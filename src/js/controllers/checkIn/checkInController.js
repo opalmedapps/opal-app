@@ -47,10 +47,11 @@
         vm.alert = {};
         vm.HasNonCheckinableAppt = false;
         vm.emptyApps = false;
-        vm.statusColor = []
+        vm.statusColor = [];
         vm.statusColor[Params.alertTypeSuccess] = 'green';
         vm.statusColor[Params.alertTypeInfo] = 'rgba(38,100,171,0.81)';
         vm.statusColor[Params.alertTypeDanger] = 'red';
+        vm.testflag = true;
 
 
         vm.goToAppointment = goToAppointment;
@@ -152,18 +153,27 @@
             console.log(patientSerNum);
             $timeout(() => {
                 vm.displayApps[patientSerNum].apps.forEach(app => {
-                    app.loading = true;
+                    if (app.Checkin == 0) {
+                        app.loading = true;
+                    }
                 })
             });
 
             $timeout(() => {
-                let allCheckIn = 0;
+                let allCheckIn = true;
                 vm.displayApps[patientSerNum].apps.forEach(app => {
-                    app.Checkin = '1';
+                    app.Checkin = app.AppointmentSerNum == '209677' ? '0':'1';
                     app.loading = false;
-                    app.CheckInStatus = patientSerNum == '51' ? 'success':'danger';
+                    app.CheckInStatus = app.AppointmentSerNum == '209677' && vm.testflag == true ? 'danger':'success';
+                    allCheckIn = allCheckIn && app.CheckInStatus == 'success';
                 })
-                vm.displayApps[patientSerNum].allCheckedIn = 1;
+                vm.displayApps[patientSerNum].allCheckedIn = allCheckIn;
+                if (patientSerNum == '51') {
+                    vm.testflag = true;
+                } else {
+                    vm.testflag = false;
+                }
+                console.log(vm.testflag);
             }, 3000);
 
             // vm.displayApps[PatientSerNum].forEach(app => {

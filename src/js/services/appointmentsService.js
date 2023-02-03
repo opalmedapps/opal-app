@@ -263,6 +263,10 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
             let localAppointments = [];
 
             appointments.forEach(appointment => {
+                let patientName = `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`;
+                if (appointment.patient.patientsernum == 51) {
+                    patientName = 'Your appointments';
+                }
                 const localAppointment = {
                     AppointmentSerNum: appointment.appointmentsernum,
                     Checkin: appointment.checkin,
@@ -274,9 +278,9 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                     State: appointment.state,
                     RoomLocation_EN: appointment.roomlocation_en,
                     RoomLocation_FR: appointment.roomlocation_fr,
-                    AppointmentType_EN: appointment.alias.aliastype,
+                    AppointmentType_EN: appointment.alias.aliasname_en,
                     ResourceDescription: appointment.alias.aliasname_en,
-                    patientName: `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`,
+                    patientName: patientName,
                     CheckInStatus: appointment.checkin == 1 ? 'success' : 'info',
                 }
                 localAppointments.push(localAppointment);

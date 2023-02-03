@@ -68,7 +68,7 @@
                         </div>
 
                         <!-- An Error Occurred - Unsuccessful Checkin -->
-                        <div ng-show="checkIn.alert.type" ng-if="app.Checkin == 0 && app.CheckinPossible == 1">
+                        <div ng-if="app.CheckInStatus == 'danger'">
                             <span class="item-desc" ng-class="fontSizeDesc" style="color: red;">
                                 {{"CHECKIN_ERROR"|translate}}
                             </span>
@@ -77,7 +77,7 @@
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item ng-if="value.allCheckedIn != 1" class="btn-primary" align="center" style="background-color:rgba(0,0,0,0);">
+        <ons-list-item ng-if="!value.allCheckedIn" class="btn-primary" align="center" style="background-color:rgba(0,0,0,0);">
             <ons-button ng-class="fontSizeTitle" style="background-color: rgba(38,100,171,0.81); width: 100%; text-align: center;"
                         ng-click="checkIn.CheckInAppointments(patientSerNum)">{{"CHECKINALLTODAY"|translate}}</ons-button>
         </ons-list-item>
