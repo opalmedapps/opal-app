@@ -24,11 +24,11 @@
                     </svg>
                     <i ng-if="app.CheckInStatus == 'success'" class="fa fa-check-square-o fa-2x"
                        style="color:#4CAF50;"></i>
-                    <i ng-if="app.CheckInStatus == 'danger'" class="fa fa-times-circle fa-2x" style="color:red;"></i>
+                    <i ng-if="app.CheckInStatus == 'danger'" class="fa fa-times-circle fa-2x color-error"></i>
                 </ons-col>
-                <ons-col width="1%" > <div style="background-color: {{checkIn.statusColor[app.CheckInStatus]}}; height: 100%;"></div></ons-col>
-                <ons-col align="center">
-                    <div style="line-height:1;padding-left:10px;padding-top:10px;">
+                <ons-col width="1%" > <div class="{{checkIn.separatorStatus[app.CheckInStatus]}}"></div></ons-col>
+                <ons-col>
+                    <div class="appointment-content">
                         <span ng-class="fontSizeTitle">
                             <p ng-if="checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
                                 {{app["AppointmentType_" + checkIn.language]}}
@@ -69,7 +69,7 @@
 
                         <!-- An Error Occurred - Unsuccessful Checkin -->
                         <div ng-if="app.CheckInStatus == 'danger'">
-                            <span class="item-desc" ng-class="fontSizeDesc" style="color: red;">
+                            <span class="item-desc color-error" ng-class="fontSizeDesc">
                                 {{"CHECKIN_ERROR"|translate}}
                             </span>
                         </div>
@@ -77,8 +77,8 @@
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item ng-if="!value.allCheckedIn" class="btn-primary" align="center" style="background-color:rgba(0,0,0,0);">
-            <ons-button ng-class="fontSizeTitle" style="background-color: rgba(38,100,171,0.81); width: 100%; text-align: center;"
+        <ons-list-item ng-if="!value.allCheckedIn" class="item-btn">
+            <ons-button ng-class="fontSizeTitle" class="checkin-btn"
                         ng-click="checkIn.CheckInAppointments(patientSerNum)">{{"CHECKINALLTODAY"|translate}}</ons-button>
         </ons-list-item>
     </ons-list>

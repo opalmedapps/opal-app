@@ -47,10 +47,10 @@
         vm.alert = {};
         vm.HasNonCheckinableAppt = false;
         vm.emptyApps = false;
-        vm.statusColor = [];
-        vm.statusColor[Params.alertTypeSuccess] = 'green';
-        vm.statusColor[Params.alertTypeInfo] = 'rgba(38,100,171,0.81)';
-        vm.statusColor[Params.alertTypeDanger] = 'red';
+        vm.separatorStatus = [];
+        vm.separatorStatus[Params.alertTypeSuccess] = 'separator-success';
+        vm.separatorStatus[Params.alertTypeInfo] = 'separator-info';
+        vm.separatorStatus[Params.alertTypeDanger] = 'separator-error';
         vm.testflag = true;
 
 
