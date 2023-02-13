@@ -28,7 +28,7 @@
   "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in for your appointments.",
   "CHECKIN_MESSAGE_BEFORE": "Check-in for your appointment.",
   "CHECKIN_MESSAGE_BEFORE_PLURAL": "Check-in for your appointments.",
-  "CHECKIN_NONE": "You have no appointments today.",
+  "CHECKIN_NONE": "You have no appointments available for checkin today.",
   "CHECKIN_PROCESSING": "Please Wait. Processing your check-in.",
   "CLICKTOOPEN": "Click to open",
   "CLINICAL_NOTES": "Clinical Notes",

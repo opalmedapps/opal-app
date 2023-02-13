@@ -81,6 +81,41 @@
             if (parameters.hasOwnProperty('apps')) {
                 vm.checkedInApps[parameters.apps.key] = parameters.apps.apps;
             }
+
+            vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
+
+            CheckInService.attemptCheckin()
+                .then(function(response){
+
+                    if(response === "NOT_ALLOWED"){
+                        Toast.showToast({
+                            message: $filter('translate')("NOT_ALLOWED"),
+                        });
+                        vm.alert.type = Params.alertTypeWarning;
+                        vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+                    } else if (response === "SUCCESS") {
+                        vm.alert.type = Params.alertTypeSuccess;
+                        vm.checkInMessage = "CHECKED_IN";
+                        vm.apps = CheckInService.getCheckInApps();
+                    } else {
+                        displayError();
+                    }
+                }).catch(error => {
+                    console.log(error);
+                    displayError();
+                });
+        }
+
+        /**
+         * @desc Displays an error state in the view, when check-in fails.
+         */
+        function displayError() {
+            $timeout(() => {
+                vm.alert.type = Params.alertTypeDanger;
+                vm.checkInMessage = "CHECKIN_ERROR";
+                vm.apps = CheckInService.getCheckInApps();
+                if (vm.apps.length === 0) vm.error = "ERROR";
+            });
         }
 
         // View appointment details
