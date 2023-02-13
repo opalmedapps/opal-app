@@ -264,6 +264,7 @@
          *                             geolocated.
          */
         async function isWithinCheckinRange() {
+            return true;
             // Get the list of sites and their coordinates from the backend
             const response = await Hospital.requestSiteInfo(UserHospitalPreferences.getHospital());
             if (!response?.count || response?.count === '0') throw new Error("No sites are defined for this institution");

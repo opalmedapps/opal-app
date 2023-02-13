@@ -105,6 +105,19 @@
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
                 const checkinState = await CheckInService.evaluateCheckinState(result.data.daily_appointments);
+                vm.todaysAppointments = result.data.daily_appointments;
+                // let ids = [];
+                // result.data.daily_appointments.forEach(app => {
+                //     ids.push(app.appointmentsernum);
+                // });
+                // const url = {
+                //     method: 'get',
+                //     url: '/api/app/appointments/',
+                // }
+                //
+                // console.log(ids);
+                // const apps = await RequestToServer.apiRequest(url, {'ids': ids});
+                // console.log(apps);
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
 
@@ -232,8 +245,22 @@
         /**
          * Takes the user to the checkin view
          */
-        function goToCheckinAppointments() {
+        async function goToCheckinAppointments() {
             if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
+            let ids = [];
+            vm.todaysAppointments.forEach(app => {
+                ids.push(app.appointmentsernum);
+            });
+            const url = {
+                method: 'get',
+                url: '/api/app/appointments/',
+            }
+
+            console.log(ids);
+            const apps = await RequestToServer.apiRequest(url, {'ids': ids});
+            console.log(apps);
+            Appointments.setCheckinAppointments(apps?.data?.results);
+
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }

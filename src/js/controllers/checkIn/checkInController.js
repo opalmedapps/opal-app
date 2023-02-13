@@ -64,6 +64,7 @@
 
         function activate() {
             vm.apps = CheckInService.getCheckInApps();
+            console.log(vm.apps);
             vm.apps.forEach(app => {
                 if (!vm.displayApps[app.PatientSerNum]) {
                     vm.displayApps[app.PatientSerNum] = {};
@@ -77,33 +78,33 @@
 
             vm.HasNonCheckinableAppt =  HasNonCheckinableAppointment(vm.apps);
 
-            const parameters = NavigatorParameters.getParameters();
-            if (parameters.hasOwnProperty('apps')) {
-                vm.checkedInApps[parameters.apps.key] = parameters.apps.apps;
-            }
+            // const parameters = NavigatorParameters.getParameters();
+            // if (parameters.hasOwnProperty('apps')) {
+            //     vm.checkedInApps[parameters.apps.key] = parameters.apps.apps;
+            // }
 
-            vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
-
-            CheckInService.attemptCheckin()
-                .then(function(response){
-
-                    if(response === "NOT_ALLOWED"){
-                        Toast.showToast({
-                            message: $filter('translate')("NOT_ALLOWED"),
-                        });
-                        vm.alert.type = Params.alertTypeWarning;
-                        vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-                    } else if (response === "SUCCESS") {
-                        vm.alert.type = Params.alertTypeSuccess;
-                        vm.checkInMessage = "CHECKED_IN";
-                        vm.apps = CheckInService.getCheckInApps();
-                    } else {
-                        displayError();
-                    }
-                }).catch(error => {
-                    console.log(error);
-                    displayError();
-                });
+            // vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
+            //
+            // CheckInService.attemptCheckin()
+            //     .then(function(response){
+            //
+            //         if(response === "NOT_ALLOWED"){
+            //             Toast.showToast({
+            //                 message: $filter('translate')("NOT_ALLOWED"),
+            //             });
+            //             vm.alert.type = Params.alertTypeWarning;
+            //             vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+            //         } else if (response === "SUCCESS") {
+            //             vm.alert.type = Params.alertTypeSuccess;
+            //             vm.checkInMessage = "CHECKED_IN";
+            //             vm.apps = CheckInService.getCheckInApps();
+            //         } else {
+            //             displayError();
+            //         }
+            //     }).catch(error => {
+            //         console.log(error);
+            //         displayError();
+            //     });
         }
 
         /**
