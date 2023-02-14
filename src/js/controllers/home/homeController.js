@@ -247,19 +247,13 @@
          */
         async function goToCheckinAppointments() {
             if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
-            let ids = [];
-            vm.todaysAppointments.forEach(app => {
-                ids.push(app.appointmentsernum);
-            });
             const url = {
                 method: 'get',
                 url: '/api/app/appointments/',
             }
-
-            console.log(ids);
-            const apps = await RequestToServer.apiRequest(url, {'ids': ids});
+            const apps = await RequestToServer.apiRequest(url);
             console.log(apps);
-            Appointments.setCheckinAppointments(apps?.data?.results);
+            Appointments.setCheckinAppointments(apps?.data?.daily_appointments);
 
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
