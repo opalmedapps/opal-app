@@ -146,10 +146,9 @@
          * @name setPatientInfo
          * @desc Sets the basic patient information in the view header that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
          */
-        function setPatientInfo(){
+        async function setPatientInfo(){
+            await ProfileSelector.init();
             vm.user = User.getLoggedinUserProfile();
-            // The observable is needed to fix a race condition on login.
-            if(!vm.user) ProfileSelector.observeProfile(() => vm.user = User.getLoggedinUserProfile());
             vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments = false;
         }

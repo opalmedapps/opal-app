@@ -34,7 +34,7 @@
                 MetaData.init();
 
                 // Init the profile selector and load the patient list. Needs to be await to prevent profile icon from flickering at login.
-                await ProfileSelector.init();
+                //await ProfileSelector.init();
                 loadingmodal.hide();
                 clearTimeout(timeOut);
 
