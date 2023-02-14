@@ -27,9 +27,9 @@
          */
         function logOut(safeDevice = true) {
             // remove the logged in user reference from DB
-            // var refCurrentUser = FirebaseService.getDBRef('logged_in_users/' + UserAuthorizationInfo.getUsername());
-            //
-            // refCurrentUser.remove();
+            let refCurrentUser = FirebaseService.getDBRef('logged_in_users/' + UserAuthorizationInfo.getUsername());
+
+            refCurrentUser.remove();
 
             loadingmodal.hide();
 
