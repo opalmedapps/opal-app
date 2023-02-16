@@ -38,12 +38,21 @@
 
         var vm = this;
         vm.apps = [];
+        vm.displayApps = {};
+        vm.patients = {};
+        vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
         vm.error = '';
         vm.checkInMessage = "";
         vm.alert = {};
         vm.HasNonCheckinableAppt = false;
+
+        vm.statusColor = []
+        vm.statusColor[Params.alertTypeSuccess] = 'green';
+        vm.statusColor[Params.alertTypeInfo] = 'rgba(38,100,171,0.81)';
+        vm.statusColor[Params.alertTypeDanger] = 'red';
+
 
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
@@ -54,30 +63,21 @@
 
         function activate() {
             vm.apps = CheckInService.getCheckInApps();
+            vm.apps.forEach(app => {
+                if (!vm.displayApps[app.PatientSerNum]) {
+                    vm.displayApps[app.PatientSerNum] = [];
+                }
+                vm.displayApps[app.PatientSerNum].push(app);
+                vm.patients[app.PatientSerNum] = app.patientName;
+            });
             vm.language = UserPreferences.getLanguage();
 
             vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
 
-            CheckInService.attemptCheckin()
-                .then(function(response){
-
-                    if(response === "NOT_ALLOWED"){
-                        Toast.showToast({
-                            message: $filter('translate')("NOT_ALLOWED"),
-                        });
-                        vm.alert.type = Params.alertTypeWarning;
-                        vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-                    } else if (response === "SUCCESS") {
-                        vm.alert.type = Params.alertTypeSuccess;
-                        vm.checkInMessage = "CHECKED_IN";
-                        vm.apps = CheckInService.getCheckInApps();
-                    } else {
-                        displayError();
-                    }
-                }).catch(error => {
-                    console.log(error);
-                    displayError();
-                });
+            const parameters = NavigatorParameters.getParameters();
+            if (parameters.hasOwnProperty('apps')) {
+                vm.checkedInApps[parameters.apps.key] = parameters.apps.apps;
+            }
         }
 
         /**
@@ -122,6 +122,33 @@
             return HasNonCheckinable;
         }
 
+        /**
+         *
+         * @param PatientSerNum
+         * @return {void}
+         * @description Checks if in the list of Appointments,for the target patient
+         */
+        async function CheckInAppointments(PatientSerNum) {
+            vm.displayApps[PatientSerNum].forEach(app => {
+                app.loading = true;
+            })
+
+            //TODO check-in apps for the target patient
+            const response = await CheckInService.attemptCheckin(PatientSerNum);
+
+            $timeout(() => {
+                let allCheckedIn = true;
+                vm.displayApps[PatientSerNum].forEach(app => {
+                    const appt = response.appts.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
+                    if (appt) {
+                        app.Checkin = appt.Checkin;
+                        app.loading = false;
+                        allCheckedIn =  allCheckedIn && app.CheckInStatus == 'success';
+                    }
+                })
+                vm.displayApps[PatientSerNum].allCheckedIn = allCheckedIn;
+            },);
+        }
     }
 })();
 
