@@ -16,8 +16,8 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:RequestToServer
  *@description Sets the appointments and provides an API to access them
  **/
-myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserPreferences', 'UserAuthorizationInfo',
-    function ($filter, LocalStorage, RequestToServer, UserPreferences, UserAuthorizationInfo) {
+myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserPreferences', 'UserAuthorizationInfo', 'ProfileSelector',
+    function ($filter, LocalStorage, RequestToServer, UserPreferences, UserAuthorizationInfo, ProfileSelector) {
 
     /**
      *@ngdoc property
@@ -274,7 +274,10 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
             userAppointmentsArray = [];
             appointments.forEach(appointment => {
                 let patientName = `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`;
-                if (appointment.patient.patientsernum == 51) {
+                console.log(ProfileSelector.getActiveProfile());
+                console.log(appointment.patient.patientsernum);
+                if (appointment.patient.patientsernum == ProfileSelector.getActiveProfile().patient_legacy_id) {
+                    console.log('test');
                     patientName = 'Your appointments';
                 }
                 const localAppointment = {
