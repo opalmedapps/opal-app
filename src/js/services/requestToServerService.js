@@ -66,9 +66,16 @@ angular
             if (parameters.method === 'get' && data) parameters.params = data;
             if (parameters.method === 'post' && data) parameters.data = data;
 
+            const headers = {
+                ...Params.API.REQUEST_HEADERS,
+                'Accept-Language': UserPreferences.getLanguage(),
+                'Appuserid': UserAuthorizationInfo.getUsername()
+            };
+
+
             return {
                 ...parameters,
-                headers: {...Params.API.REQUEST_HEADERS, 'Accept-Language': UserPreferences.getLanguage()},
+                headers: headers,
             }
         }
 
