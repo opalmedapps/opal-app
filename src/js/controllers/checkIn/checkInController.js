@@ -39,7 +39,6 @@
         var vm = this;
         vm.apps = [];
         vm.displayApps = {};
-        vm.patients = {};
         vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
@@ -48,15 +47,15 @@
         vm.alert = {};
         vm.HasNonCheckinableAppt = false;
 
-        vm.statusColor = []
-        vm.statusColor[Params.alertTypeSuccess] = 'green';
-        vm.statusColor[Params.alertTypeInfo] = 'rgba(38,100,171,0.81)';
-        vm.statusColor[Params.alertTypeDanger] = 'red';
+        vm.separatorStatus = [];
+        vm.separatorStatus[Params.alertTypeSuccess] = 'separator-success';
+        vm.separatorStatus[Params.alertTypeInfo] = 'separator-info';
+        vm.separatorStatus[Params.alertTypeDanger] = 'separator-error';
 
 
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
-        vm.checkInAppointments = checkInAppointments;
+        vm.CheckInAppointments = CheckInAppointments;
 
         activate();
 
@@ -66,10 +65,12 @@
             vm.apps = CheckInService.getCheckInApps();
             vm.apps.forEach(app => {
                 if (!vm.displayApps[app.PatientSerNum]) {
-                    vm.displayApps[app.PatientSerNum] = [];
+                    vm.displayApps[app.PatientSerNum] = {};
+                    vm.displayApps[app.PatientSerNum].apps = [];
+                    vm.displayApps[app.PatientSerNum].patientName = app.patientName;
                 }
-                vm.displayApps[app.PatientSerNum].push(app);
-                vm.patients[app.PatientSerNum] = app.patientName;
+                vm.displayApps[app.PatientSerNum].apps.push(app);
+                vm.displayApps[app.PatientSerNum].patientName = app.patientName;
             });
             vm.language = UserPreferences.getLanguage();
 
@@ -123,14 +124,16 @@
             return HasNonCheckinable;
         }
 
-         /*
+        /**
          * @param PatientSerNum
          * @return {void}
          * @description Checks if in the list of Appointments,for the target patient
          */
         async function CheckInAppointments(PatientSerNum) {
-            vm.displayApps[PatientSerNum].forEach(app => {
-                app.loading = true;
+            vm.displayApps[PatientSerNum].apps.forEach(app => {
+                if (app.CheckInStatus != 'success') {
+                    app.loading = true;
+                }
             })
 
             try {
@@ -159,7 +162,7 @@
 
             $timeout(() => {
                 let allCheckedIn = true;
-                vm.displayApps[PatientSerNum].forEach(app => {
+                vm.displayApps[PatientSerNum].apps.forEach(app => {
                     const appt = response.appts.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
                     if (appt) {
                         app.Checkin = appt.Checkin;
@@ -168,7 +171,7 @@
                     }
                 })
                 vm.displayApps[PatientSerNum].allCheckedIn = allCheckedIn;
-            },);
+            });
         }
     }
 })();

@@ -64,6 +64,50 @@
 .switch--list-item {
     margin-right: 0px;
 }
+
+.separator-info {
+    background-color: rgba(38,100,171,0.81);
+    height: 100%;
+}
+
+.separator-success {
+    background-color: green;
+    height: 100%;
+}
+
+.separator-error {
+    background-color: red;
+    height: 100%;
+}
+
+.color-info {
+    color: rgba(38,100,171,0.81);
+}
+
+.color-success {
+    color: green;
+}
+
+.color-error {
+    color: red;
+}
+
+.item-btn {
+    text-align: center;
+    background-color:rgba(0,0,0,0);
+}
+
+.checkin-btn {
+    background-color: rgba(38,100,171,0.81);
+    width: 100%;
+}
+
+.appointment-content {
+    line-height:1;
+    padding-left:10px;
+    padding-top:10px;
+}
+
 .unreadMessage {
     border-radius: 50%;
     display: inline-block;
