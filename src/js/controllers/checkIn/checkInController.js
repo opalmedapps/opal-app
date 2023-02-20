@@ -56,6 +56,7 @@
 
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
+        vm.checkInAppointments = checkInAppointments;
 
         activate();
 
@@ -122,8 +123,7 @@
             return HasNonCheckinable;
         }
 
-        /**
-         *
+         /*
          * @param PatientSerNum
          * @return {void}
          * @description Checks if in the list of Appointments,for the target patient
@@ -133,8 +133,29 @@
                 app.loading = true;
             })
 
-            //TODO check-in apps for the target patient
-            const response = await CheckInService.attemptCheckin(PatientSerNum);
+            try {
+                const response = await CheckInService.attemptCheckin(PatientSerNum);
+                if(response === "NOT_ALLOWED"){
+                    Toast.showToast({
+                        message: $filter('translate')("NOT_ALLOWED"),
+                    });
+                    vm.alert.type = Params.alertTypeWarning;
+                    vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+                } else if (response === "SUCCESS") {
+                    vm.alert.type = Params.alertTypeSuccess;
+                    vm.checkInMessage = "CHECKED_IN";
+                    vm.apps = CheckInService.getCheckInApps();
+                } else {
+                    vm.alert.type = Params.alertTypeDanger;
+                    vm.checkInMessage = "CHECKIN_ERROR";
+                    vm.apps = CheckInService.getCheckInApps();
+                    vm.error = "ERROR";
+                    displayError();
+                }
+            } catch (error) {
+                console.log(error);
+                displayError();
+            }
 
             $timeout(() => {
                 let allCheckedIn = true;
