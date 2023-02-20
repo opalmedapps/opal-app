@@ -59,6 +59,9 @@
         vm.questionOnClick = questionOnClick;
         vm.submitQuestionnaire = submitQuestionnaire;
         vm.updateRequirePassword = updateRequirePassword
+        vm.isInvalidAnswerForQuestion = isInvalidAnswerForQuestion;
+        vm.isValidAnswerForQuestionAndNotSlider = isValidAnswerForQuestionAndNotSlider;
+        vm.isValidAnswerForQuestionAndSlider = isValidAnswerForQuestionAndSlider;
 
         activate();
 
@@ -441,8 +444,8 @@
          * @desc Non completed questionnaire and invalid answer for the question
          * @returns {boolean}
          */
-         function isInvalidAnswerForQuestion() {
-            vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
+         function isInvalidAnswerForQuestion(question) {
+            return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
                 && question.optional === '0'
                 && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED
         }
@@ -452,7 +455,7 @@
          * @desc Non completed questionnaire, valid answer for the question, and not slider
          * @returns {boolean}
          */
-         function isValidAnswerForQuestionAndNotSlider() {
+         function isValidAnswerForQuestionAndNotSlider(question) {
             return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
                 && question.type_id !== vm.allowedType.SLIDER_TYPE_ID
                 && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED);
@@ -463,7 +466,7 @@
          * @desc Non completed questionnaire, valid answer for the question, and slider
          * @returns {boolean}
          */
-        function isValidAnswerForQuestionAndSlider() {
+        function isValidAnswerForQuestionAndSlider(question) {
             return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
                 && question.type_id === vm.allowedType.SLIDER_TYPE_ID
                 && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED);
