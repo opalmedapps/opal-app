@@ -105,6 +105,7 @@
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
                 const checkinState = await CheckInService.evaluateCheckinState(result.data.daily_appointments);
+                vm.todaysAppointments = result.data.daily_appointments;
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
                     vm.checkinState = checkinState;
@@ -227,8 +228,19 @@
         /**
          * Takes the user to the checkin view
          */
-        function goToCheckinAppointments() {
+        async function goToCheckinAppointments() {
             if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
+            let ids = [];
+            vm.todaysAppointments.forEach(app => {
+                ids.push(app.appointmentsernum);
+            });
+            const url = {
+                method: 'get',
+                url: '/api/app/appointments/',
+            }
+            const apps = await RequestToServer.apiRequest(url);
+            Appointments.setCheckinAppointments(apps?.data?.daily_appointments);
+
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }

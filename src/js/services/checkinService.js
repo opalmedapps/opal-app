@@ -97,14 +97,14 @@
 
         ////////////////////////////////////////////
 
-        async function attemptCheckin(){
+        async function attemptCheckin(patientSerNum){
             if (attemptedCheckin && allCheckedIn) return 'SUCCESS';
             if (attemptedCheckin && errorsExist) return 'ERROR';
 
             const isAllowed = await isWithinCheckinRange();
             if (!isAllowed) return 'NOT_ALLOWED';
 
-            const checkinResult = await checkinToAllAppointments();
+            const checkinResult = await checkinToAllAppointments(patientSerNum);
             attemptedCheckin = true;
             updateCheckinState(checkinResult.appts);
             return checkinResult.status;
@@ -140,7 +140,7 @@
                     setCheckinState("NOT_ALLOWED", appts.length);
                 }
             }
-            return
+            return;
         }
 
         function updateCheckinState(checkedInAppts){
@@ -169,7 +169,7 @@
         }
 
         function checkinErrorsExist(appts){
-            var checkinExists = false;
+            let checkinExists = false;
 
             appts.map(function(app){
                 if(app.Checkin === '1') checkinExists = true;
@@ -177,7 +177,7 @@
 
             if(!checkinExists) return false;
 
-            var errors = false;
+            let errors = false;
 
             appts.map(function(app){
                 if(app.Checkin === '-1') errors = true;
@@ -289,13 +289,19 @@
          *@description Checks the users in to all todays appointments.
          *@returns {Promise} Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.
          **/
-        function checkinToAllAppointments(){
+        function checkinToAllAppointments(patientSerNum){
 
             //Create a promise so this can be run asynchronously
-            var r = $q.defer();
+            let r = $q.defer();
 
-            RequestToServer.sendRequestWithResponse('Checkin')
-                .then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
+            RequestToServer.sendRequestWithResponse(
+                'Checkin',
+                null,
+                null,
+                null,
+                null,
+                patientSerNum
+            ).then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
                 .catch(function () { r.reject({status: 'ERROR', appts: null}); });
 
             return r.promise;

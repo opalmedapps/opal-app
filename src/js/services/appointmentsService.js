@@ -14,13 +14,15 @@ var myApp=angular.module('MUHCApp');
  *@name MUHCApp.service:Appointments
  *@requires $filter
  *@requires MUHCApp.service:RequestToServer
- *@requires $q
+ *@requires MUHCApp.service:LocalStorage
  *@requires MUHCApp.service:UserAuthorizationInfo
- *@requires $cordovaCalendar
+ *@requires MUHCApp.service:UserPreferences
+ *@requires MUHCApp.service:ProfileSelector
  *@description Sets the appointments and provides an API to access them
  **/
-myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserPreferences', 'UserAuthorizationInfo',
-    function ($filter, LocalStorage, RequestToServer, UserPreferences, UserAuthorizationInfo) {
+
+myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserPreferences', 'UserAuthorizationInfo', 'ProfileSelector',
+    function ($filter, LocalStorage, RequestToServer, UserPreferences, UserAuthorizationInfo, ProfileSelector) {
 
     /**
      *@ngdoc property
@@ -258,6 +260,46 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
             userAppointmentsArray = [];
             calendar={};
             addAppointmentsToService(appointments);
+        },
+        /**
+         *@ngdoc method
+         *@name setCheckinAppointments
+         *@methodOf MUHCApp.service:Appointments
+         *@param {Array} appointments Appointments array obtain from Firebase
+         *@description Function is called from the {@link MUHCApp.services:UpdateUI}. The function is an initializer for the service, it sets all the properties for the checkin used.
+         **/
+        setCheckinAppointments: function (appointments) {
+            //Initializing Variables
+            userAppointmentsArray = [];
+            appointments.forEach(appointment => {
+                let patientName = `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`;
+                if ((UserPreferences.getLanguage()=='FR')) {
+                    patientName = `Rendez-vous pour ${appointment.patient.firstname} ${appointment.patient.lastname}`;
+                }
+                if (appointment.patient.patientsernum == ProfileSelector.getActiveProfile().patient_legacy_id) {
+                    patientName = (UserPreferences.getLanguage()=='EN') ? 'Your appointments' : 'Vos rendez-vous';
+                }
+                const localAppointment = {
+                    AppointmentSerNum: appointment.appointmentsernum,
+                    Checkin: appointment.checkin,
+                    CheckinPossible: appointment.checkinpossible,
+                    PatientSerNum: appointment.patient.patientsernum,
+                    ScheduledStartTime: $filter('formatDate')(appointment.scheduledstarttime),
+                    ScheduledEndTime: $filter('formatDate')(appointment.scheduledendtime),
+                    LastUpdated: $filter('formatDate')(appointment.lastupdated),
+                    State: appointment.state,
+                    RoomLocation_EN: appointment.roomlocation_en,
+                    RoomLocation_FR: appointment.roomlocation_fr,
+                    AppointmentType_EN: (UserPreferences.getLanguage()=='EN') ? appointment.alias.aliasname_en:appointment.alias.aliasname_fr,
+                    ResourceDescription: (UserPreferences.getLanguage()=='EN') ? appointment.alias.aliasname_en:appointment.alias.aliasname_fr,
+                    patientName: patientName,
+                    CheckInStatus: appointment.checkin == 1 ? 'success' : 'info',
+                }
+                userAppointmentsArray.push(localAppointment);
+            });
+
+            //Sort Appointments chronologically most recent first
+            userAppointmentsArray = $filter('orderBy')(userAppointmentsArray, 'ScheduledStartTime', false);
         },
         /**
          *@ngdoc method
