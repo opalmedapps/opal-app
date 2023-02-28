@@ -3,7 +3,7 @@
     <!-- TOOLBAR -->
     <generic-toolbar title="{{edu.pageTitle}}" style-class="fontSizeTitle">
         <left-content>
-            <ons-back-button>{{ edu.eduCategory === 'research' ? "BACK" : "" | translate}}</ons-back-button>
+            <ons-back-button>{{"BACK"| translate}}</ons-back-button>
         </left-content>
         <right-content>
             <ons-toolbar-button ng-click="edu.openInfoPage()" ng-if="edu.eduCategory==='clinical'">
@@ -11,9 +11,6 @@
             </ons-toolbar-button>
         </right-content>
     </generic-toolbar>
-
-    <!-- HOSPITAL NAME BAR -->
-    <top-page-banner ng-if="edu.eduCategory==='clinical'" title="edu.selectedHospitalToDisplay"></top-page-banner>
 
     <!-- NETWORK BANNER -->
     <network-banner></network-banner>
@@ -41,7 +38,7 @@
     </div>
 
     <!-- LIST OF EDUCATIONAL MATERIALS -->
-    <ons-scroller-height ng-hide="edu.noMaterials" offset-height="78">
+    <ons-scroller-height ng-hide="edu.noMaterials" offset-height="10">
         <ons-list
             ng-repeat="edumaterial in (edu.filteredEduMaterials = (edu.edumaterials | filter: edu.searchString | orderBy: '-DateAdded'))"
             ng-click="edu.goToEducationalMaterial(edumaterial)">
