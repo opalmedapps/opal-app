@@ -7,11 +7,11 @@
 
     HomeController.$inject = [
         '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
-        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version', 'User', 'ProfileSelector'];
+        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version', 'User', 'ProfileSelector','$interval'];
 
     /* @ngInject */
     function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
-                            UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version, User, ProfileSelector)
+        UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version, User, ProfileSelector, $interval)
     {
         var vm = this;
 
@@ -60,26 +60,46 @@
             // Initialize the navigator for push and pop of pages.
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             NavigatorParameters.setNavigator(homeNavigator);
+            //Initialize the page interval to refresh checkin state every 5 second
+            setInterval();
             // Store the login time
             if (localStorage.getItem('locked')) localStorage.removeItem('locked');
-            // Refresh the page on coming back from other pages
-            homeNavigator.on('prepop', function(event) {
-                const prepopPages = ['./views/home/checkin/checkin-list.html', 'views/personal/notifications/notifications.html'];
-                if (prepopPages.includes(event.currentPage.name) && NetworkStatus.isOnline()) getDisplayData();
-            });
-            //This avoids constant repushing which causes bugs
-            homeNavigator.on('prepush', event => {
-                if (homeNavigator._doorLock.isLocked()) event.cancel();
-            });
-            //release the watchers
-            $scope.$on('$destroy',() => {
-                homeNavigator.off('prepop');
-                homeNavigator.off('prepush');
-            });
+            bindEvents();
             // Initialize the page data if online
             NetworkStatus.isOnline() ? homePageInit() : setPatientInfo();
             // set the hospital banner and available modules
             configureSelectedHospital();
+        }
+
+        /**
+         * @ngdoc function
+         * @name bindEvents
+         * @methodOf MUHCApp.controllers.homeController
+         * @description Sets up event bindings for this controller.
+         */
+        function bindEvents() {
+            // Refresh the page on coming back from other pages
+            homeNavigator.on('prepop', function(event) {
+                const prepopPages = ['./views/home/checkin/checkin-list.html', 'views/personal/notifications/notifications.html'];
+                if (prepopPages.includes(event.currentPage.name) && NetworkStatus.isOnline()) getDisplayData();
+                //restart the reload interval when going back to the home page
+                setInterval();
+            });
+
+            //This avoids constant repushing which causes bugs
+            homeNavigator.on('prepush', event => {
+                if (homeNavigator._doorLock.isLocked()) event.cancel();
+                //stop the reload interval when leaving the home page
+                cancelInterval();
+            });
+
+            //release the watchers
+            $scope.$on('$destroy',() => {
+                homeNavigator.off('prepop');
+                homeNavigator.off('prepush');
+                //stop the reload interval when leaving the home page
+                cancelInterval();
+            });
         }
 
         /**
@@ -250,6 +270,23 @@
          */
         function goToAcknowledgements() {
             homeNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
+        }
+
+        /**
+         * @description set a interval to refresh the checkin state every 5 seconds
+         */
+        function setInterval(){
+            vm.reloadInterval = $interval(function(){
+                CheckInService.reloadingCheckinState();
+                getDisplayData();
+            }, 5000);
+        }
+
+        /**
+         * @description cancel the interval
+         */
+        function cancelInterval(){
+            $interval.cancel(vm.reloadInterval);
         }
     }
 })();

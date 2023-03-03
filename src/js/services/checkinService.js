@@ -71,11 +71,11 @@
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#stateUpdated
+         *@name  MUHCApp.service.#stateReloading
          *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether or not the checkin state has been updated since initial setting
+         *@description Determines whether or not the checkin state need to be reloaded
          */
-        var stateUpdated = false;
+        var stateReloading = false;
 
         /**
          *@ngdoc property
@@ -93,6 +93,7 @@
             evaluateCheckinState: evaluateCheckinState,
             getCheckInApps: getCheckInApps,
             clear: clear,
+            reloadingCheckinState: reloadingCheckinState,
         };
 
         ////////////////////////////////////////////
@@ -111,10 +112,11 @@
         }
 
         async function evaluateCheckinState(dailyAppointments = []){
-            if (attemptedCheckin || checkinStateSet && !stateUpdated) return state;
+            if (attemptedCheckin || checkinStateSet && !stateReloading) return state;
             try {
                 await initCheckinState(dailyAppointments);
                 checkinStateSet = true;
+                stateReloading = false;
                 return state;
             } catch (error) {
                 return error;
@@ -311,6 +313,11 @@
             allCheckedIn= false;
             attemptedCheckin = false;
             checkinStateSet = false;
+            stateReloading= false;
+        }
+
+        function reloadingCheckinState(){
+            stateReloading= true;
         }
     }
 })();
