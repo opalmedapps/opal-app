@@ -6,12 +6,12 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'NavigatorParameters',
-        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version', 'User', 'ProfileSelector'];
+        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
+        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version', 'User', 'ProfileSelector','$interval'];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, Patient, $scope, $filter, NavigatorParameters,
-                            UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version, User, ProfileSelector)
+    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
+        UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version, User, ProfileSelector, $interval)
     {
         var vm = this;
 
@@ -60,26 +60,46 @@
             // Initialize the navigator for push and pop of pages.
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             NavigatorParameters.setNavigator(homeNavigator);
+            //Initialize the page interval to refresh checkin state every 5 second
+            setInterval();
             // Store the login time
             if (localStorage.getItem('locked')) localStorage.removeItem('locked');
-            // Refresh the page on coming back from other pages
-            homeNavigator.on('prepop', function(event) {
-                if (event.currentPage.name === "./views/home/checkin/checkin-list.html" && NetworkStatus.isOnline()) evaluateCheckIn();
-                if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) getDisplayData();
-            });
-            //This avoids constant repushing which causes bugs
-            homeNavigator.on('prepush', event => {
-                if (homeNavigator._doorLock.isLocked()) event.cancel();
-            });
-            //release the watchers
-            $scope.$on('$destroy',() => {
-                homeNavigator.off('prepop');
-                homeNavigator.off('prepush');
-            });
+            bindEvents();
             // Initialize the page data if online
             NetworkStatus.isOnline() ? homePageInit() : setPatientInfo();
             // set the hospital banner and available modules
             configureSelectedHospital();
+        }
+
+        /**
+         * @ngdoc function
+         * @name bindEvents
+         * @methodOf MUHCApp.controllers.homeController
+         * @description Sets up event bindings for this controller.
+         */
+        function bindEvents() {
+            // Refresh the page on coming back from other pages
+            homeNavigator.on('prepop', function(event) {
+                const prepopPages = ['./views/home/checkin/checkin-list.html', 'views/personal/notifications/notifications.html'];
+                if (prepopPages.includes(event.currentPage.name) && NetworkStatus.isOnline()) getDisplayData();
+                //restart the reload interval when going back to the home page
+                setInterval();
+            });
+
+            //This avoids constant repushing which causes bugs
+            homeNavigator.on('prepush', event => {
+                if (homeNavigator._doorLock.isLocked()) event.cancel();
+                //stop the reload interval when leaving the home page
+                cancelInterval();
+            });
+
+            //release the watchers
+            $scope.$on('$destroy',() => {
+                homeNavigator.off('prepop');
+                homeNavigator.off('prepush');
+                //stop the reload interval when leaving the home page
+                cancelInterval();
+            });
         }
 
         /**
@@ -96,8 +116,6 @@
             setNextAppointment();
             // display version updates info, if any
             checkForVersionUpdates();
-            // Display current check in status
-            evaluateCheckIn();
         }
 
         /**
@@ -106,8 +124,11 @@
         async function getDisplayData() {
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
+                const checkinState = await CheckInService.evaluateCheckinState(result.data.daily_appointments);
+                vm.todaysAppointments = result.data.daily_appointments;
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
+                    vm.checkinState = checkinState;
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
@@ -161,14 +182,6 @@
                     }
                 }).catch(console.error);
             }
-        }
-
-        /**
-         * @name evaluateCheckIn
-         * @desc checks with listener to see if the current user has checked in or not
-         */
-        function evaluateCheckIn(){
-            CheckInService.evaluateCheckinState().then(state => vm.checkinState = state);
         }
 
         /**
@@ -233,8 +246,19 @@
         /**
          * Takes the user to the checkin view
          */
-        function goToCheckinAppointments() {
-            if (vm.checkinState.noAppointments) return;
+        async function goToCheckinAppointments() {
+            if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
+            let ids = [];
+            vm.todaysAppointments.forEach(app => {
+                ids.push(app.appointmentsernum);
+            });
+            const url = {
+                method: 'get',
+                url: '/api/app/appointments/',
+            }
+            const apps = await RequestToServer.apiRequest(url);
+            Appointments.setCheckinAppointments(apps?.data?.daily_appointments);
+
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
@@ -244,6 +268,23 @@
          */
         function goToAcknowledgements() {
             homeNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
+        }
+
+        /**
+         * @description set a interval to refresh the checkin state every 5 seconds
+         */
+        function setInterval(){
+            vm.reloadInterval = $interval(function(){
+                CheckInService.reloadingCheckinState();
+                getDisplayData();
+            }, 5000);
+        }
+
+        /**
+         * @description cancel the interval
+         */
+        function cancelInterval(){
+            $interval.cancel(vm.reloadInterval);
         }
     }
 })();
