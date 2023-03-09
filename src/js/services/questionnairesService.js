@@ -298,7 +298,6 @@
          *
          */
         async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus) {
-            try {
                 let userProfile = User.getLoggedinUserProfile();
 
                 let response = await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userProfile);
@@ -314,9 +313,6 @@
                 }
 
                 return { Success: true, Location: 'Server' };
-            } catch (error) {
-                throw new Error("Error updating questionnaire status internal to app", { cause: error });
-            }
         }
 
         /**
