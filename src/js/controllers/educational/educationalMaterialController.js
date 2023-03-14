@@ -23,11 +23,11 @@
         .controller('EducationalMaterialController', EducationalMaterialController);
 
     EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial',
-        'Logger', 'UserHospitalPreferences', '$filter'];
+        'Logger', '$filter'];
 
     /* @ngInject */
     function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial,
-                                           Logger, UserHospitalPreferences, $filter) {
+                                           Logger, $filter) {
         let vm = this;
         let backButtonPressed = 0;
         let navigator;
@@ -41,9 +41,6 @@
         
         // Variable containing filtered educational materials
         vm.filteredEduMaterials;
-
-        // variable to let the user know which hospital they are logged in
-        vm.selectedHospitalToDisplay = "";
         
         // Variables to store the current category of material (clinical or research) and corresponding page title
         vm.eduCategory = '';
@@ -66,7 +63,6 @@
             configureNavigator();
 
             bindEvents();
-            configureSelectedHospital();
         }
 
         function initData() {
@@ -118,14 +114,6 @@
             } else {
                 vm.noMaterials = true;
             }
-        }
-
-        /**
-         * @name configureSelectedHospital
-         * @desc Set the hospital name to display
-         */
-        function configureSelectedHospital() {
-            vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
         }
 
         function bindEvents() {
