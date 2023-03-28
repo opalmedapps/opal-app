@@ -80,7 +80,7 @@
          */
         async function loadParkingSites() {
             try {
-                const parkingInfo = await Hospital.requestParkingInfo(
+                const parkingInfo = await Hospital.requestSiteInfo(
                     UserHospitalPreferences.getHospital(),
                 );
 

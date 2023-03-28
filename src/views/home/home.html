@@ -96,44 +96,37 @@
 
             <!--
             ================================
-            NAVIGABLE CHECKIN STATE (ALL CHECKED IN OR APPOINTMENTS AVAILABLE FOR CHECKING INTO)
+            CHECKIN
             ================================
             -->
-            <ons-list-item ng-if="Ctrl.checkinState.canNavigate && Ctrl.allowedModules.hasOwnProperty('CHK') && Ctrl.allowedModules['CHK']" modifier="chevron tappable" class="item" ng-click="Ctrl.goToCheckinAppointments()">
+            <ons-list-item 
+                ng-if="Ctrl.allowedModules.hasOwnProperty('CHK') && Ctrl.allowedModules['CHK']"
+                modifier="{{Ctrl.checkinState.canNavigate ? 'chevron tappable' : ''}}"
+                class="item"
+                ng-click="Ctrl.checkinState.canNavigate ? Ctrl.goToCheckinAppointments() : undefined">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
-                        <div>
+                        <div ng-if="Ctrl.checkinState.canNavigate">
                             <i ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError" class="fa fa-square-o fa-2x" style="color:#4CAF50;"></i>
                             <i ng-if="Ctrl.checkinState.allCheckedIn || Ctrl.checkinState.checkinError" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
                             <span ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> {{ Ctrl.checkinState.numberOfAppts }}</span>
                             <span ng-if="Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> ! </span>
+                        </div>
+                        <div ng-if="!Ctrl.checkinState.canNavigate">
+                            <i class="fa fa-square-o fa-2x" style="color:#9E9E9E;"></i>
                         </div>
                     </ons-col>
                     <ons-col>
                         <header>
                             <span class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
                         </header>
-                        <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message|translate}} {{RoomLocation}}</p>
-                        <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.calledApp["AppointmentType_"+Ctrl.language]}}</p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-
-            <!--
-            ================================
-            NON-NAVIGABLE CHECKIN STATE (NO APPOINTMENTS)
-            ================================
-            -->
-            <ons-list-item ng-if="!Ctrl.checkinState.canNavigate && Ctrl.allowedModules.hasOwnProperty('CHK') && Ctrl.allowedModules['CHK']" class="item">
-                <ons-row align="center">
-                    <ons-col class="home-view--list--icon">
-                        <i class="fa fa-square-o fa-2x" style="color:#9E9E9E;"></i>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span style="margin-top: 0" class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
-                        </header>
-                        <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message|translate}}</p>
+                        <div ng-if="Ctrl.checkinState.canNavigate">
+                            <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message | translate}} {{Ctrl.RoomLocation}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.calledApp["AppointmentType_"+Ctrl.language]}}</p>
+                        </div>
+                        <div ng-if="!Ctrl.checkinState.canNavigate">
+                            <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message|translate}}</p>
+                        </div>
                     </ons-col>
                 </ons-row>
             </ons-list-item>

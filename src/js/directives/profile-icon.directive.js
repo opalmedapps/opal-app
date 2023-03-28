@@ -23,9 +23,11 @@
                 <span class="tab-icon profile-icon" ng-style="profileColor">{{patientInitials}}</span>
             `,
             link: function (scope) {
-                const activeProfile = ProfileSelector.getActiveProfile();
-                scope.patientInitials = $filter('profileInitials')(activeProfile);
-                scope.profileColor = {'background-color': activeProfile.color};
+                scope.$watch(function () {
+                    const activeProfile = ProfileSelector.getActiveProfile();
+                    scope.patientInitials = $filter('profileInitials')(activeProfile);
+                    scope.profileColor = {'background-color': activeProfile.color};
+                });
             }
         };
     }
