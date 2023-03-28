@@ -25,6 +25,7 @@ variables:
 # IOS_DEVELOPMENT_TEAM (variable): The development team used by cordova to sign the build created via `cordova build ios --developmentTeam=___`.
 
 stages:
+  - version
   - build
   - deploy
 
@@ -36,6 +37,18 @@ check dependencies:
   script:
     - npm -v
     - npm ci --prefer-offline
+
+# TODO: 1- Protect branches ("Note: Once semantic-release is configured, any user with the permission to push commits on one of those branches will be able to publish a release. It is recommended to protect those branches, for example with GitHub protected branches.")
+increment version:
+  stage: version
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    # Testing branch; to delete
+    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
+      when: always
+  script:
+    - npx semantic-release
 
 build android:
   stage: build
