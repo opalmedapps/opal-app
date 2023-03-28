@@ -120,9 +120,7 @@
                 ],
 
                 /** CheckIn Service Constants **/
-                hospitalSite: {
-                    hospitalCoordinates: [45.474127399999996, -73.6011402] //Glen Coordinates
-                },
+                checkinRadiusMeters: 500,
 
                 /** EducationalMaterial Service Constants **/
                 educationalMaterial: {
