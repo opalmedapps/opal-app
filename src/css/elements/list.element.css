@@ -1,3 +1,10 @@
+:root {
+    --info: rgba(38,100,171,0.81);
+    --success: #4CAF50;
+    --warning: #FF8F35;
+    --danger: red;
+}
+
 .list-item-note {
     position: absolute;
     right: 36px;
@@ -64,6 +71,59 @@
 .switch--list-item {
     margin-right: 0px;
 }
+
+.separator-info {
+    background-color: var(--info);
+    height: 100%;
+}
+
+.separator-success {
+    background-color: var(--success);
+    height: 100%;
+}
+
+.separator-warning {
+    background-color: var(--warning);
+    height: 100%;
+}
+
+.separator-error {
+    background-color: var(--danger);
+    height: 100%;
+}
+
+.color-info {
+    color: var(--info);
+}
+
+.color-success {
+    color: var(--success);
+}
+
+.color-warning {
+    color: var(--warning);
+}
+
+.color-error {
+    color: var(--danger);
+}
+
+.item-btn {
+    text-align: center;
+    background-color:rgba(0,0,0,0);
+}
+
+.checkin-btn {
+    background-color: var(--info);
+    width: 100%;
+}
+
+.appointment-content {
+    line-height:1;
+    padding-left:10px;
+    padding-top:10px;
+}
+
 .unreadMessage {
     border-radius: 50%;
     display: inline-block;
