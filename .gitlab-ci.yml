@@ -52,7 +52,7 @@ increment version:
     - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
       when: always
   before_script:
-    - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3
+    - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/git@10.0.1
   script:
     - npx semantic-release
 
