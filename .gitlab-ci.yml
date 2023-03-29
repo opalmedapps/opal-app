@@ -51,7 +51,7 @@ increment version:
   before_script:
     - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3
   script:
-    - semantic-release
+    - npx semantic-release
 
 build android:
   stage: build
