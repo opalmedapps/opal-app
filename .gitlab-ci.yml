@@ -48,8 +48,10 @@ increment version:
     # Testing branch; to delete
     - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
       when: always
+  before_script:
+    - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3
   script:
-    - npx semantic-release@19.0.5
+    - semantic-release
 
 build android:
   stage: build
