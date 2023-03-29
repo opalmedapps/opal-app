@@ -41,6 +41,9 @@ stages:
 
 # TODO: 1- Protect branches ("Note: Once semantic-release is configured, any user with the permission to push commits on one of those branches will be able to publish a release. It is recommended to protect those branches, for example with GitHub protected branches.")
 increment version:
+  variables:
+    # Prevent reading deleted version tags: https://stackoverflow.com/questions/66047044/deleted-tags-are-present-in-gitlab-ci
+    GIT_STRATEGY: clone
   stage: version
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
