@@ -2,9 +2,7 @@
   "branches": ["QSCCD-946.SB.semantic-release"],
   "plugins": [
     "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/npm",
-    "@semantic-release/gitlab"
+    "@semantic-release/release-notes-generator"
   ],
   "dryRun": true
 }
