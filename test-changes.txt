@@ -1,3 +1,4 @@
 This file should be deleted before merge, and contains "changes" that can be committed to test semantic-release
 
 Feature 1
+Bug fix 1
