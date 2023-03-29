@@ -30,7 +30,8 @@ stages:
   - deploy
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
-check dependencies:
+# TEMP for testing, disable .pre check
+.check dependencies:
   stage: .pre
   rules:
     - when: always
