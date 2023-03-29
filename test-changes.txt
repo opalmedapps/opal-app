@@ -3,3 +3,4 @@ This file should be deleted before merge, and contains "changes" that can be com
 Feature 1
 Bug fix 1
 Bug fix 2
+Feature 2 - Hello World
