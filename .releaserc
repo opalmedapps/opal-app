@@ -5,15 +5,13 @@
     "@semantic-release/release-notes-generator",
     "@semantic-release/changelog",
     [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "echo NEXT IS ${nextRelease.version}"
+      "@semantic-release/exec", {
+        "prepareCmd": "node -e \"require('./opal_env.setup.js').setVersionAndBuild(nextRelease.version, '1', $ENV)\""
       }
     ],
     [
-      "@semantic-release/git",
-      {
-        "assets": ["CHANGELOG.md"]
+      "@semantic-release/git", {
+        "assets": ["CHANGELOG.md", "./env/*/config.xml"]
       }
     ]
   ],
