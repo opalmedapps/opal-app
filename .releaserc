@@ -6,7 +6,7 @@
     "@semantic-release/changelog",
     [
       "@semantic-release/exec", {
-        "analyzeCommitsCmd": "export VERSION=nextRelease.version",
+        "analyzeCommitsCmd": "echo nextRelease.version && export VERSION=nextRelease.version && echo $VERSION",
         "prepareCmd": "node -e \"require('./opal_env.setup.js').setVersionAndBuild($VERSION, '1', $ENV)\""
       }
     ],
