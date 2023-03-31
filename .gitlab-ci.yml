@@ -43,10 +43,10 @@ stages:
 # TODO: 1- Protect branches ("Note: Once semantic-release is configured, any user with the permission to push commits on one of those branches will be able to publish a release. It is recommended to protect those branches, for example with GitHub protected branches.")
 # Sets a new version number for the app when committing to a release branch
 increment version:
+  stage: version
   variables:
     # Prevent reading deleted version tags: https://stackoverflow.com/questions/66047044/deleted-tags-are-present-in-gitlab-ci
     GIT_STRATEGY: clone
-  stage: version
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
@@ -58,9 +58,14 @@ increment version:
   script:
     - npx semantic-release
 
+# TODO see if 'build' jobs can have some common code pulled out
+
 # Builds the app for Android; either automatically for release branches, or manually on other branches as needed
 build android:
   stage: build
+  variables:
+    # Re-clone to get the updated version files committed by 'increment version' job
+    GIT_STRATEGY: clone
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
@@ -85,6 +90,9 @@ build android:
 # Builds the app for iOS; either automatically for release branches, or manually on other branches as needed
 build ios:
   stage: build
+  variables:
+    # Re-clone to get the updated version files committed by 'increment version' job
+    GIT_STRATEGY: clone
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
