@@ -1,3 +1,10 @@
+# [0.4.0](https://gitlab.com/opalmedapps/qplus/compare/test0.3.0...test0.4.0) (2023-03-31)
+
+
+### Features
+
+* feature 5 ([5192f4c](https://gitlab.com/opalmedapps/qplus/commit/5192f4c1644ce1daee6fcefae862d62c12934efa))
+
 # [0.3.0](https://gitlab.com/opalmedapps/qplus/compare/test0.2.0...test0.3.0) (2023-03-31)
 
 
