@@ -8,3 +8,4 @@ Feature 3
 Feature 4
 Feature 5
 Bug fix 3
+Bug fix 4
