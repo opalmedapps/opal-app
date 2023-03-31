@@ -23,6 +23,7 @@ variables:
 # FIREBASE_APP_DEV_IOS (variable): The iOS App ID of the dev firebase project.
 # GOOGLE_APPLICATION_CREDENTIALS (file): Google service account key that provides write permissions for Firebase App Distribution (see more details below).
 # IOS_DEVELOPMENT_TEAM (variable): The development team used by cordova to sign the build created via `cordova build ios --developmentTeam=___`.
+# GITLAB_TOKEN (variable): Token used by semantic-release to commit files (e.g. config.xml with updated version number). See: https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html.
 
 stages:
   - version
@@ -40,6 +41,7 @@ stages:
     - npm ci --prefer-offline
 
 # TODO: 1- Protect branches ("Note: Once semantic-release is configured, any user with the permission to push commits on one of those branches will be able to publish a release. It is recommended to protect those branches, for example with GitHub protected branches.")
+# Sets a new version number for the app when committing to a release branch
 increment version:
   variables:
     # Prevent reading deleted version tags: https://stackoverflow.com/questions/66047044/deleted-tags-are-present-in-gitlab-ci
@@ -56,11 +58,15 @@ increment version:
   script:
     - npx semantic-release
 
+# Builds the app for Android; either automatically for release branches, or manually on other branches as needed
 build android:
   stage: build
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
+    # Testing branch; to delete
+    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
+      when: manual
     - when: manual
   before_script:
     - npm -v
@@ -76,11 +82,15 @@ build android:
     paths:
       - opal-$ENV.apk
 
+# Builds the app for iOS; either automatically for release branches, or manually on other branches as needed
 build ios:
   stage: build
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
+    # Testing branch; to delete
+    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
+      when: manual
     - when: manual
   before_script:
     - npm -v
@@ -106,6 +116,7 @@ build ios:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=short -n 1)"
     - echo "$RELEASE_NOTES"
 
+# Deploys the Android app to firebase, automatically for release branches
 deploy android to firebase:
   extends: .deploy to firebase
   rules:
@@ -116,6 +127,7 @@ deploy android to firebase:
   needs:
     - job: build android
 
+# Deploys the iOS app to firebase, automatically for release branches
 deploy ios to firebase:
   extends: .deploy to firebase
   rules:
