@@ -63,14 +63,13 @@ increment version:
 # Builds the app for Android; either automatically for release branches, or manually on other branches as needed
 build android:
   stage: build
-  variables:
-    # Re-clone to get the updated version files committed by 'increment version' job
-    GIT_STRATEGY: clone
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Only build automatically for release tags on the default branch
+    # Regex, see: https://ihateregex.io/expr/semver/
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
     # Testing branch; to delete
-    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
+    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release" && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
     - when: manual
   before_script:
@@ -90,14 +89,13 @@ build android:
 # Builds the app for iOS; either automatically for release branches, or manually on other branches as needed
 build ios:
   stage: build
-  variables:
-    # Re-clone to get the updated version files committed by 'increment version' job
-    GIT_STRATEGY: clone
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Only build automatically for release tags on the default branch
+    # Regex, see: https://ihateregex.io/expr/semver/
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
     # Testing branch; to delete
-    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
+    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release" && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
     - when: manual
   before_script:
@@ -128,7 +126,9 @@ build ios:
 deploy android to firebase:
   extends: .deploy to firebase
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Only release the app for release tags on the default branch
+    # Regex, see: https://ihateregex.io/expr/semver/
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
   script:
     - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
@@ -139,7 +139,9 @@ deploy android to firebase:
 deploy ios to firebase:
   extends: .deploy to firebase
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # Only release the app for release tags on the default branch
+    # Regex, see: https://ihateregex.io/expr/semver/
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
   script:
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
