@@ -4,3 +4,4 @@ Feature 1
 Bug fix 1
 Bug fix 2
 Feature 2 - Hello World
+Feature 3
