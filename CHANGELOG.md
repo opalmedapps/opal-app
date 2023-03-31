@@ -1,3 +1,10 @@
+## [0.4.1](https://gitlab.com/opalmedapps/qplus/compare/test0.4.0...test0.4.1) (2023-03-31)
+
+
+### Bug Fixes
+
+* bug fix 3 ([218f40e](https://gitlab.com/opalmedapps/qplus/commit/218f40ea8a4059a3a0379a0d3f3f27710be1a2f3))
+
 # [0.4.0](https://gitlab.com/opalmedapps/qplus/compare/test0.3.0...test0.4.0) (2023-03-31)
 
 
