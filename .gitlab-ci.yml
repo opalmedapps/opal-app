@@ -26,9 +26,18 @@ variables:
 # GITLAB_TOKEN (variable): Token used by semantic-release to commit files (e.g. config.xml with updated version number). See: https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html.
 
 stages:
+  - debug
   - version
   - build
   - deploy
+
+# TEMP for testing
+pipeline info:
+  stage: debug
+  script:
+    - echo $CI_COMMIT_BRANCH
+    - echo $CI_COMMIT_TAG
+    - echo $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
 # TEMP for testing, disable .pre check
