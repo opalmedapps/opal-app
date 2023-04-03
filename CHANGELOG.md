@@ -1,3 +1,10 @@
+## [0.5.2](https://gitlab.com/opalmedapps/qplus/compare/test0.5.1...test0.5.2) (2023-04-03)
+
+
+### Bug Fixes
+
+* debug pipeline rules ([6aba21f](https://gitlab.com/opalmedapps/qplus/commit/6aba21f237e17fd0a100887e87e937f2ce0447f2))
+
 ## [0.5.1](https://gitlab.com/opalmedapps/qplus/compare/test0.5.0...test0.5.1) (2023-04-03)
 
 
