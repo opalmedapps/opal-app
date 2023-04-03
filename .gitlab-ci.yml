@@ -38,6 +38,11 @@ pipeline info:
   script:
     - echo $CI_COMMIT_BRANCH
     - echo $CI_COMMIT_TAG
+    - echo $CI_COMMIT_AUTHOR
+    - echo $GITLAB_USER_EMAIL
+    - echo $GITLAB_USER_ID
+    - echo $GITLAB_USER_LOGIN
+    - echo $GITLAB_USER_NAME
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
 # TEMP for testing, disable .pre check
