@@ -83,10 +83,9 @@ increment version:
   script:
     - npx semantic-release
 
-# TODO see if 'build' jobs can have some common code pulled out
-
-# Builds the app for Android; either automatically for release branches, or manually on other branches as needed
-build android:
+# Extended job for building the app
+# Builds automatically for release branches, or manually on other branches as needed
+.build:
   stage: build
   rules:
     # Only build automatically for release tags
@@ -95,10 +94,14 @@ build android:
   before_script:
     - npm -v
     - npm ci --prefer-offline
+    - echo "$ENV"
+
+# Builds the app for Android
+build android:
+  extends: .build
   script:
     - java -version
     - gradle -v
-    - echo "$ENV"
     - npm run build:app:android:device --env=$ENV
     - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-$ENV.apk"
   artifacts:
@@ -106,54 +109,44 @@ build android:
     paths:
       - opal-$ENV.apk
 
-# Builds the app for iOS; either automatically for release branches, or manually on other branches as needed
+# Builds the app for iOS
 build ios:
-  stage: build
-  rules:
-    # Only build automatically for release tags
-    - *has_version_tag
-    - when: manual
-  before_script:
-    - npm -v
-    - npm ci --prefer-offline
+  extends: .build
   script:
     # Fixes Bus Error when cordova invokes pod install
     # See: https://stackoverflow.com/a/70581304
     - gem install --user-install ffi -- --enable-libffi-alloc
-    - echo "$ENV"
-    - npm run build:app:ios:device:ci --env=dev --devteam=$IOS_DEVELOPMENT_TEAM
+    - npm run build:app:ios:device:ci --env=$ENV --devteam=$IOS_DEVELOPMENT_TEAM
     - mv ./platforms/ios/build/device/*.ipa "opal-$ENV.ipa"
   artifacts:
     expire_in: 1 day
     paths:
       - opal-$ENV.ipa
 
-# Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the GitLab project settings
-# This service account provides permissions for uploading to Firebase App Distribution
-# See: https://firebase.google.com/docs/app-distribution/authenticate-service-account.md?platform=android
+# Extended job for deploying the app; deploys to Firebase automatically based on release tags
+#   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the GitLab project settings
+#   This service account provides permissions for uploading to Firebase App Distribution
+#   See: https://firebase.google.com/docs/app-distribution/authenticate-service-account.md?platform=android
 .deploy to firebase:
   stage: deploy
+  rules:
+    # Only release the app from release tags
+    - *has_version_tag
   before_script:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=short -n 1)"
     - echo "$RELEASE_NOTES"
 
-# Deploys the Android app to firebase, automatically for release tags
+# Deploys the Android app to Firebase
 deploy android to firebase:
   extends: .deploy to firebase
-  rules:
-    # Only release the app from release tags
-    - *has_version_tag
   script:
     - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build android
 
-# Deploys the iOS app to firebase, automatically for release tags
+# Deploys the iOS app to Firebase
 deploy ios to firebase:
   extends: .deploy to firebase
-  rules:
-    # Only release the app from release tags
-    - *has_version_tag
   script:
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
