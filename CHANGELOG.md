@@ -1,3 +1,10 @@
+## [0.6.1](https://gitlab.com/opalmedapps/qplus/compare/test0.6.0...test0.6.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* test anchors for yaml reuse ([c1637d3](https://gitlab.com/opalmedapps/qplus/commit/c1637d3895520fdbcef9c580adaeafa11fe1d31f))
+
 # [0.6.0](https://gitlab.com/opalmedapps/qplus/compare/test0.5.3...test0.6.0) (2023-04-03)
 
 
