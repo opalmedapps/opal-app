@@ -57,6 +57,9 @@ increment version:
     # Prevent reading deleted version tags: https://stackoverflow.com/questions/66047044/deleted-tags-are-present-in-gitlab-ci
     GIT_STRATEGY: clone
   rules:
+    # Do not re-run on commits made by semantic-release
+    - if: GITLAB_USER_LOGIN == "semantic-release"
+      when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
     # Testing branch; to delete
