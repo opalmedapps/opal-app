@@ -1,3 +1,10 @@
+## [0.5.3](https://gitlab.com/opalmedapps/qplus/compare/test0.5.2...test0.5.3) (2023-04-03)
+
+
+### Bug Fixes
+
+* correct variable used to identify semantic-release commits ([cfa5af2](https://gitlab.com/opalmedapps/qplus/commit/cfa5af26614309d31782310a211bcfd635fb9d82))
+
 ## [0.5.2](https://gitlab.com/opalmedapps/qplus/compare/test0.5.1...test0.5.2) (2023-04-03)
 
 
