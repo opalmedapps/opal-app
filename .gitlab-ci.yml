@@ -11,6 +11,7 @@ variables:
 # Anchors used throughout this file. See: https://docs.gitlab.com/ee/ci/yaml/yaml_optimization.html
 .shared_anchors:
   rules: &has_version_tag
+    # For semver regex, see: https://ihateregex.io/expr/semver/
     - if: $CI_COMMIT_TAG =~ /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
 
 # TODO before MR: replace all "QSCCD-946.SB.semantic-release" with $CI_DEFAULT_BRANCH
@@ -88,10 +89,8 @@ increment version:
 build android:
   stage: build
   rules:
-    # Only build automatically for release tags on the default branch
-    # Regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_TAG =~ /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-      when: always
+    # Only build automatically for release tags
+    - *has_version_tag
     - when: manual
   before_script:
     - npm -v
@@ -111,10 +110,8 @@ build android:
 build ios:
   stage: build
   rules:
-    # Only build automatically for release tags on the default branch
-    # Regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_TAG =~ /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-      when: always
+    # Only build automatically for release tags
+    - *has_version_tag
     - when: manual
   before_script:
     - npm -v
@@ -140,27 +137,23 @@ build ios:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=short -n 1)"
     - echo "$RELEASE_NOTES"
 
-# Deploys the Android app to firebase, automatically for release branches
+# Deploys the Android app to firebase, automatically for release tags
 deploy android to firebase:
   extends: .deploy to firebase
   rules:
     # Only release the app from release tags
-    # Regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-      when: always
+    - *has_version_tag
   script:
     - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build android
 
-# Deploys the iOS app to firebase, automatically for release branches
+# Deploys the iOS app to firebase, automatically for release tags
 deploy ios to firebase:
   extends: .deploy to firebase
   rules:
     # Only release the app from release tags
-    # Regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-      when: always
+    - *has_version_tag
   script:
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
