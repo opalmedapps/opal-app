@@ -11,3 +11,4 @@ Bug fix 3
 Bug fix 4
 Bug fix 5
 Feature 6
+Bug fix 6
