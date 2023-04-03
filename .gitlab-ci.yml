@@ -2,15 +2,23 @@ default:
   tags:
     - macos
 
-# Prevent duplicate pipelines when a commit is pushed to an open merge request
-# See: https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
+# TODO before MR: replace all "QSCCD-946.SB.semantic-release" with $CI_DEFAULT_BRANCH
+# TODO: replace all 'test' with 'v'
+# TODO: revert 'test-ci'
+
 workflow:
   rules:
+    # Rules for semantic-release: do not run on commits made by semantic-release, only run on the version tags it creates
+    - if: $GITLAB_USER_NAME == "semantic-release" && $CI_COMMIT_BRANCH
+      when: never
+    - if: $CI_COMMIT_TAG =~ /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+
+    # Prevent duplicate pipelines when a commit is pushed to an open merge request
+    # See: https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
       when: never
     - if: $CI_COMMIT_BRANCH
-    - if: $CI_COMMIT_TAG
 
 variables:
   ENV: "dev"  # The environment used in the app build command
@@ -28,11 +36,12 @@ variables:
 
 stages:
   - debug
-  - version
+  - check
+  - prepare
   - build
   - deploy
 
-# TEMP for testing
+# TODO TEMP for testing
 pipeline info:
   stage: debug
   script:
@@ -45,9 +54,9 @@ pipeline info:
     - echo $GITLAB_USER_NAME
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
-# TEMP for testing, disable .pre check
+# TODO TEMP for testing, disable .pre check
 .check dependencies:
-  stage: .pre
+  stage: check
   rules:
     - when: always
   script:
@@ -57,17 +66,11 @@ pipeline info:
 # TODO: 1- Protect branches ("Note: Once semantic-release is configured, any user with the permission to push commits on one of those branches will be able to publish a release. It is recommended to protect those branches, for example with GitHub protected branches.")
 # Sets a new version number for the app when committing to a release branch
 increment version:
-  stage: version
+  stage: prepare
   variables:
     # Prevent reading deleted version tags: https://stackoverflow.com/questions/66047044/deleted-tags-are-present-in-gitlab-ci
     GIT_STRATEGY: clone
   rules:
-    # Do not re-run on commits made by semantic-release
-    - if: $GITLAB_USER_NAME == "semantic-release"
-      when: never
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: always
-    # Testing branch; to delete
     - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
       when: always
   before_script:
@@ -83,9 +86,6 @@ build android:
   rules:
     # Only build automatically for release tags on the default branch
     # Regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-      when: always
-    # Testing branch; to delete
     - if: $CI_COMMIT_TAG =~ /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
     - when: manual
@@ -109,9 +109,6 @@ build ios:
   rules:
     # Only build automatically for release tags on the default branch
     # Regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-      when: always
-    # Testing branch; to delete
     - if: $CI_COMMIT_TAG =~ /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
     - when: manual
@@ -143,9 +140,9 @@ build ios:
 deploy android to firebase:
   extends: .deploy to firebase
   rules:
-    # Only release the app for release tags on the default branch
+    # Only release the app from release tags
     # Regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+    - if: $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
   script:
     - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
@@ -156,9 +153,9 @@ deploy android to firebase:
 deploy ios to firebase:
   extends: .deploy to firebase
   rules:
-    # Only release the app for release tags on the default branch
+    # Only release the app from release tags
     # Regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+    - if: $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
       when: always
   script:
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
