@@ -1,3 +1,10 @@
+# [0.7.0](https://gitlab.com/opalmedapps/qplus/compare/test0.6.2...test0.7.0) (2023-04-03)
+
+
+### Features
+
+* pull common build code out into extended job ([a11ef2e](https://gitlab.com/opalmedapps/qplus/commit/a11ef2ea0d9fd8049ac3419019441c5c645a5e7b))
+
 ## [0.6.2](https://gitlab.com/opalmedapps/qplus/compare/test0.6.1...test0.6.2) (2023-04-03)
 
 
