@@ -1,3 +1,10 @@
+## [0.6.2](https://gitlab.com/opalmedapps/qplus/compare/test0.6.1...test0.6.2) (2023-04-03)
+
+
+### Bug Fixes
+
+* apply yaml anchor throughout the file ([d261cf3](https://gitlab.com/opalmedapps/qplus/commit/d261cf3b30f2353f73b0a59bca71713dadc67306))
+
 ## [0.6.1](https://gitlab.com/opalmedapps/qplus/compare/test0.6.0...test0.6.1) (2023-04-03)
 
 
