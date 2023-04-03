@@ -1,3 +1,10 @@
+# [0.6.0](https://gitlab.com/opalmedapps/qplus/compare/test0.5.3...test0.6.0) (2023-04-03)
+
+
+### Features
+
+* clean up ci rules ([a7d23bf](https://gitlab.com/opalmedapps/qplus/commit/a7d23bfa7ac9eba421cb27f71e4938b6427ef8c6))
+
 ## [0.5.3](https://gitlab.com/opalmedapps/qplus/compare/test0.5.2...test0.5.3) (2023-04-03)
 
 
