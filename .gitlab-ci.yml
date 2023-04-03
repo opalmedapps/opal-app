@@ -63,7 +63,7 @@ increment version:
     GIT_STRATEGY: clone
   rules:
     # Do not re-run on commits made by semantic-release
-    - if: $GITLAB_USER_LOGIN == "semantic-release"
+    - if: $GITLAB_USER_NAME == "semantic-release"
       when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
