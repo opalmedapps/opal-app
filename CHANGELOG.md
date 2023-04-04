@@ -1,3 +1,10 @@
+## [0.7.1](https://gitlab.com/opalmedapps/qplus/compare/test0.7.0...test0.7.1) (2023-04-04)
+
+
+### Bug Fixes
+
+* prevent build from running on the pipeline with its old version number ([f778eb7](https://gitlab.com/opalmedapps/qplus/commit/f778eb7670580cb34fe821ad69d0d2e9286db01c))
+
 # [0.7.0](https://gitlab.com/opalmedapps/qplus/compare/test0.6.2...test0.7.0) (2023-04-03)
 
 
