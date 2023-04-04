@@ -1,5 +1,5 @@
 {
-  "branches": ["QSCCD-946.SB.semantic-release"],
+  "branches": ["staging"],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
@@ -16,6 +16,5 @@
       }
     ]
   ],
-  "dryRun": false,
-  "tagFormat": "test${version}"
+  "tagFormat": "v${version}"
 }
