@@ -6,18 +6,13 @@ variables:
   ENV: "dev"  # The environment used in the app build command
   FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
   FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
-  FIREBASE_GROUP: "test-ci"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
+  FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
 
 # Anchors used throughout this file. See: https://docs.gitlab.com/ee/ci/yaml/yaml_optimization.html
 .shared_anchors:
   rules: &has_version_tag
     # For semver regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_TAG =~ /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-
-# TODO before MR: replace all "QSCCD-946.SB.semantic-release" with $CI_DEFAULT_BRANCH
-# TODO: replace all 'test' with 'v'
-# TODO: revert 'test-ci'
-# TODO: re-enable "check dependencies"
+    - if: $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
 
 workflow:
   rules:
@@ -42,26 +37,13 @@ workflow:
 # GITLAB_TOKEN (variable): Token used by semantic-release to commit files (e.g. config.xml with updated version number). See: https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html.
 
 stages:
-  - debug
   - check
   - prepare
   - build
   - deploy
 
-# TODO TEMP for testing
-pipeline info:
-  stage: debug
-  script:
-    - echo $CI_COMMIT_BRANCH
-    - echo $CI_COMMIT_TAG
-    - echo $CI_COMMIT_AUTHOR
-    - echo $GITLAB_USER_EMAIL
-    - echo $GITLAB_USER_ID
-    - echo $GITLAB_USER_LOGIN
-    - echo $GITLAB_USER_NAME
-
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
-.check dependencies:
+check dependencies:
   stage: check
   rules:
     - when: always
@@ -69,14 +51,15 @@ pipeline info:
     - npm -v
     - npm ci --prefer-offline
 
-# Sets a new version number for the app when committing to a release branch
+# Sets a new version number for the app when committing to the default branch
 increment version:
   stage: prepare
   variables:
     # Prevent reading deleted version tags: https://stackoverflow.com/questions/66047044/deleted-tags-are-present-in-gitlab-ci
     GIT_STRATEGY: clone
   rules:
-    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
+    # Run automatically on every commit to the default branch
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
   before_script:
     - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/git@10.0.1 @semantic-release/exec@6.0.3
@@ -84,14 +67,14 @@ increment version:
     - npx semantic-release
 
 # Extended job for building the app
-# Builds automatically for release branches, or manually on other branches as needed
+# Builds automatically for release tags, or manually on other branches as needed
 .build:
   stage: build
   rules:
     # Only build automatically for release tags
     - *has_version_tag
-    # Inverse of the rule from 'increment version'; this prevents the build from executing on the commit with its old version number
-    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: never
     # In all other cases, builds can be executed manually as needed
     - when: manual
