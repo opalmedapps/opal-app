@@ -90,6 +90,10 @@ increment version:
   rules:
     # Only build automatically for release tags
     - *has_version_tag
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the commit with its old version number
+    - if: $CI_COMMIT_BRANCH == "QSCCD-946.SB.semantic-release"
+      when: never
+    # In all other cases, builds can be executed manually as needed
     - when: manual
   before_script:
     - npm -v
