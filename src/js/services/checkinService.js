@@ -100,7 +100,7 @@
 
         async function attemptCheckin(patientSerNum){
             const isAllowed = await isWithinCheckinRange();
-            if (!isAllowed) return 'NOT_ALLOWED';
+            if (!isAllowed) return 'CHECKIN_NOT_ALLOWED';
 
             const checkinResult = await checkinToAllAppointments(patientSerNum);
             attemptedCheckin = true;
@@ -131,10 +131,10 @@
             } else {
                 try {
                     const canCheckin = await isWithinCheckinRange();
-                    canCheckin ? setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length) : setCheckinState("NOT_ALLOWED", appts.length);
+                    canCheckin ? setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length) : setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
                 } catch (error) {
                     console.error(error);
-                    setCheckinState("NOT_ALLOWED", appts.length);
+                    setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
                 }
             }
             return;
@@ -151,7 +151,7 @@
             } else if (checkinErrorsExist(appts)) {
                 setCheckinState("CHECKIN_ERROR");
             } else {
-                setCheckinState("NOT_ALLOWED", appts.length);
+                setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
             }
         }
 
@@ -228,7 +228,7 @@
                     state.noAppointments = false;
                     state.allCheckedIn = false;
                     break;
-                case "NOT_ALLOWED":
+                case "CHECKIN_NOT_ALLOWED":
                     state.canNavigate = false;
                     state.numberOfAppts = numAppts;
                     state.checkinError = false;
