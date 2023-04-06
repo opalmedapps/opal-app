@@ -18,8 +18,8 @@
             'Checkinpossible'
             ------------------------------------------------------------------->
 
-            <ons-row>
-                <ons-col width="25%" align="center" style="text-align: center;">
+            <ons-row style="margin-left: -5px">
+                <ons-col width="25%" align="center" style="margin-right: 5px; text-align: center;">
                     {{app.ScheduledStartTime | date:'shortTime'}}
                     <svg ng-if="app.loading" class="progress-circular-sm">
                         <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none"
@@ -55,7 +55,7 @@
                         <!-- Successful Checkin -->
                         <div ng-if="app.CheckInStatus == 'success'">
                             <span class="item-desc" ng-class="fontSizeDesc">
-                                {{"CHECKED_IN"|translate}}
+                                {{"CHECKIN_SUCCESS"|translate}}
                             </span>
 
                             <span class="item-desc" ng-class="fontSizeDesc"
@@ -83,7 +83,7 @@
         </ons-list-item>
         <ons-list-item ng-if="!value.allCheckedIn" class="item-btn">
             <ons-button ng-class="fontSizeTitle" class="checkin-btn"
-                        ng-click="checkIn.CheckInAppointments(patientSerNum)">{{"CHECKINALLTODAY"|translate}}</ons-button>
+                        ng-click="checkIn.CheckInAppointments(patientSerNum)">{{"CHECKIN_ALL_TODAY"|translate}}</ons-button>
         </ons-list-item>
     </ons-list>
     <ons-list ng-show="checkIn.emptyApps">
