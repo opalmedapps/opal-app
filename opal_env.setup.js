@@ -196,14 +196,13 @@ class OpalEnv {
 	 * Sets version for the app, this is different from the build number, this is the version that
 	 * shows in the app store.
 	 * @throws Throws error if environment not defined, if config.xml file is not
-	 * @param{string} newVersion New version, if null it gets new version or simply increases current minor version by one.
-	 * @param{string} env Environment to update, if null, it updates the
+	 * @param {string|null} newVersion New version; if null, it increments the patch number by one.
+	 * @param {string|null} env Environment to update; if null, it updates the file in the root directory.
 	 */
 	static setVersion(newVersion = null, env = null) {
 		// Gets new version or simply increases current patch version by one.
 		const currentVersion = this.getVersion(env);
 		newVersion = (newVersion) ? newVersion : semver.inc(currentVersion, "patch");
-		this.setDirectory(env);
 		console.log(`Version update for env: '${env ? env : "default (root)"}' ${currentVersion}=>${newVersion}`);
 		this.writeToConfigXML(this.setXMLWidgetAttributeText(this.getConfigXMLJSON(),
 			"version", newVersion));
@@ -245,7 +244,22 @@ class OpalEnv {
 		this.setXMLWidgetAttributeText(configFile, "ios-CFBundleVersion", buildNumber[0]);
 		this.setXMLWidgetAttributeText(configFile, "android-versionCode", buildNumber[1]);
 		this.writeToConfigXML(configFile);
+		console.log(`Build numbers for env: '${env ? env : "default (root)"}' set to ${buildNumber[0] === buildNumber[1] ? buildNumber[0] : buildNumber}`);
+	}
 
+	/**
+	 * @desc Sets the version and build numbers in the config.xml file of the given environment.
+	 * @author Stacey Beard
+	 * @date 2023-03-30
+	 * @param {string|null} version Version number passed to setVersion().
+	 * @param {string|null} build Build number(s) passed to setBuildNumbers().
+	 * @param {string|null} env Environment to update; if null, it updates the file in the root directory.
+	 */
+	static setVersionAndBuild(version = null, build = null, env = null) {
+		const initialDirectory = shelljs.pwd().toString();
+		this.setVersion(version, env);
+		shelljs.cd(initialDirectory);
+		this.setBuildNumbers(build, env);
 	}
 
 	static getEnvironmentFolder(env = null) {
