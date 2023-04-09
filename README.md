@@ -55,6 +55,7 @@ The following is the top level anatomy of the folders and their description. As 
 ├── README.md
 ├── .gitlab # Contains templates used in GitLab
 ├── .gitlab-ci.yml # GitLab CI/CD pipeline description file
+├── docs # Project-specific documentation
 ├── env # Folder where the environment specific files live
     ├── preprod
     ├── prod
