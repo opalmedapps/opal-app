@@ -1,3 +1,10 @@
+# [1.14.0](https://gitlab.com/opalmedapps/qplus/compare/v1.13.0...v1.14.0) (2023-04-17)
+
+
+### Features
+
+* caregiver functionality for the "Upcoming Appointment" widget ([af68de9](https://gitlab.com/opalmedapps/qplus/commit/af68de91edd946e892247f83171682e4bae71da5))
+
 # [1.13.0](https://gitlab.com/opalmedapps/qplus/compare/v1.12.3...v1.13.0) (2023-04-09)
 
 
