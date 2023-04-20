@@ -59,13 +59,6 @@ class PatientTestResultsByDatetimeController {
 	}
 
 	/**
-	 * Returns the class for a given test based on its criticality (see forwarded function for details)
-	 */
-	getTestClass(test) {
-		return this.#patientTestResults.getTestClass(test);
-	}
-
-	/**
 	 * Returns the display group name for the current result, some results are under no group, in this case the string 
 	 * Other is used as group name
 	 * @param {string} groupName Group name string

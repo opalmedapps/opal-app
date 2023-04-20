@@ -41,7 +41,6 @@
 		vm.goToTestDateResults = goToTestDateResults;
 		vm.goToTestTypeResults = goToTestTypeResults;
 		vm.displayType = displayType;
-		vm.getTestClass = PatientTestResults.getTestClass;
 
 		// Used by patient-data-handler
 		vm.setTestsView = setTestsView;
