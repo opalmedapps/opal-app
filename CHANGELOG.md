@@ -1,3 +1,10 @@
+## [1.14.1](https://gitlab.com/opalmedapps/qplus/compare/v1.14.0...v1.14.1) (2023-04-20)
+
+
+### Bug Fixes
+
+* fix and refactor lab results content ([0289257](https://gitlab.com/opalmedapps/qplus/commit/02892575cce9da0d3e3ee6a312e6b39c58bbb8dc))
+
 # [1.14.0](https://gitlab.com/opalmedapps/qplus/compare/v1.13.0...v1.14.0) (2023-04-17)
 
 
