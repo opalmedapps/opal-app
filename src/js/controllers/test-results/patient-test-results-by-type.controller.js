@@ -93,13 +93,6 @@ class PatientTestResultsByTypeController {
 		return test[`name_${this.#language}`];
 	}
 
-	/**
-	 * Returns the class for a given test based on its criticality (see forwarded function for details)
-	 */
-	getTestClass(test) {
-		return this.#patientTestResults.getTestClass(test);
-	}
-
 	////////////////////////////////////////////////////
 
 	/**
