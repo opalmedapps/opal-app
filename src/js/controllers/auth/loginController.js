@@ -244,7 +244,7 @@
                     var language = UserPreferences.getLanguage();
 
                     initNavigator.pushPage('./views/login/security-question.html', {
-                        securityQuestion: response.Data.question,
+                        securityQuestion: response.Data.securityQuestion,
                         trusted: vm.trusted
                     });
                 })

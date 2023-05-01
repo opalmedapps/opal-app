@@ -173,7 +173,7 @@
                     })
                     .then(function (response) {
                         $timeout(function () {
-                            vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                            vm.Question = response.Data.securityQuestion;
                             vm.loading = false;
                         });
                     })
