@@ -58,7 +58,7 @@
             <ons-scroller style="height: 320px;">
                 <ons-list style="margin-top: 20px">
                     <ons-list-item ng-repeat="testResult in testTypeCtrl.test.results|orderBy:'-'" style="padding-top:10px;">
-                        <ons-row align="center" ng-class="[testTypeCtrl.getTestClass(testResult), fontSizeDesc]"
+                        <ons-row align="center" ng-class="fontSizeDesc"
                                  style="line-height: 1.5;">
                             <ons-col width="60%" align="center" class="labtest-col" vertical-align="center">
                                 <div style="text-align: center; margin-left:4px;">
@@ -112,7 +112,7 @@
             </ons-list-item>
 
             <!-- RECENT TEST RESULT -->
-            <ons-list-item class="list-item-container-narrow" ng-class="testTypeCtrl.getTestClass(testTypeCtrl.test)">
+            <ons-list-item class="list-item-container-narrow">
                 <ons-row ng-class="fontSizeDesc" vertical-align="center">
 
                     <!-- RECENT TEST RESULT - LEFT (LABEL) -->
