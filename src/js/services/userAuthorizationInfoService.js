@@ -38,13 +38,6 @@ function UserAuthorizationInfo(Constants) {
     var password='';
     /**
      *@ngdoc property
-    *@name  MUHCApp.service.#token
-    *@propertyOf MUHCApp.service:UserAuthorizationInfo
-    *@description Hashed of password property
-    **/
-    var token='';
-    /**
-     *@ngdoc property
     *@name  MUHCApp.service.#identifier
     *@propertyOf MUHCApp.service:UserAuthorizationInfo
     *@description Device identifier property
@@ -74,16 +67,15 @@ function UserAuthorizationInfo(Constants) {
         *@param {String} user Username
         *@param {String} pass Hashed of password
         *@param {String} exp  Expires
-        *@param {String} tok  Authentication token
+        *@param {String} userEmail The user's email address, used to log in
         *@param {boolean} trustedDevice whether the device is trusted or not
         *@description Sets all the user authorization.
         */
-        setUserAuthData: function (user, pass, exp, tok, Email, trustedDevice) {
-            username= user;
-            password=pass;
+        setUserAuthData: function (user, pass, exp, userEmail, trustedDevice) {
+            username = user;
+            password = pass;
             expires = exp;
-            token=tok;
-            email = Email;
+            email = userEmail;
             trusted = trustedDevice;
         },
         /**
@@ -110,7 +102,6 @@ function UserAuthorizationInfo(Constants) {
                 UserName: username,
                 Expires: expires,
                 Password:password,
-                Token:token
             };
         },
         /**
@@ -152,17 +143,6 @@ function UserAuthorizationInfo(Constants) {
             return expires;
         },
         /**
-        *@ngdoc method
-        *@name getToken
-        *@methodOf MUHCApp.service:UserAuthorizationInfo
-        *@returns {string} Returns authentication token
-        */
-        getToken:function()
-        {
-            
-          return token;
-        },
-        /**
          *@ngdoc method
          *@name getEmail
          *@methodOf MUHCApp.service:UserAuthorizationInfo
@@ -192,8 +172,7 @@ function UserAuthorizationInfo(Constants) {
         {
              username = '';
              expires = '';
-             password='';
-             token='';
+             password = '';
              identifier = '';
         },
         /**
