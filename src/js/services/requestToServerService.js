@@ -160,7 +160,6 @@ angular
             let params = {
                 Request : requestType,
                 DeviceId: UUID.getUUID(),
-                Token: UserAuthorizationInfo.getToken(),
                 UserID: UserAuthorizationInfo.getUsername(),
                 Parameters: requestParameters,
                 UserEmail: UserAuthorizationInfo.getEmail(),
