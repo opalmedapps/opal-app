@@ -1,3 +1,10 @@
+## [1.14.5](https://gitlab.com/opalmedapps/qplus/compare/v1.14.4...v1.14.5) (2023-05-04)
+
+
+### Bug Fixes
+
+* remove unused Token request parameter ([08aa8a6](https://gitlab.com/opalmedapps/qplus/commit/08aa8a6cd8ebaf2f1ea94274825b99f7d8d93f29))
+
 ## [1.14.4](https://gitlab.com/opalmedapps/qplus/compare/v1.14.3...v1.14.4) (2023-04-27)
 
 
