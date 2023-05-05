@@ -7,12 +7,15 @@
 
     HomeController.$inject = [
         '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
-        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version', 'User', 'ProfileSelector','$interval'];
+        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
+        'Version', 'User', 'ProfileSelector','$interval', 'UpdateUI',
+    ];
 
     /* @ngInject */
     function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
-        UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version, User, ProfileSelector, $interval)
-    {
+        UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
+        Version, User, ProfileSelector, $interval, UpdateUI,
+    ){
         var vm = this;
 
         vm.FirstName = '';
@@ -230,7 +233,18 @@
          * Takes the user to the selected appointment to view more details about it
          */
         function goToAppointments(){
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            let params = {'Navigator':'homeNavigator'};
+            // When the nearest appointment is for a patient in care,
+            // by clicking on the widget should open the calendar for that patient (e.g., care receiver's calendar)
+            if (ProfileSelector.getActiveProfile().patient_legacy_id !== vm?.closestAppointment?.patientsernum) {
+                params['isCareReceiver'] = true;
+                params['currentProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
+                ProfileSelector.loadPatientProfile(vm.closestAppointment.patientsernum);
+
+                // Reload 'Appointments' for the patient in care in case the appointments were already loaded
+                UpdateUI.updateTimestamps('Appointments', 0);
+            }
+            NavigatorParameters.setParameters(params);
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
 
