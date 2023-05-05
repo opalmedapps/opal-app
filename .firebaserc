@@ -4,6 +4,7 @@
     "dev": "opal-registration-beta",
     "preprod": "opal-prod",
     "prod": "firebase-brilliant-inferno-767",
+    "qa": "opal-1f8d2c",
     "staging": "opal-dev"
   }
 }
