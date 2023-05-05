@@ -1,3 +1,10 @@
+# [1.15.0](https://gitlab.com/opalmedapps/qplus/compare/v1.14.5...v1.15.0) (2023-05-05)
+
+
+### Features
+
+* redirect to the care receiver's calendar when click on the appointment widget ([b08e523](https://gitlab.com/opalmedapps/qplus/commit/b08e5234e8e23cdaac94353392cafb0f7111a27d))
+
 ## [1.14.5](https://gitlab.com/opalmedapps/qplus/compare/v1.14.4...v1.14.5) (2023-05-04)
 
 
