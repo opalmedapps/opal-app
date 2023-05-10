@@ -101,7 +101,6 @@ import firebase from "firebase";
 import "angularjs-scroll-glue";
 import "angular-sanitize";
 import "onsenui/js/onsenui";
-import "angular-tek-progress-bar";
 import "moment";
 import "pdfjs-dist/build/pdf";
 import "pdfjs-dist/build/pdf.worker";
@@ -125,7 +124,7 @@ import "./app.bootstrap";
 //Routes for angular views
 angular
     .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','luegg.directives',
-        'ngSanitize','ui.router','onsen','ngTouch','firebase','ui.bootstrap','Tek.progressBar'])
+        'ngSanitize','ui.router','onsen','ngTouch','firebase','ui.bootstrap'])
     .run(initialization);
 
 initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$translate', 'Patient', '$location', 'NetworkStatus'];

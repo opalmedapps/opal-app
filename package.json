@@ -54,7 +54,6 @@
     "angular-animate": "npm:@xlts.dev/angular-animate@1.9.1",
     "angular-dynamic-locale": "^0.1.27",
     "angular-sanitize": "npm:@xlts.dev/angular-sanitize@1.9.1",
-    "angular-tek-progress-bar": "^0.2.1",
     "angular-touch": "npm:@xlts.dev/angular-touch@1.9.1",
     "angular-translate": "^2.18.2",
     "angular-translate-handler-log": "^2.7.2",
