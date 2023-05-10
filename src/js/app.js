@@ -39,13 +39,6 @@
 
 /**
  *@ngdoc object
- *@name ProjectDependencies.lueggdirectives
- *@description Dependency used in the messages page to scroll automatically as messages are added to
- *conversations. Link to external reference {@link https://github.com/Luegg/angularjs-scroll-glue}.
- */
-
-/**
- *@ngdoc object
  *@name ProjectDependencies.ngSanitize
  *@description Dependency used to clean up and indent the html code.
  Link to external reference {@link https://github.com/angular/bower-angular-sanitize}.
@@ -98,7 +91,6 @@ import "angular-touch";
 import "bootstrap";
 import "angularfire";
 import firebase from "firebase";
-import "angularjs-scroll-glue";
 import "angular-sanitize";
 import "onsenui/js/onsenui";
 import "moment";
@@ -123,7 +115,7 @@ import "./app.bootstrap";
 
 //Routes for angular views
 angular
-    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','luegg.directives',
+    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate',
         'ngSanitize','ui.router','onsen','ngTouch','firebase','ui.bootstrap'])
     .run(initialization);
 
