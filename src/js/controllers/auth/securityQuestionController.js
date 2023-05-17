@@ -184,6 +184,12 @@
                 }
             } else {
                 vm.Question = parameters.securityQuestion;
+                angular.element(document).ready(function () {
+                    const securityAnswer = document.getElementById('security_answer_input');
+                    if (securityAnswer) {
+                        securityAnswer.focus();
+                    }
+                });
             }
         }
 
