@@ -206,10 +206,21 @@
                 });
             });
 
+            $scope.initNavigator.on('postpush', () => {
+                $timeout(() => {
+                    const securityAnswer = document.getElementById('security_answer_input');
+                    if (securityAnswer) {
+                        securityAnswer.focus();
+                    }
+                });
+            });
+
+
             // Remove the event listeners
             $scope.$on('$destroy', function() {
                 $scope.initNavigator.off('prepop');
                 $scope.initNavigator.off('postpop');
+                $scope.initNavigator.off('postpush');
             });
         }
 
