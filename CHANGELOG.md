@@ -1,3 +1,10 @@
+# [1.16.0](https://gitlab.com/opalmedapps/qplus/compare/v1.15.0...v1.16.0) (2023-05-19)
+
+
+### Features
+
+* add the enhancement of the security answer input (QSCCD-1112) ([f81b472](https://gitlab.com/opalmedapps/qplus/commit/f81b47258cecc9d83c73c35be340c77b558b77d7))
+
 # [1.15.0](https://gitlab.com/opalmedapps/qplus/compare/v1.14.5...v1.15.0) (2023-05-05)
 
 
