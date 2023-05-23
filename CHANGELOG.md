@@ -1,3 +1,10 @@
+## [1.16.1](https://gitlab.com/opalmedapps/qplus/compare/v1.16.0...v1.16.1) (2023-05-23)
+
+
+### Bug Fixes
+
+* change format of expected security question data ([b5622a6](https://gitlab.com/opalmedapps/qplus/commit/b5622a62b79e156fe97f1d799e29c599f71cbd33))
+
 # [1.16.0](https://gitlab.com/opalmedapps/qplus/compare/v1.15.0...v1.16.0) (2023-05-19)
 
 
