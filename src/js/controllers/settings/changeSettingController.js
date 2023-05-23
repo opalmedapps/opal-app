@@ -118,10 +118,11 @@
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                 })
                 .catch(function (error) {
+                    console.error(error);
                     $timeout(function() {
                         vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageSuccess;
-                        vm.updateMessage = "INTERNETERROR";
+                        vm.alertClass = Params.alertClassUpdateMessageError;
+                        vm.updateMessage = "ERROR_GENERIC";
                     });
                 })
         }
@@ -190,7 +191,7 @@
                     default:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INTERNETERROR";
+                        vm.updateMessage = "ERROR_GENERIC";
                         break;
                 }
             })
