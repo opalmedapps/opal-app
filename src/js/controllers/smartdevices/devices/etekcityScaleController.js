@@ -6,11 +6,11 @@
         .controller('EtekcityScaleController', EtekcityScaleController);
 
         EtekcityScaleController.$inject = [
-        '$scope', '$filter', '$timeout', 'NavigatorParameters', 'RequestToServer', 'Params', 'User'
+        '$scope', '$filter', '$timeout', 'NavigatorParameters', 'RequestToServer', 'Params', 'ProfileSelector'
     ];
 
     /* @ngInject */
-    function EtekcityScaleController($scope, $filter, $timeout, NavigatorParameters, RequestToServer, Params, User)
+    function EtekcityScaleController($scope, $filter, $timeout, NavigatorParameters, RequestToServer, Params, ProfileSelector)
     {
         // UUIDs for smart scale
         const SERVICE_UUID = 'FFE0';
@@ -68,7 +68,7 @@
                 device: vm.selectedDevice.name,
             };
 
-            const patient_id = User.getLoggedinUserProfile().patient_id;
+            const patient_id = ProfileSelector.getActiveProfile().patient_id;
             const requestParams = Params.API.ROUTES.QUANTITY_SAMPLES;
             const formattedParams = {
                 ...requestParams,

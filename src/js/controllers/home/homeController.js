@@ -292,7 +292,9 @@
          * @description get patient's first name for the appointment widget
          */
         function getPatientFirstName(){
-            if (User.getLoggedinUserProfile().patient_legacy_id === vm?.closestAppointment?.patientsernum) {
+            // TODO test
+            let selfPatientSerNum = User.getSelfPatientSerNum();
+            if (selfPatientSerNum && selfPatientSerNum === vm?.closestAppointment?.patientsernum) {
                 return $filter('translate')("YOU");
             }
             else {

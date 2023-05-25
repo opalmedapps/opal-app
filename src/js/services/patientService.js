@@ -13,24 +13,24 @@ angular
 
         let ProfileImage = '';
         let FirstName = '';
-        let LastName = '';
+        // let LastName = '';
         let AccessLevel = '';
-        let Email = '';
+        // let Email = '';
         let PatientSerNum = '';
-        let TestUser = '';
+        // let TestUser = '';
         let SelectedProfile = {};
 
         return {
             setSelectedProfile: profile => SelectedProfile = profile,
             initPatient: initPatient,
             getFirstName: () => SelectedProfile?.first_name || FirstName,
-            getLastName: () => SelectedProfile?.last_name ||LastName,
-            getEmail: () => Email,
+            // getLastName: () => SelectedProfile?.last_name ||LastName,
+            // getEmail: () => Email,
             getPatientSerNum: () => SelectedProfile?.patient_legacy_id || PatientSerNum,
-            getProfileImage: () => ProfileImage,
-            getAccessLevel: () => AccessLevel,
+            // getProfileImage: () => ProfileImage,
+            getAccessLevel: () => SelectedProfile?.AccessLevel || AccessLevel, // There is no AccessLevel in Django yet
             clearPatient: clearPatient,
-            getTestUser: () => parseInt(TestUser, 10) === 1,
+            // getTestUser: () => parseInt(TestUser, 10) === 1,
         };
 
         /**
@@ -44,15 +44,15 @@ angular
             let font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
             UserPreferences.setFontSize(font || 'large');
             FirstName = patientFields.FirstName;
-            LastName = patientFields.LastName;
+            // LastName = patientFields.LastName;
             AccessLevel = patientFields.AccessLevel;
-            Email = patientFields.Email;
-            TestUser = patientFields.TestUser;
+            // Email = patientFields.Email;
+            // TestUser = patientFields.TestUser;
             PatientSerNum = patientFields.PatientSerNum;
-            ProfileImage = (patientFields.ProfileImage && patientFields.ProfileImage !== '')
-                ? `data:image/${patientFields.DocumentType};base64,${patientFields.ProfileImage}`
-                : '';
-            patientFields.ProfileImage = ProfileImage;
+            // ProfileImage = (patientFields.ProfileImage && patientFields.ProfileImage !== '')
+            //     ? `data:image/${patientFields.DocumentType};base64,${patientFields.ProfileImage}`
+            //     : '';
+            // patientFields.ProfileImage = ProfileImage;
             return patientFields;
         }
 
@@ -61,10 +61,11 @@ angular
          * @returns {Promise<Object>} Resolves with the processed Patient information once downloaded and saved.
          */
         async function initPatient() {
-            let RequestToServer = $injector.get('RequestToServer');
-            let result = await RequestToServer.sendRequestWithResponse('UserPatient');
-            if (!result.Data || result.Data === "empty") throw new Error("Failed to download the user's patient information; no data was returned");
-            return setPatient(result.Data);
+            // let RequestToServer = $injector.get('RequestToServer');
+            // let result = await RequestToServer.sendRequestWithResponse('UserPatient');
+            // if (!result.Data || result.Data === "empty") throw new Error("Failed to download the user's patient information; no data was returned");
+            // return setPatient(result.Data);
+            return setPatient({});
         }
 
         /**
@@ -76,8 +77,8 @@ angular
         function clearPatient() {
             ProfileImage = '';
             FirstName = '';
-            LastName = '';
-            Email = '';
+            // LastName = '';
+            // Email = '';
             PatientSerNum = '';
             AccessLevel = '';
             SelectedProfile = {};

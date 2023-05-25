@@ -21,11 +21,18 @@
 
         async function getCaregiversList() {
             try {
-                const patientSerNum = User.getLoggedinUserId();
+                // TODO test
+                const selfPatientSerNum = User.getSelfPatientSerNum();
+                // Special case: if the user doesn't have a self relationship, then this user has no caregivers
+                if (!selfPatientSerNum) {
+                    vm.apiData = [];
+                    return;
+                }
+
                 const requestParams = Params.API.ROUTES.CAREGIVERS;
                 const formatedParams = {
                     ...requestParams,
-                    url: requestParams.url.replace('<PATIENT_ID>', patientSerNum),
+                    url: requestParams.url.replace('<PATIENT_ID>', selfPatientSerNum),
                 }
                 const result = await RequestToServer.apiRequest(formatedParams);
                 (result.data?.length <= 0) ? vm.notFound = true : vm.apiData = result.data;
