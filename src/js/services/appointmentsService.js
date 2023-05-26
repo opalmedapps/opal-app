@@ -201,7 +201,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         LocalStorage.WriteToLocalStorage('Appointments',userAppointmentsArray);
 
         //Sort Appointments chronologically most recent first
-        userAppointmentsArray = $filter('orderBy')(userAppointmentsArray, 'ScheduledStartTime', false);
+        userAppointmentsArray = $filter('orderBy')(userAppointmentsArray, 'ScheduledStartTime', true);
         //Extracts treatment session appointments
         treatmentSessionsObject = setTreatmentSessions(userAppointmentsArray);
         //Sets the calendar for easy extraction in the calendar view

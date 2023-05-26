@@ -166,8 +166,8 @@
          */
         function findClosestAnchor() {
             if(vm.appointments.length>0) {
-                if(dateLast<choosenTimeMilliseconds) return 'lastAnchor';
-                else if(dateFirst>choosenTimeMilliseconds) return 'firstAnchor';
+                if(dateLast<choosenTimeMilliseconds) return 'firstAnchor';
+                else if(dateFirst>choosenTimeMilliseconds) return 'lastAnchor';
                 else{
                     let ind = findClosestAppointmentToTime(choosenTimeMilliseconds);
                     return 'anchorAppointments'+ ind;
