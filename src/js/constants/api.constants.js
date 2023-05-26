@@ -45,6 +45,10 @@
                     method: 'get',
                     url: '/api/caregivers/patients/'
                 },
+                USER: {
+                    method: 'get',
+                    url: '/api/caregivers/<USERNAME>/',
+                },
                 CAREGIVERS: {
                     method: 'get',
                     url: '/api/patients/legacy/<PATIENT_ID>/caregivers/' 

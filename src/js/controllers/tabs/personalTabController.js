@@ -18,7 +18,8 @@
 
     function PersonalTabController(NavigatorParameters, Patient, NetworkStatus, $timeout, UserPreferences,
         UserHospitalPreferences, RequestToServer, Params) {
-        var vm = this;
+        let vm = this;
+        let setAccessLevel = () => vm.accessLevelAll = Patient.getAccessLevel() === "1";
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
@@ -39,12 +40,13 @@
             NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator' });
             NavigatorParameters.setNavigator(personalNavigator);
 
+            // Call early to prevent flickering of hidden menu items
+            setAccessLevel();
+
             bindEvents();
 
             vm.language = UserPreferences.getLanguage();
             configureSelectedHospital();
-
-            $timeout(() => { vm.censor = Patient.getAccessLevel() == 3 });
 
             if (NetworkStatus.isOnline()) getDisplayData();
         }
@@ -81,6 +83,9 @@
                     vm.questionnairesUnreadNumber = result.data.unread_questionnaire_count;
                     vm.educationalMaterialsNumber = result.data.unread_educationalmaterial_count;
                     // TODO: fetch badges for the research menu items
+
+                    // Refresh the visible menu items based on access level when changing profiles
+                    setAccessLevel();
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463

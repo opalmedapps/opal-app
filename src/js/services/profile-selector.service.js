@@ -30,9 +30,10 @@ import {Observer} from "../models/utility/observer";
          * @description Initialize the service once the user data is loaded.
          */
         async function init() {
+            // TODO check data flow below
             patientList = await requestPatientList();
             let loggedInUserPatientId = Patient.getPatientSerNum();
-            User.setUserProfile(patientList, loggedInUserPatientId)
+            await User.initUser();
             const patientSernum = getLocalStoragePatientSernum(loggedInUserPatientId);
             loadPatientProfile(patientSernum);
         }

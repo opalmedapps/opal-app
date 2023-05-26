@@ -10,25 +10,36 @@
         .module('MUHCApp')
         .factory('User', User);
 
-    User.$inject = ['$injector'];
+    User.$inject = ['$injector','Params','RequestToServer','UserAuthorizationInfo'];
 
-    function User($injector) {
+    function User($injector, Params, RequestToServer, UserAuthorizationInfo) {
 
-        let loggedinUserPatientProfile;
+        let userInfo;
 
         return {
-            getLoggedinUserProfile: () => loggedinUserPatientProfile,
-            setUserProfile: setUserProfile,
+            getUserInfo: () => userInfo,
+            initUser: initUser,
             getSelfPatientSerNum: getSelfPatientSerNum,
         };
 
-        function setUserProfile(profileList, userLegacyId) {
-            // TODO: rewrite this function to call Django API to get user info.
-            //  Also make sure to assign a color: either same as self, or a new one.
-            loggedinUserPatientProfile = profileList.find(profile => {
-                console.log(profile);
-                return profile.patient_legacy_id === userLegacyId;
-            });
+        async function initUser() {
+            const requestParams = Params.API.ROUTES.USER;
+            const formattedParams = {
+                ...requestParams,
+                url: requestParams.url.replace('<USERNAME>', UserAuthorizationInfo.getUsername()),
+            }
+            const result = await RequestToServer.apiRequest(formattedParams);
+            userInfo = result?.data;
+            assignColor();
+        }
+
+        /**
+         * @desc Finds and returns the user's own "self" profile, if they have one.
+         * @returns {object} The user's "self" profile, or undefined if they don't have one.
+         */
+        function getSelfProfile() {
+            const ProfileSelector = $injector.get('ProfileSelector');
+            return ProfileSelector.getPatientList().find(profile => profile?.relationship_type?.role_type === "SELF");
         }
 
         /**
@@ -36,9 +47,15 @@
          * @returns {*} The user's "self" PatientSerNum, or undefined if they don't have one.
          */
         function getSelfPatientSerNum() {
-            const ProfileSelector = $injector.get('ProfileSelector');
-            let selfProfile = ProfileSelector.getPatientList().find(profile => profile?.relationship_type?.role_type === "SELF");
+            let selfProfile = getSelfProfile();
             return selfProfile?.patient_legacy_id;
+        }
+
+        // Assigns a color to the current user, to be able to use their info similarly to other profiles (i.e. for profile icons with the initials)
+        function assignColor() {
+            let selfProfile = getSelfProfile();
+            if (selfProfile) userInfo.color = selfProfile.color;
+            else userInfo.color = '#41A4AF';
         }
     }
 })();

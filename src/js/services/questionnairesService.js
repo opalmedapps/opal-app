@@ -298,11 +298,11 @@
          *
          */
         async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus) {
-                let userProfile = User.getLoggedinUserProfile();
+                let userInfo = User.getUserInfo();
 
-                let response = await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userProfile);
+                await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userInfo);
 
-                let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus, userProfile);
+                let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus, userInfo);
 
                 if (!isFailure) {
                     throw new Error("Error updating status internal to app");

@@ -21,6 +21,7 @@ angular
         let SelectedProfile = {};
 
         return {
+            // TODO remove backup cases?
             setSelectedProfile: profile => SelectedProfile = profile,
             initPatient: initPatient,
             getFirstName: () => SelectedProfile?.first_name || FirstName,
@@ -28,7 +29,7 @@ angular
             // getEmail: () => Email,
             getPatientSerNum: () => SelectedProfile?.patient_legacy_id || PatientSerNum,
             // getProfileImage: () => ProfileImage,
-            getAccessLevel: () => SelectedProfile?.AccessLevel || AccessLevel, // There is no AccessLevel in Django yet
+            getAccessLevel: () => SelectedProfile?.data_access || AccessLevel,
             clearPatient: clearPatient,
             // getTestUser: () => parseInt(TestUser, 10) === 1,
         };
