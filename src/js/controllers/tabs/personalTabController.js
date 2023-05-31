@@ -19,7 +19,7 @@
     function PersonalTabController(NavigatorParameters, Patient, NetworkStatus, $timeout, UserPreferences,
         UserHospitalPreferences, RequestToServer, Params) {
         let vm = this;
-        let setAccessLevel = () => vm.accessLevelAll = Patient.getAccessLevel() === "1";
+        let setAccessLevel = () => vm.accessLevelAll = Patient.getAccessLevel() === "ALL";
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
