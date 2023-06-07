@@ -68,13 +68,14 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
             RequestToServer.sendRequestWithResponse(GET_SECURITY_QUESTION_AND_ANSWER_LIST_API)
                 .then(function(response){
+                    console.log(response);
                     $timeout(function(){
-
                         let activeSecurityQuestionList = response.data.activeSecurityQuestionList || [];
                         let securityQuestionWithAnsList = response.data.securityQuestionWithAnswerList || [];
-
+                        
                         vm.activeSecurityQuestionList =
                             activeSecurityQuestionList.map((securityQuestion) => new SecurityQuestion(securityQuestion));
+                        console.log(vm.activeSecurityQuestionList);
                         vm.securityQuestionWithAnsList =
                             securityQuestionWithAnsList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer));
 

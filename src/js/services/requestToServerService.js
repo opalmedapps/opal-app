@@ -118,7 +118,9 @@ angular
                         let data = snapshot.val();
                         refRequestResponse.set(null);
                         refRequestResponse.off();
+                        console.log('BEFORE-----', data)
                         data = ResponseValidator.validate(data, encryptionKey, timeOut);
+                        console.log('AFTER-----', data)
                         data.success ? resolve(data.success) : reject(data.error)
                     }
                 }, error => {
