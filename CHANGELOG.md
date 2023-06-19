@@ -1,3 +1,10 @@
+## [1.16.3](https://gitlab.com/opalmedapps/qplus/compare/v1.16.2...v1.16.3) (2023-06-19)
+
+
+### Bug Fixes
+
+* remove UserPatient and reliance on self relationship ([69928ef](https://gitlab.com/opalmedapps/qplus/commit/69928efd21761cdfce7094a60601b683c7075379))
+
 ## [1.16.2](https://gitlab.com/opalmedapps/qplus/compare/v1.16.1...v1.16.2) (2023-06-19)
 
 
