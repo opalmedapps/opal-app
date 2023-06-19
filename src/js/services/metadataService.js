@@ -123,14 +123,6 @@
                 }).catch(function (error) {
                     // Unable to load questionnaires
                 });
-
-            // Load studies to get number unread
-            Studies.getStudies().then(() => {
-                researchTabData.studiesUnreadNumber = Studies.getNumberUnreadStudies();
-            }).catch(function (error) {
-                // Unable to load studies
-            });
-
         }
 
         function fetchHomeMeta() {

@@ -7,12 +7,12 @@ import {Observer} from "../models/utility/observer";
         .module('MUHCApp')
         .service('ProfileSelector', ProfileSelector);
 
-    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'Patient', 'User'];
+    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'User'];
 
     /**
      * @description Service that handle loading of a patient list for a given caregiver and selection of the profile.
      */
-    function ProfileSelector($timeout, $window, Params, RequestToServer, Patient, User) {
+    function ProfileSelector($timeout, $window, Params, RequestToServer, User) {
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
@@ -24,6 +24,11 @@ import {Observer} from "../models/utility/observer";
             getActiveProfile: () => currentSelectedProfile,
             getConfirmedProfiles: getConfirmedProfiles,
             clearProfile: clearProfile,
+
+            // Functions to get info from the current profile
+            getFirstName: () => currentSelectedProfile?.first_name,
+            getPatientSerNum: () => currentSelectedProfile?.patient_legacy_id,
+            getAccessLevel: () => currentSelectedProfile?.data_access,
         }
 
         /**
@@ -31,10 +36,9 @@ import {Observer} from "../models/utility/observer";
          */
         async function init() {
             patientList = await requestPatientList();
-            let loggedInUserPatientId = Patient.getPatientSerNum();
-            User.setUserProfile(patientList, loggedInUserPatientId)
-            const patientSernum = getLocalStoragePatientSernum(loggedInUserPatientId);
-            loadPatientProfile(patientSernum);
+            await User.initUser();
+            const patientSerNum = getLocalStoragePatientSerNum();
+            loadPatientProfile(patientSerNum);
         }
 
         /**
@@ -45,36 +49,35 @@ import {Observer} from "../models/utility/observer";
         }
 
         /**
-         * @description Check if a patient Sernum is saved in localstorage, compare it to the current user.
-         * @param {number} currentPatientSerNum Current UserPatient sernum
-         * @returns {number} The patient sernum that needs to be used for initialization.
+         * @description Returns the PatientSerNum stored in localstorage, representing the last viewed profile.
+         *              If none is found, returns undefined.
+         * @returns {number} The PatientSerNum of the last viewed profile.
          */
-        function getLocalStoragePatientSernum(currentPatientSerNum) {
-            let savedPatientSernum = $window.localStorage.getItem('profileId') || null;
-            let savedPatientStatus = patientList.find(item => item.patient_legacy_id === savedPatientSernum)?.status;
-            return (savedPatientSernum && savedPatientStatus === Params.relationshipStatus.confirmed && (currentPatientSerNum !== savedPatientSernum)) ? savedPatientSernum : currentPatientSerNum;
+        function getLocalStoragePatientSerNum() {
+            return $window.localStorage.getItem('profileId') || undefined;
         }
 
         /**
          * @description Find in the list and load a profile as the current selected profile.
          *              Set the patient sernum in local storage.
-         * @param {number} requestedPatientSernum Patient sernum to be set as selected.
+         *              If the requested profile is invalid (for example, because the SerNum wasn't provided, or
+         *              because the relationship was revoked), fall back onto any valid profile.
+         * @param {number} requestedPatientSerNum The PatientSerNum of the profile to load.
          */
         // TODO: As of now we NEED to have a `patient_legacy_id` to be able to get any data since data calls still go through the old listener. 
         // Once endpoints to get patient's data are done, we will need to adjust this code in consequences.
-        function loadPatientProfile(requestedPatientSernum) {
-            let result = patientList.find((item) => item.patient_legacy_id == requestedPatientSernum);
-            if (result) {
-                currentSelectedProfile = result;
-                Patient.setSelectedProfile(currentSelectedProfile);
-                $window.localStorage.setItem('profileId', currentSelectedProfile.patient_legacy_id);
-                $timeout(() => {
-                    profileObserver.notify();
-                });
-            } else {
-                // TODO: Display error in the view (QSCCD-77)
-                console.error('Error selecting patient', requestedPatientSernum)
-            }
+        function loadPatientProfile(requestedPatientSerNum) {
+            // Validate that the requested profile can be loaded. If not, fall back onto some other valid profile.
+            currentSelectedProfile = getConfirmedProfiles().find((item) => item.patient_legacy_id == requestedPatientSerNum)
+                || getConfirmedProfiles()[0];
+
+            // If no profile can be loaded (e.g. because all profiles are pending), proceed without loading one.
+            if (!currentSelectedProfile) return;
+
+            $window.localStorage.setItem('profileId', currentSelectedProfile.patient_legacy_id);
+            $timeout(() => {
+                profileObserver.notify();
+            });
         }
 
         /**

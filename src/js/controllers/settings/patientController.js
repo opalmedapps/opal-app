@@ -11,7 +11,6 @@
     function PatientsController($timeout, ProfileSelector) {
         var vm = this;
         vm.error = null;
-        vm.notFound = null;
         vm.message = null;
         vm.apiData;
         vm.patients;
@@ -24,8 +23,7 @@
          */
         async function activate() {
             try {
-                const patientList = ProfileSelector.getPatientList();
-                patientList.length <= 0 ? vm.notFound = true : vm.apiData = patientList;
+                vm.apiData = ProfileSelector.getPatientList();
             } catch (error) {
                 vm.error = true;
                 console.error(error);
@@ -34,12 +32,12 @@
         }
 
         /**
-         * @descripiton Handle display of data, not foundm or error message.
+         * @description Handle display of data, not found or error message.
          */
         function handleDisplay() {
             $timeout(() => {
                 if (vm.error) return vm.message = 'RELATIONSHIPS_ERROR';
-                if (vm.notFound) return vm.message = 'RELATIONSHIPS_PATIENTS_NOT_FOUND';
+                if (vm.apiData.length === 0) return vm.message = 'RELATIONSHIPS_PATIENTS_NONE';
                 vm.patients = vm.apiData;
             });
         }
