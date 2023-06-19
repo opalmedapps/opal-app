@@ -19,14 +19,14 @@
         -->
         <div class="home-view--banner" style="background-image: url('./img/opal-init-photo.jpg');">
             <div class="text-center" align="center">
-                <img ng-hide="Ctrl.user" src="./img/patient.png" class="image-profile-home">
-                <div class="image-profile--wrapper image-profile--wrapper--home" ng-hide="!Ctrl.user">
-                    <div class="image-profile--icon image-profile--icon--home" ng-style="{'background-color': Ctrl.user.color}">{{Ctrl.user | profileInitials}}</div>
+                <img ng-hide="Ctrl.userInfo" src="./img/patient.png" class="image-profile-home">
+                <div class="image-profile--wrapper image-profile--wrapper--home" ng-hide="!Ctrl.userInfo">
+                    <div class="image-profile--icon image-profile--icon--home" ng-style="{'background-color': Ctrl.userInfo.color}">{{Ctrl.userInfo | profileInitials}}</div>
                 </div>
             </div>
             <div class="item item-text-wrap">
                 <p class="text-center">
-                    <strong ng-class="fontSizeTitle">{{Ctrl.user.first_name}} {{Ctrl.user.last_name}}</strong>
+                    <strong ng-class="fontSizeTitle">{{Ctrl.userInfo.first_name}} {{Ctrl.userInfo.last_name}}</strong>
                 </p>
             </div>
         </div>

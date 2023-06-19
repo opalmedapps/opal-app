@@ -61,7 +61,7 @@
             vm.mobilePlatform = (ons.platform.isIOS() || ons.platform.isAndroid());
             vm.Language = UserPreferences.getLanguage();
             vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
-            vm.userProfile = User.getLoggedinUserProfile();
+            vm.userInfo = User.getUserInfo();
         }
 
         function goToGeneralSettings() {

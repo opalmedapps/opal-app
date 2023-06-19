@@ -10,11 +10,11 @@
         <ons-row align="center" style="padding:5px">
             <ons-col width="120px">
                 <div class="image-profile--wrapper">
-                    <div class="image-profile--icon" ng-style="{'background-color': Ctrl.userProfile.color}">{{Ctrl.userProfile | profileInitials}}</div>
+                    <div class="image-profile--icon" ng-style="{'background-color': Ctrl.userInfo.color}">{{Ctrl.userInfo | profileInitials}}</div>
                 </div>
             </ons-col>
             <ons-col>
-                    <div class="image-profile--text">{{Ctrl.userProfile.first_name}} {{Ctrl.userProfile.last_name}}</div>
+                    <div class="image-profile--text">{{Ctrl.userInfo.first_name}} {{Ctrl.userInfo.last_name}}</div>
             </ons-col>
         </ons-row>
     </div>
