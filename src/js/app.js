@@ -119,7 +119,7 @@ angular
         'ngSanitize','ui.router','onsen','ngTouch','firebase','ui.bootstrap'])
     .run(initialization);
 
-initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$translate', 'Patient', '$location', 'NetworkStatus'];
+initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$translate', '$location', 'NetworkStatus'];
 
 /**
  *@ngdoc service
@@ -127,7 +127,7 @@ initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$transl
  *@description Service is in charge of checking that the user is authorized at every state change by checking the parameters stored
  in the Firebase localstorage,  Check run service on angular {{link}}
  **/
-function initialization($state, $stateParams, $q, $rootScope, $translate, Patient, $location, NetworkStatus) {
+function initialization($state, $stateParams, $q, $rootScope, $translate, $location, NetworkStatus) {
 
     var isOffline = 'onLine' in navigator && !navigator.onLine;
 
@@ -138,15 +138,6 @@ function initialization($state, $stateParams, $q, $rootScope, $translate, Patien
         NetworkStatus.setStatus(true);
     }
 
-
-    $rootScope.$on('$stateChangeStart',function(event,toState,toParams)
-    {
-        let serialNum = Patient.getPatientSerNum();
-        if((typeof serialNum === 'undefined'|| serialNum === '')&&toState.name === 'Home')
-        {
-            $location.path('/init');
-        }
-    });
     $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
         $translate.refresh();
     });

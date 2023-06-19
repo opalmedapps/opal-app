@@ -16,16 +16,11 @@
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
         Version, User, ProfileSelector, $interval, UpdateUI,
     ){
-        var vm = this;
+        let vm = this;
 
-        vm.FirstName = '';
-        vm.LastName = '';
-        vm.ProfileImage = null;
         vm.language = 'EN';
         vm.calledApp = null;
         vm.RoomLocation = '';
-        vm.showHomeScreenUpdate = null;
-        vm.loading = true;
         $scope.infoModalData = [];
 
         vm.checkinState = {
@@ -144,7 +139,7 @@
          * @desc Sets the basic patient information in the view header that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
          */
         function setPatientInfo(){
-            vm.user = User.getLoggedinUserProfile();
+            vm.userInfo = User.getUserInfo();
             vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments = false;
         }
@@ -292,7 +287,8 @@
          * @description get patient's first name for the appointment widget
          */
         function getPatientFirstName(){
-            if (User.getLoggedinUserProfile().patient_legacy_id === vm?.closestAppointment?.patientsernum) {
+            let selfPatientSerNum = User.getSelfPatientSerNum();
+            if (selfPatientSerNum && selfPatientSerNum === vm?.closestAppointment?.patientsernum) {
                 return $filter('translate')("YOU");
             }
             else {
