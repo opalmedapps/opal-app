@@ -1,3 +1,10 @@
+## [1.16.2](https://gitlab.com/opalmedapps/qplus/compare/v1.16.1...v1.16.2) (2023-06-19)
+
+
+### Bug Fixes
+
+* add error handler in the feedback model ([0bc17f4](https://gitlab.com/opalmedapps/qplus/commit/0bc17f49804824b94e509bca02d165e16a727ae5))
+
 ## [1.16.1](https://gitlab.com/opalmedapps/qplus/compare/v1.16.0...v1.16.1) (2023-05-23)
 
 
