@@ -5,11 +5,13 @@ that build and deploy the application automatically.
 Currently, only building and deploying to the `dev` environment is supported. However, we have plans to expand this
 to other environments in the future.
 
+_TODO_: QA work is in progress.
+
 Two different workflows are handled by the pipeline, as follows.
 
 ### 1. Commits on feature branches (regular development)
 
-When working on feature branches, the commits that developers make and push trigger a basic workflow.
+When working on feature branches, the commits that developers make and push will trigger a basic workflow.
 Specifically, any commits on branches _other_ than the default branch are handled as follows:
 
 - Pipeline runs on the pushed commit
@@ -21,9 +23,9 @@ Specifically, any commits on branches _other_ than the default branch are handle
     - `build android`/`build ios` (manual): The build is not automatically executed, to save on resources.
       This makes sense given that developers will rarely need to build the app on every commit they push.
       However, a manual button is available to build the app on demand.
-      The resulting `apk` and `ipa` files are available as artifacts for download.
+      The resulting `apk`, `ipa` and web files are available as artifacts for download.
 
-### 2. Commits on the default branch (after completed merge requests)
+### 2. Commits on the default branch (after completing merge requests)
 
 Commits on the default branch are produced as the result of approved and "squashed-and-merged" merge requests.
 These commits represent completed work that is ready for deployment to our development environment.
@@ -47,7 +49,7 @@ Any commits to the default branch are handled as follows:
         This is done by executing versioning commands available in [opal_env.setup.js](../../opal_env.setup.js).
       - `@semantic-release/git`: Commits the above files to the default branch.
         This commit is also tagged by semantic-release to identify the new version number (e.g. `v1.0.0`).
-  - Note: for the first pipeline, the work ends here. This is because the first pipeline is not running on
+  - Note: The first pipeline ends here. This is because the first pipeline is not running on
     the brand-new commit made by semantic-release. For the build to use to the newly committed version in `config.xml`,
     it must be on a new pipeline running on the latest commit, i.e. the commit created by semantic-release
     and tagged with a version number.
