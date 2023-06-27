@@ -165,8 +165,10 @@ trigger QA pipeline:
     # Avoid infinite recursion
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
       when: never
-    # TODO adjust "when"
+    # TODO adjust "when" and "needs"
     - when: always
+  needs:
+    - job: check dependencies
   variables:
     ENV: "qa"
   trigger:
