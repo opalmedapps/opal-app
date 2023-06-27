@@ -134,7 +134,7 @@ trigger QA pipeline:
   stage: build
   rules:
     # Avoid infinite recursion
-    - if: $CI_PIPELINE_SOURCE == "trigger"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
       when: never
     - when: always
   variables:
