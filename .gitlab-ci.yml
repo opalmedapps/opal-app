@@ -6,7 +6,7 @@ default:
     - macos
 
 variables:
-  ENV: "qa"  # The environment used in the app build command
+  ENV: "dev"  # The environment used in the app build command
   FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
   FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
   FIREBASE_GROUP: "test-ci"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
@@ -15,7 +15,9 @@ variables:
 .shared_anchors:
   rules: &has_version_tag
     # For semver regex, see: https://ihateregex.io/expr/semver/
-    - if: $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+    # TODO Temp for testing
+    # - if: $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+    - if: $CI_COMMIT_TAG =~ /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
 
 workflow:
   rules:
@@ -51,6 +53,7 @@ check dependencies:
   rules:
     - when: always
   script:
+    - echo "$ENV"
     - npm -v
     - npm ci --prefer-offline
 
@@ -122,6 +125,16 @@ build web:
     expire_in: 1 day
     paths:
       - opal-$ENV-www.zip
+
+# Trigger job that launches a downstream pipeline to build for the QA environment
+# See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
+trigger QA pipeline:
+  stage: build
+  variables:
+    ENVIRONMENT: "qa"
+  trigger:
+    include:
+      - local: .gitlab-ci.yml
 
 # Extended job for deploying the app; deploys to Firebase automatically based on release tags
 #   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the GitLab project settings
