@@ -46,6 +46,7 @@ stages:
   - prepare
   - build
   - deploy
+  - post
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
 check dependencies:
@@ -56,7 +57,6 @@ check dependencies:
     - echo "$ENV"
     - npm -v
     # TODO testing
-    - echo "$CI_PIPELINE_SOURCE"
     # - npm ci --prefer-offline
 
 # Sets a new version number for the app when committing to the default branch
@@ -128,21 +128,6 @@ build web:
     paths:
       - opal-$ENV-www.zip
 
-# Trigger job that launches a downstream pipeline to build for the QA environment
-# See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
-trigger QA pipeline:
-  stage: build
-  rules:
-    # Avoid infinite recursion
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-      when: never
-    - when: always
-  variables:
-    ENV: "qa"
-  trigger:
-    include:
-      - local: .gitlab-ci.yml
-
 # Extended job for deploying the app; deploys to Firebase automatically based on release tags
 #   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the GitLab project settings
 #   This service account provides permissions for uploading to Firebase App Distribution
@@ -171,3 +156,19 @@ deploy ios to firebase:
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build ios
+
+# Launches a downstream pipeline to build for the QA environment
+# See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
+trigger QA pipeline:
+  stage: post
+  rules:
+    # Avoid infinite recursion
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+      when: never
+    # TODO adjust "when"
+    - when: always
+  variables:
+    ENV: "qa"
+  trigger:
+    include:
+      - local: .gitlab-ci.yml
