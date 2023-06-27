@@ -136,6 +136,7 @@ trigger QA pipeline:
     # Avoid infinite recursion
     - if: $CI_PIPELINE_SOURCE == "trigger"
       when: never
+    - when: always
   variables:
     ENV: "qa"
   trigger:
