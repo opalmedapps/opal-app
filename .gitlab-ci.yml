@@ -55,7 +55,8 @@ check dependencies:
   script:
     - echo "$ENV"
     - npm -v
-    - npm ci --prefer-offline
+    # TODO testing
+    # - npm ci --prefer-offline
 
 # Sets a new version number for the app when committing to the default branch
 increment version:
@@ -130,8 +131,12 @@ build web:
 # See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
 trigger QA pipeline:
   stage: build
+  rules:
+    # Avoid infinite recursion
+    - if: $CI_PIPELINE_SOURCE == "trigger"
+      when: never
   variables:
-    ENVIRONMENT: "qa"
+    ENV: "qa"
   trigger:
     include:
       - local: .gitlab-ci.yml
