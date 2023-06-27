@@ -56,6 +56,7 @@ check dependencies:
     - echo "$ENV"
     - npm -v
     # TODO testing
+    - echo "$CI_PIPELINE_SOURCE"
     # - npm ci --prefer-offline
 
 # Sets a new version number for the app when committing to the default branch
