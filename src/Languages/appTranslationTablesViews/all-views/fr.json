@@ -265,7 +265,6 @@
     "SECURITYQUESTION": "Question de sécurité",
     "SECURITY_QUESTIONS": "Questions de sécurité",
     "SECURITY_QUESTION_ANSWER_UPDATE_SUCCESS": "Questions de sécurité mises à jour avec succès. Déconnection...",
-    "SECURITY_QUESTION_EXPIRED": "Cette question de sécurité est expirée. Vous devez choisir une nouvelle question.",
     "SECURITY_QUESTION_LENGTH_REQUIREMENT_1": "Votre réponse doit avoir une longueur minimale de",
     "SECURITY_QUESTION_LENGTH_REQUIREMENT_2": "caractères",
     "SECURITY_QUESTION_LOGOUT_WARNING": "Si vous faites des changements, vous serez déconnecté d'Opal et vous devez vous reconnecter.",
