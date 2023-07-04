@@ -144,8 +144,10 @@ build web:
   before_script:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
-    - echo "$GOOGLE_APPLICATION_CREDENTIALS"
-    - cat "$GOOGLE_APPLICATION_CREDENTIALS"
+    # Convert the service account variable to a file. This is required because variables defined in .gitlab-ci.yml (provided by the upstream job) cannot be files.
+    # See: https://docs.gitlab.com/ee/ci/variables/#use-a-gitlab-ciyml-variable-as-a-file-type-variable
+    - echo "$GOOGLE_APPLICATION_CREDENTIALS" > service-account.txt
+    - export GOOGLE_APPLICATION_CREDENTIALS=service-account.txt
 
 # Deploys the Android app to Firebase
 deploy android to firebase:
