@@ -1,3 +1,10 @@
+## [1.16.4](https://gitlab.com/opalmedapps/qplus/compare/v1.16.3...v1.16.4) (2023-07-04)
+
+
+### Bug Fixes
+
+* update the page and controller based on the response data from listener ([5983abd](https://gitlab.com/opalmedapps/qplus/commit/5983abd636432bc50dd5cd7d255572500b8450bb))
+
 ## [1.16.3](https://gitlab.com/opalmedapps/qplus/compare/v1.16.2...v1.16.3) (2023-06-19)
 
 
