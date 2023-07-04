@@ -1,11 +1,12 @@
 ## GitLab CI/CD
+// TODO update README
 
 This project is configured with [GitLab CI/CD pipelines](https://docs.gitlab.com/ee/ci/pipelines/)
 that build and deploy the application automatically.
 Currently, only building and deploying to the `dev` environment is supported. However, we have plans to expand this
 to other environments in the future.
 
-_TODO_: QA work is in progress.
+// _TODO_: QA work is in progress.
 
 Two different workflows are handled by the pipeline, as follows.
 

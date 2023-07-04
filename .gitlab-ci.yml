@@ -1,5 +1,6 @@
 # For a more human-readable description of the workflows outlined in this file, see `.docs/deployment/ci-cd.md`
 # When editing this file, please make sure to also keep `ci-cd.md` up to date.
+# TODO adjust the rules to run at the correct times
 
 default:
   tags:
@@ -7,6 +8,7 @@ default:
 
 variables:
   ENV: "dev"  # The environment used in the app build command
+  GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEV  # The service account providing permissions to upload to Firebase App Distribution
   FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
   FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
   FIREBASE_GROUP: "test-ci"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
@@ -129,7 +131,7 @@ build web:
       - opal-$ENV-www.zip
 
 # Extended job for deploying the app; deploys to Firebase automatically based on release tags
-#   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the GitLab project settings
+#   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the pipeline variables
 #   This service account provides permissions for uploading to Firebase App Distribution
 #   See: https://firebase.google.com/docs/app-distribution/authenticate-service-account.md?platform=android
 .deploy to firebase:
@@ -159,18 +161,22 @@ deploy ios to firebase:
 
 # Launches a downstream pipeline to build for the QA environment
 # See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
-trigger QA pipeline:
+build and deploy QA:
   stage: post
   rules:
     # Avoid infinite recursion
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
       when: never
     # TODO adjust "when" and "needs"
-    - when: always
+    - when: manual
   needs:
     - job: check dependencies
   variables:
+    # Override pipeline variables to run for the QA environment
     ENV: "qa"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_QA_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_QA_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_QA
   trigger:
     include:
       - local: .gitlab-ci.yml
