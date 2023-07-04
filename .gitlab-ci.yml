@@ -144,6 +144,8 @@ build web:
   before_script:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
+    - echo "$GOOGLE_APPLICATION_CREDENTIALS"
+    - cat "$GOOGLE_APPLICATION_CREDENTIALS"
 
 # Deploys the Android app to Firebase
 deploy android to firebase:
