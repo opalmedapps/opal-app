@@ -139,6 +139,8 @@ build web:
   rules:
     # Only release the app from release tags
     - *has_version_tag
+    # TODO temp for testing
+    - when: manual
   before_script:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
