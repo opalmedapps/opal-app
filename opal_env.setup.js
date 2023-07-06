@@ -213,29 +213,35 @@ class OpalEnv {
 	/**
 	 * Sets build number in config.xml for cordova file
 	 * @param {string|null} env Environment to update
-	 * @param {number|[number,number]|null} buildNumber New build number for app, it could a tuple representing
+	 * @param {number|[number,number]|null|string} buildNumber New build number for the app: either a tuple representing
 	 *                                      new build numbers for [ios,android], or null, which updates
-	 *                                      the current value of both platforms by 1.
+	 *                                      the current value of both platforms by 1, or 'same', in which case
+	 *                                      the build numbers are not altered.
 	 */
 	static setBuildNumbers(buildNumber = null, env = null) {
 		this.setDirectory(env);
 		let configFile = this.getConfigXMLJSON();
+		// Get existing build numbers
+		let [ios, android] = [
+			Number(this.getXMLWidgetAttributeText(configFile, "ios-CFBundleVersion")),
+			Number(this.getXMLWidgetAttributeText(configFile, "android-versionCode")),
+		];
+
 		if (buildNumber && Array.isArray(buildNumber)) {
 			buildNumber = buildNumber.map(Number);
-			if (Number.isNaN(buildNumber[0]) ||
-				Number.isNaN(buildNumber[1]))
-				throw new Error(`Build numbers [${buildNumber}] must conform to two numeric values in array, i.e. [2131,1231]`);
-		} else if (buildNumber) {
-			buildNumber = Number(buildNumber);
-			if (Number.isNaN(buildNumber)) {
-				throw new Error(`Build number ${buildNumber} must be numeric`);
+			if (Number.isNaN(buildNumber[0]) || Number.isNaN(buildNumber[1])) {
+				throw new Error(`Build numbers [${buildNumber}] must conform to two numeric values in array, e.g. [2131,1231]`);
 			}
+		}
+		else if (buildNumber === 'same') {
+			buildNumber = [ios, android];
+		}
+		else if (buildNumber) {
+			buildNumber = Number(buildNumber);
+			if (Number.isNaN(buildNumber)) throw new Error(`Build number ${buildNumber} must be numeric`);
 			buildNumber = [buildNumber, buildNumber];
-		} else {
-			// get build numbers
-			let [ios, android] = [Number(this.getXMLWidgetAttributeText(configFile,
-				"ios-CFBundleVersion")),
-				Number(this.getXMLWidgetAttributeText(configFile, "android-versionCode"))];
+		}
+		else {
 			buildNumber = [ios + 1, android + 1];
 			console.log(`OLD VERSIONS iOS: ${ios}, Android ${android}`);
 			console.log(`NEW VERSIONS iOS: ${buildNumber[0]}, Android ${buildNumber[1]}`);
@@ -260,6 +266,20 @@ class OpalEnv {
 		this.setVersion(version, env);
 		shelljs.cd(initialDirectory);
 		this.setBuildNumbers(build, env);
+	}
+
+	/**
+	 * @description Sets the version and build numbers in the config.xml files of all environments
+	 *              (with one exception: in prod, only the version is set, not the build).
+	 * @author Stacey Beard
+	 * @date 2023-07-06
+	 * @param {string|null} version Version number passed to setVersion().
+	 * @param {string|null} build Build number(s) passed to setBuildNumbers() (except for prod).
+	 */
+	static setVersionAndBuildAllEnv(version = null, build = null) {
+		const environments = this.getDirectories("./env");
+		// Exception for prod: don't change the build number. This is done separately upon release.
+		environments.forEach(env => this.setVersionAndBuild(version, (env === 'prod') ? 'same' : build, env));
 	}
 
 	static getEnvironmentFolder(env = null) {
