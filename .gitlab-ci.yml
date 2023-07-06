@@ -5,7 +5,7 @@
 # ----TESTING----
 # TODO replace "QSCCD-1065.SB.cicd-qa" with $CI_DEFAULT_BRANCH
 # TODO clean up changelog, config.xml version numbers
-# TODO fix tagFormat in .releaserc
+# TODO fix tagFormat and branches in .releaserc
 
 default:
   tags:
