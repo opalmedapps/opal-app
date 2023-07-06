@@ -1,5 +1,5 @@
 {
-  "branches": ["staging"],
+  "branches": ["staging", "QSCCD-1065.SB.cicd-qa"],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",

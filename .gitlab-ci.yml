@@ -69,7 +69,7 @@ increment version:
     GIT_STRATEGY: clone
   rules:
     # Run automatically on every commit to the default branch
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "QSCCD-1065.SB.cicd-qa"
   before_script:
     - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
   script:
@@ -83,7 +83,7 @@ increment version:
     # Only build automatically for release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
     # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "QSCCD-1065.SB.cicd-qa"
       when: never
     # In all other cases, builds can be executed manually as needed
     - when: manual
@@ -140,6 +140,8 @@ build web:
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
     # TODO temp for testing
     # - when: manual
+  environment:
+    name: $ENV
   before_script:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
@@ -186,6 +188,9 @@ build and deploy QA:
     FIREBASE_APP_ANDROID: $FIREBASE_APP_QA_ANDROID
     FIREBASE_APP_IOS: $FIREBASE_APP_QA_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_QA
+  environment:
+    name: qa
+    action: prepare
   trigger:
     include:
       - local: .gitlab-ci.yml
