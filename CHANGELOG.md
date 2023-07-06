@@ -1,3 +1,11 @@
+## [1.0.2](https://gitlab.com/opalmedapps/qplus/compare/test1.0.1...test1.0.2) (2023-07-06)
+
+
+### Bug Fixes
+
+* test release workflow ([d061f8a](https://gitlab.com/opalmedapps/qplus/commit/d061f8a3e12e848b7bb7495c6aa2b8bdbcfd95f8))
+* test release workflow ([a50f540](https://gitlab.com/opalmedapps/qplus/commit/a50f54084a6a237b5fccf66e2f1d7fb2bdd804f0))
+
 ## [1.16.4](https://gitlab.com/opalmedapps/qplus/compare/v1.16.3...v1.16.4) (2023-07-04)
 
 
