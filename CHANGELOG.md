@@ -1,3 +1,15 @@
+# [1.1.0](https://gitlab.com/opalmedapps/qplus/compare/test1.0.4...test1.1.0) (2023-07-06)
+
+
+### Bug Fixes
+
+* test manual build workflow ([1ce14f9](https://gitlab.com/opalmedapps/qplus/commit/1ce14f97bc3b6366c39a56334169be0c47f4a2fd))
+
+
+### Features
+
+* add ci environments ([5959b89](https://gitlab.com/opalmedapps/qplus/commit/5959b892274d6698e9041fb83cfbe2f8d9772254))
+
 ## [1.0.4](https://gitlab.com/opalmedapps/qplus/compare/test1.0.3...test1.0.4) (2023-07-06)
 
 
