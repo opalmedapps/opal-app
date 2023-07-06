@@ -112,7 +112,8 @@ build android:
       - opal-$ENV.apk
 
 # Builds the app for iOS
-build ios:
+# TODO DEBUG
+.build ios:
   extends: .build
   script:
     # Fixes Bus Error when cordova invokes pod install
@@ -125,7 +126,8 @@ build ios:
     paths:
       - opal-$ENV.ipa
 
-build web:
+# TODO DEBUG
+.build web:
   extends: .build
   script:
     - npm run build:web --env=$ENV
@@ -163,7 +165,8 @@ deploy android to firebase:
     - job: build android
 
 # Deploys the iOS app to Firebase
-deploy ios to firebase:
+# TODO DEBUG
+.deploy ios to firebase:
   extends: .deploy to firebase
   script:
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
@@ -180,6 +183,7 @@ build and deploy QA:
       when: never
     # Only offer QA build and deployment after automatic build and deployment for Dev
     - *has_version_tag
+      when: manual
     # TODO remove
     # - when: manual
   # TODO remove
