@@ -17,21 +17,16 @@ variables:
   FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
   FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
   FIREBASE_GROUP: "test-ci"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
+  # TODO change back to /^v(
+  VERSION_TAG_REGEX: /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/  # The tag semver regex recognized as a release, see: https://ihateregex.io/expr/semver/
 
-# Anchors used throughout this file. See: https://docs.gitlab.com/ee/ci/yaml/yaml_optimization.html
-.shared_anchors:
-  rules: &has_version_tag
-    # For semver regex, see: https://ihateregex.io/expr/semver/
-    # TODO Temp for testing
-    # - if: $CI_COMMIT_TAG =~ /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-    - if: $CI_COMMIT_TAG =~ /^test(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
 
 workflow:
   rules:
     # Rules for semantic-release: do not run on commits made by semantic-release, only run on the version tags it creates
     - if: $GITLAB_USER_NAME == "semantic-release" && $CI_COMMIT_BRANCH
       when: never
-    - *has_version_tag
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
 
     # Prevent duplicate pipelines when a commit is pushed to an open merge request
     # See: https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
@@ -75,7 +70,6 @@ increment version:
   rules:
     # Run automatically on every commit to the default branch
     - if: $CI_COMMIT_BRANCH == "QSCCD-1065.SB.cicd-qa"
-      when: always
   before_script:
     - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
   script:
@@ -87,7 +81,7 @@ increment version:
   stage: build
   rules:
     # Only build automatically for release tags
-    - *has_version_tag
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
     # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
     - if: $CI_COMMIT_BRANCH == "QSCCD-1065.SB.cicd-qa"
       when: never
@@ -145,7 +139,7 @@ build android:
   stage: deploy
   rules:
     # Only release the app from release tags
-    - *has_version_tag
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
     # TODO temp for testing
     # - when: manual
   before_script:
@@ -182,7 +176,7 @@ build and deploy QA:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
       when: never
     # Only offer QA build and deployment after automatic build and deployment for Dev
-    - *has_version_tag
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
       when: manual
     # TODO remove
     # - when: manual
