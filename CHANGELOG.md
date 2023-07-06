@@ -1,3 +1,10 @@
+## [1.1.2](https://gitlab.com/opalmedapps/qplus/compare/test1.1.1...test1.1.2) (2023-07-06)
+
+
+### Bug Fixes
+
+* test protected environment ([6fccb98](https://gitlab.com/opalmedapps/qplus/commit/6fccb98f657b83c38cd48f43460e0f94cff7df14))
+
 ## [1.1.1](https://gitlab.com/opalmedapps/qplus/compare/test1.1.0...test1.1.1) (2023-07-06)
 
 
