@@ -1,3 +1,11 @@
+## [1.0.4](https://gitlab.com/opalmedapps/qplus/compare/test1.0.3...test1.0.4) (2023-07-06)
+
+
+### Bug Fixes
+
+* debug manual setting for QA ([680a32c](https://gitlab.com/opalmedapps/qplus/commit/680a32c0d2b59b721cf2f3b824b598e39a2f3bc0))
+* remove anchor to allow manual button for QA ([3514682](https://gitlab.com/opalmedapps/qplus/commit/3514682cdaa328156f0bdd44e100a7a0273ec779))
+
 ## [1.0.3](https://gitlab.com/opalmedapps/qplus/compare/test1.0.2...test1.0.3) (2023-07-06)
 
 
