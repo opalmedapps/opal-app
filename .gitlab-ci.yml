@@ -2,6 +2,11 @@
 # When editing this file, please make sure to also keep `ci-cd.md` up to date.
 # TODO adjust the rules to run at the correct times
 
+# ----TESTING----
+# TODO replace "QSCCD-1065.SB.cicd-qa" with $CI_DEFAULT_BRANCH
+# TODO clean up changelog, config.xml version numbers
+# TODO fix tagFormat in .releaserc
+
 default:
   tags:
     - macos
@@ -69,7 +74,7 @@ increment version:
     GIT_STRATEGY: clone
   rules:
     # Run automatically on every commit to the default branch
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "QSCCD-1065.SB.cicd-qa"
       when: always
   before_script:
     - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
@@ -84,7 +89,7 @@ increment version:
     # Only build automatically for release tags
     - *has_version_tag
     # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "QSCCD-1065.SB.cicd-qa"
       when: never
     # In all other cases, builds can be executed manually as needed
     - when: manual
@@ -140,7 +145,7 @@ build web:
     # Only release the app from release tags
     - *has_version_tag
     # TODO temp for testing
-    - when: manual
+    # - when: manual
   before_script:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
@@ -173,10 +178,13 @@ build and deploy QA:
     # Avoid infinite recursion
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
       when: never
-    # TODO adjust "when" and "needs"
-    - when: manual
-  needs:
-    - job: check dependencies
+    # Only offer QA build and deployment after automatic build and deployment for Dev
+    - *has_version_tag
+    # TODO remove
+    # - when: manual
+  # TODO remove
+  # needs:
+  #  - job: check dependencies
   variables:
     # Override pipeline variables to run for the QA environment
     ENV: "qa"
