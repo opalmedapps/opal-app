@@ -89,8 +89,9 @@ increment version:
     # Only build automatically for release tags
     - *has_version_tag
     # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
-    - if: $CI_COMMIT_BRANCH == "QSCCD-1065.SB.cicd-qa"
-      when: never
+    # TODO DEBUG
+    #- if: $CI_COMMIT_BRANCH == "QSCCD-1065.SB.cicd-qa"
+    #  when: never
     # In all other cases, builds can be executed manually as needed
     - when: manual
   before_script:
@@ -144,7 +145,7 @@ build web:
   rules:
     # Only release the app from release tags
     - *has_version_tag
-    # TODO temp for testing
+    # TODO temp for testing DEBUG
     - when: manual
   before_script:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
@@ -153,6 +154,7 @@ build web:
     # See: https://docs.gitlab.com/ee/ci/variables/#use-a-gitlab-ciyml-variable-as-a-file-type-variable
     - echo "$GOOGLE_APPLICATION_CREDENTIALS" > service-account.txt
     - export GOOGLE_APPLICATION_CREDENTIALS=service-account.txt
+    # TODO DEBUG
     - echo "$GOOGLE_APPLICATION_CREDENTIALS"
 
 # Deploys the Android app to Firebase
