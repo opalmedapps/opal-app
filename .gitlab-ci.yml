@@ -145,7 +145,7 @@ build web:
     # Only release the app from release tags
     - *has_version_tag
     # TODO temp for testing
-    # - when: manual
+    - when: manual
   before_script:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
@@ -153,6 +153,7 @@ build web:
     # See: https://docs.gitlab.com/ee/ci/variables/#use-a-gitlab-ciyml-variable-as-a-file-type-variable
     - echo "$GOOGLE_APPLICATION_CREDENTIALS" > service-account.txt
     - export GOOGLE_APPLICATION_CREDENTIALS=service-account.txt
+    - echo "$GOOGLE_APPLICATION_CREDENTIALS"
 
 # Deploys the Android app to Firebase
 deploy android to firebase:
