@@ -188,9 +188,6 @@ build and deploy QA:
     FIREBASE_APP_ANDROID: $FIREBASE_APP_QA_ANDROID
     FIREBASE_APP_IOS: $FIREBASE_APP_QA_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_QA
-  environment:
-    name: qa
-    action: prepare
   trigger:
     include:
       - local: .gitlab-ci.yml
