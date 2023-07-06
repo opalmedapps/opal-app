@@ -266,6 +266,7 @@ class OpalEnv {
 		this.setVersion(version, env);
 		shelljs.cd(initialDirectory);
 		this.setBuildNumbers(build, env);
+		shelljs.cd(initialDirectory);
 	}
 
 	/**
