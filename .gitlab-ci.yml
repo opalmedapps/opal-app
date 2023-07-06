@@ -155,7 +155,7 @@ build web:
     - echo "$GOOGLE_APPLICATION_CREDENTIALS" > service-account.txt
     - export GOOGLE_APPLICATION_CREDENTIALS=service-account.txt
     # TODO DEBUG
-    - echo "$GOOGLE_APPLICATION_CREDENTIALS"
+    - cat "$GOOGLE_APPLICATION_CREDENTIALS"
 
 # Deploys the Android app to Firebase
 deploy android to firebase:
