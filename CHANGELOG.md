@@ -1,3 +1,10 @@
+## [1.16.5](https://gitlab.com/opalmedapps/qplus/compare/v1.16.4...v1.16.5) (2023-07-07)
+
+
+### Bug Fixes
+
+* reset unread number of purpose questionnaire with new backend api ([446709c](https://gitlab.com/opalmedapps/qplus/commit/446709c36faa486ee43c3d404ae938ddda54ac41))
+
 ## [1.16.4](https://gitlab.com/opalmedapps/qplus/compare/v1.16.3...v1.16.4) (2023-07-04)
 
 
