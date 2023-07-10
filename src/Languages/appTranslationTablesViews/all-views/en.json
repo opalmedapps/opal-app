@@ -303,6 +303,7 @@
   "SMARTDEVICES_MULTIPLE": "Multiple devices detected. Please specify the device to read from:",
   "SMARTDEVICES_SELECT": "Select",
   "SMARTDEVICES_VITALTRACER": "VitalTracer Watch",
+  "SMARTDEVICES_VITALTRACER_READ": "Read Heart Rate",
   "SMARTDEVICES_WEIGHT": "Weight",
   "STAGE": "Step",
   "STAGEOF": "Step {{index}} of {{total}}",

@@ -63,13 +63,11 @@
     "angularfire": "^2.3.0",
     "animate.css": "^3.7.2",
     "bootstrap": "^3.4.1",
-    "cordova": "11.0.0",
-    "cordova-android": "10.0.1",
-    "cordova-ios": "6.2.0",
+    "cordova": "12.0.0",
     "cordova-plugin-android-permissions": "1.1.2",
     "cordova-plugin-androidx-adapter": "1.1.3",
     "cordova-plugin-appversion": "1.0.0",
-    "cordova-plugin-ble-central": "1.6.0",
+    "cordova-plugin-ble-central": "1.7.0",
     "cordova-plugin-cache-clear": "1.3.8",
     "cordova-plugin-customurlscheme": "5.0.2",
     "cordova-plugin-device": "2.0.3",
@@ -112,6 +110,7 @@
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.4.0",
+    "cordova-ios": "^6.3.0",
     "css-loader": "^5.2.6",
     "exports-loader": "^0.7.0",
     "file-loader": "^5.1.0",
@@ -166,12 +165,11 @@
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "Cette application doit accéder à la bibliothèque de photos pour partager des documents / This app requires photo library access to share documents"
       },
       "cordova-plugin-ble-central": {
-        "BLUETOOTH_USAGE_DESCRIPTION": "Your description here",
-        "IOS_INIT_ON_LOAD": "false"
+        "BLUETOOTH_USAGE_DESCRIPTION": "Opal uses bluetooth to find, connect and transfer data between wearable devices.",
+        "IOS_INIT_ON_LOAD": "true"
       }
     },
     "platforms": [
-      "android",
       "ios"
     ]
   }

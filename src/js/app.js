@@ -108,7 +108,7 @@ import "animate.css";
 import "font-awesome/css/font-awesome.css";
 import "../css/app.css";
 import "../css/elements/custom-toast.element.css";
-import "../Languages/angular-locales/angular-locale_en.js"
+import "../Languages/angular-locales/angular-locale_en.js";
 
 // Load angular module bootstrap script
 import "./app.bootstrap";
