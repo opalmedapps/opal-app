@@ -79,7 +79,7 @@
                         vm.errorMessage = ERROR_NO_DEVICE;
                     }
                 });
-            }, 5000);
+            }, 3000);
         }
 
         function onScanFailed(error) {
@@ -113,7 +113,7 @@
 
             $timeout(async () => {
                 disconnect(device);
-            }, 10000);
+            }, 30000);
         }
 
         async function unsubscribe(device_id) {
