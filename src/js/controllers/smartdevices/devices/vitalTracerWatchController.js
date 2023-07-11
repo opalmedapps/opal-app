@@ -15,12 +15,13 @@
     function VitalTracerWatchController($scope, $filter, $timeout, NavigatorParameters, RequestToServer, Params, ProfileSelector, $window)
     {
         // UUIDs for smart scale
-        const SERVICE_UUID = '180D';
+        const SERVICE_UUID = '00EE';
         const BATTERY_SERVICE_UUID = '180F';
         const BATTERY_CHARACTERISTIC_UUID = '2A19';
         const HEART_RATE_SERVICE_UUID = '180D';
         const HEART_RATE_MEASUREMENT_CHARACTERISTIC_UUID = '2A37';
-        const NOTIFICATION_CHARACTERISTIC_UUID = '2902';
+        const BLOOD_PRESSURE_SERVICE_UUID = '1810';
+        const BLOOD_PRESSURE_CHARACTERISTIC_UUID = '2A35';
 
         // Error messages
         const ERROR_BACKEND = $filter('translate')('SMARTDEVICES_ERROR_BACKEND');
@@ -39,12 +40,16 @@
         let devices = new Map();
         vm.messages = [];
 
+        vm.heartRate = null;
+        vm.bloodPressure = null;
+        vm.batteryLevel = null;
+
         vm.scanAndConnect = scanAndConnect;
         // for some reason using the same function name does not work
         vm.doSelectDevice = (device) => selectDevice(device);
-        vm.showInstructions = () => !vm.scanning && vm.selectedDevice == null && devices.size == 0;
+        vm.showInstructions = () => !vm.scanning && vm.selectedDevice == null && devices.size == 0 && !vm.heartRate && !vm.bloodPressure;
         // show loading spinner while scanning and while reading data from device
-        vm.isLoading = () => (vm.scanning && vm.selectedDevice == null) || (vm.selectedDevice?.connecting);
+        vm.isLoading = () => (vm.scanning && vm.selectedDevice == null) || (vm.selectedDevice?.connecting && !vm.heartRate && !vm.bloodPressure);
         vm.done = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
         // ng-repeat does not support iterating through maps
         vm.getDeviceList = () => Array.from(devices.values());
@@ -129,85 +134,87 @@
 
         async function onConnected(device, result) {
             addMessage(`Connected to device`);
-
-            let batteryBuffer = await ble.withPromises.read(device.id, BATTERY_SERVICE_UUID, BATTERY_CHARACTERISTIC_UUID);
-            // let batteryBuffer = await ble.read(device.id, BATTERY_SERVICE_UUID, BATTERY_CHARACTERISTIC_UUID);
-            let bytes = new Uint8Array(batteryBuffer);
-            device.battery = bytes;
-            addMessage(`Battery level: ${bytes}%`);   
             
-            // addDebugMessage('Subscribing to receive notifications');
-            // await ble.withPromises.startNotification(result.id, SCALE_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID, (data) => {
-            //     onSubscribeSuccess(result.id, data);
-            // }, onSubscribeError);
+            // let batteryBuffer = await ble.withPromises.read(device.id, BATTERY_SERVICE_UUID, BATTERY_CHARACTERISTIC_UUID);
+            // let batteryBuffer = await ble.read(device.id, BATTERY_SERVICE_UUID, BATTERY_CHARACTERISTIC_UUID);
+            // let bytes = new Uint8Array(batteryBuffer);
+            // device.battery = bytes;
+            // addMessage(`Battery level: ${bytes}%`);   
+            
+            addDebugMessage('Subscribing to receive notifications');
+            await ble.withPromises.startNotification(
+                result.id,
+                HEART_RATE_SERVICE_UUID,
+                HEART_RATE_MEASUREMENT_CHARACTERISTIC_UUID,
+                (data) => {
+                    onSubscribeHeartRateSuccess(device, data);
+                },
+                onSubscribeError
+            );
+            await ble.withPromises.startNotification(
+                result.id,
+                BLOOD_PRESSURE_SERVICE_UUID,
+                BLOOD_PRESSURE_CHARACTERISTIC_UUID,
+                (data) => {
+                    onSubscribeBloodPressureSuccess(device, data);
+                },
+                onSubscribeError
+            );
+            await ble.withPromises.startNotification(
+                result.id,
+                BATTERY_SERVICE_UUID,
+                BATTERY_CHARACTERISTIC_UUID,
+                (data) => {
+                    onSubscribeBatteryLevelSuccess(device, data);
+                },
+                onSubscribeError
+            );
 
-            // $timeout(async () => {
-            //     if (!vm.weight) {
-            //         addMessage('No data retrieved from device, please redo the measurement.')
-            //         vm.errorMessage = ERROR_NO_DATA;
-            //         // need to reset some variables to show the instructions
-            //         vm.selectedDevice = null;
-            //         devices.clear()
-            //     }
+            $timeout(async () => {
+                // if (!vm.weight) {
+                //     addMessage('No data retrieved from device, please redo the measurement.')
+                //     vm.errorMessage = ERROR_NO_DATA;
+                //     // need to reset some variables to show the instructions
+                //     vm.selectedDevice = null;
+                //     devices.clear()
+                // }
 
-            //     unsubscribe(result.id);
-            //     disconnect(device);
-            // }, 5000);
+                unsubscribe(result.id);
+                disconnect(device);
+            }, 40000);
         }
 
-        async function onSubscribeSuccess(device_id, result) {
+        async function onSubscribeHeartRateSuccess(device, result) {
             let value = new Uint8Array(result);
 
-            let packetType = value[0];
             addDebugMessage(`Received raw message: ${toHexString(value)}`);
+            addDebugMessage(`Heart rate: ${value[1]}`);
+            vm.heartRate = value[1];
 
-            if (packetType === 0x12) {
-                addDebugMessage('Device says hello');
-                // send configure response with unit = kg
-                let response = new Uint8Array([0x13, 9, 21, UNIT_KG, 16, 170, 22, 0, 2]);
-                addDebugMessage(`Sending response: ${toHexString(response)}`);
-                await ble.withPromises.write(device_id, SCALE_SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
-            } else if (packetType === 0x14) {
-                addDebugMessage('Device responded with unknown packet type')
-                
-                let response = mergeArraysWithChecksum([0x20, 8, 0x15], dateToBytes());
-                addDebugMessage(`Sending response: ${toHexString(response)}`);
+            // unsubscribe(device.id);
+            // disconnect(device);
+        }
 
-                await ble.withPromises.write(device_id, SCALE_SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
-            } else if (packetType == 0x21) {
-                // no response necessary it seems, the device sends the next package (measurement) anyway
-                addDebugMessage('Device responded with second unknown packet type');
-            } else if (packetType == 0x10) {
-                addDebugMessage('Device responded with measurement packet');
+        async function onSubscribeBloodPressureSuccess(device, result) {
+            let value = new Uint8Array(result);
 
-                if (value[5] === 1) {
-                    addDebugMessage('Received final measurement');
-                    
-                    // the weight is at index 3 and 4
-                    let weightArray = value.slice(3, 5);
-                    // convert to hex string
-                    // see: https://github.com/LinusU/array-buffer-to-hex/blob/master/index.js
-                    let weightHexString = '';
+            addDebugMessage(`Received raw message: ${toHexString(value)}`);
+            addDebugMessage(`Blood pressure: ${value[1]}`);
+            vm.bloodPressure = value[1];
 
-                    weightArray.forEach(element => {
-                        weightHexString += element.toString(16);
-                    });
+            // unsubscribe(device.id);
+            // disconnect(device);
+        }
 
-                    // convert to hex to int and convert to kg
-                    let weight = parseInt(weightHexString, 16) / 100;
+        async function onSubscribeBatteryLevelSuccess(device, result) {
+            let value = new Uint8Array(result);
 
-                    addMessage(`Weight: ${weight} kg`);
-                    vm.weight = weight;
+            addDebugMessage(`Received raw message: ${toHexString(value)}`);
+            addDebugMessage(`Battery level: ${value}`);
+            vm.batteryLevel = value;
 
-                    let response = new Uint8Array([0x1f, 0x5, 0x15, 0x10, 0x49]);
-
-                    await ble.withPromises.write(device_id, SCALE_SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
-                    addDebugMessage('Told the device to stop spamming me');
-
-                    unsubscribe(device.id);
-                    disconnect(device);
-                }
-            }
+            // unsubscribe(device.id);
+            // disconnect(device);
         }
 
         function onSubscribeError(result) {
@@ -215,6 +222,7 @@
         }
 
         function addMessage(message) {
+            console.log(message);
             $timeout(() => vm.messages.push(message))
         }
 

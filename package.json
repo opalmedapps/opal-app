@@ -49,7 +49,6 @@
   "homepage": "https://github.com/Sable/qplus#readme",
   "dependencies": {
     "@babel/runtime": "^7.9.2",
-    "@havesource/cordova-plugin-push": "^2.0.0",
     "angular": "npm:@xlts.dev/angular@1.9.1",
     "angular-animate": "npm:@xlts.dev/angular-animate@1.9.1",
     "angular-dynamic-locale": "^0.1.27",
@@ -104,13 +103,14 @@
     "@babel/plugin-proposal-private-methods": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
+    "@havesource/cordova-plugin-push": "^4.0.0-dev.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.4.0",
-    "cordova-ios": "^6.3.0",
+    "cordova-ios": "^7.0.0",
     "css-loader": "^5.2.6",
     "exports-loader": "^0.7.0",
     "file-loader": "^5.1.0",
@@ -133,11 +133,6 @@
   },
   "cordova": {
     "plugins": {
-      "@havesource/cordova-plugin-push": {
-        "ANDROID_SUPPORT_V13_VERSION": "28.0.0",
-        "FCM_VERSION": "18.+",
-        "IOS_FIREBASE_MESSAGING_VERSION": "~> 6.32.2"
-      },
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-appversion": {},
@@ -167,6 +162,9 @@
       "cordova-plugin-ble-central": {
         "BLUETOOTH_USAGE_DESCRIPTION": "Opal uses bluetooth to find, connect and transfer data between wearable devices.",
         "IOS_INIT_ON_LOAD": "true"
+      },
+      "@havesource/cordova-plugin-push": {
+        "IOS_FIREBASE_MESSAGING_VERSION": "~> 8.1.1"
       }
     },
     "platforms": [

@@ -5,7 +5,7 @@
     
     <div class="smartdevices-page">
         <div align="center" class="smartdevices-fa-logo">
-            <i class="fa fa-tachometer fa-lg" style="color: #25a6d9"></i>
+            <i class="fa fa-heartbeat fa-lg" style="color: #25a6d9"></i>
         </div>
 
         <div ng-if="ctrl.errorMessage" align="center">
@@ -25,7 +25,24 @@
             <loading-spinning-circle loading-message="{{'SMARTDEVICES_CONNECTING'|translate}}">
             </loading-spinning-circle>
         </div>
-        
+
+        <div ng-if="ctrl.heartRate" align="center">
+            <!-- <p><strong>{{ "SMARTDEVICES_WEIGHT" | translate }}</strong></p> -->
+            <p class="data">
+                <span>{{ ctrl.heartRate }}</span>bpm
+                <span>{{ ctrl.bloodPressure }}</span>mm Hg
+            </p>
+
+            <!-- Currently hidden but might be helpful to show to users -->
+            <p><strong>Name:</strong> {{ctrl.selectedDevice.name}} ({{ctrl.selectedDevice.id}})</p>
+            <p><strong>Battery level:</strong> {{ctrl.batteryLevel}}%</p>
+
+            <!-- <button class="button--large--cta"
+                    ng-click="ctrl.submitData()">
+                {{ "SMARTDEVICES_ETEKCITY_SUBMIT" | translate }}
+            </button> -->
+        </div>
+
         <div ng-if="!ctrl.scanning && ctrl.selectedDevice == null && ctrl.getDeviceList().length > 1">
             <p ng-class="fontSizeTitle"><strong>{{ "SMARTDEVICES_MULTIPLE" | translate }}</strong></p>
 
