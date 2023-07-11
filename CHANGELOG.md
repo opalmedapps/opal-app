@@ -1,3 +1,10 @@
+## [1.16.6](https://gitlab.com/opalmedapps/qplus/compare/v1.16.5...v1.16.6) (2023-07-11)
+
+
+### Bug Fixes
+
+* fix lock screen for incorrect security answer input (QSCCD-1253) ([56dc8e8](https://gitlab.com/opalmedapps/qplus/commit/56dc8e89d3ab305ab40c212e7efd57bdda735234))
+
 ## [1.16.5](https://gitlab.com/opalmedapps/qplus/compare/v1.16.4...v1.16.5) (2023-07-07)
 
 
