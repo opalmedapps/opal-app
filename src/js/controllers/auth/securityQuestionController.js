@@ -114,11 +114,21 @@
 	     */
 	    vm.alertShow = true;
 
+        /**
+         * @ngdoc property
+         * @name countdownSeconds
+         * @propertyOf SecurityQuestionController
+         * @returns int
+         * @description countdown seconds for lockout
+         */
+        vm.countdownSeconds = 10;
+
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
         vm.isThereSelectedHospital = isThereSelectedHospital;
+        vm.lockout = lockout;
 
         activate();
 
@@ -281,6 +291,7 @@
                     case 4:
                         vm.alert.content = "OUTOFTRIES";
                         vm.tooManyAttempts = true;
+                        vm.lockout();
                         break;
                     case "corrupted-data":
                         vm.alert.content = "CONTACTHOSPITAL";
@@ -390,6 +401,23 @@
 
                 });
             }
+        }
+
+        /**
+         * @ngdoc method
+         * @name lockout
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description
+         * lock the screen for too many failed security answer attempts
+         */
+        function lockout(){
+            const sec = vm.countdownSeconds * 1000;
+            $timeout(() => {
+                vm.tooManyAttempts = false;
+                vm.submitting = false;
+                vm.alertShow = false;
+                vm.answer = '';
+            }, sec);
         }
 
         /**
