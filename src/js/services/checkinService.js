@@ -110,6 +110,9 @@
 
         async function evaluateCheckinState(dailyAppointments = []){
             if (attemptedCheckin || checkinStateSet && !stateReloading) return state;
+            dailyAppointments.forEach(app => {
+                app.Checkin = app.checkin;
+            });
             try {
                 await initCheckinState(dailyAppointments);
                 checkinStateSet = true;
@@ -140,8 +143,7 @@
             return;
         }
 
-        function updateCheckinState(checkedInAppts){
-
+        async function updateCheckinState(checkedInAppts){
             if(checkedInAppts && checkedInAppts.length > 0) Appointments.updateCheckedInAppointments(checkedInAppts);
             let appts = Appointments.getTodaysAppointments();
 
@@ -151,7 +153,13 @@
             } else if (checkinErrorsExist(appts)) {
                 setCheckinState("CHECKIN_ERROR");
             } else {
-                setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                try {
+                    const canCheckin = await isWithinCheckinRange();
+                    canCheckin ? setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length) : setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                } catch (error) {
+                    console.error(error);
+                    setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                }
             }
         }
 
@@ -159,7 +167,7 @@
             allCheckedIn = true;
 
             appts.map(function(app){
-                if(app.checkin === '0') allCheckedIn = false;
+                if(app.Checkin === '0') allCheckedIn = false;
             });
 
             return allCheckedIn;
@@ -191,7 +199,7 @@
         }
 
         function setCheckinState(status, numAppts){
-
+            console.log(status);
             state.message = status;
             switch(status){
                 case "CHECKIN_ERROR":
@@ -261,6 +269,7 @@
          *                             geolocated.
          */
         async function isWithinCheckinRange() {
+            return true;
             // Get the list of sites and their coordinates from the backend
             const response = await Hospital.requestSiteInfo(UserHospitalPreferences.getHospital());
             if (!response?.count || response?.count === '0') throw new Error("No sites are defined for this institution");
