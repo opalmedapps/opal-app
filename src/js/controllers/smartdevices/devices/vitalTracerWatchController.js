@@ -1,5 +1,3 @@
-// import ble from "cordova-plugin-ble-central/src/browser/BLECentralPlugin.js";
-
 (function () {
     'use strict';
 
@@ -27,12 +25,17 @@
         const ERROR_BACKEND = $filter('translate')('SMARTDEVICES_ERROR_BACKEND');
         const ERROR_NO_DEVICE = $filter('translate')('SMARTDEVICES_ERROR_NO_DEVICE');
         const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
-        // $window.ble = ble;
+
+        const SAMPLE_TYPE_HEART_RATE = 'HR';
+        const SAMPLE_TYPE_BLOOD_PRESSURE = 'HR';
+        // the patient
+        const SAMPLE_SOURCE = 'P';
+
         let vm = this;
 
         vm.scanning = false;
         vm.dataSubmitted = false;
-        vm.debug = true;
+        vm.debug = false;
 
         vm.selectedDevice = null;
         vm.errorMessage = null;
@@ -63,13 +66,11 @@
             devices.clear();
 
             await ble.withPromises.startScan([SERVICE_UUID], onDiscovered, onScanFailed);
-            // await ble.startScanWithOptions([SERVICE_UUID], {}, onDiscovered, onScanFailed);
 
             // stop scanning after 3 seconds
             $timeout(async () => {
                 vm.scanning = false;
                 await ble.withPromises.stopScan();
-                // await ble.stopScan();
 
                 // not sure why but without this the error message does not show
                 $timeout(async () => {
@@ -105,7 +106,6 @@
             addMessage(`Connecting to ${device.name} (${device.id}) ...`);
 
             await ble.withPromises.connect(device.id, (data) => {
-            // await ble.connect(device.id, (data) => {
                 onConnected(device, data);
             }, (error) => {
                 console.log('connect error: ', error);
@@ -134,12 +134,6 @@
 
         async function onConnected(device, result) {
             addMessage(`Connected to device`);
-            
-            // let batteryBuffer = await ble.withPromises.read(device.id, BATTERY_SERVICE_UUID, BATTERY_CHARACTERISTIC_UUID);
-            // let batteryBuffer = await ble.read(device.id, BATTERY_SERVICE_UUID, BATTERY_CHARACTERISTIC_UUID);
-            // let bytes = new Uint8Array(batteryBuffer);
-            // device.battery = bytes;
-            // addMessage(`Battery level: ${bytes}%`);   
             
             addDebugMessage('Subscribing to receive notifications');
             await ble.withPromises.startNotification(
@@ -171,13 +165,13 @@
             );
 
             $timeout(async () => {
-                // if (!vm.weight) {
-                //     addMessage('No data retrieved from device, please redo the measurement.')
-                //     vm.errorMessage = ERROR_NO_DATA;
-                //     // need to reset some variables to show the instructions
-                //     vm.selectedDevice = null;
-                //     devices.clear()
-                // }
+                if (!vm.heartRate && !vm.bloodPressure) {
+                    addMessage('No data retrieved from device, please redo the measurement.')
+                    vm.errorMessage = ERROR_NO_DATA;
+                    // need to reset some variables to show the instructions
+                    vm.selectedDevice = null;
+                    devices.clear()
+                }
 
                 unsubscribe(result.id);
                 disconnect(device);
@@ -190,20 +184,18 @@
             addDebugMessage(`Received raw message: ${toHexString(value)}`);
             addDebugMessage(`Heart rate: ${value[1]}`);
             vm.heartRate = value[1];
-
-            // unsubscribe(device.id);
-            // disconnect(device);
+            submitData(SAMPLE_TYPE_HEART_RATE);
         }
 
         async function onSubscribeBloodPressureSuccess(device, result) {
             let value = new Uint8Array(result);
 
+            // TODO: should read two values (e.g., 120/80 mmHg)
             addDebugMessage(`Received raw message: ${toHexString(value)}`);
             addDebugMessage(`Blood pressure: ${value[1]}`);
             vm.bloodPressure = value[1];
-
-            // unsubscribe(device.id);
-            // disconnect(device);
+            // TODO: uncomment and finalize once the backend supports blood pressure type (!690)
+            // submitData(SAMPLE_TYPE_BLOOD_PRESSURE);
         }
 
         async function onSubscribeBatteryLevelSuccess(device, result) {
@@ -212,13 +204,39 @@
             addDebugMessage(`Received raw message: ${toHexString(value)}`);
             addDebugMessage(`Battery level: ${value}`);
             vm.batteryLevel = value;
-
-            // unsubscribe(device.id);
-            // disconnect(device);
         }
 
         function onSubscribeError(result) {
             console.log('onSubscribeError: ', result);
+        }
+
+        async function submitData(sample_type) {
+            addDebugMessage('Sending the VitalTracer measurement to the backend');
+
+            let data = {
+                value: vm.heartRate,
+                type: sample_type,
+                start_date: new Date().toISOString(),
+                source: SAMPLE_SOURCE,
+                device: vm.selectedDevice.name,
+            };
+
+            const patient_id = ProfileSelector.getActiveProfile().patient_id;
+            const requestParams = Params.API.ROUTES.QUANTITY_SAMPLES;
+            const formattedParams = {
+                ...requestParams,
+                url: requestParams.url.replace('<PATIENT_ID>', patient_id),
+            };
+
+            try {
+                let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
+                
+                addMessage('Weight successfully sent to backend');
+                
+                vm.dataSubmitted = true;
+            } catch (error) {
+                vm.errorMessage = `${ERROR_BACKEND}: ${error}`;
+            }
         }
 
         function addMessage(message) {
@@ -245,33 +263,6 @@
             });
 
             return hexString;
-        }
-
-        function dateToBytes() {
-            // send response with timestamp with current time instead of hard-coded timestamp
-            // in seconds
-            const struct = require('python-struct');
-
-            const Y2K_START = 946684800;
-            // time is returned in milliseconds
-            let timestamp = (Date.now() / 1000) - Y2K_START;
-
-            // Python equivalent to: struct.pack("<I", int(timestamp))
-            // see: https://github.com/banksy-git/etekcity_scale/blob/master/etekcity_scale/packet.py#L50
-            return struct.pack('<I', parseInt(timestamp));
-        }
-
-        function mergeArraysWithChecksum(array1, array2) {
-            // sum of individual array lengths plus an element for the checksum
-            length = array1.length + array2.length;
-            let mergedArray = new Uint8Array(length + 1);
-            mergedArray.set(array1);
-            mergedArray.set(array2, array1.length);
-
-            let checksum = mergedArray.reduce((partialSum, value) => partialSum + value, 0) & 0xFF;
-            mergedArray.set([checksum], length);
-
-            return mergedArray;
         }
     }
 })();

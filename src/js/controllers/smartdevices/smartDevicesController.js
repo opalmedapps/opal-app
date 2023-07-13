@@ -1,5 +1,3 @@
-// import ble from "cordova-plugin-ble-central/src/browser/BLECentralPlugin.js";
-
 (function () {
     'use strict';
 
@@ -20,7 +18,6 @@
         vm.goToDevice = (deviceView) => NavigatorParameters.getNavigator().pushPage(`./views/smartdevices/devices/${deviceView}`);
 
         vm.bluetoothAvailable = window.hasOwnProperty('ble');
-        // vm.bluetoothAvailable = (ble.length !== 0);
         vm.bluetoothEnabled = false;
         vm.refresh = isBluetoothEnabled;
 
