@@ -65,18 +65,7 @@
             <application android:requestLegacyExternalStorage="true"/>
         </edit-config>
         <resource-file src="google-services.json" target="/app/google-services.json"/>
-        <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png"/>
-        <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png"/>
-        <splash density="land-mdpi" src="res/screen/android/splash-land-mdpi.png"/>
-        <splash density="land-xhdpi" src="res/screen/android/splash-land-xhdpi.png"/>
-        <splash density="land-xxhdpi" src="res/screen/android/splash-land-xxhdpi.png"/>
-        <splash density="land-xxxhdpi" src="res/screen/android/splash-land-xxxhdpi.png"/>
-        <splash density="port-hdpi" src="res/screen/android/splash-port-hdpi.png"/>
-        <splash density="port-ldpi" src="res/screen/android/splash-port-ldpi.png"/>
-        <splash density="port-mdpi" src="res/screen/android/splash-port-mdpi.png"/>
-        <splash density="port-xhdpi" src="res/screen/android/splash-port-xhdpi.png"/>
-        <splash density="port-xxhdpi" src="res/screen/android/splash-port-xxhdpi.png"/>
-        <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png"/>
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/OpalHealth_App_Apple_Icon_2.png"/>
         <access origin="cdvfile://*"/>
         <allow-intent href="market:*"/>
     </platform>
