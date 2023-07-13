@@ -65,7 +65,7 @@
     "animate.css": "^3.7.2",
     "bootstrap": "^3.4.1",
     "cordova": "11.0.0",
-    "cordova-android": "10.0.1",
+    "cordova-android": "11.0.0",
     "cordova-ios": "^6.2.0",
     "cordova-plugin-android-permissions": "1.1.2",
     "cordova-plugin-androidx-adapter": "1.1.3",
