@@ -47,7 +47,7 @@
   "homepage": "https://github.com/Sable/qplus#readme",
   "dependencies": {
     "@babel/runtime": "^7.9.2",
-    "@havesource/cordova-plugin-push": "^2.0.0",
+    "@havesource/cordova-plugin-push": "3.0.1",
     "angular": "^1.8.2",
     "angular-animate": "~1.6.4",
     "angular-dynamic-locale": "^0.1.27",
