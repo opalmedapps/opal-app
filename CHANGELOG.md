@@ -1,3 +1,10 @@
+## [1.16.8](https://gitlab.com/opalmedapps/qplus/compare/v1.16.7...v1.16.8) (2023-07-17)
+
+
+### Bug Fixes
+
+* fix the home page checkin status display (QSCCD-109) ([50b7f21](https://gitlab.com/opalmedapps/qplus/commit/50b7f216e6c3260a9d151c2d5548f84c6396b2e1))
+
 ## [1.16.7](https://gitlab.com/opalmedapps/qplus/compare/v1.16.6...v1.16.7) (2023-07-12)
 
 
