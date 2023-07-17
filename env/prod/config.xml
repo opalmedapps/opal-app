@@ -32,6 +32,10 @@
     <preference name="scheme" value="app"/>
     <preference name="hostname" value="localhost"/>
 
+    <!-- Fix for cordova-android 11.0.0/12.0.0 -->
+    <allow-navigation href="https://app/*"/>
+    <allow-navigation href="https://localhost/*"/>
+
     <!-- Splash screen settings -->
     <preference name="SplashScreenDelay" value="5000"/>
     <preference name="FadeSplashScreen" value="true"/>
@@ -50,6 +54,8 @@
     <platform name="android">
         <preference name="AndroidPersistentFileLocation" value="Internal"/>
         <preference name="GradlePluginGoogleServicesEnabled" value="true"/>
+        <preference name="GradlePluginKotlinEnabled" value="true"/>
+        <preference name="GradlePluginKotlinVersion" value="1.6.20"/>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:debuggable="false"/>
         </edit-config>
@@ -65,7 +71,7 @@
             <application android:requestLegacyExternalStorage="true"/>
         </edit-config>
         <resource-file src="google-services.json" target="/app/google-services.json"/>
-        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/OpalHealth_App_Apple_Icon_2.png"/>
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/Opal-splash-android-inverse-1400x1400.png"/>
         <access origin="cdvfile://*"/>
         <allow-intent href="market:*"/>
     </platform>
@@ -106,7 +112,7 @@
     <plugin name="cordova-plugin-customurlscheme" spec="5.0.2">
         <variable name="URL_SCHEME" value="opal"/>
     </plugin>
-    <plugin name="cordova-plugin-device" spec="2.0.3"/>
+    <plugin name="cordova-plugin-device" spec="2.1.0"/>
     <plugin name="cordova-plugin-file" spec="6.0.2"/>
     <plugin name="cordova-plugin-file-opener2" spec="4.0.0">
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+"/>
