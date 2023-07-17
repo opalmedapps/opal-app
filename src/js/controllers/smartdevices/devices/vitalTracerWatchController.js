@@ -12,10 +12,8 @@
     /* @ngInject */
     function VitalTracerWatchController($scope, $filter, $timeout, NavigatorParameters, RequestToServer, Params, ProfileSelector, $window)
     {
-        // UUIDs for smart scale
+        // UUIDs for smart watch
         const SERVICE_UUID = '00EE';
-        const BATTERY_SERVICE_UUID = '180F';
-        const BATTERY_CHARACTERISTIC_UUID = '2A19';
         const HEART_RATE_SERVICE_UUID = '180D';
         const HEART_RATE_MEASUREMENT_CHARACTERISTIC_UUID = '2A37';
         const BLOOD_PRESSURE_SERVICE_UUID = '1810';
@@ -27,7 +25,7 @@
         const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
 
         const SAMPLE_TYPE_HEART_RATE = 'HR';
-        const SAMPLE_TYPE_BLOOD_PRESSURE = 'HR';
+        const SAMPLE_TYPE_BLOOD_PRESSURE = 'BP';
         // the patient
         const SAMPLE_SOURCE = 'P';
 
@@ -44,15 +42,15 @@
         vm.messages = [];
 
         vm.heartRate = null;
-        vm.bloodPressure = null;
-        vm.batteryLevel = null;
+        vm.bloodPressureSystolic = null;
+        vm.bloodPressureDiastolic = null;
 
         vm.scanAndConnect = scanAndConnect;
         // for some reason using the same function name does not work
         vm.doSelectDevice = (device) => selectDevice(device);
-        vm.showInstructions = () => !vm.scanning && vm.selectedDevice == null && devices.size == 0 && !vm.heartRate && !vm.bloodPressure;
+        vm.showInstructions = () => !vm.scanning && vm.selectedDevice == null && devices.size == 0 && !vm.heartRate && !vm.bloodPressureSystolic && !vm.bloodPressureDiastolic;
         // show loading spinner while scanning and while reading data from device
-        vm.isLoading = () => (vm.scanning && vm.selectedDevice == null) || (vm.selectedDevice?.connecting && !vm.heartRate && !vm.bloodPressure);
+        vm.isLoading = () => (vm.scanning && vm.selectedDevice == null) || (vm.selectedDevice?.connecting && !vm.heartRate && !vm.bloodPressureSystolic && !vm.bloodPressureDiastolic);
         vm.done = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
         // ng-repeat does not support iterating through maps
         vm.getDeviceList = () => Array.from(devices.values());
@@ -116,9 +114,9 @@
             }, 30000);
         }
 
-        async function unsubscribe(device_id) {
+        async function unsubscribe(device_id, service_uuid, characteristic_uuid) {
             addDebugMessage('Unsubscribing from notifications');
-            await ble.withPromises.stopNotification(device_id, SCALE_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID);
+            await ble.withPromises.stopNotification(device_id, service_uuid, characteristic_uuid);
         }
 
         async function disconnect(device) {
@@ -154,18 +152,9 @@
                 },
                 onSubscribeError
             );
-            await ble.withPromises.startNotification(
-                result.id,
-                BATTERY_SERVICE_UUID,
-                BATTERY_CHARACTERISTIC_UUID,
-                (data) => {
-                    onSubscribeBatteryLevelSuccess(device, data);
-                },
-                onSubscribeError
-            );
 
             $timeout(async () => {
-                if (!vm.heartRate && !vm.bloodPressure) {
+                if (!vm.heartRate && !vm.bloodPressureSystolic && !vm.bloodPressureDiastolic) {
                     addMessage('No data retrieved from device, please redo the measurement.')
                     vm.errorMessage = ERROR_NO_DATA;
                     // need to reset some variables to show the instructions
@@ -173,7 +162,8 @@
                     devices.clear()
                 }
 
-                unsubscribe(result.id);
+                unsubscribe(result.id, HEART_RATE_SERVICE_UUID, HEART_RATE_MEASUREMENT_CHARACTERISTIC_UUID);
+                unsubscribe(result.id, BLOOD_PRESSURE_SERVICE_UUID, BLOOD_PRESSURE_CHARACTERISTIC_UUID);
                 disconnect(device);
             }, 40000);
         }
@@ -183,43 +173,47 @@
 
             addDebugMessage(`Received raw message: ${toHexString(value)}`);
             addDebugMessage(`Heart rate: ${value[1]}`);
+
+            // TODO: refactor the code below once the watch has a custom service for reading all measurements at once
+            // TODO: the app should submit to the backend all the vital signs together
             vm.heartRate = value[1];
-            submitData(SAMPLE_TYPE_HEART_RATE);
+            let data = [{
+                value: vm.heartRate,
+                type: SAMPLE_TYPE_HEART_RATE,
+                start_date: new Date().toISOString(),
+                source: SAMPLE_SOURCE,
+                device: vm.selectedDevice.name,
+            }];
+            
+            submitToBackend(data);
         }
 
         async function onSubscribeBloodPressureSuccess(device, result) {
             let value = new Uint8Array(result);
-
-            // TODO: should read two values (e.g., 120/80 mmHg)
+            // Blood pressure contains two values: systolic and diastolic (e.g., 120/80 mmHg)
             addDebugMessage(`Received raw message: ${toHexString(value)}`);
-            addDebugMessage(`Blood pressure: ${value[1]}`);
-            vm.bloodPressure = value[1];
+            addDebugMessage(`Blood pressure: ${value[1]}/${value[3]}`);
+            vm.bloodPressureSystolic = value[1];
+            vm.bloodPressureDiastolic = value[3];
+
             // TODO: uncomment and finalize once the backend supports blood pressure type (!690)
-            // submitData(SAMPLE_TYPE_BLOOD_PRESSURE);
-        }
-
-        async function onSubscribeBatteryLevelSuccess(device, result) {
-            let value = new Uint8Array(result);
-
-            addDebugMessage(`Received raw message: ${toHexString(value)}`);
-            addDebugMessage(`Battery level: ${value}`);
-            vm.batteryLevel = value;
+            // TODO: the app should submit to the backend all the vital signs together
+            // let data = [{
+            //     value: ,
+            //     type: SAMPLE_TYPE_BLOOD_PRESSURE,
+            //     start_date: new Date().toISOString(),
+            //     source: SAMPLE_SOURCE,
+            //     device: vm.selectedDevice.name,
+            // }];
+            // submitToBackend(data);
         }
 
         function onSubscribeError(result) {
             console.log('onSubscribeError: ', result);
         }
 
-        async function submitData(sample_type) {
-            addDebugMessage('Sending the VitalTracer measurement to the backend');
-
-            let data = {
-                value: vm.heartRate,
-                type: sample_type,
-                start_date: new Date().toISOString(),
-                source: SAMPLE_SOURCE,
-                device: vm.selectedDevice.name,
-            };
+        async function submitToBackend(data) {
+            addDebugMessage('Sending the VitalTracer measurements to the backend');
 
             const patient_id = ProfileSelector.getActiveProfile().patient_id;
             const requestParams = Params.API.ROUTES.QUANTITY_SAMPLES;
@@ -231,7 +225,7 @@
             try {
                 let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
                 
-                addMessage('Weight successfully sent to backend');
+                addMessage('Vital signs successfully sent to backend');
                 
                 vm.dataSubmitted = true;
             } catch (error) {

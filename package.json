@@ -160,8 +160,8 @@
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "Cette application doit accéder à la bibliothèque de photos pour partager des documents / This app requires photo library access to share documents"
       },
       "cordova-plugin-ble-central": {
-        "BLUETOOTH_USAGE_DESCRIPTION": "Opal uses bluetooth to find, connect and transfer data between wearable devices.",
-        "IOS_INIT_ON_LOAD": "true"
+        "BLUETOOTH_USAGE_DESCRIPTION": "Opal utilise Bluetooth pour se connecter à des appareils portables et en lire les mesures,  / Opal uses Bluetooth to connect to wearable devices and read measurements from them",
+        "IOS_INIT_ON_LOAD": "false"
       },
       "@havesource/cordova-plugin-push": {
         "IOS_FIREBASE_MESSAGING_VERSION": "~> 8.1.1"
