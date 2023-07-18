@@ -1,3 +1,10 @@
+## [1.16.9](https://gitlab.com/opalmedapps/qplus/compare/v1.16.8...v1.16.9) (2023-07-18)
+
+
+### Bug Fixes
+
+* update features enabled at Sainte-Justine hospital ([5103d45](https://gitlab.com/opalmedapps/qplus/commit/5103d45386019e615d2e23e44b4747d07e2b16d4))
+
 ## [1.16.8](https://gitlab.com/opalmedapps/qplus/compare/v1.16.7...v1.16.8) (2023-07-17)
 
 
