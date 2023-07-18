@@ -22,7 +22,7 @@
 
         // Error messages
         const ERROR_BACKEND = $filter('translate')('SMARTDEVICES_ERROR_BACKEND');
-        const ERROR_NO_DEVICE = $filter('translate')('SMARTDEVICES_ERROR_NO_DEVICE');
+        const ERROR_NO_DEVICE = $filter('translate')('SMARTDEVICES_ETEKCITY_ERROR_NO_DEVICE');
         const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
 
         // body mass
