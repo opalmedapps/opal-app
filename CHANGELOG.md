@@ -1,3 +1,10 @@
+## [1.16.10](https://gitlab.com/opalmedapps/qplus/compare/v1.16.9...v1.16.10) (2023-07-24)
+
+
+### Bug Fixes
+
+* fix total number of unchecked int apps display (QSCCD-109) ([6e6f820](https://gitlab.com/opalmedapps/qplus/commit/6e6f8205ea84c6b780b0cc83390f26091f775187))
+
 ## [1.16.9](https://gitlab.com/opalmedapps/qplus/compare/v1.16.8...v1.16.9) (2023-07-18)
 
 
