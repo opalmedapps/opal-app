@@ -51,7 +51,7 @@ The following is the top level anatomy of the folders and their description. As 
 
 ```
 .
-├── CHANGES # Description of changes per version
+├── CHANGELOG.md # Description of changes per version
 ├── README.md
 ├── .gitlab # Contains templates used in GitLab
 ├── .gitlab-ci.yml # GitLab CI/CD pipeline description file
