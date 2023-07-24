@@ -134,7 +134,16 @@
             } else {
                 try {
                     const canCheckin = await isWithinCheckinRange();
-                    canCheckin ? setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length) : setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                    if (canCheckin) {
+                        const unCheckinAppts = getUncheckinApps(appts);
+                        let checkinStatus = "CHECKIN_MESSAGE_BEFORE" + setPlural(unCheckinAppts);
+                        if (unCheckinAppts.length == 0) {
+                            checkinStatus = "CHECKIN_MESSAGE_AFTER";
+                        }
+                        setCheckinState(checkinStatus, unCheckinAppts.length);
+                    } else {
+                        setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                    }
                 } catch (error) {
                     console.error(error);
                     setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
@@ -155,7 +164,16 @@
             } else {
                 try {
                     const canCheckin = await isWithinCheckinRange();
-                    canCheckin ? setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length) : setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                    if (canCheckin) {
+                        const unCheckinAppts = getUncheckinApps(appts);
+                        let checkinStatus = "CHECKIN_MESSAGE_BEFORE" + setPlural(unCheckinAppts);
+                        if (unCheckinAppts.length == 0) {
+                            checkinStatus = "CHECKIN_MESSAGE_AFTER";
+                        }
+                        setCheckinState(checkinStatus, unCheckinAppts.length);
+                    } else {
+                        setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                    }
                 } catch (error) {
                     console.error(error);
                     setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
@@ -189,6 +207,16 @@
             });
 
             return errors;
+        }
+
+        function getUncheckinApps(appts) {
+            let appointments = [];
+            appts.forEach(app => {
+                if (app.Checkin == 0) {
+                    appointments.push(app);
+                }
+            });
+            return appointments;
         }
 
         function setPlural(apps) {
