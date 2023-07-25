@@ -49,7 +49,7 @@
   "homepage": "https://github.com/Sable/qplus#readme",
   "dependencies": {
     "@babel/runtime": "^7.9.2",
-    "@havesource/cordova-plugin-push": "3.0.1",
+    "@havesource/cordova-plugin-push": "4.0.0-dev.0",
     "angular": "npm:@xlts.dev/angular@1.9.1",
     "angular-animate": "npm:@xlts.dev/angular-animate@1.9.1",
     "angular-dynamic-locale": "^0.1.27",
@@ -136,8 +136,8 @@
     "plugins": {
       "@havesource/cordova-plugin-push": {
         "ANDROID_SUPPORT_V13_VERSION": "28.0.0",
-        "FCM_VERSION": "18.+",
-        "IOS_FIREBASE_MESSAGING_VERSION": "~> 6.32.2"
+        "FCM_VERSION": "23.+",
+        "IOS_FIREBASE_MESSAGING_VERSION": "~> 8.1.1"
       },
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-androidx-adapter": {},
