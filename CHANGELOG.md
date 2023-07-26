@@ -1,3 +1,10 @@
+## [1.16.11](https://gitlab.com/opalmedapps/qplus/compare/v1.16.10...v1.16.11) (2023-07-26)
+
+
+### Bug Fixes
+
+* prod hotfixes to restore the app to the Google Play Store ([453a0bf](https://gitlab.com/opalmedapps/qplus/commit/453a0bf64d33d0bbaaf4c9a62bba2f4f52adef4f))
+
 ## [1.16.10](https://gitlab.com/opalmedapps/qplus/compare/v1.16.9...v1.16.10) (2023-07-24)
 
 
