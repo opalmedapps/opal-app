@@ -140,10 +140,6 @@
                         sound: true
                     },
                     android: {
-                        icon: "opal_notification",
-                        iconColor: "#74A333",
-                        // senderID: "810896751588",   // PRODUCTION
-                        // senderID: "476395494069",   // pre-prod
                         forceShow: "true"
                     }
                 });
@@ -157,8 +153,7 @@
                         navigator.vibrate(3000);
                     }
                 });
-                push.on('error', function (e) {
-                });
+                push.on('error', console.error);
                 push.on('registration', function (data) {
                     DeviceIdentifiers.updateRegistrationId(data.registrationId);
                 });
