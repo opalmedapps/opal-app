@@ -25,7 +25,8 @@
         const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
 
         const SAMPLE_TYPE_HEART_RATE = 'HR';
-        const SAMPLE_TYPE_BLOOD_PRESSURE = 'BP';
+        const SAMPLE_TYPE_BLOOD_PRESSURE_SYSTOLIC = 'BPS';
+        const SAMPLE_TYPE_BLOOD_PRESSURE_DIASTOLIC = 'BPD';
         // the patient
         const SAMPLE_SOURCE = 'P';
 
@@ -199,14 +200,22 @@
 
             // TODO: uncomment and finalize once the backend supports blood pressure type (!690)
             // TODO: the app should submit to the backend all the vital signs together
-            // let data = [{
-            //     value: ,
-            //     type: SAMPLE_TYPE_BLOOD_PRESSURE,
-            //     start_date: new Date().toISOString(),
-            //     source: SAMPLE_SOURCE,
-            //     device: vm.selectedDevice.name,
-            // }];
-            // submitToBackend(data);
+            let data = [{
+                value: vm.bloodPressureSystolic,
+                type: SAMPLE_TYPE_BLOOD_PRESSURE_SYSTOLIC,
+                start_date: new Date().toISOString(),
+                source: SAMPLE_SOURCE,
+                device: vm.selectedDevice.name,
+            },
+            {
+                value: vm.bloodPressureDiastolic,
+                type: SAMPLE_TYPE_BLOOD_PRESSURE_DIASTOLIC,
+                start_date: new Date().toISOString(),
+                source: SAMPLE_SOURCE,
+                device: vm.selectedDevice.name,
+            }
+            ];
+            submitToBackend(data);
         }
 
         function onSubscribeError(result) {
