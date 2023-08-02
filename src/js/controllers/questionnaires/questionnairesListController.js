@@ -93,7 +93,10 @@
                 await vm.refreshQuestionnaires();
                 // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
                 if (!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) {
-                    NativeNotification.showNotificationAlert($filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"));
+                    NativeNotification.showNotificationAlert(
+                        $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                        $filter('translate')("TITLE"),
+                    );
                     return;
                 }
             }
