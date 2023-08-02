@@ -900,7 +900,10 @@
             navigator.popPage();
 
             if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
-                NativeNotification.showNotificationAlert($filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"));
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
             }
             else NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"));
         }
@@ -917,7 +920,10 @@
             navigator.popPage();
 
             if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
-                NativeNotification.showNotificationAlert($filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"));
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
             }
             else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
