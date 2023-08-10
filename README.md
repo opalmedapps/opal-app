@@ -51,7 +51,7 @@ The following is the top level anatomy of the folders and their description. As 
 
 ```
 .
-├── CHANGES # Description of changes per version
+├── CHANGELOG.md # Description of changes per version
 ├── README.md
 ├── .gitlab # Contains templates used in GitLab
 ├── .gitlab-ci.yml # GitLab CI/CD pipeline description file
@@ -96,25 +96,25 @@ For more information about versioning, please read [Versioning](https://gitlab.c
     git clone https://gitlab.com/opalmedapps/qplus.git
     ```
 
-2. Change directory to the qplus folder and make sure the staging branch is checked out. If not, check out this branch.
+2. Change directory to the qplus folder and make sure the main branch is checked out. If not, check out this branch.
     ```
     cd qplus
     git branch
     ```
    
-    If staging is not checked out:
+    If main is not checked out:
     ```
-    git checkout -b staging origin/staging
+    git checkout -b main origin/main
     ```
    
-    This pulls staging from remote and creates a local staging branch. The staging branch is the development branch in Opal 
-    and it will be the branch you will be working off of. When you create or develop a new feature, you will create a branch based on staging 
-    to develop on. e.g. If working on a new feature, you will run the commands:
+    This pulls the code from remote and creates a local main branch. The main branch is the development branch in Opal,
+    and it will be the branch you will be working off of. When you create or develop a new feature, you will need to
+    branch off of main, i.e.:
     ```
-    git checkout staging
+    git checkout main
     git checkout -b new_branch_name
     ```
-    These commands will create a new branch called `new_branch_name` from the original `staging` branch.
+    These commands will create a new branch called `new_branch_name` from the original `main` branch.
 
 3. Install the [Node Version Manager for Mac](https://github.com/nvm-sh/nvm) or
    [Node Version Manager for Windows](https://github.com/coreybutler/nvm-windows) (`nvm`).
@@ -150,7 +150,7 @@ For more information about versioning, please read [Versioning](https://gitlab.c
 
 5. Test the installation on your localhost.
     ```
-    npm run start --env=staging
+    npm run start --env=dev
     ```
    This command will open a browser at the address `http://localhost:9000`, and once the app compiles, it will launch the app. 
    A few notes:
@@ -164,20 +164,20 @@ For more information about versioning, please read [Versioning](https://gitlab.c
       This means that the code will not be compiled to the `www` folder which Cordova uses to build the app. 
       If that's the desired outcome, use the following command to build and compile the app into the `www` folder instead:
       ```
-      npm run build:web --env=staging
+      npm run build:web --env=dev
       ```
     For more information on `webpack-dev-server`, go to: https://webpack.js.org/guides/development/ under the `webpack-dev-server` section.
 
 6. Try logging in; navigate to the login page and enter the following credentials:
     ```
-    email: muhc.app.mobile@gmail.com
+    email: marge@opalmedapps.ca
     password: 12345Opal!!
     hospital: McGill University Health Centre (MUHC)
-    security answer (depending on the question): red, guitar, superman, (first pet's name) dog or meg, bob, cuba
+    security answer (depending on the question): red, superman, meg
     ```
 
 7. (Optional) If setting up a local development environment of Opal with your own backend system, you'll want
-   to redirect Opal to connect to this backend instead of `staging`. In this case, follow the instructions at
+   to redirect Opal to connect to this backend instead of `dev`. In this case, follow the instructions at
    [env/README.md](./env/README.md) to set up your installation to use the `local` environment
     (e.g. `npm run start --env=local`).
 
@@ -195,11 +195,11 @@ If you want an alternative to using webpack-dev-server for serving the Opal web 
    This globally installs a simple, zero-configuration command line server that may be used to host the Opal app locally when developing in the browser.
    Sometimes it is useful to quickly have a server in order to
    test a particular page or app. For this http-server is a great package.
-   For instance, an alternative to `npm run start:web --env=staging` which uses the _webpack-dev-server_,
-   is to build the web app using `npm run build:web --env=staging -- --watch`, change directory to
+   For instance, an alternative to `npm run start:web --env=dev` which uses the _webpack-dev-server_,
+   is to build the web app using `npm run build:web --env=dev -- --watch`, change directory to
    the `www` folder and run `http-server` inside this directory. In one command:
    ```
-   $npm run build:web --env=staging -- --watch && cd www && http-server --port 9000 --open # Build the app, and serve it in port 9000
+   $npm run build:web --env=dev -- --watch && cd www && http-server --port 9000 --open # Build the app, and serve it in port 9000
    ```
    This will watch the app code for changes, update the distribution folder (www) when a change is made which the 
    http-server would then pickup upon refreshing the page.
@@ -214,12 +214,12 @@ If you want an alternative to using webpack-dev-server for serving the Opal web 
     
     Create an empty `www` folder in your project. Otherwise, you may get the following error from Cordova: `Current working directory is not a Cordova-based project.` This folder may be deleted and re-created if needed.
     
-3. To build the app, run the following commands (if needed, replace `staging` with one of the folder names in `./env`
+3. To build the app, run the following commands (if needed, replace `dev` with one of the folder names in `./env`
     to use a different environment). These commands make sure the Cordova plugins and platforms are up-to-date,
     build the web app and then run the `cordova build` command for Android or iOS, resulting in the compiled `platforms` folder.
     ```
-    npm run build:app:ios --env=staging
-    npm run build:app:android --env=staging
+    npm run build:app:ios --env=dev
+    npm run build:app:android --env=dev
     ```
 
 4. Finally, to run the app in an emulator, execute the following command. _Note_: on Mac, you may need to install
@@ -246,13 +246,13 @@ providing you with the resulting output files directly in GitLab.
 1. After committing your work on a personal branch, push the branch to GitLab.
    1. If you have an open merge request, you will see a box saying
       `Detached merge request pipeline #___ waiting for manual action`.
-      Click on the gear icon on the right to reveal two buttons with which to launch an iOS or Android build.
+      Click on the gear icon on the right to reveal buttons with which to launch an iOS, Android or web build.
    2. If you don't have an open merge request, navigate to
       the [Pipelines page](https://gitlab.com/opalmedapps/qplus/-/pipelines).
       There, click to open the blocked pipeline corresponding to your latest commit, and use the play buttons
-      to launch a build for iOS or Android.
+      to launch a build for iOS, Android or web.
 2. Once a build job has completed, click on it to open the job's page. On the right side panel, use the 'Job artifacts'
-   section to download the output file for the build (.ipa or .apk). These files can be used to install the app directly
+   section to download the output files for the build (`.ipa`, `.apk` or web files). App files can be used to install the app directly
    on your device, or can be sent to yourself via Firebase App Distribution in your personal Firebase project.
 
 ### Opal App Scripts
@@ -262,9 +262,9 @@ Take some time to understand what they do, to help you manipulate the project be
 Note that these commands are explicitly related in terms of dependent steps, so once you understand the structure, 
 you may choose to run them differently. For instance, the command:
 ```
-  npm run start:app:ios --env=staging # Build and run in iOS
+  npm run start:app:ios --env=dev # Build and run in iOS
 ```
-Calls in sequence `npm run prepare:app && npm run build:web && cordova run ios`, carrying along the `--env=staging` variable as it goes.
+Calls in sequence `npm run prepare:app && npm run build:web && cordova run ios`, carrying along the `--env=dev` variable as it goes.
 You may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
 
 ## Troubleshooting
@@ -284,8 +284,8 @@ If at this point you have been unable to install everything properly, reach out 
 
 ### Build issues
 * If you get the following error from Cordova: `Current working directory is not a Cordova-based project`, create an empty `www` folder in your project. You may delete this folder and re-create it.
-* If you get the following error on Windows machine: `EBUSY: resource busy or locked, unlink '\google-services.json'`, go to your task manager, and kill the `Java(TM) Platform SE Binary` process (select the process and click on `End Task`).
-* If you're unable to delete the `platforms` folder on Windows, follow the step above to kill the Java binary process.
+* If you get the following error on Windows machine: `EBUSY: resource busy or locked, unlink '\google-services.json'`, go to your task manager, and kill all `Java(TM) Platform SE Binary` processes (select the processes and click on `End Task`).
+* If you're unable to delete the `platforms` folder on Windows, follow the step above to kill the Java binary processes.
   If this fails, reboot your machine.
 
 

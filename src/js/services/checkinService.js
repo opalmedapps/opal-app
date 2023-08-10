@@ -110,6 +110,9 @@
 
         async function evaluateCheckinState(dailyAppointments = []){
             if (attemptedCheckin || checkinStateSet && !stateReloading) return state;
+            dailyAppointments.forEach(app => {
+                app.Checkin = app.checkin;
+            });
             try {
                 await initCheckinState(dailyAppointments);
                 checkinStateSet = true;
@@ -131,7 +134,16 @@
             } else {
                 try {
                     const canCheckin = await isWithinCheckinRange();
-                    canCheckin ? setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length) : setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                    if (canCheckin) {
+                        const unCheckinAppts = getUncheckinApps(appts);
+                        let checkinStatus = "CHECKIN_MESSAGE_BEFORE" + setPlural(unCheckinAppts);
+                        if (unCheckinAppts.length == 0) {
+                            checkinStatus = "CHECKIN_MESSAGE_AFTER";
+                        }
+                        setCheckinState(checkinStatus, unCheckinAppts.length);
+                    } else {
+                        setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                    }
                 } catch (error) {
                     console.error(error);
                     setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
@@ -140,8 +152,7 @@
             return;
         }
 
-        function updateCheckinState(checkedInAppts){
-
+        async function updateCheckinState(checkedInAppts){
             if(checkedInAppts && checkedInAppts.length > 0) Appointments.updateCheckedInAppointments(checkedInAppts);
             let appts = Appointments.getTodaysAppointments();
 
@@ -151,7 +162,22 @@
             } else if (checkinErrorsExist(appts)) {
                 setCheckinState("CHECKIN_ERROR");
             } else {
-                setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                try {
+                    const canCheckin = await isWithinCheckinRange();
+                    if (canCheckin) {
+                        const unCheckinAppts = getUncheckinApps(appts);
+                        let checkinStatus = "CHECKIN_MESSAGE_BEFORE" + setPlural(unCheckinAppts);
+                        if (unCheckinAppts.length == 0) {
+                            checkinStatus = "CHECKIN_MESSAGE_AFTER";
+                        }
+                        setCheckinState(checkinStatus, unCheckinAppts.length);
+                    } else {
+                        setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                    }
+                } catch (error) {
+                    console.error(error);
+                    setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                }
             }
         }
 
@@ -159,7 +185,7 @@
             allCheckedIn = true;
 
             appts.map(function(app){
-                if(app.checkin === '0') allCheckedIn = false;
+                if(app.Checkin === '0') allCheckedIn = false;
             });
 
             return allCheckedIn;
@@ -183,6 +209,16 @@
             return errors;
         }
 
+        function getUncheckinApps(appts) {
+            let appointments = [];
+            appts.forEach(app => {
+                if (app.Checkin == 0) {
+                    appointments.push(app);
+                }
+            });
+            return appointments;
+        }
+
         function setPlural(apps) {
             if (apps.length > 1) {
                 return "_PLURAL";
@@ -191,7 +227,6 @@
         }
 
         function setCheckinState(status, numAppts){
-
             state.message = status;
             switch(status){
                 case "CHECKIN_ERROR":
