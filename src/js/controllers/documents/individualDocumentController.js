@@ -78,7 +78,7 @@
                 $scope.popoverDocsInfo.off('posthide');
                 $scope.popoverDocsInfo.destroy();
 
-                // After a delay, check if this destroy event corresponds to leaving the clinical notes section
+                // After a delay, check if this destroy event corresponds to leaving the clinical reports section
                 $timeout(() => {
                     try {
                         let nav = NavigatorParameters.getNavigator();
