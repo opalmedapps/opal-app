@@ -1,3 +1,10 @@
+## [1.17.1](https://gitlab.com/opalmedapps/qplus/compare/v1.17.0...v1.17.1) (2023-08-16)
+
+
+### Bug Fixes
+
+* restore Login request for analytics ([a5f5e33](https://gitlab.com/opalmedapps/qplus/commit/a5f5e33dce06081277859c7256abe83a5cd58f2b))
+
 # [1.17.0](https://gitlab.com/opalmedapps/qplus/compare/v1.16.12...v1.17.0) (2023-08-02)
 
 
