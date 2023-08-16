@@ -26,6 +26,7 @@
 
                 loadingmodal.show();
 
+                RequestToServer.sendRequest('Login'); // For analytics only; don't wait for a response
                 await UserPreferences.initFontSize();
                 await UpdateUI.init();
                 await RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
