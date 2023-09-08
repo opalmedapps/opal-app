@@ -7,19 +7,6 @@ import moment from "moment";
 
 var myApp=angular.module('MUHCApp');
 
-myApp.filter('notifications',function(){
-    return function(input){
-        if(input==='DoctorNote'){
-            return 'Doctor Note';
-        }else if(input==='DocumentReady'){
-            return 'Document Ready';
-        }else if(input==='AppointmentChange'){
-            return 'Appointment Change';
-        }
-
-    };
-});
-
 myApp.filter('removeTitleEducationalMaterial',function()
 {
     return function(string)
