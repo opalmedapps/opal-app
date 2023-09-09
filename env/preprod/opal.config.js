@@ -7,6 +7,7 @@ const config = {
         messageOfTheDayKey: "preprod_service",
         showVersionOnInit: true,
         useSourceMap: false,
+        screenshotsAllowed: false,
         webpackMode: 'production',
     },
     firebase: {

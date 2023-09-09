@@ -14,6 +14,8 @@ const config = {
         showVersionOnInit: true,
         // Boolean: whether to use a sourcemap when building the web code. Should be false in production.
         useSourceMap: true,
+        // Boolean: allow the user to take the screenshots or not.
+        screenshotsAllowed: true,
         // String: the mode to use when building with Webpack: [production, development].
         webpackMode: 'development',
     },
