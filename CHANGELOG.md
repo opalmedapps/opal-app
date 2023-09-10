@@ -1,3 +1,10 @@
+# [1.18.0](https://gitlab.com/opalmedapps/qplus/compare/v1.17.1...v1.18.0) (2023-09-10)
+
+
+### Features
+
+* add setting variable to control screenshots ([c245924](https://gitlab.com/opalmedapps/qplus/commit/c245924fc397abdf58343f4d76e200b960f12657))
+
 ## [1.17.1](https://gitlab.com/opalmedapps/qplus/compare/v1.17.0...v1.17.1) (2023-08-16)
 
 
