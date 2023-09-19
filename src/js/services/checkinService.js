@@ -299,7 +299,7 @@
             // Get the list of sites and their coordinates from the backend
             const response = await Hospital.requestSiteInfo(UserHospitalPreferences.getHospital());
             if (!response?.count || response?.count === '0') throw new Error("No sites are defined for this institution");
-            const sites = response?.results;
+            const sites = response;
 
             // To be in range, the user must be close enough to at least one of the available hospital sites
             let results = await Promise.allSettled(
