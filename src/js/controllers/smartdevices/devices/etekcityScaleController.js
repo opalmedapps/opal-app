@@ -68,11 +68,11 @@
                 device: vm.selectedDevice.name,
             };
 
-            const patient_id = ProfileSelector.getActiveProfile().patient_id;
+            const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
             const requestParams = Params.API.ROUTES.QUANTITY_SAMPLES;
             const formattedParams = {
                 ...requestParams,
-                url: requestParams.url.replace('<PATIENT_ID>', patient_id),
+                url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid),
             };
 
             try {
