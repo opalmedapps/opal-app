@@ -1,3 +1,10 @@
+## [1.18.1](https://gitlab.com/opalmedapps/qplus/compare/v1.18.0...v1.18.1) (2023-09-21)
+
+
+### Bug Fixes
+
+* use patient UUID instead of ID ([191836a](https://gitlab.com/opalmedapps/qplus/commit/191836a57419699a6456166674eaebb915964c47))
+
 # [1.18.0](https://gitlab.com/opalmedapps/qplus/compare/v1.17.1...v1.18.0) (2023-09-10)
 
 
