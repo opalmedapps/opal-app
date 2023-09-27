@@ -1,3 +1,10 @@
+# [1.19.0](https://gitlab.com/opalmedapps/qplus/compare/v1.18.1...v1.19.0) (2023-09-27)
+
+
+### Features
+
+* add uuid to updateConsentStatus listener request ([61b4014](https://gitlab.com/opalmedapps/qplus/commit/61b4014f1e5cdf1ef445b9ced24a75a20c414b24))
+
 ## [1.18.1](https://gitlab.com/opalmedapps/qplus/compare/v1.18.0...v1.18.1) (2023-09-21)
 
 
