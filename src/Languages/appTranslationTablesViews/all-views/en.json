@@ -274,6 +274,7 @@
   "SELECT_DROPDOWN_QUESTION": "Select a new security question",
   "SEND": "Send",
   "SEND_ANOTHER": "Send another",
+  "SENT_TO": "Sent to",
   "SERVER_ERROR_MODIFY_SECURITY": "Server problem: the security questions or answers cannot be modified at this time. Please try again later.",
   "SERVER_ERROR_SUBMIT_ANSWER": "Server problem: the answer cannot be submitted. Please try again later.",
   "SERVER_ERROR_SUBMIT_QUESTIONNAIRE": "Server problem: the questionnaire cannot be submitted. Please try again later.",

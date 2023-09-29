@@ -73,13 +73,12 @@
         function addAnnouncements(newAnnouncements) {
             if(!newAnnouncements || newAnnouncements[0] === "undefined") return;
 
-            newAnnouncements.forEach(annoucementToInsert => {
+            newAnnouncements.forEach(announcementToInsert => {
                 let existingElementIndex = announcements.findIndex(item => {
-                    return item.PostControlSerNum === annoucementToInsert.PostControlSerNum
-                        && new Date(item.DateAdded).toISOString().split('T')[0] === new Date(annoucementToInsert.DateAdded).toISOString().split('T')[0]
+                    return item.AnnouncementSerNum === announcementToInsert.AnnouncementSerNum
                 });
-                annoucementToInsert.DateAdded=$filter('formatDate')(annoucementToInsert.DateAdded);
-                existingElementIndex === -1 ? announcements.push(annoucementToInsert) : announcements[existingElementIndex] = annoucementToInsert;
+                announcementToInsert.DateAdded=$filter('formatDate')(announcementToInsert.DateAdded);
+                existingElementIndex === -1 ? announcements.push(announcementToInsert) : announcements[existingElementIndex] = announcementToInsert;
             });
         }
 
