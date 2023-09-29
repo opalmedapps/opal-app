@@ -1,3 +1,10 @@
+## [1.19.2](https://gitlab.com/opalmedapps/qplus/compare/v1.19.1...v1.19.2) (2023-09-29)
+
+
+### Bug Fixes
+
+* remove duplicate filtering of announcements ([96902e0](https://gitlab.com/opalmedapps/qplus/commit/96902e07fd9bac28d6369de1ad2ccb689b04171d))
+
 ## [1.19.1](https://gitlab.com/opalmedapps/qplus/compare/v1.19.0...v1.19.1) (2023-09-28)
 
 
