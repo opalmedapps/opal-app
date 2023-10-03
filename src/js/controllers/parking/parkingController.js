@@ -85,7 +85,7 @@
                 );
 
                 $timeout(() => {
-                    vm.sites = parkingInfo.results;
+                    vm.sites = parkingInfo;
 
                     if (vm.sites === undefined || vm.sites.length === 0) {
                         vm.noParkingSites = true;
