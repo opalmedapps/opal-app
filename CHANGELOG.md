@@ -1,3 +1,10 @@
+## [1.19.3](https://gitlab.com/opalmedapps/qplus/compare/v1.19.2...v1.19.3) (2023-10-03)
+
+
+### Bug Fixes
+
+* remove API pagination ([7bbedbf](https://gitlab.com/opalmedapps/qplus/commit/7bbedbf96cc4f25074914004540d3555f88eece5))
+
 ## [1.19.2](https://gitlab.com/opalmedapps/qplus/compare/v1.19.1...v1.19.2) (2023-09-29)
 
 
