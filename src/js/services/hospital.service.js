@@ -32,16 +32,10 @@
         /**
          * @name requestSiteInfo
          * @desc this function gets site info for the sites linked to a particular hospital
-         * @param {string} hospitalKey - an ID of a particular hospital (institution)
          * @returns {Promise} resolves to the sites' data if success
          */
-        async function requestSiteInfo(hospitalKey){
-            // request parameters
-            let params = {
-                'institution__code': hospitalKey,
-            };
-
-            const result = await RequestToServer.apiRequest(endpoint, params);
+        async function requestSiteInfo(){
+            const result = await RequestToServer.apiRequest(endpoint);
             return result.data;
         }
     }
