@@ -90,7 +90,6 @@ import "angular-ui-router";
 import "angular-touch";
 import "bootstrap";
 import "angularfire";
-import firebase from "firebase";
 import "angular-sanitize";
 import "onsenui/js/onsenui";
 import "moment";
@@ -116,7 +115,7 @@ import "./app.bootstrap";
 //Routes for angular views
 angular
     .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate',
-        'ngSanitize','ui.router','onsen','ngTouch','firebase','ui.bootstrap'])
+        'ngSanitize','ui.router','onsen','ngTouch','ui.bootstrap'])
     .run(initialization);
 
 initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$translate', '$location', 'NetworkStatus'];

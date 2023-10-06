@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .factory('UserHospitalPreferences', UserHospitalPreferences);
 
-    UserHospitalPreferences.$inject = ['Params', 'UserPreferences', 'FirebaseService'];
+    UserHospitalPreferences.$inject = ['Params', 'UserPreferences', 'Firebase'];
 
     /* @ngInject */
-    function UserHospitalPreferences(Params, UserPreferences, FirebaseService) {
+    function UserHospitalPreferences(Params, UserPreferences, Firebase) {
 
         let hospitalList = Params.hospitalList;
         let selectedHospitalKey = '';
@@ -79,7 +79,7 @@
                 selectedHospitalKey = localStorageHospital;
 
                 // set hospital firebase branch
-                FirebaseService.updateFirebaseUrl(hospitalList[localStorageHospital].uniqueHospitalCode + '/');
+                Firebase.updateFirebaseUrl(hospitalList[localStorageHospital].uniqueHospitalCode + '/');
             }
         }
 
@@ -102,7 +102,7 @@
             window.localStorage.setItem(localStorageHospitalKey, hospitalKey);
 
             // update firebase hospital branch
-            FirebaseService.updateFirebaseUrl(hospitalList[hospitalKey].uniqueHospitalCode + '/');
+            Firebase.updateFirebaseUrl(hospitalList[hospitalKey].uniqueHospitalCode + '/');
 
             // update local hospital
             selectedHospitalKey = hospitalKey;

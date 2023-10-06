@@ -25,7 +25,7 @@
 
     function ResetPassword(Params) {
 
-        let auth = firebase.app().auth();
+        // let auth = firebase.app().auth();
 
         let service =  {
             verifyLinkCode: verifyLinkCode,

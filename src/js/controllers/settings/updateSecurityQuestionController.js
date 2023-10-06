@@ -14,7 +14,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         '$filter',
         'UserPreferences',
         'Params',
-        'FirebaseService',
+        'Firebase',
         'LogOutService',
         'RequestToServer',
         'EncryptionService'
@@ -22,7 +22,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
     /* @ngInject */
     function UpdateSecurityQuestionController(NavigatorParameters, $timeout, $filter, UserPreferences, Params,
-                                              FirebaseService, LogOutService, RequestToServer, EncryptionService) {
+                                              Firebase, LogOutService, RequestToServer, EncryptionService) {
 
         let vm = this;
 
@@ -193,8 +193,9 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
             loadingSubmit.show();
 
             // verify password first
-            const user = FirebaseService.getAuthenticationCredentials();
-            const credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.password);
+            const user = Firebase.getAuthenticationCredentials();
+            // const credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.password);
+            // firebase.User.prototype.reauthenticateAndRetrieveDataWithCredential
 
             user.reauthenticateWithCredential(credential)
                 .then(function(){

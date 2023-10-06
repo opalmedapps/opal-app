@@ -51,7 +51,7 @@ import tabsPage from "../views/tabs/tabs.html";
 				template: loadingPage,
 				controller: 'LoadingController',
 				resolve: {
-					"currentAuth": ["FirebaseService", requireSignIn],
+					// "currentAuth": ["Firebase", requireSignIn],
 					"preventReload": ["AppState", preventReload],
 				}
 			})
@@ -60,20 +60,20 @@ import tabsPage from "../views/tabs/tabs.html";
 				template: tabsPage,
 				controller: 'TabsController',
 				resolve: {
-					"currentAuth": ["FirebaseService", requireSignIn],
+					// "currentAuth": ["Firebase", requireSignIn],
 					"preventReload": ["AppState", preventReload],
 				}
 			});
 
-		/**
-		 * @description Prevents certain routes from loading until Firebase's $requireSignIn resolves.
-		 *              Source: https://github.com/FirebaseExtended/angularfire/blob/master/docs/guide/user-auth.md
-		 * @param FirebaseService Injection of FirebaseService.
-		 * @returns {Promise<*>} Resolves if the user is signed in, or rejects with "AUTH_REQUIRED".
-		 */
-		function requireSignIn(FirebaseService) {
-			return FirebaseService.getAuthentication().$requireSignIn();
-		}
+		// /**
+		//  * @description Prevents certain routes from loading until Firebase's $requireSignIn resolves.
+		//  *              Source: https://github.com/FirebaseExtended/angularfire/blob/master/docs/guide/user-auth.md
+		//  * @param Firebase Injection of Firebase service.
+		//  * @returns {Promise<*>} Resolves if the user is signed in, or rejects with "AUTH_REQUIRED".
+		//  */
+		// function requireSignIn(Firebase) {
+		// 	return Firebase.getAuthentication().$requireSignIn();
+		// }
 
 		/**
 		 * @description Prevents reloading of certain routes by ensuring that the app state is intact before allowing

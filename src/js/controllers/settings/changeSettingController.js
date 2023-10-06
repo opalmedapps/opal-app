@@ -12,11 +12,11 @@
         .module('MUHCApp')
         .controller('ChangeSettingController', ChangeSettingController);
 
-    ChangeSettingController.$inject = ['FirebaseService', 'UserPreferences', 'RequestToServer',
+    ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer',
         '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params'];
 
     /* @ngInject */
-    function ChangeSettingController(FirebaseService, UserPreferences, RequestToServer, $timeout,
+    function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout,
                                     UserAuthorizationInfo, NavigatorParameters, $window, Params) {
         var vm = this;
         var page;
@@ -91,8 +91,10 @@
         // Reauthenticate and change password in firebase.
         function changePassword() {
             vm.disableButton = true;
-            var user = FirebaseService.getAuthenticationCredentials();
-            var credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.oldValue);
+            var user = Firebase.getAuthenticationCredentials();
+            // var credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.oldValue);
+            // firebase.User.prototype.reauthenticateAndRetrieveDataWithCredential
+            // BREAKING: firebase.User.prototype.reauthenticate has been removed in favor of firebase.User.prototype.reauthenticateWithCredential.
             user.reauthenticate(credential)
                 .then(() => {
                     // Before updating the password, check that the new password's contents are valid. -SB

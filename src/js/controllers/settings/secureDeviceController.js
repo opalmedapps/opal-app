@@ -10,11 +10,11 @@
         .controller('SecureDeviceController', SecureDeviceController);
 
     SecureDeviceController.$inject = [
-        'FirebaseService', 'NavigatorParameters', 'UserPreferences', 'Constants', '$timeout'
+        'Firebase', 'NavigatorParameters', 'UserPreferences', 'Constants', '$timeout'
     ];
 
     /* @ngInject */
-    function SecureDeviceController(FirebaseService, NavigatorParameters, UserPreferences, Constants, $timeout) {
+    function SecureDeviceController(Firebase, NavigatorParameters, UserPreferences, Constants, $timeout) {
 
         var vm = this;
         var params;

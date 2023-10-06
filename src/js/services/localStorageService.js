@@ -5,7 +5,6 @@ var myApp=angular.module('MUHCApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:LocalStorage
- *@requires $firebaseAuth
  *@requires MUHCApp.service:UserAuthorizationInfo
  *@requires MUHCApp.service:EncryptionService
  *@description API to interact with the saved data storage for the patient.

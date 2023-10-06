@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
-    ForgotPasswordController.$inject = ['$timeout', '$firebaseAuth', 'Params'];
+    ForgotPasswordController.$inject = ['$timeout', 'Params'];
 
     /* @ngInject */
-    function ForgotPasswordController($timeout, $firebaseAuth, Params) {
+    function ForgotPasswordController($timeout, Params) {
         var vm = this;
 
         /**
@@ -81,7 +81,7 @@
          * Submits the user-inputted email address to FireBase API. Either displays success or error message based on FireBase response.
          */
         function submitPasswordReset() {
-            var userAuth = $firebaseAuth();
+            // var userAuth = $firebaseAuth();
 
             userAuth.$sendPasswordResetEmail(vm.email).then(function () {
 

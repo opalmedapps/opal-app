@@ -11,12 +11,12 @@
         .module('MUHCApp')
         .controller('MainController', MainController);
 
-    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
+    MainController.$inject = ["$window", "$state", '$rootScope','Firebase','DeviceIdentifiers',
         '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus',
         'RequestToServer', 'Toast', 'Security', '$filter', 'Params', 'LogOutService', 'AppState'];
 
     /* @ngInject */
-    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
+    function MainController($window, $state, $rootScope, Firebase, DeviceIdentifiers,
                             $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus,
                             RequestToServer, Toast, Security, $filter, Params, LogOutService, AppState) {
 
@@ -40,16 +40,17 @@
             $translatePartialLoader.addPart('top-view');
 
             //Listen to authentication state, if user get's unauthenticated log user out
-            firebase.auth().onAuthStateChanged(function (authData) {
-                var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
-                if (!authData) {
-                    if ($state.current.name === 'Home') {
-                        LogOutService.logOut();
-                    } else if (authInfoLocalStorage) {
-                        LocalStorage.resetUserLocalStorage();
-                    }
-                }
-            });
+            // firebase.auth().onAuthStateChanged(function (authData) {
+            //     console.log('Firebase auth state change', authData);
+            //     var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
+            //     if (!authData) {
+            //         if ($state.current.name === 'Home') {
+            //             LogOutService.logOut();
+            //         } else if (authInfoLocalStorage) {
+            //             LocalStorage.resetUserLocalStorage();
+            //         }
+            //     }
+            // });
 
             /*****************************************
              * Check for online activity when the app starts
@@ -182,7 +183,7 @@
             // add a listener to the firebase database that watches for the changing of the token value
             // (this means that the same user has logged in somewhere else)
             //
-            let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + uid);
+            let refCurrentUser = Firebase.getDBRef(`logged_in_users/${uid}`);
 
             refCurrentUser.on('value', function () {
                 if (!$rootScope.firstTime && !localStorage.getItem('locked')) {

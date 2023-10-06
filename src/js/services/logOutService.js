@@ -5,11 +5,11 @@
         .module('MUHCApp')
         .factory('LogOutService', LogOutService);
 
-    LogOutService.$inject = ['FirebaseService', 'RequestToServer', 'CleanUp', '$window', 'UserAuthorizationInfo', 'ProfileSelector',
+    LogOutService.$inject = ['Firebase', 'RequestToServer', 'CleanUp', '$window', 'UserAuthorizationInfo', 'ProfileSelector',
         '$state', 'Constants'];
 
     /* @ngInject */
-    function LogOutService(FirebaseService, RequestToServer, CleanUp, $window, UserAuthorizationInfo, ProfileSelector,
+    function LogOutService(Firebase, RequestToServer, CleanUp, $window, UserAuthorizationInfo, ProfileSelector,
                            $state, Constants) {
         var service = {
             logOut: logOut
@@ -27,7 +27,7 @@
          */
         function logOut(safeDevice = true) {
             // remove the logged in user reference from DB
-            let refCurrentUser = FirebaseService.getDBRef('logged_in_users/' + UserAuthorizationInfo.getUsername());
+            let refCurrentUser = Firebase.getDBRef(`logged_in_users/${UserAuthorizationInfo.getUsername()}`);
 
             refCurrentUser.remove();
 
@@ -36,7 +36,7 @@
             loadingmodal.hide();
 
             // Log the time when the patient signs out from the app
-            if (firebase.auth().currentUser) RequestToServer.sendRequest('Logout');
+            // if (firebase.auth().currentUser) RequestToServer.sendRequest('Logout');
 
             // remove the saved authorized user info from session storage
             $window.sessionStorage.removeItem('UserAuthorizationInfo');
@@ -67,7 +67,7 @@
             // take user to init page
             $state.go('init').then(() => {
                 // Firebase sign out must be done after going to the init state to prevent onAuthStateChanged from re-triggering logout
-                FirebaseService.signOut();
+                Firebase.signOut();
             });
         }
     }

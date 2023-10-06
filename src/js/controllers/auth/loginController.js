@@ -22,12 +22,12 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Toast', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService',
+        'UserPreferences', 'Toast', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'Firebase',
         '$rootScope', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
     function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers,
-                             UserPreferences, Toast, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService,
+                             UserPreferences, Toast, UUID, Constants, EncryptionService, CleanUp, $window, Firebase,
                              $rootScope, Params, UserHospitalPreferences) {
 
         var vm = this;
@@ -115,24 +115,25 @@
          * @ngdoc function
          * @name authHandler
          * @methodOf MUHCApp.controllers.LoginController
-         * @param firebaseUser FireBase User Object
+         * @param firebaseUserCredential Firebase UserCredential object returned after login
          * @description
          * Receives an authenticated FireBase User Object and handles the next step of the logging process
          * which involves determining whether or not the user is handed off to the security question process.
          */
-        async function authHandler(firebaseUser) {
+        async function authHandler(firebaseUserCredential) {
             CleanUp.clear();
 
-            let sessionToken = await firebaseUser.getToken(true);
+            let firebaseUser = firebaseUserCredential.user;
+            let sessionToken = await firebaseUser.getIdToken();
 
             /******************************************************************************************************
              * LOCKING OUT OF CONCURRENT USERS
              ******************************************************************************************************/
             // Save the current session token to the users "logged in users" node.
             // This is used to make sure that the user is only logged in for one session at a time.
-            let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
+            let refCurrentUser = Firebase.getDBRef(`logged_in_users/${firebaseUser.uid}`);
 
-            refCurrentUser.set({ 'Token' : sessionToken });
+            Firebase.set(refCurrentUser, { 'Token' : sessionToken });
 
             // Evoke an observer function in mainController
             $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
@@ -214,7 +215,7 @@
                     loginAsUntrustedUser(deviceID);
                 }
                 else {
-                    if (firebase.auth().currentUser) firebase.auth().signOut();
+                    // if (firebase.auth().currentUser) firebase.auth().signOut();
                     handleError(error);
                 }
             });
@@ -248,7 +249,7 @@
                 .catch(function (error) {
                     $timeout(function(){
                         vm.loading = false;
-                        firebase.auth().signOut();
+                        // firebase.auth().signOut();
                         handleError(error);
                     });
                 });
@@ -346,7 +347,7 @@
             } else {
                 vm.loading = true;
                 if(savedEmail === vm.email) sameUser = true;
-                firebase.auth().signInWithEmailAndPassword(vm.email, vm.password).then(authHandler).catch(handleError);
+                Firebase.signIn(vm.email, vm.password).then(authHandler).catch(handleError);
             }
         }
 
