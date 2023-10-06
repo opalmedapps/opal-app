@@ -297,7 +297,7 @@
          */
         async function isWithinCheckinRange() {
             // Get the list of sites and their coordinates from the backend
-            const sites = await Hospital.requestSiteInfo(UserHospitalPreferences.getHospital());
+            const sites = await Hospital.requestSiteInfo();
             if (sites?.length === 0) throw new Error("No sites are defined for this institution");
 
             // To be in range, the user must be close enough to at least one of the available hospital sites
