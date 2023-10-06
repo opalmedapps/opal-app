@@ -1,3 +1,10 @@
+## [1.19.4](https://gitlab.com/opalmedapps/qplus/compare/v1.19.3...v1.19.4) (2023-10-06)
+
+
+### Bug Fixes
+
+* remove institution__code from api call ([e2b36b8](https://gitlab.com/opalmedapps/qplus/commit/e2b36b8c4c2d9aeb44d984c80490c38a4b77aea7))
+
 ## [1.19.3](https://gitlab.com/opalmedapps/qplus/compare/v1.19.2...v1.19.3) (2023-10-03)
 
 
