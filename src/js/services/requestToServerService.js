@@ -35,7 +35,7 @@
             let requestParameters = encryptionKey ? EncryptionService.encryptWithKey(parameters, encryptionKey) : EncryptionService.encryptData(parameters);
             let request_object = getRequestObject(requestType, requestParameters, typeOfRequest, patientID);
             let reference = getReferenceField(typeOfRequest, referenceField)
-            let pushID =  Firebase.push(reference, request_object);
+            let pushID =  Firebase.push(Firebase.getDBRef(reference), request_object);
 
             return pushID.key;
         }
