@@ -28,15 +28,14 @@
         function logOut(safeDevice = true) {
             // remove the logged in user reference from DB
             let refCurrentUser = Firebase.getDBRef(`logged_in_users/${UserAuthorizationInfo.getUsername()}`);
-
-            refCurrentUser.remove();
+            Firebase.remove(refCurrentUser);
 
             ProfileSelector.clearProfile();
 
             loadingmodal.hide();
 
             // Log the time when the patient signs out from the app
-            // if (firebase.auth().currentUser) RequestToServer.sendRequest('Logout');
+            if (Firebase.getCurrentUser()) RequestToServer.sendRequest('Logout');
 
             // remove the saved authorized user info from session storage
             $window.sessionStorage.removeItem('UserAuthorizationInfo');
