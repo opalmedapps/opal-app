@@ -215,7 +215,8 @@
                     loginAsUntrustedUser(deviceID);
                 }
                 else {
-                    // if (firebase.auth().currentUser) firebase.auth().signOut();
+                    console.error('Error sending identifiers to server during trusted login');
+                    Firebase.signOut();
                     handleError(error);
                 }
             });
@@ -247,9 +248,10 @@
                     });
                 })
                 .catch(function (error) {
-                    $timeout(function(){
+                    $timeout(() => {
+                        console.error('Error sending identifiers to server during untrusted login');
                         vm.loading = false;
-                        // firebase.auth().signOut();
+                        Firebase.signOut();
                         handleError(error);
                     });
                 });

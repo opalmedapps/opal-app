@@ -193,7 +193,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
             loadingSubmit.show();
 
             // verify password first
-            const user = Firebase.getAuthenticationCredentials();
+            const user = Firebase.getCurrentUser();
             // const credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.password);
             // firebase.User.prototype.reauthenticateAndRetrieveDataWithCredential
 

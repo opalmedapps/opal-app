@@ -91,7 +91,7 @@
         // Reauthenticate and change password in firebase.
         function changePassword() {
             vm.disableButton = true;
-            var user = Firebase.getAuthenticationCredentials();
+            var user = Firebase.getCurrentUser();
             // var credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.oldValue);
             // firebase.User.prototype.reauthenticateAndRetrieveDataWithCredential
             // BREAKING: firebase.User.prototype.reauthenticate has been removed in favor of firebase.User.prototype.reauthenticateWithCredential.

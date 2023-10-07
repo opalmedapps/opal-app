@@ -36,8 +36,7 @@
 		}
 
 		function initSettings() {
-			var authData = Firebase.getAuthentication().$getAuth();
-			vm.authenticated = !!authData;
+			vm.authenticated = !!Firebase.getCurrentUser();
 			vm.languageSwitch = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
 			vm.currentYear = new Date().getFullYear();
 			vm.APP_VERSION = Constants.version();
