@@ -133,7 +133,7 @@
 
             // mark questionnaire as finished
             verifyPassword(vm.requirePassword, vm.password)
-                .then(function (userCredential) {
+                .then(function () {
                     // Grab the patient uuid from the ProfileSelector
                     const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
 
@@ -141,7 +141,7 @@
                     if (vm.isConsent && !vm.requirePassword) {
                         Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined', patient_uuid);
                     }
-                    else if (vm.isConsent && vm.requirePassword) {  // TODO: Replace userCredential when firebase auth bug fixed: QSCCD-1583
+                    else if (vm.isConsent && vm.requirePassword) {
                         Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented', patient_uuid);
                     }
 
