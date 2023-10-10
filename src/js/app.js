@@ -66,12 +66,6 @@
 
 /**
  *@ngdoc object
- *@name ProjectDependencies.firebase
- *@description dependency used to create the user authorization service, if user not authorized, i.e. token expired the user will be redirected to the login screen. Used also by the {@link MUHCApp.logOutController logOutController} to unauthorized users at logout. Link to external reference {@link https://github.com/firebase/angularfire}.
- */
-
-/**
- *@ngdoc object
  *@name ProjectDependencies.uibootstrap
  *@description Dependency used accross all views. Provides a way to interact with bootstrap elements using the Angular Framework.
  *Link to external reference {@link https://github.com/angular-ui/bootstrap}.
@@ -89,7 +83,6 @@ import "angular-translate-loader-partial";
 import "angular-ui-router";
 import "angular-touch";
 import "bootstrap";
-import "angularfire";
 import "angular-sanitize";
 import "onsenui/js/onsenui";
 import "moment";
