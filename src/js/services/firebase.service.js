@@ -4,7 +4,7 @@
  *         Refactored by Stacey Beard in October 2023.
  */
 import { getApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { confirmPasswordReset, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, verifyPasswordResetCode } from 'firebase/auth';
 import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, set } from "firebase/database";
 
 (function () {
@@ -27,9 +27,14 @@ import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, s
             // Custom functions
             getCurrentUser: getCurrentUser,
             getDBRef: getDBRef,
-            signIn: (email, password) => signInWithEmailAndPassword(auth, email, password),
             signOut: signOutOfFirebase,
             updateFirebaseUrl: updateFirebaseUrl,
+
+            // Auth functions
+            confirmPasswordReset: (code, newPassword) => confirmPasswordReset(auth, code, newPassword),
+            sendPasswordResetEmail: email => sendPasswordResetEmail(auth, email),
+            signInWithEmailAndPassword: (email, password) => signInWithEmailAndPassword(auth, email, password),
+            verifyPasswordResetCode: code => verifyPasswordResetCode(auth, code),
 
             // Direct access to built-in Firebase functions
             off: off,

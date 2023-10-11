@@ -21,11 +21,9 @@
         .module('MUHCApp')
         .factory('ResetPassword', ResetPassword);
 
-    ResetPassword.$inject = ['Params'];
+    ResetPassword.$inject = ['Firebase','Params'];
 
-    function ResetPassword(Params) {
-
-        // let auth = firebase.app().auth();
+    function ResetPassword(Firebase, Params) {
 
         let service =  {
             verifyLinkCode: verifyLinkCode,
@@ -43,15 +41,13 @@
          *@description verifies the password reset code sent to the user.
          **/
         function verifyLinkCode(url) {
-
             var oobCode = this.getParameter('oobCode', url);
 
-            if(oobCode){
-                return auth.verifyPasswordResetCode(oobCode[1]);
+            if (oobCode) {
+                return Firebase.verifyPasswordResetCode(oobCode[1]);
             } else {
                 return Promise.reject({Code: Params.invalidActionCode});
             }
-
         }
 
         /**
@@ -63,14 +59,8 @@
          *@description confirms the password reset.
          *@returns {Promise} Returns promise containing void.
          **/
-        function completePasswordChange(oobCode, newPassword) {
-            try {
-                return auth.confirmPasswordReset(oobCode[1], newPassword);
-            }
-            catch (error) {
-                // Needed because the above line sometimes throws an error instead of rejecting
-                return Promise.reject(error);
-            }
+        async function completePasswordChange(oobCode, newPassword) {
+            return await Firebase.confirmPasswordReset(oobCode[1], newPassword);
         }
 
         /**

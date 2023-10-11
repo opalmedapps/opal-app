@@ -349,7 +349,7 @@
             } else {
                 vm.loading = true;
                 if(savedEmail === vm.email) sameUser = true;
-                Firebase.signIn(vm.email, vm.password).then(authHandler).catch(handleError);
+                Firebase.signInWithEmailAndPassword(vm.email, vm.password).then(authHandler).catch(handleError);
             }
         }
 
