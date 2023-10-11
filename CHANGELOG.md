@@ -1,3 +1,10 @@
+## [1.19.6](https://gitlab.com/opalmedapps/qplus/compare/v1.19.5...v1.19.6) (2023-10-11)
+
+
+### Bug Fixes
+
+* remove the return value from the function verifyPassword ([1d93ad2](https://gitlab.com/opalmedapps/qplus/commit/1d93ad2fd395eecd827c7ecc5fdb477cea6b2dd5))
+
 ## [1.19.5](https://gitlab.com/opalmedapps/qplus/compare/v1.19.4...v1.19.5) (2023-10-10)
 
 
