@@ -88,19 +88,27 @@
             vm.disableButton = !(vm.newValue.length >= MIN_PASSWORD_LENGTH && vm.newValue === vm.newValueValidate);
         }
 
-        // Reauthenticate and change password in firebase.
-        function changePassword() {
-            vm.disableButton = true;
-            var user = Firebase.getCurrentUser();
-            // var credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.oldValue);
-            // firebase.User.prototype.reauthenticateAndRetrieveDataWithCredential
-            // BREAKING: firebase.User.prototype.reauthenticate has been removed in favor of firebase.User.prototype.reauthenticateWithCredential.
-            user.reauthenticate(credential)
-                .then(() => {
-                    // Before updating the password, check that the new password's contents are valid. -SB
-                    validatePasswordContents(vm.newValue) ? user.updatePassword(vm.newValue).then(updateOnServer).catch(handleError) : handleError({code:"password-disrespects-criteria"});
-                })
-                .catch(handleError);
+        /**
+         * @description Re-authenticates the user with their old password, then sets their new password in Firebase
+         *              and on the server.
+         */
+        async function changePassword() {
+            try {
+                vm.disableButton = true;
+                await Firebase.reauthenticateCurrentUser(vm.oldValue);
+
+                // Before updating it, check that the new password meets the minimum security requirements
+                if (validatePasswordContents(vm.newValue)) {
+                    await Firebase.updateCurrentUserPassword(vm.newValue);
+                    await updateOnServer();
+                }
+                else {
+                    handleError({code:"password-disrespects-criteria"});
+                }
+            }
+            catch (error) {
+                handleError(error);
+            }
         }
 
         // Change the password on Opal servers
@@ -148,6 +156,7 @@
         }
 
         function handleError(error) {
+            console.error(error);
             $timeout(function(){
                 switch(error.code){
                     case Params.userMismatch:

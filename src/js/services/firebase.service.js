@@ -13,6 +13,7 @@ import {
     sendPasswordResetEmail,
     signInWithEmailAndPassword,
     signOut,
+    updatePassword,
     verifyPasswordResetCode
 } from 'firebase/auth';
 
@@ -40,6 +41,7 @@ import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, s
             getDBRef: getDBRef,
             reauthenticateCurrentUser: reauthenticateCurrentUser,
             signOut: signOutOfFirebase,
+            updateCurrentUserPassword: newPassword => updatePassword(getCurrentUser(), newPassword),
             updateFirebaseUrl: updateFirebaseUrl,
 
             // Direct access to Auth functions (where the auth parameter is managed by this service)
