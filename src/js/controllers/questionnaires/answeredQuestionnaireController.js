@@ -133,7 +133,11 @@
 
             // mark questionnaire as finished
             verifyPassword(vm.requirePassword, vm.password)
-                .then(function (userCredential) {
+                .then(function () {
+                    // reauthenticateWithCredential will return undefined if it succeeds, otherwise will
+                    // throw exception, so we do not need return value from it.
+                    // see https://firebase.google.com/docs/auth/web/manage-users#re_authenticate_a_user
+
                     // Grab the patient uuid from the ProfileSelector
                     const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
 
@@ -141,7 +145,7 @@
                     if (vm.isConsent && !vm.requirePassword) {
                         Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined', patient_uuid);
                     }
-                    else if (vm.isConsent && vm.requirePassword) {  // TODO: Replace userCredential when firebase auth bug fixed: QSCCD-1583
+                    else if (vm.isConsent && vm.requirePassword) {
                         Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented', patient_uuid);
                     }
 
