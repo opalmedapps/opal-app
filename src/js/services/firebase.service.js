@@ -4,7 +4,18 @@
  *         Refactored by Stacey Beard in October 2023.
  */
 import { getApp } from 'firebase/app';
-import { confirmPasswordReset, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, verifyPasswordResetCode } from 'firebase/auth';
+
+import {
+    confirmPasswordReset,
+    EmailAuthProvider,
+    getAuth,
+    reauthenticateWithCredential,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signOut,
+    verifyPasswordResetCode
+} from 'firebase/auth';
+
 import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, set } from "firebase/database";
 
 (function () {
@@ -19,7 +30,7 @@ import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, s
     function Firebase(Params) {
         let firebaseUrl = Params.firebaseBaseUrl;
         let app = getApp();
-        let auth = getAuth();
+        let auth = getAuth(app);
         let database = getDatabase(app);
         let firebaseDBRef = ref(database, firebaseUrl);
 
@@ -27,16 +38,17 @@ import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, s
             // Custom functions
             getCurrentUser: getCurrentUser,
             getDBRef: getDBRef,
+            reauthenticateCurrentUser: reauthenticateCurrentUser,
             signOut: signOutOfFirebase,
             updateFirebaseUrl: updateFirebaseUrl,
 
-            // Auth functions
+            // Direct access to Auth functions (where the auth parameter is managed by this service)
             confirmPasswordReset: (code, newPassword) => confirmPasswordReset(auth, code, newPassword),
             sendPasswordResetEmail: email => sendPasswordResetEmail(auth, email),
             signInWithEmailAndPassword: (email, password) => signInWithEmailAndPassword(auth, email, password),
             verifyPasswordResetCode: code => verifyPasswordResetCode(auth, code),
 
-            // Direct access to built-in Firebase functions
+            // Direct access to other built-in Firebase functions
             off: off,
             onValue: onValue,
             push: push,
@@ -53,6 +65,18 @@ import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, s
          */
         function getCurrentUser() {
             return getAuth(app).currentUser;
+        }
+
+        /**
+         * @description Re-authenticates a user for security purposes, typically by prompting the user to
+         *              re-enter their password before completing certain actions.
+         * @param {string} password The password re-entered by the user.
+         * @returns {Promise<void>}
+         */
+        async function reauthenticateCurrentUser(password) {
+            const user = getCurrentUser();
+            const credential = EmailAuthProvider.credential(user.email, password);
+            await reauthenticateWithCredential(user, credential);
         }
 
         /**

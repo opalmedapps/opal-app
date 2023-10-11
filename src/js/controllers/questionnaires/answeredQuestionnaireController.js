@@ -387,15 +387,8 @@
          * @param {string} password
          * @returns {firebase.Promise|Promise<void>}
          */
-        function verifyPassword(requirePassword, password) {
-            if (requirePassword) {
-                const user = Firebase.getCurrentUser();
-                // const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
-                // firebase.User.prototype.reauthenticateAndRetrieveDataWithCredential
-                return user.reauthenticateWithCredential(credential);
-            }
-
-            return Promise.resolve();
+        async function verifyPassword(requirePassword, password) {
+            if (requirePassword) await Firebase.reauthenticateCurrentUser(password);
         }
 
         /**
