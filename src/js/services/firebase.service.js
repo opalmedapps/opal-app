@@ -9,6 +9,7 @@ import {
     confirmPasswordReset,
     EmailAuthProvider,
     getAuth,
+    onAuthStateChanged,
     reauthenticateWithCredential,
     sendPasswordResetEmail,
     signInWithEmailAndPassword,
@@ -46,6 +47,7 @@ import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, s
 
             // Direct access to Auth functions (where the auth parameter is managed by this service)
             confirmPasswordReset: (code, newPassword) => confirmPasswordReset(auth, code, newPassword),
+            onAuthStateChanged: callback => onAuthStateChanged(auth, callback),
             sendPasswordResetEmail: email => sendPasswordResetEmail(auth, email),
             signInWithEmailAndPassword: (email, password) => signInWithEmailAndPassword(auth, email, password),
             verifyPasswordResetCode: code => verifyPasswordResetCode(auth, code),

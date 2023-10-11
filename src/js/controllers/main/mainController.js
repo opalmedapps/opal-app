@@ -39,18 +39,19 @@
         function bindEvents() {
             $translatePartialLoader.addPart('top-view');
 
-            //Listen to authentication state, if user get's unauthenticated log user out
-            // firebase.auth().onAuthStateChanged(function (authData) {
-            //     console.log('Firebase auth state change', authData);
-            //     var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
-            //     if (!authData) {
-            //         if ($state.current.name === 'Home') {
-            //             LogOutService.logOut();
-            //         } else if (authInfoLocalStorage) {
-            //             LocalStorage.resetUserLocalStorage();
-            //         }
-            //     }
-            // });
+            // Listen to the Firebase authentication state; if the user gets unauthenticated, log out
+            Firebase.onAuthStateChanged(function (authData) {
+                console.log('Firebase auth state change', authData);
+                var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
+                if (!authData) {
+                    if ($state.current.name === 'Home') {
+                        console.warn('Firebase authentication has detected a state change: no user is logged in; redirecting to the init page');
+                        LogOutService.logOut();
+                    } else if (authInfoLocalStorage) {
+                        LocalStorage.resetUserLocalStorage();
+                    }
+                }
+            });
 
             /*****************************************
              * Check for online activity when the app starts
