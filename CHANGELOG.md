@@ -1,3 +1,10 @@
+## [1.19.7](https://gitlab.com/opalmedapps/qplus/compare/v1.19.6...v1.19.7) (2023-10-12)
+
+
+### Bug Fixes
+
+* **deps:** update firebase to version 10.4.0 ([f346094](https://gitlab.com/opalmedapps/qplus/commit/f34609404d560e99c5065dca12ffbd824aab232d))
+
 ## [1.19.6](https://gitlab.com/opalmedapps/qplus/compare/v1.19.5...v1.19.6) (2023-10-11)
 
 
