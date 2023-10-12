@@ -1,21 +1,25 @@
-//
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
+/**
+ * @description Service providing access to the Opal Listener.
+ * @author David Herrera, Summer 2016, Email:davidfherrerar@gmail.com
+ */
+(function () {
+    'use strict';
 
-angular
-    .module('MUHCApp')
-    .service('RequestToServer',['$injector', 'UserAuthorizationInfo', 'EncryptionService', 'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params', 'UserPreferences',
-    function($injector, UserAuthorizationInfo, EncryptionService, FirebaseService, Constants, UUID, ResponseValidator, Params, UserPreferences){
+    angular
+        .module('MUHCApp')
+        .factory('RequestToServer', RequestToServer);
 
-        let firebase_url;
-        let response_url;
+    RequestToServer.$inject = ['$injector','UserAuthorizationInfo','EncryptionService','Firebase','Constants','UUID',
+        'ResponseValidator','Params','UserPreferences'];
 
+    function RequestToServer($injector, UserAuthorizationInfo, EncryptionService, Firebase, Constants, UUID,
+                             ResponseValidator, Params, UserPreferences) {
         return {
-            sendRequestWithResponse: sendRequestWithResponse,
             sendRequest: sendRequest,
+            sendRequestWithResponse: sendRequestWithResponse,
             apiRequest: apiRequest,
             handleMultiplePatientsRequests: handleMultiplePatientsRequests
-        };
+        }
 
         /**
          * @description Encrypt and send data to firebase
@@ -26,14 +30,12 @@ angular
          * @returns Firebase unique reference key where the data is uploaded
          */
         function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID) {
-            firebase_url = FirebaseService.getDBRef();
-            response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
             if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
             let requestType = encryptionKey ? typeOfRequest : EncryptionService.encryptData(typeOfRequest);
             let requestParameters = encryptionKey ? EncryptionService.encryptWithKey(parameters, encryptionKey) : EncryptionService.encryptData(parameters);
             let request_object = getRequestObject(requestType, requestParameters, typeOfRequest, patientID);
             let reference = getReferenceField(typeOfRequest, referenceField)
-            let pushID =  firebase_url.child(reference).push(request_object);
+            let pushID =  Firebase.push(Firebase.getDBRef(reference), request_object);
 
             return pushID.key;
         }
@@ -41,21 +43,20 @@ angular
         /**
          * @description Call the new listener structure that relays the request to Django backend
          * @param {object} parameters Required fields to process request
-         * @param {object | null} Data the is needed to be passed to the request.
+         * @param {object | null} data Optional params (for 'get') or data (for 'post') that are passed in the request.
          * @returns Promise that contains the response data
          */
         function apiRequest(parameters, data = null) {
             return new Promise(async (resolve, reject) => {
-                let formatedParams = formatParams(parameters, data);
-                let requestKey = sendRequest('api', formatedParams);
-                let firebasePath = `${UserAuthorizationInfo.getUsername()}/${requestKey}`;
-                let dbReference = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
-    
-                dbReference.child(firebasePath).on('value', snapshot => {
-                    if (snapshot.exists())  {
+                let formattedParams = formatParams(parameters, data);
+                let requestKey = sendRequest('api', formattedParams);
+                let dbReference = Firebase.getDBRef(`users/${UserAuthorizationInfo.getUsername()}/${requestKey}`);
+
+                Firebase.onValue(dbReference, snapshot => {
+                    if (snapshot.exists()) {
                         const apiData = ResponseValidator.validateApiResponse(snapshot.val());
-                        dbReference.child(firebasePath).set(null);
-                        dbReference.child(firebasePath).off();
+                        Firebase.set(dbReference, null);
+                        Firebase.off(dbReference);
                         apiData instanceof Error ? reject(apiData) : resolve(apiData);
                     }
                 });
@@ -71,7 +72,6 @@ angular
                 'Accept-Language': UserPreferences.getLanguage(),
                 'Appuserid': UserAuthorizationInfo.getUsername()
             };
-
 
             return {
                 ...parameters,
@@ -111,30 +111,33 @@ angular
                 //Sends request and gets random key for request
                 let key = sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID);
                 //Sets the reference to fetch data for that request
-                let refRequestResponse = (!referenceField) ? response_url.child(UserAuthorizationInfo.getUsername() + '/' + key) : firebase_url.child(responseField).child(key);
+                const username = UserAuthorizationInfo.getUsername();
+                let refRequestResponse = referenceField
+                    ? Firebase.getDBRef(`${responseField}/${key}`)
+                    : Firebase.getDBRef(`users/${username}/${key}`);
                 //Waits to obtain the request data.
-                refRequestResponse.on('value', snapshot => {
+                Firebase.onValue(refRequestResponse, snapshot => {
                     if (snapshot.exists()) {
                         let data = snapshot.val();
-                        refRequestResponse.set(null);
-                        refRequestResponse.off();
+                        Firebase.set(refRequestResponse, null);
+                        Firebase.off(refRequestResponse);
                         data = ResponseValidator.validate(data, encryptionKey, timeOut);
                         data.success ? resolve(data.success) : reject(data.error)
                     }
                 }, error => {
-                    refRequestResponse.set(null);
-                    refRequestResponse.off();
+                    Firebase.set(refRequestResponse, null);
+                    Firebase.off(refRequestResponse);
                     reject(error);
                 });
 
                 // If request takes longer than 1.5 minutes to come back with timeout request, delete the listener
                 const timeOut = setTimeout(function() {
-                    refRequestResponse.off();
+                    Firebase.off(refRequestResponse);
                     reject({Response:'timeout'});
                 }, Params.requestTimeout);
 
             });
-        };
+        }
 
         /**
          * @description Set the correct referentce field to cue request in the good listener's part.
@@ -148,7 +151,7 @@ angular
             if (referenceField) return referenceField;
             return typeOfRequest === 'api' ? 'api' : 'requests';
         }
-        
+
 
         /**
          * @description Fill up request params to be send to the listener
@@ -164,7 +167,7 @@ angular
                 Parameters: requestParameters,
                 UserEmail: UserAuthorizationInfo.getEmail(),
                 AppVersion: Constants.version(),
-                Timestamp: firebase.database.ServerValue.TIMESTAMP
+                Timestamp: Firebase.serverTimestamp(),
             };
             // Add a target patient if the request type is for patient data
             if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) params.TargetPatientID = patientID || getPatientId();
@@ -181,4 +184,5 @@ angular
             const selectedProfile = ProfileSelectorService.getActiveProfile();
             return selectedProfile?.patient_legacy_id;
         }
-}]);
+    }
+})();

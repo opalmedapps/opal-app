@@ -12,11 +12,11 @@
         .module('MUHCApp')
         .controller('ChangeSettingController', ChangeSettingController);
 
-    ChangeSettingController.$inject = ['FirebaseService', 'UserPreferences', 'RequestToServer',
+    ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer',
         '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params'];
 
     /* @ngInject */
-    function ChangeSettingController(FirebaseService, UserPreferences, RequestToServer, $timeout,
+    function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout,
                                     UserAuthorizationInfo, NavigatorParameters, $window, Params) {
         var vm = this;
         var page;
@@ -88,17 +88,27 @@
             vm.disableButton = !(vm.newValue.length >= MIN_PASSWORD_LENGTH && vm.newValue === vm.newValueValidate);
         }
 
-        // Reauthenticate and change password in firebase.
-        function changePassword() {
-            vm.disableButton = true;
-            var user = FirebaseService.getAuthenticationCredentials();
-            var credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.oldValue);
-            user.reauthenticate(credential)
-                .then(() => {
-                    // Before updating the password, check that the new password's contents are valid. -SB
-                    validatePasswordContents(vm.newValue) ? user.updatePassword(vm.newValue).then(updateOnServer).catch(handleError) : handleError({code:"password-disrespects-criteria"});
-                })
-                .catch(handleError);
+        /**
+         * @description Re-authenticates the user with their old password, then sets their new password in Firebase
+         *              and on the server.
+         */
+        async function changePassword() {
+            try {
+                vm.disableButton = true;
+                await Firebase.reauthenticateCurrentUser(vm.oldValue);
+
+                // Before updating it, check that the new password meets the minimum security requirements
+                if (validatePasswordContents(vm.newValue)) {
+                    await Firebase.updateCurrentUserPassword(vm.newValue);
+                    await updateOnServer();
+                }
+                else {
+                    handleError({code:"password-disrespects-criteria"});
+                }
+            }
+            catch (error) {
+                handleError(error);
+            }
         }
 
         // Change the password on Opal servers
@@ -146,6 +156,7 @@
         }
 
         function handleError(error) {
+            console.error(error);
             $timeout(function(){
                 switch(error.code){
                     case Params.userMismatch:
