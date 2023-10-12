@@ -1,3 +1,10 @@
+## [1.19.8](https://gitlab.com/opalmedapps/qplus/compare/v1.19.7...v1.19.8) (2023-10-12)
+
+
+### Bug Fixes
+
+* update dependencies firebase-tools and cordova ([10f77f5](https://gitlab.com/opalmedapps/qplus/commit/10f77f517d35eb5374ecbae0b7e74be518b2291a))
+
 ## [1.19.7](https://gitlab.com/opalmedapps/qplus/compare/v1.19.6...v1.19.7) (2023-10-12)
 
 
