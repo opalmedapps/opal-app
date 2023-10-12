@@ -62,8 +62,6 @@
             NavigatorParameters.setNavigator(homeNavigator);
             //Initialize the page interval to refresh checkin state every 5 second
             setInterval();
-            // Store the login time
-            if (localStorage.getItem('locked')) localStorage.removeItem('locked');
             bindEvents();
             // Initialize the page data if online
             NetworkStatus.isOnline() ? homePageInit() : setPatientInfo();

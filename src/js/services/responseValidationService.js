@@ -14,10 +14,10 @@
         .module('MUHCApp')
         .factory('ResponseValidator', ResponseValidator);
 
-    ResponseValidator.$inject = ['$filter', 'FirebaseService', '$state', '$window', 'Security', 'EncryptionService', 'Params', 'Toast'];
+    ResponseValidator.$inject = ['$filter', 'Firebase', '$state', '$window', 'Security', 'EncryptionService', 'Params', 'Toast'];
 
     /* @ngInject */
-    function ResponseValidator($filter, FirebaseService, $state, $window, Security, EncryptionService, Params, Toast) {
+    function ResponseValidator($filter, Firebase, $state, $window, Security, EncryptionService, Params, Toast) {
 
         /**
          * Expose API to consumers
@@ -100,7 +100,7 @@
             $window.sessionStorage.removeItem('UserAuthorizationInfo');
 
             //signout on FireBase
-            FirebaseService.signOut();
+            Firebase.signOut();
 
             // Change state of security
             Security.update('validVersion', false)

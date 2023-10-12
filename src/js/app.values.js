@@ -20,6 +20,8 @@
                 tenMinutesMilliSeconds: 600000,
                 requestTimeout: 30000,
 
+                firebaseBaseUrl: 'dev3/',
+
                 appointmentType: {
                     appointmentTypeEn: 'appointment',
                     appointmentTypeFr: 'rendez-vous'

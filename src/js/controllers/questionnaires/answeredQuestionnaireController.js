@@ -14,7 +14,7 @@
     AnsweredQuestionnaireController.$inject = [
         '$filter',
         '$timeout',
-        'FirebaseService',
+        'Firebase',
         'NativeNotification',
         'NavigatorParameters',
         'Params',
@@ -24,7 +24,7 @@
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $timeout, FirebaseService, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -391,14 +391,8 @@
          * @param {string} password
          * @returns {firebase.Promise|Promise<void>}
          */
-        function verifyPassword(requirePassword, password) {
-            if (requirePassword) {
-                const user = FirebaseService.getAuthenticationCredentials();
-                const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
-                return user.reauthenticateWithCredential(credential);
-            }
-
-            return Promise.resolve();
+        async function verifyPassword(requirePassword, password) {
+            if (requirePassword) await Firebase.reauthenticateCurrentUser(password);
         }
 
         /**

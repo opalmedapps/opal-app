@@ -6,11 +6,11 @@
 		.controller("InitSettingsController", InitSettingsController);
 
 	InitSettingsController.$inject = [
-		'FirebaseService', 'NavigatorParameters', 'UserPreferences', 'Constants', '$timeout', '$window', '$rootScope'
+		'Firebase', 'NavigatorParameters', 'UserPreferences', 'Constants', '$timeout', '$window', '$rootScope'
 	];
 
 	/* @ngInject */
-	function InitSettingsController(FirebaseService, NavigatorParameters, UserPreferences, Constants, $timeout, $window, $rootScope) {
+	function InitSettingsController(Firebase, NavigatorParameters, UserPreferences, Constants, $timeout, $window, $rootScope) {
 
 		let vm = this;
 		var params;
@@ -36,8 +36,7 @@
 		}
 
 		function initSettings() {
-			var authData = FirebaseService.getAuthentication().$getAuth();
-			vm.authenticated = !!authData;
+			vm.authenticated = !!Firebase.getCurrentUser();
 			vm.languageSwitch = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
 			vm.currentYear = new Date().getFullYear();
 			vm.APP_VERSION = Constants.version();

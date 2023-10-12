@@ -8,11 +8,11 @@
         .module('MUHCApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', '$filter', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences',
+    LoadingController.$inject = ['$state', '$filter', 'ConcurrentLogin', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences',
         'RequestToServer', 'MetaData', 'LogOutService', 'NativeNotification', 'ProfileSelector'];
 
     /* @ngInject */
-    function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences,
+    function LoadingController($state, $filter, ConcurrentLogin, UpdateUI, UserAuthorizationInfo, UserPreferences,
                                RequestToServer, MetaData, LogOutService, NativeNotification, ProfileSelector) {
 
         activate();
@@ -41,6 +41,7 @@
                     return;
                 }
 
+                await ConcurrentLogin.initConcurrentLogin();
                 $state.go('Home');
 
                 loadingmodal.hide();
