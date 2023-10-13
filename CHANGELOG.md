@@ -1,3 +1,10 @@
+## [1.19.9](https://gitlab.com/opalmedapps/qplus/compare/v1.19.8...v1.19.9) (2023-10-13)
+
+
+### Bug Fixes
+
+* fix Firebase unauthentication bug ([8540398](https://gitlab.com/opalmedapps/qplus/commit/8540398e4d70f228c5af06a23c15dfb269878a64))
+
 ## [1.19.8](https://gitlab.com/opalmedapps/qplus/compare/v1.19.7...v1.19.8) (2023-10-12)
 
 
