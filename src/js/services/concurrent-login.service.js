@@ -38,7 +38,13 @@
          */
         function clearConcurrentLogin() {
             firstValueChecked = false;
-            Firebase.off(getUserRef());
+            try {
+                Firebase.off(getUserRef());
+            }
+            catch (error) {
+                // Suppress an error if it occurs here; getUserRef might fail if the current user has already been logged out
+                console.warn('Could not clear concurrent login listener:', error);
+            }
         }
 
         /*********************************/
