@@ -47,14 +47,16 @@
         <preference name="GradlePluginKotlinEnabled" value="true"/>
         <preference name="GradlePluginKotlinVersion" value="1.7.10"/>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <!-- Security setting; should be false for pen tests and prod builds -->
             <application android:debuggable="false"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
+            <!-- Security setting; do not set to true -->
             <application android:allowBackup="false"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-            <!-- Needed to allow http links (non-https) such as labtestsonline.fr -->
-            <application android:usesCleartextTraffic="true"/>
+            <!-- Security setting; do not set to true. Note: blocks access to HTTP (non-HTTPS) links -->
+            <application android:usesCleartextTraffic="false"/>
         </edit-config>
         <!-- requestLegacyExternalStorage fixes file access issues in Android 10 / API Level 29. This parameter will be ignored by API Level 30+, when your app is running on Android 11 devices -->
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
