@@ -1,3 +1,10 @@
+## [1.19.10](https://gitlab.com/opalmedapps/qplus/compare/v1.19.9...v1.19.10) (2023-10-20)
+
+
+### Bug Fixes
+
+* set android:usesCleartextTraffic back to false for security purposes ([8ca9446](https://gitlab.com/opalmedapps/qplus/commit/8ca944664d9c864d9d4b79a387608670fe2fefa0))
+
 ## [1.19.9](https://gitlab.com/opalmedapps/qplus/compare/v1.19.8...v1.19.9) (2023-10-13)
 
 
