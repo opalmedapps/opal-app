@@ -9,9 +9,9 @@
         .module('MUHCApp')
         .service('Studies', StudiesService);
 
-    StudiesService.$inject = ['RequestToServer', '$filter', '$q'];
+    StudiesService.$inject = ['RequestToServer', '$filter', '$q', 'Params'];
 
-    function StudiesService(RequestToServer, $filter, $q) {
+    function StudiesService(RequestToServer, $filter, $q, Params) {
 
         var studies = [];
 
@@ -20,7 +20,8 @@
             getStudies: getStudies,
             getStudiesList: getStudiesList,
             readStudy: readStudy,
-            updateConsentStatus: updateConsentStatus
+            updateConsentStatus: updateConsentStatus,
+            createDatabankConsent: createDatabankConsent
         };
 
 
@@ -56,20 +57,45 @@
 
         }
 
+        /**
+         * @name createDatabankConsent
+         * @desc Trigger creation of a new databank consent in Django.
+         *       Default for all modules is true during databank phase 1.
+         * @param {string} patientUUID The Django uuid of the currently selected patient
+         */
+        async function createDatabankConsent(patient_uuid) {
+            let data = {
+                "has_appointments": true,
+                "has_questionnaires": true,
+                "has_labs": true,
+                "has_diagnoses": true,
+                "has_demographics": true,
+            };
+
+            const requestParams = Params.API.ROUTES.DATABANK_CONSENT;
+            const formattedParams = {
+                ...requestParams,
+                url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid),
+            };
+
+            try {
+                let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
+            } catch (error) {
+                console.error('Error creating databank consent', error);
+            }
+        }
 
         /**
          * @name updateConsentStatus
          * @desc Updates the consent status for the study corresponding to the given consent form Id.
          * @param {int} questionnaireId The ID of the consent form (questionnaire Id in QuestionnaireDB).
          * @param {string} status The consent status submitted, either "opalConsented" or "declined".
-         * @param {string} patientUUID The Django uuid of the currently selected patient
          * @return {promise} 
          */
-        async function updateConsentStatus(questionnaireId, status, patientUUID) {
+        async function updateConsentStatus(questionnaireId, status) {
             let params = {
                 questionnaire_id: questionnaireId,
-                status: status,
-                uuid: patientUUID
+                status: status
             };
 
             try {

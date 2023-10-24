@@ -18,13 +18,13 @@
         'NativeNotification',
         'NavigatorParameters',
         'Params',
-        'ProfileSelector',
         'Questionnaires',
-        'Studies'
+        'Studies',
+        'ProfileSelector'
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, Questionnaires, Studies, ProfileSelector) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -137,16 +137,20 @@
                     // reauthenticateWithCredential will return undefined if it succeeds, otherwise will
                     // throw exception, so we do not need return value from it.
                     // see https://firebase.google.com/docs/auth/web/manage-users#re_authenticate_a_user
-
+                    
                     // Grab the patient uuid from the ProfileSelector
                     const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
-
+                    
                     // Update consent status to opalConsented or declined
                     if (vm.isConsent && !vm.requirePassword) {
-                        Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined', patient_uuid);
+                        Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined');
                     }
                     else if (vm.isConsent && vm.requirePassword) {
-                        Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented', patient_uuid);
+                        Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented');
+                        // Trigger databank consent creation with additional check
+                        if (vm.questionnaire.nickname && vm.questionnaire.nickname==='Databank Consent Questionnaire'){
+                            Studies.createDatabankConsent(patient_uuid);
+                        }
                     }
 
                     // mark questionnaire as finished
