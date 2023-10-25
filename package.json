@@ -119,7 +119,7 @@
     "node-polyfill-webpack-plugin": "2.0.1",
     "raw-loader": "^4.0.0",
     "run-script-os": "^1.1.6",
-    "semantic-release": "19.0.5",
+    "semantic-release": "22.0.5",
     "semver": "7.5.4",
     "shelljs": "^0.8.3",
     "style-loader": "^1.1.3",
