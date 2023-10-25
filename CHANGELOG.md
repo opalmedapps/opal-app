@@ -1,3 +1,10 @@
+## [1.19.14](https://gitlab.com/opalmedapps/qplus/compare/v1.19.13...v1.19.14) (2023-10-25)
+
+
+### Bug Fixes
+
+* **deps:** update semantic-release dependency ([c74613a](https://gitlab.com/opalmedapps/qplus/commit/c74613ad5f21824462b989122098fd8085c138fc))
+
 ## [1.19.13](https://gitlab.com/opalmedapps/qplus/compare/v1.19.12...v1.19.13) (2023-10-25)
 
 
