@@ -1,3 +1,10 @@
+## [1.19.13](https://gitlab.com/opalmedapps/qplus/compare/v1.19.12...v1.19.13) (2023-10-25)
+
+
+### Bug Fixes
+
+* **deps:** upgrade semver dependency ([3744dce](https://gitlab.com/opalmedapps/qplus/commit/3744dce792b1bd0e0885f4af8a82689b5db07eb0))
+
 ## [1.19.12](https://gitlab.com/opalmedapps/qplus/compare/v1.19.11...v1.19.12) (2023-10-25)
 
 
