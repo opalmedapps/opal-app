@@ -1,3 +1,10 @@
+## [1.19.12](https://gitlab.com/opalmedapps/qplus/compare/v1.19.11...v1.19.12) (2023-10-25)
+
+
+### Bug Fixes
+
+* **deps:** use node v20.8.0 ([e0b6e18](https://gitlab.com/opalmedapps/qplus/commit/e0b6e18aee41314bcfdd099e0ddd94cb534b6c99))
+
 ## [1.19.11](https://gitlab.com/opalmedapps/qplus/compare/v1.19.10...v1.19.11) (2023-10-24)
 
 
