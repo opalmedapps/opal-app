@@ -148,7 +148,8 @@
                     else if (vm.isConsent && vm.requirePassword) {
                         Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented');
                         // Trigger databank consent creation with additional check
-                        if (vm.questionnaire.nickname && vm.questionnaire.nickname==='Databank Consent Questionnaire'){
+                        const pattern = /.*databank\s*consent\s*questionnaire.*/i;
+                        if (vm.questionnaire.nickname && pattern.test(vm.questionnaire.nickname.toLowerCase())){
                             Studies.createDatabankConsent(patient_uuid);
                         }
                     }
