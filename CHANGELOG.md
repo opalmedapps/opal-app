@@ -1,3 +1,31 @@
+## [1.19.14](https://gitlab.com/opalmedapps/qplus/compare/v1.19.13...v1.19.14) (2023-10-25)
+
+
+### Bug Fixes
+
+* **deps:** update semantic-release dependency ([c74613a](https://gitlab.com/opalmedapps/qplus/commit/c74613ad5f21824462b989122098fd8085c138fc))
+
+## [1.19.13](https://gitlab.com/opalmedapps/qplus/compare/v1.19.12...v1.19.13) (2023-10-25)
+
+
+### Bug Fixes
+
+* **deps:** upgrade semver dependency ([3744dce](https://gitlab.com/opalmedapps/qplus/commit/3744dce792b1bd0e0885f4af8a82689b5db07eb0))
+
+## [1.19.12](https://gitlab.com/opalmedapps/qplus/compare/v1.19.11...v1.19.12) (2023-10-25)
+
+
+### Bug Fixes
+
+* **deps:** use node v20.8.0 ([e0b6e18](https://gitlab.com/opalmedapps/qplus/commit/e0b6e18aee41314bcfdd099e0ddd94cb534b6c99))
+
+## [1.19.11](https://gitlab.com/opalmedapps/qplus/compare/v1.19.10...v1.19.11) (2023-10-24)
+
+
+### Bug Fixes
+
+* **deps:** update xlts angular packages to v1.9.3 (patch) ([9568ce7](https://gitlab.com/opalmedapps/qplus/commit/9568ce7ab0a5d177c80ef5e8fae3037935113a96))
+
 ## [1.19.10](https://gitlab.com/opalmedapps/qplus/compare/v1.19.9...v1.19.10) (2023-10-20)
 
 
