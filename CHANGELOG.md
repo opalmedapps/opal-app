@@ -1,3 +1,10 @@
+# [1.20.0](https://gitlab.com/opalmedapps/qplus/compare/v1.19.14...v1.20.0) (2023-10-30)
+
+
+### Features
+
+* trigger create DatabankConsent api via new Django API pattern ([639d0db](https://gitlab.com/opalmedapps/qplus/commit/639d0db4b7fa8d9dd75fc0ca3122fbd55ee86eee))
+
 ## [1.19.14](https://gitlab.com/opalmedapps/qplus/compare/v1.19.13...v1.19.14) (2023-10-25)
 
 
