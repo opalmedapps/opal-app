@@ -9,15 +9,31 @@
     // https://docs.renovatebot.com/presets-default/#separatepatchreleases
     ":separatePatchReleases",
   ],
-  "assignees": ["staceybeard", "yickmo"],
+  "assignees": ["staceybeard", "yickmo", "anton.gladyr"],
   "labels": ["dependencies"],
   "separateMinorPatch": true,
+  "ignoreDeps": [
+    "@babel/runtime",
+    "animate.css",
+    "bootstrap",
+    "highcharts",
+    "ionicons",
+    "moment",
+    "onsenui",
+    "@babel/core",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-transform-runtime",
+    "@babel/preset-env",
+    "babel-loader",
+    "exports-loader",
+    "html-loader",
+    "imports-loader",
+    "raw-loader",
+    "style-loader",
+  ],
   "packageRules": [
-    // Exclude all the dependencies except for AngularJS/xlts
-    // TODO: group all the dependencies
-    {
-      "excludePackagePatterns": ["/.*/"],
-    },
+    // TODO: add the missing dependencies and group them if possible
     // Group auxiliary angular-related updates
     {
       "matchPackagePatterns": ["^angular"],
