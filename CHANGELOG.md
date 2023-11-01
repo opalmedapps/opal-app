@@ -1,3 +1,10 @@
+## [1.20.1](https://gitlab.com/opalmedapps/qplus/compare/v1.20.0...v1.20.1) (2023-11-01)
+
+
+### Bug Fixes
+
+* pin dependencies to the versions currently used ([728a3fc](https://gitlab.com/opalmedapps/qplus/commit/728a3fcd28cbe0a1846e93fc53252fffc1e7bb88))
+
 # [1.20.0](https://gitlab.com/opalmedapps/qplus/compare/v1.19.14...v1.20.0) (2023-10-30)
 
 
