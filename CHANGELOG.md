@@ -1,3 +1,10 @@
+## [1.20.2](https://gitlab.com/opalmedapps/qplus/compare/v1.20.1...v1.20.2) (2023-11-03)
+
+
+### Bug Fixes
+
+* add service status key for the dev environment ([5a5d698](https://gitlab.com/opalmedapps/qplus/commit/5a5d6981cd21e33ef76d2690006409411d08b1f3))
+
 ## [1.20.1](https://gitlab.com/opalmedapps/qplus/compare/v1.20.0...v1.20.1) (2023-11-01)
 
 
