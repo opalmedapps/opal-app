@@ -4,7 +4,7 @@ const config = {
     env: "dev",
     settings: {
         kickOutConcurrentUsers: false,
-        messageOfTheDayKey: "",
+        messageOfTheDayKey: "dev_service",
         showVersionOnInit: true,
         useSourceMap: true,
         screenshotsAllowed: true,
