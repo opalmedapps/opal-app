@@ -1,3 +1,10 @@
+## [1.20.3](https://gitlab.com/opalmedapps/qplus/compare/v1.20.2...v1.20.3) (2023-11-08)
+
+
+### Bug Fixes
+
+* download full questionnaire stub via notifications instead of partial data ([b75755a](https://gitlab.com/opalmedapps/qplus/commit/b75755a4ceea74be15f4684f4ee6ae76671ea5f9))
+
 ## [1.20.2](https://gitlab.com/opalmedapps/qplus/compare/v1.20.1...v1.20.2) (2023-11-03)
 
 
