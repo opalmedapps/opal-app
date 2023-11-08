@@ -29,7 +29,7 @@
         // this is redundant, but written for clarity, ordered alphabetically
         return {
             updateQuestionnaireStatus: updateQuestionnaireStatus,
-            requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
+            requestQuestionnaireStubFromSerNum: requestQuestionnaireStubFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnairePurpose: requestQuestionnairePurpose,
             requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
@@ -37,14 +37,23 @@
         };
 
         /**
-         * @name requestOpalQuestionnaireFromSerNum
-         * @desc this function gets a questionnaire's general information stored in OpalDB from the listener
-         * @param {string|int} questionnaireSerNum
-         * @returns {Promise}
+         * @name requestQuestionnaireStubFromSerNum
+         * @desc Gets a questionnaire's basic information (questionnaire stub) from OpalDB.
+         * @param {string|int} questionnaireSerNum The SerNum of the questionnaire to look up.
+         * @returns {Promise<Object>} Resolves to the basic information (questionnaire stub) for the given questionnaire.
          */
-        async function requestOpalQuestionnaireFromSerNum(questionnaireSerNum) {
-            const response = await RequestToServer.sendRequestWithResponse(api.GET_OPAL_QUESTIONNAIRE_FROM_SERNUM, {questionnaireSerNum});
-            return response.hasOwnProperty('Data') ? response.Data : {};
+        async function requestQuestionnaireStubFromSerNum(questionnaireSerNum) {
+            let response = await RequestToServer.sendRequestWithResponse('GetOneItem', {
+                category: 'QuestionnaireList',
+                language: UserPreferences.getLanguage(),
+                serNum: questionnaireSerNum,
+            });
+            let questionnaireStub = response.Data?.hasOwnProperty('QuestionnaireList') ? response.Data?.QuestionnaireList[0] : undefined;
+            if (!questionnaireStub) {
+                console.error(response);
+                throw `GetOneItem for QuestionnaireList with QuestionnaireSerNum = ${questionnaireSerNum} returned an invalid response`;
+            }
+            return questionnaireStub;
         }
 
         /**
@@ -157,8 +166,7 @@
                 // this is in case firebase deletes the property when it is empty
                 return response?.Data ? response.Data : {};
             } catch (error) {
-                console.log('Error in requestQuestionnaire: ', error);
-
+                console.error('Error in requestQuestionnaire', error);
                 return {};
             }
         }
@@ -184,8 +192,7 @@
 
                 return {};
             } catch (error) {
-                console.log('Error in requestQuestionnairePurpose: ', error);
-
+                console.error('Error in requestQuestionnairePurpose', error);
                 return {};
             }
         }
@@ -211,8 +218,7 @@
 
                 return { numberUnread: "0" };
             } catch (error) {
-                console.log('Error in requestQuestionnaireUnreadNumber: ', error);
-
+                console.error('Error in requestQuestionnaireUnreadNumber', error);
                 return { numberUnread: "0" };
             }
         }
