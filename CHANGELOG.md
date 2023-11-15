@@ -1,3 +1,10 @@
+## [1.20.4](https://gitlab.com/opalmedapps/qplus/compare/v1.20.3...v1.20.4) (2023-11-15)
+
+
+### Bug Fixes
+
+* fix checkin appointments patient name issue (QSCCD-1639) ([000cbc9](https://gitlab.com/opalmedapps/qplus/commit/000cbc99eaec754386428d901ce4d84144f76ada))
+
 ## [1.20.3](https://gitlab.com/opalmedapps/qplus/compare/v1.20.2...v1.20.3) (2023-11-08)
 
 
