@@ -498,17 +498,22 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             }).then((response)=>{
                 let packageContents = response.Data;
                 // Attach the icons and colours to the package contents.
-                for (var i = 0; i < packageContents.length; i++) {
-                    if(educationalMaterialType[packageContents[i].EducationalMaterialType_EN]) {
-                        packageContents[i].Icon = educationalMaterialType[packageContents[i].EducationalMaterialType_EN].icon;
-                        packageContents[i].Color = educationalMaterialType[packageContents[i].EducationalMaterialType_EN].color;
-                    }
-                    else{
-                        packageContents[i].Icon = educationalMaterialType['Other'].icon;
-                        packageContents[i].Color = educationalMaterialType['Other'].color;
-                    }
+                if (packageContents) {
+                    packageContents.forEach((content) => {
+                        if(educationalMaterialType[content.EducationalMaterialType_EN]) {
+                            content.Icon = educationalMaterialType[content.EducationalMaterialType_EN].icon;
+                            content.Color = educationalMaterialType[content.EducationalMaterialType_EN].color;
+                        }
+                        else{
+                            content.Icon = educationalMaterialType['Other'].icon;
+                            content.Color = educationalMaterialType['Other'].color;
+                        }
+                    });
+                    deferred.resolve(packageContents);
+                } else {
+                    deferred.resolve([]);
                 }
-                deferred.resolve(packageContents);
+
             }).catch((err)=>{
                 deferred.reject(err);
             });
