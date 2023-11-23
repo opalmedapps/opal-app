@@ -1,3 +1,10 @@
+## [1.20.5](https://gitlab.com/opalmedapps/qplus/compare/v1.20.4...v1.20.5) (2023-11-23)
+
+
+### Bug Fixes
+
+* fix educational packages display with empty content (QSCCD-1680) ([805164f](https://gitlab.com/opalmedapps/qplus/commit/805164fdeac72a16169a61923ebf004a83cc2e3f))
+
 ## [1.20.4](https://gitlab.com/opalmedapps/qplus/compare/v1.20.3...v1.20.4) (2023-11-15)
 
 
