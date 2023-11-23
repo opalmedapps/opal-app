@@ -57,6 +57,7 @@
     "angular-touch": "npm:@xlts.dev/angular-touch@1.9.3",
     "angular-translate": "2.19.0",
     "angular-translate-handler-log": "2.19.0",
+    "angular-translate-interpolation-messageformat": "2.19.0",
     "angular-translate-loader-partial": "2.19.0",
     "angular-ui-bootstrap": "2.5.6",
     "angular-ui-router": "1.0.30",
