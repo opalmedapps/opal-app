@@ -86,16 +86,21 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         vm.trusted = false;
 
         /**
-         * @desc Promise that can be cancelled if the user leaves the page (to cancel any in-progress untrusted login attempt).
+         * @description Promise that can be cancelled if the user leaves the page (to cancel any in-progress untrusted login attempt).
          * @type {{promise: Promise, cancel: function} | undefined}
          */
         vm.untrustedPromise = undefined;
 
         /**
-         * @desc Promise that can be cancelled if the user leaves the page (to cancel any in-progress trusted login attempt).
+         * @description Promise that can be cancelled if the user leaves the page (to cancel any in-progress trusted login attempt).
          * @type {{promise: Promise, cancel: function} | undefined}
          */
         vm.trustedPromise = undefined;
+
+        /**
+         * @description Tracks whether the login attempt on this page has been successful; used to decide whether to cancel login on destruction of the controller.
+         */
+        vm.attemptSuccessful = false;
 
         vm.cancelLoginAttempt = cancelLoginAttempt;
         vm.clearErrors = clearErrors;
@@ -127,8 +132,11 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         }
 
         function bindEvents() {
-            // On destroy, cancel any in-progress login attempt
-            $scope.$on('$destroy', cancelLoginAttempt);
+            // On destroy, cancel any unfinished in-progress login attempt
+            $scope.$on('$destroy', () => {
+                // Avoid cancelling login when the attempt was successful and we're destroying the controller to go to the next page
+                if (!vm.attemptSuccessful) cancelLoginAttempt();
+            });
         }
 
         /**
@@ -214,6 +222,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
             vm.trustedPromise = DeviceIdentifiers.sendDeviceIdentifiersToServer();
 
             vm.trustedPromise.promise.then(() => {
+                vm.attemptSuccessful = true;
                 $state.go('loading');
             }).catch(error => {
                 if (error instanceof CancelledPromiseError) {
@@ -248,8 +257,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
             vm.untrustedPromise = DeviceIdentifiers.sendFirstTimeIdentifierToServer();
 
             vm.untrustedPromise.promise.then(response => {
-                vm.loading = false;
-
+                vm.attemptSuccessful = true;
                 initNavigator.pushPage('./views/login/security-question.html', {
                     securityQuestion: response.Data.securityQuestion,
                     trusted: vm.trusted,
