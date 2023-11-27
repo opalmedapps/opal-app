@@ -8,6 +8,8 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
+import { CancelledPromiseError } from "../../models/utility/cancelled-promise-error";
+
 /**
  *  @ngdoc controller
  *  @name MUHCApp.controllers: LoginController
@@ -21,14 +23,14 @@
         .module('MUHCApp')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$timeout', '$state', 'ConcurrentLogin', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Toast', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'Firebase',
-        '$rootScope', 'Params', 'UserHospitalPreferences'];
+    LoginController.$inject = ['$filter', '$rootScope', '$scope', '$state', '$timeout', '$window', 'CleanUp',
+        'ConcurrentLogin', 'Constants', 'DeviceIdentifiers', 'EncryptionService', 'Firebase', 'Params', 'Toast',
+        'UserAuthorizationInfo', 'UserHospitalPreferences', 'UserPreferences', 'UUID'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, ConcurrentLogin, UserAuthorizationInfo, $filter, DeviceIdentifiers,
-                             UserPreferences, Toast, UUID, Constants, EncryptionService, CleanUp, $window, Firebase,
-                             $rootScope, Params, UserHospitalPreferences) {
+    function LoginController($filter, $rootScope, $scope, $state, $timeout, $window, CleanUp,
+                             ConcurrentLogin, Constants, DeviceIdentifiers, EncryptionService, Firebase, Params, Toast,
+                             UserAuthorizationInfo, UserHospitalPreferences, UserPreferences, UUID) {
 
         var vm = this;
 
@@ -83,9 +85,21 @@
          */
         vm.trusted = false;
 
+        /**
+         * @desc Promise that can be cancelled if the user leaves the page (to cancel any in-progress untrusted login attempt).
+         * @type {{promise: Promise, cancel: function} | undefined}
+         */
+        vm.untrustedPromise = undefined;
+
+        /**
+         * @desc Promise that can be cancelled if the user leaves the page (to cancel any in-progress trusted login attempt).
+         * @type {{promise: Promise, cancel: function} | undefined}
+         */
+        vm.trustedPromise = undefined;
+
+        vm.cancelLoginAttempt = cancelLoginAttempt;
         vm.clearErrors = clearErrors;
         vm.submit = submit;
-        vm.goToInit = goToInit;
         vm.goToReset = goToReset;
         vm.isThereSelectedHospital = isThereSelectedHospital;
 
@@ -100,6 +114,7 @@
         function activate(){
 
             clearErrors();
+            bindEvents();
 
             //Obtain email from localStorage and show that email
             savedEmail = $window.localStorage.getItem('Email');
@@ -109,6 +124,11 @@
             $timeout(function(){
                 vm.trusted = !!($window.localStorage.getItem("deviceID"));
             });
+        }
+
+        function bindEvents() {
+            // On destroy, cancel any in-progress login attempt
+            $scope.$on('$destroy', cancelLoginAttempt);
         }
 
         /**
@@ -182,7 +202,7 @@
                 // Now that we know that both the password and security answer are hashed, we can create our encryption hash
                 EncryptionService.generateEncryptionHash();
             }
-            catch(error) {
+            catch (error) {
                 // If there's something wrong with the stored trusted info, log in as untrusted instead
                 warnTrustedError(error);
                 loginAsUntrustedUser(deviceID);
@@ -190,11 +210,17 @@
             }
 
             UUID.setUUID(deviceID);
-            DeviceIdentifiers.sendIdentifiersToServer().then(function () {
+
+            vm.trustedPromise = DeviceIdentifiers.sendDeviceIdentifiersToServer();
+
+            vm.trustedPromise.promise.then(() => {
                 $state.go('loading');
-            })
-            .catch(function (error) {
-                if (error.Code === Params.REQUEST.CODE.ENCRYPTION_ERROR || error.code === "PERMISSION_DENIED" ) {
+            }).catch(error => {
+                if (error instanceof CancelledPromiseError) {
+                    // Cancelled on purpose: nothing additional to do here
+                    console.warn(error);
+                }
+                else if (error.Code === Params.REQUEST.CODE.ENCRYPTION_ERROR || error.code === "PERMISSION_DENIED" ) {
                     warnTrustedError(error);
                     loginAsUntrustedUser(deviceID);
                 }
@@ -219,26 +245,29 @@
             if (!Constants.app) UUID.setUUID(UUID.generate());
 
             //send new device ID which maps to a security question in the backend
-            DeviceIdentifiers.sendFirstTimeIdentifierToServer()
-                .then(function (response) {
+            vm.untrustedPromise = DeviceIdentifiers.sendFirstTimeIdentifierToServer();
 
-                    vm.loading = false;
-                    //if all goes well, take the user to be asked security question
-                    var language = UserPreferences.getLanguage();
+            vm.untrustedPromise.promise.then(response => {
+                vm.loading = false;
 
-                    initNavigator.pushPage('./views/login/security-question.html', {
-                        securityQuestion: response.Data.securityQuestion,
-                        trusted: vm.trusted
-                    });
-                })
-                .catch(function (error) {
+                initNavigator.pushPage('./views/login/security-question.html', {
+                    securityQuestion: response.Data.securityQuestion,
+                    trusted: vm.trusted,
+                });
+            }).catch(error => {
+                if (error instanceof CancelledPromiseError) {
+                    // Cancelled on purpose: nothing additional to do here
+                    console.warn(error);
+                }
+                else {
                     $timeout(() => {
                         console.error('Error sending identifiers to server during untrusted login');
                         vm.loading = false;
                         Firebase.signOut();
                         handleError(error);
                     });
-                });
+                }
+            });
         }
 
         /**
@@ -315,6 +344,23 @@
         }
 
         /**
+         * @desc Used when the user leaves the page to cancel an in-progress login attempt.
+         */
+        function cancelLoginAttempt() {
+            Firebase.signOut();
+
+            // Cancel any in-progress promise to prevent a timeout from being triggered after a later successful login
+            let promises = [vm.trustedPromise, vm.untrustedPromise];
+            promises.forEach(promise => {
+                if (promise && typeof promise.cancel === 'function') {
+                    promise.cancel();
+                }
+            });
+
+            vm.loading = false;
+        }
+
+        /**
          * @ngdoc method
          * @name submit
          * @methodOf MUHCApp.controllers.LoginController
@@ -339,24 +385,14 @@
 
         /**
          * @ngdoc method
-         * @name goToInit
-         * @methodOf MUHCApp.controllers.LoginController
-         * @description
-         * Brings user to init screen
-         */
-        function goToInit(){
-            initNavigator.popPage();
-        }
-
-        /**
-         * @ngdoc method
          * @name goToReset
          * @methodOf MUHCApp.controllers.LoginController
          * @description
          * Brings user to password reset screen
          */
         function goToReset(){
-            initNavigator.pushPage('./views/login/forgot-password.html',{})
+            cancelLoginAttempt();
+            initNavigator.pushPage('./views/login/forgot-password.html', {});
         }
 
         /**
