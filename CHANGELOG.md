@@ -1,3 +1,10 @@
+## [1.20.6](https://gitlab.com/opalmedapps/qplus/compare/v1.20.5...v1.20.6) (2023-12-01)
+
+
+### Bug Fixes
+
+* added cancellable promise to fix login bug ([b8b0f79](https://gitlab.com/opalmedapps/qplus/commit/b8b0f79a7f8e7351ee98745e81b93c61ecc86232))
+
 ## [1.20.5](https://gitlab.com/opalmedapps/qplus/compare/v1.20.4...v1.20.5) (2023-11-23)
 
 
