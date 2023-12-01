@@ -104,7 +104,7 @@ build ios:
     # See: https://stackoverflow.com/a/70581304
     - gem install --user-install ffi -- --enable-libffi-alloc
     - npm run build:app:ios:device:ci --env=$ENV --devteam=$IOS_DEVELOPMENT_TEAM
-    - mv ./platforms/ios/build/device/*.ipa "opal-$ENV.ipa"
+    - mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-$ENV.ipa"
   artifacts:
     expire_in: 1 day
     paths:
