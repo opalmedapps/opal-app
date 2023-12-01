@@ -12,7 +12,8 @@
         let directive = {
             restrict: 'E',
             scope: {
-
+                // Optional function called when clicking on the hospital selector
+                "onClick": "=?",
             },
             template: `<ons-list>
                            <ons-list-item modifier="chevron" ng-click="goToHospitalSelection()" ng-style="!hospitalIsSelected() && {'background-color': 'rgba(241, 241, 88, 0.25882352941176473)'}">
@@ -34,6 +35,7 @@
                  * @description Navigates to the hospital selection screen.
                  */
                 function goToHospitalSelection() {
+                    if (scope.onClick && typeof scope.onClick === 'function') scope.onClick();
                     initNavigator.pushPage('./views/login/set-hospital.html', {});
                 }
 

@@ -1,3 +1,5 @@
+import { CancelledPromiseError } from '../models/utility/cancelled-promise-error';
+
 /**
  * @description Service providing access to the Opal Listener.
  * @author David Herrera, Summer 2016, Email:davidfherrerar@gmail.com
@@ -17,6 +19,7 @@
         return {
             sendRequest: sendRequest,
             sendRequestWithResponse: sendRequestWithResponse,
+            sendRequestWithResponseCancellable: sendRequestWithResponseCancellable,
             apiRequest: apiRequest,
             handleMultiplePatientsRequests: handleMultiplePatientsRequests
         }
@@ -105,9 +108,49 @@
             }
         }
 
-
+        /**
+         * @description Sends a request to the listener and resolves after receiving a response (or after a timeout).
+         *
+         *              This function's requests cannot be cancelled. This function is provided to simplify the code
+         *              when cancellation is not needed. See below for a cancellable version.
+         * @param {string} typeOfRequest The type of request to make to the listener.
+         * @param {object} [parameters] Optional parameters to send with the request.
+         * @param {string} [encryptionKey] Optional key, to be used only when making atypical requests requiring different encryption.
+         * @param {string} [referenceField] Optional different Firebase path on which to post the request. Must be used with responseField.
+         * @param {string} [responseField] Optional different Firebase path on which to receive the response. Must be used with referenceField.
+         * @param {string|number} [patientID] Optional legacy PatientSerNum to use as the TargetPatientID, when making a request for a patient
+         *                                    other than the one from the currently selected profile.
+         * @returns {Promise<object>} Resolves with the response from the listener, or rejects with an error.
+         */
         function sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField, patientID) {
-            return new Promise((resolve, reject) => {
+            let promiseWrapper = sendRequestWithResponseCancellable(typeOfRequest, parameters, encryptionKey, referenceField, responseField, patientID);
+            // Return only the promise without the cancellation feature
+            return promiseWrapper.promise;
+        }
+
+        /**
+         * @description Cancellable version of `sendRequestWithResponse`.
+         *              Sends a request to the listener and resolves after receiving a response (or after a timeout).
+         *              To cancel the request, call the `cancel` function in the return object.
+         *              When cancelled, an unfinished request will still execute in the listener, but the response will be
+         *              ignored and .then() will not be triggered. Instead, a CancelledPromiseError will be rejected.
+         *
+         *              For information about the parameters, see `sendRequestWithResponse`.
+         *
+         *              Implementation based on: https://medium.com/@masnun/creating-cancellable-promises-33bf4b9da39c
+         * @returns {{promise: Promise<object>, cancel: function}} Returns an object containing the Promise for the request,
+         *                                                         and a function that can be called to cancel it.
+         *                                                         If cancelled, the promise rejects with a CancelledPromiseError.
+         */
+        function sendRequestWithResponseCancellable(typeOfRequest, parameters, encryptionKey, referenceField, responseField, patientID) {
+            let returnObject = {}
+
+            const cancellationTrigger = new Promise((resolve, reject) => {
+                // If the cancel function below is called, this Promise rejects, which is used to cancel the request
+                returnObject.cancel = () => reject(new CancelledPromiseError());
+            });
+
+            returnObject.promise = new Promise((resolve, reject) => {
                 //Sends request and gets random key for request
                 let key = sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID);
                 //Sets the reference to fetch data for that request
@@ -136,7 +179,17 @@
                     reject({Response:'timeout'});
                 }, Params.requestTimeout);
 
+                // Cancellation code: if the cancel function is called before the request finishes, we reject the request Promise.
+                cancellationTrigger.catch(cancelMessage => {
+                    reject(cancelMessage);
+
+                    // Clean up
+                    Firebase.off(refRequestResponse);
+                    clearTimeout(timeOut);
+                });
             });
+
+            return returnObject;
         }
 
         /**
