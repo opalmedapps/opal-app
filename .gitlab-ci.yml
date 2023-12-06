@@ -48,8 +48,7 @@ stages:
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
 check dependencies:
-  tags:
-    - macos
+  image: node:20.10.0-alpine
   stage: check
   rules:
     - when: always
@@ -84,7 +83,7 @@ increment version:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: never
     # In all other cases, builds can be executed manually as needed
-    - when: manual
+    # - when: manual
   before_script:
     - npm -v
     - npm ci --prefer-offline
