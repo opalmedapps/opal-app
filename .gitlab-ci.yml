@@ -189,6 +189,6 @@ mobsf-android-sast:
   dependencies:
     - build android
 
-mobsd-ios-sast:
+mobsf-ios-sast:
   dependencies:
     - build ios
