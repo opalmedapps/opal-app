@@ -48,7 +48,8 @@ stages:
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
 check dependencies:
-  image: node:20.10.0-alpine
+  tags:
+    - macos
   stage: check
   rules:
     - when: always
@@ -58,6 +59,7 @@ check dependencies:
 
 # Sets a new version number for the app when committing to the default branch
 increment version:
+  image: node:20.10.0-alpine
   stage: prepare
   variables:
     # Prevent reading deleted version tags: https://stackoverflow.com/questions/66047044/deleted-tags-are-present-in-gitlab-ci
