@@ -48,6 +48,8 @@ stages:
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
 check dependencies:
+  tags:
+    - macos
   stage: check
   rules:
     - when: always
@@ -73,6 +75,8 @@ increment version:
 # Builds automatically for release tags, or manually on other branches as needed
 .build:
   stage: build
+  tags:
+    - macos
   rules:
     # Only build automatically for release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
@@ -129,6 +133,8 @@ build web:
 #   See: https://firebase.google.com/docs/app-distribution/authenticate-service-account.md?platform=android
 .deploy to firebase:
   stage: deploy
+  tags:
+    - macos
   rules:
     # Only release the app from release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
