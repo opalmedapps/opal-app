@@ -80,7 +80,7 @@ increment version:
     - macos
   rules:
     # Only build automatically for release tags
-    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+    # - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
     # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: never
