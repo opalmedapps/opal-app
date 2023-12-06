@@ -119,6 +119,7 @@ build ios:
 
 build web:
   extends: .build
+  image: node:20.10.0-alpine
   script:
     - npm run build:web --env=$ENV
     - zip -r -X opal-$ENV-www.zip www
@@ -193,6 +194,7 @@ include:
 # ensure that mobsf jobs depend on builds
 # https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
 # https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
 mobsf-android-sast:
   dependencies:
     - build android
