@@ -40,6 +40,9 @@ stages:
   - check
   - prepare
   - build
+  # for SAST
+  # https://docs.gitlab.com/ee/user/application_security/sast/#requirements
+  - test
   - deploy
   - post
 
@@ -175,3 +178,6 @@ build and deploy QA:
   trigger:
     include:
       - local: .gitlab-ci.yml
+
+include:
+  - template: Jobs/SAST.gitlab-ci.yml
