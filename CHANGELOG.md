@@ -1,3 +1,10 @@
+## [1.20.8](https://gitlab.com/opalmedapps/qplus/compare/v1.20.7...v1.20.8) (2023-12-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @havesource/cordova-plugin-push to v4.0.0 ([c0d54c5](https://gitlab.com/opalmedapps/qplus/commit/c0d54c50bfbe5db6a0674c34267e56d385f74cf2))
+
 ## [1.20.7](https://gitlab.com/opalmedapps/qplus/compare/v1.20.6...v1.20.7) (2023-12-01)
 
 
