@@ -187,7 +187,9 @@ build and deploy QA:
       - local: .gitlab-ci.yml
 
 include:
-  - template: Jobs/SAST.gitlab-ci.yml
+  # run security scanning jobs also in merge request pipelines:
+  # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
+  - template: Jobs/SAST.latest.gitlab-ci.yml
 
 # ensure that mobsf jobs depend on builds
 # https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
