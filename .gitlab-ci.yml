@@ -181,3 +181,14 @@ build and deploy QA:
 
 include:
   - template: Jobs/SAST.gitlab-ci.yml
+
+# ensure that mobsf jobs depend on builds
+# https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
+# https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
+mobsf-android-sast:
+  dependencies:
+    - build android
+
+mobsd-ios-sast:
+  dependencies:
+    - build ios
