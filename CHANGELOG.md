@@ -1,3 +1,13 @@
+## [1.20.10](https://gitlab.com/opalmedapps/qplus/compare/v1.20.9...v1.20.10) (2023-12-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-android to v12.0.1 ([ae59240](https://gitlab.com/opalmedapps/qplus/commit/ae59240cc744a84355983a261df70a58b55ca75f))
+* **deps:** update dependency cordova-plugin-ble-central to v1.7.2 ([22b1ebe](https://gitlab.com/opalmedapps/qplus/commit/22b1ebe99af3729037b51ca45bbc1b0bd20dea3a))
+* **deps:** update dependency cordova-plugin-splashscreen to v6.0.2 ([cb6c928](https://gitlab.com/opalmedapps/qplus/commit/cb6c928f23d0823fa1d284cd7b621da54423d16a))
+* **deps:** update dependency firebase to v10.7.1 ([4625a8c](https://gitlab.com/opalmedapps/qplus/commit/4625a8c40d1be1c1866cf57f4d65fb10e3ca74be))
+
 ## [1.20.9](https://gitlab.com/opalmedapps/qplus/compare/v1.20.8...v1.20.9) (2023-12-07)
 
 
