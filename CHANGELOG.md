@@ -1,3 +1,10 @@
+## [1.20.9](https://gitlab.com/opalmedapps/qplus/compare/v1.20.8...v1.20.9) (2023-12-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-android-permissions to v1.1.5 ([bdd6d9a](https://gitlab.com/opalmedapps/qplus/commit/bdd6d9a10ae370e72416138e78c0e56e3b13756a))
+
 ## [1.20.8](https://gitlab.com/opalmedapps/qplus/compare/v1.20.7...v1.20.8) (2023-12-06)
 
 
