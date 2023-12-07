@@ -1,3 +1,10 @@
+## [1.20.11](https://gitlab.com/opalmedapps/qplus/compare/v1.20.10...v1.20.11) (2023-12-07)
+
+
+### Bug Fixes
+
+* rename available profiles (QSCCD-1772) ([5cdcd17](https://gitlab.com/opalmedapps/qplus/commit/5cdcd1708761b6ebf541341d35a570edc2c83988))
+
 ## [1.20.10](https://gitlab.com/opalmedapps/qplus/compare/v1.20.9...v1.20.10) (2023-12-07)
 
 
