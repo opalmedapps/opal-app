@@ -250,7 +250,7 @@
   "RELATIONSHIPS_PATIENTS_STATUS_DEN": "Denied",
   "RELATIONSHIPS_PATIENTS_STATUS_EXP": "Expired",
   "RELATIONSHIPS_PATIENTS_STATUS_REV": "Revoked",
-  "RELATIONSHIPS_PATIENTS_AVAILABLE": "Available profile(s)",
+  "RELATIONSHIPS_PATIENTS_AVAILABLE": "Available patient charts",
   "RELATIONSHIPS_PATIENTS_NOT_AVAILABLE": "No available profile",
   "RELATIONSHIPS_PATIENTS": "My patients",
   "RELATIONSHIPS_PATIENTS_NONE": "No patients are linked to your account.",
