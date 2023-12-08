@@ -16,18 +16,20 @@ import '../../css/directives/password-strength-checker.directive.css';
     /**
      * @author Stacey Beard
      * @date 2023-12-07
-     * @description
+     * @description TODO
      */
     function passwordStrengthChecker($timeout) {
         return {
             restrict: 'E',
             scope: {
+                // Password variable to link to the strength bar
+                "password": "=",
 
+                // [Value set by the directive] Boolean indicating whether the password is strong enough
+                // TODO make it non-optional
+                "isStrongEnough": "=?",
             },
-            template: `<input placeholder='{{"PASSWORD"|translate}}' ng-model="password" ng-change="calculateStrength()">
-
-                       <br>
-                       <!--Password length strength meter-->
+            template: `<!--Password length strength meter-->
                        <div class="strength-meter">
                            <div class="strength-meter-fill" data-strength="{{passwordStrength}}"></div>
                        </div>
@@ -44,21 +46,18 @@ import '../../css/directives/password-strength-checker.directive.css';
                     },
                 };
 
-                let savedStrength = -1;
-
                 zxcvbnOptions.setOptions(options);
 
-                scope.calculateStrength = () => {
-                    $timeout(() => {
+                // Every time the password changes, recalculate the strength
+                scope.$watch('password', function(newValue, oldValue) {
+                    if (scope.password) {
                         let results = zxcvbn(scope.password);
-                        // console.log(results);
                         scope.passwordStrength = results.score;
-                        if (savedStrength !== scope.passwordStrength) {
-                            console.log(scope.passwordStrength);
-                            savedStrength = scope.passwordStrength;
-                        }
-                    });
-                };
+                    }
+                    else scope.passwordStrength = -1;
+
+                    // TODO calculate isStrongEnough based on requiredStrength constant
+                });
             },
         };
     }
