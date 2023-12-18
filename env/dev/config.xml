@@ -62,7 +62,7 @@
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:requestLegacyExternalStorage="true"/>
         </edit-config>
-        <resource-file src="google-services.json" target="/app/google-services.json"/>
+        <!-- <resource-file src="google-services.json" target="/app/google-services.json"/> -->
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/Opal-splash-android-inverse-1400x1400.png"/>
         <access origin="cdvfile://*"/>
         <allow-intent href="market:*"/>
