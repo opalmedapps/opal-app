@@ -1,3 +1,11 @@
+## [1.20.14](https://gitlab.com/opalmedapps/qplus/compare/v1.20.13...v1.20.14) (2023-12-19)
+
+
+### Bug Fixes
+
+* **android:** prevent third party activities and receivers from being exported ([bb5dce5](https://gitlab.com/opalmedapps/qplus/commit/bb5dce5219c0579d758320bb7b4165e157a97e4f))
+* **ios:** ensure App Transport Security is enabled ([905b4d1](https://gitlab.com/opalmedapps/qplus/commit/905b4d142ed29414c740f0214a112a20340f836c))
+
 ## [1.20.13](https://gitlab.com/opalmedapps/qplus/compare/v1.20.12...v1.20.13) (2023-12-19)
 
 
