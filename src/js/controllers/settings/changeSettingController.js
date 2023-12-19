@@ -23,6 +23,10 @@
         var parameters;
         var navigatorName;
         const MIN_PASSWORD_LENGTH = 8;
+
+        // Value set by the password strength checker directive
+        vm.passwordIsStrongEnough = false;
+
         vm.changePassword = changePassword;
         vm.changeFont = changeFont;
         vm.changeLanguage = changeLanguage;
@@ -85,7 +89,11 @@
         // Used to enable or disable the UPDATE button
         function validatePassword() {
             vm.newUpdate = false;
-            vm.disableButton = !(vm.newValue.length >= MIN_PASSWORD_LENGTH && vm.newValue === vm.newValueValidate);
+            let passwordIsValid = vm.newValue.length >= MIN_PASSWORD_LENGTH
+                && vm.newValue === vm.newValueValidate
+                && vm.passwordIsStrongEnough;
+
+            vm.disableButton = !passwordIsValid;
         }
 
         /**

@@ -32,8 +32,10 @@
                     ng-model="Ctrl.newValue"
                     ng-change="Ctrl.validatePassword()">
                 </password-input>
-                <password-strength-checker password="Ctrl.newValue">
-                </password-strength-checker>
+                <password-strength-checker
+                    password="Ctrl.newValue"
+                    is-strong-enough="Ctrl.passwordIsStrongEnough"
+                ></password-strength-checker>
             </div>
             <div class="style-4" style="width: 100%;">
                 <password-input>

@@ -11,14 +11,14 @@ import '../../css/directives/password-strength-checker.directive.css';
         .module("MUHCApp")
         .directive("passwordStrengthChecker", passwordStrengthChecker);
 
-    passwordStrengthChecker.$inject = ["$timeout"];
+    passwordStrengthChecker.$inject = ['UserAuthorizationInfo'];
 
     /**
      * @author Stacey Beard
      * @date 2023-12-07
      * @description TODO
      */
-    function passwordStrengthChecker($timeout) {
+    function passwordStrengthChecker(UserAuthorizationInfo) {
         return {
             restrict: 'E',
             scope: {
@@ -48,15 +48,20 @@ import '../../css/directives/password-strength-checker.directive.css';
 
                 zxcvbnOptions.setOptions(options);
 
+                // User-specific values that can lower the password strength
+                let email = UserAuthorizationInfo.getEmail();
+                let emailPrefix = email?.substring(0, email.indexOf('@'));
+
                 // Every time the password changes, recalculate the strength
                 scope.$watch('password', function(newValue, oldValue) {
                     if (scope.password) {
-                        let results = zxcvbn(scope.password);
+                        let results = zxcvbn(scope.password, [email, emailPrefix]);
                         scope.passwordStrength = results.score;
                     }
                     else scope.passwordStrength = -1;
 
                     // TODO calculate isStrongEnough based on requiredStrength constant
+                    scope.isStrongEnough = scope.passwordStrength >= 3;
                 });
             },
         };
