@@ -26,6 +26,7 @@
         var vm = this;
         var parameters;
         const MIN_PASSWORD_LENGTH = 10;
+        const MAX_PASSWORD_LENGTH = 50;
         vm.alert = {};
         vm.resetSuccess = false;
         vm.invalidPassword = true;
@@ -52,7 +53,7 @@
             var str = vm.newValue;
             if (str !== null && str !== undefined && typeof str === 'string')
             {
-                return !(str.length < MIN_PASSWORD_LENGTH || str.length > 50 || str.search(/\d/) === -1 ||
+                return !(str.length < MIN_PASSWORD_LENGTH || str.length > MAX_PASSWORD_LENGTH || str.search(/\d/) === -1 ||
                     str.search(/[A-Z]/) === -1 || str.search(/\W|_{1}/) <= -1);
             }
 

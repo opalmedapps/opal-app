@@ -23,6 +23,7 @@
         var parameters;
         var navigatorName;
         const MIN_PASSWORD_LENGTH = 10;
+        const MAX_PASSWORD_LENGTH = 50;
 
         // Value set by the password strength checker directive
         vm.passwordIsStrongEnough = false;
@@ -90,6 +91,7 @@
         function validatePassword() {
             vm.newUpdate = false;
             let passwordIsValid = vm.newValue.length >= MIN_PASSWORD_LENGTH
+                && vm.newValue.length <= MAX_PASSWORD_LENGTH
                 && vm.newValue === vm.newValueValidate
                 && vm.passwordIsStrongEnough;
 
