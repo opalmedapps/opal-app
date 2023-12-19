@@ -25,7 +25,7 @@
 
         var vm = this;
         var parameters;
-        const MIN_PASSWORD_LENGTH = 8;
+        const MIN_PASSWORD_LENGTH = 10;
         vm.alert = {};
         vm.resetSuccess = false;
         vm.invalidPassword = true;

@@ -22,7 +22,7 @@
         var page;
         var parameters;
         var navigatorName;
-        const MIN_PASSWORD_LENGTH = 8;
+        const MIN_PASSWORD_LENGTH = 10;
 
         // Value set by the password strength checker directive
         vm.passwordIsStrongEnough = false;

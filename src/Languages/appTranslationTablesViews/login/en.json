@@ -99,7 +99,7 @@
   "REGISTER_OPAL": "Register for Opal",
   "RESETERROR": "Password Reset Error",
   "RESET_PASSWORD_SENT": "If your email address is in our system, an email will be sent to you to reset your password. Do not close the app while completing the password reset process.",
-  "RESETINSTRUCTIONS": "Your password should be at least 8 characters long and should contain at least one number, one capital letter and one special character.",
+  "RESETINSTRUCTIONS": "Your password should be at least 10 characters long and should contain at least one number, one capital letter and one special character.",
   "RESETPASSWORD": "Reset Password",
   "RESET_PASSWORD_CODE_INVALID": "The authorization code used to reset your password is invalid. Please try again.",
   "RESET_PASSWORD_CODE_EXPIRED": "You took too long to reset your password. Please try again.",

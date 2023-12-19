@@ -99,7 +99,7 @@
   "REGISTER_OPAL": "S'inscrire à Opal",
   "RESETERROR": "Erreur de réinitialisation du mot de passe",
   "RESET_PASSWORD_SENT": "Si votre adresse courriel est dans notre système, un courriel vous sera envoyé pour réinitialiser votre mot de passe. Ne fermez pas l'application pendant le processus de réinitialisation.",
-  "RESETINSTRUCTIONS": "Le nouveau mot de passe doit comporter au moins 8 caractères et doit contenir au moins une lettre majuscule, un caractère spécial et un chiffre",
+  "RESETINSTRUCTIONS": "Le nouveau mot de passe doit comporter au moins 10 caractères et doit contenir au moins une lettre majuscule, un caractère spécial et un chiffre",
   "RESETPASSWORD": "Réinitialiser le mot de passe",
   "RESET_PASSWORD_CODE_INVALID": "Le code d'autorisation utilisé pour réinitialiser votre mot de passe n'est pas valide. Veuillez réessayer.",
   "RESET_PASSWORD_CODE_EXPIRED": "Vous avez pris trop de temps pour réinitialiser votre mot de passe. Veuillez réessayer.",
