@@ -42,6 +42,7 @@
     <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
     <icon src="./res/OpalHealth_App_Apple_Icon_2.png"/>
     <platform name="android">
+        <preference name="android-minSdkVersion" value="26" />
         <preference name="AndroidPersistentFileLocation" value="Internal"/>
         <preference name="GradlePluginGoogleServicesEnabled" value="true"/>
         <preference name="GradlePluginKotlinEnabled" value="true"/>
@@ -50,7 +51,7 @@
             <!-- Security setting; should be false for pen tests and prod builds -->
             <application android:debuggable="true"/>
         </edit-config>
-        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <!-- Security setting; do not set to true -->
             <application android:allowBackup="false"/>
         </edit-config>
@@ -61,6 +62,19 @@
         <!-- requestLegacyExternalStorage fixes file access issues in Android 10 / API Level 29. This parameter will be ignored by API Level 30+, when your app is running on Android 11 devices -->
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:requestLegacyExternalStorage="true"/>
+        </edit-config>
+        <!-- Security setting: Ensure that activities, services, providers and receivers are not exported. This avoids them being exposed to other apps. -->
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity" mode="merge">
+            <activity android:exported="false"/>
+        </edit-config>  
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/service" mode="merge">
+            <service android:exported="false" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/provider" mode="merge">
+            <provider android:exported="false" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/receiver" mode="merge">
+            <receiver android:exported="false" />
         </edit-config>
         <resource-file src="google-services.json" target="/app/google-services.json"/>
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/Opal-splash-android-inverse-1400x1400.png"/>
