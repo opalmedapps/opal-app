@@ -1,3 +1,10 @@
+## [1.20.13](https://gitlab.com/opalmedapps/qplus/compare/v1.20.12...v1.20.13) (2023-12-19)
+
+
+### Bug Fixes
+
+* change description for Bluetooth permission ([e22d625](https://gitlab.com/opalmedapps/qplus/commit/e22d625d4a555b95328c4cfbe63d79a1daa87ae8))
+
 ## [1.20.12](https://gitlab.com/opalmedapps/qplus/compare/v1.20.11...v1.20.12) (2023-12-18)
 
 
