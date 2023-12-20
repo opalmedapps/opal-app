@@ -57,8 +57,8 @@ import '../../css/directives/password-strength-checker.directive.css';
                 const passwordRequirements = {
                     "PASSWORD_INVALID_MIN_LENGTH": (password) => password.length < Params.minPasswordLength,
                     "PASSWORD_INVALID_MAX_LENGTH": (password) => password.length > Params.maxPasswordLength,
-                    "PASSWORD_INVALID_NUMBER": (password) => password.search(/\d/) === -1,
-                    "PASSWORD_INVALID_CAPITAL": (password) => password.search(/[A-Z]/) === -1,
+                    "PASSWORD_INVALID_NUMBER": (password) => password.search(/\d{1}/) === -1,
+                    "PASSWORD_INVALID_CAPITAL": (password) => password.search(/[A-Z]{1}/) === -1,
                     "PASSWORD_INVALID_SPECIAL_CHAR": (password) => password.search(/\W|_{1}/) === -1,
                     "PASSWORD_INVALID_STRENGTH": () => !scope.passwordStrength || scope.passwordStrength < Params.minPasswordStrengthLevel,
                 }

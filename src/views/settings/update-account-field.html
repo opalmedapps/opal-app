@@ -15,7 +15,7 @@
                 ng-class="fontSizeDesc"
                 placeholder="{{Ctrl.placeHolderCurrent|translate}}"
                 ng-model="Ctrl.oldValue"
-                ng-change="Ctrl.validatePassword()">
+                ng-change="Ctrl.passwordFieldChange()">
             </password-input>
         </div>
         <div style="margin-top: 5vh">
@@ -32,7 +32,7 @@
                     class="style-4"
                     placeholder="{{Ctrl.placeHolderNew|translate}}"
                     ng-model="Ctrl.newValue"
-                    ng-change="Ctrl.validatePassword()">
+                    ng-change="Ctrl.passwordFieldChange()">
                 </password-input>
                 <password-strength-checker
                     password="Ctrl.newValue"
@@ -53,7 +53,7 @@
                     class="style-4"
                     placeholder="{{Ctrl.placeHolderValidate|translate}}"
                     ng-model="Ctrl.newValueValidate"
-                    ng-change="Ctrl.validatePassword()">
+                    ng-change="Ctrl.passwordFieldChange()">
                 </password-input>
                 <p class="new-password--field-error" ng-class="fontSizeDesc" ng-if="Ctrl.passwordConfirmationInvalid()">
                     {{"PASSWORD_INVALID_MATCH" | translate}}
