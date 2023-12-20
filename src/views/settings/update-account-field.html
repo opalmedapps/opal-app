@@ -20,8 +20,8 @@
         </div>
         <div style="margin-top: 5vh">
             <p ng-class="fontSizeTitle" translate ="{{Ctrl.instruction}}"></p>
-            <p class="new-password--instructions" ng-class="fontSizeDesc">{{"RESETINSTRUCTIONS" | translate}}</p>
-            <div class="new-password--div style-4">
+            <p class="change-password--instructions" ng-class="fontSizeDesc">{{"RESETINSTRUCTIONS" | translate}}</p>
+            <div class="change-password--div style-4">
                 <!-- NEW PASSWORD INPUT -->
                 <password-input>
                     <input
@@ -39,7 +39,7 @@
                     is-valid="Ctrl.passwordIsValid"
                     error-message-keys="Ctrl.passwordErrors">
                 </password-strength-checker>
-                <p class="new-password--field-error" ng-class="fontSizeDesc" ng-if="Ctrl.passwordErrors">
+                <p class="change-password--field-error" ng-class="fontSizeDesc" ng-if="Ctrl.passwordErrors">
                     {{Ctrl.passwordErrors[0] | translate}}
                 </p>
 
@@ -55,12 +55,12 @@
                     ng-model="Ctrl.newValueValidate"
                     ng-change="Ctrl.passwordFieldChange()">
                 </password-input>
-                <p class="new-password--field-error" ng-class="fontSizeDesc" ng-if="Ctrl.passwordConfirmationInvalid()">
+                <p class="change-password--field-error" ng-class="fontSizeDesc" ng-if="Ctrl.passwordConfirmationInvalid()">
                     {{"PASSWORD_INVALID_MATCH" | translate}}
                 </p>
 
                 <!-- NEW PASSWORD SUBMIT BUTTON -->
-                <button class="new-password--submit-button button button--large" ng-disabled="Ctrl.disableButton" ng-click="Ctrl.changePassword()">
+                <button class="change-password--submit-button button button--large" ng-disabled="Ctrl.disableButton" ng-click="Ctrl.changePassword()">
                     {{"UPDATEPASSWORDBUTTON"|translate}}
                 </button>
             </div>
