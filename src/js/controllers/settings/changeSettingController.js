@@ -22,16 +22,17 @@
         var page;
         var parameters;
         var navigatorName;
-        const MIN_PASSWORD_LENGTH = 10;
-        const MAX_PASSWORD_LENGTH = 50;
 
-        // Value set by the password strength checker directive
-        vm.passwordIsStrongEnough = false;
+        // Values set by the password strength checker directive
+        vm.passwordIsValid = false;
+        vm.passwordErrors = [];
 
         vm.changePassword = changePassword;
         vm.changeFont = changeFont;
         vm.changeLanguage = changeLanguage;
         vm.validatePassword = validatePassword;
+        // Used to show an error when a provided password confirmation doesn't match the other value
+        vm.passwordConfirmationInvalid = () => vm.newValueValidate && vm.newValue !== vm.newValueValidate;
 
         activate();
 
@@ -90,12 +91,7 @@
         // Used to enable or disable the UPDATE button
         function validatePassword() {
             vm.newUpdate = false;
-            let passwordIsValid = vm.newValue.length >= MIN_PASSWORD_LENGTH
-                && vm.newValue.length <= MAX_PASSWORD_LENGTH
-                && vm.newValue === vm.newValueValidate
-                && vm.passwordIsStrongEnough;
-
-            vm.disableButton = !passwordIsValid;
+            vm.disableButton = !vm.passwordIsValid || vm.newValue !== vm.newValueValidate;
         }
 
         /**
@@ -192,7 +188,7 @@
                     case Params.invalidPassword:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_PASSWORD";
+                        vm.updateMessage = "INVALID_OLD_PASSWORD";
                         break;
                     case Params.emailInUse:
                         vm.alertClass = Params.alertClassUpdateMessageError;
@@ -202,7 +198,7 @@
                     case Params.weakPassword:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_PASSWORD";
+                        vm.updateMessage = "PASSWORD_CRITERIA";
                         break;
                     case "password-disrespects-criteria":
                         vm.newUpdate = true;

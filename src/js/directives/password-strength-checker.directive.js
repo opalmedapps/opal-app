@@ -11,33 +11,34 @@ import '../../css/directives/password-strength-checker.directive.css';
         .module("MUHCApp")
         .directive("passwordStrengthChecker", passwordStrengthChecker);
 
-    passwordStrengthChecker.$inject = ['UserAuthorizationInfo'];
+    passwordStrengthChecker.$inject = ['Params', 'UserAuthorizationInfo'];
 
     /**
      * @author Stacey Beard
      * @date 2023-12-07
-     * @description TODO
+     * @description Password strength bar and requirements checks used to validate the strength and validity of new passwords.
      */
-    function passwordStrengthChecker(UserAuthorizationInfo) {
+    function passwordStrengthChecker(Params, UserAuthorizationInfo) {
         return {
             restrict: 'E',
             scope: {
                 // Password variable to link to the strength bar
                 "password": "=",
 
-                // [Value set by the directive] Boolean indicating whether the password is strong enough
-                // TODO make it non-optional
-                "isStrongEnough": "=?",
+                // [Value set by the directive] Boolean indicating whether the password is valid
+                "isValid": "=",
+
+                // [Value set by the directive] List of translation keys representing the error messages for an invalid password
+                "errorMessageKeys": "=",
             },
             template: `<!--Password length strength meter-->
                        <div class="strength-meter">
                            <div class="strength-meter-fill" data-strength="{{passwordStrength}}"></div>
                        </div>
-                       <br>
             `,
             link: scope => {
+                // Options provided to zxcvbn
                 const options = {
-                    translations: zxcvbnEnPackage.translations,
                     graphs: zxcvbnCommonPackage.adjacencyGraphs,
                     dictionary: {
                         ...zxcvbnCommonPackage.dictionary,
@@ -46,23 +47,66 @@ import '../../css/directives/password-strength-checker.directive.css';
                     },
                 };
 
+                /**
+                 * @description Password strength requirements.
+                 *              Keys are the error message keys corresponding to each requirement.
+                 *              The values are functions that return true if the password fails the given requirement.
+                 *              NOTE: errors should be displayed in this order (with strength error last, since it's the least specific)
+                 * @type {{string: (function(string): boolean)}}
+                 */
+                const passwordRequirements = {
+                    "PASSWORD_INVALID_MIN_LENGTH": (password) => password.length < Params.minPasswordLength,
+                    "PASSWORD_INVALID_MAX_LENGTH": (password) => password.length > Params.maxPasswordLength,
+                    "PASSWORD_INVALID_NUMBER": (password) => password.search(/\d/) === -1,
+                    "PASSWORD_INVALID_CAPITAL": (password) => password.search(/[A-Z]/) === -1,
+                    "PASSWORD_INVALID_SPECIAL_CHAR": (password) => password.search(/\W|_{1}/) === -1,
+                    "PASSWORD_INVALID_STRENGTH": () => !scope.passwordStrength || scope.passwordStrength < Params.minPasswordStrengthLevel,
+                }
+
                 zxcvbnOptions.setOptions(options);
 
                 // User-specific values that can lower the password strength
                 let email = UserAuthorizationInfo.getEmail();
                 let emailPrefix = email?.substring(0, email.indexOf('@'));
 
-                // Every time the password changes, recalculate the strength
+                // Every time the password changes, recalculate its strength and validity
                 scope.$watch('password', function(newValue, oldValue) {
+                    // Recalculate password strength to display in the bar
                     if (scope.password) {
                         let results = zxcvbn(scope.password, [email, emailPrefix]);
                         scope.passwordStrength = results.score;
                     }
                     else scope.passwordStrength = -1;
 
-                    // TODO calculate isStrongEnough based on requiredStrength constant
-                    scope.isStrongEnough = scope.passwordStrength >= 3;
+                    // Recalculate the password's validity
+                    recalculatePasswordValidity();
+
+                    // If the password is strong via zxcvbn, but invalid via our own requirements, lower the strength to the highest invalid level
+                    // This makes the UI clearer by showing a low strength for passwords we consider invalid
+                    if (!scope.isValid && scope.passwordStrength >= Params.minPasswordStrengthLevel) {
+                        scope.passwordStrength = Params.minPasswordStrengthLevel - 1;
+                    }
                 });
+
+                function recalculatePasswordValidity() {
+                    scope.errorMessageKeys = [];
+
+                    // Skip validation if the password is empty
+                    if (!scope.password) {
+                        scope.isValid = false;
+                        return;
+                    }
+
+                    // Check all validation requirements
+                    let validity = true;
+                    Object.entries(passwordRequirements).forEach(([errorKey, isInvalid]) => {
+                        if (isInvalid(scope.password)) {
+                            validity = false;
+                            scope.errorMessageKeys.push(errorKey);
+                        }
+                    });
+                    scope.isValid = validity;
+                }
             },
         };
     }

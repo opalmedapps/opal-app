@@ -27,6 +27,11 @@
         var parameters;
         const MIN_PASSWORD_LENGTH = 10;
         const MAX_PASSWORD_LENGTH = 50;
+
+        // Values set by the password strength checker directive
+        vm.passwordIsValid = false;
+        vm.passwordErrors = [];
+
         vm.alert = {};
         vm.resetSuccess = false;
         vm.invalidPassword = true;
@@ -54,7 +59,8 @@
             if (str !== null && str !== undefined && typeof str === 'string')
             {
                 return !(str.length < MIN_PASSWORD_LENGTH || str.length > MAX_PASSWORD_LENGTH || str.search(/\d/) === -1 ||
-                    str.search(/[A-Z]/) === -1 || str.search(/\W|_{1}/) <= -1);
+                    str.search(/[A-Z]/) === -1 || str.search(/\W|_{1}/) <= -1
+                    || !vm.passwordIsValid);
             }
 
             return false;

@@ -56,7 +56,6 @@
   "INFO": "Information",
   "INVALID_EMAIL": "Invalid e-mail",
   "INVALID_EMAIL_OR_PWD": "Email or password is incorrect.",
-  "INVALID_PASSWORD": "Invalid password.",
   "INVALID_USER": "Invalid user.",
   "KICKEDOUT": "You have logged in on another device.",
   "LANGUAGE": "Language",
