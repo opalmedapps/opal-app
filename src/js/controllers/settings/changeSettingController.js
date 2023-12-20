@@ -57,9 +57,6 @@
                     vm.newValue = '';
                     vm.newValueValidate = '';
                     vm.oldValue = '';
-                    vm.placeHolderCurrent = "ENTEROLDPASSWORDPLACEHOLDER";
-                    vm.placeHolderNew = "SETNEWPASSWORDPLACEHOLDER";
-                    vm.placeHolderValidate = "REENTERPASSWORDPLACEHOLDER";
                     vm.instruction = "ENTERNEWPASSWORD";
                     vm.instructionOld = "ENTEROLDPASSWORD";
                 } else if (parameters === Params.setLanguageParam) {

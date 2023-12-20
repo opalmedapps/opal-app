@@ -13,7 +13,7 @@
                 ng-minlength="1"
                 type="password"
                 ng-class="fontSizeDesc"
-                placeholder="{{Ctrl.placeHolderCurrent|translate}}"
+                placeholder="{{'ENTEROLDPASSWORDPLACEHOLDER' | translate}}"
                 ng-model="Ctrl.oldValue"
                 ng-change="Ctrl.passwordFieldChange()">
             </password-input>
@@ -30,7 +30,7 @@
                     type="password"
                     ng-class="fontSizeDesc"
                     class="style-4"
-                    placeholder="{{Ctrl.placeHolderNew|translate}}"
+                    placeholder="{{'SETNEWPASSWORDPLACEHOLDER' | translate}}"
                     ng-model="Ctrl.newValue"
                     ng-change="Ctrl.passwordFieldChange()">
                 </password-input>
@@ -51,7 +51,7 @@
                     type="password"
                     ng-class="fontSizeDesc"
                     class="style-4"
-                    placeholder="{{Ctrl.placeHolderValidate|translate}}"
+                    placeholder="{{'REENTERPASSWORDPLACEHOLDER' | translate}}"
                     ng-model="Ctrl.newValueValidate"
                     ng-change="Ctrl.passwordFieldChange()">
                 </password-input>
