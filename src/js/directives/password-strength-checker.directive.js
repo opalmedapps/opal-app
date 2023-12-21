@@ -31,7 +31,7 @@ import '../../css/directives/password-strength-checker.directive.css';
                 // [Value set by the directive] List of translation keys representing the error messages for an invalid password
                 "errorMessageKeys": "=",
             },
-            template: `<!--Password length strength meter-->
+            template: `<!--Password strength meter-->
                        <div class="strength-meter">
                            <div class="strength-meter-fill" data-strength="{{passwordStrength}}"></div>
                        </div>
