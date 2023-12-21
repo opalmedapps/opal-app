@@ -113,9 +113,6 @@ import '../../../css/views/init-page.view.css';
 				});
 			}, 10);
 
-			// Get location permission
-			Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
-
 			AppState.setInitialized(true);
 		}
 

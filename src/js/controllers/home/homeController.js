@@ -67,6 +67,9 @@
             NetworkStatus.isOnline() ? homePageInit() : setPatientInfo();
             // set the hospital banner and available modules
             configureSelectedHospital();
+
+            // Get location permission
+			Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
         }
 
         /**
