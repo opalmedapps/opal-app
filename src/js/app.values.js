@@ -121,6 +121,11 @@
                     {size: 'xlarge', style: 'fontDescXlarge', text: 'LARGE'}
                 ],
 
+                /** Password settings **/
+                minPasswordLength: 10,
+                maxPasswordLength: 50,
+                minPasswordStrengthLevel: 3,
+
                 /** CheckIn Service Constants **/
                 checkinRadiusMeters: 500,
 
