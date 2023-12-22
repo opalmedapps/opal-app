@@ -33,16 +33,9 @@ function UserAuthorizationInfo(Constants) {
      *@ngdoc property
     *@name  MUHCApp.service.#password
     *@propertyOf MUHCApp.service:UserAuthorizationInfo
-    *@description Firebase session time expiration in milliseconds since epoch 
+    *@description Hash of the user's password
     **/
     var password='';
-    /**
-     *@ngdoc property
-    *@name  MUHCApp.service.#identifier
-    *@propertyOf MUHCApp.service:UserAuthorizationInfo
-    *@description Device identifier property
-    */
-    var identifier = '';
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#email
@@ -60,6 +53,11 @@ function UserAuthorizationInfo(Constants) {
     var trusted = false;
 
     return {
+        getUsername: () => username,
+        getEmail: () => email,
+        getPassword: () => password,
+        getTrusted: () => trusted,
+
         /**
         *@ngdoc method
         *@name setUserAuthData
@@ -104,54 +102,7 @@ function UserAuthorizationInfo(Constants) {
                 Password:password,
             };
         },
-        /**
-        *@ngdoc method
-        *@name getUserName
-        *@methodOf MUHCApp.service:UserAuthorizationInfo
-        *@returns {string} Returns Firebase username.
-        */
-        getUsername:function(){
-            return username;
-        },
-        /**
-        *@ngdoc method
-        *@name getUserName
-        *@methodOf MUHCApp.service:UserAuthorizationInfo
-        *@returns {string} Returns device identifier.
-        */
-        getDeviceIdentifier:function()
-        {
-            identifier = Constants.app ? device.uuid : 'browser';
-            return identifier;
-        },
-        /**
-        *@ngdoc method
-        *@name getPassword
-        *@methodOf MUHCApp.service:UserAuthorizationInfo
-        *@returns {string} Returns hashed of user password for encryption
-        */
-        getPassword:function(){
-            return password;
-        },
-        /**
-        *@ngdoc method
-        *@name getExpires
-        *@methodOf MUHCApp.service:UserAuthorizationInfo
-        *@returns {number} Returns date in milliseconds
-        */
-        getExpires:function(){
-            return expires;
-        },
-        /**
-         *@ngdoc method
-         *@name getEmail
-         *@methodOf MUHCApp.service:UserAuthorizationInfo
-         *@returns {string} Returns user email
-         */
-        getEmail:function()
-        {
-            return email;
-        },
+
         /**
          *@ngdoc method
          *@name setEmail
@@ -173,16 +124,6 @@ function UserAuthorizationInfo(Constants) {
              username = '';
              expires = '';
              password = '';
-             identifier = '';
         },
-        /**
-         *@ngdoc method
-         *@name getTrusted
-         *@methodOf MUHCApp.service:UserAuthorizationInfo
-         *@returns {boolean} Returns trusted flag
-         */
-        getTrusted: function () {
-            return trusted;
-        }
     }
 }

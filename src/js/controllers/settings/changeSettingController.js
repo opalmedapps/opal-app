@@ -22,11 +22,17 @@
         var page;
         var parameters;
         var navigatorName;
-        const MIN_PASSWORD_LENGTH = 8;
+
+        // Values set by the password strength checker directive
+        vm.passwordIsValid = false;
+        vm.passwordErrors = [];
+
         vm.changePassword = changePassword;
         vm.changeFont = changeFont;
         vm.changeLanguage = changeLanguage;
-        vm.validatePassword = validatePassword;
+        vm.passwordFieldChange = passwordFieldChange;
+        // Used to show an error when the password confirmation doesn't match the password
+        vm.passwordConfirmationInvalid = () => !vm.newValueValidate || vm.newValue !== vm.newValueValidate;
 
         activate();
 
@@ -51,9 +57,6 @@
                     vm.newValue = '';
                     vm.newValueValidate = '';
                     vm.oldValue = '';
-                    vm.placeHolderCurrent = "ENTEROLDPASSWORDPLACEHOLDER";
-                    vm.placeHolderNew = "SETNEWPASSWORDPLACEHOLDER";
-                    vm.placeHolderValidate = "REENTERPASSWORDPLACEHOLDER";
                     vm.instruction = "ENTERNEWPASSWORD";
                     vm.instructionOld = "ENTEROLDPASSWORD";
                 } else if (parameters === Params.setLanguageParam) {
@@ -82,10 +85,16 @@
             UserPreferences.setLanguage(val, true);
         }
 
-        // Used to enable or disable the UPDATE button
-        function validatePassword() {
-            vm.newUpdate = false;
-            vm.disableButton = !(vm.newValue.length >= MIN_PASSWORD_LENGTH && vm.newValue === vm.newValueValidate);
+        /**
+         * @description Updates variables when the user types in the password fields, for example,
+         *              enables/disables the submit button.
+         */
+        function passwordFieldChange() {
+            // Use $timeout to compute the changes after vm.passwordIsValid is set
+            $timeout(() => {
+                vm.newUpdate = false;
+                vm.disableButton = !vm.passwordIsValid || vm.passwordConfirmationInvalid();
+            });
         }
 
         /**
@@ -96,15 +105,8 @@
             try {
                 vm.disableButton = true;
                 await Firebase.reauthenticateCurrentUser(vm.oldValue);
-
-                // Before updating it, check that the new password meets the minimum security requirements
-                if (validatePasswordContents(vm.newValue)) {
-                    await Firebase.updateCurrentUserPassword(vm.newValue);
-                    await updateOnServer();
-                }
-                else {
-                    handleError({code:"password-disrespects-criteria"});
-                }
+                await Firebase.updateCurrentUserPassword(vm.newValue);
+                await updateOnServer();
             }
             catch (error) {
                 handleError(error);
@@ -137,24 +139,6 @@
                 })
         }
 
-        /**
-         * validatePasswordContents
-         * @author Stacey Beard, Yuan Chen
-         * @date 2020-06-08
-         * @desc Checks the contents of a password to make sure it matches security criteria.
-         *       For example, checks that the password contains at least one capital letter, one special character and one number.
-         *       Used after the UPDATE button is pressed to refuse the password and produce an error message
-         *       if necessary.
-         * @returns {boolean} True if the password contents are valid; false otherwise
-         */
-        function validatePasswordContents(passwordValue) {
-            let containsANumber = passwordValue.search(/\d{1}/) > -1;
-            let containsACapitalLetter = passwordValue.search(/[A-Z]{1}/) > -1;
-            let containsSpecialChar = passwordValue.search(/\W|_{1}/) > -1;
-
-            return containsACapitalLetter && containsANumber && containsSpecialChar;
-        }
-
         function handleError(error) {
             console.error(error);
             $timeout(function(){
@@ -182,7 +166,7 @@
                     case Params.invalidPassword:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_PASSWORD";
+                        vm.updateMessage = "INVALID_OLD_PASSWORD";
                         break;
                     case Params.emailInUse:
                         vm.alertClass = Params.alertClassUpdateMessageError;
@@ -190,11 +174,6 @@
                         vm.updateMessage = "EMAIL_TAKEN";
                         break;
                     case Params.weakPassword:
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_PASSWORD";
-                        break;
-                    case "password-disrespects-criteria":
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
                         vm.updateMessage = "PASSWORD_CRITERIA";

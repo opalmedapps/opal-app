@@ -55,3 +55,25 @@
 .patient-content--text p:first-child {
     font-weight: 500;
 }
+
+.change-password--div {
+    background-color: #F4F4F4;
+    margin-bottom: 20px;
+    padding: 14px 10px;
+    width: 100%;
+}
+
+.change-password--instructions {
+    color: #6B6B6B;
+    margin-bottom: 20px;
+}
+
+.change-password--field-error {
+    color: red;
+    margin: 5px auto 20px;
+    text-align: left;
+}
+
+.change-password--submit-button {
+    margin-top: 20px;
+}
