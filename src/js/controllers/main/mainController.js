@@ -32,6 +32,10 @@
             bindEvents();
             setPushPermissions();
 
+            if (Constants.app) {
+                IRoot.isRooted(jailbreakOrRootedDevice, console.error);
+            }
+
             DeviceIdentifiers.setDeviceIdentifiers();
         }
 
@@ -106,6 +110,15 @@
                     message: $filter('translate')("INACTIVE"),
                     positionOffset: 30,
                 });
+            }
+        }
+
+        function jailbreakOrRootedDevice(detected) {
+            console.log('jailbreak or rooted device detection result', detected);
+            if (detected) {
+                loadingmodal.hide();
+                jailbreakModal.show();
+                $state.go('init');
             }
         }
 
@@ -210,6 +223,7 @@
             updateRequiredModal.show();
             $state.go('init')
         }
+        
         /**
          * Function takes care of displaying the splash screen when app is placed in the background. Note that this
          * works with the plugin: cordova-plugin-privacyscreen which offers a black screen. This is not so pretty

@@ -109,6 +109,8 @@
   "INVALID_OLD_PASSWORD": "Invalid old password.",
   "INVALID_PASSWORD": "Invalid password.",
   "INVESTIGATOR": "Investigator",
+  "JAILBREAK_TITLE": "Jailbreak/Rooted Device Detected",
+  "JAILBREAK_MESSAGE": "Running this app on a jailbroken or rooted device is not supported.",
   "LABELS": "Labels",
   "LAB_BYDATE": "By Date",
   "LAB_BYTYPE": "By Type",
