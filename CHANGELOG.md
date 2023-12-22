@@ -1,3 +1,10 @@
+# [1.21.0](https://gitlab.com/opalmedapps/qplus/compare/v1.20.14...v1.21.0) (2023-12-22)
+
+
+### Features
+
+* add strength bar for password changes ([08524ef](https://gitlab.com/opalmedapps/qplus/commit/08524ef4e434c69a81c75c9a4274ad564a211b67))
+
 ## [1.20.14](https://gitlab.com/opalmedapps/qplus/compare/v1.20.13...v1.20.14) (2023-12-19)
 
 
