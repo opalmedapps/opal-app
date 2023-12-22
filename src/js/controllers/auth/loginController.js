@@ -24,13 +24,15 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$filter', '$rootScope', '$scope', '$state', '$timeout', '$window', 'CleanUp',
-        'ConcurrentLogin', 'Constants', 'DeviceIdentifiers', 'EncryptionService', 'Firebase', 'Params', 'Toast',
-        'UserAuthorizationInfo', 'UserHospitalPreferences', 'UserPreferences', 'UUID'];
+        'ConcurrentLogin', 'Constants', 'DeviceIdentifiers', 'EncryptionService', 'Firebase',
+        'NavigatorParameters', 'Params', 'Toast', 'UserAuthorizationInfo', 'UserHospitalPreferences',
+        'UserPreferences', 'UUID'];
 
     /* @ngInject */
     function LoginController($filter, $rootScope, $scope, $state, $timeout, $window, CleanUp,
-                             ConcurrentLogin, Constants, DeviceIdentifiers, EncryptionService, Firebase, Params, Toast,
-                             UserAuthorizationInfo, UserHospitalPreferences, UserPreferences, UUID) {
+                             ConcurrentLogin, Constants, DeviceIdentifiers, EncryptionService, Firebase,
+                             NavigatorParameters, Params, Toast, UserAuthorizationInfo, UserHospitalPreferences,
+                             UserPreferences, UUID) {
 
         var vm = this;
 
@@ -133,10 +135,20 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         }
 
         function bindEvents() {
+            let navigator = NavigatorParameters.getNavigator();
+
             // On destroy, cancel any unfinished in-progress login attempt
             $scope.$on('$destroy', () => {
                 // Avoid cancelling login when the attempt was successful and we're destroying the controller to go to the next page
                 if (!vm.attemptSuccessful) cancelLoginAttempt();
+
+                // Remove event listener
+                navigator.off('prepop');
+            });
+
+            // Reset loading when cancelling from the security question screen
+            navigator.on('prepop', function () {
+                vm.loading = false;
             });
         }
 
