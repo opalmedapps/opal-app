@@ -1,3 +1,10 @@
+## [1.21.1](https://gitlab.com/opalmedapps/qplus/compare/v1.21.0...v1.21.1) (2023-12-22)
+
+
+### Bug Fixes
+
+* request location permission on home screen instead of init screen ([438a113](https://gitlab.com/opalmedapps/qplus/commit/438a113bcc83b78c95b142da960b2822b7e3185a))
+
 # [1.21.0](https://gitlab.com/opalmedapps/qplus/compare/v1.20.14...v1.21.0) (2023-12-22)
 
 
