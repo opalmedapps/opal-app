@@ -56,6 +56,8 @@
   "INVALID_EMAIL": "Adresse couriel invalide",
   "INVALID_EMAIL_OR_PWD": "Adresse courriel ou mot de passe invalide",
   "INVALID_USER": "Utilisateur invalide.",
+  "JAILBREAK_TITLE": "Appareil débridé détecté",
+  "JAILBREAK_MESSAGE": "L'exécution de cette application sur un appareil débridé n'est pas permise.",
   "KICKEDOUT": "Votre compte a été ouvert sur un autre appareil.",
   "LANGUAGE": "Langue",
   "LEAVEMESSAGE": "Laissez-nous un message",
