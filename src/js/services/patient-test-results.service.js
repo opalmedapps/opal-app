@@ -50,6 +50,7 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 			getTestTypes: () => testTypes,
 			getTestResultsByDate: getTestResultsByDate,
 			getTestResultsByType: getTestResultsByType,
+			getTestResultsUrl: () => './views/personal/test-results/test-results.html',
 			clear: clear,
 
 			// Exported for testing

@@ -14,6 +14,7 @@
  * @requires MUHCApp.service:Documents
  * @requires MUHCApp.service:EducationalMaterial
  * @requires MUHCApp.service:Questionnaires
+ * @requires MUHCApp.service:PatientTestResults
  * @requires MUHCApp.service:RequestToServer
  * @requires MUHCApp.service:TxTeamMessages
  * @requires MUHCApp.service:UserPreferences
@@ -28,10 +29,10 @@
         .factory('Notifications', Notifications);
 
     Notifications.$inject = ['$filter','$injector','$q','Announcements','Appointments','CheckInService','Documents',
-        'EducationalMaterial','Questionnaires','RequestToServer','TxTeamMessages','UserPreferences'];
+        'EducationalMaterial', 'PatientTestResults', 'Questionnaires', 'RequestToServer','TxTeamMessages','UserPreferences'];
 
     function Notifications($filter, $injector, $q, Announcements, Appointments, CheckInService, Documents,
-                           EducationalMaterial, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
+                           EducationalMaterial, PatientTestResults, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
         /**
          * @ngdoc property
          * @name MUHCApp.service.#Notifications
@@ -148,7 +149,7 @@
                 PageUrl: Questionnaires.getQuestionnaireStartUrl,
                 searchFunction: (refTableRowSerNum => refTableRowSerNum),
                 readFunction: function () {
-                    return true
+                    return true;
                 },
             },
             // Special case: uses a dedicated download page in 'PageUrl' (questionnaireNotifRedirect.html) instead of 'refreshType'
@@ -158,7 +159,33 @@
                 PageUrl: Questionnaires.getQuestionnaireStartUrl,
                 searchFunction: (refTableRowSerNum => refTableRowSerNum),
                 readFunction: function () {
-                    return true
+                    return true;
+                },
+            },
+            'AppointmentNew': {
+                icon: 'fa fa-calendar-plus-o',
+                color: '#5FAB61',
+                readFunction: Appointments.readAppointmentBySerNum,
+                searchFunction: Appointments.getAppointmentBySerNum,
+                PageUrl: Appointments.getAppointmentUrl,
+                refreshType: 'Appointments',
+            },
+            'AppointmentCancelled': {
+                icon: 'fa fa-calendar-times-o',
+                color: '#ff0787',
+                readFunction: Appointments.readAppointmentBySerNum,
+                searchFunction: Appointments.getAppointmentBySerNum,
+                PageUrl: Appointments.getAppointmentUrl,
+                refreshType: 'Appointments',
+            },
+            // Special case: opens the general lab results page, not a specific lab
+            'NewLabResult': {
+                icon: 'fa fa-flask ',
+                color: '#8BC34A',
+                PageUrl: PatientTestResults.getTestResultsUrl,
+                searchFunction: (refTableRowSerNum => refTableRowSerNum),
+                readFunction: function () {
+                    return true;
                 },
             },
         };
