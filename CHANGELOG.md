@@ -1,3 +1,10 @@
+# [1.22.0](https://gitlab.com/opalmedapps/qplus/compare/v1.21.2...v1.22.0) (2024-01-09)
+
+
+### Features
+
+* add jailbreak/root device detection ([8f56b29](https://gitlab.com/opalmedapps/qplus/commit/8f56b29f0589801932ca34cb3fa05a53d043e172))
+
 ## [1.21.2](https://gitlab.com/opalmedapps/qplus/compare/v1.21.1...v1.21.2) (2024-01-09)
 
 
