@@ -2,8 +2,7 @@
 # When editing this file, please make sure to also keep `ci-cd.md` up to date.
 
 default:
-  tags:
-    - macos
+  image: node:20.10.0-alpine3.19
 
 variables:
   ENV: "dev"  # The environment used in the app build command
@@ -85,6 +84,8 @@ increment version:
 
 # Builds the app for Android
 build android:
+  tags:
+    - macos
   extends: .build
   script:
     - java -version
@@ -98,6 +99,8 @@ build android:
 
 # Builds the app for iOS
 build ios:
+  tags:
+    - macos
   extends: .build
   script:
     # Fixes Bus Error when cordova invokes pod install
@@ -157,7 +160,6 @@ deploy ios to firebase:
 deploy web app to development:
   stage: deploy
   environment: development
-  image: alpine:3.19
   needs:
     - build web
   script:
