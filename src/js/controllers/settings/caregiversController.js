@@ -14,6 +14,7 @@
         vm.message = null;
         vm.apiData;
         vm.caregivers;
+        vm.loadingList = true;  // This is for loading the list of caregivers
         vm.getRelationshipStatusText = (status) => `RELATIONSHIPS_PATIENTS_STATUS_${status}`;
 
         getCaregiversList();
@@ -35,9 +36,11 @@
                 }
                 const result = await RequestToServer.apiRequest(formatedParams);
                 vm.apiData = result.data;
+                vm.loadingList = false;
             } catch (error) {
                 vm.error = true;
                 console.error(error);
+                vm.loadingList = false;
             }
             handleDisplay();
         }
