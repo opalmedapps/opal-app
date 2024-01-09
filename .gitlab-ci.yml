@@ -70,14 +70,14 @@ increment version:
 # Builds automatically for release tags, or manually on other branches as needed
 .build:
   stage: build
-  rules:
-    # Only build automatically for release tags
-    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
-    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: never
-    # In all other cases, builds can be executed manually as needed
-    - when: manual
+  # rules:
+  #   # Only build automatically for release tags
+  #   - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+  #   # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+  #   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  #     when: never
+  #   # In all other cases, builds can be executed manually as needed
+  #   - when: manual
   before_script:
     - npm -v
     - npm ci --prefer-offline
