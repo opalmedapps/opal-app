@@ -1,3 +1,10 @@
+## [1.21.2](https://gitlab.com/opalmedapps/qplus/compare/v1.21.1...v1.21.2) (2024-01-09)
+
+
+### Bug Fixes
+
+* add loading circle and error box for caregiver page ([1f1a30b](https://gitlab.com/opalmedapps/qplus/commit/1f1a30bfefe8a4701d1ecdba809730663da89cb7))
+
 ## [1.21.1](https://gitlab.com/opalmedapps/qplus/compare/v1.21.0...v1.21.1) (2023-12-22)
 
 
