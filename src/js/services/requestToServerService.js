@@ -83,7 +83,8 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
         }
 
         /**
-         * @descrition - Execute multiple requests to get an announcement per patient then merge the data together.
+         * @descrition - Execute multiple requests to get a categorical data (e.g., announcement) per patient
+         *               then merge the data together.
          * @param {string} typeOfRequest - Type of request send to the listener
          * @param {object} parameters - Extra parameters to identify data to be query
          * @param {string} categoryRequested - The data category requested
@@ -99,7 +100,7 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
             }));
 
             results.forEach(result => {
-                if (result && result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data.Announcements]
+                if (result && result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data[categoryRequested]]
             });
 
             return {
