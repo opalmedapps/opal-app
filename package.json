@@ -82,6 +82,7 @@
     "cordova-plugin-globalization": "1.11.0",
     "cordova-plugin-inappbrowser": "5.0.0",
     "cordova-plugin-ios-detect-screenshot": "1.0.0",
+    "cordova-plugin-iroot": "3.1.0",
     "cordova-plugin-network-information": "3.0.0",
     "cordova-plugin-prevent-screenshot": "1.0.3",
     "cordova-plugin-splashscreen": "6.0.2",
@@ -169,7 +170,8 @@
       "cordova-plugin-ble-central": {
         "BLUETOOTH_USAGE_DESCRIPTION": "Bluetooth est nécessaire pour se connecter aux appareils intelligents / Bluetooth is needed to connect to smart devices",
         "IOS_INIT_ON_LOAD": "false"
-      }
+      },
+      "cordova-plugin-iroot": {}
     },
     "platforms": [
       "android",
