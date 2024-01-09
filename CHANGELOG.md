@@ -1,3 +1,10 @@
+# [1.23.0](https://gitlab.com/opalmedapps/qplus/compare/v1.22.0...v1.23.0) (2024-01-09)
+
+
+### Features
+
+* add missing notification types ([b0dfd4a](https://gitlab.com/opalmedapps/qplus/commit/b0dfd4a2d15e207aacb9fe1014db2202b9fc64ac))
+
 # [1.22.0](https://gitlab.com/opalmedapps/qplus/compare/v1.21.2...v1.22.0) (2024-01-09)
 
 
