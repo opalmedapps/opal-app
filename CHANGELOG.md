@@ -1,3 +1,10 @@
+## [1.23.1](https://gitlab.com/opalmedapps/qplus/compare/v1.23.0...v1.23.1) (2024-01-10)
+
+
+### Bug Fixes
+
+* remove unnecessary storage access permissions ([c4424c0](https://gitlab.com/opalmedapps/qplus/commit/c4424c0b330dbd504031ecfd7ebb0cddb21cea80))
+
 # [1.23.0](https://gitlab.com/opalmedapps/qplus/compare/v1.22.0...v1.23.0) (2024-01-09)
 
 
