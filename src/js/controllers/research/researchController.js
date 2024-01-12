@@ -23,6 +23,7 @@
         vm.allowedModules = {};
 
         vm.openResearchStudies = openResearchStudies;
+        vm.openResearchFeedback = openResearchFeedback;
         vm.openReferenceMaterial = openReferenceMaterial;
         vm.openResearchQuestionnaires = openResearchQuestionnaires;
         vm.openConsentForms = openConsentForms;
@@ -78,9 +79,13 @@
             navigator.pushPage('views/personal/research/research-studies/research-studies.html');
         }
 
+        function openResearchFeedback() {
+            navigator.pushPage('views/personal/research/research-feedback/research-feedback.html');
+        }
+
         function openReferenceMaterial() {
             NavigatorParameters.setParameters({ Navigator: navigatorName, category: 'research' });
-            navigator.pushPage('views/personal/education/education.html');
+            navigator.pushPage('views/personal/research/research-feedback/research-feedback.html');
         }
 
         function openResearchQuestionnaires() {
