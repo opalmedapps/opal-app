@@ -1,3 +1,10 @@
+## [1.24.1](https://gitlab.com/opalmedapps/qplus/compare/v1.24.0...v1.24.1) (2024-01-12)
+
+
+### Bug Fixes
+
+* remove unwanted android exports added by plugins ([a04b7ca](https://gitlab.com/opalmedapps/qplus/commit/a04b7ca7ff264d58804251ff6bd0e66cfdc5c6f1))
+
 # [1.24.0](https://gitlab.com/opalmedapps/qplus/compare/v1.23.1...v1.24.0) (2024-01-12)
 
 
