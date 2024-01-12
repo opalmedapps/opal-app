@@ -63,6 +63,7 @@ increment version:
     # Run automatically on every commit to the default branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
+    - apk add --no-cache git
     - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
   script:
     - npx semantic-release
