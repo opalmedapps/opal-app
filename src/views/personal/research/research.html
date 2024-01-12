@@ -87,5 +87,22 @@
                 </ons-col>
             </ons-row>
         </ons-list-item>
+        <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('FEE') && tab.allowedModules['FEE']"
+                           ng-click="tab.openResearchFeedback()">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-thumbs-up" size="2x" style="color:#4CAF50"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH_FEEDBACK"|translate}}</span>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
+        </ons-list-item>
     </ons-list>
 </ons-page>
