@@ -5,6 +5,16 @@ default:
   # run jobs on GitLab shared runners by default
   # only run those jobs that need our own build machine (macOS) specifically
   image: node:20.10.0-alpine3.19
+  # Cache modules in between pipelines
+  # See: https://javascript.plainenglish.io/improving-ci-performance-aka-how-to-save-your-money-31ff691360e4
+  cache:
+    # compute cache key from lock file
+    # https://docs.gitlab.com/ee/ci/caching/#compute-the-cache-key-from-the-lock-file
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
 
 variables:
   ENV: "dev"  # The environment used in the app build command
@@ -51,7 +61,7 @@ check dependencies:
     - when: always
   script:
     - npm -v
-    - npm ci --prefer-offline
+    - npm ci --cache .npm --prefer-offline
 
 # Sets a new version number for the app when committing to the default branch
 increment version:
@@ -82,7 +92,7 @@ increment version:
     - when: manual
   before_script:
     - npm -v
-    - npm ci --prefer-offline
+    - npm ci --cache .npm --prefer-offline
     - echo "$ENV"
 
 # Builds the app for Android
