@@ -1,3 +1,10 @@
+## [1.24.2](https://gitlab.com/opalmedapps/qplus/compare/v1.24.1...v1.24.2) (2024-01-16)
+
+
+### Bug Fixes
+
+* **deps:** upgrade crypto-js to 4.2.0 and update the parameters of the pbkdf2 function ([59e6fdb](https://gitlab.com/opalmedapps/qplus/commit/59e6fdb89010bf6c3ffe238bf21ec84fad44d881))
+
 ## [1.24.1](https://gitlab.com/opalmedapps/qplus/compare/v1.24.0...v1.24.1) (2024-01-12)
 
 
