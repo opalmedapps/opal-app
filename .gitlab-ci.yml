@@ -136,8 +136,13 @@ build web:
     expire_in: 1 day
     paths:
       - www
+  # Override of the base .build rules, to ensure web builds are run automatically
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    # In all other cases, execute web builds automatically
+    - when: always
 
 # Extended job for deploying the app; deploys to Firebase automatically based on release tags
 #   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the pipeline variables
