@@ -36,9 +36,9 @@
                         method: 'get',
                         url: '/api/sites/'
                     },
-                    INSTITUTIONS: {
+                    INSTITUTION: {
                         method: 'get',
-                        url: '/api/institutions/',
+                        url: '/api/institution/',
                     }
                 },
                 PATIENTS: {

@@ -47,6 +47,7 @@ import "./controllers/tabs/personalTabController.js";
 import "./controllers/test-results/patient-test-results.controller.js";
 import "./controllers/test-results/patient-test-results-by-type.controller.js";
 import "./controllers/test-results/patient-test-results-by-datetime.controller.js";
+import "./controllers/test-results/patient-test-results-delay-info.controller.js";
 import "./controllers/txTeamMessages/txTeamMessagesController.js";
 import "./controllers/txTeamMessages/individualMessageController.js";
 import "./controllers/auth/setHospitalController.js";
