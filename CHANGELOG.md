@@ -1,3 +1,10 @@
+## [1.26.1](https://gitlab.com/opalmedapps/qplus/compare/v1.26.0...v1.26.1) (2024-01-23)
+
+
+### Bug Fixes
+
+* **ci:** fix app deployment to Firebase ([c18e5bb](https://gitlab.com/opalmedapps/qplus/commit/c18e5bb8eeca7e5bb8b5bcf2d7046a1ecde52482))
+
 # [1.26.0](https://gitlab.com/opalmedapps/qplus/compare/v1.25.0...v1.26.0) (2024-01-23)
 
 
