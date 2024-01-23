@@ -23,6 +23,7 @@
         vm.allowedModules = {};
 
         vm.openResearchStudies = openResearchStudies;
+        vm.openResearchFeedback = openResearchFeedback;
         vm.openReferenceMaterial = openReferenceMaterial;
         vm.openResearchQuestionnaires = openResearchQuestionnaires;
         vm.openConsentForms = openConsentForms;
@@ -76,6 +77,10 @@
 
         function openResearchStudies() {
             navigator.pushPage('views/personal/research/research-studies/research-studies.html');
+        }
+
+        function openResearchFeedback() {
+            navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'research'});
         }
 
         function openReferenceMaterial() {
