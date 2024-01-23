@@ -53,7 +53,7 @@
 		}
 
 		function goToFeedback() {
-			vm.navigator.pushPage('views/general/feedback/feedback.html');
+			vm.navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'});
 		}
 
 		function secureYourDeviceNotice() {
