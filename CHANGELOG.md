@@ -1,3 +1,10 @@
+# [1.26.0](https://gitlab.com/opalmedapps/qplus/compare/v1.25.0...v1.26.0) (2024-01-23)
+
+
+### Features
+
+* research feedback mechanism ([352fbd4](https://gitlab.com/opalmedapps/qplus/commit/352fbd483ae059fe290a28e7e09e2a7c65a973b1))
+
 # [1.25.0](https://gitlab.com/opalmedapps/qplus/compare/v1.24.3...v1.25.0) (2024-01-22)
 
 
