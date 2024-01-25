@@ -69,7 +69,7 @@ import '../../../css/views/init-page.view.css';
 		function activate() {
 
 			DynamicContent.ensureInitialized().then(() => {
-				// Read the Message Of The Day from [qa|staging|preprod|prod]_serviceStatus_[EN|FR].php on depDocs
+				// Read the Message Of The Day from [dev|qa|staging|preprod|prod|etc.]_serviceStatus_[EN|FR].php on depDocs
 				return DynamicContent.getPageContent(OPAL_CONFIG.settings.messageOfTheDayKey);
 
 			}).then(response => {
