@@ -22,7 +22,7 @@
     /* @ngInject */
     function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout,
                                           FileManagerService, Constants, $q, UserPreferences, Browser, $filter,
-                                          Toast) {
+                                          Toast, ProfileSelector) {
         let vm = this;
         let navigator = null;
         let parameters;
@@ -68,6 +68,8 @@
                 initializeDocument(docParams);
             }
             $rootScope.DocAlreadyInitialized = false;
+
+            navigator.on('prepop', () => NavigatorParameters.prepopHandler('Documents'));
         }
 
         /**

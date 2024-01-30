@@ -55,6 +55,8 @@
 		function activate() {
 			language = UserPreferences.getLanguage();
 			navigator = NavigatorParameters.getNavigator();
+
+			navigator.on('prepop', () => NavigatorParameters.prepopHandler('Appointments'));
 		}
 
 		/**

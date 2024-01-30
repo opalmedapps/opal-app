@@ -73,6 +73,8 @@
                     handleLoadQuestionnaireErr();
                 });
             }
+
+            navigator.on('prepop', () => NavigatorParameters.prepopHandler('QuestionnaireList'));
         }
 
         /**

@@ -8,7 +8,7 @@ var myApp=angular.module('MUHCApp');
  *@description Used to pass parameters between Navigators, the Onsen navigator options are not good enough because the controller you navigate to has to know the navigator that's currently in, this is possible but the code becomes
  very messy with a bunch of if and else clauses, this service makes things rather simple, its simply cleaner. For more info on navigator see: {@link https://onsen.io/v1/reference/ons-navigator.html Onsen Navigation}.
  **/
-myApp.service('NavigatorParameters',function(){
+myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(ProfileSelector, UpdateUI){
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#parameters
@@ -82,7 +82,32 @@ myApp.service('NavigatorParameters',function(){
         {
             return navigator._attrs.var;
         },
+        /**
+         *@ngdoc method
+         *@name prepopHandler
+         *@methodOf MUHCApp.service:NavigatorParameters
+         *@param {Object} item The name of the item that has to be reloaded
+         *@return {Object} Returns a handler function for the prepop event.
+         **/
+         prepopHandler:function(item)
+         {
+            // Patient profile that was active/set on the previous page
+            let prevPageProfileID = this.getParameters()?.currentProfile;
+            let previousProfile = ProfileSelector.getPatientList().find(
+                (item) => item.patient_legacy_id == prevPageProfileID
+            )
+             // Reload profile that was active/set on the previous page
+             if (
+                this.getParameters()?.isCareReceiver
+                && previousProfile
+            ) {
+                ProfileSelector.loadPatientProfile(prevPageProfileID);
+
+                // Reload 'Documents' for the current user
+                UpdateUI.updateTimestamps(item, 0);
+            }
+         },
     };
 
 
-});
+}]);

@@ -80,6 +80,8 @@
                 vm.language = language;
                 vm.app = parameters.Post;
             });
+
+            navigator.on('prepop', () => NavigatorParameters.prepopHandler('Appointments'));
         }
 
         /**

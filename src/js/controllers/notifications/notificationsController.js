@@ -11,11 +11,11 @@
         .controller('NotificationsController', NotificationsController);
 
     NotificationsController.$inject = ['$filter','$scope','$timeout','NativeNotification','NavigatorParameters',
-        'Notifications','Permissions','RequestToServer','Utility'];
+        'Notifications','Permissions','ProfileSelector', 'RequestToServer', 'UpdateUI', 'Utility'];
 
     /* @ngInject */
     function NotificationsController($filter, $scope, $timeout, NativeNotification, NavigatorParameters,
-                                     Notifications, Permissions, RequestToServer, Utility) {
+                                     Notifications, Permissions, ProfileSelector, RequestToServer, UpdateUI, Utility) {
         let vm = this;
         let navigator;
 
@@ -57,7 +57,6 @@
 
         function displayNotifications(){
             var notifications = Notifications.getUserNotifications();
-
             if (notifications.length === 0)  {
                 $timeout(function() {
                     vm.noNotifications = true;
@@ -83,7 +82,17 @@
          */
         async function goToNotification(index, notification) {
             try {
-                if (notification.ReadStatus === '0') Notifications.readNotification(index, notification);
+                let params = { 'Navigator': 'homeNavigator' };
+                // By clicking on the notification for a patient in care should switch the profile behind the scenes
+                if (ProfileSelector.getActiveProfile().patient_legacy_id !== notification.PatientSerNum) {
+                    params['isCareReceiver'] = true;
+                    params['currentProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
+                    ProfileSelector.loadPatientProfile(notification.PatientSerNum);
+
+                    // Reload the target item referenced by a notification for the patient in care
+                    // in case the item's data were already loaded
+                    UpdateUI.updateTimestamps(notification.refreshType, 0);
+                }
 
                 if (!notification.hasOwnProperty('PageUrl')) throw new Error("Notification does not have property 'PageUrl'; unable to open");
                 let post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
@@ -95,8 +104,12 @@
                     post = await Utility.promiseMinDelay(Notifications.downloadNotificationTarget(notification), 500);
                 }
 
+                // Mark notification as read
+                if (notification.ReadStatus === '0') Notifications.readNotification(index, notification);
+
                 // Navigate to the notification target's display page
-                NavigatorParameters.updateParameters({'Post': post});
+                params['Post'] = post;
+                NavigatorParameters.updateParameters(params);
                 navigator.pushPage(notification.PageUrl);
             }
             catch(error) {

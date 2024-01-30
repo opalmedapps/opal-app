@@ -42,6 +42,9 @@
         function activate() {
             var parameters=NavigatorParameters.getParameters();
             vm.announcement = Announcements.setLanguage(parameters.Post);
+
+            let navigator = NavigatorParameters.getNavigator();
+            navigator.on('prepop', () => NavigatorParameters.prepopHandler('Announcements'));
         }
     }
 })();

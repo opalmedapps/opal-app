@@ -123,6 +123,9 @@
                     vm.loadingContents = false;
                 }
             }
+
+            let navigator = NavigatorParameters.getNavigator();
+            navigator.on('prepop', () => NavigatorParameters.prepopHandler('EducationalMaterial'));
         }
 
         function bindEvents() {
