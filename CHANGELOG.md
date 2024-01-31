@@ -1,3 +1,10 @@
+## [1.26.2](https://gitlab.com/opalmedapps/qplus/compare/v1.26.1...v1.26.2) (2024-01-31)
+
+
+### Bug Fixes
+
+* remove console log ([08b6918](https://gitlab.com/opalmedapps/qplus/commit/08b69182f72b4fcc1b4d25ed5fd7eea24eb91ead))
+
 ## [1.26.1](https://gitlab.com/opalmedapps/qplus/compare/v1.26.0...v1.26.1) (2024-01-23)
 
 
