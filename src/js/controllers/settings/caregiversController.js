@@ -48,7 +48,6 @@
         function handleDisplay() {
             $timeout(() => {
                 if (vm.error) return vm.message = 'RELATIONSHIPS_CAREGIVERS_ERROR';
-                console.log(vm.apiData.length, vm.apiData);
                 if (vm.apiData.length === 0) return vm.message = 'RELATIONSHIPS_CAREGIVERS_NONE';
                 vm.caregivers = vm.apiData;
             });
