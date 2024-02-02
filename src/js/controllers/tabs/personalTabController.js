@@ -77,6 +77,7 @@
                 });
                 $timeout(() => {
                     vm.appointmentsUnreadNumber = result.data.unread_appointment_count;
+                    vm.labsUnreadNumber = result.data.unread_lab_result_count;
                     vm.documentsUnreadNumber = result.data.unread_document_count;
                     vm.txTeamMessagesUnreadNumber = result.data.unread_txteammessage_count;
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
