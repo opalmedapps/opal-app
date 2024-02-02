@@ -1,3 +1,10 @@
+# [1.27.0](https://gitlab.com/opalmedapps/qplus/compare/v1.26.2...v1.27.0) (2024-02-02)
+
+
+### Features
+
+* add badge for unread lab results ([b9af501](https://gitlab.com/opalmedapps/qplus/commit/b9af5019e497c6a1fe16acdaf322be363d3f11c9))
+
 ## [1.26.2](https://gitlab.com/opalmedapps/qplus/compare/v1.26.1...v1.26.2) (2024-01-31)
 
 
