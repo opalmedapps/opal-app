@@ -21,7 +21,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
 
     // Constants for key derivation
     const keySizeBits = 256; // Key size in bits
-    const iterations = 600000;
+    const iterations = 25000;
     const bitsPerWord = 32; // Used to convert keySizeBits, since crypto-js expects key sizes in 32-bit words
 
     function decryptObject(object, secret) {
