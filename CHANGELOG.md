@@ -1,3 +1,10 @@
+## [1.27.1](https://gitlab.com/opalmedapps/qplus/compare/v1.27.0...v1.27.1) (2024-02-08)
+
+
+### Bug Fixes
+
+* reduce iterations on PBKDF2 to temporarily improve app slowness ([f4d1ba5](https://gitlab.com/opalmedapps/qplus/commit/f4d1ba55f096bcac80afed1e6ee44dd7cd4051d4))
+
 # [1.27.0](https://gitlab.com/opalmedapps/qplus/compare/v1.26.2...v1.27.0) (2024-02-02)
 
 
