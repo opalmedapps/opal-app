@@ -50,8 +50,8 @@ workflow:
 stages:
   - check
   - prepare
-  - build
   - test
+  - build
   - deploy
   - post
 
