@@ -239,6 +239,8 @@ build and deploy QA:
 include:
   # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
+  # Dependency Scanning: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
+  - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
 
 # Secret Detection Customization: 
 # https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
