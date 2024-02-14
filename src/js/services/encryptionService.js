@@ -19,6 +19,11 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
 
     const main_fields = ['UserID', 'Timestamp', 'Code', 'DeviceId'];
 
+    // Constants for key derivation
+    const keySizeBits = 256; // Key size in bits
+    const iterations = 25000;
+    const bitsPerWord = 32; // Used to convert keySizeBits, since crypto-js expects key sizes in 32-bit words
+
     function decryptObject(object, secret) {
         if (typeof object === 'string') {
             //grab the nonce
@@ -118,8 +123,8 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
      *@ngdoc method
      *@name hash
      *@methodOf MUHCApp.service:EncryptionService
-     *@description Encrypts a given password using SHA512
-     *@return {String} Returns hashed password
+     *@description Hashes a given string using SHA512
+     *@return {String} Returns hashed string
      **/
     function hash(incoming) {
         return CryptoJS.SHA512(incoming).toString();
@@ -220,8 +225,9 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          */
         generateSpecificEncryptionKey: function (secret, salt) {
             return CryptoJS.PBKDF2(secret, salt, {
-                keySize: 512 / 32,
-                iterations: 1000
+                keySize: keySizeBits /bitsPerWord,
+                iterations: iterations,
+                hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
         },
 
@@ -229,13 +235,15 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          *@ngdoc method
          *@name generateEncryptionHash
          *@methodOf MUHCApp.service:EncryptionService
-         *@description Encrypts a given password using SHA512
+         *@description Encrypts a given password using SHA-256
          *@return {String} Returns hashed password
          **/
-        generateEncryptionHash: function () {
-            encryptionHash = CryptoJS.PBKDF2(hash(UserAuthorizationInfo.getUsername()), securityAnswerHash, {
-                keySize: 512 / 32,
-                iterations: 1000
+         generateEncryptionHash: function () {
+            var usernameHash = hash(UserAuthorizationInfo.getUsername());
+            encryptionHash = CryptoJS.PBKDF2(usernameHash, securityAnswerHash, {
+                keySize: keySizeBits /bitsPerWord,
+                iterations: iterations,
+                hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
         },
 

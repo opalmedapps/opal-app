@@ -57,28 +57,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         },
         /**
          *@ngdoc method
-         *@name setIdentifier
-         *@param {String} identifierType Name of one of the three properties for the deviceIdentifiers object.
-         *@param {String} value new value for field.
-         *@methodOf MUHCApp.service:DeviceIdentifiers
-         *@description Sets the identifierType property for the deviceIdentifiers object
-         **/
-        setIdentifier:function(identifierType, value)
-        {
-            deviceIdentifiers[identifierType] = value;
-        },
-        /**
-         *@ngdoc method
-         *@name getDeviceIdentifiers
-         *@methodOf MUHCApp.service:DeviceIdentifiers
-         *@returns {Object} Returns deviceIdentifiers object.
-         **/
-        getDeviceIdentifiers:function()
-        {
-            return deviceIdentifiers;
-        },
-        /**
-         *@ngdoc method
          *@name sendDeviceIdentifiersToServer
          *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Sends the device identifiers to the listener.

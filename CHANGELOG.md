@@ -1,3 +1,168 @@
+## [1.27.1](https://gitlab.com/opalmedapps/qplus/compare/v1.27.0...v1.27.1) (2024-02-08)
+
+
+### Bug Fixes
+
+* reduce iterations on PBKDF2 to temporarily improve app slowness ([f4d1ba5](https://gitlab.com/opalmedapps/qplus/commit/f4d1ba55f096bcac80afed1e6ee44dd7cd4051d4))
+
+# [1.27.0](https://gitlab.com/opalmedapps/qplus/compare/v1.26.2...v1.27.0) (2024-02-02)
+
+
+### Features
+
+* add badge for unread lab results ([b9af501](https://gitlab.com/opalmedapps/qplus/commit/b9af5019e497c6a1fe16acdaf322be363d3f11c9))
+
+## [1.26.2](https://gitlab.com/opalmedapps/qplus/compare/v1.26.1...v1.26.2) (2024-01-31)
+
+
+### Bug Fixes
+
+* remove console log ([08b6918](https://gitlab.com/opalmedapps/qplus/commit/08b69182f72b4fcc1b4d25ed5fd7eea24eb91ead))
+
+## [1.26.1](https://gitlab.com/opalmedapps/qplus/compare/v1.26.0...v1.26.1) (2024-01-23)
+
+
+### Bug Fixes
+
+* **ci:** fix app deployment to Firebase ([c18e5bb](https://gitlab.com/opalmedapps/qplus/commit/c18e5bb8eeca7e5bb8b5bcf2d7046a1ecde52482))
+
+# [1.26.0](https://gitlab.com/opalmedapps/qplus/compare/v1.25.0...v1.26.0) (2024-01-23)
+
+
+### Features
+
+* research feedback mechanism ([352fbd4](https://gitlab.com/opalmedapps/qplus/commit/352fbd483ae059fe290a28e7e09e2a7c65a973b1))
+
+# [1.25.0](https://gitlab.com/opalmedapps/qplus/compare/v1.24.3...v1.25.0) (2024-01-22)
+
+
+### Features
+
+* add lab delay information to lab result detail view and info screen ([1371574](https://gitlab.com/opalmedapps/qplus/commit/1371574c59e92c728c1c63b49122e004143cdbee))
+
+## [1.24.3](https://gitlab.com/opalmedapps/qplus/compare/v1.24.2...v1.24.3) (2024-01-18)
+
+
+### Bug Fixes
+
+* **ci:** fix web build rules ([1ac3387](https://gitlab.com/opalmedapps/qplus/commit/1ac33879cf50c0ebe745bcc4286d571cbebcdd53))
+
+## [1.24.2](https://gitlab.com/opalmedapps/qplus/compare/v1.24.1...v1.24.2) (2024-01-16)
+
+
+### Bug Fixes
+
+* **deps:** upgrade crypto-js to 4.2.0 and update the parameters of the pbkdf2 function ([59e6fdb](https://gitlab.com/opalmedapps/qplus/commit/59e6fdb89010bf6c3ffe238bf21ec84fad44d881))
+
+## [1.24.1](https://gitlab.com/opalmedapps/qplus/compare/v1.24.0...v1.24.1) (2024-01-12)
+
+
+### Bug Fixes
+
+* remove unwanted android exports added by plugins ([a04b7ca](https://gitlab.com/opalmedapps/qplus/commit/a04b7ca7ff264d58804251ff6bd0e66cfdc5c6f1))
+
+# [1.24.0](https://gitlab.com/opalmedapps/qplus/compare/v1.23.1...v1.24.0) (2024-01-12)
+
+
+### Features
+
+* adjust databank consent creation logic with new questions ([5c7e83a](https://gitlab.com/opalmedapps/qplus/commit/5c7e83a42a8b3677b056c571659cdf5aa23af21c))
+
+## [1.23.1](https://gitlab.com/opalmedapps/qplus/compare/v1.23.0...v1.23.1) (2024-01-10)
+
+
+### Bug Fixes
+
+* remove unnecessary storage access permissions ([c4424c0](https://gitlab.com/opalmedapps/qplus/commit/c4424c0b330dbd504031ecfd7ebb0cddb21cea80))
+
+# [1.23.0](https://gitlab.com/opalmedapps/qplus/compare/v1.22.0...v1.23.0) (2024-01-09)
+
+
+### Features
+
+* add missing notification types ([b0dfd4a](https://gitlab.com/opalmedapps/qplus/commit/b0dfd4a2d15e207aacb9fe1014db2202b9fc64ac))
+
+# [1.22.0](https://gitlab.com/opalmedapps/qplus/compare/v1.21.2...v1.22.0) (2024-01-09)
+
+
+### Features
+
+* add jailbreak/root device detection ([8f56b29](https://gitlab.com/opalmedapps/qplus/commit/8f56b29f0589801932ca34cb3fa05a53d043e172))
+
+## [1.21.2](https://gitlab.com/opalmedapps/qplus/compare/v1.21.1...v1.21.2) (2024-01-09)
+
+
+### Bug Fixes
+
+* add loading circle and error box for caregiver page ([1f1a30b](https://gitlab.com/opalmedapps/qplus/commit/1f1a30bfefe8a4701d1ecdba809730663da89cb7))
+
+## [1.21.1](https://gitlab.com/opalmedapps/qplus/compare/v1.21.0...v1.21.1) (2023-12-22)
+
+
+### Bug Fixes
+
+* request location permission on home screen instead of init screen ([438a113](https://gitlab.com/opalmedapps/qplus/commit/438a113bcc83b78c95b142da960b2822b7e3185a))
+
+# [1.21.0](https://gitlab.com/opalmedapps/qplus/compare/v1.20.14...v1.21.0) (2023-12-22)
+
+
+### Features
+
+* add strength bar for password changes ([08524ef](https://gitlab.com/opalmedapps/qplus/commit/08524ef4e434c69a81c75c9a4274ad564a211b67))
+
+## [1.20.14](https://gitlab.com/opalmedapps/qplus/compare/v1.20.13...v1.20.14) (2023-12-19)
+
+
+### Bug Fixes
+
+* **android:** prevent third party activities and receivers from being exported ([bb5dce5](https://gitlab.com/opalmedapps/qplus/commit/bb5dce5219c0579d758320bb7b4165e157a97e4f))
+* **ios:** ensure App Transport Security is enabled ([905b4d1](https://gitlab.com/opalmedapps/qplus/commit/905b4d142ed29414c740f0214a112a20340f836c))
+
+## [1.20.13](https://gitlab.com/opalmedapps/qplus/compare/v1.20.12...v1.20.13) (2023-12-19)
+
+
+### Bug Fixes
+
+* change description for Bluetooth permission ([e22d625](https://gitlab.com/opalmedapps/qplus/commit/e22d625d4a555b95328c4cfbe63d79a1daa87ae8))
+
+## [1.20.12](https://gitlab.com/opalmedapps/qplus/compare/v1.20.11...v1.20.12) (2023-12-18)
+
+
+### Bug Fixes
+
+* add a polyfill to patch Array.prototype.at on emulators ([4d18015](https://gitlab.com/opalmedapps/qplus/commit/4d18015e880d1836e7c9a90f952740b3d24be83b)), closes [/github.com/wojtekmaj/react-pdf/issues/1465#issuecomment-1537669572](https://gitlab.com//github.com/wojtekmaj/react-pdf/issues/1465/issues/issuecomment-1537669572)
+
+## [1.20.11](https://gitlab.com/opalmedapps/qplus/compare/v1.20.10...v1.20.11) (2023-12-07)
+
+
+### Bug Fixes
+
+* rename available profiles (QSCCD-1772) ([5cdcd17](https://gitlab.com/opalmedapps/qplus/commit/5cdcd1708761b6ebf541341d35a570edc2c83988))
+
+## [1.20.10](https://gitlab.com/opalmedapps/qplus/compare/v1.20.9...v1.20.10) (2023-12-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-android to v12.0.1 ([ae59240](https://gitlab.com/opalmedapps/qplus/commit/ae59240cc744a84355983a261df70a58b55ca75f))
+* **deps:** update dependency cordova-plugin-ble-central to v1.7.2 ([22b1ebe](https://gitlab.com/opalmedapps/qplus/commit/22b1ebe99af3729037b51ca45bbc1b0bd20dea3a))
+* **deps:** update dependency cordova-plugin-splashscreen to v6.0.2 ([cb6c928](https://gitlab.com/opalmedapps/qplus/commit/cb6c928f23d0823fa1d284cd7b621da54423d16a))
+* **deps:** update dependency firebase to v10.7.1 ([4625a8c](https://gitlab.com/opalmedapps/qplus/commit/4625a8c40d1be1c1866cf57f4d65fb10e3ca74be))
+
+## [1.20.9](https://gitlab.com/opalmedapps/qplus/compare/v1.20.8...v1.20.9) (2023-12-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-android-permissions to v1.1.5 ([bdd6d9a](https://gitlab.com/opalmedapps/qplus/commit/bdd6d9a10ae370e72416138e78c0e56e3b13756a))
+
+## [1.20.8](https://gitlab.com/opalmedapps/qplus/compare/v1.20.7...v1.20.8) (2023-12-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @havesource/cordova-plugin-push to v4.0.0 ([c0d54c5](https://gitlab.com/opalmedapps/qplus/commit/c0d54c50bfbe5db6a0674c34267e56d385f74cf2))
+
 ## [1.20.7](https://gitlab.com/opalmedapps/qplus/compare/v1.20.6...v1.20.7) (2023-12-01)
 
 

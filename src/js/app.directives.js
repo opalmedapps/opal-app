@@ -18,6 +18,7 @@ import "./directives/labs-info-button.directive";
 import "./directives/pdf-viewer.directive";
 import "./directives/generic-toolbar.directive.js"
 import "./directives/password-input.directive.js";
+import "./directives/password-strength-checker.directive.js";
 import "./directives/video-tag-by-format.directive.js";
 import "./directives/patient-data-handler.directive";
 import "./directives/ons-pull-hook-content.directive";

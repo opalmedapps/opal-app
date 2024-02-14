@@ -51,9 +51,9 @@
                 ng-click="personalNavigator.pushPage('views/personal/test-results/test-results.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <ons-icon icon="ion-erlenmeyer-flask" size="2x" style="color:#8BC34A"></ons-icon>
-                        </div>
+                        <ons-icon icon="ion-erlenmeyer-flask" size="2x" style="color:#8BC34A"></ons-icon>
+                        <span class="notification"
+                            ng-show="tab.labsUnreadNumber > 0">{{tab.labsUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>

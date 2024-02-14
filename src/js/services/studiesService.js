@@ -72,19 +72,24 @@
                 "has_diagnoses": true,
                 "has_demographics": true,
                 "middle_name": "",
-                "city_of_birth": ""
+                "city_of_birth": "",
+                "health_data_authorization": "",
+                "contact_authorization": ""
             };
-            // Extract the middle name and city of birth question responses for the GUID generation in Django
+            // Extract the responses for the consent validation and GUID generation in Django
             consent_questionnaire_response.sections.forEach(section => {
                 section.questions.forEach(question => {
                     if (/middle\s*name/i.test(question.question_display)) {
-                    data.middle_name = question.patient_answer.answer[0].answer_value;
-                  } else if (/city\s*of\s*birth/i.test(question.question_display)) {
-                    data.city_of_birth = question.patient_answer.answer[0].answer_value;
-                  }
+                        data.middle_name = question.patient_answer.answer[0].answer_value;
+                    } else if (/city\s*of\s*birth/i.test(question.question_display)) {
+                        data.city_of_birth = question.patient_answer.answer[0].answer_value;
+                    } else if (/authorization\s*for\s*health\s*information/i.test(question.question_display)) {
+                        data.health_data_authorization = question.patient_answer.answer[0].answer_option_text;
+                    } else if (/authorization\s*for\s*qscc\s*databank/i.test(question.question_display)) {
+                        data.contact_authorization = question.patient_answer.answer[0].answer_option_text;
+                    }
                 });
-              });
-
+            });
             const requestParams = Params.API.ROUTES.DATABANK_CONSENT;
             const formattedParams = {
                 ...requestParams,

@@ -121,6 +121,11 @@
                     {size: 'xlarge', style: 'fontDescXlarge', text: 'LARGE'}
                 ],
 
+                /** Password settings **/
+                minPasswordLength: 10,
+                maxPasswordLength: 50,
+                minPasswordStrengthLevel: 3,
+
                 /** CheckIn Service Constants **/
                 checkinRadiusMeters: 500,
 
@@ -180,6 +185,7 @@
                     "HOS": 0,
                     "SMD": 0,
                     "CTB": 1,
+                    "RFE": 0,
                 },
                 localStorageHospitalKey: 'hospital',
                 hospitalList: {
@@ -215,6 +221,7 @@
                             "HOS": 1,
                             "SMD": 1,
                             "CTB": 1,
+                            "RFE": 1,
                         },
                     },
                     'RI-MUHC': {
@@ -249,6 +256,7 @@
                             "HOS": 1,
                             "SMD": 1,
                             "CTB": 1,
+                            "RFE": 1,
                         },
                     },
                     'CHU_SJ': {
@@ -283,6 +291,7 @@
                             "HOS": 0,
                             "SMD": 0,
                             "CTB": 1,
+                            "RFE": 1,
                         },
                     }
                 },

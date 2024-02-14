@@ -1,9 +1,20 @@
 # For a more human-readable description of the workflows outlined in this file, see `.docs/deployment/ci-cd.md`
 # When editing this file, please make sure to also keep `ci-cd.md` up to date.
 
-# default:
-  # tags:
-    # - macos
+default:
+  # run jobs on GitLab shared runners by default
+  # only run those jobs that need our own build machine (macOS) specifically
+  image: node:20.10.0-alpine3.19
+  # Cache modules in between pipelines
+  # See: https://javascript.plainenglish.io/improving-ci-performance-aka-how-to-save-your-money-31ff691360e4
+  cache:
+    # compute cache key from lock file
+    # https://docs.gitlab.com/ee/ci/caching/#compute-the-cache-key-from-the-lock-file
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
 
 variables:
   ENV: "dev"  # The environment used in the app build command
@@ -54,7 +65,7 @@ check dependencies:
     - when: always
   script:
     - npm -v
-    - npm ci --prefer-offline
+    - npm ci --cache .npm --prefer-offline
 
 # Sets a new version number for the app when committing to the default branch
 increment version:
@@ -67,6 +78,7 @@ increment version:
     # Run automatically on every commit to the default branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
+    - apk add --no-cache git
     - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
   script:
     - npx semantic-release
@@ -87,11 +99,14 @@ increment version:
     # - when: manual
   before_script:
     - npm -v
-    - npm ci --prefer-offline
+    - npm ci --cache .npm --prefer-offline
     - echo "$ENV"
 
 # Builds the app for Android
 build android:
+  # use our build Mac
+  tags:
+    - macos
   extends: .build
   script:
     - java -version
@@ -105,6 +120,9 @@ build android:
 
 # Builds the app for iOS
 build ios:
+  # use our build Mac
+  tags:
+    - macos
   extends: .build
   script:
     # Fixes Bus Error when cordova invokes pod install
@@ -122,26 +140,32 @@ build web:
   image: node:20.10.0-alpine
   script:
     - npm run build:web --env=$ENV
-    - zip -r -X opal-$ENV-www.zip www
   artifacts:
     expire_in: 1 day
     paths:
-      - opal-$ENV-www.zip
+      - www
+  # Override of the base .build rules, to ensure web builds are run automatically
+  rules:
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    # In all other cases, execute web builds automatically
+    - when: always
 
 # Extended job for deploying the app; deploys to Firebase automatically based on release tags
 #   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the pipeline variables
 #   This service account provides permissions for uploading to Firebase App Distribution
 #   See: https://firebase.google.com/docs/app-distribution/authenticate-service-account.md?platform=android
-.deploy to firebase:
+.deploy app to firebase:
   stage: deploy
-  tags:
-    - macos
+  # require web app to be deployed (which uses the environment)
+  needs:
+    - deploy web
   rules:
     # Only release the app from release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
-  environment:
-    name: $ENV
   before_script:
+    - apk add --no-cache git
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
     # Convert the service account variable to a file. This is required because variables defined in .gitlab-ci.yml (when triggering a downstream pipeline) cannot be files.
@@ -151,19 +175,45 @@ build web:
 
 # Deploys the Android app to Firebase
 deploy android to firebase:
-  extends: .deploy to firebase
+  extends: .deploy app to firebase
   script:
-    - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+    - npx firebase-tools appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build android
 
 # Deploys the iOS app to Firebase
 deploy ios to firebase:
-  extends: .deploy to firebase
+  extends: .deploy app to firebase
   script:
-    - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+    - npx firebase-tools appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build ios
+
+deploy web:
+  stage: deploy
+  environment: $ENV
+  needs:
+    - build web
+  script:
+    - apk add --no-cache lftp
+    - lftp --version
+    - echo "listing working directory..."
+    - ls -la
+    - echo "transferring files and listing remote directory..."
+    # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
+    - >
+      lftp -e "
+        set cmd:fail-exit yes; 
+        open $FTP_HOST; 
+        user $FTP_USER $FTP_PASSWORD; 
+        mirror --exclude='app' --reverse --delete --verbose ./static/landingpage/ ./app/${CI_ENVIRONMENT_NAME}/;
+        mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${CI_ENVIRONMENT_NAME}/app/;
+        ls -la app/${CI_ENVIRONMENT_NAME}; 
+        bye
+      "
+  rules:
+    # Only release the web version from release tags
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
 
 # Launches a downstream pipeline to build for the QA environment
 # See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html

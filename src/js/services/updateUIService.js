@@ -62,7 +62,7 @@
                 set: Notifications.initNotifications,
                 update: Notifications.updateUserNotifications,
                 lastUpdated: 0,
-                multiProfileEnabled: false,
+                multiProfileEnabled: true,
             },
             'PatientTestDates': {
                 set: PatientTestResults.setTestDates,
