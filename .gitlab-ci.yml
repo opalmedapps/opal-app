@@ -263,8 +263,10 @@ variables:
 # https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
 mobsf-android-sast:
-  needs:
+  dependencies:
     - build android
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
   # rules:
   #   - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
