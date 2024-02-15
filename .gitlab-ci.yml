@@ -16,6 +16,16 @@ default:
     paths:
       - .npm/
 
+
+variables:
+  ENV: "dev"  # The environment used in the app build command
+  GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEV  # The service account providing permissions to upload to Firebase App Distribution
+  FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
+  FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
+  FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
+  VERSION_TAG_REGEX: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/  # The tag semver regex recognized as a release, see: https://ihateregex.io/expr/semver/
+
+
 workflow:
   rules:
     # Rules for semantic-release: do not run on commits made by semantic-release, only run on the version tags it creates
@@ -240,16 +250,6 @@ include:
   - template: Jobs/SAST.latest.gitlab-ci.yml
 
 
-variables:
-  ENV: "dev"  # The environment used in the app build command
-  GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEV  # The service account providing permissions to upload to Firebase App Distribution
-  FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
-  FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
-  FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
-  VERSION_TAG_REGEX: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/  # The tag semver regex recognized as a release, see: https://ihateregex.io/expr/semver/
-  # see: https://docs.gitlab.com/ee/user/application_security/sast/index.html#experimental-features
-  SAST_EXPERIMENTAL_FEATURES: "true"
-
 # Secret Detection Customization: 
 # https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
 # secret_detection:
@@ -258,7 +258,7 @@ variables:
 #   when: always
 
 # SAST Scanning Customization:
-# ensure that mobsf jobs depend on builds (see also the experimental features variable in the variables section above)
+# ensure that mobsf jobs depend on builds
 # https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
 # https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
@@ -266,35 +266,12 @@ mobsf-android-sast:
   dependencies:
     - build android
   rules:
+    # override rules since at the time the job is created the apk does not exist yet
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-  # rules:
-  #   - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
-  #     when: never
-  #   - if: $SAST_EXCLUDED_ANALYZERS =~ /mobsf/
-  #     when: never
-  #   # Add the job to merge request pipelines if there's an open merge request.
-  #   - if: $CI_PIPELINE_SOURCE == "merge_request_event" &&
-  #         $SAST_EXPERIMENTAL_FEATURES == 'true'
-  #   - if: $CI_OPEN_MERGE_REQUESTS  # Don't add it to a *branch* pipeline if it's already in a merge request pipeline.
-  #     when: never
-  #     # If there's no open merge request, add it to a *branch* pipeline instead.
-  #   - if: $CI_COMMIT_BRANCH &&
-  #         $SAST_EXPERIMENTAL_FEATURES == 'true'
-
-# mobsf-ios-sast:
-  # dependencies:
-    # - build ios
-  # rules:
-  #   - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
-  #     when: never
-  #   - if: $SAST_EXCLUDED_ANALYZERS =~ /mobsf/
-  #     when: never
-  #   # Add the job to merge request pipelines if there's an open merge request.
-  #   - if: $CI_PIPELINE_SOURCE == "merge_request_event" &&
-  #         $SAST_EXPERIMENTAL_FEATURES == 'true'
-  #   - if: $CI_OPEN_MERGE_REQUESTS  # Don't add it to a *branch* pipeline if it's already in a merge request pipeline.
-  #     when: never
-  #     # If there's no open merge request, add it to a *branch* pipeline instead.
-  #   - if: $CI_COMMIT_BRANCH &&
-  #         $SAST_EXPERIMENTAL_FEATURES == 'true'
+mobsf-ios-sast:
+  dependencies:
+    - build ios
+  rules:
+    # override rules since at the time the job is created the apk does not exist yet
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
