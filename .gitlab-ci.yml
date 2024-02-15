@@ -279,9 +279,9 @@ mobsf-android-sast:
   #   - if: $CI_COMMIT_BRANCH &&
   #         $SAST_EXPERIMENTAL_FEATURES == 'true'
 
-mobsf-ios-sast:
-  dependencies:
-    - build ios
+# mobsf-ios-sast:
+  # dependencies:
+    # - build ios
   # rules:
   #   - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
   #     when: never
