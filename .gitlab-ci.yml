@@ -263,8 +263,9 @@ variables:
 # https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
 mobsf-android-sast:
-  dependencies:
+  needs:
     - build android
+
   # rules:
   #   - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
   #     when: never
