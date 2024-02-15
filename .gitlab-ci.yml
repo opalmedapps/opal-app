@@ -246,7 +246,9 @@ include:
   # Dependency Scanning: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
   # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
-  - template: Jobs/SAST.latest.gitlab-ci.yml
+  - component: gitlab.com/components/sast/sast@main
+    inputs:
+      include_experimental: "true"
 
 # Secret Detection Customization: 
 # https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
