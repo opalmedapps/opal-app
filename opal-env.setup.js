@@ -26,7 +26,8 @@ class OpalEnv {
     static copyEnvironmentFiles(env) {
         this.verifyOpalEnvironmentExists(env);
         const environment_folder = `./env/${env}/*`;
-        shelljs.cp("-f", environment_folder, "./");
+        shelljs.cp('-f', environment_folder, './');
+        shelljs.cp('-f', './env/config.xml', './');
         this.insertConfigXmlPlaceholders(env);
     }
 
@@ -164,10 +165,7 @@ class OpalEnv {
      * @param {string} env The name of the environment, i.e. the name of a sub-folder in env/.
      */
     static getBuildNumber(env) {
-        const initialDirectory = shelljs.pwd().toString();
-        this.setDirectory(env);
-        let envConfigs = this.getOpalConfigJSON();
-        shelljs.cd(initialDirectory);
+        let envConfigs = this.getOpalConfigJSON(env);
         return envConfigs.configXml.BUILD_NUMBER;
     }
 
