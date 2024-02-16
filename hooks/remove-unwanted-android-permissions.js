@@ -16,6 +16,7 @@ fs.readFile(manifestFile, 'utf8', function(err, data) {
         result = result.replace(`<uses-permission android:name="android.permission.${permissionsToRemove[i]}" />`, '');
     }
 
+    /* eslint-disable detect-non-literal-fs-filename */
     fs.writeFile(manifestFile, result, 'utf8', function(err) {
         if (err) return console.log(err);
     });
