@@ -19,7 +19,7 @@ fs.readFile(manifestFile, 'utf8', function(err, data) {
         );
     }
 
-    /* eslint-disable detect-non-literal-fs-filename */
+    // nosemgrep: detect-non-literal-fs-filename
     fs.writeFile(manifestFile, result, 'utf8', function(err) {
         if (err) return console.log(err);
     });
