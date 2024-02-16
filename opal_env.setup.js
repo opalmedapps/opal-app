@@ -317,6 +317,7 @@ class OpalEnv {
 		const path = env ? `./env/${env}/opal.config.js` : './opal.config.js';
 		// nosemgrep: detect-non-literal-fs-filename (only used by webpack)
 		if (!fs.existsSync(path)) throw new Error(`File not found: ${path}`);
+		// nosemgrep: detect-non-literal-require (internal functionality; no user-supplied data used)
 		return require(path);
 	}
 
