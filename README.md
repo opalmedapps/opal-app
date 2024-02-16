@@ -59,7 +59,7 @@ The following is the top level anatomy of the folders and their description. As 
 ├── plugins # Cordova plugins folder, interfaces for native functionalities (Camera, Calendar etc.)
 ├── node_modules # App production and development dependencies
 ├── .gitignore
-├── opal_env.setup.js # File to manage the Opal environments and versions
+├── opal-env.setup.js # File to manage the Opal environments and versions
 ├── package-lock.json
 ├── package.json # Contains scripts for development
 ├── static # Contains static pages such as the landing page and password-reset site (Password reset functionality in Opal)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<widget android-versionCode="20029" ios-CFBundleVersion="20029" id="com.hig.opal2" version="1.26.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>Opal</name>
+<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="1.26.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>${APP_NAME}</name>
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web -
         is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative.
@@ -13,16 +13,16 @@
         Opal Med Apps Inc.
     </author>
     <content src="index.html"/>
-    <!-- 
+    <!--
         Cordova Allow List
 
         See: https://cordova.apache.org/docs/en/dev/guide/appdev/allowlist/#network-request-allow-list
         See: https://cordova.apache.org/docs/en/latest/guide/appdev/allowlist/#other-notes
     -->
-    <!-- 
+    <!--
         Don't allow arbitrary loads.
         Add additional domain names specifically if necessary.
-        
+
         See: https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/
     -->
     <allow-navigation href="https://www.youtube.com/*" requires-certificate-transparency="true"/>
@@ -58,7 +58,7 @@
         <preference name="GradlePluginKotlinVersion" value="1.7.10"/>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <!-- Security setting; should be false for pen tests and prod builds -->
-            <application android:debuggable="false"/>
+            <application android:debuggable="${ANDROID_DEBUGGABLE}"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <!-- Security setting; do not set to true -->

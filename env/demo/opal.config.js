@@ -8,7 +8,13 @@ const config = {
         showVersionOnInit: true,
         useSourceMap: true,
         screenshotsAllowed: true,
-        webpackMode: 'development',
+        webpackMode: "development",
+    },
+    configXml: {
+        "APP_ID": "com.hig.opaldemo",
+        "APP_NAME": "Opal Demo",
+        "BUILD_NUMBER": 1,
+        "ANDROID_DEBUGGABLE": true,
     },
     firebase: {
         apiKey: "AIzaSyDuG5sAQ2tmiVanDnBg9ff3FRATI9Eis8U",
