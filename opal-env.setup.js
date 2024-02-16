@@ -303,8 +303,8 @@ class OpalEnv {
 
         let envConfigs = this.getOpalConfigJSON(env);
 
-        Object.entries(envConfigs.configXml).forEach((placeholder, value) => {
-            configXmlFile.replace('${' + placeholder + '}', value);
+        Object.entries(envConfigs.configXml).forEach(([placeholder, value]) => {
+            configXmlFile = configXmlFile.replaceAll('${' + placeholder + '}', value);
         });
 
         fs.writeFileSync("./config.xml", configXmlFile);
