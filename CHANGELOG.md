@@ -1,3 +1,24 @@
+## [1.27.1](https://gitlab.com/opalmedapps/qplus/compare/v1.27.0...v1.27.1) (2024-02-08)
+
+
+### Bug Fixes
+
+* reduce iterations on PBKDF2 to temporarily improve app slowness ([f4d1ba5](https://gitlab.com/opalmedapps/qplus/commit/f4d1ba55f096bcac80afed1e6ee44dd7cd4051d4))
+
+# [1.27.0](https://gitlab.com/opalmedapps/qplus/compare/v1.26.2...v1.27.0) (2024-02-02)
+
+
+### Features
+
+* add badge for unread lab results ([b9af501](https://gitlab.com/opalmedapps/qplus/commit/b9af5019e497c6a1fe16acdaf322be363d3f11c9))
+
+## [1.26.2](https://gitlab.com/opalmedapps/qplus/compare/v1.26.1...v1.26.2) (2024-01-31)
+
+
+### Bug Fixes
+
+* remove console log ([08b6918](https://gitlab.com/opalmedapps/qplus/commit/08b69182f72b4fcc1b4d25ed5fd7eea24eb91ead))
+
 ## [1.26.1](https://gitlab.com/opalmedapps/qplus/compare/v1.26.0...v1.26.1) (2024-01-23)
 
 
