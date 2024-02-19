@@ -52,6 +52,7 @@ stages:
   - check
   - prepare
   - build
+  # Required for security scanning jobs
   - test
   - deploy
   - post
@@ -225,7 +226,6 @@ build and deploy QA:
     # Only offer QA build and deployment after automatic build and deployment for Dev
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
       when: manual
-      allow_failure: true
   variables:
     # Override pipeline variables to run for the QA environment
     ENV: "qa"
@@ -238,6 +238,7 @@ build and deploy QA:
 
 include:
   # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
+  # See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
 
 # Secret Detection Customization: 
