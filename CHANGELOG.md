@@ -1,3 +1,10 @@
+## [1.27.3](https://gitlab.com/opalmedapps/qplus/compare/v1.27.2...v1.27.3) (2024-02-19)
+
+
+### Bug Fixes
+
+* **deps:** remove insecure insights and update dependencies ([14c9948](https://gitlab.com/opalmedapps/qplus/commit/14c994885e6b0a2a2761d06a8f1958831289b6ed))
+
 ## [1.27.2](https://gitlab.com/opalmedapps/qplus/compare/v1.27.1...v1.27.2) (2024-02-19)
 
 
