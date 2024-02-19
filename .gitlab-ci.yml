@@ -237,6 +237,17 @@ build and deploy QA:
       - local: .gitlab-ci.yml
 
 include:
+  # Code Quality: https://docs.gitlab.com/ee/ci/testing/code_quality.html
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Code-Quality.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
   # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
   # See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
+
+# use code quality with MR pipelines
+# https://docs.gitlab.com/ee/ci/testing/code_quality.html#use-code-quality-with-merge-request-pipelines
+code_quality:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
