@@ -240,10 +240,3 @@ include:
   # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
   # See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
-
-# Secret Detection Customization: 
-# https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# secret_detection:
-#   # don't wait for previous stage to succeed
-#   # see: https://docs.gitlab.com/ee/ci/yaml/#when
-#   when: always
