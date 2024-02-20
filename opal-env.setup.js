@@ -176,7 +176,10 @@ class OpalEnv {
         const currentVersion = this.getVersion();
         newVersion = newVersion ? newVersion : semver.inc(currentVersion, "patch");
         console.log(`Version update: ${currentVersion} => ${newVersion}`);
-        this.writeToConfigXML(this.setXMLWidgetAttributeText(this.getConfigXMLJSON('./env'), "version", newVersion));
+        this.writeToConfigXML(
+            this.setXMLWidgetAttributeText(this.getConfigXMLJSON('./env'), "version", newVersion),
+            './env'
+        );
     }
 
     /**
@@ -207,7 +210,7 @@ class OpalEnv {
         let path = `./env/${env}/opal.config.js`;
         if (fs.existsSync(path)) rawConfigFile = fs.readFileSync(path).toString();
         else throw new Error("config.xml file not found");
-        rawConfigFile.replace(/"BUILD_NUMBER": [0-9]+,/i, `"BUILD_NUMBER": ${buildNumber},`);
+        rawConfigFile = rawConfigFile.replace(/"BUILD_NUMBER": [0-9]+,/i, `"BUILD_NUMBER": ${buildNumber},`);
         fs.writeFileSync(path, rawConfigFile);
 
         console.log(`Build numbers for env: '${env}' set to ${buildNumber}`);
@@ -244,9 +247,11 @@ class OpalEnv {
      * @description Writes content back to the config.xml file.
      *              Assumes the current directory contains this file.
      * @param {Element} configFile The new content to write.
+     * @param {string} basePath The base path in which to look ('config.xml' is appended to it).
      */
-    static writeToConfigXML(configFile) {
-        fs.writeFileSync("./config.xml", xmlJs.js2xml(configFile, {
+    static writeToConfigXML(configFile, basePath) {
+        let filePath = path.join(basePath, 'config.xml');
+        fs.writeFileSync(filePath, xmlJs.js2xml(configFile, {
             fullTagEmptyElement: false,
             indentCdata: true,
             spaces: 4,
