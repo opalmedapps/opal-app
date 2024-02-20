@@ -27,7 +27,7 @@ const config = {
         "APP_NAME": "Opal Sample",
         // Integer: the build number shown in brackets after the app's version number. Prod requires a higher value for store uploads.
         "BUILD_NUMBER": 1,
-        // Boolean: whether the Android app is debuggable and its console logs are visible (android:debuggable).
+        // Boolean: whether the Android app is debuggable (android:debuggable).
         "ANDROID_DEBUGGABLE": true,
     },
     // Block of Firebase web configurations, with contents pasted from the Firebase Console
