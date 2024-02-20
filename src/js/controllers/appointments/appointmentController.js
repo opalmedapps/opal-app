@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', '$timeout', 'Browser'];
+    AppointmentController.$inject = ['$scope', 'NavigatorParameters', 'UserPreferences', '$timeout', 'Browser'];
 
     /* @ngInject */
-    function AppointmentController(NavigatorParameters, UserPreferences, $timeout, Browser) {
+    function AppointmentController($scope, NavigatorParameters, UserPreferences, $timeout, Browser) {
 
         let vm = this;
 
@@ -76,6 +76,8 @@
             let parameters = NavigatorParameters.getParameters();
             let language = UserPreferences.getLanguage().toUpperCase();
 
+            bindEvents();
+
             $timeout(function(){
                 vm.language = language;
                 vm.app = parameters.Post;
@@ -118,6 +120,15 @@
         function openMap(){
             let url = vm.app["MapUrl_"+ vm.language];
             Browser.openInternal(url, true);
+        }
+
+        function bindEvents() {
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if appointment was opened via Notifications tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
     }
 })();

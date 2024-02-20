@@ -37,7 +37,7 @@
         // control the modules to display to users
         vm.allowedModules = {};
 
-        // For displaying the closest upcoming endpoint
+        // For displaying the closest upcoming appointment
         vm.closestAppointment = null;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
