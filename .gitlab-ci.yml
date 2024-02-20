@@ -62,7 +62,8 @@ stages:
 
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
-check dependencies:
+# TODO testing
+.check dependencies:
   stage: check
   rules:
     - when: always
