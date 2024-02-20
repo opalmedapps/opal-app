@@ -1,7 +1,8 @@
-const fs = require("fs");
-const semver = require("semver");
-const shelljs = require("shelljs");
-const xmlJs = require("xml-js");
+const fs = require('fs');
+const path = require('path');
+const semver = require('semver');
+const shelljs = require('shelljs');
+const xmlJs = require('xml-js');
 
 class OpalEnv {
 
@@ -32,17 +33,18 @@ class OpalEnv {
     }
 
     /**
-     * @description Sets the version and build numbers in the config.xml files of all environments
+     * @description Sets the version and build numbers in config.xml and the opal.config.js files of all environments
      *              (with one exception: in prod, only the version is set, not the build).
      * @author Stacey Beard
      * @date 2023-07-06
      * @param {string|null} version Version number passed to setVersion().
-     * @param {string|null} build Build number(s) passed to setBuildNumber() (except for prod).
+     * @param {string|number|null} build Build number passed to setBuildNumber() (except for prod).
      */
     static setVersionAndBuildAllEnv(version = null, build = null) {
         const environments = this.getDirectories("./env");
+        this.setVersion(version);
         // Exception for prod: don't change the build number. This is done separately upon release.
-        environments.forEach(env => this.setVersionAndBuild(version, (env === 'prod') ? 'same' : build, env));
+        environments.forEach(env => this.setBuildNumber((env === 'prod') ? 'same' : build, env));
     }
 
     /**
@@ -152,10 +154,7 @@ class OpalEnv {
      * @returns {string} The app's version number.
      */
     static getVersion() {
-        const initialDirectory = shelljs.pwd().toString();
-        shelljs.cd('./env/');
-        let configFile = this.getConfigXMLJSON();
-        shelljs.cd(initialDirectory);
+        let configFile = this.getConfigXMLJSON('./env');
         return configFile.elements[0].attributes.version;
     }
 
@@ -170,39 +169,22 @@ class OpalEnv {
     }
 
     /**
-     * @desc Sets the version and build numbers in the config.xml file of the given environment.
-     * @author Stacey Beard
-     * @date 2023-03-30
-     * @param {string|null} version Version number passed to setVersion().
-     * @param {string|null} build Build number(s) passed to setBuildNumber().
-     * @param {string|null} env Environment to update; if null, it updates the file in the root directory.
-     */
-    static setVersionAndBuild(version = null, build = null, env = null) {
-        this.setVersion(version);
-        this.setBuildNumber(build, env);
-    }
-
-    /**
      * @description Sets a new version number for the app (but not the build number).
      * @param {string|null} newVersion New version to set; if null, it increments the patch number by one.
      */
     static setVersion(newVersion = null) {
         const currentVersion = this.getVersion();
         newVersion = newVersion ? newVersion : semver.inc(currentVersion, "patch");
-        console.log(`Version update: ${currentVersion}=>${newVersion}`);
-
-        const initialDirectory = shelljs.pwd().toString();
-        shelljs.cd('./env/');
-        this.writeToConfigXML(this.setXMLWidgetAttributeText(this.getConfigXMLJSON(), "version", newVersion));
-        shelljs.cd(initialDirectory);
+        console.log(`Version update: ${currentVersion} => ${newVersion}`);
+        this.writeToConfigXML(this.setXMLWidgetAttributeText(this.getConfigXMLJSON('./env'), "version", newVersion));
     }
 
     /**
-     * @description Sets a new build number for the app (but not the build number).
+     * @description Sets a new build number for the app.
      * @param {string} env The name of the environment to update.
-     * @param {number|null|string} buildNumber New build number for the app: either an integer representing the new value,
-     *                                         or null, which updates the current value of both platforms by 1,
-     *                                         or 'same', in which case the build numbers are not altered.
+     * @param {number|null|string} buildNumber New build number for the app: either a string/integer representing the new value,
+     *                                         or null, which updates the current value by 1,
+     *                                         or 'same', in which case the build number is not altered.
      */
     static setBuildNumber(buildNumber = null, env) {
         let envConfigs = this.getOpalConfigJSON(env);
@@ -247,15 +229,15 @@ class OpalEnv {
     }
 
     /**
-     * @description Read the config.xml file, converts it to a JSON object and returns it.
-     *              Assumes a config.xml file exists in current directory.
+     * @description Reads the config.xml file, converts it to a JSON object and returns it.
+     *              Assumes a config.xml file exists at the specified path.
+     * @param {string} basePath The base path in which to look ('config.xml' is appended to it).
      * @returns {Element} A JSON object representing the config file.
      */
-    static getConfigXMLJSON() {
-        if (fs.existsSync("./config.xml")) {
-            return xmlJs.xml2js(fs.readFileSync("./config.xml").toString());
-        }
-        throw new Error("config.xml file not found");
+    static getConfigXMLJSON(basePath) {
+        let filePath = path.join(basePath, 'config.xml');
+        if (fs.existsSync(filePath)) return xmlJs.xml2js(fs.readFileSync(filePath).toString());
+        throw new Error(`File not found: ${filePath}`);
     }
 
     /**
