@@ -22,7 +22,8 @@ variables:
   GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEV  # The service account providing permissions to upload to Firebase App Distribution
   FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
   FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
-  FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
+  # TODO temp for testing
+  FIREBASE_GROUP: "test-ci"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
   VERSION_TAG_REGEX: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/  # The tag semver regex recognized as a release, see: https://ihateregex.io/expr/semver/
 
 
@@ -136,6 +137,7 @@ build ios:
     paths:
       - opal-$ENV.ipa
 
+# Builds the web version of the app
 build web:
   extends: .build
   script:
@@ -194,6 +196,9 @@ deploy web:
   environment: $ENV
   needs:
     - build web
+  rules:
+    # Only release the web version from release tags
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
   script:
     - apk add --no-cache lftp
     - lftp --version
@@ -212,32 +217,8 @@ deploy web:
         ls -la app/${CI_ENVIRONMENT_NAME}; 
         bye
       "
-  rules:
-    # Only release the web version from release tags
-    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
 
-# Launches a downstream pipeline to build for the QA environment
-# See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
-build and deploy QA:
-  stage: post
-  rules:
-    # Avoid infinite recursion
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-      when: never
-    # Only offer QA build and deployment after automatic build and deployment for Dev
-    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
-      when: manual
-      allow_failure: true
-  variables:
-    # Override pipeline variables to run for the QA environment
-    ENV: "qa"
-    FIREBASE_APP_ANDROID: $FIREBASE_APP_QA_ANDROID
-    FIREBASE_APP_IOS: $FIREBASE_APP_QA_IOS
-    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_QA
-  trigger:
-    include:
-      - local: .gitlab-ci.yml
-
+# Test stage
 include:
   # use latest template versions to run security scanning jobs also in merge request pipelines:
   # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
@@ -271,3 +252,71 @@ mobsf-ios-sast:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     # Automatically built for release tags only (see .build)
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+
+# Extended job for launching a downstream pipeline in another environment
+# See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
+.build and deploy downstream:
+  # TODO Testing
+  stage: prepare
+  rules:
+    # Avoid infinite recursion
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+      when: never
+    # Only offer build and deployment in other environments after automatic build and deployment for Dev
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+      when: manual
+    # TODO TEMP TESTING
+    - when: manual
+  trigger:
+    include:
+      - local: .gitlab-ci.yml
+
+# Launches a downstream pipeline to build for the Demo environment
+build and deploy demo:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the Demo environment
+    ENV: "demo"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_DEMO_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_DEMO_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEMO
+
+# Launches a downstream pipeline to build for the DevOps environment
+build and deploy devops:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the DevOps environment
+    ENV: "devops"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_DEVOPS_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_DEVOPS_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEVOPS
+
+# Launches a downstream pipeline to build for the PreProd environment
+build and deploy preprod:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the PreProd environment
+    ENV: "preprod"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_PREPROD_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_PREPROD_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_PREPROD
+
+# Launches a downstream pipeline to build for the QA environment
+build and deploy qa:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the QA environment
+    ENV: "qa"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_QA_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_QA_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_QA
+
+# Launches a downstream pipeline to build for the Staging environment
+build and deploy staging:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the Staging environment
+    ENV: "staging"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_STAGING_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_STAGING_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_STAGING

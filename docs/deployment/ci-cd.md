@@ -2,8 +2,7 @@
 
 This project is configured with [GitLab CI/CD pipelines](https://docs.gitlab.com/ee/ci/pipelines/)
 to build and deploy the application automatically.
-Currently, only building and deploying to the `dev` and `qa` environments is supported. However, we have plans to expand this
-to other environments in the future.
+Currently, deployment is only supported for non-prod environments.
 
 Two different workflows are handled by the pipeline, as follows.
 
@@ -20,10 +19,12 @@ Specifically, any commits on branches _other_ than the default branch are handle
       This provides early feedback (in the form of a failed pipeline) to alert developers that the build will later fail
       since the dependencies are unable to install successfully.
   - Stage 2: `build`
-    - `build android`/`build ios`/`build web` (manual): The build is not automatically executed, to save on resources.
+    - `build android`/`build ios`/`build web` (manual/manual/auto): App builds are not automatically executed, to save on resources.
       This makes sense given that developers will rarely need to build the app on every commit they push.
       However, a manual button is available to build the app on demand (using the Dev environment settings and backend).
       The resulting `apk`, `ipa` and web files are available as artifacts for download.
+  - Stage 3: `test`
+    - _More details to be added._
 
 ### 2. Commits on the default branch (after completing merge requests)
 
@@ -69,9 +70,9 @@ Any commits to the default branch are handled as follows:
       Permission to execute this job is restricted via the use of protected environments (more details below).
     - `deploy web`: The web app as well as its landing page are uploaded to the FTP server corresponding to the environment.
   - Stage 4: `post`
-    - `build and deploy QA`: Optional manual trigger job that can be used to launch a [downstream child pipeline](https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html#parent-child-pipelines)
-      to deploy the app to the QA environment. If launched, the same jobs in this current "second pipeline" run again,
-      but using environment variables representing QA.
+    - `build and deploy <ENV>`: Optional manual trigger job that can be used to launch a [downstream child pipeline](https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html#parent-child-pipelines)
+      to deploy the app in a given environment. If launched, the same jobs in this current "second pipeline" run again,
+      but using the variables for that environment.
       For more information on downstream pipelines, refer to GitLab's documentation.
 
 ## Protected Environments
