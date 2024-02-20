@@ -200,7 +200,7 @@ class OpalEnv {
         rawConfigFile = rawConfigFile.replace(/"BUILD_NUMBER": [0-9]+,/i, `"BUILD_NUMBER": ${buildNumber},`);
         fs.writeFileSync(`./env/${env}/opal.config.js`, rawConfigFile);
 
-        console.log(`Build numbers for env: '${env}' set to ${buildNumber}`);
+        console.log(`Build number for env: '${env}' set to ${buildNumber}`);
     }
 
     /**
