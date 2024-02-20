@@ -127,16 +127,6 @@ class OpalEnv {
     }
 
     /**
-     * @description Changes directory into the given /env sub-folder.
-     * @param env The name of the environment to access.
-     */
-    static setDirectory(env) {
-        this.verifyOpalEnvironmentExists(env);
-        const dir = `./env/${env}`;
-        shelljs.cd(dir);
-    }
-
-    /**
      * @description Reads and returns the environment settings from opal.config.js.
      * @author Stacey Beard
      * @date 2022-03-23
@@ -144,7 +134,7 @@ class OpalEnv {
      * @returns {object} The settings object provided in the file.
      */
     static getEnvSettings(env) {
-        const config = this.getOpalConfigJSON(env);
+        const config = this.getOpalConfigJs(env, true);
         if (!config || !config.settings) throw new Error(`opal.config.js for environment "${env}" is not correctly formatted with a "settings" property.`);
         return config.settings;
     }
@@ -154,7 +144,7 @@ class OpalEnv {
      * @returns {string} The app's version number.
      */
     static getVersion() {
-        let configFile = this.getConfigXMLJSON('./env');
+        let configFile = this.getConfigXML('./env', true);
         return configFile.elements[0].attributes.version;
     }
 
@@ -164,7 +154,7 @@ class OpalEnv {
      * @param {string} env The name of the environment, i.e. the name of a sub-folder in env/.
      */
     static getBuildNumber(env) {
-        let envConfigs = this.getOpalConfigJSON(env);
+        let envConfigs = this.getOpalConfigJs(env, true);
         return envConfigs.configXml.BUILD_NUMBER;
     }
 
@@ -177,8 +167,8 @@ class OpalEnv {
         newVersion = newVersion ? newVersion : semver.inc(currentVersion, "patch");
         console.log(`Version update: ${currentVersion} => ${newVersion}`);
         this.writeToConfigXML(
-            this.setXMLWidgetAttributeText(this.getConfigXMLJSON('./env'), "version", newVersion),
-            './env'
+            './env',
+            this.setXMLWidgetAttributeText(this.getConfigXML('./env', true), "version", newVersion),
         );
     }
 
@@ -190,7 +180,7 @@ class OpalEnv {
      *                                         or 'same', in which case the build number is not altered.
      */
     static setBuildNumber(buildNumber = null, env) {
-        let envConfigs = this.getOpalConfigJSON(env);
+        let envConfigs = this.getOpalConfigJs(env, true);
 
         // Get existing build number
         let oldBuildNumber = envConfigs.configXml.BUILD_NUMBER;
@@ -206,56 +196,60 @@ class OpalEnv {
         }
 
         // Replace the build number in opal.config.js
-        let rawConfigFile;
-        let path = `./env/${env}/opal.config.js`;
-        if (fs.existsSync(path)) rawConfigFile = fs.readFileSync(path).toString();
-        else throw new Error("config.xml file not found");
+        let rawConfigFile = this.getOpalConfigJs(env, false);
         rawConfigFile = rawConfigFile.replace(/"BUILD_NUMBER": [0-9]+,/i, `"BUILD_NUMBER": ${buildNumber},`);
-        fs.writeFileSync(path, rawConfigFile);
+        fs.writeFileSync(`./env/${env}/opal.config.js`, rawConfigFile);
 
         console.log(`Build numbers for env: '${env}' set to ${buildNumber}`);
     }
 
     /**
-     * @description Reads and returns the contents of opal.config.js (a JSON object) from the directory for
-     *              the given environment.
+     * @description Reads and returns the contents of opal.config.js from the directory for
+     *              the given environment. Can be returned either as a JS object, or as raw string content.
      * @author Stacey Beard
      * @date 2022-03-23
      * @param {string} env The name of the environment to use.
-     * @returns {object} The JSON object provided in the file.
+     * @param {boolean} parseAsJs If true, the file content is retrieved as a JavaScript object.
+     *                            If false, the raw string content is returned.
+     * @returns {object|string} The JS object provided in the file, or the raw string content of the file.
      */
-    static getOpalConfigJSON(env) {
+    static getOpalConfigJs(env, parseAsJs) {
         this.verifyOpalEnvironmentExists(env);
         const path = `./env/${env}/opal.config.js`;
         if (!fs.existsSync(path)) throw new Error(`File not found: ${path}`);
-        return require(path);
+        return parseAsJs ? require(path) : fs.readFileSync(path).toString();
     }
 
     /**
-     * @description Reads the config.xml file, converts it to a JSON object and returns it.
+     * @description Reads the config.xml file, (optionally) converts it to a JavaScript object, and returns it.
      *              Assumes a config.xml file exists at the specified path.
      * @param {string} basePath The base path in which to look ('config.xml' is appended to it).
-     * @returns {Element} A JSON object representing the config file.
+     * @param {boolean} parseAsJs If true, the file content is parsed as a JavaScript object.
+     *                            If false, the raw string content is returned.
+     * @returns {Element|string} The content of the file, either as a JS object or as a string.
      */
-    static getConfigXMLJSON(basePath) {
+    static getConfigXML(basePath, parseAsJs) {
         let filePath = path.join(basePath, 'config.xml');
-        if (fs.existsSync(filePath)) return xmlJs.xml2js(fs.readFileSync(filePath).toString());
-        throw new Error(`File not found: ${filePath}`);
+        if (!fs.existsSync(filePath)) throw new Error(`File not found: ${filePath}`);
+        let fileContentString = fs.readFileSync(filePath).toString();
+        return parseAsJs ? xmlJs.xml2js(fileContentString) : fileContentString;
     }
 
     /**
-     * @description Writes content back to the config.xml file.
+     * @description Writes content back to the config.xml file. Converts it from a JS object if necessary,
+     *              otherwise, writes the raw string directly to the file.
      *              Assumes the current directory contains this file.
-     * @param {Element} configFile The new content to write.
      * @param {string} basePath The base path in which to look ('config.xml' is appended to it).
+     * @param {Element|string} content The new content to write.
      */
-    static writeToConfigXML(configFile, basePath) {
+    static writeToConfigXML(basePath, content) {
         let filePath = path.join(basePath, 'config.xml');
-        fs.writeFileSync(filePath, xmlJs.js2xml(configFile, {
+        let contentToWrite = typeof content === "string" ? content : xmlJs.js2xml(content, {
             fullTagEmptyElement: false,
             indentCdata: true,
             spaces: 4,
-        }));
+        })
+        fs.writeFileSync(filePath, contentToWrite);
     }
 
     /**
@@ -282,19 +276,14 @@ class OpalEnv {
      * @param {string} env The name of the environment to use.
      */
     static insertConfigXmlPlaceholders(env) {
-        let configXmlFile;
-        if (fs.existsSync("./config.xml")) {
-            configXmlFile = fs.readFileSync("./config.xml").toString();
-        }
-        else throw new Error("config.xml file not found");
-
-        let envConfigs = this.getOpalConfigJSON(env);
+        let configXmlFile = this.getConfigXML('./', false);
+        let envConfigs = this.getOpalConfigJs(env, true);
 
         Object.entries(envConfigs.configXml).forEach(([placeholder, value]) => {
-            configXmlFile = configXmlFile.replaceAll('${' + placeholder + '}', value);
+            configXmlFile = configXmlFile.replaceAll('${' + placeholder + '}', value.toString());
         });
 
-        fs.writeFileSync("./config.xml", configXmlFile);
+        this.writeToConfigXML('./', configXmlFile);
     }
 }
 module.exports = OpalEnv;
