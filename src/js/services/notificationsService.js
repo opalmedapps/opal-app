@@ -183,6 +183,7 @@
                 icon: 'fa fa-flask ',
                 color: '#8BC34A',
                 PageUrl: PatientTestResults.getTestResultsUrl,
+                refreshType: ['PatientTestDates', 'PatientTestTypes'],
                 searchFunction: (refTableRowSerNum => refTableRowSerNum),
                 readFunction: function () {
                     return true;

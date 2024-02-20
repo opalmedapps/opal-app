@@ -13,6 +13,7 @@
 
     AnsweredQuestionnaireController.$inject = [
         '$filter',
+        '$scope',
         '$timeout',
         'Firebase',
         'NativeNotification',
@@ -24,7 +25,7 @@
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -92,6 +93,12 @@
                             // process the answers and check if submit is allowed.
                             init();
                         }
+
+                        $scope.$on('$destroy', () => {
+                            // Reload user profile if questionnaire was opened via Notifications tab,
+                            // and profile was implicitly changed.
+                            NavigatorParameters.reloadPreviousProfilePrepopHandler();
+                        });
 
                         vm.loadingQuestionnaire = false;
                     });

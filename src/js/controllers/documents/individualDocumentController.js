@@ -75,6 +75,7 @@
          */
         function bindEvents() {
             $scope.$on('$destroy', function () {
+                navigator.off('prepop');
                 $scope.popoverDocsInfo.off('posthide');
                 $scope.popoverDocsInfo.destroy();
 
@@ -93,6 +94,10 @@
                     }
                 }, 200);
             });
+
+            // Reload user profile if individual document was opened via Home tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         function initializeDocument(document) {
