@@ -318,7 +318,6 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         {
 
             searchAppointmentsAndDelete(appointments);
-            //this.clearAppointments();
             addAppointmentsToService(appointments);
         },
         /**

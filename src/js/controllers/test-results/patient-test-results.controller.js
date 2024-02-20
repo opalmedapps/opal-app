@@ -8,9 +8,9 @@
 		.module('MUHCApp')
 		.controller('PatientTestResultsController', PatientTestResultsController);
 
-	PatientTestResultsController.$inject = ['$filter','NavigatorParameters','PatientTestResults','UserPreferences'];
+	PatientTestResultsController.$inject = ['$scope', '$filter','NavigatorParameters','PatientTestResults','UserPreferences'];
 
-	function PatientTestResultsController($filter, NavigatorParameters, PatientTestResults, UserPreferences) {
+	function PatientTestResultsController($scope, $filter, NavigatorParameters, PatientTestResults, UserPreferences) {
 
 		const vm = this;
 
@@ -55,6 +55,8 @@
 		function activate() {
 			language = UserPreferences.getLanguage();
 			navigator = NavigatorParameters.getNavigator();
+
+			bindEvents();
 		}
 
 		/**
@@ -92,6 +94,17 @@
 		function setTestsView() {
 			vm.testDates = PatientTestResults.getTestDates().sort((a, b) => b.getTime() - a.getTime()); // Newest first
 			vm.testTypes = $filter('orderBy')(PatientTestResults.getTestTypes(), `name_${language}`);
+		}
+
+		function bindEvents() {
+			// Remove event listeners
+			$scope.$on('$destroy', () => navigator.off('prepop'));
+
+			// Reload user profile if lab results were opened via Notifications tab,
+			// and profile was implicitly changed.
+			navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler(
+				['PatientTestDates', 'PatientTestTypes'],
+			));
 		}
 	}
 })();

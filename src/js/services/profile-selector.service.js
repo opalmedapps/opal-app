@@ -23,6 +23,7 @@ import {Observer} from "../models/utility/observer";
             loadPatientProfile: loadPatientProfile,
             getActiveProfile: () => currentSelectedProfile,
             getConfirmedProfiles: getConfirmedProfiles,
+            attachToObserver: fun => profileObserver.attach(fun),
             clearProfile: clearProfile,
 
             // Functions to get info from the current profile

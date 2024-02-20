@@ -23,11 +23,17 @@
                 <span class="tab-icon profile-icon" ng-style="profileColor">{{patientInitials}}</span>
             `,
             link: function (scope) {
-                scope.$watch(function () {
+                // Needed to force an update to the icon on the tab bar in certain cases
+                // For example when clicking back from a Questionnaire notification that changes profiles
+                ProfileSelector.attachToObserver(refreshDisplay);
+
+                scope.$watch(refreshDisplay);
+
+                function refreshDisplay() {
                     const activeProfile = ProfileSelector.getActiveProfile();
                     scope.patientInitials = activeProfile ? $filter('profileInitials')(activeProfile) : '';
                     scope.profileColor = {'background-color': activeProfile?.color || 'grey'};
-                });
+                }
             }
         };
     }
