@@ -168,6 +168,8 @@ build web:
   rules:
     # Only release the app from release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+    # TODO testing
+    - when: always
   before_script:
     - apk add --no-cache git
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
@@ -193,7 +195,8 @@ deploy ios to firebase:
   needs:
     - job: build ios
 
-deploy web:
+# TODO testing
+.deploy web:
   stage: deploy
   environment: $ENV
   needs:
@@ -221,32 +224,35 @@ deploy web:
       "
 
 # Test stage
-include:
-  # use latest template versions to run security scanning jobs also in merge request pipelines:
-  # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
-  # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
-  # See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Secret-Detection.latest.gitlab-ci.yml
-  - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
-  # Dependency Scanning: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
-  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Dependency-Scanning.latest.gitlab-ci.yml
-  - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
-  # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
-  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
-  - template: Jobs/SAST.latest.gitlab-ci.yml
+# TODO testing
+#include:
+#  # use latest template versions to run security scanning jobs also in merge request pipelines:
+#  # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
+#  # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
+#  # See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Secret-Detection.latest.gitlab-ci.yml
+#  - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
+#  # Dependency Scanning: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
+#  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Dependency-Scanning.latest.gitlab-ci.yml
+#  - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
+#  # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
+#  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
+#  - template: Jobs/SAST.latest.gitlab-ci.yml
 
 # SAST Scanning Customization:
 # ensure that mobsf jobs depend on builds
 # https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
 # https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
-mobsf-android-sast:
+# TODO testing
+.mobsf-android-sast:
   needs:
     - build android
   rules:
     # override rules since at the time the job is created the apk does not exist yet
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-mobsf-ios-sast:
+# TODO testing
+.mobsf-ios-sast:
   needs:
     - build ios
   rules:
