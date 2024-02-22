@@ -6,7 +6,7 @@
     "@semantic-release/changelog",
     [
       "@semantic-release/exec", {
-        "prepareCmd": "node -e \"require('./opal_env.setup.js').setVersionAndBuildAllEnv('${nextRelease.version}', '1')\""
+        "prepareCmd": "node -e \"require('./opal-env.setup.js').setVersionAndBuildAllEnv('${nextRelease.version}', '1')\""
       }
     ],
     [
