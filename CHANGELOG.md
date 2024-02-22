@@ -1,3 +1,10 @@
+## [1.29.1](https://gitlab.com/opalmedapps/qplus/compare/v1.29.0...v1.29.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* add new environments and integrate config.xml duplicates ([91f32c2](https://gitlab.com/opalmedapps/qplus/commit/91f32c2f3936fad7abd258733d9d4edade901a65))
+
 # [1.29.0](https://gitlab.com/opalmedapps/qplus/compare/v1.28.0...v1.29.0) (2024-02-22)
 
 
