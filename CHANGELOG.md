@@ -1,3 +1,10 @@
+## [1.29.2](https://gitlab.com/opalmedapps/qplus/compare/v1.29.1...v1.29.2) (2024-02-22)
+
+
+### Bug Fixes
+
+* repair semantic-release commit issue after !1124 ([ba83b43](https://gitlab.com/opalmedapps/qplus/commit/ba83b43774db28e0f8008f4d5cf1caa24642909d))
+
 ## [1.29.1](https://gitlab.com/opalmedapps/qplus/compare/v1.29.0...v1.29.1) (2024-02-22)
 
 
