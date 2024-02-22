@@ -21,10 +21,10 @@
         .module('MUHCApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['$scope', 'Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params'];
+    CalendarController.$inject = ['$scope', 'Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params', 'Notifications'];
 
     /* @ngInject */
-    function CalendarController($scope, Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params) {
+    function CalendarController($scope, Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params, Notifications) {
         const vm = this;
 
         let todaysTimeMilliseconds;
@@ -298,7 +298,21 @@
          * @param appointment
          */
         function goToAppointment(appointment) {
-            if(appointment.ReadStatus === '0') Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+            if(appointment.ReadStatus === '0') {
+                Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+                // Mark corresponding notification as read
+                Notifications.implicitlyMarkNotificationAsRead(
+                    appointment.AppointmentSerNum,
+                    [
+                        Params.NOTIFICATION_TYPES.RoomAssignment,
+                        Params.NOTIFICATION_TYPES.NextAppointment,
+                        Params.NOTIFICATION_TYPES.AppointmentTimeChange,
+                        Params.NOTIFICATION_TYPES.CheckInNotification,
+                        Params.NOTIFICATION_TYPES.AppointmentNew,
+                        Params.NOTIFICATION_TYPES.AppointmentCancelled,
+                    ],
+                );
+            }
             NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':appointment});
             $window[navigatorName].pushPage('./views/personal/appointments/individual-appointment.html');
         }

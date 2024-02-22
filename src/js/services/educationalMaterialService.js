@@ -365,21 +365,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             }
         },
 
-        // Sends a request to the backend to mark the row numbered 'serNum' of the table EducationalMaterial as read.
-        // Author: Tongyou (Eason) Yang
-        readMaterial:function(serNum)
-        {
-            RequestToServer.sendRequestWithResponse('Read',{'Id':serNum, 'Field':'EducationalMaterial'})
-            // // For testing
-            // .then((res)=>{
-            //     console.log(res);
-            //     ons.notification.alert({message:"Set EducationalMaterial row "+serNum+" as read."});
-            // }).catch((err)=>{
-            //     console.log("Failed to set EducationalMaterial row "+serNum+" as read due to error:");
-            //     console.log(err);
-            // });
-        },
-
         /**
          * @ngdoc method
          * @name logScrolledToBottomIfApplicable

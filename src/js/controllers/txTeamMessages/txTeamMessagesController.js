@@ -11,10 +11,12 @@
         .module('MUHCApp')
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
-    TxTeamMessagesController.$inject = ['$scope', 'TxTeamMessages','NavigatorParameters', '$timeout', '$filter'];
+    TxTeamMessagesController.$inject = [
+        '$scope', 'TxTeamMessages','NavigatorParameters', '$timeout', '$filter','Notifications', 'Params'
+    ];
 
     /* @ngInject */
-    function TxTeamMessagesController($scope, TxTeamMessages, NavigatorParameters, $timeout, $filter) {
+    function TxTeamMessagesController($scope, TxTeamMessages, NavigatorParameters, $timeout, $filter, Notifications, Params) {
         var vm = this;
         vm.goToTeamMessage = goToTeamMessage;
 
@@ -45,8 +47,12 @@
         function goToTeamMessage(message){
             if(message.ReadStatus === '0')
             {
-                message.ReadStatus = '1';
                 TxTeamMessages.readTxTeamMessageBySerNum(message.TxTeamMessageSerNum);
+                // Mark corresponding notifications as read
+                Notifications.implicitlyMarkNotificationAsRead(
+                    message.TxTeamMessageSerNum,
+                    Params.NOTIFICATION_TYPES.TxTeamMessage,
+                );
             }
             NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':message});
             personalNavigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html');
