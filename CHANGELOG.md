@@ -1,3 +1,10 @@
+## [1.29.3](https://gitlab.com/opalmedapps/qplus/compare/v1.29.2...v1.29.3) (2024-02-26)
+
+
+### Bug Fixes
+
+* **deps:** update auxiliary angular packages to v2.19.1 (patch) ([e49b824](https://gitlab.com/opalmedapps/qplus/commit/e49b824979a4b3a75b8ea84220e1414fe717be3d))
+
 ## [1.29.2](https://gitlab.com/opalmedapps/qplus/compare/v1.29.1...v1.29.2) (2024-02-22)
 
 
