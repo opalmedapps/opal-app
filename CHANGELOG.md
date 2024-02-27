@@ -1,3 +1,10 @@
+## [1.29.4](https://gitlab.com/opalmedapps/qplus/compare/v1.29.3...v1.29.4) (2024-02-27)
+
+
+### Bug Fixes
+
+* reassign Dev and Staging Firebase projects ([06475a1](https://gitlab.com/opalmedapps/qplus/commit/06475a181b02cfc0359c204ef394cad7fe73250e))
+
 ## [1.29.3](https://gitlab.com/opalmedapps/qplus/compare/v1.29.2...v1.29.3) (2024-02-26)
 
 
