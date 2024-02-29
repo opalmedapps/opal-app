@@ -19,11 +19,12 @@
         'NativeNotification',
         'NavigatorParameters',
         'Params',
-        'Questionnaires'
+        'Questionnaires',
+        'Notifications'
     ];
 
     /* @ngInject */
-    function QuestionnaireMainController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires) {
+    function QuestionnaireMainController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires, Notifications) {
         let vm = this;
 
         // constants
@@ -204,7 +205,18 @@
                 try {
                     // update status for the questionnaire of service and listener / database
                     // send the request before setting the status locally, because the request can fail if the questionnaire was locked by another user
-                    await Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, inProgress, oldStatus);
+                    let response = await Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, inProgress, oldStatus);
+                    const notifications = Notifications.getUserNotifications();
+
+                    if (response.QuestionnaireSerNum && (Array.isArray(notifications) && notifications.length > 0)) {
+                        const notificationToMark = notifications.find(
+                            (notif) => (
+                                notif.RefTableRowSerNum === response?.QuestionnaireSerNum
+                                && notif.NotificationType === Params.NOTIFICATION_TYPES.LegacyQuestionnaire
+                            )
+                        );
+                        if (notificationToMark) notificationToMark.ReadStatus = '1';
+                    }
 
                     $timeout(() => {
                         vm.questionnaire.status = inProgress;
