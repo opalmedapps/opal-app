@@ -1,3 +1,10 @@
+# [1.30.0](https://gitlab.com/opalmedapps/qplus/compare/v1.29.4...v1.30.0) (2024-02-29)
+
+
+### Features
+
+* implicitly mark questionnaire notifications as read ([ee8f5f3](https://gitlab.com/opalmedapps/qplus/commit/ee8f5f34993dccf48141623f032fcca61a5cdeeb))
+
 ## [1.29.4](https://gitlab.com/opalmedapps/qplus/compare/v1.29.3...v1.29.4) (2024-02-27)
 
 
