@@ -315,7 +315,7 @@
         async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus) {
                 let userInfo = User.getUserInfo();
 
-                await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userInfo);
+                let response = await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userInfo);
 
                 let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus, userInfo);
 
@@ -327,7 +327,7 @@
                     numberOfUnreadQuestionnaires[currentPurpose] -= 1;
                 }
 
-                return { Success: true, Location: 'Server' };
+                return { Success: true, Location: 'Server', QuestionnaireSerNum: response?.QuestionnaireSerNum};
         }
 
         /**

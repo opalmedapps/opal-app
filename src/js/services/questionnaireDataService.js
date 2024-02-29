@@ -89,8 +89,8 @@
             };
 
             try {
-                await RequestToServer.sendRequestWithResponse(api.UPDATE_STATUS, params);
-                return {Success: true, Location: 'Server'}
+                let response = await RequestToServer.sendRequestWithResponse(api.UPDATE_STATUS, params);
+                return {Success: true, Location: 'Server', QuestionnaireSerNum: response?.QuestionnaireSerNum};
             } catch (error) {
                 throw {Success: false, Location: '', Error: error}
             }
