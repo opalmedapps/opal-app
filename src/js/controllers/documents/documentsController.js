@@ -53,7 +53,7 @@
             {
                 Documents.readDocument(doc.DocumentSerNum);
                 // Mark corresponding notifications as read
-                Notifications.implicitlyMarkNotificationAsRead(
+                Notifications.implicitlyMarkCachedNotificationAsRead(
                     doc.DocumentSerNum,
                     [Params.NOTIFICATION_TYPES.Document, Params.NOTIFICATION_TYPES.UpdDocument],
                 );

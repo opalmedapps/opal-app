@@ -34,6 +34,7 @@
                 'QuestionnaireSaveAnswer',
                 'QuestionnaireUpdateStatus',
                 'Refresh',
+                'Read',
                 'Studies',
             ],
         });

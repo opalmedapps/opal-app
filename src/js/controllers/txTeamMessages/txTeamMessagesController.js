@@ -49,7 +49,7 @@
             {
                 TxTeamMessages.readTxTeamMessageBySerNum(message.TxTeamMessageSerNum);
                 // Mark corresponding notifications as read
-                Notifications.implicitlyMarkNotificationAsRead(
+                Notifications.implicitlyMarkCachedNotificationAsRead(
                     message.TxTeamMessageSerNum,
                     Params.NOTIFICATION_TYPES.TxTeamMessage,
                 );

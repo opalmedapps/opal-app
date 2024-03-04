@@ -99,7 +99,7 @@
             if(appointment.ReadStatus === '0') {
                 Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
                 // Mark corresponding notification as read
-                Notifications.implicitlyMarkNotificationAsRead(
+                Notifications.implicitlyMarkCachedNotificationAsRead(
                     appointment.AppointmentSerNum,
                     [
                         Params.NOTIFICATION_TYPES.RoomAssignment,
