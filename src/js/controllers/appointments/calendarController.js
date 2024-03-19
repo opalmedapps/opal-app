@@ -379,7 +379,7 @@
 
             // Reload user profile if appointments calendar was opened via Home tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler('Appointments'));
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler(['Appointments']));
         }
     }
 })();
