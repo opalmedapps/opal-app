@@ -188,11 +188,13 @@
                     "RFE": 0,
                 },
                 localStorageHospitalKey: 'hospital',
-                hospitalList: {
-                    'MUHC': {
-                        acronym: 'MUHC',
-                        fullName: 'MUHC_FULL',
+                hospitalList: [
+                    {
                         uniqueHospitalCode: 'A0',
+                        acronymReal: 'MUHC',
+                        fullNameReal: 'MUHC_FULL',
+                        acronymDevelopment: 'OMI',
+                        fullNameDevelopment: 'OMI_FULL',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -224,10 +226,12 @@
                             "RFE": 1,
                         },
                     },
-                    'RI-MUHC': {
-                        acronym: 'RI_MUHC_ACRONYM',
-                        fullName: 'RI_MUHC_FULL',
+                    {
                         uniqueHospitalCode: 'A6',
+                        acronymReal: 'RI_MUHC_ACRONYM',
+                        fullNameReal: 'RI_MUHC_FULL',
+                        acronymDevelopment: 'ORI',
+                        fullNameDevelopment: 'ORI_FULL',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -259,10 +263,12 @@
                             "RFE": 1,
                         },
                     },
-                    'CHU_SJ': {
-                        acronym: 'CHU_SJ_ACRONYM',
-                        fullName: 'CHU_SJ_FULL',
+                    {
                         uniqueHospitalCode: 'A4',
+                        acronymReal: 'CHU_SJ_ACRONYM',
+                        fullNameReal: 'CHU_SJ_FULL',
+                        acronymDevelopment: 'OHIGPH',
+                        fullNameDevelopment: 'OHIGPH_FULL',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -294,7 +300,7 @@
                             "RFE": 1,
                         },
                     }
-                },
+                ],
                 relationshipStatus: {
                     pending: 'PEN',
                     confirmed: 'CON',

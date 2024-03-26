@@ -6,6 +6,7 @@ const config = {
         kickOutConcurrentUsers: true,
         messageOfTheDayKey: "qa_service",
         showVersionOnInit: true,
+        useRealInstitutionNames: false,
         useSourceMap: true,
         screenshotsAllowed: true,
         webpackMode: "development",
