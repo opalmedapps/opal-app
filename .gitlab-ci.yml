@@ -245,6 +245,8 @@ mobsf-android-sast:
   rules:
     # override rules since at the time the job is created the apk does not exist yet
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Automatically built for release tags only (see .build)
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
 
 mobsf-ios-sast:
   needs:
