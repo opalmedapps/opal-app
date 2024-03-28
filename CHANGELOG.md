@@ -1,3 +1,10 @@
+## [1.30.3](https://gitlab.com/opalmedapps/qplus/compare/v1.30.2...v1.30.3) (2024-03-28)
+
+
+### Bug Fixes
+
+* add missing entries to CSP policy ([5b760c8](https://gitlab.com/opalmedapps/qplus/commit/5b760c833a8c1c43ed3b541ff0eba587167246dd))
+
 ## [1.30.2](https://gitlab.com/opalmedapps/qplus/compare/v1.30.1...v1.30.2) (2024-03-21)
 
 
