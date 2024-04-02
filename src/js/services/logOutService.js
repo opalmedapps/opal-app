@@ -6,11 +6,11 @@
         .factory('LogOutService', LogOutService);
 
     LogOutService.$inject = ['Firebase', 'RequestToServer', 'CleanUp', '$window', 'UserAuthorizationInfo', 'ProfileSelector',
-        '$state', 'Constants'];
+        '$state', 'Constants', 'EncryptionService'];
 
     /* @ngInject */
     function LogOutService(Firebase, RequestToServer, CleanUp, $window, UserAuthorizationInfo, ProfileSelector,
-                           $state, Constants) {
+                           $state, Constants, EncryptionService) {
         var service = {
             logOut: logOut
         };
@@ -53,7 +53,7 @@
                 localStorage.removeItem("deviceID");
 
                 // clear out security answers
-                localStorage.removeItem(UserAuthorizationInfo.getUsername() + "/securityAns");
+                localStorage.removeItem(EncryptionService.getStorageKey());
 
                 // clear the cordova webview cache
                 if (Constants.app) {
