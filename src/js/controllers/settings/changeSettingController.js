@@ -13,11 +13,13 @@
         .controller('ChangeSettingController', ChangeSettingController);
 
     ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params'];
+        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params',
+        'EncryptionService'];
 
     /* @ngInject */
     function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout,
-                                    UserAuthorizationInfo, NavigatorParameters, $window, Params) {
+                                    UserAuthorizationInfo, NavigatorParameters, $window, Params,
+                                    EncryptionService) {
         var vm = this;
         var page;
         var parameters;
@@ -127,7 +129,7 @@
                     });
 
                     localStorage.removeItem("deviceID");
-                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                    localStorage.removeItem(EncryptionService.getStorageKey());
                 })
                 .catch(function (error) {
                     console.error(error);

@@ -53,8 +53,6 @@
          * @returns {String} The UUID.
          **/
         function generate(a){
-
-
             return a           // if the placeholder was passed, return
                 ? (              // a random number from 0 to 15
                     a ^            // unless b is 8,

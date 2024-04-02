@@ -120,10 +120,8 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
          *************************/
 
         function activate(){
-
             clearErrors();
             bindEvents();
-
             //Obtain email from localStorage and show that email
             savedEmail = $window.localStorage.getItem('Email');
             if(savedEmail) vm.email = savedEmail;
@@ -194,7 +192,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
                 $window.localStorage.removeItem('Email');
                 $window.localStorage.removeItem('Password');
                 $window.localStorage.removeItem("deviceID");
-                $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                $window.localStorage.removeItem(EncryptionService.getStorageKey());
                 $window.localStorage.removeItem('hospital');
             }
 
@@ -217,7 +215,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
             const warnTrustedError = (error) => { console.warn("An error occurred while logging in as trusted; now attempting to log in as untrusted.", error) };
 
             try {
-                var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
+                var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(EncryptionService.getStorageKey()), UserAuthorizationInfo.getPassword());
                 EncryptionService.setSecurityAns(ans);
 
                 // Now that we know that both the password and security answer are hashed, we can create our encryption hash
@@ -231,7 +229,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
             }
 
             UUID.setUUID(deviceID);
-
+            
             vm.trustedPromise = DeviceIdentifiers.sendDeviceIdentifiersToServer();
 
             vm.trustedPromise.promise.then(() => {
@@ -263,8 +261,13 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
          * If a user has been deemed as untrusted, then this takes the user to the security question process
          */
         function loginAsUntrustedUser(deviceID){
-            //if using a web browers (via demo or testing)
-            if (!Constants.app) UUID.setUUID(UUID.generate());
+            // If the deviceID exists use it, otherwise generate a new one
+            if (!deviceID){
+                UUID.setUUID(UUID.generate());
+            } else {
+                // This will allow the trusted login to work when switching between hospitals
+                UUID.setUUID(deviceID);
+            }
 
             //send new device ID which maps to a security question in the backend
             vm.untrustedPromise = DeviceIdentifiers.sendFirstTimeIdentifierToServer();

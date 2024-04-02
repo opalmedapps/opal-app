@@ -98,7 +98,7 @@
                     vm.resetSuccess = true;
                 });
                 localStorage.removeItem("deviceID");
-                localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                localStorage.removeItem(EncryptionService.getStorageKey());
             }).catch(function (error) {
                 $timeout(function(){
                     console.error(error);
