@@ -24,6 +24,7 @@
             getHospital: getHospital,
             getHospitalList: getHospitalList,
             getAllowedModulesBeforeLogin: getAllowedModulesBeforeLogin,
+            getHospitalInstitutionCode: getHospitalInstitutionCode,
         };
 
         return service;
@@ -85,6 +86,21 @@
 
         function getHospital (){
             return selectedHospitalKey;
+        }
+
+        /**
+         * @name getHospitalInstitutionCode
+         * @desc Return the unique institution code of the selected hospital e.g A0, A4 etc
+         * @returns institurionCode {string} Instituion code string
+         */
+        function getHospitalInstitutionCode(){
+            if (hospitalList[window.localStorage.getItem(localStorageHospitalKey)]){
+                return hospitalList[window.localStorage.getItem(localStorageHospitalKey)].uniqueHospitalCode;
+            }
+            // If trusted=False when a user logs out hospitalList could be empty when we try to clear the sec ans localStorage
+            // In that case, return an empty string to avoid crashing
+            return '';
+            
         }
 
         /**
