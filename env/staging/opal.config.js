@@ -6,6 +6,7 @@ const config = {
         kickOutConcurrentUsers: true,
         messageOfTheDayKey: "staging_service",
         showVersionOnInit: true,
+        useRealInstitutionNames: false,
         useSourceMap: true,
         screenshotsAllowed: false,
         webpackMode: "development",

@@ -12,6 +12,8 @@ const config = {
         messageOfTheDayKey: "",
         // Boolean: whether to show the app's version and build number on the front page.
         showVersionOnInit: true,
+        // Boolean: whether to use real (production-ready) institution names and acronyms (such as "MUHC"). If false, generic names are used.
+        useRealInstitutionNames: false,
         // Boolean: whether to use a sourcemap when building the web code. Should be false in production.
         useSourceMap: true,
         // Boolean: allow the user to take the screenshots or not.

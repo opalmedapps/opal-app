@@ -140,7 +140,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
      * @return {String} The storage key.
      */
     function getStorageKey() {
-        var hospitalCode = UserHospitalPreferences.getHospitalInstitutionCode();
+        var hospitalCode = UserHospitalPreferences.getHospitalCode();
         var username = UserAuthorizationInfo.getUsername();
         return `${username}:${hospitalCode}:securityAns`;
     }
