@@ -6,6 +6,7 @@ const config = {
         kickOutConcurrentUsers: true,
         messageOfTheDayKey: "prod_service",
         showVersionOnInit: false,
+        useRealInstitutionNames: true,
         useSourceMap: false,
         screenshotsAllowed: false,
         webpackMode: "production",

@@ -5,14 +5,14 @@
         .module('MUHCApp')
         .controller('SetHospitalController', SetHospitalController);
 
-    SetHospitalController.$inject = ['UserHospitalPreferences'];
+    SetHospitalController.$inject = ['$filter', 'NativeNotification','UserHospitalPreferences'];
 
     /* @ngInject */
-    function SetHospitalController(UserHospitalPreferences) {
+    function SetHospitalController($filter, NativeNotification, UserHospitalPreferences) {
         var vm = this;
 
-        vm.hospitalObj = {};
-        vm.selectedHospitalKey = '';
+        vm.hospitalList = {};
+        vm.selectedHospitalCode = '';
 
         vm.saveSelectedHospital = saveSelectedHospital;
 
@@ -21,11 +21,10 @@
         ////////////////
 
         function activate() {
-            // bring hospital list into view
-            vm.hospitalObj = UserHospitalPreferences.getHospitalList();
+            vm.hospitalList = UserHospitalPreferences.getHospitalListForDisplay();
 
             // set to selected the one choice stored
-            vm.selectedHospitalKey = UserHospitalPreferences.getHospital();
+            vm.selectedHospitalCode = UserHospitalPreferences.getHospitalCode();
         }
 
         /*************************
@@ -38,10 +37,14 @@
          * @methodOf MUHCApp.controllers.SetHospitalController
          * @description Add the selected hospital to local storage and update firebase branch
          */
-        function saveSelectedHospital(){
-            // add the selected hospital to the local storage and update firebase branch
-            UserHospitalPreferences.setHospital(vm.selectedHospitalKey);
+        function saveSelectedHospital() {
+            try {
+                UserHospitalPreferences.setHospital(vm.selectedHospitalCode);
+            }
+            catch (error) {
+                console.error(error);
+                NativeNotification.showNotificationAlert($filter('translate')("ERROR_SELECTING_HOSPITAL"));
+            }
         }
     }
 })();
-

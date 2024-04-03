@@ -5,11 +5,11 @@
             <li class="list__header" ng-class="fontSizeTitle" style="font-size: 18px">
                 {{"SELECT_HOSPITAL"|translate}}
             </li>
-            <li class="list__item list__item--tappable" ng-repeat="(hospitalKey, hospitalValue) in vm.hospitalObj track by hospitalKey">
+            <li class="list__item list__item--tappable" ng-repeat="(key, hospital) in vm.hospitalList">
                 <label class="radio-button radio-button--list-item">
-                    <input type="radio" value="{{hospitalKey}}" ng-change="vm.saveSelectedHospital();" ng-model="vm.selectedHospitalKey">
+                    <input type="radio" value="{{hospital.uniqueHospitalCode}}" ng-change="vm.saveSelectedHospital()" ng-model="vm.selectedHospitalCode">
                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                    {{hospitalValue.fullName|translate}} ({{hospitalValue.acronym|translate}})
+                    {{hospital.fullName|translate}} ({{hospital.acronym|translate}})
                 </label>
             </li>
         </ul>
