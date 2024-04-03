@@ -1,3 +1,10 @@
+## [1.30.4](https://gitlab.com/opalmedapps/qplus/compare/v1.30.3...v1.30.4) (2024-04-03)
+
+
+### Bug Fixes
+
+* add environment variables for generic hospital names ([727753b](https://gitlab.com/opalmedapps/qplus/commit/727753b2c5d013597909b2e6b8507c0634b59df1))
+
 ## [1.30.3](https://gitlab.com/opalmedapps/qplus/compare/v1.30.2...v1.30.3) (2024-03-28)
 
 
