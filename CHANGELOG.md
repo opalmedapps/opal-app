@@ -1,3 +1,10 @@
+## [1.32.1](https://gitlab.com/opalmedapps/qplus/compare/v1.32.0...v1.32.1) (2024-04-04)
+
+
+### Bug Fixes
+
+* clear observers at logout to prevent errors ([2ea8a0d](https://gitlab.com/opalmedapps/qplus/commit/2ea8a0df2d2bc47ad22569c67d92c945b31e0411))
+
 # [1.32.0](https://gitlab.com/opalmedapps/qplus/compare/v1.31.0...v1.32.0) (2024-04-04)
 
 
