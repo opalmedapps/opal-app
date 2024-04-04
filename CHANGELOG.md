@@ -1,3 +1,10 @@
+# [1.32.0](https://gitlab.com/opalmedapps/qplus/compare/v1.31.0...v1.32.0) (2024-04-04)
+
+
+### Features
+
+* add api url and relationshiptype table to info tabs ([17cc589](https://gitlab.com/opalmedapps/qplus/commit/17cc589e4093542832430100255770b89e9c63d0))
+
 # [1.31.0](https://gitlab.com/opalmedapps/qplus/compare/v1.30.4...v1.31.0) (2024-04-04)
 
 
