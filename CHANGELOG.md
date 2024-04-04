@@ -1,3 +1,10 @@
+# [1.31.0](https://gitlab.com/opalmedapps/qplus/compare/v1.30.4...v1.31.0) (2024-04-04)
+
+
+### Features
+
+* add relationship type to patients.html and caregivers.html ([323f94a](https://gitlab.com/opalmedapps/qplus/commit/323f94a3352970d98340ec6a7da98ef61a3646c2))
+
 ## [1.30.4](https://gitlab.com/opalmedapps/qplus/compare/v1.30.3...v1.30.4) (2024-04-03)
 
 
