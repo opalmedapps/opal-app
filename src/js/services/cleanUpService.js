@@ -18,12 +18,12 @@
     CleanUp.$inject = ['ConcurrentLogin', 'User', 'UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
         'Appointments', 'TxTeamMessages', 'Questionnaires',
         'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
-        'UpdateUI', 'PatientTestResults', 'CheckInService'];
+        'UpdateUI', 'PatientTestResults', 'CheckInService', 'ProfileSelector'];
 
     function CleanUp(ConcurrentLogin, User, UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
                      Appointments, TxTeamMessages, Questionnaires,
                      Announcements, EducationalMaterial, Notifications, UserPreferences,
-                     UpdateUI, PatientTestResults, CheckInService) {
+                     UpdateUI, PatientTestResults, CheckInService, ProfileSelector) {
         let service = {
             clear: clear,
             clearSensitive: clearSensitive
@@ -50,6 +50,7 @@
             UpdateUI.clearUpdateUI();
             CheckInService.clear();
             ConcurrentLogin.clearConcurrentLogin();
+            ProfileSelector.clearProfile();
         }
 
         function clearSensitive() {

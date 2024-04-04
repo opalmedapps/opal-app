@@ -142,6 +142,7 @@ import {Observer} from "../models/utility/observer";
         function clearProfile() {
             patientList = [];
             currentSelectedProfile = null;
+            profileObserver.clear();
         }
     }
 })();
