@@ -12,24 +12,31 @@
 
 export class Observer {
     /**
-     * @desc An array of functions to call when the state managed by this observer changes.
+     * @description An array of functions to call when the state managed by this observer changes.
      * @type {function[]}
      */
     observers = [];
 
     /**
-     * @desc Attaches an observer function to this object. This function will be called by notify().
-     * @param fun The observer function to attach to this object.
+     * @description Attaches an observer function to this object. This function will be called by notify().
+     * @param {function} fun The observer function to attach to this object.
      */
     attach(fun) {
         this.observers.push(fun);
     }
 
     /**
-     * @desc This function should be called when the observed state changes, to notify all attached observers
-     *       of a change.
+     * @description Notifies all attached observers of a change.
+     *              This function should be called whenever the observed state changes.
      */
     notify() {
         this.observers.forEach(fun => fun());
+    }
+
+    /**
+     * @description Unsubscribes all observer functions attached to this object.
+     */
+    clear() {
+        this.observers = [];
     }
 }

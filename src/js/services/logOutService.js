@@ -5,11 +5,11 @@
         .module('MUHCApp')
         .factory('LogOutService', LogOutService);
 
-    LogOutService.$inject = ['Firebase', 'RequestToServer', 'CleanUp', '$window', 'UserAuthorizationInfo', 'ProfileSelector',
+    LogOutService.$inject = ['Firebase', 'RequestToServer', 'CleanUp', '$window', 'UserAuthorizationInfo',
         '$state', 'Constants', 'EncryptionService'];
 
     /* @ngInject */
-    function LogOutService(Firebase, RequestToServer, CleanUp, $window, UserAuthorizationInfo, ProfileSelector,
+    function LogOutService(Firebase, RequestToServer, CleanUp, $window, UserAuthorizationInfo,
                            $state, Constants, EncryptionService) {
         var service = {
             logOut: logOut
@@ -34,8 +34,6 @@
                 let refCurrentUser = Firebase.getDBRef(`logged_in_users/${UserAuthorizationInfo.getUsername()}`);
                 Firebase.remove(refCurrentUser);
             }
-
-            ProfileSelector.clearProfile();
 
             loadingmodal.hide();
 
