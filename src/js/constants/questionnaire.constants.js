@@ -50,6 +50,7 @@
             QUESTIONNAIRE_PURPOSES: ['clinical', 'research', 'quality', 'consent', 'clerical', 'opal'],
             BACKEND_ERROR_CODES: {
                 'LOCKING_ERROR': '-8',
+                'NOT_ALLOWED_TO_ANSWER': 'Not allowed'
             }
         });
 })();

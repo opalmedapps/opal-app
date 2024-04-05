@@ -914,6 +914,12 @@
                     $filter('translate')("TITLE"),
                 );
             }
+            else if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
+                    $filter('translate')("TITLE"),
+                );
+            }
             else NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"));
         }
 
@@ -931,6 +937,12 @@
             if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
                 NativeNotification.showNotificationAlert(
                     $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
                     $filter('translate')("TITLE"),
                 );
             }
