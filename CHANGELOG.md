@@ -1,3 +1,10 @@
+# [1.33.0](https://gitlab.com/opalmedapps/qplus/compare/v1.32.1...v1.33.0) (2024-04-05)
+
+
+### Features
+
+* show an alert if caregiver is not allowed to answer questionnaire on behalf of the patient ([1a5473c](https://gitlab.com/opalmedapps/qplus/commit/1a5473cb174f6bb9285100e15e737374aa1a2574))
+
 ## [1.32.1](https://gitlab.com/opalmedapps/qplus/compare/v1.32.0...v1.32.1) (2024-04-04)
 
 
