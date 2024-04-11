@@ -53,10 +53,7 @@ const config = env => {
 				watch: true,
 			},
 			client: {
-				overlay: {
-					errors: true,
-					warnings: false,
-				},
+				overlay: false,
 				progress: true,
 			},
 			compress: true,
