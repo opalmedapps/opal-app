@@ -1,3 +1,10 @@
+## [1.33.1](https://gitlab.com/opalmedapps/qplus/compare/v1.33.0...v1.33.1) (2024-04-11)
+
+
+### Bug Fixes
+
+* remove request to server for account change upon login ([85bb7e4](https://gitlab.com/opalmedapps/qplus/commit/85bb7e41fb8489075cf5f89dbf49ebf261b047cd))
+
 # [1.33.0](https://gitlab.com/opalmedapps/qplus/compare/v1.32.1...v1.33.0) (2024-04-05)
 
 
