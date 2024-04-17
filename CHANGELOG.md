@@ -1,3 +1,10 @@
+## [1.33.2](https://gitlab.com/opalmedapps/qplus/compare/v1.33.1...v1.33.2) (2024-04-17)
+
+
+### Bug Fixes
+
+* fix opening educational material booklets from notifications ([404cbd0](https://gitlab.com/opalmedapps/qplus/commit/404cbd07024c2a1c4cdf6c337626d09cdc1db6d9))
+
 ## [1.33.1](https://gitlab.com/opalmedapps/qplus/compare/v1.33.0...v1.33.1) (2024-04-11)
 
 
