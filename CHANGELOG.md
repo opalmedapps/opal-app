@@ -1,3 +1,10 @@
+## [1.33.3](https://gitlab.com/opalmedapps/qplus/compare/v1.33.2...v1.33.3) (2024-04-25)
+
+
+### Bug Fixes
+
+* **deps:** add custom filter to display lab test results in given timezone ([8a22b69](https://gitlab.com/opalmedapps/qplus/commit/8a22b69e0ab75cb091b25b22d7925a9c27dc6f47))
+
 ## [1.33.2](https://gitlab.com/opalmedapps/qplus/compare/v1.33.1...v1.33.2) (2024-04-17)
 
 
