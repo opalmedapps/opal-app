@@ -30,8 +30,8 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
 
     // Title mapping depending on educational material category
     const CATEGORY_TITLE_MAP = {
-        clinical: 'EDUCATION',
-        research: 'REFERENCE_MATERIAL',
+        clinical: 'EDUCATION_SHORT',
+        research: 'RESEARCH_REFERENCE_SHORT',
     };
 
      // Variables for education material notifications
