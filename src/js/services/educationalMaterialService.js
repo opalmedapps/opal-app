@@ -129,19 +129,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             }
         }
     }
-    // Returns educational material object matching that EducationalMaterialSerNum parameter
-    // is returned as a service function in return{} section: getEducationaMaterialBySerNum
-    function getEducationalMaterialByControlSerNum(cserNum)
-    {
 
-
-        for (var i = 0; i < educationalMaterialArray.length; i++) {
-            if(educationalMaterialArray[i].EducationalMaterialControlSerNum==cserNum)
-            {
-                return angular.copy(educationalMaterialArray[i]);
-            }
-        }
-    }
     //Formats the input dates and gets it ready for controllers, updates announcementsArray
     function addEducationalMaterial(edumaterial)
     {
