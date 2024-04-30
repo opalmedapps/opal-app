@@ -1,3 +1,10 @@
+## [1.33.4](https://gitlab.com/opalmedapps/qplus/compare/v1.33.3...v1.33.4) (2024-04-30)
+
+
+### Bug Fixes
+
+* fix password reset issue and timestamp decryption issue ([f1f02ef](https://gitlab.com/opalmedapps/qplus/commit/f1f02eff6a6a6bac31ce0ddf8fcd9df243cfcb5f))
+
 ## [1.33.3](https://gitlab.com/opalmedapps/qplus/compare/v1.33.2...v1.33.3) (2024-04-25)
 
 
