@@ -20,11 +20,12 @@
         'NavigatorParameters',
         'Params',
         'Questionnaires',
-        'UpdateUI'
+        'UpdateUI',
+        'ProfileSelector'
     ];
 
     /* @ngInject */
-    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires, UpdateUI) {
+    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires, UpdateUI, ProfileSelector) {
         let vm = this;
 
         // constants
@@ -91,8 +92,11 @@
             // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
             if (vm.refreshQuestionnaires) {
                 await vm.refreshQuestionnaires();
+                let relationshipType = ProfileSelector.getActiveProfile().relationship_type.role_type;
+                let answerable = ProfileSelector.getActiveProfile().relationship_type.can_answer_questionnaire;
                 // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
-                if (!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) {
+                // If the relationship type is not 'SELF' and can_answer_questionnaire is False, the questionnaire cannot be opened
+                if ((!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) || (relationshipType !== 'SELF' && !answerable)) {
                     NativeNotification.showNotificationAlert(
                         $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
                         $filter('translate')("TITLE"),
