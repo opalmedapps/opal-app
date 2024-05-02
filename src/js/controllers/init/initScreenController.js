@@ -67,10 +67,14 @@ import '../../../css/views/init-page.view.css';
 		////////////////
 
 		function activate() {
+			// document.addEventListener('deviceready', function () {
+			// 	navigator.splashscreen.hide();
+			// 	console.log("DEVICE IS READY");
+			// });
 
 			DynamicContent.ensureInitialized().then(() => {
 				// Read the Message Of The Day from [dev|qa|staging|preprod|prod|etc.]_serviceStatus_[EN|FR].php on depDocs
-				return DynamicContent.getPageContent(OPAL_CONFIG.settings.messageOfTheDayKey);
+				return Promise.resolve({data: {'Attention' : 'Opal is currently experiencing difficulties accessing clinical notes.'}});
 
 			}).then(response => {
 				// Save the Message Of The Day
@@ -115,17 +119,19 @@ import '../../../css/views/init-page.view.css';
 		}
 
 		function showMessageOfTheDay() {
-			if (vm.globalMessageDescription !== '') {
-				if (!vm.hasShownMessageOfTheDay) {
-					Toast.showToast({
-						message: vm.globalMessage + "\n" + vm.globalMessageDescription,
-						fontSize: 18,
-						durationWordsPerMinute: 80, // Slow down the message of the day
-						positionOffset: 30,
-					});
-					vm.hasShownMessageOfTheDay = true;
+			$timeout(function () {
+				if (vm.globalMessageDescription !== '') {
+					if (!vm.hasShownMessageOfTheDay) {
+						Toast.showToast({
+							message: vm.globalMessage + "\n" + vm.globalMessageDescription,
+							fontSize: 18,
+							durationWordsPerMinute: 80, // Slow down the message of the day
+							positionOffset: 30,
+						});
+						vm.hasShownMessageOfTheDay = true;
+					}
 				}
-			}
+			}, 5000); // Add a delay equivalent to SplashScreenDelay to ensure message is not hidden by splash screen
 		}
 
 		/**
