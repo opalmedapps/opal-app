@@ -1,3 +1,10 @@
+## [1.33.5](https://gitlab.com/opalmedapps/qplus/compare/v1.33.4...v1.33.5) (2024-05-03)
+
+
+### Bug Fixes
+
+* add "In Progress By" label to questionnaires ([60260d6](https://gitlab.com/opalmedapps/qplus/commit/60260d60573d270d9b56b4023137a20794b61e30))
+
 ## [1.33.4](https://gitlab.com/opalmedapps/qplus/compare/v1.33.3...v1.33.4) (2024-04-30)
 
 
