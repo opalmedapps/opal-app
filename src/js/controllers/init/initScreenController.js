@@ -115,17 +115,19 @@ import '../../../css/views/init-page.view.css';
 		}
 
 		function showMessageOfTheDay() {
-			if (vm.globalMessageDescription !== '') {
-				if (!vm.hasShownMessageOfTheDay) {
-					Toast.showToast({
-						message: vm.globalMessage + "\n" + vm.globalMessageDescription,
-						fontSize: 18,
-						durationWordsPerMinute: 80, // Slow down the message of the day
-						positionOffset: 30,
-					});
-					vm.hasShownMessageOfTheDay = true;
+			$timeout(function () {
+				if (vm.globalMessageDescription !== '') {
+					if (!vm.hasShownMessageOfTheDay) {
+						Toast.showToast({
+							message: vm.globalMessage + "\n" + vm.globalMessageDescription,
+							fontSize: 18,
+							durationWordsPerMinute: 80, // Slow down the message of the day
+							positionOffset: 30,
+						});
+						vm.hasShownMessageOfTheDay = true;
+					}
 				}
-			}
+			}, Constants.app ? 5000 : 0); // Add a delay on mobile equivalent to length of SplashScreenDelay to ensure message is not hidden by splash screen
 		}
 
 		/**
