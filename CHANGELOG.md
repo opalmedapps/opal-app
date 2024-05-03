@@ -1,3 +1,10 @@
+## [1.33.6](https://gitlab.com/opalmedapps/qplus/compare/v1.33.5...v1.33.6) (2024-05-03)
+
+
+### Bug Fixes
+
+* add delay to message of the day display (QSCCD-2139) ([2164a4b](https://gitlab.com/opalmedapps/qplus/commit/2164a4b7835fe5b07d78d92728c2bbdc8a74ce5a))
+
 ## [1.33.5](https://gitlab.com/opalmedapps/qplus/compare/v1.33.4...v1.33.5) (2024-05-03)
 
 
