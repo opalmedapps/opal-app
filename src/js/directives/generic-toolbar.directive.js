@@ -18,7 +18,6 @@
             scope: {
                 title: '@',
                 backButton: '=?',
-                styleClass: '=',
             },
             transclude: {
                 'leftContentSlot': '?leftContent',
@@ -27,7 +26,7 @@
             template: `
                 <ons-toolbar fixed-style>
                     <div class="left" ng-transclude="leftContentSlot" ng-style="iosStyleFix"><ons-back-button ng-hide="backButton === false">{{"BACK"|translate}}</ons-back-button></div>
-                    <div class="center overflow-text-ellipsis" ng-class="styleClass" ng-style="iosStyleFix">{{title}}</div>
+                    <div class="center toolbar-title overflow-text-ellipsis" ng-style="iosStyleFix">{{title}}</div>
                     <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix"></div>
                 </ons-toolbar>
             `,
