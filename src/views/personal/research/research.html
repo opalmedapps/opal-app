@@ -57,7 +57,7 @@
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <ons-icon icon="ion-clipboard" size="2x" style="color:darkslateblue"></ons-icon><span
+                        <ons-icon icon="ion-clipboard" size="2x" style="color: #607d8b"></ons-icon><span
                             class="notification"
                             ng-show="tab.researchQuestionnairesUnreadNumber>0">{{tab.researchQuestionnairesUnreadNumber}}</span>
                     </div>
@@ -75,8 +75,10 @@
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <img style="width: 35px;" src="./img/file-signature.png"><span class="notification"
-                            ng-show="tab.consentQuestionnairesUnreadNumber>0">{{tab.consentQuestionnairesUnreadNumber}}</span>
+                        <img style="width: 35px; margin-left: 10px" src="./img/file-signature.png">
+                        <span class="notification" ng-show="tab.consentQuestionnairesUnreadNumber>0" style="margin-left: -15px">
+                            {{tab.consentQuestionnairesUnreadNumber}}
+                        </span>
                     </div>
                 </ons-col>
                 <ons-col>
