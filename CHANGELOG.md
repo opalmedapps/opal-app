@@ -1,3 +1,11 @@
+## [1.33.8](https://gitlab.com/opalmedapps/qplus/compare/v1.33.7...v1.33.8) (2024-05-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency moment-timezone to v0.5.45 ([093d81f](https://gitlab.com/opalmedapps/qplus/commit/093d81f78f0864d73dbfac542243d154a1549a60))
+* move the "Information" page earlier in the Opal tour ([bc131de](https://gitlab.com/opalmedapps/qplus/commit/bc131dec8ac1dccb012d59933aeb8942dca7d70b))
+
 ## [1.33.7](https://gitlab.com/opalmedapps/qplus/compare/v1.33.6...v1.33.7) (2024-05-05)
 
 
