@@ -270,18 +270,10 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         {
             let educationalMaterialArrayByCategory = [];
 
-            // reset number of unread educational material on reload
-            numberOfUnreadMaterial['clinical'] = 0;
-            numberOfUnreadMaterial['research'] = 0;
-
             educationalMaterialArray.forEach(function(edumaterial){
                 // get material for specified category
                 if(edumaterial.Category === eduCategory){
                     educationalMaterialArrayByCategory.push(edumaterial);
-                }
-                // count number of unread materials for both categories
-                if(edumaterial.ReadStatus === '0' && numberOfUnreadMaterial.hasOwnProperty(edumaterial.Category)){
-                    numberOfUnreadMaterial[edumaterial.Category] += 1;
                 }
             });
 
@@ -315,6 +307,14 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         getNumberOfUnreadEducationalMaterials:function() 
         {
             return this.getUnreadEducationalMaterials().length;
+        },
+        /**
+         * @description Saves the number of unread materials for a given purpose.
+         * @param {string} purpose The purpose of the unread materials.
+         * @param {number} unreadNum The number of unread materials.
+         */
+        setNumberOfUnreadMaterialsByPurpose: (purpose, unreadNum) => {
+            numberOfUnreadMaterial[purpose] = unreadNum;
         },
         /**
          *@ngdoc method

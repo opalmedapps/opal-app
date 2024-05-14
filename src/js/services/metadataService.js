@@ -23,16 +23,14 @@
         .module('MUHCApp')
         .factory('MetaData', MetaData);
 
-    MetaData.$inject = ['Appointments', 'Documents', 'TxTeamMessages', 'Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial', 'Studies'];
+    MetaData.$inject = ['Appointments', 'Documents', 'TxTeamMessages', 'Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial'];
 
-    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial, Studies) {
+    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial) {
 
         //you only need to use this service the first time entering a tab
         var firstTimeHome = true;
         var firstTimePersonal = true;
         var firstTimeGeneral = true;
-        var firstTimeEducational = true;
-        var firstTimeResearch = true;
 
         var personalTabData = {
             appointmentsUnreadNumber: null,
@@ -52,7 +50,6 @@
         };
 
         var researchTabData = {
-            studiesUnreadNumber: null,
             researchQuestionnairesUnreadNumber: null,
             researchEduMaterialsUnreadNumber: null,
             consentQuestionnairesUnreadNumber: null
@@ -63,21 +60,14 @@
 
         var MetaData = {
             init: init,
-            fetchPersonalMeta: fetchPersonalMeta,
             fetchHomeMeta: fetchHomeMeta,
-            fetchGeneralMeta: fetchGeneralMeta,
             fetchEducationalMeta: fetchEducationalMeta,
-            fetchResearchMeta: () => researchTabData,
             isFirstTimePersonal: isFirstTimePersonal,
             isFirstTimeHome: isFirstTimeHome,
             isFirstTimeGeneral: isFirstTimeGeneral,
-            isFirstTimeEducational: isFirstTimeEducational,
-            isFirstTimeResearch: () => firstTimeResearch,
             setFetchedPersonal: setFetchedPersonal,
             setFetchedHome: setFetchedHome,
             setFetchedGeneral: setFetchedGeneral,
-            setFetchedEducational: setFetchedEducational,
-            setFetchedResearch: setFetchedResearch,
             noEduMaterial: noEduMaterial,
         };
 
@@ -118,7 +108,7 @@
                     researchTabData.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('consent');
 
                     //sum all notifications in researchTabData
-                    personalTabData.researchUnreadNumber = researchTabData.studiesUnreadNumber + researchTabData.researchQuestionnairesUnreadNumber
+                    personalTabData.researchUnreadNumber = researchTabData.researchQuestionnairesUnreadNumber
                         + researchTabData.researchEduMaterialsUnreadNumber + researchTabData.consentQuestionnairesUnreadNumber;
                 }).catch(function (error) {
                     // Unable to load questionnaires
@@ -137,20 +127,12 @@
             firstTimeHome = false;
         }
 
-        function fetchPersonalMeta() {
-            return personalTabData;
-        }
-
         function isFirstTimePersonal() {
             return firstTimePersonal;
         }
 
         function setFetchedPersonal() {
             firstTimePersonal = false;
-        }
-
-        function fetchGeneralMeta() {
-            return generalTabData;
         }
 
         function setFetchedGeneral() {
@@ -165,22 +147,8 @@
             return eduMaterials;
         }
 
-        function isFirstTimeEducational() {
-            return firstTimeEducational;
-        }
-
-        function setFetchedEducational() {
-            firstTimeEducational = false;
-        }
-
         function noEduMaterial() {
             return noMaterials;
         }
-
-        function setFetchedResearch() {
-            firstTimeResearch = false;
-        }
-
     }
-
 })();

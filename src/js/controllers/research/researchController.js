@@ -13,11 +13,11 @@
         .module('MUHCApp')
         .controller('ResearchController', ResearchController);
 
-    ResearchController.$inject = ['EducationalMaterial', 'MetaData', 'NavigatorParameters', 'Questionnaires', 'Studies',
-        'UserHospitalPreferences'];
+    ResearchController.$inject = ['$scope', '$timeout', 'EducationalMaterial', 'MetaData', 'NavigatorParameters',
+        'Params', 'ProfileSelector', 'Questionnaires', 'RequestToServer', 'Studies', 'UserHospitalPreferences'];
 
-    function ResearchController(EducationalMaterial, MetaData, NavigatorParameters, Questionnaires, Studies,
-                                UserHospitalPreferences) {
+    function ResearchController($scope, $timeout, EducationalMaterial, MetaData, NavigatorParameters,
+                                Params, ProfileSelector, Questionnaires, RequestToServer, Studies, UserHospitalPreferences) {
         let vm = this;
 
         vm.allowedModules = {};
@@ -42,12 +42,12 @@
 
             bindEvents();
             configureSelectedHospital();
-            setMetaData();
             setBadges();
         }
 
         function bindEvents() {
             navigator.on('prepop', () => setBadges());
+            $scope.$on('$destroy', () => navigator.off('prepop'));
         }
 
         /**
@@ -58,21 +58,34 @@
             vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
         }
 
-        function setMetaData() {
-            if (MetaData.isFirstTimeResearch()) {
-                var meta = MetaData.fetchResearchMeta();
-                vm.studiesUnreadNumber = meta.studiesUnreadNumber;
-                vm.researchQuestionnairesUnreadNumber = meta.researchQuestionnairesUnreadNumber;
-                vm.consentQuestionnairesUnreadNumber = meta.consentQuestionnairesUnreadNumber;
-                MetaData.setFetchedResearch();
+        async function setBadges() {
+            try {
+                const patientSerNum = ProfileSelector.getPatientSerNum();
+                const requestConfig = Params.API.ROUTES.CHART
+                const result = await RequestToServer.apiRequest({
+                    ...requestConfig,
+                    url: `${requestConfig.url}${patientSerNum}/`
+                });
+                await $timeout(() => {
+                    vm.researchReferenceUnreadNumber = parseInt(result.data.unread_research_reference_count);
+                    vm.researchQuestionnairesUnreadNumber = parseInt(result.data.unread_research_questionnaire_count);
+                    vm.consentQuestionnairesUnreadNumber = parseInt(result.data.unread_consent_questionnaire_count);
+                    EducationalMaterial.setNumberOfUnreadMaterialsByPurpose(
+                        'research',
+                        vm.researchReferenceUnreadNumber,
+                    );
+                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
+                        'research',
+                        vm.researchQuestionnairesUnreadNumber,
+                    );
+                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
+                        'consent',
+                        vm.consentQuestionnairesUnreadNumber,
+                    );
+                });
+            } catch (error) {
+                console.error(error);
             }
-        }
-
-        function setBadges() {
-            vm.studiesUnreadNumber = Studies.getNumberUnreadStudies();
-            vm.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('research');
-            vm.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('consent');
-            vm.eduMaterialUnreadNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research');
         }
 
         function openResearchStudies() {
