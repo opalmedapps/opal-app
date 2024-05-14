@@ -95,7 +95,7 @@
             // Use $timeout to compute the changes after vm.passwordIsValid is set
             $timeout(() => {
                 vm.newUpdate = false;
-                vm.disableButton = !vm.passwordIsValid || vm.passwordConfirmationInvalid();
+                vm.disableButton = !vm.oldValue || !vm.passwordIsValid || vm.passwordConfirmationInvalid();
             });
         }
 
