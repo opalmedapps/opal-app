@@ -1,3 +1,10 @@
+## [1.33.9](https://gitlab.com/opalmedapps/qplus/compare/v1.33.8...v1.33.9) (2024-05-14)
+
+
+### Bug Fixes
+
+* prevent password change submission if no old value is provided ([946bd46](https://gitlab.com/opalmedapps/qplus/commit/946bd46496287be20d8c220d5fd113a40a513583))
+
 ## [1.33.8](https://gitlab.com/opalmedapps/qplus/compare/v1.33.7...v1.33.8) (2024-05-14)
 
 
