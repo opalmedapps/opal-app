@@ -13,10 +13,10 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['$timeout', 'EducationalMaterial', 'NavigatorParameters', 'NetworkStatus', 'Params',
+    PersonalTabController.$inject = ['$timeout', 'NavigatorParameters', 'NetworkStatus', 'Params',
         'ProfileSelector', 'Questionnaires', 'RequestToServer', 'UserHospitalPreferences', 'UserPreferences'];
 
-    function PersonalTabController($timeout, EducationalMaterial, NavigatorParameters, NetworkStatus, Params,
+    function PersonalTabController($timeout, NavigatorParameters, NetworkStatus, Params,
         ProfileSelector, Questionnaires, RequestToServer, UserHospitalPreferences, UserPreferences) {
 
         let vm = this;
@@ -87,22 +87,6 @@
                     vm.researchReferenceUnreadNumber = parseInt(result.data.unread_research_reference_count);
                     vm.researchQuestionnairesUnreadNumber = parseInt(result.data.unread_research_questionnaire_count);
                     vm.consentQuestionnairesUnreadNumber = parseInt(result.data.unread_consent_questionnaire_count);
-                    EducationalMaterial.setNumberOfUnreadMaterialsByPurpose(
-                        'clinical',
-                        vm.educationalMaterialsUnreadNumber,
-                    );
-                    EducationalMaterial.setNumberOfUnreadMaterialsByPurpose(
-                        'research',
-                        vm.researchReferenceUnreadNumber,
-                    );
-                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
-                        'research',
-                        vm.researchQuestionnairesUnreadNumber,
-                    );
-                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
-                        'consent',
-                        vm.consentQuestionnairesUnreadNumber,
-                    );
                     vm.researchUnreadNumber = calculateResearchBadge();
 
                     // Refresh the visible menu items based on access level when changing profiles

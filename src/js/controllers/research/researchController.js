@@ -13,10 +13,10 @@
         .module('MUHCApp')
         .controller('ResearchController', ResearchController);
 
-    ResearchController.$inject = ['$scope', '$timeout', 'EducationalMaterial', 'MetaData', 'NavigatorParameters',
+    ResearchController.$inject = ['$scope', '$timeout', 'NavigatorParameters',
         'Params', 'ProfileSelector', 'Questionnaires', 'RequestToServer', 'Studies', 'UserHospitalPreferences'];
 
-    function ResearchController($scope, $timeout, EducationalMaterial, MetaData, NavigatorParameters,
+    function ResearchController($scope, $timeout, NavigatorParameters,
                                 Params, ProfileSelector, Questionnaires, RequestToServer, Studies, UserHospitalPreferences) {
         let vm = this;
 
@@ -70,18 +70,6 @@
                     vm.researchReferenceUnreadNumber = parseInt(result.data.unread_research_reference_count);
                     vm.researchQuestionnairesUnreadNumber = parseInt(result.data.unread_research_questionnaire_count);
                     vm.consentQuestionnairesUnreadNumber = parseInt(result.data.unread_consent_questionnaire_count);
-                    EducationalMaterial.setNumberOfUnreadMaterialsByPurpose(
-                        'research',
-                        vm.researchReferenceUnreadNumber,
-                    );
-                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
-                        'research',
-                        vm.researchQuestionnairesUnreadNumber,
-                    );
-                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
-                        'consent',
-                        vm.consentQuestionnairesUnreadNumber,
-                    );
                 });
             } catch (error) {
                 console.error(error);
