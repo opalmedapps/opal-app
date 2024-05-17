@@ -174,7 +174,7 @@ For more information about versioning, please read [Versioning](https://gitlab.c
     ```plain
     email: marge@opalmedapps.ca
     password: 12345Opal!!
-    hospital: Établissement médical Opal (ÉMO)
+    hospital: Etablissement medical Opal(EMO)
     security answer (depending on the question): red, superman, meg
     ```
 
