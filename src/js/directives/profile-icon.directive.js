@@ -1,34 +1,29 @@
+
 (function () {
     'use strict';
 
     angular
         .module("MUHCApp")
-        .directive("profileTabIcon", ProfileTabIcon);
+        .directive("profileIcon", ProfileIcon);
 
-    ProfileTabIcon.$inject = ['$filter', 'ProfileSelector'];
+    ProfileIcon.$inject = ['$filter', 'ProfileSelector'];
 
     /**
-     * @name ProfileTabIcon
+     * @name ProfileIcon
      * @author David Gagne
      * @date 2022-09-23
-     * @desc Tab icon that includes a circle with initials for the active profile, and a label for the name of the tab.
+     * @desc Display the round icon with active profile initials
      */
-    function ProfileTabIcon($filter, ProfileSelector)
+    function ProfileIcon($filter, ProfileSelector)
     {
         return {
             restrict: 'E',
             scope: {
-                // Optional string: label to display under the profile icon
-                "label": "@?",
-
                 // Optional boolean: if true, the profile icon syncs with its parent ons tab (colour when selected, grey when unselected)
                 "syncWithOnsToolbar": "<?",
             },
             template: `
-                <div class="tab">
-                    <span class="tab-icon profile-icon" ng-style="profileColor">{{patientInitials}}</span>
-                    <div class="tab-label" ng-style="fontColor">{{label}}</div>
-                </div>
+                <span class="tab-icon profile-icon" ng-style="profileColor">{{patientInitials}}</span>
             `,
             link: function (scope, element) {
                 // Needed to force an update to the icon on the tab bar in certain cases
@@ -50,14 +45,12 @@
                         // In case of issues, fall back on the default tab color
                         const selectedColor = activeProfile?.color || '#1284ff';
                         const isOnActiveTab = element.parents('ons-tab.active').length > 0;
-                        scope.color = isOnActiveTab ? selectedColor : '#666';
+                        scope.profileColor = {
+                            'background-color': isOnActiveTab ? selectedColor : '#666',
+                        };
                     }
                     // Otherwise, the profile icon is always in color (or can fall back on grey in case of errors)
-                    else scope.color = activeProfile?.color || 'grey';
-
-                    // Wrap the chosen values for ng-style
-                    scope.profileColor = {'background-color': scope.color};
-                    scope.fontColor = {'color': scope.color};
+                    else scope.profileColor = {'background-color': activeProfile?.color || 'grey'};
                 }
             }
         };
