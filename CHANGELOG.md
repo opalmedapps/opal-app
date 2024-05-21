@@ -1,3 +1,25 @@
+## [1.33.9](https://gitlab.com/opalmedapps/qplus/compare/v1.33.8...v1.33.9) (2024-05-14)
+
+
+### Bug Fixes
+
+* prevent password change submission if no old value is provided ([946bd46](https://gitlab.com/opalmedapps/qplus/commit/946bd46496287be20d8c220d5fd113a40a513583))
+
+## [1.33.8](https://gitlab.com/opalmedapps/qplus/compare/v1.33.7...v1.33.8) (2024-05-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency moment-timezone to v0.5.45 ([093d81f](https://gitlab.com/opalmedapps/qplus/commit/093d81f78f0864d73dbfac542243d154a1549a60))
+* move the "Information" page earlier in the Opal tour ([bc131de](https://gitlab.com/opalmedapps/qplus/commit/bc131dec8ac1dccb012d59933aeb8942dca7d70b))
+
+## [1.33.7](https://gitlab.com/opalmedapps/qplus/compare/v1.33.6...v1.33.7) (2024-05-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v10.8.1 ([42a3930](https://gitlab.com/opalmedapps/qplus/commit/42a39309e6d289dbd34f16251ba8ab342dc9f49c))
+
 ## [1.33.6](https://gitlab.com/opalmedapps/qplus/compare/v1.33.5...v1.33.6) (2024-05-03)
 
 
