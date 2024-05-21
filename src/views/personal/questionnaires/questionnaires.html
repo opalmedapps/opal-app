@@ -1,5 +1,5 @@
 <ons-page ng-controller="QuestionnaireMainController as vm">
-    <generic-toolbar title="{{'QUESTIONNAIRE_HOME'|translate}}">
+    <generic-toolbar title="{{'QUESTIONNAIRE_HOME'|translate}}" style-class="fontSizeTitle">
         <right-content>
             <!--the words leading to begin / resume questionnaire depending on the status of the questionnaire-->
             <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == vm.allowedStatus.NEW_QUESTIONNAIRE_STATUS && !vm.loadingQuestionnaire"
