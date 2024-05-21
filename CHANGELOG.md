@@ -1,3 +1,10 @@
+## [1.33.10](https://gitlab.com/opalmedapps/qplus/compare/v1.33.9...v1.33.10) (2024-05-21)
+
+
+### Bug Fixes
+
+* rename Educational Material to Reference Material ([d8db979](https://gitlab.com/opalmedapps/qplus/commit/d8db979b355d2069a1f9cabed16537fb291d8c0e))
+
 ## [1.33.9](https://gitlab.com/opalmedapps/qplus/compare/v1.33.8...v1.33.9) (2024-05-14)
 
 
