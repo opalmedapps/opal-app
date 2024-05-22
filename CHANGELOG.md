@@ -1,3 +1,10 @@
+## [1.33.11](https://gitlab.com/opalmedapps/qplus/compare/v1.33.10...v1.33.11) (2024-05-22)
+
+
+### Bug Fixes
+
+* adjust the space allocation in the upper toolbar ([9eb1ef2](https://gitlab.com/opalmedapps/qplus/commit/9eb1ef2e7a23b13d1f9a0561cdb2ff574d90922d))
+
 ## [1.33.10](https://gitlab.com/opalmedapps/qplus/compare/v1.33.9...v1.33.10) (2024-05-21)
 
 
