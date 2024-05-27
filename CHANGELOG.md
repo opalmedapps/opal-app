@@ -1,3 +1,10 @@
+## [1.33.12](https://gitlab.com/opalmedapps/qplus/compare/v1.33.11...v1.33.12) (2024-05-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v10.12.1 ([3fb17a4](https://gitlab.com/opalmedapps/qplus/commit/3fb17a4cf194c98a9c44cf2ea3abbaa09bf691cf))
+
 ## [1.33.11](https://gitlab.com/opalmedapps/qplus/compare/v1.33.10...v1.33.11) (2024-05-22)
 
 
