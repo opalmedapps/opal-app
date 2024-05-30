@@ -1,3 +1,17 @@
+## [1.33.14](https://gitlab.com/opalmedapps/qplus/compare/v1.33.13...v1.33.14) (2024-05-30)
+
+
+### Bug Fixes
+
+* grey out the Chart toolbar icon when unselected ([5e53d7c](https://gitlab.com/opalmedapps/qplus/commit/5e53d7c9d995d0317839cafccc85606f4f22bc45))
+
+## [1.33.13](https://gitlab.com/opalmedapps/qplus/compare/v1.33.12...v1.33.13) (2024-05-30)
+
+
+### Bug Fixes
+
+* refactor research menu badges and delete dead badge code ([b1beb8c](https://gitlab.com/opalmedapps/qplus/commit/b1beb8c2d0e6b4e7ad9f4dc903be062fc1d2766b))
+
 ## [1.33.12](https://gitlab.com/opalmedapps/qplus/compare/v1.33.11...v1.33.12) (2024-05-27)
 
 
