@@ -31,7 +31,6 @@
 
         var param;
         let navigator;
-        var navigatorPage;
 
         vm.loadingContents = false;
         vm.errorLoadingContents = false;
@@ -64,7 +63,6 @@
             //Getting Parameters from navigation
             param = NavigatorParameters.getParameters();
             navigator = NavigatorParameters.getNavigator();
-            navigatorPage = param.Navigator;
 
             bindEvents();
 
@@ -148,8 +146,11 @@
             try {
                 let nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
                 if (nextStatus !== -1) {
-                    NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
-                    navigator.pushPage(nextStatus.Url);
+                    navigator.pushPage(nextStatus.Url, {
+                        'Index': index,
+                        'Booklet': vm.edumaterial,
+                        'TableOfContents': vm.tableOfContents,
+                    });
 
                     /* Most calls to logSubClickedEduMaterial() are handled by the function handlePostChangeEventCarousel()
                      * in bookletMaterialController.js. However, the one special case (clicking on the first material in
@@ -284,8 +285,10 @@
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             var rstep = vm.recursive_step + 1;
-            NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Post': material, 'RStep': rstep });
-            navigator.pushPage('./views/personal/education/individual-material.html');
+            navigator.pushPage('./views/personal/education/individual-material.html', {
+                'Post': material,
+                'RStep': rstep,
+            });
         }
     }
 })();

@@ -36,7 +36,6 @@
              */
 
             function activate() {
-                NavigatorParameters.setParameters({'Navigator': 'generalNavigator'});
                 NavigatorParameters.setNavigator(generalNavigator);
 
                 bindEvents();
@@ -95,7 +94,6 @@
              */
 
             function goToParking() {
-                NavigatorParameters.setParameters('generalNavigator');
                 generalNavigator.pushPage('views/general/parking/parking.html');
             }
 

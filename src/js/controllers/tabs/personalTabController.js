@@ -28,17 +28,15 @@
         vm.getDisplayData = getDisplayData;
 
         vm.personalDeviceBackButton = () => tabbar.setActiveTab(0);
-        
+
         vm.goToClinicalQuestionnaire = goToClinicalQuestionnaire;
+        vm.goToClinicalReference = goToClinicalReference;
 
         activate();
 
         //////////////////////////
 
         function activate() {
-            //It is possible for a notification to have been read such as a document since this controller has already been instantiated
-            // we will have to check to sync that number on the badges for the tabs on the personal page.
-            NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator' });
             NavigatorParameters.setNavigator(personalNavigator);
 
             // Call early to prevent flickering of hidden menu items
@@ -127,8 +125,14 @@
          * @desc Get clinical questionnaires
          */
         function goToClinicalQuestionnaire() {
-            NavigatorParameters.setParameters({ questionnairePurpose: 'clinical' });
-            personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html');
+            personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html', {questionnairePurpose: 'clinical'});
+        }
+
+        /**
+         * @desc Navigates to the clinical reference material list.
+         */
+        function goToClinicalReference() {
+            personalNavigator.pushPage('views/personal/education/education.html', {category: 'clinical'});
         }
     }
 })();

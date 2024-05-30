@@ -30,7 +30,6 @@
         vm.openInfoPage = openInfoPage;
 
         let navigator = null;
-        let navigatorName = '';
 
         activate();
 
@@ -38,7 +37,6 @@
 
         function activate() {
             navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
 
             bindEvents();
             configureSelectedHospital();
@@ -85,18 +83,15 @@
         }
 
         function openReferenceMaterial() {
-            NavigatorParameters.setParameters({ Navigator: navigatorName, category: 'research' });
-            navigator.pushPage('views/personal/education/education.html');
+            navigator.pushPage('views/personal/education/education.html', {category: 'research'});
         }
 
         function openResearchQuestionnaires() {
-            NavigatorParameters.setParameters({ questionnairePurpose: 'research' });
-            navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
+            navigator.pushPage('views/personal/questionnaires/questionnairesList.html', {questionnairePurpose: 'research'});
         }
 
         function openConsentForms() {
-            NavigatorParameters.setParameters({ questionnairePurpose: 'consent' });
-            navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
+            navigator.pushPage('views/personal/questionnaires/questionnairesList.html', {questionnairePurpose: 'consent'});
         }
 
         function openInfoPage() {

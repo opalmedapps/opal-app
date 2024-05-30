@@ -77,16 +77,10 @@ describe('CalendarController', function() {
             };
         }
 
-
         // Spies
         spyOn( UserPreferences, 'getLanguage').and.callFake( function() {
             return 'EN';
         } );
-
-
-        spyOn( NavigatorParameters, 'setParameters').and.returnValue(true);
-        spyOn( NavigatorParameters, 'getParameters').and.returnValue({Navigator: 'navigator'});
-
 
         $controller = _$controller_;
         controller = $controller('CalendarController', { NavigatorParameters: NavigatorParameters, $scope: $scope,
@@ -152,12 +146,10 @@ describe('CalendarController', function() {
 
         controller.goToAppointment(controller.appointments[0]);
         expect(spy).toHaveBeenCalledTimes(0);
-        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
         expect(spy2).toHaveBeenCalled();
 
         controller.goToAppointment(controller.appointments[1]);
         expect(spy).toHaveBeenCalled();
-        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
         expect(spy2).toHaveBeenCalled();
     });
 

@@ -23,7 +23,6 @@
                                       UserHospitalPreferences, LogOutService, User) {
 
         var vm = this;
-        var navigatorName;
         vm.accountDeviceBackButton = () => tabbar.setActiveTab(0);
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToUpdateAccountField = (param, animation) => settingsNavigator.pushPage('views/settings/update-account-field.html', {param:param},{ animation : animation });
@@ -34,11 +33,9 @@
         ////////////////
 
         function activate() {
-            loadSettings();
-            // Setting our parameters for pushing and popping pages
-            NavigatorParameters.setParameters({'Navigator':'settingsNavigator'});
             NavigatorParameters.setNavigator(settingsNavigator);
-            navigatorName = NavigatorParameters.getNavigatorName();
+
+            loadSettings();
 
             // After a page is popped reintialize the settings.
             settingsNavigator.on('postpop', () => {
@@ -64,7 +61,6 @@
         }
 
         function goToGeneralSettings() {
-            NavigatorParameters.setParameters({'Navigator': navigatorName});
             settingsNavigator.pushPage('./views/init/init-settings.html');
         }
     }

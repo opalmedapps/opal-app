@@ -23,7 +23,7 @@
         var vm = this;
         var page;
         var parameters;
-        var navigatorName;
+        var navigator;
 
         // Values set by the password strength checker directive
         vm.passwordIsValid = false;
@@ -42,12 +42,11 @@
 
         //Sets all the account settings depending on the field that needs to be changed
         function activate() {
-            //Mappings between parameters and translation
-            //Navigator parameter
-            navigatorName = NavigatorParameters.getParameters().Navigator;
-            page = $window[navigatorName].getCurrentPage();
+            navigator = NavigatorParameters.getNavigator();
+            page = navigator.getCurrentPage();
             parameters = page.options.param;
 
+            // Mapping between parameters and their translations
             $timeout(function () {
                 //Instantiates values and parameters
                 vm.disableButton = true;

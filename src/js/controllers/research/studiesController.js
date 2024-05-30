@@ -37,7 +37,6 @@
         vm.getStatusText = getStatusText;
 
         let navigator = null;
-        let navigatorName = '';
 
         activate();
 
@@ -45,7 +44,6 @@
 
         function activate() {
             navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
 
             loadStudies();
 
@@ -96,8 +94,7 @@
 
         function openStudy(study) {
             if (study.ReadStatus === '0') Studies.readStudy(study.patientStudyId)
-            NavigatorParameters.setParameters({ 'Navigator': navigator, 'Post': study });
-            navigator.pushPage('views/personal/research/research-studies/individual-study.html');
+            navigator.pushPage('views/personal/research/research-studies/individual-study.html', {'Post': study});
         }
 
     }

@@ -41,14 +41,11 @@ describe('AppointmentController', function() {
             return 'EN';
         } );
 
-
-        spyOn( NavigatorParameters, 'setParameters').and.returnValue(true);
-
         if(!isCorrupted){
-            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Navigator: 'navigator', Post: MockData.test_appointments[0]});
+            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Post: MockData.test_appointments[0]});
 
         } else {
-            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Navigator: 'navigator', Post: {}});
+            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Post: {}});
         }
 
         $controller = _$controller_;

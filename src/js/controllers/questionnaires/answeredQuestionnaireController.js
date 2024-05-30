@@ -36,7 +36,6 @@
         // variables for controller
         let purpose = 'default';
         let navigator = null;
-        let navigatorName = '';
 
         // constants for the view and controller
         vm.allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
@@ -71,7 +70,6 @@
 
         function activate() {
             navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
 
             let params = NavigatorParameters.getParameters();
 
@@ -119,16 +117,14 @@
          * @param {int} qIndex the index of the question to be edited
          */
         function editQuestion(sIndex, qIndex) {
-
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.replacePage('views/personal/questionnaires/questionnaires.html', {
+                animation: 'slide', // OnsenUI
                 sectionIndex: sIndex,
                 questionIndex: qIndex,
                 editQuestion: true,
                 answerQuestionnaireId: vm.questionnaire.qp_ser_num,
                 questionnairePurpose: purpose
             });
-            navigator.replacePage('views/personal/questionnaires/questionnaires.html', {animation: 'slide'});
         }
 
         /**
@@ -173,8 +169,10 @@
 
                     vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
 
-                    NavigatorParameters.setParameters({Navigator: navigatorName, questionnairePurpose: purpose});
-                    navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {animation: 'slide'});
+                    navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {
+                        animation: 'slide', // OnsenUI
+                        questionnairePurpose: purpose
+                    });
                 })
                 .catch(handleSubmitErr)
         }
@@ -381,7 +379,6 @@
          */
         function handleLoadQuestionnaireErr() {
             // go to the questionnaire list page if there is an error
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
             NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
@@ -424,7 +421,6 @@
                 vm.loadingSubmitQuestionnaire = false;
 
                 // go to the questionnaire list page if there is an error
-                NavigatorParameters.setParameters({ Navigator: navigatorName });
                 navigator.popPage();
 
                 NativeNotification.showNotificationAlert($filter('translate')("TOO_MANY_REQUESTS_CONSENT"));
@@ -432,7 +428,6 @@
                 vm.loadingSubmitQuestionnaire = false;
 
                 // go to the questionnaire list page if there is an error
-                NavigatorParameters.setParameters({ Navigator: navigatorName });
                 navigator.popPage();
 
                 NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_QUESTIONNAIRE"));

@@ -36,7 +36,6 @@
         let purpose = 'default';
         let hasGoneBackToHomeScreen = false;    // this variable is used for noting whether the user has gone back to the home screen or not because if they did, we have to update the startIndex.
         let navigator = null;
-        let navigatorName = '';
 
         // variables that can be seen from view, sorted alphabetically
         vm.beginInstructions = '';
@@ -83,7 +82,6 @@
 
         function activate() {
             navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
 
             let params = NavigatorParameters.getParameters();
 
@@ -447,14 +445,10 @@
          * @desc This function leads to the summary page
          */
         function summaryPage(){
-
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
-                answerQuestionnaireId: vm.questionnaire.qp_ser_num
-            });
-
             // go to summary page directly
-            navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html');
+            navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
+                answerQuestionnaireId: vm.questionnaire.qp_ser_num,
+            });
         }
 
         /**
@@ -905,7 +899,6 @@
          * @param {Object} error The original error object being handled.
          */
         function handleSaveAnswerErr(error) {
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
             if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
@@ -931,7 +924,6 @@
          */
         function handleLoadQuestionnaireErr(error) {
             // go to the questionnaire list page if there is an error
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
             if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {

@@ -82,7 +82,7 @@
          */
         async function goToNotification(index, notification) {
             try {
-                let params = { 'Navigator': 'homeNavigator' };
+                let params = {};
                 // By clicking on the notification for a patient in care should switch the profile behind the scenes
                 if (ProfileSelector.getActiveProfile().patient_legacy_id !== notification.PatientSerNum) {
                     params['isCareReceiver'] = true;
@@ -111,8 +111,7 @@
 
                 // Navigate to the notification target's display page
                 params['Post'] = post;
-                NavigatorParameters.updateParameters(params);
-                navigator.pushPage(notification.PageUrl);
+                navigator.pushPage(notification.PageUrl, params);
             }
             catch(error) {
                 console.error(error);

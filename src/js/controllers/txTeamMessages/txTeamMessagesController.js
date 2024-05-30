@@ -17,7 +17,9 @@
 
     /* @ngInject */
     function TxTeamMessagesController($scope, TxTeamMessages, NavigatorParameters, $timeout, $filter, Notifications, Params) {
-        var vm = this;
+        let vm = this;
+        let navigator;
+
         vm.goToTeamMessage = goToTeamMessage;
 
         // Used by patient-data-handler
@@ -28,6 +30,7 @@
         //////////////////////////////
 
         function activate(){
+            navigator = NavigatorParameters.getNavigator();
             bindEvents();
         }
 
@@ -54,13 +57,10 @@
                     Params.NOTIFICATION_TYPES.TxTeamMessage,
                 );
             }
-            NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':message});
-            personalNavigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html');
+            navigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html', {'Post': message});
         }
 
         function bindEvents() {
-            let navigator = NavigatorParameters.getNavigator();
-
             // Remove event listeners
             $scope.$on('$destroy', () => navigator.off('prepop'));
 

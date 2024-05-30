@@ -32,7 +32,6 @@
 
         // variables for controller
         let navigator = null;
-        let navigatorName = '';
         let purpose = 'default';
 
         // variables seen from view
@@ -62,7 +61,6 @@
 
         function activate() {
             navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
             let params = NavigatorParameters.getParameters();
 
             purpose = params.questionnairePurpose.toLowerCase();
@@ -102,14 +100,11 @@
             }
 
             // putting editQuestion false to claim that we are not coming from a summary page
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.pushPage('views/personal/questionnaires/questionnaires.html', {
                 answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
                 editQuestion: false,
                 questionnairePurpose: purpose
             });
-
-            navigator.pushPage('views/personal/questionnaires/questionnaires.html');
         }
 
         /**
@@ -118,12 +113,10 @@
          * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
         function goToQuestionnaireSummary(selectedQuestionnaire){
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {
+                animation: 'slide', // OnsenUI
                 answerQuestionnaireId: selectedQuestionnaire.qp_ser_num
             });
-
-            navigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {animation: 'slide'});
         }
 
         /**

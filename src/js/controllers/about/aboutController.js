@@ -76,10 +76,6 @@
         }
 
         /**
-         * navigatorName = 'initNavigator' or 'homeNavigator'
-         * navigatorName = 'initNavigator' when about.html is called from init-Screen.html (initScreenController)
-         * navigatorName = 'homeNavigator' when about.html is called from home.html (homeController)
-         *
          * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
          */
         function openTour() {

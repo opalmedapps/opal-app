@@ -59,8 +59,6 @@ describe('AnnouncementsController', function() {
             spyOn( Announcements, 'readAnnouncementBySerNum' ).and.returnValue(true);
         }
 
-        spyOn( NavigatorParameters, 'setParameters').and.returnValue(true);
-
         $controller = _$controller_;
         controller = $controller('AnnouncementsController', {Announcements: Announcements, NavigatorParameters: NavigatorParameters, $scope: $scope});
 
@@ -79,7 +77,6 @@ describe('AnnouncementsController', function() {
         expect(controller.announcements[1].ReadStatus).toBe('0');
         controller.goToAnnouncement(controller.announcements[1]);
         expect(Announcements.readAnnouncementBySerNum).toHaveBeenCalled();
-        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
         expect(controller.announcements[1].ReadStatus).toBe('1');
 
         no_announcements = true;

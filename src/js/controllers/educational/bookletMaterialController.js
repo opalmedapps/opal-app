@@ -39,7 +39,6 @@
         var vm = this;
 
         var parameters;
-        var navigatorName;
 
         vm.goBack = goBack;
         vm.goNext = goNext;
@@ -59,7 +58,6 @@
 
         function activate(){
             parameters = NavigatorParameters.getParameters();
-            navigatorName = parameters.Navigator;
 
             initBooklet();
             bindEvents();

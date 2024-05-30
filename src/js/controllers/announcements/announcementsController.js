@@ -77,10 +77,7 @@
                     [Params.NOTIFICATION_TYPES.Announcement],
                 );
             }
-            NavigatorParameters.setParameters({Navigator:'generalNavigator', Post: announcement});
-            $scope.generalNavigator.pushPage('./views/general/announcements/individual-announcement.html');
+            $scope.generalNavigator.pushPage('./views/general/announcements/individual-announcement.html', {Post: announcement});
         }
     }
 })();
-
-

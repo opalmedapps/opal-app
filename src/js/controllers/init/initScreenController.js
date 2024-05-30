@@ -134,8 +134,7 @@ import '../../../css/views/init-page.view.css';
 		 * Go to Learn About Opal
 		 */
 		function gotoLearnAboutOpal() {
-			NavigatorParameters.setParameters({'Navigator': 'initNavigator', 'isBeforeLogin': true});
-			initNavigator.pushPage('./views/home/about/about.html');
+			initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		}
 
 		/**
@@ -150,7 +149,6 @@ import '../../../css/views/init-page.view.css';
 		 * Go to general settings (About)
 		 */
 		function goToGeneralSettings() {
-			NavigatorParameters.setParameters({'Navigator': 'initNavigator'});
 			initNavigator.pushPage('./views/init/init-settings.html');
 		}
 

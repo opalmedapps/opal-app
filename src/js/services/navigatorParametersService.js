@@ -16,29 +16,7 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
      *@description Object that represents the parameters
      **/
     var navigator = null;
-    var parameters = null;
     return{
-        /**
-         *@ngdoc method
-         *@name setParameters
-         *@methodOf MUHCApp.service:NavigatorParameters
-         *@param {Object} param Parameters object, it always specifies as a property the current navigator.
-         *@description Simply sets the parameters object
-         **/
-        setParameters:function(param)
-        {
-            parameters=param;
-        },
-        /**
-         * @desc Updates some values of the saved parameters. Parameters that are not given a new value are left as-is.
-         * @param {Object} newParams Object containing the parameters to update (keys and new values).
-         */
-        updateParameters: newParams => {
-            parameters = {
-                ...parameters,
-                ...newParams,
-            }
-        },
         /**
          *@ngdoc method
          *@name setParameters
@@ -58,9 +36,7 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
          **/
         getParameters:function()
         {
-            return parameters;
-            /*parameters={};
-             return object;*/
+            return navigator.getCurrentPage().options;
         },
         /**
          *@ngdoc method

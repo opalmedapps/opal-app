@@ -15,7 +15,9 @@
 
     /* @ngInject */
     function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger, $timeout, Notifications, Params) {
-        var vm = this;
+        let vm = this;
+        let navigator;
+
         vm.noDocuments = true;
         vm.documents = [];
 
@@ -29,6 +31,7 @@
         ////////////////
 
         function activate() {
+            navigator = NavigatorParameters.getNavigator();
             Logger.sendLog('Documents', 'all');
         }
 
@@ -58,8 +61,7 @@
                     [Params.NOTIFICATION_TYPES.Document, Params.NOTIFICATION_TYPES.UpdDocument],
                 );
             }
-            NavigatorParameters.setParameters({'navigatorName':'personalNavigator', 'Post':doc});
-            personalNavigator.pushPage('./views/personal/documents/individual-document.html');
+            navigator.pushPage('./views/personal/documents/individual-document.html', {'Post': doc});
         }
     }
 })();

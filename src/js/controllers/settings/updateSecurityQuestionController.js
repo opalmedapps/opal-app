@@ -29,7 +29,6 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         // variables for controller
         let lang = UserPreferences.getLanguage();
         let navigator = null;
-        let navigatorName = '';
 
         // constants for controller
         const GET_SECURITY_QUESTION_AND_ANSWER_LIST_API = 'SecurityQuestionAnswerList';
@@ -64,7 +63,6 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          */
         function activate() {
             navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
 
             RequestToServer.sendRequestWithResponse(GET_SECURITY_QUESTION_AND_ANSWER_LIST_API)
                 .then(function(response){
@@ -163,7 +161,6 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @desc show a notification to the user in case a request to server fails
          */
         function handleLoadSecurityQuestionListRequestErr (){
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
             ons.notification.alert({

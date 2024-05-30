@@ -31,7 +31,6 @@
         let vm = this;
 
         let navigator = null;
-        let navigatorName = '';
 
         /**
          * @ngdoc property
@@ -70,7 +69,6 @@
 
         function activate() {
             navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
 
             let parameters = NavigatorParameters.getParameters();
             let language = UserPreferences.getLanguage().toUpperCase();
@@ -85,7 +83,7 @@
 
         function aboutAppointment()
         {
-            navigator.pushPage('./views/personal/appointments/about-appointment.html');
+            navigator.pushPage('./views/personal/appointments/about-appointment.html', {'Post': vm.app});
         }
 
         /**

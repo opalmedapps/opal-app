@@ -9,12 +9,15 @@
 
     /* @ngInject */
     function PatientsController($timeout, ProfileSelector) {
-        var vm = this;
+        let vm = this;
+        let navigator;
+
         vm.error = null;
         vm.message = null;
         vm.apiData;
         vm.patients;
         vm.getRelationshipStatusText = (status) => `RELATIONSHIPS_PATIENTS_STATUS_${status}`;
+        vm.goToPatientsInfo = () => navigator.pushPage('views/settings/info-page-relationship-type.html', {id: 'patients'})
 
         activate();
 
@@ -22,6 +25,7 @@
          * @description - Get list of patient related to the current user.
          */
         async function activate() {
+            navigator = NavigatorParameters.getNavigator();
             try {
                 vm.apiData = ProfileSelector.getPatientList();
             } catch (error) {

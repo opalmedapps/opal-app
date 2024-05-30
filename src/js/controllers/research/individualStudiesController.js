@@ -23,7 +23,6 @@
         vm.goToQuestionnaire = goToQuestionnaire;
 
         let navigator = null;
-        let navigatorName = '';
         let parameters = null;
 
 
@@ -33,7 +32,6 @@
 
         function activate() {
             navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
             parameters = NavigatorParameters.getParameters();
 
             vm.study = parameters.Post;
@@ -60,14 +58,10 @@
          * @param {int} questionnaireId QuestionnaireSerNum in the Questionnaire table (OpalDB)
          */
         function goToQuestionnaire(questionnaireId) {
-            NavigatorParameters.setParameters({
-                Navigator: navigator,
+            navigator.pushPage('views/personal/questionnaires/questionnaireNotifRedirect.html', {
+                animation: 'fade', // OnsenUI
                 Post: questionnaireId
             });
-            navigator.pushPage(
-                'views/personal/questionnaires/questionnaireNotifRedirect.html',
-                { animation: 'fade' }
-            );
         }
     }
 })();
