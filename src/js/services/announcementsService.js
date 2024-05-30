@@ -49,7 +49,6 @@
             setAnnouncements: setAnnouncements,
             updateAnnouncements: (array) => addAnnouncements(array),
             getAnnouncements: () => announcements,
-            getNumberUnreadAnnouncements: getNumberUnreadAnnouncements,
             getAnnouncementBySerNum: getAnnouncementBySerNum,
             readAnnouncementBySerNum: readAnnouncementBySerNum,
             readAnnouncement: readAnnouncement,
@@ -97,21 +96,6 @@
             announcements=[];
             lastUpdated = Date.now();
             addAnnouncements(array);
-        }
-
-        /**
-         *@ngdoc method
-         *@name getNumberUnreadAnnouncements
-         *@methodOf MUHCApp.service:Announcements
-         *@description Iterates through array object and returns the number of unread announcements
-         *@returns {Number} Returns number of unread news
-         **/
-        function getNumberUnreadAnnouncements() {
-            var number = 0;
-            for (var i = 0; i < announcements.length; i++) {
-                if (announcements[i].ReadStatus === '0') number++;
-            }
-            return number;
         }
 
         /**

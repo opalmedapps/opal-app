@@ -13,11 +13,12 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['NavigatorParameters', 'ProfileSelector', 'NetworkStatus', '$timeout', 'UserPreferences', 'Questionnaires',
-        'UserHospitalPreferences', 'RequestToServer', 'Params'];
+    PersonalTabController.$inject = ['$timeout', 'NavigatorParameters', 'NetworkStatus', 'Params',
+        'ProfileSelector', 'Questionnaires', 'RequestToServer', 'UserHospitalPreferences', 'UserPreferences'];
 
-    function PersonalTabController(NavigatorParameters, ProfileSelector, NetworkStatus, $timeout, UserPreferences, Questionnaires,
-        UserHospitalPreferences, RequestToServer, Params) {
+    function PersonalTabController($timeout, NavigatorParameters, NetworkStatus, Params,
+        ProfileSelector, Questionnaires, RequestToServer, UserHospitalPreferences, UserPreferences) {
+
         let vm = this;
         let setAccessLevel = () => vm.accessLevelAll = ProfileSelector.getAccessLevel() === "ALL";
 
@@ -69,11 +70,11 @@
          */
         async function getDisplayData() {
             try {
-                const patientSernum = ProfileSelector.getPatientSerNum();
+                const patientSerNum = ProfileSelector.getPatientSerNum();
                 const requestConfig = Params.API.ROUTES.CHART
                 const result = await RequestToServer.apiRequest({
                     ...requestConfig,
-                    url: `${requestConfig.url}${patientSernum}/`
+                    url: `${requestConfig.url}${patientSerNum}/`
                 });
                 $timeout(() => {
                     vm.appointmentsUnreadNumber = result.data.unread_appointment_count;
@@ -82,19 +83,8 @@
                     vm.txTeamMessagesUnreadNumber = result.data.unread_txteammessage_count;
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
                     vm.questionnairesUnreadNumber = result.data.unread_questionnaire_count;
-                    vm.educationalMaterialsNumber = result.data.unread_educationalmaterial_count;
-                    vm.researchUnreadNumber = parseInt(result.data.unread_research_questionnaire_count);
-                    vm.consentQuestionnairesUnreadNumber = parseInt(result.data.unread_consent_questionnaire_count);
-                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
-                        'research',
-                        vm.researchUnreadNumber,
-                    );
-                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
-                        'consent',
-                        vm.consentQuestionnairesUnreadNumber,
-                    );
-                    vm.researchUnreadNumber += parseInt(vm.consentQuestionnairesUnreadNumber);
-                    // TODO: fetch badges for the research menu items
+                    vm.educationalMaterialsUnreadNumber = result.data.unread_educationalmaterial_count;
+                    vm.researchUnreadNumber = calculateResearchBadge(result.data);
 
                     // Refresh the visible menu items based on access level when changing profiles
                     setAccessLevel();
@@ -103,6 +93,24 @@
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
                 console.error(error);
             }
+        }
+
+        /**
+         * @description Calculates the total value of the "unread items" badge for the research menu based on
+         *              the enabled research modules. If a module is not enabled (not visible), then it
+         *              won't be included in the count.
+         * @param {object} unreadCounts Object containing the number of unread items for each module.
+         * @returns {number} The total value of all visible badges inside the research menu.
+         */
+        function calculateResearchBadge(unreadCounts) {
+            let total = 0;
+            let researchReferenceEnabled = vm.allowedModules.hasOwnProperty('REF') && vm.allowedModules['REF'];
+            let researchQuestionnairesEnabled = vm.allowedModules.hasOwnProperty('RQU') && vm.allowedModules['RQU'];
+            let researchConsentEnabled = vm.allowedModules.hasOwnProperty('CON') && vm.allowedModules['CON'];
+            if (researchReferenceEnabled) total += parseInt(unreadCounts.unread_research_reference_count);
+            if (researchQuestionnairesEnabled) total += parseInt(unreadCounts.unread_research_questionnaire_count);
+            if (researchConsentEnabled) total += parseInt(unreadCounts.unread_consent_questionnaire_count);
+            return total;
         }
 
         /**
