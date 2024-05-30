@@ -60,7 +60,6 @@
          */
         vm.corrupted_appointment = false;
 
-        vm.goToMap = goToMap;
         vm.aboutAppointment = aboutAppointment;
         vm.moreEducationalMaterial = moreEducationalMaterial;
         vm.openMap = openMap;
@@ -82,19 +81,6 @@
                 vm.language = language;
                 vm.app = parameters.Post;
             });
-        }
-
-        /**
-         * @ngdoc method
-         * @name goToMap
-         * @methodOf MUHCApp.controllers.AppointmentController
-         * @description
-         * Takes the user to the map of the specified appointment
-         */
-        function goToMap()
-        {
-            NavigatorParameters.setParameters(vm.app);
-            navigator.pushPage('./views/general/maps/individual-map.html');
         }
 
         function aboutAppointment()

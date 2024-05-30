@@ -76,16 +76,6 @@ describe('AppointmentController', function() {
         });
     });
 
-    it('goes to map', function() {
-        var spy = spyOn($window.navigator, 'pushPage');
-        controller.goToMap();
-        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
-        expect(NavigatorParameters.setParameters).toHaveBeenCalledWith(controller.app);
-        expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledWith('./views/general/maps/individual-map.html')
-
-    });
-
     it('goes to about appointment', function() {
         var spy = spyOn($window.navigator, 'pushPage');
         $timeout.flush();
