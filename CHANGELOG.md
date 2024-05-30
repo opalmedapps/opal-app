@@ -1,3 +1,10 @@
+## [1.33.14](https://gitlab.com/opalmedapps/qplus/compare/v1.33.13...v1.33.14) (2024-05-30)
+
+
+### Bug Fixes
+
+* grey out the Chart toolbar icon when unselected ([5e53d7c](https://gitlab.com/opalmedapps/qplus/commit/5e53d7c9d995d0317839cafccc85606f4f22bc45))
+
 ## [1.33.13](https://gitlab.com/opalmedapps/qplus/compare/v1.33.12...v1.33.13) (2024-05-30)
 
 
