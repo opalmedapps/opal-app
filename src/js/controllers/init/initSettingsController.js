@@ -65,8 +65,6 @@
 			if (type.toLowerCase() === 'tou') {
 				$rootScope.contentType = 'tou';
 				vm.navigator.pushPage('./views/templates/content.html', {contentType: 'tou'});
-				// NavigatorParameters.setParameters({type: type, title: 'Terms of Use', Navigator: vm.navigatorName});
-				// vm.navigator.pushPage('./views/init/init-legal.html');
 			} else if (type.toLowerCase() === 'serviceagreement') {
 				$rootScope.contentType = 'serviceagreement';
 				vm.navigator.pushPage('./views/templates/content.html', {contentType: 'serviceagreement'});
