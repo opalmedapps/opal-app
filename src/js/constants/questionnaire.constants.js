@@ -29,7 +29,6 @@
                 'UPDATE_STATUS': 'QuestionnaireUpdateStatus',
                 'SAVE_ANSWER': 'QuestionnaireSaveAnswer',
                 'GET_QUESTIONNAIRE': 'Questionnaire',
-                'GET_NUMBER_UNREAD': 'QuestionnaireNumberUnread',
                 'GET_PURPOSE': 'QuestionnairePurpose'
             },
             QUESTIONNAIRE_NOTIFICATION_CONSTANTS: {

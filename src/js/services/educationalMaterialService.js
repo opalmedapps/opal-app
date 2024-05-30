@@ -34,12 +34,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         research: 'RESEARCH_REFERENCE_SHORT',
     };
 
-     // Variables for education material notifications
-     let numberOfUnreadMaterial = {
-        clinical: 0,
-        research: 0
-     }
-
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#educationalMaterialArray
@@ -252,67 +246,16 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         {
             let educationalMaterialArrayByCategory = [];
 
-            // reset number of unread educational material on reload
-            numberOfUnreadMaterial['clinical'] = 0;
-            numberOfUnreadMaterial['research'] = 0;
-
             educationalMaterialArray.forEach(function(edumaterial){
                 // get material for specified category
                 if(edumaterial.Category === eduCategory){
                     educationalMaterialArrayByCategory.push(edumaterial);
                 }
-                // count number of unread materials for both categories
-                if(edumaterial.ReadStatus === '0' && numberOfUnreadMaterial.hasOwnProperty(edumaterial.Category)){
-                    numberOfUnreadMaterial[edumaterial.Category] += 1;
-                }
             });
 
             return educationalMaterialArrayByCategory;
         },
-        /**
-         *@ngdoc method
-         *@name getUnreadEducationalMaterials
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@description Filters the educationalMaterialArray by a ReadStatus of '0'.
-         *@returns {Array} Returns array containing unread educational material
-         **/
-        getUnreadEducationalMaterials:function()
-        {
-            var array=[];
-            for (var i = 0; i < educationalMaterialArray.length; i++) {
-                if(educationalMaterialArray[i].ReadStatus ==='0')
-                {
-                    array.push(educationalMaterialArray[i]);
-                }
-            }
-            return array;
-        },
 
-        /**
-         *@ngdoc method
-         *@name getNumberOfUnreadEducationalMaterials
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@returns {Object} Returns the number of unread educational material
-         **/
-        getNumberOfUnreadEducationalMaterials:function() 
-        {
-            return this.getUnreadEducationalMaterials().length;
-        },
-        /**
-         *@ngdoc method
-         *@name getNumberOfUnreadEducationalMaterialByCategory
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
-         *@description Gets the number of unread materials in a given category
-         *@returns {int} Returns number of unread educational material of type eduCategory
-         **/
-         getNumberOfUnreadEducationalMaterialByCategory:function(eduCategory='clinical')
-         {
-             if(numberOfUnreadMaterial.hasOwnProperty(eduCategory)){
-                 return numberOfUnreadMaterial[eduCategory];
-             }
-             return 0;
-         },
         /**
          *@ngdoc method
          *@name getEducationaMaterialBySerNum
