@@ -15,7 +15,7 @@ describe('AppointmentController', function() {
 
     var $controller;
     var controller;
-    var NavigatorParameters;
+    var Navigator;
     var UserPreferences;
     var $scope;
     var $timeout;
@@ -23,9 +23,9 @@ describe('AppointmentController', function() {
 
     var isCorrupted = false;
 
-    beforeEach(inject(function(_$controller_, _NavigatorParameters_, _UserPreferences_, _$timeout_){
+    beforeEach(inject(function(_$controller_, _Navigator_, _UserPreferences_, _$timeout_){
 
-        NavigatorParameters= _NavigatorParameters_;
+        Navigator= _Navigator_;
         UserPreferences = _UserPreferences_;
         $timeout = _$timeout_;
         $window = {
@@ -42,14 +42,14 @@ describe('AppointmentController', function() {
         } );
 
         if(!isCorrupted){
-            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Post: MockData.test_appointments[0]});
+            spyOn( Navigator, 'getParameters').and.returnValue({Post: MockData.test_appointments[0]});
 
         } else {
-            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Post: {}});
+            spyOn( Navigator, 'getParameters').and.returnValue({Post: {}});
         }
 
         $controller = _$controller_;
-        controller = $controller('AppointmentController', { NavigatorParameters: NavigatorParameters, $scope: $scope, UserPreferences: _UserPreferences_, $window: $window});
+        controller = $controller('AppointmentController', { Navigator: Navigator, $scope: $scope, UserPreferences: _UserPreferences_, $window: $window});
 
     }));
 

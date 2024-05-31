@@ -21,10 +21,10 @@
         .controller('StudiesController', StudiesController);
 
     /* @ngInject */
-    StudiesController.$inject = ['NavigatorParameters', 'Studies', 'UserPreferences', '$filter', '$timeout'];
+    StudiesController.$inject = ['Navigator', 'Studies', 'UserPreferences', '$filter', '$timeout'];
 
 
-    function StudiesController(NavigatorParameters, Studies, UserPreferences, $filter, $timeout) {
+    function StudiesController(Navigator, Studies, UserPreferences, $filter, $timeout) {
         let vm = this;
 
         vm.language = '';
@@ -43,7 +43,7 @@
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
 
             loadStudies();
 

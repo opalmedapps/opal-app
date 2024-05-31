@@ -13,12 +13,12 @@
         .controller('ChangeSettingController', ChangeSettingController);
 
     ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params',
+        '$timeout', 'UserAuthorizationInfo', 'Navigator', '$window', 'Params',
         'EncryptionService'];
 
     /* @ngInject */
     function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout,
-                                    UserAuthorizationInfo, NavigatorParameters, $window, Params,
+                                    UserAuthorizationInfo, Navigator, $window, Params,
                                     EncryptionService) {
         var vm = this;
         var page;
@@ -42,7 +42,7 @@
 
         //Sets all the account settings depending on the field that needs to be changed
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
             page = navigator.getCurrentPage();
             parameters = page.options.param;
 

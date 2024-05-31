@@ -21,11 +21,11 @@
         .module('MUHCApp')
         .controller('IndividualMaterialController', IndividualMaterialController);
 
-    IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial',
+    IndividualMaterialController.$inject = ['$scope', '$timeout', 'Navigator', 'EducationalMaterial',
         'FileManagerService', '$filter', 'Logger', 'Params', 'Toast'];
 
     /* @ngInject */
-    function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial,
+    function IndividualMaterialController($scope, $timeout, Navigator, EducationalMaterial,
         FileManagerService, $filter, Logger, Params, Toast) {
         var vm = this;
 
@@ -61,8 +61,8 @@
 
         function activate() {
             //Getting Parameters from navigation
-            param = NavigatorParameters.getParameters();
-            navigator = NavigatorParameters.getNavigator();
+            param = Navigator.getParameters();
+            navigator = Navigator.getNavigator();
 
             bindEvents();
 
@@ -139,7 +139,7 @@
                 $scope.popoverSharing.destroy();
             });
 
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler());
         }
 
         function goToEducationalMaterial(index) {

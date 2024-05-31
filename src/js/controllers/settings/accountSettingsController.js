@@ -15,11 +15,11 @@
         .module('MUHCApp')
         .controller('accountSettingController', accountSettingController);
 
-    accountSettingController.$inject = ['UserPreferences', '$scope', '$timeout', 'NavigatorParameters',
+    accountSettingController.$inject = ['UserPreferences', '$scope', '$timeout', 'Navigator',
         'UserHospitalPreferences', 'LogOutService', 'User'];
 
     /* @ngInject */
-    function accountSettingController(UserPreferences, $scope, $timeout, NavigatorParameters,
+    function accountSettingController(UserPreferences, $scope, $timeout, Navigator,
                                       UserHospitalPreferences, LogOutService, User) {
 
         var vm = this;
@@ -33,7 +33,7 @@
         ////////////////
 
         function activate() {
-            NavigatorParameters.setNavigator(settingsNavigator);
+            Navigator.setNavigator(settingsNavigator);
 
             loadSettings();
 

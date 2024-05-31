@@ -28,12 +28,12 @@
         .module('MUHCApp')
         .controller('BookletMaterialController', BookletMaterialController);
 
-    BookletMaterialController.$inject = ['$http', '$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter',
+    BookletMaterialController.$inject = ['$http', '$scope', '$timeout', 'Navigator', '$rootScope', '$filter',
         'EducationalMaterial', 'Logger', 'Params'];
 
 
     /* @ngInject */
-    function BookletMaterialController($http, $scope, $timeout, NavigatorParameters, $rootScope, $filter,
+    function BookletMaterialController($http, $scope, $timeout, Navigator, $rootScope, $filter,
                                        EducationalMaterial, Logger, Params) {
 
         var vm = this;
@@ -57,7 +57,7 @@
         /////////////////////////////
 
         function activate(){
-            parameters = NavigatorParameters.getParameters();
+            parameters = Navigator.getParameters();
 
             initBooklet();
             bindEvents();

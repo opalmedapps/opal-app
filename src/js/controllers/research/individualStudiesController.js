@@ -12,8 +12,8 @@
         .module('MUHCApp')
         .controller('IndividualStudiesController', IndividualStudiesController);
 
-    IndividualStudiesController.$inject = ['NavigatorParameters', 'Studies', 'UserPreferences'];
-    function IndividualStudiesController(NavigatorParameters, Studies, UserPreferences) {
+    IndividualStudiesController.$inject = ['Navigator', 'Studies', 'UserPreferences'];
+    function IndividualStudiesController(Navigator, Studies, UserPreferences) {
         let vm = this;
         vm.study;
         vm.language;
@@ -31,8 +31,8 @@
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            parameters = NavigatorParameters.getParameters();
+            navigator = Navigator.getNavigator();
+            parameters = Navigator.getParameters();
 
             vm.study = parameters.Post;
             vm.language = UserPreferences.getLanguage();

@@ -17,14 +17,14 @@
         '$scope',
         '$timeout',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Params',
         'Questionnaires',
         'UpdateUI'
     ];
 
     /* @ngInject */
-    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires, UpdateUI) {
+    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires, UpdateUI) {
         let vm = this;
 
         // constants
@@ -60,8 +60,8 @@
         // //////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            let params = NavigatorParameters.getParameters();
+            navigator = Navigator.getNavigator();
+            let params = Navigator.getParameters();
 
             purpose = params.questionnairePurpose.toLowerCase();
             vm.dataHandlerParameters.purpose = purpose;

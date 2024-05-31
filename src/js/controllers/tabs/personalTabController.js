@@ -13,10 +13,10 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['$timeout', 'NavigatorParameters', 'NetworkStatus', 'Params',
+    PersonalTabController.$inject = ['$timeout', 'Navigator', 'NetworkStatus', 'Params',
         'ProfileSelector', 'Questionnaires', 'RequestToServer', 'UserHospitalPreferences', 'UserPreferences'];
 
-    function PersonalTabController($timeout, NavigatorParameters, NetworkStatus, Params,
+    function PersonalTabController($timeout, Navigator, NetworkStatus, Params,
         ProfileSelector, Questionnaires, RequestToServer, UserHospitalPreferences, UserPreferences) {
 
         let vm = this;
@@ -37,7 +37,7 @@
         //////////////////////////
 
         function activate() {
-            NavigatorParameters.setNavigator(personalNavigator);
+            Navigator.setNavigator(personalNavigator);
 
             // Call early to prevent flickering of hidden menu items
             setAccessLevel();

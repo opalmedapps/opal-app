@@ -6,11 +6,11 @@
 		.controller("InitSettingsController", InitSettingsController);
 
 	InitSettingsController.$inject = [
-		'Firebase', 'NavigatorParameters', 'UserPreferences', 'Constants', '$timeout', '$window', '$rootScope'
+		'Firebase', 'Navigator', 'UserPreferences', 'Constants', '$timeout', '$window', '$rootScope'
 	];
 
 	/* @ngInject */
-	function InitSettingsController(Firebase, NavigatorParameters, UserPreferences, Constants, $timeout, $window, $rootScope) {
+	function InitSettingsController(Firebase, Navigator, UserPreferences, Constants, $timeout, $window, $rootScope) {
 
 		let vm = this;
 		let navigator;
@@ -25,8 +25,8 @@
 		/////////////////////////
 
 		function activate() {
-			navigator = NavigatorParameters.getNavigator();
-			vm.navigatorName = NavigatorParameters.getNavigatorName();
+			navigator = Navigator.getNavigator();
+			vm.navigatorName = Navigator.getNavigatorName();
 
 			initSettings();
 		}

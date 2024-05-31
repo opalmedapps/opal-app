@@ -9,7 +9,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         .controller('UpdateSecurityQuestionController', UpdateSecurityQuestionController);
 
     UpdateSecurityQuestionController.$inject = [
-        'NavigatorParameters',
+        'Navigator',
         '$timeout',
         '$filter',
         'UserPreferences',
@@ -21,7 +21,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
     ];
 
     /* @ngInject */
-    function UpdateSecurityQuestionController(NavigatorParameters, $timeout, $filter, UserPreferences, Params,
+    function UpdateSecurityQuestionController(Navigator, $timeout, $filter, UserPreferences, Params,
                                               Firebase, LogOutService, RequestToServer, EncryptionService) {
 
         let vm = this;
@@ -62,7 +62,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          *      and initialize the latter for front-end use
          */
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
 
             RequestToServer.sendRequestWithResponse(GET_SECURITY_QUESTION_AND_ANSWER_LIST_API)
                 .then(function(response){

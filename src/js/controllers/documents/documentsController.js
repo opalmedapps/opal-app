@@ -10,11 +10,11 @@
         .controller('DocumentsController', DocumentsController);
 
     DocumentsController.$inject = [
-        'Documents', '$filter', 'NavigatorParameters', 'Permissions', 'Logger', '$timeout', 'Notifications', 'Params'
+        'Documents', '$filter', 'Navigator', 'Permissions', 'Logger', '$timeout', 'Notifications', 'Params'
     ];
 
     /* @ngInject */
-    function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger, $timeout, Notifications, Params) {
+    function DocumentsController(Documents, $filter, Navigator, Permissions, Logger, $timeout, Notifications, Params) {
         let vm = this;
         let navigator;
 
@@ -31,7 +31,7 @@
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
             Logger.sendLog('Documents', 'all');
         }
 

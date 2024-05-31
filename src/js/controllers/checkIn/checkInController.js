@@ -18,7 +18,7 @@
     CheckInController.$inject = [
         '$timeout',
         'CheckInService',
-        'NavigatorParameters',
+        'Navigator',
         'UserPreferences',
         'Toast',
         '$filter',
@@ -29,7 +29,7 @@
     function CheckInController(
         $timeout,
         CheckInService,
-        NavigatorParameters,
+        Navigator,
         UserPreferences,
         Toast,
         $filter,
@@ -63,7 +63,7 @@
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
             vm.apps = CheckInService.getCheckInApps();
             vm.apps.forEach(app => {
                 if (!vm.displayApps[app.PatientSerNum]) {

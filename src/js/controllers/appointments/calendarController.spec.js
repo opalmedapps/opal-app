@@ -15,7 +15,7 @@ describe('CalendarController', function() {
 
     var $controller;
     var controller;
-    var NavigatorParameters;
+    var Navigator;
     var UserPreferences;
     var $scope;
     var $timeout;
@@ -28,9 +28,9 @@ describe('CalendarController', function() {
     var empty_appointments;
     var varied_date = false;
 
-    beforeEach(inject(function(_$controller_, _NavigatorParameters_, _UserPreferences_, _$timeout_){
+    beforeEach(inject(function(_$controller_, _Navigator_, _UserPreferences_, _$timeout_){
 
-        NavigatorParameters= _NavigatorParameters_;
+        Navigator = _Navigator_;
         UserPreferences = _UserPreferences_;
         $timeout = _$timeout_;
         $window = {
@@ -83,7 +83,7 @@ describe('CalendarController', function() {
         } );
 
         $controller = _$controller_;
-        controller = $controller('CalendarController', { NavigatorParameters: NavigatorParameters, $scope: $scope,
+        controller = $controller('CalendarController', { Navigator: Navigator, $scope: $scope,
             UserPreferences: _UserPreferences_, $window: $window, Appointments: Appointments, $location: $location, $anchorScroll: $anchorScroll});
 
     }));

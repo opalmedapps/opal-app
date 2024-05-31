@@ -6,13 +6,13 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
+        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
         'Version', 'User', 'ProfileSelector', '$interval', 'UpdateUI', 'Permissions',
     ];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
+    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
         Version, User, ProfileSelector, $interval, UpdateUI, Permissions,
     ) {
@@ -57,7 +57,7 @@
          */
 
         function activate() {
-            NavigatorParameters.setNavigator(homeNavigator);
+            Navigator.setNavigator(homeNavigator);
 
             // Get location permission
             Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);

@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .controller('CaregiversController', CaregiversController);
 
-    CaregiversController.$inject = ['$timeout', 'NavigatorParameters', 'Params', 'RequestToServer', 'User'];
+    CaregiversController.$inject = ['$timeout', 'Navigator', 'Params', 'RequestToServer', 'User'];
 
     /* @ngInject */
-    function CaregiversController($timeout, NavigatorParameters, Params, RequestToServer, User) {
+    function CaregiversController($timeout, Navigator, Params, RequestToServer, User) {
         let vm = this;
         let navigator;
 
@@ -25,7 +25,7 @@
         ////////////////
 
         async function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
             await getCaregiversList();
         }
 

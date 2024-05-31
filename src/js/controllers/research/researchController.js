@@ -13,10 +13,10 @@
         .module('MUHCApp')
         .controller('ResearchController', ResearchController);
 
-    ResearchController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'Params', 'ProfileSelector',
+    ResearchController.$inject = ['$scope', '$timeout', 'Navigator', 'Params', 'ProfileSelector',
         'Questionnaires', 'RequestToServer', 'Studies', 'UserHospitalPreferences'];
 
-    function ResearchController($scope, $timeout, NavigatorParameters, Params, ProfileSelector,
+    function ResearchController($scope, $timeout, Navigator, Params, ProfileSelector,
                                 Questionnaires, RequestToServer, Studies, UserHospitalPreferences) {
         let vm = this;
 
@@ -36,7 +36,7 @@
         ////////////////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
 
             bindEvents();
             configureSelectedHospital();

@@ -21,10 +21,10 @@
         .module('MUHCApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['$scope', 'Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params', 'Notifications'];
+    CalendarController.$inject = ['$scope', 'Appointments', '$timeout', '$location', '$anchorScroll','Navigator', 'UserPreferences', '$window', 'Params', 'Notifications'];
 
     /* @ngInject */
-    function CalendarController($scope, Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params, Notifications) {
+    function CalendarController($scope, Appointments, $timeout, $location, $anchorScroll, Navigator, UserPreferences, $window, Params, Notifications) {
         const vm = this;
 
         let todaysTimeMilliseconds;
@@ -95,7 +95,7 @@
          *************************/
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
 
             bindEvents();
 
@@ -375,7 +375,7 @@
 
             // Reload user profile if appointments calendar was opened via Home tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler(['Appointments']));
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler(['Appointments']));
         }
     }
 })();

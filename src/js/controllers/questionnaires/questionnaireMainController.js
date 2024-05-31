@@ -17,14 +17,14 @@
         '$scope',
         '$timeout',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Params',
         'Questionnaires',
         'Notifications'
     ];
 
     /* @ngInject */
-    function QuestionnaireMainController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires, Notifications) {
+    function QuestionnaireMainController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires, Notifications) {
         let vm = this;
 
         // constants
@@ -81,9 +81,9 @@
         // //////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
 
-            let params = NavigatorParameters.getParameters();
+            let params = Navigator.getParameters();
 
             if (!params?.questionnairePurpose
                 || !Questionnaires.validateQuestionnairePurpose(params?.questionnairePurpose)
@@ -156,7 +156,7 @@
                             removeListener();
                             // Reload user profile if questionnaire was opened via Notifications tab,
                             // and profile was implicitly changed.
-                            NavigatorParameters.reloadPreviousProfilePrepopHandler();
+                            Navigator.reloadPreviousProfilePrepopHandler();
                         });
 
                         // no longer loading

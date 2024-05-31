@@ -17,7 +17,7 @@
         '$timeout',
         'Firebase',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Params',
         'ProfileSelector',
         'Questionnaires',
@@ -25,7 +25,7 @@
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, Navigator, Params, ProfileSelector, Questionnaires, Studies) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -69,9 +69,9 @@
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
 
-            let params = NavigatorParameters.getParameters();
+            let params = Navigator.getParameters();
 
             if (!params.hasOwnProperty('answerQuestionnaireId')){
                 vm.loadingQuestionnaire = false;
@@ -95,7 +95,7 @@
                         $scope.$on('$destroy', () => {
                             // Reload user profile if questionnaire was opened via Notifications tab,
                             // and profile was implicitly changed.
-                            NavigatorParameters.reloadPreviousProfilePrepopHandler();
+                            Navigator.reloadPreviousProfilePrepopHandler();
                         });
 
                         vm.loadingQuestionnaire = false;

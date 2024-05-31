@@ -12,11 +12,11 @@
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
     TxTeamMessagesController.$inject = [
-        '$scope', 'TxTeamMessages','NavigatorParameters', '$timeout', '$filter','Notifications', 'Params'
+        '$scope', 'TxTeamMessages','Navigator', '$timeout', '$filter','Notifications', 'Params'
     ];
 
     /* @ngInject */
-    function TxTeamMessagesController($scope, TxTeamMessages, NavigatorParameters, $timeout, $filter, Notifications, Params) {
+    function TxTeamMessagesController($scope, TxTeamMessages, Navigator, $timeout, $filter, Notifications, Params) {
         let vm = this;
         let navigator;
 
@@ -30,7 +30,7 @@
         //////////////////////////////
 
         function activate(){
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
             bindEvents();
         }
 
@@ -66,7 +66,7 @@
 
             // Reload user profile if announcement was opened via Notifications tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler());
         }
     }
 })();

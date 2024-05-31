@@ -15,13 +15,13 @@
         '$filter',
         '$timeout',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Questionnaires',
         'Utility',
     ];
 
     /* @ngInject */
-    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, NavigatorParameters,
+    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, Navigator,
                                                   Questionnaires, Utility) {
         let vm = this;
 
@@ -37,8 +37,8 @@
         ////////////////
 
         async function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorParams = NavigatorParameters.getParameters();
+            navigator = Navigator.getNavigator();
+            navigatorParams = Navigator.getParameters();
 
             if (!navigatorParams.hasOwnProperty('Post') || isNaN(parseInt(navigatorParams.Post))) {
                 vm.loadingQuestionnaire = false;

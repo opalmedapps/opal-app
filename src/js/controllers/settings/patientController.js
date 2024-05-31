@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .controller('PatientsController', PatientsController);
 
-        PatientsController.$inject = ['$timeout', 'ProfileSelector'];
+        PatientsController.$inject = ['$timeout', 'Navigator', 'ProfileSelector'];
 
     /* @ngInject */
-    function PatientsController($timeout, ProfileSelector) {
+    function PatientsController($timeout, Navigator, ProfileSelector) {
         let vm = this;
         let navigator;
 
@@ -25,7 +25,7 @@
          * @description - Get list of patient related to the current user.
          */
         async function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
             try {
                 vm.apiData = ProfileSelector.getPatientList();
             } catch (error) {

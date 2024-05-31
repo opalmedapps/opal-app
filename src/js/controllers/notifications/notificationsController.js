@@ -10,11 +10,11 @@
         .module('MUHCApp')
         .controller('NotificationsController', NotificationsController);
 
-    NotificationsController.$inject = ['$filter','$scope','$timeout','NativeNotification','NavigatorParameters',
+    NotificationsController.$inject = ['$filter','$scope','$timeout','NativeNotification','Navigator',
         'Notifications','Permissions','ProfileSelector', 'RequestToServer', 'UpdateUI', 'Utility', 'Params'];
 
     /* @ngInject */
-    function NotificationsController($filter, $scope, $timeout, NativeNotification, NavigatorParameters,
+    function NotificationsController($filter, $scope, $timeout, NativeNotification, Navigator,
                                      Notifications, Permissions, ProfileSelector, RequestToServer, UpdateUI, Utility, Params) {
         let vm = this;
         let navigator;
@@ -39,7 +39,7 @@
         ///////////////////////////
 
         function activate(){
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
 
             // Create the popover menu
             ons.createPopover('./views/personal/notifications/notifications-popover.html', {parentScope: $scope}).then(function (popover) {

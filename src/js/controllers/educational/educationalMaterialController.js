@@ -22,11 +22,11 @@
         .module('MUHCApp')
         .controller('EducationalMaterialController', EducationalMaterialController);
 
-    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial',
+    EducationalMaterialController.$inject = ['Navigator', '$scope', 'EducationalMaterial',
         'Logger', '$filter', 'Notifications', 'Params'];
 
     /* @ngInject */
-    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial,
+    function EducationalMaterialController(Navigator, $scope, EducationalMaterial,
                                            Logger, $filter, Notifications, Params) {
         let vm = this;
         let navigator;
@@ -54,7 +54,7 @@
         ///////////////////////////////////
 
         function activate(){
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
             setEduCategory();
         }
 
@@ -73,9 +73,9 @@
          * @desc Sets the education material category based on navigator parameters (defaults to clinical)
          */
          function setEduCategory(){
-            let navigatorParams = NavigatorParameters.getParameters();
+            let navigatorParams = Navigator.getParameters();
 
-            // Set category if specified in NavigatorParameters, otherwise defaults to clinical
+            // Set category if specified in Navigator, otherwise defaults to clinical
             vm.eduCategory  = navigatorParams.category || 'clinical';
 
             // Set corresponding page title and no material message

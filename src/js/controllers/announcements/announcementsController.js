@@ -24,7 +24,7 @@
 
     AnnouncementsController.$inject = [
         'Announcements',
-        'NavigatorParameters',
+        'Navigator',
         '$scope',
         '$filter',
         'Notifications',
@@ -34,7 +34,7 @@
     /* @ngInject */
     function AnnouncementsController(
         Announcements,
-        NavigatorParameters,
+        Navigator,
         $scope,
         $filter,
         Notifications,

@@ -13,8 +13,8 @@
  *  @name MUHCApp.controllers: AppointmentController
  *  @description
  *
- *  Manages the individual appointment detail view. It receives parameters via NavigatorParameters and then displays the appointment
- *  details to the User
+ *  Manages the individual appointment detail view. It receives parameters via the Navigator service
+ *  and then displays the appointment details to the user.
  */
 (function () {
     'use strict';
@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['$scope', 'NavigatorParameters', 'UserPreferences', '$timeout', 'Browser'];
+    AppointmentController.$inject = ['$scope', 'Navigator', 'UserPreferences', '$timeout', 'Browser'];
 
     /* @ngInject */
-    function AppointmentController($scope, NavigatorParameters, UserPreferences, $timeout, Browser) {
+    function AppointmentController($scope, Navigator, UserPreferences, $timeout, Browser) {
 
         let vm = this;
 
@@ -68,9 +68,9 @@
         //////////////////////////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
 
-            let parameters = NavigatorParameters.getParameters();
+            let parameters = Navigator.getParameters();
             let language = UserPreferences.getLanguage().toUpperCase();
 
             bindEvents();
@@ -112,7 +112,7 @@
 
             // Reload user profile if appointment was opened via Notifications tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler());
         }
     }
 })();

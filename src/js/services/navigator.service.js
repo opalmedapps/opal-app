@@ -1,5 +1,5 @@
 /**
- * @description Service helping to manage the Onsen navigator.
+ * @description Service that helps manage the Onsen navigator.
  * @author David Herrera, Summer 2016, Email:davidfherrerar@gmail.com
  *         Refactored by Stacey Beard in May 2024.
  */
@@ -17,21 +17,17 @@
 
         return {
             getNavigator: () => navigator,
-            getNavigatorName: navigator._attrs.var,
+            getNavigatorName: () => navigator ? navigator._attrs.var : '',
             getParameters: () => navigator.getCurrentPage().options,
             reloadPreviousProfilePrepopHandler: reloadPreviousProfilePrepopHandler,
             setNavigator: nav => navigator = nav,
         }
 
         /**
-         *@ngdoc method
-         *@name reloadPreviousProfilePrepopHandler
-         *@desc Reload patient profile using profileID that was used on the previous page.
-         *      The handler is invoked in case the profile was implicitly changed.
-         *      E.g., opening up a caregiver's notification and going back to the Notifications page.
-         *@methodOf MUHCApp.service:NavigatorParameters
-         *@param {Array<string>} [categories=[]] The categories to update (force to refresh).
-         *@return {Object} Returns a handler function for the prepop event.
+         * @description Reload patient profile using profileID that was used on the previous page.
+         *              The handler is invoked in case the profile was implicitly changed.
+         *              E.g., opening up a caregiver's notification and going back to the Notifications page.
+         * @param {Array<string>} [categories=[]] The categories to update (force to refresh).
          **/
         function reloadPreviousProfilePrepopHandler(categories = []) {
             // Patient profile that was active/set on the previous page
