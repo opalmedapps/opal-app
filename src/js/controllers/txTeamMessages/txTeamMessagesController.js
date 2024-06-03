@@ -12,7 +12,7 @@
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
     TxTeamMessagesController.$inject = [
-        '$scope', 'TxTeamMessages','Navigator', '$timeout', '$filter','Notifications', 'Params'
+        '$scope', 'TxTeamMessages', 'Navigator', '$timeout', '$filter','Notifications', 'Params'
     ];
 
     /* @ngInject */
