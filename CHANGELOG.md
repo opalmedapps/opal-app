@@ -1,3 +1,10 @@
+## [1.33.15](https://gitlab.com/opalmedapps/qplus/compare/v1.33.14...v1.33.15) (2024-06-04)
+
+
+### Bug Fixes
+
+* Don't throw errors if optional questions are missing answer in completed questionnaire summary ([487d747](https://gitlab.com/opalmedapps/qplus/commit/487d7479e15bab755be8a0d68bd09fef6785dacb))
+
 ## [1.33.14](https://gitlab.com/opalmedapps/qplus/compare/v1.33.13...v1.33.14) (2024-05-30)
 
 
