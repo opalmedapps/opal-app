@@ -139,7 +139,7 @@
                 $scope.popoverSharing.destroy();
             });
 
-            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler());
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
 
         function goToEducationalMaterial(index) {

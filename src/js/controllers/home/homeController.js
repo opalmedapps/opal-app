@@ -227,18 +227,17 @@
          * Takes the user to the selected appointment to view more details about it
          */
         function goToAppointments() {
-            let params = {};
             // When the nearest appointment is for a patient in care,
             // by clicking on the widget should open the calendar for that patient (e.g., care receiver's calendar)
             if (ProfileSelector.getActiveProfile().patient_legacy_id !== vm?.closestAppointment?.patientsernum) {
-                params['isCareReceiver'] = true;
-                params['currentProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
+                let currentPageParams = Navigator.getParameters();
+                currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                 ProfileSelector.loadPatientProfile(vm.closestAppointment.patientsernum);
 
                 // Reload 'Appointments' for the patient in care in case the appointments were already loaded
                 UpdateUI.updateTimestamps('Appointments', 0);
             }
-            homeNavigator.pushPage('./views/personal/appointments/appointments.html', params);
+            homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
 
         /**

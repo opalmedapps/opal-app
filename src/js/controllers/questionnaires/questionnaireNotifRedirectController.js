@@ -92,8 +92,6 @@
                 answerQuestionnaireId: answerQuestionnaireId,
                 editQuestion: false,
                 questionnairePurpose: purpose.toLowerCase(),
-                isCareReceiver: navigatorParams['isCareReceiver'],
-                currentProfile: navigatorParams['currentProfile'],
             });
         }
 
@@ -106,8 +104,6 @@
             navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
                 animation: 'fade', // OnsenUI
                 answerQuestionnaireId: answerQuestionnaireId,
-                isCareReceiver: navigatorParams['isCareReceiver'],
-                currentProfile: navigatorParams['currentProfile'],
             });
         }
 
@@ -138,11 +134,7 @@
          */
         function handleLoadQuestionnaireErr() {
             // go to the questionnaire list page if there is an error
-            navigator.popPage({
-                isCareReceiver: navigatorParams['isCareReceiver'],
-                currentProfile: navigatorParams['currentProfile'],
-            });
-
+            navigator.popPage();
             NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
     }
