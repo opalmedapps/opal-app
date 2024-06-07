@@ -95,7 +95,7 @@
                         $scope.$on('$destroy', () => {
                             // Reload user profile if questionnaire was opened via Notifications tab,
                             // and profile was implicitly changed.
-                            Navigator.reloadPreviousProfilePrepopHandler();
+                            Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
                         });
 
                         vm.loadingQuestionnaire = false;

@@ -112,7 +112,7 @@
 
             // Reload user profile if appointment was opened via Notifications tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler());
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
     }
 })();

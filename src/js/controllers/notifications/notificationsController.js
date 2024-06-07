@@ -85,8 +85,8 @@
                 let params = {};
                 // By clicking on the notification for a patient in care should switch the profile behind the scenes
                 if (ProfileSelector.getActiveProfile().patient_legacy_id !== notification.PatientSerNum) {
-                    params['isCareReceiver'] = true;
-                    params['currentProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
+                    let currentPageParams = Navigator.getParameters();
+                    currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                     ProfileSelector.loadPatientProfile(notification.PatientSerNum);
 
                     // Special case for the lab results notifications: reload labs in case they were already loaded.

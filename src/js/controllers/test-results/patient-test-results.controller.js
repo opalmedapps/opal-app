@@ -103,6 +103,7 @@
 			// Reload user profile if lab results were opened via Notifications tab,
 			// and profile was implicitly changed.
 			navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler(
+				'notifications.html',
 				['PatientTestDates', 'PatientTestTypes'],
 			));
 		}
