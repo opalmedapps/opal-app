@@ -12,12 +12,14 @@
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
     TxTeamMessagesController.$inject = [
-        '$scope', 'TxTeamMessages','NavigatorParameters', '$timeout', '$filter','Notifications', 'Params'
+        '$scope', 'TxTeamMessages', 'Navigator', '$timeout', '$filter','Notifications', 'Params'
     ];
 
     /* @ngInject */
-    function TxTeamMessagesController($scope, TxTeamMessages, NavigatorParameters, $timeout, $filter, Notifications, Params) {
-        var vm = this;
+    function TxTeamMessagesController($scope, TxTeamMessages, Navigator, $timeout, $filter, Notifications, Params) {
+        let vm = this;
+        let navigator;
+
         vm.goToTeamMessage = goToTeamMessage;
 
         // Used by patient-data-handler
@@ -28,6 +30,7 @@
         //////////////////////////////
 
         function activate(){
+            navigator = Navigator.getNavigator();
             bindEvents();
         }
 
@@ -54,19 +57,16 @@
                     Params.NOTIFICATION_TYPES.TxTeamMessage,
                 );
             }
-            NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':message});
-            personalNavigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html');
+            navigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html', {'Post': message});
         }
 
         function bindEvents() {
-            let navigator = NavigatorParameters.getNavigator();
-
             // Remove event listeners
             $scope.$on('$destroy', () => navigator.off('prepop'));
 
             // Reload user profile if announcement was opened via Notifications tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler());
         }
     }
 })();

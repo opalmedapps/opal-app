@@ -19,7 +19,7 @@ import '../../../css/views/init-page.view.css';
 
 	InitScreenController.$inject = [
 		'AppState',
-		'NavigatorParameters',
+		'Navigator',
 		'$translatePartialLoader',
 		'UserPreferences',
 		'$filter',
@@ -35,7 +35,7 @@ import '../../../css/views/init-page.view.css';
 	/* @ngInject */
 	function InitScreenController(
 		AppState,
-		NavigatorParameters,
+		Navigator,
 		$translatePartialLoader,
 		UserPreferences,
 		$filter,
@@ -103,7 +103,7 @@ import '../../../css/views/init-page.view.css';
 			//Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
 			setTimeout(function () {
 				$("#listInitApp").css({display: 'block'});
-				NavigatorParameters.setNavigator(initNavigator);
+				Navigator.setNavigator(initNavigator);
 				initNavigator.on('prepush', function (event) {
 					if (initNavigator._doorLock.isLocked()) {
 						event.cancel();
@@ -134,8 +134,7 @@ import '../../../css/views/init-page.view.css';
 		 * Go to Learn About Opal
 		 */
 		function gotoLearnAboutOpal() {
-			NavigatorParameters.setParameters({'Navigator': 'initNavigator', 'isBeforeLogin': true});
-			initNavigator.pushPage('./views/home/about/about.html');
+			initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		}
 
 		/**
@@ -150,7 +149,6 @@ import '../../../css/views/init-page.view.css';
 		 * Go to general settings (About)
 		 */
 		function goToGeneralSettings() {
-			NavigatorParameters.setParameters({'Navigator': 'initNavigator'});
 			initNavigator.pushPage('./views/init/init-settings.html');
 		}
 

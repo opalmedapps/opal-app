@@ -6,13 +6,13 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
+        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
         'Version', 'User', 'ProfileSelector', '$interval', 'UpdateUI', 'Permissions',
     ];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
+    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
         Version, User, ProfileSelector, $interval, UpdateUI, Permissions,
     ) {
@@ -57,9 +57,7 @@
          */
 
         function activate() {
-            // Initialize the navigator for push and pop of pages.
-            NavigatorParameters.setParameters({ 'Navigator': 'homeNavigator' });
-            NavigatorParameters.setNavigator(homeNavigator);
+            Navigator.setNavigator(homeNavigator);
 
             // Get location permission
             Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
@@ -222,15 +220,14 @@
          * @desc Go to learn about Opal page
          */
         function gotoLearnAboutOpal() {
-            NavigatorParameters.setParameters({ 'Navigator': 'homeNavigator', 'isBeforeLogin': false });
-            homeNavigator.pushPage('./views/home/about/about.html');
+            homeNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': false});
         }
 
         /**
          * Takes the user to the selected appointment to view more details about it
          */
         function goToAppointments() {
-            let params = { 'Navigator': 'homeNavigator' };
+            let params = {};
             // When the nearest appointment is for a patient in care,
             // by clicking on the widget should open the calendar for that patient (e.g., care receiver's calendar)
             if (ProfileSelector.getActiveProfile().patient_legacy_id !== vm?.closestAppointment?.patientsernum) {
@@ -241,8 +238,7 @@
                 // Reload 'Appointments' for the patient in care in case the appointments were already loaded
                 UpdateUI.updateTimestamps('Appointments', 0);
             }
-            NavigatorParameters.setParameters(params);
-            homeNavigator.pushPage('./views/personal/appointments/appointments.html');
+            homeNavigator.pushPage('./views/personal/appointments/appointments.html', params);
         }
 
         /**
@@ -256,8 +252,6 @@
             }
             const apps = await RequestToServer.apiRequest(url);
             Appointments.setCheckinAppointments(apps?.data?.daily_appointments);
-
-            NavigatorParameters.setParameters({ 'Navigator': 'homeNavigator' });
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
 

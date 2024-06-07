@@ -33,15 +33,15 @@ class PatientTestResultsByDatetimeController {
 	/**
 	 *
 	 * @param {PatientTestResults} patientTestResults
-	 * @param {NavigatorParameters} navigatorParameters
+	 * @param {Navigator} navigator
 	 * @param {UserPreferences} userPreferences
 	 * @param {$timeout} $timeout
 	 * @param {$filter} $filter
 	 */
-	constructor(patientTestResults, navigatorParameters,
+	constructor(patientTestResults, navigator,
 	            userPreferences, $timeout, $filter) {
 		this.#patientTestResults = patientTestResults;
-		this.#navigator = navigatorParameters.getNavigator();
+		this.#navigator = navigator.getNavigator();
 		this.#language = userPreferences.getLanguage();
 		this.#$filter = $filter;
 		this.#$timeout = $timeout;
@@ -128,7 +128,7 @@ class PatientTestResultsByDatetimeController {
 	}
 }
 
-PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'NavigatorParameters', 'UserPreferences',
+PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator', 'UserPreferences',
 													'$timeout', '$filter'];
 angular
 	.module('MUHCApp')

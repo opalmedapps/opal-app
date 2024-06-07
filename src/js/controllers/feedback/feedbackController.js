@@ -10,12 +10,12 @@
         .controller('FeedbackController', FeedbackController);
 
     FeedbackController.$inject = [
-        '$filter', '$scope', '$timeout', 'NativeNotification', 'NavigatorParameters',
+        '$filter', '$scope', '$timeout', 'NativeNotification', 'Navigator',
         'NetworkStatus', 'RequestToServer',
     ];
 
     /* @ngInject */
-    function FeedbackController($filter, $scope, $timeout, NativeNotification, NavigatorParameters,
+    function FeedbackController($filter, $scope, $timeout, NativeNotification, Navigator,
                                 NetworkStatus, RequestToServer) {
         var vm = this;
 
@@ -27,7 +27,7 @@
         //////////////////////
 
         function activate() {
-            let navigator = NavigatorParameters.getNavigator();
+            let navigator = Navigator.getNavigator();
             let parameters = navigator.getCurrentPage().options;
 
             vm.enableSend = false;

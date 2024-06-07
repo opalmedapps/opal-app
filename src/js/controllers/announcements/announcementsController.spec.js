@@ -15,14 +15,14 @@ describe('AnnouncementsController', function() {
 
     var $controller;
     var controller;
-    var NavigatorParameters;
+    var Navigator;
     var Announcements;
     var UserPreferences;
     var $scope;
 
     var no_announcements = false;
 
-    beforeEach(inject(function(_$controller_, _NavigatorParameters_, _UserPreferences_){
+    beforeEach(inject(function(_$controller_, _Navigator_, _UserPreferences_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         Announcements = {
             getAnnouncements: function(){
@@ -36,7 +36,7 @@ describe('AnnouncementsController', function() {
             }
         };
 
-        NavigatorParameters= _NavigatorParameters_;
+        Navigator = _Navigator_;
         UserPreferences = _UserPreferences_;
 
         $scope = {
@@ -59,10 +59,8 @@ describe('AnnouncementsController', function() {
             spyOn( Announcements, 'readAnnouncementBySerNum' ).and.returnValue(true);
         }
 
-        spyOn( NavigatorParameters, 'setParameters').and.returnValue(true);
-
         $controller = _$controller_;
-        controller = $controller('AnnouncementsController', {Announcements: Announcements, NavigatorParameters: NavigatorParameters, $scope: $scope});
+        controller = $controller('AnnouncementsController', {Announcements: Announcements, Navigator: Navigator, $scope: $scope});
 
     }));
 
@@ -79,7 +77,6 @@ describe('AnnouncementsController', function() {
         expect(controller.announcements[1].ReadStatus).toBe('0');
         controller.goToAnnouncement(controller.announcements[1]);
         expect(Announcements.readAnnouncementBySerNum).toHaveBeenCalled();
-        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
         expect(controller.announcements[1].ReadStatus).toBe('1');
 
         no_announcements = true;

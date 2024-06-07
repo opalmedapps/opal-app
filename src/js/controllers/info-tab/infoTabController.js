@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['$filter', '$scope', 'NavigatorParameters'];
+    InfoTabController.$inject = ['$filter', '$scope', 'Navigator'];
 
     /* @ngInject */
-    function InfoTabController($filter, $scope, NavigatorParameters) {
+    function InfoTabController($filter, $scope, Navigator) {
         let vm = this;
         vm.view = {};
 
@@ -70,7 +70,7 @@
         activate();
 
         function activate() {
-            let params = NavigatorParameters.getNavigator().getCurrentPage().options;
+            let params = Navigator.getNavigator().getCurrentPage().options;
             vm.view = views[params.id];
         }
 
