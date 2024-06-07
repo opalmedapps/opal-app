@@ -13,10 +13,10 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['$timeout', 'NavigatorParameters', 'NetworkStatus', 'Params',
+    PersonalTabController.$inject = ['$timeout', 'Navigator', 'NetworkStatus', 'Params',
         'ProfileSelector', 'Questionnaires', 'RequestToServer', 'UserHospitalPreferences', 'UserPreferences'];
 
-    function PersonalTabController($timeout, NavigatorParameters, NetworkStatus, Params,
+    function PersonalTabController($timeout, Navigator, NetworkStatus, Params,
         ProfileSelector, Questionnaires, RequestToServer, UserHospitalPreferences, UserPreferences) {
 
         let vm = this;
@@ -28,18 +28,16 @@
         vm.getDisplayData = getDisplayData;
 
         vm.personalDeviceBackButton = () => tabbar.setActiveTab(0);
-        
+
         vm.goToClinicalQuestionnaire = goToClinicalQuestionnaire;
+        vm.goToClinicalReference = goToClinicalReference;
 
         activate();
 
         //////////////////////////
 
         function activate() {
-            //It is possible for a notification to have been read such as a document since this controller has already been instantiated
-            // we will have to check to sync that number on the badges for the tabs on the personal page.
-            NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator' });
-            NavigatorParameters.setNavigator(personalNavigator);
+            Navigator.setNavigator(personalNavigator);
 
             // Call early to prevent flickering of hidden menu items
             setAccessLevel();
@@ -127,8 +125,14 @@
          * @desc Get clinical questionnaires
          */
         function goToClinicalQuestionnaire() {
-            NavigatorParameters.setParameters({ questionnairePurpose: 'clinical' });
-            personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html');
+            personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html', {questionnairePurpose: 'clinical'});
+        }
+
+        /**
+         * @desc Navigates to the clinical reference material list.
+         */
+        function goToClinicalReference() {
+            personalNavigator.pushPage('views/personal/education/education.html', {category: 'clinical'});
         }
     }
 })();

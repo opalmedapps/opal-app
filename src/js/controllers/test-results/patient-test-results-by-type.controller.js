@@ -52,18 +52,18 @@ class PatientTestResultsByTypeController {
 	 * @param {PatientTestResults} patientTestResults
 	 * @param {UserPreferences} userPreferences
 	 * @param {HcChartLabsConfiguration} hcChartLabsConfiguration
-	 * @param {NavigatorParameters} navigatorParameters
+	 * @param {Navigator} navigator
 	 * @param {$filter} $filter Angular filter
 	 * @param {$timeout} $timeout Angular module
 	 * @param {Browser} browser Browser service
 	 * @param {ProfileSelector} profileSelector profile selector service
 	 */
 	constructor(patientTestResults, userPreferences, hcChartLabsConfiguration,
-		navigatorParameters, $filter, $timeout, browser, profileSelector) {
+		navigator, $filter, $timeout, browser, profileSelector) {
 		this.#patientTestResults = patientTestResults;
 		this.#language = userPreferences.getLanguage();
 		this.#fontSize = userPreferences.getFontSize();
-		this.#navigator = navigatorParameters.getNavigator();
+		this.#navigator = navigator.getNavigator();
 		this.#$timeout = $timeout;
 		this.#$filter = $filter;
 		this.#labsChartConfigurationFactory = hcChartLabsConfiguration;
@@ -188,4 +188,4 @@ angular
 	.controller('PatientTestResultsByTypeController', PatientTestResultsByTypeController);
 
 PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences', 'HcChartLabsConfiguration',
-	'NavigatorParameters', '$filter', '$timeout', 'Browser', 'ProfileSelector'];
+	'Navigator', '$filter', '$timeout', 'Browser', 'ProfileSelector'];

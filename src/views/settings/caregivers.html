@@ -1,7 +1,7 @@
 <ons-page style="background-color: white" ng-controller="CaregiversController as Ctrl" ng-cloak>
     <generic-toolbar title="{{'RELATIONSHIPS_CAREGIVERS'|translate}}" style-class="fontSizeTitle">
         <right-content>
-            <ons-toolbar-button ng-click="settingsNavigator.pushPage('views/settings/info-page-relationship-type.html',{id:'caregivers'})">
+            <ons-toolbar-button ng-click="Ctrl.goToCaregiversInfo()">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>
