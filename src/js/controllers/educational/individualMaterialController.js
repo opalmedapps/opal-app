@@ -139,7 +139,9 @@
                 $scope.popoverSharing.destroy();
             });
 
-            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler());
+            // Reload user profile if educational/reference material was opened via Notifications,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
 
         function goToEducationalMaterial(index) {
