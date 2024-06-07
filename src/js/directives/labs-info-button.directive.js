@@ -5,7 +5,7 @@
         .module("MUHCApp")
         .directive("labsInfoButton", LabsInfoButton);
 
-    LabsInfoButton.$inject = ['NavigatorParameters'];
+    LabsInfoButton.$inject = ['Navigator'];
 
     /**
      * @name LabsInfoButton
@@ -14,7 +14,7 @@
      * @desc Directive for the lab results info button.
      * @example <labs-info-button></labs-info-button>
      */
-    function LabsInfoButton(NavigatorParameters)
+    function LabsInfoButton(Navigator)
     {
         let directive = {
             restrict: 'E',
@@ -36,7 +36,7 @@
                  */
                 function goToInfoPage()
                 {
-                    let navigator = NavigatorParameters.getNavigator();
+                    let navigator = Navigator.getNavigator();
                     navigator.pushPage('./views/personal/test-results/test-results-info.html', {});
                 }
             }

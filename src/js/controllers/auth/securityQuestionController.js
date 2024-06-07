@@ -12,7 +12,7 @@
  *  @ngdoc controller
  *  @name MUHCApp.controllers: SecurityQuestionController
  *  @requires '$scope', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService', 'UUID', 'UserAuthorizationInfo',
- *  '$state', 'Constants', 'DeviceIdentifiers', 'NavigatorParameters'
+ *  '$state', 'Constants', 'DeviceIdentifiers', 'Navigator'
  *  @description
  *
  *  Controller that submits the user's security question to be validated by our servers. This leads to the generation of the user's encryption key.
@@ -25,12 +25,12 @@
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope', 'Params',
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'Navigator', '$scope', 'Params',
         'UserHospitalPreferences'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope,
+                                        UserAuthorizationInfo, $state, DeviceIdentifiers, Navigator, $scope,
                                         Params, UserHospitalPreferences) {
 
         var vm = this;
@@ -140,7 +140,7 @@
 
         function activate(){
             deviceID = UUID.getUUID();
-            var nav = NavigatorParameters.getNavigator();
+            var nav = Navigator.getNavigator();
             parameters = nav.getCurrentPage().options;
             trusted = parameters.trusted;
 

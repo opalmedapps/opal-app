@@ -18,7 +18,7 @@ import "./services/nativeNotificationAlertService.js";
 import "./services/questionnairesService.js";
 import "./services/txTeamMessagesService.js";
 import "./services/announcementsService.js";
-import "./services/navigatorParametersService.js";
+import "./services/navigator.service.js";
 import "./services/educationalMaterialService.js";
 import "./services/toast.service";
 import "./services/deviceIdentifiersService.js";

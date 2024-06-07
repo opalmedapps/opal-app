@@ -23,11 +23,11 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences',
+    AboutController.$inject = ['UserPreferences', 'Navigator', 'Params', 'UserHospitalPreferences',
         'Browser', 'DynamicContent'];
 
     /* @ngInject */
-    function AboutController(UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser,
+    function AboutController(UserPreferences, Navigator, Params, UserHospitalPreferences, Browser,
                              DynamicContent) {
         const vm = this;
         var navigator = null;
@@ -47,8 +47,8 @@
 
         function activate() {
 
-            parameters = NavigatorParameters.getParameters();
-            navigator = NavigatorParameters.getNavigator();
+            parameters = Navigator.getParameters();
+            navigator = Navigator.getNavigator();
 
             /**
              * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
@@ -76,10 +76,6 @@
         }
 
         /**
-         * navigatorName = 'initNavigator' or 'homeNavigator'
-         * navigatorName = 'initNavigator' when about.html is called from init-Screen.html (initScreenController)
-         * navigatorName = 'homeNavigator' when about.html is called from home.html (homeController)
-         *
          * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
          */
         function openTour() {
