@@ -95,9 +95,9 @@
                 }, 200);
             });
 
-            // Reload user profile if individual document was opened via Home tab,
+            // Reload user profile if individual document was opened via Notifications,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler());
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
 
         function initializeDocument(document) {
