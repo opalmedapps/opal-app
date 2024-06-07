@@ -1,3 +1,10 @@
+## [1.33.16](https://gitlab.com/opalmedapps/qplus/compare/v1.33.15...v1.33.16) (2024-06-07)
+
+
+### Bug Fixes
+
+* fix bug resetting profiles too early while viewing notifications ([102d935](https://gitlab.com/opalmedapps/qplus/commit/102d9356738ed3be796fed25c04317159ee1cd8e))
+
 ## [1.33.15](https://gitlab.com/opalmedapps/qplus/compare/v1.33.14...v1.33.15) (2024-06-04)
 
 
