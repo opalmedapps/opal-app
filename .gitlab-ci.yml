@@ -234,6 +234,12 @@ include:
   # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Security/DAST.latest.gitlab-ci.yml
   - template: DAST.latest.gitlab-ci.yml
 
+# Secret Detection Customization:
+# https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/index.html#overriding-the-analyzer-jobs
+secret_detection:
+  # Prevent default access to artifacts from previous stages, to avoid scanning for secrets in the npm cache (.npm)
+  needs: []
+
 # SAST Scanning Customization:
 # ensure that mobsf jobs depend on builds
 # https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
