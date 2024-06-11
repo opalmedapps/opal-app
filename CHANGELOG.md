@@ -1,3 +1,10 @@
+## [1.33.17](https://gitlab.com/opalmedapps/qplus/compare/v1.33.16...v1.33.17) (2024-06-11)
+
+
+### Bug Fixes
+
+* add loading wheel to the feedback page ([aefdaad](https://gitlab.com/opalmedapps/qplus/commit/aefdaada759ea26410d6535be48ed49195330c6d))
+
 ## [1.33.16](https://gitlab.com/opalmedapps/qplus/compare/v1.33.15...v1.33.16) (2024-06-07)
 
 
