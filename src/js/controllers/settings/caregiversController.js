@@ -36,6 +36,7 @@
                 if (!selfPatientSerNum) {
                     vm.apiData = [];
                     handleDisplay();
+                    vm.loadingList = false;
                     return;
                 }
 
