@@ -1,3 +1,10 @@
+## [1.33.18](https://gitlab.com/opalmedapps/qplus/compare/v1.33.17...v1.33.18) (2024-06-12)
+
+
+### Bug Fixes
+
+* fix the bug showing loading wheel when there are no caregivers. ([a1dc814](https://gitlab.com/opalmedapps/qplus/commit/a1dc814f32f91914c7d5c889b798ee346a5cc557))
+
 ## [1.33.17](https://gitlab.com/opalmedapps/qplus/compare/v1.33.16...v1.33.17) (2024-06-11)
 
 
