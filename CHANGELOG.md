@@ -1,3 +1,10 @@
+## [1.33.19](https://gitlab.com/opalmedapps/qplus/compare/v1.33.18...v1.33.19) (2024-06-14)
+
+
+### Bug Fixes
+
+* remove ORI from the list of hospitals at login and associated translation strings ([278df62](https://gitlab.com/opalmedapps/qplus/commit/278df6221f4461b8504a0a41401c222115562436))
+
 ## [1.33.18](https://gitlab.com/opalmedapps/qplus/compare/v1.33.17...v1.33.18) (2024-06-12)
 
 
