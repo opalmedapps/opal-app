@@ -1,3 +1,10 @@
+## [1.33.20](https://gitlab.com/opalmedapps/qplus/compare/v1.33.19...v1.33.20) (2024-06-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pdfjs-dist to v4 ([a3a26e1](https://gitlab.com/opalmedapps/qplus/commit/a3a26e1b745785d31efca99975fb043e9efd36df))
+
 ## [1.33.19](https://gitlab.com/opalmedapps/qplus/compare/v1.33.18...v1.33.19) (2024-06-14)
 
 
