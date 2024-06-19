@@ -1,3 +1,10 @@
+## [1.33.21](https://gitlab.com/opalmedapps/qplus/compare/v1.33.20...v1.33.21) (2024-06-19)
+
+
+### Bug Fixes
+
+* add property to make textbox more sensitive ([7276385](https://gitlab.com/opalmedapps/qplus/commit/7276385932d2de202baa49969cee3f3f93c9ecc9))
+
 ## [1.33.20](https://gitlab.com/opalmedapps/qplus/compare/v1.33.19...v1.33.20) (2024-06-19)
 
 
