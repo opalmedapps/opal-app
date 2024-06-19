@@ -4,6 +4,7 @@
     text-align: center;
     top: 0;
     width: 100%;
+    touch-action: manipulation;
 }
 
 .security-question--col {
