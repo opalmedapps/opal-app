@@ -1,3 +1,10 @@
+## [1.34.1](https://gitlab.com/opalmedapps/qplus/compare/v1.34.0...v1.34.1) (2024-06-20)
+
+
+### Bug Fixes
+
+* add back core-js to add polyfill for missing function in simulators ([6dab2ab](https://gitlab.com/opalmedapps/qplus/commit/6dab2abb78da1ee751e60027751898d663b36d30))
+
 # [1.34.0](https://gitlab.com/opalmedapps/qplus/compare/v1.33.21...v1.34.0) (2024-06-20)
 
 
