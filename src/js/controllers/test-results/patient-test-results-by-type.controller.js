@@ -46,6 +46,8 @@ class PatientTestResultsByTypeController {
 	#$filter;
 	#browser;
 	#profileSelector;
+	#updateUI;
+
 
 	/**
 	 * Class constructor for controller
@@ -57,9 +59,10 @@ class PatientTestResultsByTypeController {
 	 * @param {$timeout} $timeout Angular module
 	 * @param {Browser} browser Browser service
 	 * @param {ProfileSelector} profileSelector profile selector service
+	 * @param {UpdateUI} updateUI update UI service
 	 */
 	constructor(patientTestResults, userPreferences, hcChartLabsConfiguration,
-		navigator, $filter, $timeout, browser, profileSelector) {
+		navigator, $filter, $timeout, browser, profileSelector, updateUI) {
 		this.#patientTestResults = patientTestResults;
 		this.#language = userPreferences.getLanguage();
 		this.#fontSize = userPreferences.getFontSize();
@@ -69,6 +72,7 @@ class PatientTestResultsByTypeController {
 		this.#labsChartConfigurationFactory = hcChartLabsConfiguration;
 		this.#browser = browser;
 		this.#profileSelector = profileSelector;
+		this.#updateUI = updateUI;
 		this.#initialize(this.#navigator.getCurrentPage().options);
 	}
 
@@ -148,6 +152,20 @@ class PatientTestResultsByTypeController {
 			if (results) {
 				this.test = results;
 
+				// Updates testDates array in the patient-test-results service and in the patient-test-results view.
+				// Since both arrays share the same reference, updating one will automatically update the other.
+				// Once the arrays are updated, the UI will also be automatically updated (bolding on "By Date" tab).
+				// NOTE: this.#updateUI.updateTimestamps('PatientTestDates', 0) will not work because it creates
+				// an array with a new reference (e.g., setTestDates function in the service), so the array in the view
+				// won't be automatically updated.
+				// NOTE: default UpdateUI update call (e.g., PatientTestResults.updateTestDates) will return
+				// only updated records that will result in incorrect readStatuses (the query in the listener
+				// needs to aggregate the read statuses on all the testDates labs, not just on the updated ones).
+				// To reload all testDates records from listener and update the existing array in the patient-test-results
+				// service, set lastUpdated to 1 (e.g., updateTimestamps('PatientTestDates', 1)).
+				this.#updateUI.updateTimestamps('PatientTestDates', 1);
+				this.#updateUI.getData('PatientTestDates');
+
 				let nonInterpretableDelay = this.#profileSelector.getActiveProfile().non_interpretable_lab_result_delay;
 				let interpretableDelay = this.#profileSelector.getActiveProfile().interpretable_lab_result_delay;
 				
@@ -188,4 +206,4 @@ angular
 	.controller('PatientTestResultsByTypeController', PatientTestResultsByTypeController);
 
 PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences', 'HcChartLabsConfiguration',
-	'Navigator', '$filter', '$timeout', 'Browser', 'ProfileSelector'];
+	'Navigator', '$filter', '$timeout', 'Browser', 'ProfileSelector', 'UpdateUI'];

@@ -63,13 +63,23 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 		////////////////
 
 		/**
-		 * @description Processes dates from the format sent by the listener to the format used in this service.
-		 * @param {String[]} newDates - An array of dates, as provided by the listener.
-		 * @returns {Date[]} A new processed array of Date objects.
+		 * @description Processes lab results dates from the format sent by the listener to the format used in this service.
+		 * @param {String[]} newDates - An array of objects containing lab results' dates and read statuses,
+		 *								as provided by the listener.
+		 *								E.g., [
+		 *									{"collectedDateTime":"2023-05-05 14:00:00Z","readStatus":1},
+		 *									{"collectedDateTime":"2023-01-05 15:59:00Z","readStatus":0},
+		 *								]
+		 * @returns {Date[]} A new processed array of objects with formatted dates.
 		 */
-		function processDates(newDates) {
+		function processTestDates(newDates) {
 			newDates = newDates || [];
-			return newDates.map(date => new Date(date.replace(/-/g, "/")));
+			return newDates.map(item => (
+				{
+					...item,
+					collectedDateTime: new Date(item.collectedDateTime.replace(/-/g, "/"))
+				})
+			);
 		}
 
 		/**
@@ -83,12 +93,12 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 		}
 
 		/**
-		 * @description Processes an array of dates from the listener and saves it in this service.
+		 * @description Processes an array of objects with dates from the listener and saves it in this service.
 		 *              Any previously added values are overwritten.
-		 * @param {String[]} newDates - An array of dates, as provided by the listener.
+		 * @param {String[]} newDates - An array of objects with dates, as provided by the listener.
 		 */
 		function setTestDates(newDates) {
-			testDates = processDates(newDates);
+			testDates = processTestDates(newDates);
 			testResultsByDate = {};
 		}
 
@@ -104,18 +114,23 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 
 		/**
 		 * @description Processes an array of updated dates from the listener and uses it to update this service.
-		 *              New dates are added; the rest are left untouched.
+		 *              New dates are added. Read status are updated for the corresponding dates.
 		 * @param {String[]} newTestDates - An array of new or updated dates, as provided by the listener.
 		 */
 		function updateTestDates(newTestDates) {
-			let processedNewTestDates = processDates(newTestDates);
+			let processedNewTestDates = processTestDates(newTestDates);
+			processedNewTestDates.forEach(
+				newDate => {
+					let labTestDate = testDates.find(
+						testDate => newDate.collectedDateTime.getTime() === testDate.collectedDateTime.getTime()
+					);
 
-			// Dates are simple objects with only one relevant value; simply add the new ones that are missing from the array
-			let testDatesAsTime = testDates.map(testDate => testDate.getTime());
-			processedNewTestDates.forEach(newDate => { if (!testDatesAsTime.includes(newDate.getTime())) testDates.push(newDate) });
+					!labTestDate ? testDates.push(newDate) : labTestDate.readStatus = newDate.readStatus;
+				}
+			);
 
 			// Delete cached data by date for all the updated items
-			processedNewTestDates.forEach(e => testResultByDateDeleteCached(e));
+			processedNewTestDates.forEach(e => testResultByDateDeleteCached(e.collectedDateTime));
 		}
 
 		/**
