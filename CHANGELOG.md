@@ -1,3 +1,10 @@
+# [1.34.0](https://gitlab.com/opalmedapps/qplus/compare/v1.33.21...v1.34.0) (2024-06-20)
+
+
+### Features
+
+* add bolding for unread lab results ([c4aafd5](https://gitlab.com/opalmedapps/qplus/commit/c4aafd5235eadefae62e8815a0c9205c18865f5b))
+
 ## [1.33.21](https://gitlab.com/opalmedapps/qplus/compare/v1.33.20...v1.33.21) (2024-06-19)
 
 
