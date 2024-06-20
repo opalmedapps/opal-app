@@ -55,7 +55,6 @@
 		function activate() {
 			language = UserPreferences.getLanguage();
 			navigator = Navigator.getNavigator();
-
 			bindEvents();
 		}
 
@@ -64,6 +63,12 @@
 		 * @param {Date} testDate Test date for the subsequent view
 		 */
 		function goToTestDateResults(testDate) {
+			// Marks cached test dates as read (also implicitly marks as read testDates in the service)
+			vm.testDates.forEach(testResult => {
+				if (testResult.collectedDateTime === testDate && testResult.readStatus === '0')
+					testResult.readStatus = '1';
+			});
+
 			navigator.pushPage(
 				'./views/personal/test-results/test-results-by-datetime.html',
 				{ testDate });
@@ -74,6 +79,13 @@
 		 * @param {number} testTypeSerNum ExpressionSerNum for the given test type
 		 */
 		function goToTestTypeResults(testTypeSerNum) {
+			// Mark cached test results by type as read (also implicitly marks as read testTypes in the service)
+			vm.testTypes.forEach(testResult => {
+				if (testResult.testExpressionSerNum === testTypeSerNum && testResult.readStatus === false) {
+					testResult.readStatus = true;
+				}
+			});
+
 			navigator.pushPage(
 				'./views/personal/test-results/test-results-by-type.html',
 				{ testTypeSerNum });
@@ -92,8 +104,11 @@
 		 *              Results are sorted in reverse chronological order for dates, and alphabetical order for types.
 		 */
 		function setTestsView() {
-			vm.testDates = PatientTestResults.getTestDates().sort((a, b) => b.getTime() - a.getTime()); // Newest first
-			vm.testTypes = $filter('orderBy')(PatientTestResults.getTestTypes(), `name_${language}`);
+			vm.testDates = PatientTestResults.getTestDates().sort(
+				(a, b) => b.collectedDateTime.getTime() - a.collectedDateTime.getTime()
+			); // Newest first
+			vm.testTypes = PatientTestResults.getTestTypes();
+			vm.testTypes.sort((a, b) => a[`name_${language}`].localeCompare(b[`name_${language}`]));
 		}
 
 		function bindEvents() {
