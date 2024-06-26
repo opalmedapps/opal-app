@@ -1,3 +1,10 @@
+## [1.34.2](https://gitlab.com/opalmedapps/qplus/compare/v1.34.1...v1.34.2) (2024-06-26)
+
+
+### Bug Fixes
+
+* update google-services.json for the preprod environment ([b535ad6](https://gitlab.com/opalmedapps/qplus/commit/b535ad60da819d4cca7fc87225b51c1d85c6676e))
+
 ## [1.34.1](https://gitlab.com/opalmedapps/qplus/compare/v1.34.0...v1.34.1) (2024-06-20)
 
 
