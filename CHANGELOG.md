@@ -1,3 +1,10 @@
+## [1.34.3](https://gitlab.com/opalmedapps/qplus/compare/v1.34.2...v1.34.3) (2024-07-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-device to v3 ([85e1f18](https://gitlab.com/opalmedapps/qplus/commit/85e1f1823554af923c985b4865ca7661df8c4314))
+
 ## [1.34.2](https://gitlab.com/opalmedapps/qplus/compare/v1.34.1...v1.34.2) (2024-06-26)
 
 
