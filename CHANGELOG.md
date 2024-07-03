@@ -1,3 +1,10 @@
+## [1.34.5](https://gitlab.com/opalmedapps/qplus/compare/v1.34.4...v1.34.5) (2024-07-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-file to v8 ([77ac2f4](https://gitlab.com/opalmedapps/qplus/commit/77ac2f4c305d4cebc9e9a6b41f6b56e6681c98e1))
+
 ## [1.34.4](https://gitlab.com/opalmedapps/qplus/compare/v1.34.3...v1.34.4) (2024-07-03)
 
 
