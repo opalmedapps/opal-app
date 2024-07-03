@@ -1,3 +1,10 @@
+## [1.34.4](https://gitlab.com/opalmedapps/qplus/compare/v1.34.3...v1.34.4) (2024-07-03)
+
+
+### Bug Fixes
+
+* add polyfill to patch promise-with-resolvers on emulators ([e6fc402](https://gitlab.com/opalmedapps/qplus/commit/e6fc402c4fb87a9eb955eae89e80f1e79556045d))
+
 ## [1.34.3](https://gitlab.com/opalmedapps/qplus/compare/v1.34.2...v1.34.3) (2024-07-03)
 
 
