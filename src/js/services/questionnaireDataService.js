@@ -159,15 +159,8 @@
                 'qp_ser_num': answerQuestionnaireID,
                 'language': UserPreferences.getLanguage(),
             };
-            try {
-                let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
-
-                // this is in case firebase deletes the property when it is empty
-                return response?.Data ? response.Data : {};
-            } catch (error) {
-                console.error('Error in requestQuestionnaire', error);
-                return {};
-            }
+            let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
+            return response?.Data ? response.Data : {};
         }
 
         /**
