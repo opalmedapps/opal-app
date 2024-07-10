@@ -1,3 +1,10 @@
+# [1.35.0](https://gitlab.com/opalmedapps/qplus/compare/v1.34.5...v1.35.0) (2024-07-10)
+
+
+### Features
+
+* add questionnaire blocked pop up message ([82ef502](https://gitlab.com/opalmedapps/qplus/commit/82ef502364ee170b47ea8ba4f98b25477a751897))
+
 ## [1.34.5](https://gitlab.com/opalmedapps/qplus/compare/v1.34.4...v1.34.5) (2024-07-03)
 
 
