@@ -17,7 +17,7 @@
         'NativeNotification',
         'Navigator',
         'Questionnaires',
-        'Utility',
+        'Utility'
     ];
 
     /* @ngInject */

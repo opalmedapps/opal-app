@@ -25,6 +25,7 @@
 
     /* @ngInject */
     function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires, UpdateUI) {
+
         let vm = this;
 
         // constants
@@ -85,20 +86,7 @@
          * @desc This function request the questionnaire selected from back-end and push it to the carousel
          * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
-        async function goToQuestionnaire(selectedQuestionnaire) {
-            // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
-            if (vm.refreshQuestionnaires) {
-                await vm.refreshQuestionnaires();
-                // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
-                if (!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) {
-                    NativeNotification.showNotificationAlert(
-                        $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
-                        $filter('translate')("TITLE"),
-                    );
-                    return;
-                }
-            }
-
+        function goToQuestionnaire(selectedQuestionnaire) {
             // putting editQuestion false to claim that we are not coming from a summary page
             navigator.pushPage('views/personal/questionnaires/questionnaires.html', {
                 answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
