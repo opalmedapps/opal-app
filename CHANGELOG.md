@@ -1,3 +1,10 @@
+## [1.35.1](https://gitlab.com/opalmedapps/qplus/compare/v1.35.0...v1.35.1) (2024-07-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-android to v13 ([2778d93](https://gitlab.com/opalmedapps/qplus/commit/2778d93f59c66aa47a49ccd3546b5a2ff2ff72f0))
+
 # [1.35.0](https://gitlab.com/opalmedapps/qplus/compare/v1.34.5...v1.35.0) (2024-07-10)
 
 
