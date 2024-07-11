@@ -25,7 +25,6 @@
     "@babel/plugin-proposal-private-methods",
     "@babel/plugin-transform-runtime",
     "@babel/preset-env",
-    "babel-loader",
     "exports-loader",
     "html-loader",
     "imports-loader",
