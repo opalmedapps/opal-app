@@ -38,5 +38,10 @@
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
       "groupName": "xlts angular packages"
     },
+    // Group babel updates
+    {
+      "matchPackagePatterns": ["babel"],
+      "groupName": "babel packages"
+    },
   ],
 }
