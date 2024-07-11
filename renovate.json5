@@ -20,7 +20,6 @@
     "ionicons",
     "moment",
     "onsenui",
-    "@babel/core",
     "@babel/plugin-transform-runtime",
     "@babel/preset-env",
     "exports-loader",
