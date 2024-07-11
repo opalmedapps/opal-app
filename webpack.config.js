@@ -80,7 +80,7 @@ const config = env => {
 						loader: 'babel-loader',
 						options: {
 							presets: ['@babel/preset-env'],
-							plugins: ['@babel/plugin-proposal-private-methods',
+							plugins: [
 								'@babel/plugin-proposal-class-properties',
 								["@babel/plugin-transform-runtime", {
 									regenerator: true
