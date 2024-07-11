@@ -21,7 +21,6 @@
     "moment",
     "onsenui",
     "@babel/core",
-    "@babel/plugin-proposal-class-properties",
     "@babel/plugin-transform-runtime",
     "@babel/preset-env",
     "exports-loader",
