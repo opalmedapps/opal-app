@@ -1,3 +1,10 @@
+## [1.35.2](https://gitlab.com/opalmedapps/qplus/compare/v1.35.1...v1.35.2) (2024-07-12)
+
+
+### Bug Fixes
+
+* **deps:** update babel packages ([30509ea](https://gitlab.com/opalmedapps/qplus/commit/30509ea343177d46f018b7e99f0a748a77b4dd72))
+
 ## [1.35.1](https://gitlab.com/opalmedapps/qplus/compare/v1.35.0...v1.35.1) (2024-07-10)
 
 
