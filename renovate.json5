@@ -9,23 +9,16 @@
     // https://docs.renovatebot.com/presets-default/#separatepatchreleases
     ":separatePatchReleases",
   ],
-  "assignees": ["staceybeard", "yickmo", "anton.gladyr"],
+  "assignees": ["staceybeard", "anton.gladyr"],
   "labels": ["dependencies"],
   "separateMinorPatch": true,
   "ignoreDeps": [
-    "@babel/runtime",
     "animate.css",
     "bootstrap",
     "highcharts",
     "ionicons",
     "moment",
     "onsenui",
-    "@babel/core",
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-proposal-private-methods",
-    "@babel/plugin-transform-runtime",
-    "@babel/preset-env",
-    "babel-loader",
     "exports-loader",
     "html-loader",
     "imports-loader",
@@ -44,6 +37,11 @@
     {
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
       "groupName": "xlts angular packages"
+    },
+    // Group babel updates
+    {
+      "matchPackagePatterns": ["babel"],
+      "groupName": "babel packages"
     },
   ],
 }
