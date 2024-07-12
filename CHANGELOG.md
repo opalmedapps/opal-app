@@ -1,3 +1,10 @@
+## [1.35.3](https://gitlab.com/opalmedapps/qplus/compare/v1.35.2...v1.35.3) (2024-07-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-ios to v7.1.0 and add privacy-manifest ([559e0c0](https://gitlab.com/opalmedapps/qplus/commit/559e0c0605ff6f87dd7b4269320d110ebc839d57))
+
 ## [1.35.2](https://gitlab.com/opalmedapps/qplus/compare/v1.35.1...v1.35.2) (2024-07-12)
 
 
