@@ -11,14 +11,15 @@
 
     FeedbackController.$inject = [
         '$filter', '$scope', '$timeout', 'NativeNotification', 'Navigator',
-        'NetworkStatus', 'RequestToServer',
+        'NetworkStatus', 'RequestToServer', 'User'
     ];
 
     /* @ngInject */
     function FeedbackController($filter, $scope, $timeout, NativeNotification, Navigator,
-                                NetworkStatus, RequestToServer) {
+                                NetworkStatus, RequestToServer, User) {
         var vm = this;
         vm.isSubmitting = false;
+        vm.userInfo = {};
 
         vm.submitFeedback = submitFeedback;
         vm.reset = reset;
@@ -35,6 +36,7 @@
             bindEvents();
 
             initializeContentBasedOnType(parameters.contentType);
+            vm.userInfo = User.getUserInfo();
         }
 
         /**
