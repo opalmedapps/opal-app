@@ -81,7 +81,7 @@
     "cordova-plugin-file-opener2": "4.0.0",
     "cordova-plugin-geolocation": "4.1.0",
     "cordova-plugin-globalization": "1.11.0",
-    "cordova-plugin-inappbrowser": "5.0.0",
+    "cordova-plugin-inappbrowser": "6.0.0",
     "cordova-plugin-ios-detect-screenshot": "1.0.0",
     "cordova-plugin-iroot": "3.1.0",
     "cordova-plugin-network-information": "3.0.0",
