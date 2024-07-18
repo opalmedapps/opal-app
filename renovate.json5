@@ -19,7 +19,6 @@
     "ionicons",
     "moment",
     "onsenui",
-    "imports-loader",
     "raw-loader",
     "style-loader",
   ],
