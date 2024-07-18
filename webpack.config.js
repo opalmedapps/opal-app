@@ -101,13 +101,17 @@ const config = env => {
 				{
 					// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, Modernizr has a weird passing of document, window properties
 					// to make it work I looked at this issue: basically it re-attaches this to window.
+					// This solution was found online, see: https://github.com/webpack/webpack/issues/512#issuecomment-288143187
+					// Original code: loader: 'imports-loader?this=>window!exports-loader?window.Modernizr'
+					// It has since been rewritten to a new syntax due to Webpack / imports-loader / exports-loader updates
 					test: /onsenui.js/,
 					use: [
 						{
 							loader: 'imports-loader?this=>window'
 						},
+						// Adds this to the output bundle: module.exports = window.Modernizr;
 						{
-							loader: 'exports-loader?window.Modernizr'
+							loader: 'exports-loader?type=commonjs&exports=single|window.Modernizr'
 						}
 					],
 
