@@ -106,15 +106,15 @@ const config = env => {
 					// It has since been rewritten to a new syntax due to Webpack / imports-loader / exports-loader updates
 					test: /onsenui.js/,
 					use: [
+						// Adds the following to the output bundle: (function () { ... }).call(window);
 						{
-							loader: 'imports-loader?this=>window'
+							loader: 'imports-loader?this=>window',
 						},
-						// Adds this to the output bundle: module.exports = window.Modernizr;
+						// Adds the following to the output bundle: module.exports = window.Modernizr;
 						{
-							loader: 'exports-loader?type=commonjs&exports=single|window.Modernizr'
-						}
+							loader: 'exports-loader?type=commonjs&exports=single|window.Modernizr',
+						},
 					],
-
 				},
 				// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, When compiling with Webpack, the Fastclick library
 				// in onsenui (get rid of the 300ms delay) has a set of if statements to determine the sort of
