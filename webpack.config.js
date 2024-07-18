@@ -108,7 +108,7 @@ const config = env => {
 					use: [
 						// Adds the following to the output bundle: (function () { ... }).call(window);
 						{
-							loader: 'imports-loader?this=>window',
+							loader: 'imports-loader?type=commonjs&wrapper=window',
 						},
 						// Adds the following to the output bundle: module.exports = window.Modernizr;
 						{
@@ -124,8 +124,11 @@ const config = env => {
 					test: /onsenui.js/,
 					use: [
 						{
-							loader: 'imports-loader?define=>false,module.exports=>false'
-						}
+							loader: 'imports-loader',
+							options: {
+								additionalCode: 'var define = false; module.exports = false;'
+							},
+						},
 					],
 				},
 				{
