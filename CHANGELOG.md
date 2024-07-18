@@ -1,3 +1,10 @@
+## [1.35.5](https://gitlab.com/opalmedapps/qplus/compare/v1.35.4...v1.35.5) (2024-07-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-geolocation to v5 ([0c23e37](https://gitlab.com/opalmedapps/qplus/commit/0c23e376d2bf3a0702c6e8f5fb63c12de727150a))
+
 ## [1.35.4](https://gitlab.com/opalmedapps/qplus/compare/v1.35.3...v1.35.4) (2024-07-17)
 
 
