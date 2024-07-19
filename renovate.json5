@@ -19,11 +19,6 @@
     "ionicons",
     "moment",
     "onsenui",
-    "exports-loader",
-    "html-loader",
-    "imports-loader",
-    "raw-loader",
-    "style-loader",
   ],
   "packageRules": [
     // TODO: add the missing dependencies and group them if possible
