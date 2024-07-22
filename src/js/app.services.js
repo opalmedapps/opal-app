@@ -35,6 +35,7 @@ import "./services/loggerService.js";
 import "./services/networkStatusService.js";
 import "./services/responseValidationService.js";
 import "./services/securityService.js";
+import "./services/session-keys.service.js";
 import "./services/UserHospitalPreferencesService.js";
 import "./services/patient-test-results.service";
 import "./services/questionnaireDataService.js";

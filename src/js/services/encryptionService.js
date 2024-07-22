@@ -7,6 +7,7 @@
 //
 import nacl from "tweetnacl";
 import util from "tweetnacl-util";
+import sodium from 'libsodium-wrappers';
 
 nacl.util = util;
 var myApp = angular.module('OpalApp');
@@ -14,7 +15,7 @@ var myApp = angular.module('OpalApp');
  *@ngdoc service
  *@description Provides an API to encrypt and decrypt objects, arrays, or strings.
  **/
-myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPreferences', function (UserAuthorizationInfo, UserHospitalPreferences) {
+myApp.service('EncryptionService', ['SessionKeys', 'UserAuthorizationInfo', 'UserHospitalPreferences', function (SessionKeys, UserAuthorizationInfo, UserHospitalPreferences) {
 
     var securityAnswerHash = '';
     var encryptionHash = '';
@@ -64,17 +65,17 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
 
     function encryptObject(object, secret, nonce) {
         if (typeof object === 'string') {
-            return nacl.util.encodeBase64(appendUint8Array(nonce, nacl.secretbox(nacl.util.decodeUTF8(object), nonce, secret)));
+            return sodium.to_base64(appendUint8Array(nonce, sodium.crypto_secretbox_easy(object, nonce, secret)));
         } else if (typeof object !== 'string' && typeof object !== 'object') {
             object = String(object);
-            return nacl.util.encodeBase64(appendUint8Array(nonce, nacl.secretbox(nacl.util.decodeUTF8(object), nonce, secret)));
+            return sodium.to_base64(appendUint8Array(nonce, sodium.crypto_secretbox_easy(object, nonce, secret)));
         } else {
-            for (var key in object) {
+            for (let key in object) {
                 if (typeof object[key] === 'object') {
                     encryptObject(object[key], secret, nonce);
                 } else {
                     object[key] = String(object[key]);
-                    object[key] = nacl.util.encodeBase64(appendUint8Array(nonce, nacl.secretbox(nacl.util.decodeUTF8(object[key]), nonce, secret)));
+                    object[key] = sodium.to_base64(appendUint8Array(nonce, sodium.crypto_secretbox_easy(object[key], nonce, secret)));
                 }
             }
             return object;
@@ -128,7 +129,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
      *@return {String} Returns hashed string
      **/
     function hash(incoming) {
-        return CryptoJS.SHA512(incoming).toString();
+        return sodium.to_hex(sodium.crypto_generichash(sodium.crypto_generichash_BYTES, incoming));
     }
 
     /**
@@ -177,7 +178,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
          **/
         encryptData: function (object) {
             var nonce = this.generateNonce();
-            return encryptObject(object, nacl.util.decodeUTF8(encryptionHash.substring(0, nacl.secretbox.keyLength)), nonce);
+            return encryptObject(object, SessionKeys.getOutgoingKey(), nonce);
         },
 
         /**
@@ -190,7 +191,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
          **/
         encryptWithKey: function (object, secret) {
             var nonce = this.generateNonce();
-            return encryptObject(object, nacl.util.decodeUTF8(secret.substring(0, nacl.secretbox.keyLength)), nonce);
+            return encryptObject(object, secret.substring(0, sodium.crypto_secretbox_KEYBYTES), nonce);
         },
 
         /**
@@ -254,7 +255,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         },
 
         generateNonce: function () {
-            return nacl.randomBytes(nacl.secretbox.nonceLength)
+            return sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
         },
 
         /**

@@ -25,14 +25,14 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
 
     LoginController.$inject = ['$filter', '$rootScope', '$scope', '$state', '$timeout', '$window', 'CleanUp',
         'ConcurrentLogin', 'Constants', 'DeviceIdentifiers', 'EncryptionService', 'Firebase',
-        'Navigator', 'Params', 'Toast', 'UserAuthorizationInfo', 'UserHospitalPreferences',
-        'UserPreferences', 'UUID'];
+        'Navigator', 'Params', 'RequestToServer', 'SessionKeys', 'Toast', 'UserAuthorizationInfo',
+        'UserHospitalPreferences', 'UserPreferences', 'UUID'];
 
     /* @ngInject */
     function LoginController($filter, $rootScope, $scope, $state, $timeout, $window, CleanUp,
                              ConcurrentLogin, Constants, DeviceIdentifiers, EncryptionService, Firebase,
-                             Navigator, Params, Toast, UserAuthorizationInfo, UserHospitalPreferences,
-                             UserPreferences, UUID) {
+                             Navigator, Params, RequestToServer, SessionKeys, Toast, UserAuthorizationInfo,
+                             UserHospitalPreferences, UserPreferences, UUID) {
 
         var vm = this;
 
@@ -197,9 +197,20 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
 
             var deviceID = localStorage.getItem("deviceID");
 
+            // Exchange encryption keys with the listener to be used during this session
+            await exchangeKeysWithListener();
+
             //if the device was a previously trusted device, and is still set to trusted...
             if (deviceID && sameUser) loginAsTrustedUser(deviceID);
             else loginAsUntrustedUser();
+        }
+
+        async function exchangeKeysWithListener() {
+            let data = {
+                userPublicKey: SessionKeys.getUserPublicKey(),
+            };
+            let response = await RequestToServer.sendRequestWithResponse('KeyExchange', data, EncryptionService.hash('none'));
+            console.log('Sent public key and received response', response);
         }
 
         /**
