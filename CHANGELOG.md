@@ -1,3 +1,10 @@
+# [1.36.0](https://gitlab.com/opalmedapps/qplus/compare/v1.35.6...v1.36.0) (2024-07-22)
+
+
+### Features
+
+* send log request to capture trusted/untrusted devices ([dae92a7](https://gitlab.com/opalmedapps/qplus/commit/dae92a78f9ced1cd0945f058bc89169e23643f1c))
+
 ## [1.35.6](https://gitlab.com/opalmedapps/qplus/compare/v1.35.5...v1.35.6) (2024-07-18)
 
 
