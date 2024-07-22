@@ -17,12 +17,12 @@
 
     MainController.$inject = ["$window", "$state", '$rootScope','Firebase','DeviceIdentifiers',
         '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'Navigator', 'NetworkStatus',
-        'RequestToServer', 'Toast', 'Security', '$filter', 'Params', 'LogOutService', 'AppState'];
+        'RequestToServer', 'Toast', 'Security', '$filter', 'Params', 'LogOutService', 'AppState', 'SessionKeys'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, Firebase, DeviceIdentifiers,
                             $translatePartialLoader, LocalStorage, Constants, CleanUp, Navigator, NetworkStatus,
-                            RequestToServer, Toast, Security, $filter, Params, LogOutService, AppState) {
+                            RequestToServer, Toast, Security, $filter, Params, LogOutService, AppState, SessionKeys) {
 
         var timeoutLockout;
 
@@ -35,6 +35,7 @@
 
             bindEvents();
             setPushPermissions();
+            SessionKeys.init();
 
             /*
                 Detect jailbroken and rooted devices and prevent continuing.

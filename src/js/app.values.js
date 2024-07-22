@@ -128,6 +128,7 @@
                     {
                         uniqueHospitalCode: 'A6',
                         enabled: true,
+                        publicKey: '3ae5d9c2f66a8120fad07193b23243300bdf07e61ed531c21fabcb79b939273a',
                         acronymReal: 'NEURO_ACRONYM',
                         fullNameReal: 'NEURO_FULL',
                         acronymGeneric: 'OMI',
@@ -166,6 +167,7 @@
                     {
                         uniqueHospitalCode: 'A4',
                         enabled: true,
+                        publicKey: '21220face40707c4a66bbad9ef1f3771689fe1016266fcde689656e3272ac323',
                         acronymReal: '',
                         fullNameReal: '',
                         acronymGeneric: 'OHIGPH',
