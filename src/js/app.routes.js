@@ -53,6 +53,9 @@ import tabsPage from "../views/tabs/tabs.html";
 			})
 			.state('loading', {
 				url: '/loading',
+				params: {
+					isTrustedDevice: null,
+				},
 				template: loadingPage,
 				controller: 'LoadingController',
 				resolve: {
