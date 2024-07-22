@@ -2,9 +2,13 @@
 # When editing this file, please make sure to also keep `ci-cd.md` up to date.
 
 default:
+  # TODO temporarily disabling use of shared runners since we've run out of compute minutes; running on our Mac instead
+  tags:
+    - macos
   # run jobs on GitLab shared runners by default
   # only run those jobs that need our own build machine (macOS) specifically
-  image: node:20.13.1-alpine3.19
+  # image: node:20.13.1-alpine3.19
+
   # Cache modules in between pipelines
   # See: https://javascript.plainenglish.io/improving-ci-performance-aka-how-to-save-your-money-31ff691360e4
   cache:
