@@ -67,9 +67,9 @@
                     ng-class="fontSizeTitle">{{app.ScheduledStartTime|date:'fullDate'}}</ons-list-header>
                 <ons-list-item modifier="chevron">
                     <ons-row>
-                        <ons-col align="center" width="60px">
+                        <ons-col align="center" width="64px">
                             <div align="center" style="line-height:1">
-                                <span style="color:grey;" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'shortTime'}}</span>
+                                <span style="color:grey; margin-left:4px" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'veryShortTime'}}</span>
                             </div>
                         </ons-col>
                         <ons-col width="5px" style="opacity:0.8" ng-style="{ 'background-color': calendar.getListColor($index) }"></ons-col>
