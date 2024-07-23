@@ -185,7 +185,9 @@ const config = env => {
 				}
 			}),
 			new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fr/),
-			new NodePolyfillPlugin()
+			new NodePolyfillPlugin({
+				additionalAliases: ['process'],
+			}),
 		],
 		optimization: {
 			minimize: minimize,
