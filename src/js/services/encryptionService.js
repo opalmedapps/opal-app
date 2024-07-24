@@ -92,7 +92,7 @@ myApp.service('EncryptionService', ['SessionKeys', 'UserAuthorizationInfo', 'Use
             }
         }
 
-        var value = nacl.util.decodeBase64(str);
+        var value = sodium.from_base64(str);
 
         return [value.slice(0, nacl.secretbox.nonceLength), value.slice(nacl.secretbox.nonceLength, value.length)]
     }
