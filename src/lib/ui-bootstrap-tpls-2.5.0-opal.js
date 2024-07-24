@@ -330,6 +330,8 @@ angular.module('ui.bootstrap.alert', [])
   return {
     controller: 'UibAlertController',
     controllerAs: 'alert',
+    // Allows this directive to be used as an attribute or element
+    restrict: 'AE',
     templateUrl: function(element, attrs) {
       return attrs.templateUrl || 'uib/template/alert/alert.html';
     },
@@ -2058,6 +2060,8 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
       showColor: '&',
     },
     require: ['uibDatepicker', '^ngModel'],
+    // Allows this directive to be used as an attribute or element
+    restrict: 'AE',
     controller: 'UibDatepickerController',
     controllerAs: 'datepicker',
     link: function(scope, element, attrs, ctrls) {
@@ -7499,6 +7503,7 @@ angular.module("uib/template/datepicker/day.html", []).run(["$templateCache", fu
     "  </thead>\n" +
     "  <tbody>\n" +
     "    <tr class=\"uib-weeks\" ng-repeat=\"row in rows track by $index\" role=\"row\">\n" +
+    "      <td ng-if=\"showWeeks\" class=\"text-center h6\"><em>{{ weekNumbers[$index] }}</em></td>\n" +
     "      <td ng-repeat=\"dt in row\" class=\"uib-day text-center\" role=\"gridcell\"\n" +
     "        id=\"{{::dt.uid}}\"\n" +
     "        ng-class=\"::dt.customClass\">\n" +
