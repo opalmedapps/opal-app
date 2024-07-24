@@ -40,25 +40,31 @@ import _sodium from 'libsodium-wrappers';
             await _sodium.ready;
             sodium = _sodium;
 
-            await generatePublicKeyPair();
-            hospitalPublicKey = await getHospitalPublicKey('A0');
+            generatePublicKeyPair();
+            hospitalPublicKey = getHospitalPublicKey('A0');
             console.log('Hospital public key is', sodium.to_hex(hospitalPublicKey));
-            await generateSessionKeys();
+            generateSessionKeys();
         }
 
-        async function getHospitalPublicKey(code) {
+        function getHospitalPublicKey(code) {
             // TODO implement getting keys externally
             return sodium.from_hex(UserHospitalPreferences.getHospitalByCode(code).publicKey);
         }
 
-        async function generatePublicKeyPair() {
+        function generatePublicKeyPair() {
             userPublicKeyPair = sodium.crypto_box_keypair();
             console.log('Generated app user keypair', userPublicKeyPair.keyType, sodium.to_hex(userPublicKeyPair.publicKey));
         }
 
-        async function generateSessionKeys() {
+        function generateSessionKeys() {
             let userSessionKeys = sodium.crypto_kx_client_session_keys(userPublicKeyPair.publicKey, userPublicKeyPair.privateKey, hospitalPublicKey);
             console.log('Generated session keys', userSessionKeys);
+        }
+
+        async function generateSessionId() {
+            // Generate a session ID with a length of 32 bytes
+            // Session ID length: https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#session-id-length
+            return sodium.randombytes_buf(32);
         }
     }
 })();
