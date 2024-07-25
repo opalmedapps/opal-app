@@ -336,7 +336,11 @@ angular.module('ui.bootstrap.alert', [])
       return attrs.templateUrl || 'uib/template/alert/alert.html';
     },
     transclude: true,
+    // Variable restored from a previous version (1.1.2); fixes spacing issues
+    replace: true,
     scope: {
+      // Variable restored from a previous version (1.1.2); allows different alert styles
+      type: '@',
       close: '&'
     }
   };
@@ -7445,11 +7449,14 @@ angular.module("uib/template/accordion/accordion.html", []).run(["$templateCache
 
 angular.module("uib/template/alert/alert.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("uib/template/alert/alert.html",
-    "<button ng-show=\"closeable\" type=\"button\" class=\"close\" ng-click=\"close({$event: $event})\">\n" +
-    "  <span aria-hidden=\"true\">&times;</span>\n" +
-    "  <span class=\"sr-only\">Close</span>\n" +
-    "</button>\n" +
-    "<div ng-transclude></div>\n" +
+    // Div restored from an earlier version (1.1.2) to apply a different style based on the alert type
+    "<div class=\"alert\" ng-class=\"['alert-' + (type || 'warning'), closeable ? 'alert-dismissible' : null]\" role=\"alert\">\n" +
+    "    <button ng-show=\"closeable\" type=\"button\" class=\"close\" ng-click=\"close({$event: $event})\">\n" +
+    "        <span aria-hidden=\"true\">&times;</span>\n" +
+    "        <span class=\"sr-only\">Close</span>\n" +
+    "    </button>\n" +
+    "    <div ng-transclude></div>\n" +
+    "</div>\n" +
     "");
 }]);
 
