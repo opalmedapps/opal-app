@@ -164,6 +164,7 @@
                     })
                 })
                 .catch(function(error){
+                    console.error(error);
                     $timeout(function(){
                         vm.loadingQuestionnaire = false;
                         handleLoadQuestionnaireErr(error);
