@@ -34,7 +34,13 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
          */
         function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID) {
             if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
-            let requestType = encryptionKey ? typeOfRequest : EncryptionService.encryptData(typeOfRequest);
+
+            // TODO
+            let requestType;
+            if (typeOfRequest === 'VerifyAnswer') requestType = typeOfRequest;
+            else if (!encryptionKey) requestType = EncryptionService.encryptData(typeOfRequest);
+            else requestType = typeOfRequest;
+
             let requestParameters = encryptionKey ? EncryptionService.encryptWithKey(parameters, encryptionKey) : EncryptionService.encryptData(parameters);
             let request_object = getRequestObject(requestType, requestParameters, typeOfRequest, patientID);
             let reference = getReferenceField(typeOfRequest, referenceField)
