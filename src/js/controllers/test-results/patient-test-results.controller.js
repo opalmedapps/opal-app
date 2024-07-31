@@ -8,9 +8,9 @@
 		.module('MUHCApp')
 		.controller('PatientTestResultsController', PatientTestResultsController);
 
-	PatientTestResultsController.$inject = ['$scope', '$filter','Navigator','PatientTestResults','UserPreferences'];
+	PatientTestResultsController.$inject = ['$scope', '$locale', 'Navigator','PatientTestResults','UserPreferences'];
 
-	function PatientTestResultsController($scope, $filter, Navigator, PatientTestResults, UserPreferences) {
+	function PatientTestResultsController($scope, $locale, Navigator, PatientTestResults, UserPreferences) {
 
 		const vm = this;
 
@@ -44,6 +44,9 @@
 
 		// Used by patient-data-handler
 		vm.setTestsView = setTestsView;
+
+		// Current locale
+		vm.locale = $locale.id;
 
 		let language;
 		let navigator;

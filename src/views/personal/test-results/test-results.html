@@ -51,7 +51,12 @@
                     <ons-list>
                         <div ng-repeat="testDate in tests.testDates">
                             <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="tests.testDates | showHeader : $index"
-                                            >{{testDate.collectedDateTime|date:'fullDate'}}
+                                            >{{
+                                                testDate.collectedDateTime.toLocaleString(
+                                                    tests.locale,
+                                                    { timeZone: 'America/Toronto', dateStyle: "full" }
+                                                )
+                                            }}
                             </ons-list-header>
                             <ons-list-item
                                     ng-click="tests.goToTestDateResults(testDate.collectedDateTime)"
@@ -66,7 +71,12 @@
                                         <div style="line-height:1;">
                                             <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': (testDate.readStatus==='0')}]">
                                                 {{"ADDED"|translate}}
-                                                {{testDate.collectedDateTime|convertTimezone:'h:mm a':'America/Toronto'}}
+                                                {{
+                                                    testDate.collectedDateTime.toLocaleString(
+                                                        tests.locale,
+                                                        { timeZone: 'America/Toronto', timeStyle: "short" }
+                                                    )
+                                                }}
                                             </span>
                                         </div>
                                     </ons-col>
