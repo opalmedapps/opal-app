@@ -3,7 +3,7 @@
  * @author Stacey Beard
  */
 
-import _sodium from 'libsodium-wrappers';
+import _sodium from 'libsodium-wrappers-sumo';
 
 (function() {
     'use strict';
@@ -57,7 +57,7 @@ import _sodium from 'libsodium-wrappers';
         }
 
         function generateSessionKeys() {
-            let userSessionKeys = sodium.crypto_kx_client_session_keys(userPublicKeyPair.publicKey, userPublicKeyPair.privateKey, hospitalPublicKey);
+            userSessionKeys = sodium.crypto_kx_client_session_keys(userPublicKeyPair.publicKey, userPublicKeyPair.privateKey, hospitalPublicKey);
             console.log('Generated session keys', userSessionKeys);
         }
 

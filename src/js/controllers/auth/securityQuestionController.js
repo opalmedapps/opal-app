@@ -357,7 +357,6 @@
                 var hash = EncryptionService.hash(answer);
 
                 //Sets up the proper request object based on use case
-                var key = hash;
                 var firebaseRequestField = passwordReset ? 'passwordResetRequests' : undefined;
                 var firebaseResponseField = passwordReset ? 'passwordResetResponses' : undefined;
                 var parameterObject = {
@@ -372,11 +371,11 @@
                     parameterObject['Password'] = UserAuthorizationInfo.getPassword();
                 }
 
-                RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data) {
-	                vm.alertShow = true;
+                RequestToServer.sendRequestWithResponse('VerifyAnswer', parameterObject, undefined, firebaseRequestField, firebaseResponseField).then(data => {
+                    vm.alertShow = true;
                     vm.submitting = false;
                     if(data.Data.AnswerVerified === "true") {
-                        handleSuccess(key)
+                        handleSuccess(hash);
                     } else if(data.Data.AnswerVerified === "false"){
                         removeUserData();
                         handleError({Code: "wrong-answer"});
@@ -385,9 +384,9 @@
                     }
                 })
                 .catch(function(error) {
-	                vm.alertShow = true;
-	                vm.submitting = false;
-	                removeUserData();
+                    vm.alertShow = true;
+                    vm.submitting = false;
+                    removeUserData();
                     if(error.hasOwnProperty('Reason') && error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
                         handleError({Code: "corrupted-data"});
                     } else {

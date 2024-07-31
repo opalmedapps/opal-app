@@ -7,7 +7,7 @@
 //
 import nacl from "tweetnacl";
 import util from "tweetnacl-util";
-import sodium from 'libsodium-wrappers';
+import sodium from 'libsodium-wrappers-sumo';
 
 nacl.util = util;
 var myApp = angular.module('OpalApp');
@@ -129,7 +129,7 @@ myApp.service('EncryptionService', ['SessionKeys', 'UserAuthorizationInfo', 'Use
      *@return {String} Returns hashed string
      **/
     function hash(incoming) {
-        return sodium.to_hex(sodium.crypto_generichash(sodium.crypto_generichash_BYTES, incoming));
+        return sodium.to_hex(sodium.crypto_hash_sha512(incoming));
     }
 
     /**
@@ -185,13 +185,16 @@ myApp.service('EncryptionService', ['SessionKeys', 'UserAuthorizationInfo', 'Use
          *@ngdoc method
          *@name encryptWithKey
          *@params {Object} object Object to be encrypted
-         *@params {String} secret Key for encrypting
+         *@params {String} secret Key for encrypting (in hex format)
          *@description Uses the secret parameter as key to encrypt object parameter
          *@return {Object} Returns encrypted object
          **/
         encryptWithKey: function (object, secret) {
-            var nonce = this.generateNonce();
-            return encryptObject(object, secret.substring(0, sodium.crypto_secretbox_KEYBYTES), nonce);
+            let nonce = this.generateNonce();
+            let secretUint8 = sodium.from_hex(secret);
+            // Truncates the key to the right length for encryption, for edge cases when the key is not already the right length
+            let truncatedKey = secretUint8.slice(0, sodium.crypto_secretbox_KEYBYTES);
+            return encryptObject(object, truncatedKey, nonce);
         },
 
         /**
