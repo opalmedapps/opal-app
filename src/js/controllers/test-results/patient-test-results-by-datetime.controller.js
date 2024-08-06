@@ -21,6 +21,11 @@ class PatientTestResultsByDatetimeController {
 	 */
 	loading = true;
 	/**
+	 * Variable containing current locale
+	 */
+	locale = "";
+
+	/**
 	* @type {string}
 	*/
 	#language = "";
@@ -39,15 +44,17 @@ class PatientTestResultsByDatetimeController {
 	 * @param {$timeout} $timeout
 	 * @param {$filter} $filter
 	 * @param {UpdateUI} updateUI update UI service
+	 * @param {$locale} $locale
 	 */
 	constructor(patientTestResults, navigator,
-	            userPreferences, $timeout, $filter, updateUI) {
+	            userPreferences, $timeout, $filter, updateUI, $locale) {
 		this.#patientTestResults = patientTestResults;
 		this.#navigator = navigator.getNavigator();
 		this.#language = userPreferences.getLanguage();
 		this.#$filter = $filter;
 		this.#$timeout = $timeout;
 		this.#updateUI = updateUI;
+		this.locale = $locale.id;
 		this.#initialize(this.#navigator.getCurrentPage().options);
 	}
 
@@ -145,7 +152,7 @@ class PatientTestResultsByDatetimeController {
 }
 
 PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator', 'UserPreferences',
-													'$timeout', '$filter', 'UpdateUI'];
+													'$timeout', '$filter', 'UpdateUI', '$locale'];
 angular
 	.module('MUHCApp')
 	.controller('PatientTestResultsByDatetimeController', PatientTestResultsByDatetimeController);
