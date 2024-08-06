@@ -1,3 +1,10 @@
+## [1.36.2](https://gitlab.com/opalmedapps/qplus/compare/v1.36.1...v1.36.2) (2024-08-06)
+
+
+### Bug Fixes
+
+* display lab dates according to the Montreal timezone ([8090f1f](https://gitlab.com/opalmedapps/qplus/commit/8090f1ffcffdf3c84a24d9d4c19c90b4ee5e060c))
+
 ## [1.36.1](https://gitlab.com/opalmedapps/qplus/compare/v1.36.0...v1.36.1) (2024-07-29)
 
 
