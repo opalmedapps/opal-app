@@ -1,3 +1,4 @@
+// Source: https://github.com/angular/bower-angular-i18n/blob/master/angular-locale_en-ca.js
 'use strict';
 angular.module("ngLocale", [], ["$provide", function($provide) {
 var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
@@ -80,18 +81,34 @@ $provide.value("$locale", {
       "Nov",
       "Dec"
     ],
+    "STANDALONEMONTH": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
     "WEEKENDRANGE": [
       5,
       6
     ],
     "fullDate": "EEEE, MMMM d, y",
     "longDate": "MMMM d, y",
-    "medium": "MMM d, y h:mm a",
+    "medium": "MMM d, y h:mm:ss a",
+    "mediumNoSeconds": "MMM d, y h:mm a",
     "mediumDate": "MMM d, y",
     "mediumTime": "h:mm:ss a",
     "short": "y-MM-dd h:mm a",
     "shortDate": "y-MM-dd",
-    "shortTime": "h:mm a"
+    "shortTime": "h:mm a",
+    "veryShortTime": "h:mm a"
   },
   "NUMBER_FORMATS": {
     "CURRENCY_SYM": "$",
@@ -123,6 +140,7 @@ $provide.value("$locale", {
     ]
   },
   "id": "en-ca",
+  "localeID": "en_CA",
   "pluralCat": function(n, opt_precision) {  var i = n | 0;  var vf = getVF(n, opt_precision);  if (i == 1 && vf.v == 0) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);
