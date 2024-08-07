@@ -1,8 +1,8 @@
-# Setting Up a Local Environment
+# Setting Up an Environment
 
 A local environment can be set up to facilitate development on a single machine without having to rely on external
 components.
-See the [set up guide](https://opalmedapps.gitlab.io/) for instructions on how to set everything up.
+See the [set up guide](https://opalmedapps.gitlab.io/docs/) for instructions on how to set everything up.
 
 To connect the app to your local environment, create the following file in `env/local`:
 
