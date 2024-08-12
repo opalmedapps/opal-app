@@ -1,3 +1,10 @@
+## [1.36.3](https://gitlab.com/opalmedapps/qplus/compare/v1.36.2...v1.36.3) (2024-08-12)
+
+
+### Bug Fixes
+
+* relabel copyright to RI-MUHC ([2356cfb](https://gitlab.com/opalmedapps/qplus/commit/2356cfbda928bb7c000fcee4e2d4ac1545ab8591))
+
 ## [1.36.2](https://gitlab.com/opalmedapps/qplus/compare/v1.36.1...v1.36.2) (2024-08-06)
 
 
