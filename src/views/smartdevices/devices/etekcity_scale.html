@@ -14,13 +14,13 @@
 
         <div ng-if="ctrl.showInstructions()">
             <div style="text-align: justify;">
-                <p>{{ "SMARTDEVICES_ETEKCITY_INSTRUCTIONS" | translate }}</p>
+                <p>{{ "SMARTDEVICES_SCALE_INSTRUCTIONS" | translate }}</p>
             </div>
             
             <div align="center">
                 <button class="button--large--cta"
                         ng-click="ctrl.scanAndConnect()">
-                        <span>{{ "SMARTDEVICES_ETEKCITY_READ" | translate }}</span>
+                        <span>{{ "SMARTDEVICES_SCALE_READ" | translate }}</span>
                 </button>
             </div>
         </div>
@@ -42,12 +42,12 @@
             -->
             <button class="button--large--cta"
                     ng-click="ctrl.submitData()">
-                {{ "SMARTDEVICES_ETEKCITY_SUBMIT" | translate }}
+                {{ "SMARTDEVICES_SCALE_SUBMIT" | translate }}
             </button>
         </div>
 
         <div ng-if="ctrl.dataSubmitted" align="center">
-            <p>{{ "SMARTDEVICES_ETEKCITY_SUBMITTED" | translate }}</p>
+            <p>{{ "SMARTDEVICES_SCALE_SUBMITTED" | translate }}</p>
             <p>{{ "SMARTDEVICES_INFO_SUBMITTED" | translate }}</p>
             <button class="button--large--cta"
                     ng-click="ctrl.done()">
