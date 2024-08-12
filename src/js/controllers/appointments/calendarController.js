@@ -21,10 +21,10 @@
         .module('MUHCApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params', 'ProfileSelector', 'UpdateUI', 'User'];
+    CalendarController.$inject = ['$scope', 'Appointments', '$location', '$anchorScroll', 'Navigator', 'UserPreferences', 'Params', 'Notifications'];
 
     /* @ngInject */
-    function CalendarController(Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params, ProfileSelector, UpdateUI, User) {
+    function CalendarController($scope, Appointments, $location, $anchorScroll, Navigator, UserPreferences, Params, Notifications) {
         const vm = this;
 
         let todaysTimeMilliseconds;
@@ -32,7 +32,7 @@
         let today;
         let dateLast;
         let dateFirst;
-        let navigatorName;
+        let navigator;
 
         /**
          * The date options that are fed into the appointment calendar
@@ -41,8 +41,8 @@
         vm.dateOptions = {
             formatYear: 'yyyy',
             startingDay: 0,
-            formatDay:'d',
-            showWeeks:false
+            formatDay: 'd',
+            showWeeks: false,
         };
 
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
@@ -95,6 +95,9 @@
          *************************/
 
         function activate() {
+            navigator = Navigator.getNavigator();
+
+            bindEvents();
 
             // Get the user's language
             vm.language = UserPreferences.getLanguage();
@@ -109,29 +112,6 @@
 
             // Initialize calendar styling
             initializeCalendarStyle();
-
-            // Get the name of the current navigator
-            navigatorName = NavigatorParameters.getParameters().Navigator;
-
-            let navigator = NavigatorParameters.getNavigator();
-
-            // Patient profile that was active/set on the previous page
-            let prevPageProfileID = NavigatorParameters.getParameters()?.currentProfile;
-            let previousProfile = ProfileSelector.getPatientList().find(
-                (item) => item.patient_legacy_id == prevPageProfileID
-            )
-            navigator.on('prepop', () => {
-                // Reload profile that was active/set on the previous page
-                if (
-                    NavigatorParameters.getParameters()?.isCareReceiver
-                    && previousProfile
-                ) {
-                    ProfileSelector.loadPatientProfile(prevPageProfileID);
-                    
-                    // Reload 'Appointments' for the current user
-                    UpdateUI.updateTimestamps('Appointments', 0);
-                }
-            });
         }
 
         /**
@@ -317,16 +297,29 @@
          * @param appointment
          */
         function goToAppointment(appointment) {
-            if(appointment.ReadStatus === '0') Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
-            NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':appointment});
-            $window[navigatorName].pushPage('./views/personal/appointments/individual-appointment.html');
+            if(appointment.ReadStatus === '0') {
+                Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+                // Mark corresponding notification as read
+                Notifications.implicitlyMarkCachedNotificationAsRead(
+                    appointment.AppointmentSerNum,
+                    [
+                        Params.NOTIFICATION_TYPES.RoomAssignment,
+                        Params.NOTIFICATION_TYPES.NextAppointment,
+                        Params.NOTIFICATION_TYPES.AppointmentTimeChange,
+                        Params.NOTIFICATION_TYPES.CheckInNotification,
+                        Params.NOTIFICATION_TYPES.AppointmentNew,
+                        Params.NOTIFICATION_TYPES.AppointmentCancelled,
+                    ],
+                );
+            }
+            navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
         }
 
         /**
          * Opens the calendar legend
          */
         function goToCalendarOptions() {
-            $window[navigatorName].pushPage('./views/personal/appointments/calendar-options.html');
+            navigator.pushPage('./views/personal/appointments/calendar-options.html');
         }
 
         /**
@@ -376,8 +369,13 @@
             return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
         }
 
+        function bindEvents() {
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if appointments calendar was opened via Home tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('home.html', ['Appointments']));
+        }
     }
 })();
-
-
-

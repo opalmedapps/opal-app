@@ -140,10 +140,7 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
          **/
         clearUserPreferences: function() {
             fontSize = '';
+            languageObserver.clear();
         }
-
     };
-
-
-
 }]);

@@ -266,9 +266,9 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
             const selfPatientSerNum = User.getSelfPatientSerNum();
             if (!appointments) return;
             appointments.forEach(appointment => {
-                let patientName = `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`;
+                let patientName = `${appointment.patient.first_name} ${appointment.patient.last_name}'s appointments`;
                 if ((UserPreferences.getLanguage()=='FR')) {
-                    patientName = `Rendez-vous pour ${appointment.patient.firstname} ${appointment.patient.lastname}`;
+                    patientName = `Rendez-vous pour ${appointment.patient.first_name} ${appointment.patient.last_name}`;
                 }
                 if (selfPatientSerNum && appointment.patient.patientsernum === selfPatientSerNum) {
                     patientName = (UserPreferences.getLanguage()=='EN') ? 'Your appointments' : 'Vos rendez-vous';
@@ -318,7 +318,6 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         {
 
             searchAppointmentsAndDelete(appointments);
-            //this.clearAppointments();
             addAppointmentsToService(appointments);
         },
         /**
@@ -581,68 +580,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         isThereNextTreatment:function(){
             return !angular.equals({}, treatmentSessionsObject.CurrentAppointment.Appointment);
         },
-        //Get number of unread news
-        /**
-         *@ngdoc method
-         *@name getNumberUnreadAppointments
-         *@methodOf MUHCApp.service:Appointments
-         *@param {Object} serNum AppointmentSerNum
-         *@returns {String} Returns the number of unseen appointments
-         **/
-        getNumberUnreadAppointments:function()
-        {
-            var array = [];
-            var number = 0;
-            for (var i = 0; i < userAppointmentsArray.length; i++) {
-                if(userAppointmentsArray[i].ReadStatus == '0')
-                {
-                    number++;
-                }
-            }
-            return number;
-        },
-        //Input array or string sets the language of the appointments for controllers to use
-        /**
-         *@ngdoc method
-         *@name setAppointmentsLanguage
-         *@methodOf MUHCApp.service:Appointments
-         *@param {Array} array Array containing appointments to be translated
-         *@description Checks the current language in  UserPreferences service and sets appropiate language for each appointment in the array
-         *@returns {String} Returns the array with the proper up to date translations
-         **/
-        setAppointmentsLanguage:function(array)
-        {
-            var language = UserPreferences.getLanguage();
 
-            //Check if array
-            if (Array.isArray(array)) {
-
-                for (var i = 0; i < array.length; i++) {
-                    //set language
-                    if(!array[i].hasOwnProperty('Title')||!array[i].hasOwnProperty('Description')||!array[i].hasOwnProperty('ResourceName'))
-                    {
-                        if( array[i].Resource.hasOwnProperty('Machine')||Object.keys(array[i].Resource).length === 0)
-                        {
-                            array[i].ResourceName = (language =='EN')? array[i].MapName_EN : array[i].MapName_FR;
-                        }else if(array[i].Resource.hasOwnProperty('Doctor')){
-                            array[i].ResourceName = (language =='EN')? array[i].Resource.Doctor : array[i].Resource.Doctor;
-                        }else{
-                            array[i].ResourceName = (language =='EN')? array[i].MapName_EN : array[i].MapName_FR;
-                        }
-                        array[i].Title = (language=='EN')? array[i].AppointmentType_EN : array[i].AppointmentType_FR;
-                        array[i].Description = (language == 'EN')? array[i].AppointmentDescription_EN : array[i].AppointmentDescription_FR;
-                    }
-                }
-            }else{
-                //set language if string
-                if(!array.hasOwnProperty('Title')||!array.hasOwnProperty('Description'))
-                {
-                    array.Title = (language=='EN')? array.AppointmentType_EN : array.AppointmentType_FR;
-                    array.Description = (language == 'EN')? array.AppointmentDescription_EN: array.AppointmentDescription_FR;
-                }
-            }
-            return array;
-        },
         /**
          *@ngdoc method
          *@name clearAppointments

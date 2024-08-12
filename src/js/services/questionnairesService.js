@@ -121,12 +121,6 @@
 
         // Variables for questionnaire notifications
         let currentPurpose = 'default';
-        let numberOfUnreadQuestionnaires = {
-            clinical: 0,
-            research: 0,
-            consent: 0,
-            default: 0,
-        }
 
         // this is redundant but written for clarity, ordered alphabetically
         return {
@@ -135,7 +129,6 @@
             getQuestionnaireBySerNum: getQuestionnaireBySerNum,
             getCarouselItems: () => carouselItems,
             getCurrentQuestionnaire: () => currentQuestionnaire, // getter for the current questionnaire
-            getNumberOfUnreadQuestionnairesByPurpose: (questionnairePurpose = 'default') => numberOfUnreadQuestionnaires[questionnairePurpose], // is used for showing the badge by the personalTabController.js and researchController.js for the appropriate purpose
             getQuestionnaireBackToListByPurpose: (questionnairePurpose = 'default') => PURPOSE_LIST_MAP[questionnairePurpose], //  gets the correct translation key for the questionnaire back to list message. It assumes that the purpose has been validated.
             getQuestionnaireBeginByPurpose: (questionnairePurpose = 'default') => PURPOSE_BEGIN_MAP[questionnairePurpose], // gets the correct translation key for the begin questionnaire instruction. It assumes that the purpose has been validated.
             getQuestionnaireCount: getQuestionnaireCount,
@@ -149,26 +142,16 @@
             getQuestionnaireThankByPurpose: (questionnairePurpose = 'default') => PURPOSE_THANKS_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire thank you message. It assumes that the purpose has been validated.
             isWaitingForSavingAnswer: () => waitingForSavingAnswer,
             updateQuestionnaireStatus: updateQuestionnaireStatus,
-            requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
+            requestQuestionnaireStubFromSerNum: requestQuestionnaireStubFromSerNum,
+            formatQuestionnaireStub: formatQuestionnaireStub,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnairePurpose: (qp_ser_num) => QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num), // gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
-            requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer,
             validateQuestionnairePurpose: (questionnairePurpose) => allowedPurpose.includes(questionnairePurpose.toLowerCase()), // check whether the questionnaire purpose is valid (true if it is valid, false otherwise)
             setQuestionnaireList: setQuestionnaireList,
             updateQuestionnaireList: updateQuestionnaireList,
-            setNumberOfUnreadQuestionnairesByPurpose: setNumberOfUnreadQuestionnairesByPurpose,
-        };
 
-        /**
-         * @desc Set the unreadNum for related purpose questionnaire.
-         * @param purpose The purpose of the questionnaire to find.
-         * @param unreadNum The unreadNum of the purpose questionnaire.
-         * @returns void.
-         */
-        function setNumberOfUnreadQuestionnairesByPurpose(purpose, unreadNum) {
-            numberOfUnreadQuestionnaires[purpose] = unreadNum;
-        }
+        };
 
         /**
          * @name findInProgressQuestionIndex
@@ -248,15 +231,19 @@
         }
 
         /**
-         * @name requestOpalQuestionnaireFromSerNum
-         * @desc this function gets the basic information concerning a questionnaire stored in the OpalDB from its SerNum
-         *       In particular, it gets the answerQuestionnaireId of that questionnaire,
-         *       which allows the questionnaire to be found in the questionnaireDB
-         * @param {string|int} questionnaireSerNum
-         * @returns {Promise}
+         * @name requestQuestionnaireStubFromSerNum
+         * @description Gets the basic information concerning a questionnaire stored in the OpalDB from its SerNum
+         *              In particular, gets the qp_ser_num (answerQuestionnaireId) of that questionnaire,
+         *              which allows the questionnaire to be found in the questionnaireDB.
+         *              This information is also saved to the appropriate list in this service.
+         * @param {string|int} questionnaireSerNum The SerNum of the questionnaire to look up.
+         * @returns {Promise<Object>} Resolves to the basic information (questionnaire stub) for the given questionnaire.
          */
-        function requestOpalQuestionnaireFromSerNum(questionnaireSerNum) {
-            return QuestionnaireDataService.requestOpalQuestionnaireFromSerNum(questionnaireSerNum);
+        async function requestQuestionnaireStubFromSerNum(questionnaireSerNum) {
+            let questionnaireStub = await QuestionnaireDataService.requestQuestionnaireStubFromSerNum(questionnaireSerNum);
+            // Add the questionnaire stub to this service
+            setQuestionnaireList([questionnaireStub], false);
+            return questionnaireStub;
         }
 
         /**
@@ -278,27 +265,6 @@
         }
 
         /**
-         * @name requestQuestionnaireUnreadNumber
-         * @desc this function is requesting the number of unread (e.g. 'New') questionnaires from questionnaireDataService and
-         *       processes this response to set the number of unread questionnaires variable for notifications 
-         * @param {string} questionnairePurpose the purpose of questionnaires requested
-         * @returns {Promise}
-         */
-        async function requestQuestionnaireUnreadNumber(questionnairePurpose) {
-            try {
-                let responseUnreadNumber = await QuestionnaireDataService.requestQuestionnaireUnreadNumber(questionnairePurpose);
-
-                numberOfUnreadQuestionnaires[questionnairePurpose] = parseInt(responseUnreadNumber.numberUnread);
-
-                return { Success: true, Location: 'Server' };
-            } catch (error) {
-                console.log('Error in requestQuestionnaireUnreadNumber: ', error);
-
-                return { Success: false, Location: 'Server' };
-            }
-        }
-
-        /**
          * @name updateQuestionnaireStatus
          * @desc this function updates the status of a given questionnaire in the app and also in the database.
          *       Note that this function does not do any input check. It is relayed to the helper functions
@@ -311,7 +277,7 @@
         async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus) {
                 let userInfo = User.getUserInfo();
 
-                await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userInfo);
+                let response = await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userInfo);
 
                 let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus, userInfo);
 
@@ -319,11 +285,7 @@
                     throw new Error("Error updating status internal to app");
                 }
 
-                if (newStatus === 1) {
-                    numberOfUnreadQuestionnaires[currentPurpose] -= 1;
-                }
-
-                return { Success: true, Location: 'Server' };
+                return { Success: true, Location: 'Server', QuestionnaireSerNum: response?.QuestionnaireSerNum};
         }
 
         /**
@@ -502,21 +464,6 @@
             catch (err) {
                 console.error(err);
                 return 0;
-            }
-        }
-
-        /**
-         * @desc Deletes all "in progress" questionnaires that are locked by another user.
-         *       "New" questionnaires are not checked because they are all unlocked by definition.
-         *       "Completed" questionnaires are not checked because users are allowed to see questionnaires completed
-         *       by other users, as long as they have access to the right patient.
-         */
-        function deleteQuestionnairesLockedByOthers() {
-            for (const [qp_ser_num, questionnaire] of Object.entries(inProgressQuestionnaires)) {
-                const respondent = questionnaire.respondent_username;
-                if (respondent && respondent !== '' && respondent !== UserAuthorizationInfo.getUsername()) {
-                    delete inProgressQuestionnaires[qp_ser_num];
-                }
             }
         }
 
@@ -1002,7 +949,8 @@
         /**
          * @name setQuestionnaireList
          * @desc Processes an array of questionnaires from the listener and saves it in this service.
-         *       By default, any previously added questionnaires are overwritten.
+         *       By default, any previously added questionnaires are overwritten, but this can be disabled to
+         *       just add new questionnaires to the existing list.
          * @param {Object[]} questionnaireList - An array of questionnaires, as provided by the listener.
          * @param {boolean} [clearExisting] - Optional, defaults to true; indicates whether to clear away all previously
          *                                    added questionnaires.
@@ -1033,7 +981,6 @@
                     console.error('Questionnaire stub failed validation; not including it.', err, questionnaire);
                 }
             });
-            deleteQuestionnairesLockedByOthers();
         }
 
         /**

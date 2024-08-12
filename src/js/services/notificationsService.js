@@ -14,6 +14,7 @@
  * @requires MUHCApp.service:Documents
  * @requires MUHCApp.service:EducationalMaterial
  * @requires MUHCApp.service:Questionnaires
+ * @requires MUHCApp.service:PatientTestResults
  * @requires MUHCApp.service:RequestToServer
  * @requires MUHCApp.service:TxTeamMessages
  * @requires MUHCApp.service:UserPreferences
@@ -28,10 +29,10 @@
         .factory('Notifications', Notifications);
 
     Notifications.$inject = ['$filter','$injector','$q','Announcements','Appointments','CheckInService','Documents',
-        'EducationalMaterial','Questionnaires','RequestToServer','TxTeamMessages','UserPreferences'];
+        'EducationalMaterial', 'PatientTestResults', 'Questionnaires', 'RequestToServer','TxTeamMessages','UserPreferences', 'Params'];
 
     function Notifications($filter, $injector, $q, Announcements, Appointments, CheckInService, Documents,
-                           EducationalMaterial, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
+                           EducationalMaterial, PatientTestResults, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences, Params) {
         /**
          * @ngdoc property
          * @name MUHCApp.service.#Notifications
@@ -61,7 +62,7 @@
          *                    } ...
          */
         let notificationTypes = {
-            'Document': {
+            [Params.NOTIFICATION_TYPES.Document]: {
                 icon: 'ion-android-document',
                 color: '#90CAF9',
                 readFunction: Documents.readDocument,
@@ -69,7 +70,7 @@
                 PageUrl: Documents.getDocumentUrl,
                 refreshType: 'Documents',
             },
-            'UpdDocument': {
+            [Params.NOTIFICATION_TYPES.UpdDocument]: {
                 icon: 'ion-android-document',
                 color: '#BA68C8',
                 readFunction: Documents.readDocument,
@@ -77,7 +78,7 @@
                 PageUrl: Documents.getDocumentUrl,
                 refreshType: 'Documents',
             },
-            'RoomAssignment': {
+            [Params.NOTIFICATION_TYPES.RoomAssignment]: {
                 icon: 'fa fa-calendar-o',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -85,7 +86,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
-            'TxTeamMessage': {
+            [Params.NOTIFICATION_TYPES.TxTeamMessage]: {
                 icon: 'fa fa-user-md ',
                 color: '#2196F3',
                 readFunction: TxTeamMessages.readTxTeamMessage,
@@ -93,7 +94,7 @@
                 PageUrl: TxTeamMessages.getTxTeamMessageUrl,
                 refreshType: 'TxTeamMessages',
             },
-            'Announcement': {
+            [Params.NOTIFICATION_TYPES.Announcement]: {
                 icon: 'fa fa-bullhorn',
                 color: '#FFC107',
                 readFunction: Announcements.readAnnouncementBySerNum,
@@ -101,7 +102,7 @@
                 PageUrl: Announcements.getAnnouncementUrl,
                 refreshType: 'Announcements',
             },
-            'EducationalMaterial': {
+            [Params.NOTIFICATION_TYPES.EducationalMaterial]: {
                 icon: 'fa fa-book',
                 color: '#9575CD',
                 readFunction: EducationalMaterial.readEducationalMaterial,
@@ -109,7 +110,7 @@
                 PageUrl: EducationalMaterial.getEducationalMaterialUrl,
                 refreshType: 'EducationalMaterial',
             },
-            'NextAppointment': {
+            [Params.NOTIFICATION_TYPES.NextAppointment]: {
                 icon: 'fa fa-calendar',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -117,7 +118,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
-            'AppointmentTimeChange': {
+            [Params.NOTIFICATION_TYPES.AppointmentTimeChange]: {
                 icon: 'fa fa-calendar',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -125,7 +126,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
-            'CheckInNotification': {
+            [Params.NOTIFICATION_TYPES.CheckInNotification]: {
                 icon: 'fa fa-check-square-o',
                 color: '#4CAF50',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -133,7 +134,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
-            'CheckInError': {
+            [Params.NOTIFICATION_TYPES.CheckInError]: {
                 icon: 'fa fa-check-square-o',
                 color: '#F44336',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -142,38 +143,65 @@
                 refreshType: 'Appointments',
             },
             // Special case: uses a dedicated download page in 'PageUrl' (questionnaireNotifRedirect.html) instead of 'refreshType'
-            'Questionnaire': {
+            [Params.NOTIFICATION_TYPES.Questionnaire]: {
                 icon: 'ion-clipboard',
                 color: '#607d8b',
                 PageUrl: Questionnaires.getQuestionnaireStartUrl,
                 searchFunction: (refTableRowSerNum => refTableRowSerNum),
                 readFunction: function () {
-                    return true
+                    return true;
                 },
             },
             // Special case: uses a dedicated download page in 'PageUrl' (questionnaireNotifRedirect.html) instead of 'refreshType'
-            'LegacyQuestionnaire': {
+            [Params.NOTIFICATION_TYPES.LegacyQuestionnaire]: {
                 icon: 'ion-clipboard',
                 color: '#607d8b',
                 PageUrl: Questionnaires.getQuestionnaireStartUrl,
                 searchFunction: (refTableRowSerNum => refTableRowSerNum),
                 readFunction: function () {
-                    return true
+                    return true;
+                },
+            },
+            [Params.NOTIFICATION_TYPES.AppointmentNew]: {
+                icon: 'fa fa-calendar-plus-o',
+                color: '#5FAB61',
+                readFunction: Appointments.readAppointmentBySerNum,
+                searchFunction: Appointments.getAppointmentBySerNum,
+                PageUrl: Appointments.getAppointmentUrl,
+                refreshType: 'Appointments',
+            },
+            [Params.NOTIFICATION_TYPES.AppointmentCancelled]: {
+                icon: 'fa fa-calendar-times-o',
+                color: '#ff0787',
+                readFunction: Appointments.readAppointmentBySerNum,
+                searchFunction: Appointments.getAppointmentBySerNum,
+                PageUrl: Appointments.getAppointmentUrl,
+                refreshType: 'Appointments',
+            },
+            // Special case: opens the general lab results page, not a specific lab
+            [Params.NOTIFICATION_TYPES.NewLabResult]: {
+                icon: 'fa fa-flask ',
+                color: '#8BC34A',
+                PageUrl: PatientTestResults.getTestResultsUrl,
+                refreshType: ['PatientTestDates', 'PatientTestTypes'],
+                searchFunction: (refTableRowSerNum => refTableRowSerNum),
+                readFunction: function () {
+                    return true;
                 },
             },
         };
 
         let service =  {
-            initNotifications: initNotifications,
             updateUserNotifications: updateUserNotifications,
             getUserNotifications: getUserNotifications,
             readNotification: readNotification,
-            getNumberUnreadNotifications: getNumberUnreadNotifications,
             getNotificationPost: getNotificationPost,
             downloadNotificationTarget: downloadNotificationTarget,
+            setNotifications: setNotifications,
             setNotificationsLanguage: setNotificationsLanguage,
             clearNotifications: clearNotifications,
             markAllRead: markAllRead,
+            implicitlyMarkCachedNotificationAsRead: implicitlyMarkCachedNotificationAsRead,
         };
 
         return service;
@@ -184,7 +212,7 @@
          *  PRIVATE FUNCTIONS
          ******************************/
 
-        //Used by the update function, it iterates through the notifications if it finds the notification then it deletes it.
+        // Used by the update function, it iterates through the notifications if it finds the notification then it deletes it.
         function searchAndDeleteNotifications(notifications) {
             for (let i = 0; i < notifications.length; i++) {
                 for (let j = 0; j < Notifications.length; j++) {
@@ -196,12 +224,15 @@
             }
         }
 
-        //Adds the notification to the notifications array and the localStorage array.
+        // Adds the notification to the notifications array and the localStorage array.
         function addUserNotifications(notifications) {
             if (typeof notifications === 'undefined') return;
             let temp = angular.copy(notifications);
             for (let i = 0; i < notifications.length; i++) {
-                if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') continue;
+                if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') {
+                    console.warn(`Notification with unsupported type ${temp[i].NotificationType}:`, temp[i]);
+                    continue;
+                } 
 
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
@@ -218,12 +249,12 @@
 
         /**
          * @ngdoc method
-         * @name setUserNotifications
+         * @name setNotifications
          * @methodOf MUHCApp.service:Notifications
          * @param {Object} notifications Notifications array that contains the new notifications
          * @description Setter method for Notifications
          **/
-        function setUserNotifications(notifications) {
+        function setNotifications(notifications) {
             Notifications = [];
             addUserNotifications(notifications);
         }
@@ -231,16 +262,6 @@
         /******************************
          *  PUBLIC FUNCTIONS
          ******************************/
-
-        function initNotifications(notifications) {
-            setUserNotifications(notifications);
-
-            /* SetNotificationsLanguage removes all broken notifications from the list.
-             * Calling it here ensures that the unread notifications badge is initialized to the right value before
-             * showing the Home tab.
-             * -SB */
-            setNotificationsLanguage(Notifications);
-        }
 
         /**
          *@ngdoc method
@@ -314,21 +335,6 @@
 
         /**
          * @ngdoc method
-         * @name getNumberUnreadNotifications
-         * @methodOf MUHCApp.service:Notifications
-         * @description Iterates through the Notifications array and returns the number of unread notifications.
-         * @returns {Number} Returns number of unread notifications
-         **/
-        function getNumberUnreadNotifications() {
-            let number = 0;
-            for (let i = 0; i < Notifications.length; i++) {
-                if (Notifications[i].ReadStatus === '0') number++;
-            }
-            return number;
-        }
-
-        /**
-         * @ngdoc method
          * @name getNotificationPost
          * @methodOf MUHCApp.service:Notifications
          * @param {Object} notification Notification that belongs to the post
@@ -349,7 +355,7 @@
             await UpdateUI.getSingleItem(notification.refreshType, notification.RefTableRowSerNum);
 
             // Look up the item to make sure it was correctly saved in a data service
-            let savedItem = getNotificationPost(notification)
+            let savedItem = getNotificationPost(notification);
             if (!savedItem) throw new Error(`Failed to download or save notification target for '${notification.NotificationType}' with SerNum ${notification.RefTableRowSerNum}`);
             return savedItem;
         }
@@ -373,6 +379,7 @@
                     notifications[i].Title = notifications[i][`Name_${language}`];
                     notifications[i].RefTableRowTitle = notifications[i][`RefTableRowTitle_${language}`];
                 } catch (e) {
+                    console.error('Incorrectly formatted notification, not shown', notifications[i]);
                     notifications.splice(i, 1);
                 }
             }
@@ -387,6 +394,32 @@
          **/
         function clearNotifications() {
             Notifications = [];
+        }
+
+        /**
+         * @ngdoc method 
+         * @name implicitlyMarkCachedNotificationAsRead
+         * @methodOf MUHCApp.service:Notifications
+         * @desc Implicitly mark cached notifications as read.
+         *       E.g., cached notification linked to a new/updated/canceled appointment.
+         * @param {string} serNum Serial number of a category item for which a corresponding notifications is being updated.
+         * @param {Array} notificationTypes Notification types that are associated with the category item.
+         *        E.g., Document record is associated with "Document" and "UpdDocument" notification types.
+         */
+        function implicitlyMarkCachedNotificationAsRead(serNum, notificationTypes) {
+            if (Array.isArray(Notifications) && Notifications.length)
+            {
+                Notifications.forEach(
+                    (notif) => {
+                        if (
+                            notif.RefTableRowSerNum === serNum
+                            && notificationTypes.includes(notif.NotificationType)
+                        )
+                            // Do not invoke readFunction if notification is implicitly read
+                            // since it's already invoked in the corresponding category item.
+                            notif.ReadStatus = '1';
+                    });
+            }
         }
     }
 })();

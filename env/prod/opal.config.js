@@ -6,8 +6,16 @@ const config = {
         kickOutConcurrentUsers: true,
         messageOfTheDayKey: "prod_service",
         showVersionOnInit: false,
+        useRealInstitutionNames: true,
         useSourceMap: false,
-        webpackMode: 'production',
+        screenshotsAllowed: false,
+        webpackMode: "production",
+    },
+    configXml: {
+        "APP_ID": "com.hig.opal2",
+        "APP_NAME": "Opal",
+        "BUILD_NUMBER": 20029,
+        "ANDROID_DEBUGGABLE": false,
     },
     firebase: {
         apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",

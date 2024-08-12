@@ -88,6 +88,11 @@
                                                 <span class="item-title" ng-class="fontSizeTitle">{{questionnaire.nickname}}</span>
                                             </ons-col>
                                         </ons-row>
+                                        <ons-row align="center" ng-hide="questionnaire.respondent_display_name === ''">
+                                            <ons-col  class="questionnaires-list-text">
+                                                <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_IN_PROGRESS_BY" | translate}}: {{questionnaire.respondent_display_name}}</span>
+                                            </ons-col>
+                                        </ons-row>
                                         <ons-row align="center">
                                             <ons-col class="questionnaires-list-text">
                                                 <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_LAST_UPDATED"|translate}} {{questionnaire.last_updated|date:'yyyy-MM-dd HH:mm:ss'}}</span>

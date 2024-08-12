@@ -31,10 +31,10 @@
                 'PatientTestTypeResults',
                 'PatientTestTypes',
                 'Questionnaire',
-                'QuestionnaireInOpalDBFromSerNum',
                 'QuestionnaireSaveAnswer',
                 'QuestionnaireUpdateStatus',
                 'Refresh',
+                'Read',
                 'Studies',
             ],
         });

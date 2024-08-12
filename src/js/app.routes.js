@@ -22,9 +22,14 @@ import tabsPage from "../views/tabs/tabs.html";
 		 * @date 2022-01-31
 		 */
 		$uiRouterProvider.stateService.defaultErrorHandler(err => {
-			// AUTH_REQUIRED is thrown by $requireSignIn(), while RELOAD_REDIRECT is thrown manually by "preventReload"
-			if (err.detail === "AUTH_REQUIRED" || err.detail === "RELOAD_REDIRECT") {
-				console.warn("Reload or unauthenticated state detected; redirecting to the init page", err);
+			// AUTH_REQUIRED is thrown by requireSignIn()
+			if (err.detail === "AUTH_REQUIRED") {
+				console.warn("Unauthenticated state detected (Firebase); redirecting to the init page", err);
+				$uiRouterProvider.stateService.go('init');
+			}
+			// RELOAD_REDIRECT is thrown by preventReload()
+			else if (err.detail === "RELOAD_REDIRECT") {
+				console.warn("Reload triggered, causing live data to be cleared; redirecting to the init page", err);
 				$uiRouterProvider.stateService.go('init');
 			}
 			else console.error("Transition Rejection", err);
@@ -48,10 +53,13 @@ import tabsPage from "../views/tabs/tabs.html";
 			})
 			.state('loading', {
 				url: '/loading',
+				params: {
+					isTrustedDevice: null,
+				},
 				template: loadingPage,
 				controller: 'LoadingController',
 				resolve: {
-					"currentAuth": ["FirebaseService", requireSignIn],
+					"currentAuth": ["Firebase", requireSignIn],
 					"preventReload": ["AppState", preventReload],
 				}
 			})
@@ -60,19 +68,19 @@ import tabsPage from "../views/tabs/tabs.html";
 				template: tabsPage,
 				controller: 'TabsController',
 				resolve: {
-					"currentAuth": ["FirebaseService", requireSignIn],
+					"currentAuth": ["Firebase", requireSignIn],
 					"preventReload": ["AppState", preventReload],
 				}
 			});
 
 		/**
-		 * @description Prevents certain routes from loading until Firebase's $requireSignIn resolves.
-		 *              Source: https://github.com/FirebaseExtended/angularfire/blob/master/docs/guide/user-auth.md
-		 * @param FirebaseService Injection of FirebaseService.
+		 * @description Prevents certain routes from loading if no Firebase user is authenticated.
+		 * @param Firebase Injection of the Firebase service.
 		 * @returns {Promise<*>} Resolves if the user is signed in, or rejects with "AUTH_REQUIRED".
 		 */
-		function requireSignIn(FirebaseService) {
-			return FirebaseService.getAuthentication().$requireSignIn();
+		function requireSignIn(Firebase) {
+			let userExists = !!Firebase.getCurrentUser();
+			return userExists ? Promise.resolve() : Promise.reject("AUTH_REQUIRED");
 		}
 
 		/**

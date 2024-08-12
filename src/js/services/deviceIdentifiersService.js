@@ -31,14 +31,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         deviceUUID:'',
         deviceType:''
     };
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#haveBeenSent
-     *@propertyOf MUHCApp.service:DeviceIdentifiers
-     *@description Flag to check whether the device identifiers have been sent
-     **/
-    var haveBeenSet = false;
-    var haveBeenSent = false;
 
     return{
         /**
@@ -52,12 +44,14 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             
             deviceIdentifiers.deviceUUID = Constants.app ? device.uuid : browserUUID;
             deviceIdentifiers.deviceType = Constants.app ? device.platform : 'browser';
-            haveBeenSent = false;
-            haveBeenSet = true;
+        },
+        getDeviceIdentifiers:function()
+        {
+            return deviceIdentifiers;
         },
         /**
          *@ngdoc method
-         *@name setDeviceIdentifiers
+         *@name updateRegistrationId
          *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Sets the deviceIdentifiers property.
          **/
@@ -67,54 +61,28 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         },
         /**
          *@ngdoc method
-         *@name setIdentifier
-         *@param {String} identifierType Name of one of the three properties for the deviceIdentifiers object.
-         *@param {String} value new value for field.
+         *@name sendDeviceIdentifiersToServer
          *@methodOf MUHCApp.service:DeviceIdentifiers
-         *@description Sets the identifierType property for the deviceIdentifiers object
-         **/
-        setIdentifier:function(identifierType, value)
+         *@description Sends the device identifiers to the listener.
+         *@returns {{promise: Promise, cancel: function}} Cancellable Promise.
+         */
+        sendDeviceIdentifiersToServer: function()
         {
-            deviceIdentifiers[identifierType] = value;
-        },
-        /**
-         *@ngdoc method
-         *@name getDeviceIdentifiers
-         *@methodOf MUHCApp.service:DeviceIdentifiers
-         *@returns {Object} Returns deviceIdentifiers object.
-         **/
-        getDeviceIdentifiers:function()
-        {
-            return deviceIdentifiers;
-        },
-        /**
-         *@ngdoc method
-         *@name sendIdentifiersToServer
-         *@methodOf MUHCApp.service:DeviceIdentifiers
-         *@description If the device identifiers are set and have not been sent, it sends the device identifiers.
-         **/
-        sendIdentifiersToServer: async function()
-        {
-            if (haveBeenSet && !haveBeenSent)
-            {
-                var data = JSON.parse(JSON.stringify(deviceIdentifiers));
-                await RequestToServer.sendRequestWithResponse('DeviceIdentifier', data);
-                haveBeenSent = true;
-            }
+            let data = JSON.parse(JSON.stringify(deviceIdentifiers));
+            return RequestToServer.sendRequestWithResponseCancellable('DeviceIdentifier', data);
         },
         /**
          *@ngdoc method
          *@name sendFirstTimeIdentifierToServer
          *@methodOf MUHCApp.service:DeviceIdentifiers
-         *@description Sending the data on first login to the server.
+         *@description Sends the device identifiers to the listener, while also requesting a security question.
+         *@returns {{promise: Promise, cancel: function}} Cancellable Promise which resolves with security question data.
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-
-            var data = JSON.parse(JSON.stringify(deviceIdentifiers));
+            let data = JSON.parse(JSON.stringify(deviceIdentifiers));
             data['Password'] = UserAuthorizationInfo.getPassword();
-
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion', data, EncryptionService.hash('none'), null, null);
+            return RequestToServer.sendRequestWithResponseCancellable('SecurityQuestion', data, EncryptionService.hash('none'));
         },
         /**
          *@ngdoc method
@@ -143,7 +111,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             };
 
             localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
-            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+            localStorage.removeItem(EncryptionService.getStorageKey());
         }
     };
 }]);

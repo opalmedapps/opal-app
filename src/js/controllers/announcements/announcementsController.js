@@ -24,17 +24,21 @@
 
     AnnouncementsController.$inject = [
         'Announcements',
-        'NavigatorParameters',
+        'Navigator',
         '$scope',
-        '$filter'
+        '$filter',
+        'Notifications',
+        'Params'
     ];
 
     /* @ngInject */
     function AnnouncementsController(
         Announcements,
-        NavigatorParameters,
+        Navigator,
         $scope,
-        $filter
+        $filter,
+        Notifications,
+        Params
     ) {
         var vm = this;
         vm.noAnnouncements = true;
@@ -66,13 +70,14 @@
         function goToAnnouncement(announcement) {
             if(announcement.ReadStatus === '0')
             {
-                announcement.ReadStatus = '1';
                 Announcements.readAnnouncementBySerNum(announcement.AnnouncementSerNum);
+                // Mark corresponding notifications as read
+                Notifications.implicitlyMarkCachedNotificationAsRead(
+                    announcement.AnnouncementSerNum,
+                    [Params.NOTIFICATION_TYPES.Announcement],
+                );
             }
-            NavigatorParameters.setParameters({Navigator:'generalNavigator', Post: announcement});
-            $scope.generalNavigator.pushPage('./views/general/announcements/individual-announcement.html');
+            $scope.generalNavigator.pushPage('./views/general/announcements/individual-announcement.html', {Post: announcement});
         }
     }
 })();
-
-

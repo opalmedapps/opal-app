@@ -49,7 +49,6 @@
             setAnnouncements: setAnnouncements,
             updateAnnouncements: (array) => addAnnouncements(array),
             getAnnouncements: () => announcements,
-            getNumberUnreadAnnouncements: getNumberUnreadAnnouncements,
             getAnnouncementBySerNum: getAnnouncementBySerNum,
             readAnnouncementBySerNum: readAnnouncementBySerNum,
             readAnnouncement: readAnnouncement,
@@ -73,13 +72,12 @@
         function addAnnouncements(newAnnouncements) {
             if(!newAnnouncements || newAnnouncements[0] === "undefined") return;
 
-            newAnnouncements.forEach(annoucementToInsert => {
+            newAnnouncements.forEach(announcementToInsert => {
                 let existingElementIndex = announcements.findIndex(item => {
-                    return item.PostControlSerNum === annoucementToInsert.PostControlSerNum
-                        && new Date(item.DateAdded).toISOString().split('T')[0] === new Date(annoucementToInsert.DateAdded).toISOString().split('T')[0]
+                    return item.AnnouncementSerNum === announcementToInsert.AnnouncementSerNum
                 });
-                annoucementToInsert.DateAdded=$filter('formatDate')(annoucementToInsert.DateAdded);
-                existingElementIndex === -1 ? announcements.push(annoucementToInsert) : announcements[existingElementIndex] = annoucementToInsert;
+                announcementToInsert.DateAdded=$filter('formatDate')(announcementToInsert.DateAdded);
+                existingElementIndex === -1 ? announcements.push(announcementToInsert) : announcements[existingElementIndex] = announcementToInsert;
             });
         }
 
@@ -98,21 +96,6 @@
             announcements=[];
             lastUpdated = Date.now();
             addAnnouncements(array);
-        }
-
-        /**
-         *@ngdoc method
-         *@name getNumberUnreadAnnouncements
-         *@methodOf MUHCApp.service:Announcements
-         *@description Iterates through array object and returns the number of unread announcements
-         *@returns {Number} Returns number of unread news
-         **/
-        function getNumberUnreadAnnouncements() {
-            var number = 0;
-            for (var i = 0; i < announcements.length; i++) {
-                if (announcements[i].ReadStatus === '0') number++;
-            }
-            return number;
         }
 
         /**

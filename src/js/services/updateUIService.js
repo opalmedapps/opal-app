@@ -59,10 +59,10 @@
                 multiProfileEnabled: false,
             },
             'Notifications': {
-                set: Notifications.initNotifications,
+                set: Notifications.setNotifications,
                 update: Notifications.updateUserNotifications,
                 lastUpdated: 0,
-                multiProfileEnabled: false,
+                multiProfileEnabled: true,
             },
             'PatientTestDates': {
                 set: PatientTestResults.setTestDates,

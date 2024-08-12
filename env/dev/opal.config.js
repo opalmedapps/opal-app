@@ -4,19 +4,27 @@ const config = {
     env: "dev",
     settings: {
         kickOutConcurrentUsers: false,
-        messageOfTheDayKey: "",
+        messageOfTheDayKey: "dev_service",
         showVersionOnInit: true,
+        useRealInstitutionNames: false,
         useSourceMap: true,
-        webpackMode: 'development',
+        screenshotsAllowed: true,
+        webpackMode: "development",
+    },
+    configXml: {
+        "APP_ID": "com.hig.opaldev2",
+        "APP_NAME": "Opal Dev",
+        "BUILD_NUMBER": 1,
+        "ANDROID_DEBUGGABLE": true,
     },
     firebase: {
-        apiKey: "AIzaSyC_2PJUxJlGTd16BmuRxCiPEq3mGLYq2m8",
-        authDomain: "opal-registration-beta.firebaseapp.com",
-        databaseURL: "https://opal-registration-beta.firebaseio.com",
-        projectId: "opal-registration-beta",
-        storageBucket: "opal-registration-beta.appspot.com",
-        messagingSenderId: "452605759067",
-        appId: "1:452605759067:web:b372ac4ea85be458e7797e",
+        apiKey: "AIzaSyAMIDdcQR8EiY9gjj4cgxp6Vu3xwa78Ww8",
+        authDomain: "opal-dev.firebaseapp.com",
+        databaseURL: "https://opal-dev.firebaseio.com",
+        projectId: "opal-dev",
+        storageBucket: "opal-dev.appspot.com",
+        messagingSenderId: "652464215237",
+        appId: "1:652464215237:web:0254157de7cc10f8f94cac"
     },
 };
 

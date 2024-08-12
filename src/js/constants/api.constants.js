@@ -36,9 +36,9 @@
                         method: 'get',
                         url: '/api/sites/'
                     },
-                    INSTITUTIONS: {
+                    INSTITUTION: {
                         method: 'get',
-                        url: '/api/institutions/',
+                        url: '/api/institution/',
                     }
                 },
                 PATIENTS: {
@@ -53,10 +53,18 @@
                     method: 'get',
                     url: '/api/patients/legacy/<PATIENT_ID>/caregivers/' 
                 },
+                RELATIONSHIP_TYPES: {
+                    method: 'get',
+                    url: '/api/relationship-types/'
+                },
                 QUANTITY_SAMPLES: {
                     method: 'post',
-                    url: '/api/patients/<PATIENT_ID>/health-data/quantity-samples/'
+                    url: '/api/patients/<PATIENT_UUID>/health-data/quantity-samples/'
                 },
+                DATABANK_CONSENT: {
+                    method: 'post',
+                    url: '/api/patients/<PATIENT_UUID>/databank/consent/'
+                }
             }
         });
 })();

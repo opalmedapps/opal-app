@@ -17,13 +17,14 @@
         '$scope',
         '$timeout',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Params',
-        'Questionnaires'
+        'Questionnaires',
+        'Notifications'
     ];
 
     /* @ngInject */
-    function QuestionnaireMainController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires) {
+    function QuestionnaireMainController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires, Notifications) {
         let vm = this;
 
         // constants
@@ -35,7 +36,6 @@
         let purpose = 'default';
         let hasGoneBackToHomeScreen = false;    // this variable is used for noting whether the user has gone back to the home screen or not because if they did, we have to update the startIndex.
         let navigator = null;
-        let navigatorName = '';
 
         // variables that can be seen from view, sorted alphabetically
         vm.beginInstructions = '';
@@ -81,10 +81,9 @@
         // //////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
 
-            let params = NavigatorParameters.getParameters();
+            let params = Navigator.getParameters();
 
             if (!params?.questionnairePurpose
                 || !Questionnaires.validateQuestionnairePurpose(params?.questionnairePurpose)
@@ -155,16 +154,20 @@
                         // listen to the event of destroy the controller in order to do clean up
                         $scope.$on('$destroy', function() {
                             removeListener();
+                            // Reload user profile if questionnaire was opened via Notifications tab,
+                            // and profile was implicitly changed.
+                            Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
                         });
 
                         // no longer loading
                         delayLoading();
                     })
                 })
-                .catch(function(){
+                .catch(function(error){
+                    console.error(error);
                     $timeout(function(){
                         vm.loadingQuestionnaire = false;
-                        handleLoadQuestionnaireErr();
+                        handleLoadQuestionnaireErr(error);
                     });
                 });
         }
@@ -201,7 +204,12 @@
                 try {
                     // update status for the questionnaire of service and listener / database
                     // send the request before setting the status locally, because the request can fail if the questionnaire was locked by another user
-                    await Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, inProgress, oldStatus);
+                    let response = await Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, inProgress, oldStatus);
+
+                    Notifications.implicitlyMarkCachedNotificationAsRead(
+                        response?.QuestionnaireSerNum,
+                        Params.NOTIFICATION_TYPES.LegacyQuestionnaire
+                    );
 
                     $timeout(() => {
                         vm.questionnaire.status = inProgress;
@@ -438,14 +446,10 @@
          * @desc This function leads to the summary page
          */
         function summaryPage(){
-
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
-                answerQuestionnaireId: vm.questionnaire.qp_ser_num
-            });
-
             // go to summary page directly
-            navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html');
+            navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
+                answerQuestionnaireId: vm.questionnaire.qp_ser_num,
+            });
         }
 
         /**
@@ -896,12 +900,17 @@
          * @param {Object} error The original error object being handled.
          */
         function handleSaveAnswerErr(error) {
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
             if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
                 NativeNotification.showNotificationAlert(
                     $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
                     $filter('translate')("TITLE"),
                 );
             }
@@ -916,12 +925,19 @@
          */
         function handleLoadQuestionnaireErr(error) {
             // go to the questionnaire list page if there is an error
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+            if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR 
+                || error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
                 NativeNotification.showNotificationAlert(
                     $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER 
+                || error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
                     $filter('translate')("TITLE"),
                 );
             }

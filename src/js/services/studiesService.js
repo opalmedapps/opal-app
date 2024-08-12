@@ -9,18 +9,18 @@
         .module('MUHCApp')
         .service('Studies', StudiesService);
 
-    StudiesService.$inject = ['RequestToServer', '$filter', '$q'];
+    StudiesService.$inject = ['RequestToServer', '$filter', '$q', 'Params'];
 
-    function StudiesService(RequestToServer, $filter, $q) {
+    function StudiesService(RequestToServer, $filter, $q, Params) {
 
         var studies = [];
 
         return {
-            getNumberUnreadStudies: getNumberUnreadStudies,
             getStudies: getStudies,
             getStudiesList: getStudiesList,
             readStudy: readStudy,
-            updateConsentStatus: updateConsentStatus
+            updateConsentStatus: updateConsentStatus,
+            createDatabankConsent: createDatabankConsent
         };
 
 
@@ -56,6 +56,51 @@
 
         }
 
+        /**
+         * @name createDatabankConsent
+         * @desc Trigger creation of a new databank consent in Django.
+         *       Default for all modules is true during databank phase 1.
+         * @param {string} patientUUID The Django uuid of the currently selected patient
+         * @param {JSON} consent_questionnaire_response Patient completed response to the consent form
+         */
+        async function createDatabankConsent(patient_uuid, consent_questionnaire_response) {
+            let data = {
+                "has_appointments": true,
+                "has_questionnaires": true,
+                "has_labs": true,
+                "has_diagnoses": true,
+                "has_demographics": true,
+                "middle_name": "",
+                "city_of_birth": "",
+                "health_data_authorization": "",
+                "contact_authorization": ""
+            };
+            // Extract the responses for the consent validation and GUID generation in Django
+            consent_questionnaire_response.sections.forEach(section => {
+                section.questions.forEach(question => {
+                    if (/middle\s*name/i.test(question.question_display)) {
+                        data.middle_name = question.patient_answer.answer[0].answer_value;
+                    } else if (/city\s*of\s*birth/i.test(question.question_display)) {
+                        data.city_of_birth = question.patient_answer.answer[0].answer_value;
+                    } else if (/authorization\s*for\s*health\s*information/i.test(question.question_display)) {
+                        data.health_data_authorization = question.patient_answer.answer[0].answer_option_text;
+                    } else if (/authorization\s*for\s*qscc\s*databank/i.test(question.question_display)) {
+                        data.contact_authorization = question.patient_answer.answer[0].answer_option_text;
+                    }
+                });
+            });
+            const requestParams = Params.API.ROUTES.DATABANK_CONSENT;
+            const formattedParams = {
+                ...requestParams,
+                url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid),
+            };
+
+            try {
+                let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
+            } catch (error) {
+                console.error('Error creating databank consent', error);
+            }
+        }
 
         /**
          * @name updateConsentStatus
@@ -72,7 +117,6 @@
 
             try {
                 let response = await RequestToServer.sendRequestWithResponse('StudyUpdateStatus', params);
-
                 return { Success: true, Location: 'Server' };
             } catch (error) {
                 throw { Success: false, Location: '', Error: error };
@@ -100,20 +144,6 @@
                     RequestToServer.sendRequest('Read', { 'Id': patientStudyId, 'Field': 'patientStudy' });
                 }
             }
-        }
-
-        /**
-         * @name getNumberUnreadStudies
-         * @description Iterates through the studies array and returns the number of unread studies.
-         * @returns {Number} Returns number of unread studies
-         **/
-        function getNumberUnreadStudies() {
-            let number = 0;
-            for (let i = 0; i < studies.length; i++) {
-                if (studies[i].ReadStatus === '0') number++;
-            }
-
-            return number;
         }
     }
 })();

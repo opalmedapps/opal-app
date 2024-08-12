@@ -30,21 +30,9 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
 
     // Title mapping depending on educational material category
     const CATEGORY_TITLE_MAP = {
-        clinical: 'EDUCATION',
-        research: 'REFERENCE_MATERIAL',
+        clinical: 'EDUCATION_SHORT',
+        research: 'RESEARCH_REFERENCE_SHORT',
     };
-
-    // No material message mapping depending on educational material category
-    const CATEGORY_EMPTY_MAP = {
-        clinical: 'NOEDUCATIONALMATERIAL',
-        research: 'REFERENCE_MATERIAL_NONE',
-    };
-
-     // Variables for education material notifications
-     let numberOfUnreadMaterial = {
-        clinical: 0,
-        research: 0
-     }
 
     /**
      *@ngdoc property
@@ -135,19 +123,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             }
         }
     }
-    // Returns educational material object matching that EducationalMaterialSerNum parameter
-    // is returned as a service function in return{} section: getEducationaMaterialBySerNum
-    function getEducationalMaterialByControlSerNum(cserNum)
-    {
 
-
-        for (var i = 0; i < educationalMaterialArray.length; i++) {
-            if(educationalMaterialArray[i].EducationalMaterialControlSerNum==cserNum)
-            {
-                return angular.copy(educationalMaterialArray[i]);
-            }
-        }
-    }
     //Formats the input dates and gets it ready for controllers, updates announcementsArray
     function addEducationalMaterial(edumaterial)
     {
@@ -270,67 +246,16 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         {
             let educationalMaterialArrayByCategory = [];
 
-            // reset number of unread educational material on reload
-            numberOfUnreadMaterial['clinical'] = 0;
-            numberOfUnreadMaterial['research'] = 0;
-
             educationalMaterialArray.forEach(function(edumaterial){
                 // get material for specified category
                 if(edumaterial.Category === eduCategory){
                     educationalMaterialArrayByCategory.push(edumaterial);
                 }
-                // count number of unread materials for both categories
-                if(edumaterial.ReadStatus === '0' && numberOfUnreadMaterial.hasOwnProperty(edumaterial.Category)){
-                    numberOfUnreadMaterial[edumaterial.Category] += 1;
-                }
             });
 
             return educationalMaterialArrayByCategory;
         },
-        /**
-         *@ngdoc method
-         *@name getUnreadEducationalMaterials
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@description Filters the educationalMaterialArray by a ReadStatus of '0'.
-         *@returns {Array} Returns array containing unread educational material
-         **/
-        getUnreadEducationalMaterials:function()
-        {
-            var array=[];
-            for (var i = 0; i < educationalMaterialArray.length; i++) {
-                if(educationalMaterialArray[i].ReadStatus ==='0')
-                {
-                    array.push(educationalMaterialArray[i]);
-                }
-            }
-            return array;
-        },
 
-        /**
-         *@ngdoc method
-         *@name getNumberOfUnreadEducationalMaterials
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@returns {Object} Returns the number of unread educational material
-         **/
-        getNumberOfUnreadEducationalMaterials:function() 
-        {
-            return this.getUnreadEducationalMaterials().length;
-        },
-        /**
-         *@ngdoc method
-         *@name getNumberOfUnreadEducationalMaterialByCategory
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
-         *@description Gets the number of unread materials in a given category
-         *@returns {int} Returns number of unread educational material of type eduCategory
-         **/
-         getNumberOfUnreadEducationalMaterialByCategory:function(eduCategory='clinical')
-         {
-             if(numberOfUnreadMaterial.hasOwnProperty(eduCategory)){
-                 return numberOfUnreadMaterial[eduCategory];
-             }
-             return 0;
-         },
         /**
          *@ngdoc method
          *@name getEducationaMaterialBySerNum
@@ -363,21 +288,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
                     RequestToServer.sendRequest('Read', {'Id': serNum, 'Field': 'EducationalMaterial'});
                 }
             }
-        },
-
-        // Sends a request to the backend to mark the row numbered 'serNum' of the table EducationalMaterial as read.
-        // Author: Tongyou (Eason) Yang
-        readMaterial:function(serNum)
-        {
-            RequestToServer.sendRequestWithResponse('Read',{'Id':serNum, 'Field':'EducationalMaterial'})
-            // // For testing
-            // .then((res)=>{
-            //     console.log(res);
-            //     ons.notification.alert({message:"Set EducationalMaterial row "+serNum+" as read."});
-            // }).catch((err)=>{
-            //     console.log("Failed to set EducationalMaterial row "+serNum+" as read due to error:");
-            //     console.log(err);
-            // });
         },
 
         /**
@@ -498,17 +408,22 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             }).then((response)=>{
                 let packageContents = response.Data;
                 // Attach the icons and colours to the package contents.
-                for (var i = 0; i < packageContents.length; i++) {
-                    if(educationalMaterialType[packageContents[i].EducationalMaterialType_EN]) {
-                        packageContents[i].Icon = educationalMaterialType[packageContents[i].EducationalMaterialType_EN].icon;
-                        packageContents[i].Color = educationalMaterialType[packageContents[i].EducationalMaterialType_EN].color;
-                    }
-                    else{
-                        packageContents[i].Icon = educationalMaterialType['Other'].icon;
-                        packageContents[i].Color = educationalMaterialType['Other'].color;
-                    }
+                if (packageContents) {
+                    packageContents.forEach((content) => {
+                        if(educationalMaterialType[content.EducationalMaterialType_EN]) {
+                            content.Icon = educationalMaterialType[content.EducationalMaterialType_EN].icon;
+                            content.Color = educationalMaterialType[content.EducationalMaterialType_EN].color;
+                        }
+                        else{
+                            content.Icon = educationalMaterialType['Other'].icon;
+                            content.Color = educationalMaterialType['Other'].color;
+                        }
+                    });
+                    deferred.resolve(packageContents);
+                } else {
+                    deferred.resolve([]);
                 }
-                deferred.resolve(packageContents);
+
             }).catch((err)=>{
                 deferred.reject(err);
             });
@@ -549,19 +464,5 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         {
             return $filter('translate')(CATEGORY_TITLE_MAP[eduCategory]);
         },
-        /**
-         *@ngdoc method
-         *@name getEducationalMaterialEmptyMessage
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
-         *@description Gets translated message to display when no education material is available for the given category.
-         *@returns {String} The translated message when no material is available for the education views
-         **/
-        getEducationalMaterialEmptyMessage:function(eduCategory='clinical')
-        {
-            return $filter('translate')(CATEGORY_EMPTY_MAP[eduCategory]);
-        }
     };
-
-
 }]);

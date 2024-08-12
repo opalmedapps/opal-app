@@ -6,8 +6,16 @@ const config = {
         kickOutConcurrentUsers: true,
         messageOfTheDayKey: "preprod_service",
         showVersionOnInit: true,
+        useRealInstitutionNames: true,
         useSourceMap: false,
-        webpackMode: 'production',
+        screenshotsAllowed: false,
+        webpackMode: "production",
+    },
+    configXml: {
+        "APP_ID": "com.hig.opalpreprod",
+        "APP_NAME": "Opal Pre Prod",
+        "BUILD_NUMBER": 1,
+        "ANDROID_DEBUGGABLE": false,
     },
     firebase: {
         apiKey: "AIzaSyAGBV2Zwr0SYKy_J92jceof-OFeeFmm0Gw",

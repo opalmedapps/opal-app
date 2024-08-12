@@ -2,8 +2,20 @@
 # When editing this file, please make sure to also keep `ci-cd.md` up to date.
 
 default:
-  tags:
-    - macos
+  # run jobs on GitLab shared runners by default
+  # only run those jobs that need our own build machine (macOS) specifically
+  image: node:20.13.1-alpine3.19
+  # Cache modules in between pipelines
+  # See: https://javascript.plainenglish.io/improving-ci-performance-aka-how-to-save-your-money-31ff691360e4
+  cache:
+    # compute cache key from lock file
+    # https://docs.gitlab.com/ee/ci/caching/#compute-the-cache-key-from-the-lock-file
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+
 
 variables:
   ENV: "dev"  # The environment used in the app build command
@@ -12,6 +24,10 @@ variables:
   FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
   FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
   VERSION_TAG_REGEX: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/  # The tag semver regex recognized as a release, see: https://ihateregex.io/expr/semver/
+
+  # Override for SAST: https://docs.gitlab.com/ee/user/application_security/sast/#vulnerability-filters
+  # Avoid scanning the ui-bootstrap library twice; only scan the Opal version
+  SAST_EXCLUDED_PATHS: "spec, test, tests, tmp, src/lib/*-original.js"
 
 
 workflow:
@@ -23,10 +39,11 @@ workflow:
 
     # Prevent duplicate pipelines when a commit is pushed to an open merge request
     # See: https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
-      when: never
-    - if: $CI_COMMIT_BRANCH
+    # Source: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Workflows/MergeRequest-Pipelines.gitlab-ci.yml
+    - if: $CI_MERGE_REQUEST_IID
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
 
 # Project variables: the following variables must be configured in the project's CI/CD settings
 #
@@ -40,8 +57,12 @@ stages:
   - check
   - prepare
   - build
+  # Required for security scanning jobs
+  - test
   - deploy
+  - dast
   - post
+
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
 check dependencies:
@@ -50,7 +71,7 @@ check dependencies:
     - when: always
   script:
     - npm -v
-    - npm ci --prefer-offline
+    - npm ci --cache .npm --prefer-offline
 
 # Sets a new version number for the app when committing to the default branch
 increment version:
@@ -62,6 +83,7 @@ increment version:
     # Run automatically on every commit to the default branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
+    - apk add --no-cache git
     - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
   script:
     - npx semantic-release
@@ -78,13 +100,19 @@ increment version:
       when: never
     # In all other cases, builds can be executed manually as needed
     - when: manual
+      # prevent later stages to be blocked
+      # see: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
+      allow_failure: true
   before_script:
     - npm -v
-    - npm ci --prefer-offline
+    - npm ci --cache .npm --prefer-offline
     - echo "$ENV"
 
 # Builds the app for Android
 build android:
+  # use our build Mac
+  tags:
+    - macos
   extends: .build
   script:
     - java -version
@@ -98,40 +126,52 @@ build android:
 
 # Builds the app for iOS
 build ios:
+  # use our build Mac
+  tags:
+    - macos
   extends: .build
   script:
     # Fixes Bus Error when cordova invokes pod install
     # See: https://stackoverflow.com/a/70581304
     - gem install --user-install ffi -- --enable-libffi-alloc
     - npm run build:app:ios:device:ci --env=$ENV --devteam=$IOS_DEVELOPMENT_TEAM
-    - mv ./platforms/ios/build/device/*.ipa "opal-$ENV.ipa"
+    - mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-$ENV.ipa"
   artifacts:
     expire_in: 1 day
     paths:
       - opal-$ENV.ipa
 
+# Builds the web version of the app
 build web:
   extends: .build
   script:
     - npm run build:web --env=$ENV
-    - zip -r -X opal-$ENV-www.zip www
   artifacts:
     expire_in: 1 day
     paths:
-      - opal-$ENV-www.zip
+      - www
+  # Override of the base .build rules, to ensure web builds are run automatically
+  rules:
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    # In all other cases, execute web builds automatically
+    - when: always
 
 # Extended job for deploying the app; deploys to Firebase automatically based on release tags
 #   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the pipeline variables
 #   This service account provides permissions for uploading to Firebase App Distribution
 #   See: https://firebase.google.com/docs/app-distribution/authenticate-service-account.md?platform=android
-.deploy to firebase:
+.deploy app to firebase:
   stage: deploy
+  # require web app to be deployed (which uses the environment)
+  needs:
+    - deploy web
   rules:
     # Only release the app from release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
-  environment:
-    name: $ENV
   before_script:
+    - apk add --no-cache git
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
     # Convert the service account variable to a file. This is required because variables defined in .gitlab-ci.yml (when triggering a downstream pipeline) cannot be files.
@@ -141,37 +181,170 @@ build web:
 
 # Deploys the Android app to Firebase
 deploy android to firebase:
-  extends: .deploy to firebase
+  extends: .deploy app to firebase
   script:
-    - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+    - npx firebase-tools appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build android
 
 # Deploys the iOS app to Firebase
 deploy ios to firebase:
-  extends: .deploy to firebase
+  extends: .deploy app to firebase
   script:
-    - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+    - npx firebase-tools appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build ios
 
-# Launches a downstream pipeline to build for the QA environment
+deploy web:
+  stage: deploy
+  environment: $ENV
+  needs:
+    - build web
+  rules:
+    # Only release the web version from release tags
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+  script:
+    - apk add --no-cache lftp
+    - lftp --version
+    - echo "listing working directory..."
+    - ls -la
+    - echo "deploying to ${CI_ENVIRONMENT_NAME}"
+    - echo "transferring files and listing remote directory..."
+    # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
+    - >
+      lftp -e "
+        set cmd:fail-exit yes; 
+        open $FTP_HOST; 
+        user $FTP_USER $FTP_PASSWORD; 
+        mirror --exclude='app' --reverse --delete --verbose ./static/landingpage/ ./app/${CI_ENVIRONMENT_NAME}/;
+        mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${CI_ENVIRONMENT_NAME}/app/;
+        ls -la app/${CI_ENVIRONMENT_NAME}; 
+        bye
+      "
+
+include:
+  # use latest template versions to run security scanning jobs also in merge request pipelines:
+  # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
+  # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
+  # See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Secret-Detection.latest.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
+  # Dependency Scanning: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Dependency-Scanning.latest.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
+  # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
+  - template: Jobs/SAST.latest.gitlab-ci.yml
+  # DAST Scanning: https://docs.gitlab.com/ee/user/application_security/dast/
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Security/DAST.latest.gitlab-ci.yml
+  - template: DAST.latest.gitlab-ci.yml
+
+# Secret Detection Customization:
+# https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/index.html#overriding-the-analyzer-jobs
+secret_detection:
+  # Prevent default access to artifacts from previous stages, to avoid scanning for secrets in the npm cache (.npm)
+  needs: []
+
+# SAST Scanning Customization:
+# ensure that mobsf jobs depend on builds
+# https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
+# https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
+mobsf-android-sast:
+  needs:
+    - build android
+  rules:
+    # override rules since at the time the job is created the apk does not exist yet
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Automatically built for release tags only (see .build)
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+
+mobsf-ios-sast:
+  needs:
+    - build ios
+  rules:
+    # override rules since at the time the job is created the apk does not exist yet
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Automatically built for release tags only (see .build)
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+
+# DAST Scanning Customization:
+# https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/requirements.html
+# https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/enabling_the_analyzer.html
+dast:
+  needs: ["deploy web"]
+  # https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/variables.html
+  variables:
+    DAST_WEBSITE: "https://dev.app.opalmedapps.ca"
+    DAST_BROWSER_SCAN: "true"
+    # enables active scanning
+    # https://docs.gitlab.com/ee/user/application_security/dast/browser/checks/#active-checks
+    # DAST_FULL_SCAN_ENABLED: "true"
+  # can only run in the same pipeline as the dependent job (deploy web)
+  rules:
+    # Only release the web version from release tags
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+
+# Extended job for launching a downstream pipeline in another environment
 # See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
-build and deploy QA:
+.build and deploy downstream:
   stage: post
   rules:
     # Avoid infinite recursion
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
       when: never
-    # Only offer QA build and deployment after automatic build and deployment for Dev
+    # Only offer build and deployment in other environments after automatic build and deployment for Dev
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
       when: manual
+  trigger:
+    include:
+      - local: .gitlab-ci.yml
+
+# Launches a downstream pipeline to build for the Demo environment
+build and deploy demo:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the Demo environment
+    ENV: "demo"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_DEMO_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_DEMO_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEMO
+
+# Launches a downstream pipeline to build for the DevOps environment
+build and deploy devops:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the DevOps environment
+    ENV: "devops"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_DEVOPS_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_DEVOPS_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEVOPS
+
+# Launches a downstream pipeline to build for the PreProd environment
+build and deploy preprod:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the PreProd environment
+    ENV: "preprod"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_PREPROD_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_PREPROD_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_PREPROD
+
+# Launches a downstream pipeline to build for the QA environment
+build and deploy qa:
+  extends: .build and deploy downstream
   variables:
     # Override pipeline variables to run for the QA environment
     ENV: "qa"
     FIREBASE_APP_ANDROID: $FIREBASE_APP_QA_ANDROID
     FIREBASE_APP_IOS: $FIREBASE_APP_QA_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_QA
-  trigger:
-    include:
-      - local: .gitlab-ci.yml
+
+# Launches a downstream pipeline to build for the Staging environment
+build and deploy staging:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the Staging environment
+    ENV: "staging"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_STAGING_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_STAGING_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_STAGING

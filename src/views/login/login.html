@@ -16,7 +16,7 @@
                         </password-input>
                         <br/>
                         <!-- HOSPITAL SELECTOR -->
-                        <hospital-selector></hospital-selector>
+                        <hospital-selector on-click="login.cancelLoginAttempt"></hospital-selector>
 
                         <br/>
                         <div ng-show="login.alert.type">
@@ -28,7 +28,7 @@
                     <div id="trusted-flex-container">
                         <p id="trusted-text">{{"TRUST_DEVICE"|translate}}</p>
                         <span id="trusted-toggle">
-                             <ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch>
+                             <ons-switch ng-disabled="login.loading" var="login.trustSwitch" ng-model="login.trusted"></ons-switch>
                         </span>
                     </div>
                     <br>
@@ -43,7 +43,7 @@
                 </form>
 
                 <!-- FORGOT PASSWORD -->
-                <button class="button button--large--quiet" ng-click="initNavigator.pushPage('./views/login/forgot-password.html',{})">
+                <button class="button button--large--quiet" ng-click="login.goToReset()">
                     {{"FORGOTPASSWORD"|translate}}
                 </button>
             </div>

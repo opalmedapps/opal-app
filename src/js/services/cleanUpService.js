@@ -15,15 +15,15 @@
         .module('MUHCApp')
         .factory('CleanUp', CleanUp);
 
-    CleanUp.$inject = ['UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
+    CleanUp.$inject = ['ConcurrentLogin', 'User', 'UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
         'Appointments', 'TxTeamMessages', 'Questionnaires',
         'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
-        'UpdateUI', 'PatientTestResults', 'CheckInService'];
+        'UpdateUI', 'PatientTestResults', 'CheckInService', 'ProfileSelector'];
 
-    function CleanUp(UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
+    function CleanUp(ConcurrentLogin, User, UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
                      Appointments, TxTeamMessages, Questionnaires,
                      Announcements, EducationalMaterial, Notifications, UserPreferences,
-                     UpdateUI, PatientTestResults, CheckInService) {
+                     UpdateUI, PatientTestResults, CheckInService, ProfileSelector) {
         let service = {
             clear: clear,
             clearSensitive: clearSensitive
@@ -44,10 +44,13 @@
             Announcements.clearAnnouncements();
             EducationalMaterial.clearEducationalMaterial();
             Notifications.clearNotifications();
+            User.clearUserData();
             UserPreferences.clearUserPreferences();
             UserAuthorizationInfo.clearUserAuthorizationInfo();
             UpdateUI.clearUpdateUI();
             CheckInService.clear();
+            ConcurrentLogin.clearConcurrentLogin();
+            ProfileSelector.clearProfile();
         }
 
         function clearSensitive() {

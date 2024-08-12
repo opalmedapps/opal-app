@@ -1,11 +1,19 @@
 <ons-page style="background-color: white" ng-controller="CaregiversController as Ctrl" ng-cloak>
     <generic-toolbar title="{{'RELATIONSHIPS_CAREGIVERS'|translate}}" style-class="fontSizeTitle">
-        <right-content>   
-            <ons-toolbar-button ng-click="settingsNavigator.pushPage('views/tabs/info-page-tabs.html',{id:'caregivers'})">
+        <right-content>
+            <ons-toolbar-button ng-click="Ctrl.goToCaregiversInfo()">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
-        </right-content> 
+        </right-content>
     </generic-toolbar>
+
+    <!-- LOADING CIRCLE-->
+    <loading-spinning-circle ng-if="Ctrl.loadingList" loading-message="{{'LOADINGDATA'|translate}}"></loading-spinning-circle>
+
+    <!-- Error message -->
+    <div ng-show="Ctrl.error" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="'danger'">{{"LOADING_ERROR"|translate}}</uib-alert>
+    </div>
     
     <div ng-if="Ctrl.message" class="container" align="center">
         <p style="margin-top:25vh;color:grey">{{Ctrl.message|translate}}</p>
@@ -21,7 +29,7 @@
                 </ons-col>
                 <ons-col style="word-wrap: break-word;">
                     <div ng-class="fontSizeTitle">{{caregivers.first_name}} {{caregivers.last_name}}</div>
-                    <div class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate }} {{Ctrl.getRelationshipStatusText(caregivers.status) | translate | lowercase}}</div>
+                    <div class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate }} {{Ctrl.getRelationshipStatusText(caregivers.status) | translate | lowercase}} ({{caregivers.relationship_type}})</div>
                 </ons-col>
             </ons-row>
         </ons-list-item>

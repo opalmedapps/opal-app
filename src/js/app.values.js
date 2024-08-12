@@ -9,16 +9,18 @@
     This factory keeps track of all constants across the app.
      */
 
-    Params.$inject = ['QuestionnaireConstants', 'RequestConstants', 'ApiConstants'];
+    Params.$inject = ['QuestionnaireConstants', 'RequestConstants', 'ApiConstants', 'NotificationConstants'];
 
     /* @ngInject */
-    function Params (QuestionnaireConstants, RequestConstants, ApiConstants) {
+    function Params (QuestionnaireConstants, RequestConstants, ApiConstants, NotificationConstants) {
 
         let appConstants =
             {
                 maxIdleTimeAllowed: 300000, // 300 000 ms = 5 min. If changed, also edit the "INACTIVE" string
                 tenMinutesMilliSeconds: 600000,
                 requestTimeout: 30000,
+
+                firebaseBaseUrl: 'dev3/',
 
                 appointmentType: {
                     appointmentTypeEn: 'appointment',
@@ -119,6 +121,11 @@
                     {size: 'xlarge', style: 'fontDescXlarge', text: 'LARGE'}
                 ],
 
+                /** Password settings **/
+                minPasswordLength: 10,
+                maxPasswordLength: 50,
+                minPasswordStrengthLevel: 3,
+
                 /** CheckIn Service Constants **/
                 checkinRadiusMeters: 500,
 
@@ -178,13 +185,16 @@
                     "HOS": 0,
                     "SMD": 0,
                     "CTB": 1,
+                    "RFE": 0,
                 },
                 localStorageHospitalKey: 'hospital',
-                hospitalList: {
-                    'MUHC': {
-                        acronym: 'MUHC',
-                        fullName: 'MUHC_FULL',
+                hospitalList: [
+                    {
                         uniqueHospitalCode: 'A0',
+                        acronymReal: 'MUHC',
+                        fullNameReal: 'MUHC_FULL',
+                        acronymGeneric: 'OMI',
+                        fullNameGeneric: 'OMI_FULL',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -196,7 +206,7 @@
                             "CSQ": 1,
                             "RES": 1,
                             "STU": 0,
-                            "REF": 0,
+                            "REF": 1,
                             "RQU": 1,
                             "CON": 1,
                             "CHK": 1,
@@ -213,46 +223,15 @@
                             "HOS": 1,
                             "SMD": 1,
                             "CTB": 1,
+                            "RFE": 1,
                         },
                     },
-                    'RI-MUHC': {
-                        acronym: 'RI_MUHC_ACRONYM',
-                        fullName: 'RI_MUHC_FULL',
-                        uniqueHospitalCode: 'A6',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "RES": 1,
-                            "STU": 0,
-                            "REF": 0,
-                            "RQU": 1,
-                            "CON": 1,
-                            "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
-                            "SMD": 0,
-                            "CTB": 1,
-                        },
-                    },
-                    'CHU_SJ': {
-                        acronym: 'CHU_SJ_ACRONYM',
-                        fullName: 'CHU_SJ_FULL',
+                    {
                         uniqueHospitalCode: 'A4',
+                        acronymReal: 'CHU_SJ_ACRONYM',
+                        fullNameReal: 'CHU_SJ_FULL',
+                        acronymGeneric: 'OHIGPH',
+                        fullNameGeneric: 'OHIGPH_FULL',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -264,7 +243,7 @@
                             "CSQ": 1,
                             "RES": 0,
                             "STU": 0,
-                            "REF": 0,
+                            "REF": 1,
                             "RQU": 0,
                             "CON": 0,
                             "CHK": 0,
@@ -281,9 +260,10 @@
                             "HOS": 0,
                             "SMD": 0,
                             "CTB": 1,
+                            "RFE": 1,
                         },
                     }
-                },
+                ],
                 relationshipStatus: {
                     pending: 'PEN',
                     confirmed: 'CON',
@@ -297,6 +277,7 @@
         return {
             ...appConstants,
             ...QuestionnaireConstants,
+            ...NotificationConstants,
             REQUEST: {
                 ...RequestConstants
             },

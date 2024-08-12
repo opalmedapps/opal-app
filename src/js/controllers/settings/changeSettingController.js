@@ -12,21 +12,24 @@
         .module('MUHCApp')
         .controller('ChangeSettingController', ChangeSettingController);
 
-    ChangeSettingController.$inject = ['FirebaseService', 'UserPreferences', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params'];
+    ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer', '$timeout', 'Navigator',
+        'Params', 'EncryptionService'];
 
     /* @ngInject */
-    function ChangeSettingController(FirebaseService, UserPreferences, RequestToServer, $timeout,
-                                    UserAuthorizationInfo, NavigatorParameters, $window, Params) {
-        var vm = this;
-        var page;
-        var parameters;
-        var navigatorName;
-        const MIN_PASSWORD_LENGTH = 8;
+    function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout, Navigator,
+                                     Params, EncryptionService) {
+        let vm = this;
+
+        // Values set by the password strength checker directive
+        vm.passwordIsValid = false;
+        vm.passwordErrors = [];
+
         vm.changePassword = changePassword;
         vm.changeFont = changeFont;
         vm.changeLanguage = changeLanguage;
-        vm.validatePassword = validatePassword;
+        vm.passwordFieldChange = passwordFieldChange;
+        // Used to show an error when the password confirmation doesn't match the password
+        vm.passwordConfirmationInvalid = () => !vm.newValueValidate || vm.newValue !== vm.newValueValidate;
 
         activate();
 
@@ -34,12 +37,9 @@
 
         //Sets all the account settings depending on the field that needs to be changed
         function activate() {
-            //Mappings between parameters and translation
-            //Navigator parameter
-            navigatorName = NavigatorParameters.getParameters().Navigator;
-            page = $window[navigatorName].getCurrentPage();
-            parameters = page.options.param;
+            let parameters = Navigator.getParameters().param;
 
+            // Mapping between parameters and their translations
             $timeout(function () {
                 //Instantiates values and parameters
                 vm.disableButton = true;
@@ -51,9 +51,6 @@
                     vm.newValue = '';
                     vm.newValueValidate = '';
                     vm.oldValue = '';
-                    vm.placeHolderCurrent = "ENTEROLDPASSWORDPLACEHOLDER";
-                    vm.placeHolderNew = "SETNEWPASSWORDPLACEHOLDER";
-                    vm.placeHolderValidate = "REENTERPASSWORDPLACEHOLDER";
                     vm.instruction = "ENTERNEWPASSWORD";
                     vm.instructionOld = "ENTEROLDPASSWORD";
                 } else if (parameters === Params.setLanguageParam) {
@@ -82,23 +79,32 @@
             UserPreferences.setLanguage(val, true);
         }
 
-        // Used to enable or disable the UPDATE button
-        function validatePassword() {
-            vm.newUpdate = false;
-            vm.disableButton = !(vm.newValue.length >= MIN_PASSWORD_LENGTH && vm.newValue === vm.newValueValidate);
+        /**
+         * @description Updates variables when the user types in the password fields, for example,
+         *              enables/disables the submit button.
+         */
+        function passwordFieldChange() {
+            // Use $timeout to compute the changes after vm.passwordIsValid is set
+            $timeout(() => {
+                vm.newUpdate = false;
+                vm.disableButton = !vm.oldValue || !vm.passwordIsValid || vm.passwordConfirmationInvalid();
+            });
         }
 
-        // Reauthenticate and change password in firebase.
-        function changePassword() {
-            vm.disableButton = true;
-            var user = FirebaseService.getAuthenticationCredentials();
-            var credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.oldValue);
-            user.reauthenticate(credential)
-                .then(() => {
-                    // Before updating the password, check that the new password's contents are valid. -SB
-                    validatePasswordContents(vm.newValue) ? user.updatePassword(vm.newValue).then(updateOnServer).catch(handleError) : handleError({code:"password-disrespects-criteria"});
-                })
-                .catch(handleError);
+        /**
+         * @description Re-authenticates the user with their old password, then sets their new password in Firebase
+         *              and on the server.
+         */
+        async function changePassword() {
+            try {
+                vm.disableButton = true;
+                await Firebase.reauthenticateCurrentUser(vm.oldValue);
+                await Firebase.updateCurrentUserPassword(vm.newValue);
+                await updateOnServer();
+            }
+            catch (error) {
+                handleError(error);
+            }
         }
 
         // Change the password on Opal servers
@@ -115,7 +121,7 @@
                     });
 
                     localStorage.removeItem("deviceID");
-                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                    localStorage.removeItem(EncryptionService.getStorageKey());
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -127,25 +133,8 @@
                 })
         }
 
-        /**
-         * validatePasswordContents
-         * @author Stacey Beard, Yuan Chen
-         * @date 2020-06-08
-         * @desc Checks the contents of a password to make sure it matches security criteria.
-         *       For example, checks that the password contains at least one capital letter, one special character and one number.
-         *       Used after the UPDATE button is pressed to refuse the password and produce an error message
-         *       if necessary.
-         * @returns {boolean} True if the password contents are valid; false otherwise
-         */
-        function validatePasswordContents(passwordValue) {
-            let containsANumber = passwordValue.search(/\d{1}/) > -1;
-            let containsACapitalLetter = passwordValue.search(/[A-Z]{1}/) > -1;
-            let containsSpecialChar = passwordValue.search(/\W|_{1}/) > -1;
-
-            return containsACapitalLetter && containsANumber && containsSpecialChar;
-        }
-
         function handleError(error) {
+            console.error(error);
             $timeout(function(){
                 switch(error.code){
                     case Params.userMismatch:
@@ -171,7 +160,7 @@
                     case Params.invalidPassword:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_PASSWORD";
+                        vm.updateMessage = "INVALID_OLD_PASSWORD";
                         break;
                     case Params.emailInUse:
                         vm.alertClass = Params.alertClassUpdateMessageError;
@@ -179,11 +168,6 @@
                         vm.updateMessage = "EMAIL_TAKEN";
                         break;
                     case Params.weakPassword:
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_PASSWORD";
-                        break;
-                    case "password-disrespects-criteria":
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
                         vm.updateMessage = "PASSWORD_CRITERIA";

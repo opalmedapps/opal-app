@@ -85,6 +85,7 @@ p {
 @import url('./elements/contact.element.css');
 @import url('./elements/checkout.element.css');
 @import url('./elements/triangle.element.css');
+@import url('./elements/text.element.css');
 @import url('./elements/timeline.element.css');
 @import url('./views/test-result.view.css');
 @import url('./elements/button.element.css');

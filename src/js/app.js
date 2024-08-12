@@ -66,12 +66,6 @@
 
 /**
  *@ngdoc object
- *@name ProjectDependencies.firebase
- *@description dependency used to create the user authorization service, if user not authorized, i.e. token expired the user will be redirected to the login screen. Used also by the {@link MUHCApp.logOutController logOutController} to unauthorized users at logout. Link to external reference {@link https://github.com/firebase/angularfire}.
- */
-
-/**
- *@ngdoc object
  *@name ProjectDependencies.uibootstrap
  *@description Dependency used accross all views. Provides a way to interact with bootstrap elements using the Angular Framework.
  *Link to external reference {@link https://github.com/angular-ui/bootstrap}.
@@ -80,23 +74,19 @@
 import "jquery";
 import angular from "angular";
 import "angular-animate";
-import "angular-ui-bootstrap";
-import "../lib/ui-bootstrap-tpls-1.1.2";
+import "../lib/ui-bootstrap-tpls-2.5.6-opal.js";
 import "angular-translate";
 import "angular-dynamic-locale";
 import "angular-translate-handler-log";
+// for pluralization support: https://angular-translate.github.io/docs/#/guide/14_pluralization
+import "angular-translate-interpolation-messageformat";
 import "angular-translate-loader-partial";
 import "angular-ui-router";
 import "angular-touch";
 import "bootstrap";
-import "angularfire";
-import firebase from "firebase";
 import "angular-sanitize";
 import "onsenui/js/onsenui";
 import "moment";
-import "pdfjs-dist/build/pdf";
-import "pdfjs-dist/build/pdf.worker";
-import "pdfjs-dist/web/pdf_viewer";
 import "crypto-js";
 import "tweetnacl";
 import "tweetnacl-util";
@@ -109,6 +99,10 @@ import "font-awesome/css/font-awesome.css";
 import "../css/app.css";
 import "../css/elements/custom-toast.element.css";
 import "../Languages/angular-locales/angular-locale_en.js";
+// Fixes an issue running on an emulator and getting "Uncaught TypeError: key.split(...).at is not a function" from pdf.js
+import 'core-js/features/array/at';
+// Fixes an issue running on an emulator and getting "Uncaught TypeError: promise.withresolvers is not a function" from pdf.js
+import 'core-js/proposals/promise-with-resolvers';
 
 // Load angular module bootstrap script
 import "./app.bootstrap";
@@ -116,7 +110,7 @@ import "./app.bootstrap";
 //Routes for angular views
 angular
     .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate',
-        'ngSanitize','ui.router','onsen','ngTouch','firebase','ui.bootstrap'])
+        'ngSanitize','ui.router','onsen','ngTouch','ui.bootstrap'])
     .run(initialization);
 
 initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$translate', '$location', 'NetworkStatus'];

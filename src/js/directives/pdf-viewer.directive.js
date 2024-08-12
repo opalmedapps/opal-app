@@ -4,6 +4,9 @@
  *         Refactored by James Brace, Sept 2017 (individualDocumentController.js).
  *         Refactored as a directive by Stacey Beard, Aug 2021 (pdf-viewer.directive.js).
  */
+// See: https://github.com/mozilla/pdf.js/tree/master/examples/webpack
+import * as pdfjsLib from 'pdfjs-dist/webpack.mjs';
+
 (function () {
     'use strict';
 
@@ -86,7 +89,7 @@
 
                     uint8pf = FileManagerService.convertToUint8Array(scope.pdfContent);
 
-                    PDFJS.getDocument(uint8pf).then(function (_pdfDoc) {
+                    pdfjsLib.getDocument(uint8pf).promise.then(function (_pdfDoc) {
                         uint8pf = null;
 
                         let promises = [];
@@ -150,7 +153,7 @@
 
                 function draw(page, canvas, ctx) {
 
-                    let scaledViewport = page.getViewport(scale);
+                    let scaledViewport = page.getViewport({ scale: scale });
                     canvas.height = scaledViewport.height;
                     canvas.width = scaledViewport.width;
 

@@ -6,8 +6,16 @@ const config = {
         kickOutConcurrentUsers: true,
         messageOfTheDayKey: "qa_service",
         showVersionOnInit: true,
+        useRealInstitutionNames: false,
         useSourceMap: true,
-        webpackMode: 'development',
+        screenshotsAllowed: true,
+        webpackMode: "development",
+    },
+    configXml: {
+        "APP_ID": "com.hig.opalqa",
+        "APP_NAME": "Opal QA",
+        "BUILD_NUMBER": 1,
+        "ANDROID_DEBUGGABLE": true,
     },
     firebase: {
         apiKey: "AIzaSyAH6PNhdH4_tLleCiZlesBnV5iJIPICJi4",

@@ -8,12 +8,14 @@
         .module('MUHCApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', '$filter', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences',
-        'RequestToServer', 'MetaData', 'LogOutService', 'NativeNotification', 'ProfileSelector'];
+    LoadingController.$inject = ['$state', '$filter', 'ConcurrentLogin', 'DeviceIdentifiers', 'Logger',
+    'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'RequestToServer', '$stateParams', 'LogOutService',
+    'NativeNotification', 'ProfileSelector'];
 
     /* @ngInject */
-    function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences,
-                               RequestToServer, MetaData, LogOutService, NativeNotification, ProfileSelector) {
+    function LoadingController($state, $filter, ConcurrentLogin, DeviceIdentifiers, Logger, UpdateUI,
+        UserAuthorizationInfo, UserPreferences, RequestToServer, $stateParams, LogOutService, NativeNotification,
+        ProfileSelector) {
 
         activate();
 
@@ -26,21 +28,26 @@
 
                 loadingmodal.show();
 
-                RequestToServer.sendRequest('Login'); // For analytics only; don't wait for a response
+                Logger.sendLog(  // For analytics only; don't wait for a response
+                    'Login',
+                    {
+                        "isTrustedDevice": $stateParams.isTrustedDevice,
+                        "deviceType": DeviceIdentifiers.getDeviceIdentifiers().deviceType,
+                    },
+                );
                 await UserPreferences.initFontSize();
                 await UpdateUI.init();
-                await RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
-                await MetaData.init();
                 await ProfileSelector.init();
-
+                
                 // TODO: Currently, the app isn't able to handle a state in which there are no confirmed profiles. In this case, cancel login.
                 if (ProfileSelector.getConfirmedProfiles().length === 0) {
                     console.error('Cannot log in when there are no confirmed profiles.');
                     clearTimeout(timeOut);
-                    NativeNotification.showNotificationAlert($filter('translate')("ERROR_NO_CONFIRMED_PROFILES"), LogOutService.logOut, $filter('translate')("INFO"));
+                    NativeNotification.showNotificationAlert($filter('translate')("ERROR_NO_CONFIRMED_PROFILES"), $filter('translate')("INFO"), LogOutService.logOut);
                     return;
                 }
 
+                await ConcurrentLogin.initConcurrentLogin();
                 $state.go('Home');
 
                 loadingmodal.hide();
@@ -50,14 +57,14 @@
                 console.error(error);
                 clearTimeout(timeOut);
                 // If any part of the initialization fails, then the user cannot log in
-                NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), LogOutService.logOut);
+                NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), null, LogOutService.logOut);
             }
         }
 
         //Timeout to show, alerting user of server problems.
         let timeOut = setTimeout(function(){
             loadingmodal.hide();
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"), LogOutService.logOut);
+            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"), null, LogOutService.logOut);
         }, 90000);
     }
 })();

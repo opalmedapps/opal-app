@@ -15,16 +15,14 @@
         .module('MUHCApp')
         .controller('accountSettingController', accountSettingController);
 
-    accountSettingController.$inject = ['UserPreferences', '$scope', '$timeout', 'NavigatorParameters',
+    accountSettingController.$inject = ['UserPreferences', '$scope', '$timeout', 'Navigator',
         'UserHospitalPreferences', 'LogOutService', 'User'];
 
     /* @ngInject */
-    function accountSettingController(UserPreferences, $scope, $timeout, NavigatorParameters,
+    function accountSettingController(UserPreferences, $scope, $timeout, Navigator,
                                       UserHospitalPreferences, LogOutService, User) {
 
         var vm = this;
-        var navigatorName;
-        vm.passFill = '********';
         vm.accountDeviceBackButton = () => tabbar.setActiveTab(0);
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToUpdateAccountField = (param, animation) => settingsNavigator.pushPage('views/settings/update-account-field.html', {param:param},{ animation : animation });
@@ -35,11 +33,9 @@
         ////////////////
 
         function activate() {
+            Navigator.setNavigator(settingsNavigator);
+
             loadSettings();
-            // Setting our parameters for pushing and popping pages
-            NavigatorParameters.setParameters({'Navigator':'settingsNavigator'});
-            NavigatorParameters.setNavigator(settingsNavigator);
-            navigatorName = NavigatorParameters.getNavigatorName();
 
             // After a page is popped reintialize the settings.
             settingsNavigator.on('postpop', () => {
@@ -65,7 +61,6 @@
         }
 
         function goToGeneralSettings() {
-            NavigatorParameters.setParameters({'Navigator': navigatorName});
             settingsNavigator.pushPage('./views/init/init-settings.html');
         }
     }

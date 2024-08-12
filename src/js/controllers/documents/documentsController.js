@@ -9,11 +9,15 @@
         .module('MUHCApp')
         .controller('DocumentsController', DocumentsController);
 
-    DocumentsController.$inject = ['Documents', '$filter', 'NavigatorParameters', 'Permissions', 'Logger', '$timeout'];
+    DocumentsController.$inject = [
+        'Documents', '$filter', 'Navigator', 'Permissions', 'Logger', '$timeout', 'Notifications', 'Params'
+    ];
 
     /* @ngInject */
-    function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger, $timeout) {
-        var vm = this;
+    function DocumentsController(Documents, $filter, Navigator, Permissions, Logger, $timeout, Notifications, Params) {
+        let vm = this;
+        let navigator;
+
         vm.noDocuments = true;
         vm.documents = [];
 
@@ -27,6 +31,7 @@
         ////////////////
 
         function activate() {
+            navigator = Navigator.getNavigator();
             Logger.sendLog('Documents', 'all');
         }
 
@@ -45,15 +50,18 @@
         }
 
         //Go to document function, if not read, read it, then set parameters for navigation
-        function goToDocument(doc){
-
-            if(doc.ReadStatus == '0')
+        function goToDocument(doc)
+        {
+            if (doc.ReadStatus === '0')
             {
-                doc.ReadStatus ='1';
                 Documents.readDocument(doc.DocumentSerNum);
+                // Mark corresponding notifications as read
+                Notifications.implicitlyMarkCachedNotificationAsRead(
+                    doc.DocumentSerNum,
+                    [Params.NOTIFICATION_TYPES.Document, Params.NOTIFICATION_TYPES.UpdDocument],
+                );
             }
-            NavigatorParameters.setParameters({'navigatorName':'personalNavigator', 'Post':doc});
-            personalNavigator.pushPage('./views/personal/documents/individual-document.html');
+            navigator.pushPage('./views/personal/documents/individual-document.html', {'Post': doc});
         }
     }
 })();

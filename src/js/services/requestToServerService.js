@@ -1,21 +1,28 @@
-//
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
+import { CancelledPromiseError } from '../models/utility/cancelled-promise-error';
 
-angular
-    .module('MUHCApp')
-    .service('RequestToServer',['$injector', 'UserAuthorizationInfo', 'EncryptionService', 'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params', 'UserPreferences',
-    function($injector, UserAuthorizationInfo, EncryptionService, FirebaseService, Constants, UUID, ResponseValidator, Params, UserPreferences){
+/**
+ * @description Service providing access to the Opal Listener.
+ * @author David Herrera, Summer 2016, Email:davidfherrerar@gmail.com
+ */
+(function () {
+    'use strict';
 
-        let firebase_url;
-        let response_url;
+    angular
+        .module('MUHCApp')
+        .factory('RequestToServer', RequestToServer);
 
+    RequestToServer.$inject = ['$injector','UserAuthorizationInfo','EncryptionService','Firebase','Constants','UUID',
+        'ResponseValidator','Params','UserPreferences'];
+
+    function RequestToServer($injector, UserAuthorizationInfo, EncryptionService, Firebase, Constants, UUID,
+                             ResponseValidator, Params, UserPreferences) {
         return {
-            sendRequestWithResponse: sendRequestWithResponse,
             sendRequest: sendRequest,
+            sendRequestWithResponse: sendRequestWithResponse,
+            sendRequestWithResponseCancellable: sendRequestWithResponseCancellable,
             apiRequest: apiRequest,
             handleMultiplePatientsRequests: handleMultiplePatientsRequests
-        };
+        }
 
         /**
          * @description Encrypt and send data to firebase
@@ -26,14 +33,12 @@ angular
          * @returns Firebase unique reference key where the data is uploaded
          */
         function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID) {
-            firebase_url = FirebaseService.getDBRef();
-            response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
             if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
             let requestType = encryptionKey ? typeOfRequest : EncryptionService.encryptData(typeOfRequest);
             let requestParameters = encryptionKey ? EncryptionService.encryptWithKey(parameters, encryptionKey) : EncryptionService.encryptData(parameters);
             let request_object = getRequestObject(requestType, requestParameters, typeOfRequest, patientID);
             let reference = getReferenceField(typeOfRequest, referenceField)
-            let pushID =  firebase_url.child(reference).push(request_object);
+            let pushID =  Firebase.push(Firebase.getDBRef(reference), request_object);
 
             return pushID.key;
         }
@@ -41,21 +46,20 @@ angular
         /**
          * @description Call the new listener structure that relays the request to Django backend
          * @param {object} parameters Required fields to process request
-         * @param {object | null} Data the is needed to be passed to the request.
+         * @param {object | null} data Optional params (for 'get') or data (for 'post') that are passed in the request.
          * @returns Promise that contains the response data
          */
         function apiRequest(parameters, data = null) {
             return new Promise(async (resolve, reject) => {
-                let formatedParams = formatParams(parameters, data);
-                let requestKey = sendRequest('api', formatedParams);
-                let firebasePath = `${UserAuthorizationInfo.getUsername()}/${requestKey}`;
-                let dbReference = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
-    
-                dbReference.child(firebasePath).on('value', snapshot => {
-                    if (snapshot.exists())  {
+                let formattedParams = formatParams(parameters, data);
+                let requestKey = sendRequest('api', formattedParams);
+                let dbReference = Firebase.getDBRef(`users/${UserAuthorizationInfo.getUsername()}/${requestKey}`);
+
+                Firebase.onValue(dbReference, snapshot => {
+                    if (snapshot.exists()) {
                         const apiData = ResponseValidator.validateApiResponse(snapshot.val());
-                        dbReference.child(firebasePath).set(null);
-                        dbReference.child(firebasePath).off();
+                        Firebase.set(dbReference, null);
+                        Firebase.off(dbReference);
                         apiData instanceof Error ? reject(apiData) : resolve(apiData);
                     }
                 });
@@ -72,7 +76,6 @@ angular
                 'Appuserid': UserAuthorizationInfo.getUsername()
             };
 
-
             return {
                 ...parameters,
                 headers: headers,
@@ -80,7 +83,8 @@ angular
         }
 
         /**
-         * @descrition - Execute multiple requests to get an announcement per patient then merge the data together.
+         * @descrition - Execute multiple requests to get a categorical data (e.g., announcement) per patient
+         *               then merge the data together.
          * @param {string} typeOfRequest - Type of request send to the listener
          * @param {object} parameters - Extra parameters to identify data to be query
          * @param {string} categoryRequested - The data category requested
@@ -96,7 +100,7 @@ angular
             }));
 
             results.forEach(result => {
-                if (result && result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data.Announcements]
+                if (result && result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data[categoryRequested]]
             });
 
             return {
@@ -105,36 +109,89 @@ angular
             }
         }
 
-
+        /**
+         * @description Sends a request to the listener and resolves after receiving a response (or after a timeout).
+         *
+         *              This function's requests cannot be cancelled. This function is provided to simplify the code
+         *              when cancellation is not needed. See below for a cancellable version.
+         * @param {string} typeOfRequest The type of request to make to the listener.
+         * @param {object} [parameters] Optional parameters to send with the request.
+         * @param {string} [encryptionKey] Optional key, to be used only when making atypical requests requiring different encryption.
+         * @param {string} [referenceField] Optional different Firebase path on which to post the request. Must be used with responseField.
+         * @param {string} [responseField] Optional different Firebase path on which to receive the response. Must be used with referenceField.
+         * @param {string|number} [patientID] Optional legacy PatientSerNum to use as the TargetPatientID, when making a request for a patient
+         *                                    other than the one from the currently selected profile.
+         * @returns {Promise<object>} Resolves with the response from the listener, or rejects with an error.
+         */
         function sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField, patientID) {
-            return new Promise((resolve, reject) => {
+            let promiseWrapper = sendRequestWithResponseCancellable(typeOfRequest, parameters, encryptionKey, referenceField, responseField, patientID);
+            // Return only the promise without the cancellation feature
+            return promiseWrapper.promise;
+        }
+
+        /**
+         * @description Cancellable version of `sendRequestWithResponse`.
+         *              Sends a request to the listener and resolves after receiving a response (or after a timeout).
+         *              To cancel the request, call the `cancel` function in the return object.
+         *              When cancelled, an unfinished request will still execute in the listener, but the response will be
+         *              ignored and .then() will not be triggered. Instead, a CancelledPromiseError will be rejected.
+         *
+         *              For information about the parameters, see `sendRequestWithResponse`.
+         *
+         *              Implementation based on: https://medium.com/@masnun/creating-cancellable-promises-33bf4b9da39c
+         * @returns {{promise: Promise<object>, cancel: function}} Returns an object containing the Promise for the request,
+         *                                                         and a function that can be called to cancel it.
+         *                                                         If cancelled, the promise rejects with a CancelledPromiseError.
+         */
+        function sendRequestWithResponseCancellable(typeOfRequest, parameters, encryptionKey, referenceField, responseField, patientID) {
+            let returnObject = {}
+
+            const cancellationTrigger = new Promise((resolve, reject) => {
+                // If the cancel function below is called, this Promise rejects, which is used to cancel the request
+                returnObject.cancel = () => reject(new CancelledPromiseError());
+            });
+
+            returnObject.promise = new Promise((resolve, reject) => {
                 //Sends request and gets random key for request
                 let key = sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID);
                 //Sets the reference to fetch data for that request
-                let refRequestResponse = (!referenceField) ? response_url.child(UserAuthorizationInfo.getUsername() + '/' + key) : firebase_url.child(responseField).child(key);
+                const username = UserAuthorizationInfo.getUsername();
+                let refRequestResponse = referenceField
+                    ? Firebase.getDBRef(`${responseField}/${key}`)
+                    : Firebase.getDBRef(`users/${username}/${key}`);
                 //Waits to obtain the request data.
-                refRequestResponse.on('value', snapshot => {
+                Firebase.onValue(refRequestResponse, snapshot => {
                     if (snapshot.exists()) {
                         let data = snapshot.val();
-                        refRequestResponse.set(null);
-                        refRequestResponse.off();
+                        Firebase.set(refRequestResponse, null);
+                        Firebase.off(refRequestResponse);
                         data = ResponseValidator.validate(data, encryptionKey, timeOut);
                         data.success ? resolve(data.success) : reject(data.error)
                     }
                 }, error => {
-                    refRequestResponse.set(null);
-                    refRequestResponse.off();
+                    Firebase.set(refRequestResponse, null);
+                    Firebase.off(refRequestResponse);
                     reject(error);
                 });
 
                 // If request takes longer than 1.5 minutes to come back with timeout request, delete the listener
                 const timeOut = setTimeout(function() {
-                    refRequestResponse.off();
+                    Firebase.off(refRequestResponse);
                     reject({Response:'timeout'});
                 }, Params.requestTimeout);
 
+                // Cancellation code: if the cancel function is called before the request finishes, we reject the request Promise.
+                cancellationTrigger.catch(cancelMessage => {
+                    reject(cancelMessage);
+
+                    // Clean up
+                    Firebase.off(refRequestResponse);
+                    clearTimeout(timeOut);
+                });
             });
-        };
+
+            return returnObject;
+        }
 
         /**
          * @description Set the correct referentce field to cue request in the good listener's part.
@@ -148,7 +205,7 @@ angular
             if (referenceField) return referenceField;
             return typeOfRequest === 'api' ? 'api' : 'requests';
         }
-        
+
 
         /**
          * @description Fill up request params to be send to the listener
@@ -164,7 +221,7 @@ angular
                 Parameters: requestParameters,
                 UserEmail: UserAuthorizationInfo.getEmail(),
                 AppVersion: Constants.version(),
-                Timestamp: firebase.database.ServerValue.TIMESTAMP
+                Timestamp: Firebase.serverTimestamp(),
             };
             // Add a target patient if the request type is for patient data
             if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) params.TargetPatientID = patientID || getPatientId();
@@ -181,4 +238,5 @@ angular
             const selectedProfile = ProfileSelectorService.getActiveProfile();
             return selectedProfile?.patient_legacy_id;
         }
-}]);
+    }
+})();

@@ -7,12 +7,12 @@ import {Observer} from "../models/utility/observer";
         .module('MUHCApp')
         .service('ProfileSelector', ProfileSelector);
 
-    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'User'];
+    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'User', 'UserPreferences'];
 
     /**
      * @description Service that handle loading of a patient list for a given caregiver and selection of the profile.
      */
-    function ProfileSelector($timeout, $window, Params, RequestToServer, User) {
+    function ProfileSelector($timeout, $window, Params, RequestToServer, User, UserPreferences) {
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
@@ -23,9 +23,11 @@ import {Observer} from "../models/utility/observer";
             loadPatientProfile: loadPatientProfile,
             getActiveProfile: () => currentSelectedProfile,
             getConfirmedProfiles: getConfirmedProfiles,
+            attachToObserver: fun => profileObserver.attach(fun),
             clearProfile: clearProfile,
 
             // Functions to get info from the current profile
+            currentProfileIsSelf: () => currentSelectedProfile.relationship_type.role_type === 'SELF',
             getFirstName: () => currentSelectedProfile?.first_name,
             getPatientSerNum: () => currentSelectedProfile?.patient_legacy_id,
             getAccessLevel: () => currentSelectedProfile?.data_access,
@@ -36,9 +38,19 @@ import {Observer} from "../models/utility/observer";
          */
         async function init() {
             patientList = await requestPatientList();
+            observeLanguageChanges();
             await User.initUser();
             const patientSerNum = getLocalStoragePatientSerNum();
             loadPatientProfile(patientSerNum);
+        }
+
+        /**
+         * @description When the language changes, force patients list to be repopulated.
+         */
+        function observeLanguageChanges() {
+            UserPreferences.observeLanguage(async () => {
+                patientList = await requestPatientList();
+            });
         }
 
         /**
@@ -88,6 +100,10 @@ import {Observer} from "../models/utility/observer";
             try {
                 const requestParams = Params.API.ROUTES.PATIENTS;
                 const result = await RequestToServer.apiRequest(requestParams);
+                // Backend can return no data if user has no relationships whatsoever
+                if (!result.data) {
+                    return [];
+                }
                 const formatedResult = assignColor(result.data) ? result.data : [];
                 return formatedResult
             } catch (error) {
@@ -127,6 +143,7 @@ import {Observer} from "../models/utility/observer";
         function clearProfile() {
             patientList = [];
             currentSelectedProfile = null;
+            profileObserver.clear();
         }
     }
 })();

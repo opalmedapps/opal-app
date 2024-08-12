@@ -10,21 +10,27 @@ var myApp = angular.module('MUHCApp');
  *@ngdoc service
  *@name MUHCApp.service:EncryptionService
  *@requires MUHCApp.service:UserAuthorizationInfo
+ *@requires MUHCApp.service:UserHospitalPreferences
  *@description Provides an API to encrypt and decrypt objects, arrays, or strings.
  **/
-myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAuthorizationInfo) {
+myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPreferences', function (UserAuthorizationInfo, UserHospitalPreferences) {
 
     var securityAnswerHash = '';
     var encryptionHash = '';
 
-    const main_fields = ['UserID', 'Timestamp', 'Code', 'DeviceId'];
+    const main_fields = ['UserID', 'timestamp', 'Timestamp', 'Code', 'DeviceId'];
+
+    // Constants for key derivation
+    const keySizeBits = 256; // Key size in bits
+    const iterations = 25000;
+    const bitsPerWord = 32; // Used to convert keySizeBits, since crypto-js expects key sizes in 32-bit words
 
     function decryptObject(object, secret) {
         if (typeof object === 'string') {
             //grab the nonce
             var pair = splitValue(object);
             var decryptedObj = nacl.util.encodeUTF8(nacl.secretbox.open(pair[1], pair[0], secret));
-
+            
             return stripEscapingSlashes(decryptedObj);
 
         } else {
@@ -118,11 +124,25 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
      *@ngdoc method
      *@name hash
      *@methodOf MUHCApp.service:EncryptionService
-     *@description Encrypts a given password using SHA512
-     *@return {String} Returns hashed password
+     *@description Hashes a given string using SHA512
+     *@return {String} Returns hashed string
      **/
     function hash(incoming) {
         return CryptoJS.SHA512(incoming).toString();
+    }
+
+    /**
+     * @ngdoc method
+     * @name getStorageKey
+     * @methodOf MUHCApp.service:EncryptionService
+     * @description Generates a storage key that includes the hospital code.
+     * This key is used for storing and retrieving the encrypted security answer specific to a user and hospital.
+     * @return {String} The storage key.
+     */
+    function getStorageKey() {
+        var hospitalCode = UserHospitalPreferences.getHospitalCode();
+        var username = UserAuthorizationInfo.getUsername();
+        return `${username}:${hospitalCode}:securityAns`;
     }
 
     return {
@@ -220,8 +240,9 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          */
         generateSpecificEncryptionKey: function (secret, salt) {
             return CryptoJS.PBKDF2(secret, salt, {
-                keySize: 512 / 32,
-                iterations: 1000
+                keySize: keySizeBits /bitsPerWord,
+                iterations: iterations,
+                hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
         },
 
@@ -229,18 +250,26 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          *@ngdoc method
          *@name generateEncryptionHash
          *@methodOf MUHCApp.service:EncryptionService
-         *@description Encrypts a given password using SHA512
+         *@description Encrypts a given password using SHA-256
          *@return {String} Returns hashed password
          **/
-        generateEncryptionHash: function () {
-            encryptionHash = CryptoJS.PBKDF2(hash(UserAuthorizationInfo.getUsername()), securityAnswerHash, {
-                keySize: 512 / 32,
-                iterations: 1000
+         generateEncryptionHash: function () {
+            var usernameHash = hash(UserAuthorizationInfo.getUsername());
+            encryptionHash = CryptoJS.PBKDF2(usernameHash, securityAnswerHash, {
+                keySize: keySizeBits /bitsPerWord,
+                iterations: iterations,
+                hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
         },
 
         generateNonce: function () {
             return nacl.randomBytes(nacl.secretbox.nonceLength)
         },
+
+        /**
+         * Public interface to get the storage key from outside the service.
+         * @return {String} The storage key.
+         */
+        getStorageKey: getStorageKey,
     };
 }]);

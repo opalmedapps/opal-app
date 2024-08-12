@@ -6,11 +6,11 @@
         .controller('VitalTracerWatchController', VitalTracerWatchController);
 
         VitalTracerWatchController.$inject = [
-        '$scope', '$filter', '$timeout', 'NavigatorParameters', 'RequestToServer', 'Params', 'ProfileSelector', '$window'
+        '$scope', '$filter', '$timeout', 'Navigator', 'RequestToServer', 'Params', 'ProfileSelector', '$window'
     ];
 
     /* @ngInject */
-    function VitalTracerWatchController($scope, $filter, $timeout, NavigatorParameters, RequestToServer, Params, ProfileSelector, $window)
+    function VitalTracerWatchController($scope, $filter, $timeout, Navigator, RequestToServer, Params, ProfileSelector, $window)
     {
         // UUIDs for smart watch
         const SERVICE_UUID = '00EE';
@@ -52,7 +52,7 @@
         vm.showInstructions = () => !vm.scanning && vm.selectedDevice == null && devices.size == 0 && !vm.heartRate && !vm.bloodPressureSystolic && !vm.bloodPressureDiastolic;
         // show loading spinner while scanning and while reading data from device
         vm.isLoading = () => (vm.scanning && vm.selectedDevice == null) || (vm.selectedDevice?.connecting && !vm.heartRate && !vm.bloodPressureSystolic && !vm.bloodPressureDiastolic);
-        vm.done = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
+        vm.done = () => Navigator.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
         // ng-repeat does not support iterating through maps
         vm.getDeviceList = () => Array.from(devices.values());
 
@@ -225,11 +225,11 @@
         async function submitToBackend(data) {
             addDebugMessage('Sending the VitalTracer measurements to the backend');
 
-            const patient_id = ProfileSelector.getActiveProfile().patient_id;
+            const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
             const requestParams = Params.API.ROUTES.QUANTITY_SAMPLES;
             const formattedParams = {
                 ...requestParams,
-                url: requestParams.url.replace('<PATIENT_ID>', patient_id),
+                url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid),
             };
 
             try {

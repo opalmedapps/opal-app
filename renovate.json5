@@ -9,15 +9,18 @@
     // https://docs.renovatebot.com/presets-default/#separatepatchreleases
     ":separatePatchReleases",
   ],
-  "assignees": ["staceybeard", "yickmo"],
+  "assignees": ["staceybeard", "anton.gladyr"],
   "labels": ["dependencies"],
   "separateMinorPatch": true,
+  "ignoreDeps": [
+    "bootstrap",
+    "highcharts",
+    "ionicons",
+    "moment",
+    "onsenui",
+  ],
   "packageRules": [
-    // Exclude all the dependencies except for AngularJS/xlts
-    // TODO: group all the dependencies
-    {
-      "excludePackagePatterns": ["/.*/"],
-    },
+    // TODO: add the missing dependencies and group them if possible
     // Group auxiliary angular-related updates
     {
       "matchPackagePatterns": ["^angular"],
@@ -28,6 +31,11 @@
     {
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
       "groupName": "xlts angular packages"
+    },
+    // Group babel updates
+    {
+      "matchPackagePatterns": ["babel"],
+      "groupName": "babel packages"
     },
   ],
 }

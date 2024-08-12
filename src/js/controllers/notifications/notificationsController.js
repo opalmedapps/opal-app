@@ -10,12 +10,12 @@
         .module('MUHCApp')
         .controller('NotificationsController', NotificationsController);
 
-    NotificationsController.$inject = ['$filter','$scope','$timeout','NativeNotification','NavigatorParameters',
-        'Notifications','Permissions','RequestToServer','Utility'];
+    NotificationsController.$inject = ['$filter','$scope','$timeout','NativeNotification','Navigator',
+        'Notifications','Permissions','ProfileSelector', 'RequestToServer', 'UpdateUI', 'Utility', 'Params'];
 
     /* @ngInject */
-    function NotificationsController($filter, $scope, $timeout, NativeNotification, NavigatorParameters,
-                                     Notifications, Permissions, RequestToServer, Utility) {
+    function NotificationsController($filter, $scope, $timeout, NativeNotification, Navigator,
+                                     Notifications, Permissions, ProfileSelector, RequestToServer, UpdateUI, Utility, Params) {
         let vm = this;
         let navigator;
 
@@ -39,7 +39,7 @@
         ///////////////////////////
 
         function activate(){
-            navigator = NavigatorParameters.getNavigator();
+            navigator = Navigator.getNavigator();
 
             // Create the popover menu
             ons.createPopover('./views/personal/notifications/notifications-popover.html', {parentScope: $scope}).then(function (popover) {
@@ -57,7 +57,6 @@
 
         function displayNotifications(){
             var notifications = Notifications.getUserNotifications();
-
             if (notifications.length === 0)  {
                 $timeout(function() {
                     vm.noNotifications = true;
@@ -83,7 +82,19 @@
          */
         async function goToNotification(index, notification) {
             try {
-                if (notification.ReadStatus === '0') Notifications.readNotification(index, notification);
+                let params = {};
+                // By clicking on the notification for a patient in care should switch the profile behind the scenes
+                if (ProfileSelector.getActiveProfile().patient_legacy_id !== notification.PatientSerNum) {
+                    let currentPageParams = Navigator.getParameters();
+                    currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
+                    ProfileSelector.loadPatientProfile(notification.PatientSerNum);
+
+                    // Special case for the lab results notifications: reload labs in case they were already loaded.
+                    // It's necessary because the notification redirects to the "Lab Results" page that lists all labs,
+                    // and it's possible that they were already loaded and cached.
+                    if (notification.NotificationType === Params.NOTIFICATION_TYPES.NewLabResult)
+                        UpdateUI.updateTimestamps(notification.refreshType, 0);
+                }
 
                 if (!notification.hasOwnProperty('PageUrl')) throw new Error("Notification does not have property 'PageUrl'; unable to open");
                 let post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
@@ -95,9 +106,12 @@
                     post = await Utility.promiseMinDelay(Notifications.downloadNotificationTarget(notification), 500);
                 }
 
+                // Mark notification as read
+                if (notification.ReadStatus === '0') Notifications.readNotification(index, notification);
+
                 // Navigate to the notification target's display page
-                NavigatorParameters.updateParameters({'Post': post});
-                navigator.pushPage(notification.PageUrl);
+                params['Post'] = post;
+                navigator.pushPage(notification.PageUrl, params);
             }
             catch(error) {
                 console.error(error);

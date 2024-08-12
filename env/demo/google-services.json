@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "391932120299",
+    "firebase_url": "https://opal-3a1a23-default-rtdb.firebaseio.com",
+    "project_id": "opal-3a1a23",
+    "storage_bucket": "opal-3a1a23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391932120299:android:2f4ea85884ac2856d682ae",
+        "android_client_info": {
+          "package_name": "com.hig.opaldemo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApn5qfm514SYm0nuTWPL0AT_Wih6l7Yls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

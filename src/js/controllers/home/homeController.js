@@ -6,16 +6,16 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
+        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
-        'Version', 'User', 'ProfileSelector','$interval', 'UpdateUI',
+        'Version', 'User', 'ProfileSelector', '$interval', 'UpdateUI', 'Permissions',
     ];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
+    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
-        Version, User, ProfileSelector, $interval, UpdateUI,
-    ){
+        Version, User, ProfileSelector, $interval, UpdateUI, Permissions,
+    ) {
         let vm = this;
 
         vm.language = 'EN';
@@ -37,7 +37,7 @@
         // control the modules to display to users
         vm.allowedModules = {};
 
-        // For displaying the closest upcoming endpoint
+        // For displaying the closest upcoming appointment
         vm.closestAppointment = null;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
@@ -57,13 +57,13 @@
          */
 
         function activate() {
-            // Initialize the navigator for push and pop of pages.
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
-            NavigatorParameters.setNavigator(homeNavigator);
+            Navigator.setNavigator(homeNavigator);
+
+            // Get location permission
+            Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
+
             //Initialize the page interval to refresh checkin state every 5 second
             setInterval();
-            // Store the login time
-            if (localStorage.getItem('locked')) localStorage.removeItem('locked');
             bindEvents();
             // Initialize the page data if online
             NetworkStatus.isOnline() ? homePageInit() : setPatientInfo();
@@ -79,11 +79,14 @@
          */
         function bindEvents() {
             // Refresh the page on coming back from other pages
-            homeNavigator.on('prepop', function(event) {
+            homeNavigator.on('prepop', function (event) {
                 const prepopPages = ['./views/home/checkin/checkin-list.html', 'views/personal/notifications/notifications.html'];
                 if (prepopPages.includes(event.currentPage.name) && NetworkStatus.isOnline()) getDisplayData();
+
                 //restart the reload interval when going back to the home page
-                setInterval();
+                $timeout(() => {
+                    if (Navigator.getPageName() === 'home.html') setInterval();
+                })
             });
 
             //This avoids constant repushing which causes bugs
@@ -94,7 +97,7 @@
             });
 
             //release the watchers
-            $scope.$on('$destroy',() => {
+            $scope.$on('$destroy', () => {
                 homeNavigator.off('prepop');
                 homeNavigator.off('prepush');
                 //stop the reload interval when leaving the home page
@@ -138,12 +141,12 @@
          * @name setPatientInfo
          * @desc Sets the basic patient information in the view header that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
          */
-        function setPatientInfo(){
+        function setPatientInfo() {
             vm.userInfo = User.getUserInfo();
             vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments = false;
         }
-        
+
         /**
          * @name checkForVersionUpdates
          * @desc get latest version info according to the current version
@@ -160,13 +163,13 @@
             }
 
             if (currentVersion !== lastVersion) {
-                Version.getVersionUpdates(lastVersion, currentVersion, vm.language).then(function(data) {
+                Version.getVersionUpdates(lastVersion, currentVersion, vm.language).then(function (data) {
                     if (data && data.length > 0) {
                         $scope.infoModalVersion = Version.currentVersion();
                         $scope.infoModalData = data;
                         $timeout(function () {
                             infoModal.show();
-                        },200);
+                        }, 200);
                         localStorage.setItem('lastVersion', currentVersion);
                     }
                 }).catch(console.error);
@@ -176,7 +179,7 @@
         /**
          * Initialize the app's modal size based on the screen size
          */
-        function initModalSize(){
+        function initModalSize() {
             var fontSize = UserPreferences.getFontSize();
             var rcorners = document.getElementById("rcorners");
             if (fontSize === "xlarge") {
@@ -206,7 +209,7 @@
          * Exits the app on pressing the back button
          * Note: For Android devices only
          */
-        function homeDeviceBackButton(){
+        function homeDeviceBackButton() {
             ons.notification.confirm({
                 message: $filter('translate')('EXIT_APP'),
                 modifier: 'android',
@@ -219,27 +222,24 @@
         /**
          * @desc Go to learn about Opal page
          */
-        function gotoLearnAboutOpal(){
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'isBeforeLogin': false});
-            homeNavigator.pushPage('./views/home/about/about.html');
+        function gotoLearnAboutOpal() {
+            homeNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': false});
         }
 
         /**
          * Takes the user to the selected appointment to view more details about it
          */
-        function goToAppointments(){
-            let params = {'Navigator':'homeNavigator'};
+        function goToAppointments() {
             // When the nearest appointment is for a patient in care,
             // by clicking on the widget should open the calendar for that patient (e.g., care receiver's calendar)
             if (ProfileSelector.getActiveProfile().patient_legacy_id !== vm?.closestAppointment?.patientsernum) {
-                params['isCareReceiver'] = true;
-                params['currentProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
+                let currentPageParams = Navigator.getParameters();
+                currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                 ProfileSelector.loadPatientProfile(vm.closestAppointment.patientsernum);
 
                 // Reload 'Appointments' for the patient in care in case the appointments were already loaded
                 UpdateUI.updateTimestamps('Appointments', 0);
             }
-            NavigatorParameters.setParameters(params);
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
 
@@ -254,8 +254,6 @@
             }
             const apps = await RequestToServer.apiRequest(url);
             Appointments.setCheckinAppointments(apps?.data?.daily_appointments);
-
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
 
@@ -263,14 +261,14 @@
          * @description Takes the user to the acknowledgements page.
          */
         function goToAcknowledgements() {
-            homeNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
+            homeNavigator.pushPage('./views/templates/content.html', { contentType: 'acknowledgements' });
         }
 
         /**
          * @description set a interval to refresh the checkin state every 5 seconds
          */
-        function setInterval(){
-            vm.reloadInterval = $interval(function(){
+        function setInterval() {
+            vm.reloadInterval = $interval(function () {
                 CheckInService.reloadingCheckinState();
                 getDisplayData();
             }, 5000);
@@ -279,14 +277,14 @@
         /**
          * @description cancel the interval
          */
-        function cancelInterval(){
+        function cancelInterval() {
             $interval.cancel(vm.reloadInterval);
         }
 
         /**
          * @description get patient's first name for the appointment widget
          */
-        function getPatientFirstName(){
+        function getPatientFirstName() {
             let selfPatientSerNum = User.getSelfPatientSerNum();
             if (selfPatientSerNum && selfPatientSerNum === vm?.closestAppointment?.patientsernum) {
                 return $filter('translate')("YOU");

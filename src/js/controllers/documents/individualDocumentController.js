@@ -16,11 +16,11 @@
         .module('MUHCApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
-    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout',
+    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'Navigator', 'Documents', '$timeout',
         'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Browser', '$filter', 'Toast'];
 
     /* @ngInject */
-    function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout,
+    function IndividualDocumentController($rootScope, $scope, Navigator, Documents, $timeout,
                                           FileManagerService, Constants, $q, UserPreferences, Browser, $filter,
                                           Toast) {
         let vm = this;
@@ -46,8 +46,8 @@
         /////////////////////////////
 
         function activate() {
-            parameters = NavigatorParameters.getParameters();
-            navigator = NavigatorParameters.getNavigator();
+            parameters = Navigator.getParameters();
+            navigator = Navigator.getNavigator();
 
             //PDF params
             docParams = Documents.setDocumentsLanguage(parameters.Post);
@@ -75,13 +75,14 @@
          */
         function bindEvents() {
             $scope.$on('$destroy', function () {
+                navigator.off('prepop');
                 $scope.popoverDocsInfo.off('posthide');
                 $scope.popoverDocsInfo.destroy();
 
                 // After a delay, check if this destroy event corresponds to leaving the clinical reports section
                 $timeout(() => {
                     try {
-                        let nav = NavigatorParameters.getNavigator();
+                        let nav = Navigator.getNavigator();
 
                         // If the destroy event is tied to leaving the page, clear the document info
                         let viewingDocument = nav.pages.some((e) => { return e.page.includes("individual-document.html") });
@@ -93,6 +94,10 @@
                     }
                 }, 200);
             });
+
+            // Reload user profile if individual document was opened via Notifications,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
 
         function initializeDocument(document) {
@@ -145,7 +150,7 @@
             $rootScope.DocAlreadyInitialized = true;
 
             if (vm.DocumentDescription !== '') {
-                navigator.pushPage('./views/personal/documents/about-document.html');
+                navigator.pushPage('./views/personal/documents/about-document.html', {'Post': docParams});
             } else {
                 // Check if there is any about link
                 var link = null;

@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "redirect/public",
+    "public": "static/passwordreset",
     "ignore": [
       "firebase.json",
       "**/.*",

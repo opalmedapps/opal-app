@@ -13,17 +13,21 @@
 
     AnsweredQuestionnaireController.$inject = [
         '$filter',
+        '$scope',
         '$timeout',
-        'FirebaseService',
+        'Firebase',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Params',
+        'ProfileSelector',
         'Questionnaires',
-        'Studies'
+        'Studies',
+        'User',
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $timeout, FirebaseService, NativeNotification, NavigatorParameters, Params, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, Navigator, Params,
+                                             ProfileSelector, Questionnaires, Studies, User) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -34,7 +38,6 @@
         // variables for controller
         let purpose = 'default';
         let navigator = null;
-        let navigatorName = '';
 
         // constants for the view and controller
         vm.allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
@@ -44,6 +47,7 @@
         // variables that can be seen from view, sorted alphabetically
         vm.consentStatus = null;
         vm.hasDescription = false;
+        vm.isAnsweringAsSelf = false;  // Used to alter the display of the submission instructions
         vm.isConsent = false;
         vm.loadingQuestionnaire = true;     // the loading circle for one questionnaire
         vm.loadingSubmitQuestionnaire = false;  // the loading circle for saving questionnaire
@@ -53,6 +57,7 @@
         vm.submitAllowed = false;   // if all questions are completed, then the user is allowed to submit.
         vm.submitButtonText = '';
         vm.submitInstructions = '';
+        vm.submittedByNames = {};  // Names used to show who's submitting the answers, and for which patient
 
         // functions that can be seen from view, sorted alphabetically
         vm.editQuestion = editQuestion;
@@ -68,16 +73,24 @@
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
 
-            let params = NavigatorParameters.getParameters();
+            let params = Navigator.getParameters();
 
             if (!params.hasOwnProperty('answerQuestionnaireId')){
                 vm.loadingQuestionnaire = false;
 
                 handleLoadQuestionnaireErr();
             }
+
+            // Get the user and patient names to display on the submission page
+            vm.isAnsweringAsSelf = ProfileSelector.currentProfileIsSelf();
+            let user = User.getUserInfo();
+            let patient = ProfileSelector.getActiveProfile();
+            vm.submittedByNames = {
+                userName: `${user.first_name} ${user.last_name}`,
+                patientName: `${patient.first_name} ${patient.last_name}`,
+            };
 
             Questionnaires.requestQuestionnaire(params.answerQuestionnaireId)
                 .then(function(){
@@ -91,6 +104,12 @@
                             // process the answers and check if submit is allowed.
                             init();
                         }
+
+                        $scope.$on('$destroy', () => {
+                            // Reload user profile if questionnaire was opened via Notifications tab,
+                            // and profile was implicitly changed.
+                            Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
+                        });
 
                         vm.loadingQuestionnaire = false;
                     });
@@ -111,16 +130,14 @@
          * @param {int} qIndex the index of the question to be edited
          */
         function editQuestion(sIndex, qIndex) {
-
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.replacePage('views/personal/questionnaires/questionnaires.html', {
+                animation: 'slide', // OnsenUI
                 sectionIndex: sIndex,
                 questionIndex: qIndex,
                 editQuestion: true,
                 answerQuestionnaireId: vm.questionnaire.qp_ser_num,
                 questionnairePurpose: purpose
             });
-            navigator.replacePage('views/personal/questionnaires/questionnaires.html', {animation: 'slide'});
         }
 
         /**
@@ -132,13 +149,25 @@
 
             // mark questionnaire as finished
             verifyPassword(vm.requirePassword, vm.password)
-                .then(function (userCredential) {
+                .then(function () {
+                    // reauthenticateWithCredential will return undefined if it succeeds, otherwise will
+                    // throw exception, so we do not need return value from it.
+                    // see https://firebase.google.com/docs/auth/web/manage-users#re_authenticate_a_user
+                    
+                    // Grab the patient uuid from the ProfileSelector
+                    const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
+                    
                     // Update consent status to opalConsented or declined
                     if (vm.isConsent && !vm.requirePassword) {
                         Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined');
                     }
-                    else if (vm.isConsent && vm.requirePassword && userCredential) {
+                    else if (vm.isConsent && vm.requirePassword) {
                         Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented');
+                        // Trigger databank consent creation with additional check
+                        const pattern = /(?=.*databank)(?=.*consent)(?=.*questionnaire)?.*/i;
+                        if (vm.questionnaire.nickname && pattern.test(vm.questionnaire.nickname.toLowerCase())){
+                            Studies.createDatabankConsent(patient_uuid, vm.questionnaire);
+                        }
                     }
 
                     // mark questionnaire as finished
@@ -153,8 +182,10 @@
 
                     vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
 
-                    NavigatorParameters.setParameters({Navigator: navigatorName, questionnairePurpose: purpose});
-                    navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {animation: 'slide'});
+                    navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {
+                        animation: 'slide', // OnsenUI
+                        questionnairePurpose: purpose
+                    });
                 })
                 .catch(handleSubmitErr)
         }
@@ -273,7 +304,8 @@
                             // this loop will be only once except for checkbox
                             // this is to verify the properties in answer
                             for (let k = 0; k < vm.questionnaire.sections[i].questions[j].patient_answer.answer.length; k++){
-                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_value')){
+                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_value')
+                                    && vm.questionnaire.sections[i].questions[j].optional === "0"){
 
                                     vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].answer_value = NON_EXISTING_ANSWER;
                                     vm.submitAllowed = false;
@@ -281,7 +313,9 @@
                                 }
 
                                 // this check is separated because slider and textbox do not need this property and will not have it if the user has just filled the question out
-                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_option_text')){
+                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_option_text')
+                                    && vm.questionnaire.sections[i].questions[j].optional === "0"){
+
                                     vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].answer_option_text = NON_EXISTING_ANSWER;
                                     vm.submitAllowed = false;
                                     handleLoadQuestionnaireErr();
@@ -359,12 +393,23 @@
          * @desc shows a notification to the user in case a request to server fails to load the questionnaire
          *      and move the user back to the previous page
          */
-        function handleLoadQuestionnaireErr() {
+        function handleLoadQuestionnaireErr(error) {
             // go to the questionnaire list page if there is an error
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+            if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
 
         /**
@@ -383,15 +428,8 @@
          * @param {string} password
          * @returns {firebase.Promise|Promise<void>}
          */
-        function verifyPassword(requirePassword, password) {
-            if (requirePassword) {
-                const user = FirebaseService.getAuthenticationCredentials();
-                const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
-
-                return user.reauthenticateWithCredential(credential);
-            }
-
-            return Promise.resolve();
+        async function verifyPassword(requirePassword, password) {
+            if (requirePassword) await Firebase.reauthenticateCurrentUser(password);
         }
 
         /**
@@ -411,7 +449,6 @@
                 vm.loadingSubmitQuestionnaire = false;
 
                 // go to the questionnaire list page if there is an error
-                NavigatorParameters.setParameters({ Navigator: navigatorName });
                 navigator.popPage();
 
                 NativeNotification.showNotificationAlert($filter('translate')("TOO_MANY_REQUESTS_CONSENT"));
@@ -419,7 +456,6 @@
                 vm.loadingSubmitQuestionnaire = false;
 
                 // go to the questionnaire list page if there is an error
-                NavigatorParameters.setParameters({ Navigator: navigatorName });
                 navigator.popPage();
 
                 NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_QUESTIONNAIRE"));

@@ -19,12 +19,11 @@ import '../../../css/views/init-page.view.css';
 
 	InitScreenController.$inject = [
 		'AppState',
-		'NavigatorParameters',
+		'Navigator',
 		'$translatePartialLoader',
 		'UserPreferences',
 		'$filter',
 		'Constants',
-		'Permissions',
 		'DynamicContent',
 		'Toast',
 		'Params',
@@ -36,12 +35,11 @@ import '../../../css/views/init-page.view.css';
 	/* @ngInject */
 	function InitScreenController(
 		AppState,
-		NavigatorParameters,
+		Navigator,
 		$translatePartialLoader,
 		UserPreferences,
 		$filter,
 		Constants,
-		Permissions,
 		DynamicContent,
 		Toast,
 		Params,
@@ -52,7 +50,7 @@ import '../../../css/views/init-page.view.css';
 		var vm = this;
 		vm.globalMessage = '';
 		vm.globalMessageDescription = '';
-		vm.firstTime = true;
+		vm.hasShownMessageOfTheDay = false;
 		vm.OPAL_CONFIG = OPAL_CONFIG;
 		vm.APP_VERSION = Constants.version();
 		vm.APP_BUILD_NUMBER = Constants.build();
@@ -71,7 +69,7 @@ import '../../../css/views/init-page.view.css';
 		function activate() {
 
 			DynamicContent.ensureInitialized().then(() => {
-				// Read the Message Of The Day from [qa|staging|preprod|prod]_serviceStatus_[EN|FR].php on depDocs
+				// Read the Message Of The Day from [dev|qa|staging|preprod|prod|etc.]_serviceStatus_[EN|FR].php on depDocs
 				return DynamicContent.getPageContent(OPAL_CONFIG.settings.messageOfTheDayKey);
 
 			}).then(response => {
@@ -105,7 +103,7 @@ import '../../../css/views/init-page.view.css';
 			//Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
 			setTimeout(function () {
 				$("#listInitApp").css({display: 'block'});
-				NavigatorParameters.setNavigator(initNavigator);
+				Navigator.setNavigator(initNavigator);
 				initNavigator.on('prepush', function (event) {
 					if (initNavigator._doorLock.isLocked()) {
 						event.cancel();
@@ -113,32 +111,30 @@ import '../../../css/views/init-page.view.css';
 				});
 			}, 10);
 
-			// Get location permission
-			Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
-
 			AppState.setInitialized(true);
 		}
 
 		function showMessageOfTheDay() {
-			if (vm.globalMessageDescription !== '') {
-				if (vm.firstTime) {
-					vm.firstTime = false;
-					Toast.showToast({
-						message: vm.globalMessage + "\n" + vm.globalMessageDescription,
-						fontSize: 18,
-						durationWordsPerMinute: 80, // Slow down the message of the day
-						positionOffset: 30,
-					});
+			$timeout(function () {
+				if (vm.globalMessageDescription !== '') {
+					if (!vm.hasShownMessageOfTheDay) {
+						Toast.showToast({
+							message: vm.globalMessage + "\n" + vm.globalMessageDescription,
+							fontSize: 18,
+							durationWordsPerMinute: 80, // Slow down the message of the day
+							positionOffset: 30,
+						});
+						vm.hasShownMessageOfTheDay = true;
+					}
 				}
-			}
+			}, Constants.app ? 5000 : 0); // Add a delay on mobile equivalent to length of SplashScreenDelay to ensure message is not hidden by splash screen
 		}
 
 		/**
 		 * Go to Learn About Opal
 		 */
 		function gotoLearnAboutOpal() {
-			NavigatorParameters.setParameters({'Navigator': 'initNavigator', 'isBeforeLogin': true});
-			initNavigator.pushPage('./views/home/about/about.html');
+			initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		}
 
 		/**
@@ -153,7 +149,6 @@ import '../../../css/views/init-page.view.css';
 		 * Go to general settings (About)
 		 */
 		function goToGeneralSettings() {
-			NavigatorParameters.setParameters({'Navigator': 'initNavigator'});
 			initNavigator.pushPage('./views/init/init-settings.html');
 		}
 

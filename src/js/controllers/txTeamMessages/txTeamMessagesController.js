@@ -11,11 +11,13 @@
         .module('MUHCApp')
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
-    TxTeamMessagesController.$inject = ['TxTeamMessages','NavigatorParameters', '$timeout', '$filter'];
+    TxTeamMessagesController.$inject = ['$filter', '$timeout', 'Navigator', 'Notifications', 'Params', 'TxTeamMessages'];
 
     /* @ngInject */
-    function TxTeamMessagesController(TxTeamMessages, NavigatorParameters, $timeout, $filter) {
-        var vm = this;
+    function TxTeamMessagesController($filter, $timeout, Navigator, Notifications, Params, TxTeamMessages) {
+        let vm = this;
+        let navigator;
+
         vm.goToTeamMessage = goToTeamMessage;
 
         // Used by patient-data-handler
@@ -26,7 +28,7 @@
         //////////////////////////////
 
         function activate(){
-
+            navigator = Navigator.getNavigator();
         }
 
         /**
@@ -45,11 +47,14 @@
         function goToTeamMessage(message){
             if(message.ReadStatus === '0')
             {
-                message.ReadStatus = '1';
                 TxTeamMessages.readTxTeamMessageBySerNum(message.TxTeamMessageSerNum);
+                // Mark corresponding notifications as read
+                Notifications.implicitlyMarkCachedNotificationAsRead(
+                    message.TxTeamMessageSerNum,
+                    Params.NOTIFICATION_TYPES.TxTeamMessage,
+                );
             }
-            NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':message});
-            personalNavigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html');
+            navigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html', {'Post': message});
         }
     }
 })();

@@ -23,13 +23,15 @@
         .controller('IndividualAnnouncementController', IndividualAnnouncementController);
 
     IndividualAnnouncementController.$inject = [
-        'NavigatorParameters',
+        '$scope',
+        'Navigator',
         'Announcements'
     ];
 
     /* @ngInject */
     function IndividualAnnouncementController(
-        NavigatorParameters,
+        $scope,
+        Navigator,
         Announcements
     ) {
         var vm = this;
@@ -40,8 +42,21 @@
         ////////////////
 
         function activate() {
-            var parameters=NavigatorParameters.getParameters();
+            bindEvents();
+
+            var parameters = Navigator.getParameters();
             vm.announcement = Announcements.setLanguage(parameters.Post);
+        }
+
+        function bindEvents() {
+            let navigator = Navigator.getNavigator();
+
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if announcement was opened via Notifications tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
     }
 })();

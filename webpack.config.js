@@ -3,8 +3,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const OpalEnv = require("./opal_env.setup");
+const OpalEnv = require("./opal-env.setup");
 
 let entry = [
 	"./src/js/app.js",
@@ -15,17 +16,18 @@ let entry = [
 	"./src/js/app.filters.js",
 	"./src/js/app.controllers.js",
 	"./src/js/app.constants.js",
-	"./src/js/app.values.js"];
+	"./src/js/app.values.js",
+];
 
 const config = env => {
 	console.log("Webpack variables:", env);
 
-	// Parse the Opal environment to use, specified via e.g. `webpack --env.opal_environment=preprod`
-	const OPAL_ENV = env ? env.opal_environment : null;
-	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV || "default (root directory)"}`);
+	// Parse the Opal environment to use, specified for example via webpack as `--env opal_environment=%npm_config_env%` and npm as `--env=dev`
+	const OPAL_ENV = env?.opal_environment;
 
 	// Throws error if the defined folder for environment does not exist.
 	OpalEnv.verifyOpalEnvironmentExists(OPAL_ENV);
+	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV}`);
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
 
 	// Read environment settings from opal.config.js
@@ -51,10 +53,7 @@ const config = env => {
 				watch: true,
 			},
 			client: {
-				overlay: {
-					errors: true,
-					warnings: false,
-				},
+				overlay: false,
 				progress: true,
 			},
 			compress: true,
@@ -81,12 +80,13 @@ const config = env => {
 						loader: 'babel-loader',
 						options: {
 							presets: ['@babel/preset-env'],
-							plugins: ['@babel/plugin-proposal-private-methods',
-								'@babel/plugin-proposal-class-properties',
+							plugins: [
 								["@babel/plugin-transform-runtime", {
+									// Note: this option will be removed with @babel/core version 8
+									// See: https://babeljs.io/docs/babel-plugin-transform-runtime#regenerator
 									regenerator: true
-								}]]
-
+								}]
+							]
 						}
 					}
 				},
@@ -96,22 +96,25 @@ const config = env => {
 				},
 				{
 					test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-					use: [
-						{
-							loader: 'file-loader',
-							options: {
-								name: '[name].[ext]',
-								outputPath: 'fonts/'
-							},
-						}
-					]
+					type: 'asset/resource'
 				},
 				{
 					// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, Modernizr has a weird passing of document, window properties
 					// to make it work I looked at this issue: basically it re-attaches this to window.
+					// This solution was found online, see: https://github.com/webpack/webpack/issues/512#issuecomment-288143187
+					// Original code: loader: 'imports-loader?this=>window!exports-loader?window.Modernizr'
+					// It has since been rewritten to a new syntax due to Webpack / imports-loader / exports-loader updates
 					test: /onsenui.js/,
-					loader: 'imports-loader?this=>window!exports-loader?window.Modernizr'
-
+					use: [
+						// Adds the following to the output bundle: (function () { ... }).call(window);
+						{
+							loader: 'imports-loader?type=commonjs&wrapper=window',
+						},
+						// Adds the following to the output bundle: module.exports = window.Modernizr;
+						{
+							loader: 'exports-loader?type=commonjs&exports=single|window.Modernizr',
+						},
+					],
 				},
 				// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, When compiling with Webpack, the Fastclick library
 				// in onsenui (get rid of the 300ms delay) has a set of if statements to determine the sort of
@@ -119,18 +122,18 @@ const config = env => {
 				// and node modules and makes Fastclick implement the Web interface.
 				{
 					test: /onsenui.js/,
-					loader: 'imports-loader?define=>false,module.exports=>false'
+					use: [
+						{
+							loader: 'imports-loader',
+							options: {
+								additionalCode: 'var define = false; module.exports = false;',
+							},
+						},
+					],
 				},
 				{
 					test: /\.png$/,
-					use: [
-						{
-							loader: 'file-loader',
-							options: {
-								mimetype: 'image/png'
-							}
-						}
-					]
+					type: 'asset/resource'
 				}
 			]
 		},
@@ -155,6 +158,8 @@ const config = env => {
 			new HtmlWebpackPlugin({
 				template: './src/index.html',
 				inject: 'head',
+				// v5 changed script loading to be deferred, revert to previous default
+				scriptLoading: 'blocking',
 				title: 'Opal',
 				filename: 'index.html',
 				meta: {
@@ -179,7 +184,10 @@ const config = env => {
 					"mobile-web-app-capable": "yes"
 				}
 			}),
-			new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fr/)
+			new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fr/),
+			new NodePolyfillPlugin({
+				additionalAliases: ['process'],
+			}),
 		],
 		optimization: {
 			minimize: minimize,

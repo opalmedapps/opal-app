@@ -29,22 +29,30 @@
         // this is redundant, but written for clarity, ordered alphabetically
         return {
             updateQuestionnaireStatus: updateQuestionnaireStatus,
-            requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
+            requestQuestionnaireStubFromSerNum: requestQuestionnaireStubFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnairePurpose: requestQuestionnairePurpose,
-            requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer
         };
 
         /**
-         * @name requestOpalQuestionnaireFromSerNum
-         * @desc this function gets a questionnaire's general information stored in OpalDB from the listener
-         * @param {string|int} questionnaireSerNum
-         * @returns {Promise}
+         * @name requestQuestionnaireStubFromSerNum
+         * @desc Gets a questionnaire's basic information (questionnaire stub) from OpalDB.
+         * @param {string|int} questionnaireSerNum The SerNum of the questionnaire to look up.
+         * @returns {Promise<Object>} Resolves to the basic information (questionnaire stub) for the given questionnaire.
          */
-        async function requestOpalQuestionnaireFromSerNum(questionnaireSerNum) {
-            const response = await RequestToServer.sendRequestWithResponse(api.GET_OPAL_QUESTIONNAIRE_FROM_SERNUM, {questionnaireSerNum});
-            return response.hasOwnProperty('Data') ? response.Data : {};
+        async function requestQuestionnaireStubFromSerNum(questionnaireSerNum) {
+            let response = await RequestToServer.sendRequestWithResponse('GetOneItem', {
+                category: 'QuestionnaireList',
+                language: UserPreferences.getLanguage(),
+                serNum: questionnaireSerNum,
+            });
+            let questionnaireStub = response.Data?.hasOwnProperty('QuestionnaireList') ? response.Data?.QuestionnaireList[0] : undefined;
+            if (!questionnaireStub) {
+                console.error(response);
+                throw `GetOneItem for QuestionnaireList with QuestionnaireSerNum = ${questionnaireSerNum} returned an invalid response`;
+            }
+            return questionnaireStub;
         }
 
         /**
@@ -80,8 +88,8 @@
             };
 
             try {
-                await RequestToServer.sendRequestWithResponse(api.UPDATE_STATUS, params);
-                return {Success: true, Location: 'Server'}
+                let response = await RequestToServer.sendRequestWithResponse(api.UPDATE_STATUS, params);
+                return {Success: true, Location: 'Server', QuestionnaireSerNum: response?.QuestionnaireSerNum};
             } catch (error) {
                 throw {Success: false, Location: '', Error: error}
             }
@@ -151,16 +159,8 @@
                 'qp_ser_num': answerQuestionnaireID,
                 'language': UserPreferences.getLanguage(),
             };
-            try {
-                let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
-
-                // this is in case firebase deletes the property when it is empty
-                return response?.Data ? response.Data : {};
-            } catch (error) {
-                console.log('Error in requestQuestionnaire: ', error);
-
-                return {};
-            }
+            let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
+            return response?.Data ? response.Data : {};
         }
 
         /**
@@ -184,36 +184,8 @@
 
                 return {};
             } catch (error) {
-                console.log('Error in requestQuestionnairePurpose: ', error);
-
+                console.error('Error in requestQuestionnairePurpose', error);
                 return {};
-            }
-        }
-
-        /**
-       * @name requestQuestionnaireUnreadNumber
-       * @desc Asks the listener for the number of unread (e.g. 'New') questoinnaires under a specific purpose for this user
-       * @param {string} questionnairePurpose the purpose of questionnaires requested
-       * @returns {Promise} resolves to the number of unread questionnaires data
-       */
-        async function requestQuestionnaireUnreadNumber(questionnairePurpose) {
-            let params = {
-                purpose: questionnairePurpose
-            };
-
-            try {
-                let response = await RequestToServer.sendRequestWithResponse(api.GET_NUMBER_UNREAD, params);
-
-                // this is in case firebase deletes the property when it is empty
-                if (response.hasOwnProperty('Data')) {
-                    return response.Data;
-                }
-
-                return { numberUnread: "0" };
-            } catch (error) {
-                console.log('Error in requestQuestionnaireUnreadNumber: ', error);
-
-                return { numberUnread: "0" };
             }
         }
     }

@@ -1,4 +1,4 @@
-<ons-page ng-controller="EducationalMaterialController as edu" ng-device-backbutton="edu.educationDeviceBackButton()">
+<ons-page ng-controller="EducationalMaterialController as edu">
 
     <!-- TOOLBAR -->
     <generic-toolbar title="{{edu.pageTitle}}" style-class="fontSizeTitle">
@@ -34,7 +34,7 @@
     <!-- NO MATERIAL TEXT -->
     <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials && !edu.hideContent" align="center"
         ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
-        {{edu.noMaterialMessage}}
+        {{'REFERENCE_MATERIAL_NONE' | translate}}
     </div>
 
     <!-- LIST OF EDUCATIONAL MATERIALS -->
