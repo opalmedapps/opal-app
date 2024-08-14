@@ -116,4 +116,5 @@ p {
 @import url('./views/login.view.css');
 @import url('./views/new-password.view.css');
 @import url('./views/home.view.css');
+@import url('./views/individual-appointment.view.css');
 @import url('./utilities.css');
