@@ -315,7 +315,7 @@
     "SMARTDEVICES_VITALTRACER_READ": "Lire les fonctions vitales",
     "SMARTDEVICES_VITALTRACER_SUBMITTED": "Merci d'avoir enregistré vos fonctions vitales.",
     "SMARTDEVICES_WEIGHT": "Poids",
-    "SMARTDEVICES_XIAOMI": "Balance Xiaomi Mi",
+    "SMARTDEVICES_XIAOMI_SCALE": "Balance Xiaomi Mi",
     "STAGE": "Étape",
     "STAGEOF": "Étape {{index}} sur {{total}}",
     "STUDIES": "Études",

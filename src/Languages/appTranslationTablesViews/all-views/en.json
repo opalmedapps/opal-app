@@ -315,7 +315,7 @@
   "SMARTDEVICES_VITALTRACER_READ": "Read Vital Signs",
   "SMARTDEVICES_VITALTRACER_SUBMITTED": "Thank you for submitting your vital signs.",
   "SMARTDEVICES_WEIGHT": "Weight",
-  "SMARTDEVICES_XIAOMI": "Xiaomi Mi Scale",
+  "SMARTDEVICES_XIAOMI_SCALE": "Xiaomi Mi Scale",
   "STAGE": "Step",
   "STAGEOF": "Step {{index}} of {{total}}",
   "STUDIES": "Studies",
