@@ -93,17 +93,21 @@
         /**
          * @description Returns the list of available hospitals, formatted for display.
          *              The values in the returned object depend on the environment setting useRealInstitutionNames.
+         *              Note: when useRealInstitutionNames = true, if a hospital has no real name or acronym, then it's
+         *                    omitted from the list of real hospitals.
          * @returns {{uniqueHospitalCode: string, acronym: string, fullName: string}[]} The list of hospitals for display.
          */
         function getHospitalListForDisplay() {
             let useRealName = OPAL_CONFIG.settings.useRealInstitutionNames;
             return hospitalList.map(entry => {
+                // Special case: if no real name or acronym is provided, then a hospital isn't included in the list of real hospitals
+                if (useRealName && (!entry.acronymReal || !entry.fullNameReal)) return undefined;
                 return {
                     uniqueHospitalCode: entry.uniqueHospitalCode,
                     acronym: useRealName ? entry.acronymReal : entry.acronymGeneric,
                     fullName: useRealName ? entry.fullNameReal : entry.fullNameGeneric,
                 }
-            });
+            }).filter(entry => !!entry); // Filter out undefined entries
         }
     }
 })();
