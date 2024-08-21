@@ -1,3 +1,10 @@
+## [1.36.5](https://gitlab.com/opalmedapps/qplus/compare/v1.36.4...v1.36.5) (2024-08-21)
+
+
+### Bug Fixes
+
+* update hospital list ([4274f14](https://gitlab.com/opalmedapps/qplus/commit/4274f1402e27cba4d495298d7fc41d356eae2ba0))
+
 ## [1.36.4](https://gitlab.com/opalmedapps/qplus/compare/v1.36.3...v1.36.4) (2024-08-14)
 
 
