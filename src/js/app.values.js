@@ -190,9 +190,9 @@
                 localStorageHospitalKey: 'hospital',
                 hospitalList: [
                     {
-                        uniqueHospitalCode: 'A0',
-                        acronymReal: 'MUHC',
-                        fullNameReal: 'MUHC_FULL',
+                        uniqueHospitalCode: 'A6',
+                        acronymReal: 'RI_MUHC_ACRONYM',
+                        fullNameReal: 'RI_MUHC_FULL',
                         acronymGeneric: 'OMI',
                         fullNameGeneric: 'OMI_FULL',
                         modules: {
@@ -219,8 +219,8 @@
                             "MAS": 1,
                             "EDU": 1,
                             "SUP": 1,
-                            "CED": 1,
-                            "HOS": 1,
+                            "CED": 0,
+                            "HOS": 0,
                             "SMD": 1,
                             "CTB": 1,
                             "RFE": 1,
@@ -228,8 +228,8 @@
                     },
                     {
                         uniqueHospitalCode: 'A4',
-                        acronymReal: 'CHU_SJ_ACRONYM',
-                        fullNameReal: 'CHU_SJ_FULL',
+                        acronymReal: '',
+                        fullNameReal: '',
                         acronymGeneric: 'OHIGPH',
                         fullNameGeneric: 'OHIGPH_FULL',
                         modules: {

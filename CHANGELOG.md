@@ -1,3 +1,31 @@
+## [1.36.5](https://gitlab.com/opalmedapps/qplus/compare/v1.36.4...v1.36.5) (2024-08-21)
+
+
+### Bug Fixes
+
+* update hospital list ([4274f14](https://gitlab.com/opalmedapps/qplus/commit/4274f1402e27cba4d495298d7fc41d356eae2ba0))
+
+## [1.36.4](https://gitlab.com/opalmedapps/qplus/compare/v1.36.3...v1.36.4) (2024-08-14)
+
+
+### Bug Fixes
+
+* improve "About this appointment" button UI ([af66703](https://gitlab.com/opalmedapps/qplus/commit/af6670399e0c5fbf8cffe1b6e4f02442e4c56c9a))
+
+## [1.36.3](https://gitlab.com/opalmedapps/qplus/compare/v1.36.2...v1.36.3) (2024-08-12)
+
+
+### Bug Fixes
+
+* relabel copyright to RI-MUHC ([2356cfb](https://gitlab.com/opalmedapps/qplus/commit/2356cfbda928bb7c000fcee4e2d4ac1545ab8591))
+
+## [1.36.2](https://gitlab.com/opalmedapps/qplus/compare/v1.36.1...v1.36.2) (2024-08-06)
+
+
+### Bug Fixes
+
+* display lab dates according to the Montreal timezone ([8090f1f](https://gitlab.com/opalmedapps/qplus/commit/8090f1ffcffdf3c84a24d9d4c19c90b4ee5e060c))
+
 ## [1.36.1](https://gitlab.com/opalmedapps/qplus/compare/v1.36.0...v1.36.1) (2024-07-29)
 
 
