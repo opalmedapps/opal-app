@@ -7,6 +7,7 @@
  * Licence      :   This file is subject to the terms and conditions defined in
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
+import { AppointmentFromBackend } from '../models/personal/appointments/AppointmentFromBackend.js';
 
 /**
  *@ngdoc service
@@ -24,10 +25,17 @@
         .module('MUHCApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$q', 'Appointments', 'Hospital', 'Location', 'Params', 'RequestToServer', 'UserHospitalPreferences'];
+    CheckInService.$inject = ['$q', 'Appointments', 'Hospital', 'Location', 'Params', 'RequestToServer', 'User', 'UserPreferences'];
 
     /* @ngInject */
-    function CheckInService($q, Appointments, Hospital, Location, Params, RequestToServer, UserHospitalPreferences) {
+    function CheckInService($q, Appointments, Hospital, Location, Params, RequestToServer, User, UserPreferences) {
+
+        /**
+         * @description Array of today's appointments for check-in.
+         *              This array may contain appointments from several different patients (in a caregiver context).
+         * @type {AppointmentFromBackend[]}
+         */
+        let appointmentsForCheckIn = [];
 
         /**
          *@ngdoc property
@@ -90,10 +98,11 @@
 
         return {
             attemptCheckin: attemptCheckin,
+            clear: clear,
             evaluateCheckinState: evaluateCheckinState,
             getCheckInApps: getCheckInApps,
-            clear: clear,
             reloadingCheckinState: reloadingCheckinState,
+            setAppointmentsForCheckIn: setAppointmentsForCheckIn,
         };
 
         ////////////////////////////////////////////
@@ -154,7 +163,7 @@
 
         async function updateCheckinState(checkedInAppts){
             if(checkedInAppts && checkedInAppts.length > 0) Appointments.updateCheckedInAppointments(checkedInAppts);
-            let appts = Appointments.getTodaysAppointments();
+            let appts = Appointments.getAppointmentsToday();
 
             //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
             if(alreadyCheckedIn(appts)){
@@ -282,7 +291,7 @@
          *@returns {Array} Todays checkinable appointments
          */
         function getCheckInApps() {
-            return Appointments.getTodaysAppointments();
+            return Appointments.getAppointmentsToday();
         }
 
         /**
@@ -338,7 +347,28 @@
             return r.promise;
         }
 
+        /**
+         * @description Formats and saves the list of today's appointments for check-in.
+         * @param appointments The list of appointments for check-in.
+         */
+        function setAppointmentsForCheckIn(appointments) {
+            if (!appointments) return;
+
+            // Format appointments from the backend format to the app's format
+            appointmentsForCheckIn = [];
+            const selfPatientSerNum = User.getSelfPatientSerNum();
+            const patientIsSelf = selfPatientSerNum && patient.patientsernum === selfPatientSerNum;
+            appointments.forEach(appointment => {
+                const formattedAppointment = new AppointmentFromBackend(appointment, UserPreferences.getLanguage(), patientIsSelf);
+                appointmentsForCheckIn.push(formattedAppointment);
+            });
+
+            // Sort chronologically with the most recent first
+            appointmentsForCheckIn = $filter('orderBy')(appointmentsForCheckIn, 'ScheduledStartTime', false);
+        }
+
         function clear() {
+            appointmentsForCheckIn = [];
             allCheckedIn= false;
             attemptedCheckin = false;
             checkinStateSet = false;

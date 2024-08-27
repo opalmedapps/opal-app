@@ -253,7 +253,7 @@
                 url: '/api/app/appointments/',
             }
             const apps = await RequestToServer.apiRequest(url);
-            Appointments.setCheckinAppointments(apps?.data?.daily_appointments);
+            CheckInService.setAppointmentsForCheckIn(apps?.data?.daily_appointments);
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
 
