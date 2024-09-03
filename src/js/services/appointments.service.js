@@ -14,18 +14,17 @@
     function Appointments($filter, RequestToServer) {
         /**
          * @description Array containing all of the current patient's appointments, organized chronologically from most recent to oldest.
-         **/
+         * @type {object[]}
+         */
         let userAppointmentsArray = [];
 
         return {
             clearAppointments: clearAppointments,
             getAppointmentBySerNum: serNum => userAppointmentsArray.find(apt => apt.AppointmentSerNum == serNum),
-            getAppointmentsToday: getAppointmentsToday,
             getAppointmentUrl: () => './views/personal/appointments/individual-appointment.html',
             getUserAppointments: () => userAppointmentsArray,
             readAppointmentBySerNum: readAppointmentBySerNum,
             setUserAppointments: setUserAppointments,
-            updateCheckedInAppointments: updateCheckedInAppointments,
             updateUserAppointments: updateUserAppointments,
         }
 
@@ -49,29 +48,6 @@
         function updateUserAppointments(appointments) {
             searchAppointmentsAndDelete(appointments);
             addAppointmentsToService(appointments);
-        }
-
-        /**
-         * @description Returns all the patient's appointments for today.
-         * @returns {object[]} The patient's appointments for today.
-         */
-        function getAppointmentsToday() {
-            let today = new Date();
-            return userAppointmentsArray.filter(appointment => {
-                return appointment.toDateString() === today.toDateString();
-            });
-        }
-
-        /**
-         * @description Updates appointments in the patient's array to set them as checked-in.
-         * @param appointments The list of appointments to update. These appointments are not updated directly,
-         *                     instead, they're matched to those in the service by AppointmentSerNum.
-         */
-        function updateCheckedInAppointments(appointments) {
-            let serNumsToUpdate = appointments.map(apt => apt.AppointmentSerNum);
-            userAppointmentsArray.forEach(apt => {
-                if(serNumsToUpdate.includes(apt.AppointmentSerNum)) apt.Checkin = 1;
-            })
         }
 
         /**

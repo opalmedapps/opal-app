@@ -125,7 +125,8 @@
         async function getDisplayData() {
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
-                const checkinState = await CheckInService.evaluateCheckinState(result?.data?.daily_appointments);
+                CheckInService.setAppointmentsForCheckIn(result.data?.daily_appointments);
+                const checkinState = await CheckInService.evaluateCheckinState();
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result?.data?.unread_notification_count;
                     vm.checkinState = checkinState;
@@ -246,6 +247,7 @@
         /**
          * Takes the user to the checkin view
          */
+        // TODO need loading wheel?
         async function goToCheckinAppointments() {
             if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
             const url = {

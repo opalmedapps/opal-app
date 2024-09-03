@@ -19,7 +19,7 @@
   "CHARACTERS_LEFT": "characters left",
   "CHECKIN": "Check-in",
   "CHECKIN_ALL_TODAY": "Check in",
-  "CHECKIN_ERROR": "Unable to check in for this appointment. Please go to the reception.",
+  "CHECKIN_ERROR": "Unable to check in for one or more appointment(s). Please try again, or go to the reception.",
   "CHECKIN_MESSAGE_AFTER": "You are checked in for your appointment.",
   "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in for your appointments.",
   "CHECKIN_MESSAGE_BEFORE": "Check in for your appointment.",

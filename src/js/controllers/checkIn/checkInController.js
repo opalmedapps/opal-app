@@ -15,38 +15,23 @@
         .module('MUHCApp')
         .controller('CheckInController', CheckInController);
 
-    CheckInController.$inject = [
-        '$timeout',
-        'CheckInService',
-        'Navigator',
-        'UserPreferences',
-        'Toast',
-        '$filter',
-        'Params'
-    ];
+    CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'Navigator', 'Params', 'Toast', 'User',
+        'UserPreferences'];
 
     /* @ngInject */
-    function CheckInController(
-        $timeout,
-        CheckInService,
-        Navigator,
-        UserPreferences,
-        Toast,
-        $filter,
-        Params
-    ) {
+    function CheckInController($filter, $timeout, CheckInService, Navigator, Params, Toast, User,
+                               UserPreferences) {
         let vm = this;
         let navigator;
 
         vm.apps = [];
         vm.displayApps = {};
-        vm.emptyApps = true;
+        vm.noAppointments = true;
         vm.language = '';
         vm.response = '';
         vm.error = '';
         vm.checkInMessage = "";
         vm.alert = {};
-        vm.HasNonCheckinableAppt = false;
 
         vm.separatorStatus = [];
         vm.separatorStatus[Params.alertTypeInfo] = 'separator-info';
@@ -54,9 +39,8 @@
         vm.separatorStatus[Params.alertTypeWarning] = 'separator-warning';
         vm.separatorStatus[Params.alertTypeDanger] = 'separator-error';
 
+        vm.checkIntoAppointments = checkIntoAppointments;
         vm.goToAppointment = goToAppointment;
-        vm.HasMeaningfulAlias = HasMeaningfulAlias;
-        vm.CheckInAppointments = CheckInAppointments;
 
         activate();
 
@@ -64,26 +48,33 @@
 
         function activate() {
             navigator = Navigator.getNavigator();
-            vm.apps = CheckInService.getCheckInApps();
-            vm.apps.forEach(app => {
-                if (!vm.displayApps[app.PatientSerNum]) {
-                    vm.displayApps[app.PatientSerNum] = {};
-                    vm.displayApps[app.PatientSerNum].apps = [];
-                    vm.displayApps[app.PatientSerNum].patientName = app.patientName;
-                    vm.displayApps[app.PatientSerNum].allCheckedIn = true;
-                }
-                vm.displayApps[app.PatientSerNum].apps.push(app);
-                vm.displayApps[app.PatientSerNum].patientName = app.patientName;
-                const allCheckedIn = vm.displayApps[app.PatientSerNum].allCheckedIn;
-                vm.displayApps[app.PatientSerNum].allCheckedIn = allCheckedIn && ['warning', 'success'].indexOf(app.CheckInStatus) > -1;
-            });
+            vm.apps = CheckInService.getAppointmentsForCheckIn();
             vm.language = UserPreferences.getLanguage();
+            const selfPatientSerNum = User.getSelfPatientSerNum();
 
-            if (Object.keys(vm.displayApps).length > 0) {
-                vm.emptyApps = false;
-            }
+            // Get the list of unique patientSerNums for check-in
+            let patientSerNums = new Set(vm.apps.map(apt => apt.PatientSerNum));
 
-            vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
+            // For each patient, build an object containing all of their appointments for check-in
+            patientSerNums.forEach(patientSerNum => {
+                const patientAppointments = vm.apps.filter(apt => apt.PatientSerNum === patientSerNum);
+
+                // Set the header based on whether the patient is the user or a care-receiver
+                let patientHeader;
+                const patientIsSelf = patientSerNum === selfPatientSerNum;
+                const fullName = `${patient.first_name} ${patient.last_name}`;
+                if (patientIsSelf) patientHeader = vm.language === 'EN' ? 'Your appointments' : 'Vos rendez-vous';
+                else patientHeader = vm.language === 'EN' ? `${fullName}'s appointments` : `Rendez-vous de ${fullName}`;
+
+                vm.displayApps[patientSerNum] = {
+                    apps: patientAppointments,
+                    allCheckedIn: patientAppointments.every(apt => ['warning', 'success'].includes(apt.CheckInStatus)),
+                    patientHeader: patientHeader,
+                };
+            });
+
+            // TODO needed?
+            vm.noAppointments = Object.keys(vm.displayApps).length === 0;
         }
 
         /**
@@ -95,80 +86,46 @@
             });
         }
 
-        // View appointment details
-        function goToAppointment(appointment){
+        /**
+         * @description Opens the individual appointment view for a given appointment, and marks it as read.
+         * @param {object} appointment The appointment to open.
+         */
+        function goToAppointment(appointment) {
             if(appointment.ReadStatus === '0') {
                 Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
                 // Mark corresponding notification as read
                 Notifications.implicitlyMarkCachedNotificationAsRead(
                     appointment.AppointmentSerNum,
-                    [
-                        Params.NOTIFICATION_TYPES.RoomAssignment,
-                        Params.NOTIFICATION_TYPES.NextAppointment,
-                        Params.NOTIFICATION_TYPES.AppointmentTimeChange,
-                        Params.NOTIFICATION_TYPES.CheckInNotification,
-                        Params.NOTIFICATION_TYPES.AppointmentNew,
-                        Params.NOTIFICATION_TYPES.AppointmentCancelled,
-                    ],
+                    Notifications.appointmentNotificationTypes(),
                 );
             }
             navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
         }
 
         /**
-         * Checks if AppointmentType has a Meaningful Alias; i.e. other than the word "Appointment" or "Rendez-vous"
-         * @returns {boolean}
+         * @description Checks in all appointments for the target patient.
+         * @param patientSerNum The SerNum of the patient to check in.
+         * @returns {Promise<void>}
          */
-        function HasMeaningfulAlias(appointmentType) {
-            return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
-        }
-
-        /**
-         *
-         * @param apps
-         * @return {boolean}
-         * @description Checks if in the list of Appointments, there is "at least" one Non-Checkinable appointment,
-         *              like a Blood Test
-         */
-        function HasNonCheckinableAppointment(apps) {
-            var HasNonCheckinable = false;
-            apps.map(function (app) {
-                if (app.CheckinPossible === '0')  HasNonCheckinable = true;
-            });
-
-            return HasNonCheckinable;
-        }
-
-        /**
-         * @param PatientSerNum
-         * @return {void}
-         * @description Checks if in the list of Appointments,for the target patient
-         */
-        async function CheckInAppointments(PatientSerNum) {
-            vm.displayApps[PatientSerNum].apps.forEach(app => {
-                if (app.CheckInStatus != 'success') {
-                    app.loading = true;
-                }
-            });
+        async function checkIntoAppointments(patientSerNum) {
+            app.loading = vm.displayApps[patientSerNum].apps.some(app => app.CheckInStatus !== 'success');
 
             try {
-                const response = await CheckInService.attemptCheckin(PatientSerNum);
-                if(response === 'CHECKIN_NOT_ALLOWED'){
-                    displayError('CHECKIN_NOT_ALLOWED');
-                } else if (response === 'SUCCESS') {
-                    vm.apps = CheckInService.getCheckInApps();
-                } else {
-                    displayError('CHECKIN_ERROR');
-                }
-            } catch (error) {
+                const response = await CheckInService.attemptCheckin(patientSerNum);
+
+                if (response === 'CHECKIN_NOT_ALLOWED') displayError('CHECKIN_NOT_ALLOWED');
+                else if (response === 'SUCCESS') vm.apps = CheckInService.getAppointmentsForCheckIn();
+                else displayError('CHECKIN_ERROR');
+            }
+            catch (error) {
                 console.log(error);
                 displayError('CHECKIN_ERROR');
             }
 
-
+            // TODO -- figure out what's being done and update it to be clearer
             $timeout(() => {
                 let allCheckedIn = true;
-                vm.displayApps[PatientSerNum].apps.forEach(app => {
+                vm.displayApps[patientSerNum].apps.forEach(app => {
                     const appt = vm.apps.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
                     if (appt) {
                         app.Checkin = appt.Checkin;
@@ -178,9 +135,8 @@
                         allCheckedIn =  allCheckedIn && ['warning', 'success'].indexOf(app.CheckInStatus) > -1;
                     }
                 })
-                vm.displayApps[PatientSerNum].allCheckedIn = allCheckedIn;
+                vm.displayApps[patientSerNum].allCheckedIn = allCheckedIn;
             });
         }
     }
 })();
-

@@ -19,7 +19,7 @@
     "CHARACTERS_LEFT": "caractères restants",
     "CHECKIN": "Enregistrement",
     "CHECKIN_ALL_TODAY": "Enregistrer",
-    "CHECKIN_ERROR": "Impossible de s'enregistrer pour ce rendez-vous. Veuillez vous rendre à la réception.",
+    "CHECKIN_ERROR": "Impossible de s'enregistrer pour votre/vos rendez-vous. Veuillez réessayer ou vous présenter à la réception.",
     "CHECKIN_MESSAGE_AFTER": "Vous êtes enregistré(e) pour votre rendez-vous.",
     "CHECKIN_MESSAGE_AFTER_PLURAL": "Vous êtes enregistré(e) pour vos rendez-vous.",
     "CHECKIN_MESSAGE_BEFORE": "Enregistrez-vous pour votre rendez-vous.",

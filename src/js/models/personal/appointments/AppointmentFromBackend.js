@@ -21,16 +21,8 @@ export class AppointmentFromBackend {
             state,
         },
         language,
-        patientIsSelf,
     ) {
-        let patientName = `${patient.first_name} ${patient.last_name}'s appointments`;
-        if (language === 'FR') {
-            patientName = `Rendez-vous pour ${patient.first_name} ${patient.last_name}`;
-        }
-        if (patientIsSelf) {
-            patientName = (language === 'EN') ? 'Your appointments' : 'Vos rendez-vous';
-        }
-
+        // TODO -- figure out what this is for and update it to be clearer
         let checkinStatus = checkin == 1 ? 'success' : 'info';
         checkinStatus = checkinpossible == 0 && checkinStatus ? 'warning' : checkinStatus;
 
@@ -49,7 +41,6 @@ export class AppointmentFromBackend {
         this.MapName_FR = hospitalmap?.mapname_fr;
         this.MapUrl_EN = hospitalmap?.mapurl_en;
         this.MapUrl_FR = hospitalmap?.mapurl_fr;
-        this.patientName = patientName;
         this.PatientSerNum = patient.patientsernum;
         this.ResourceDescription = language === 'EN' ? alias.aliasname_en : alias.aliasname_fr;
         this.RoomLocation_EN = roomlocation_en;

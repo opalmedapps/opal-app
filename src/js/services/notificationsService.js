@@ -192,6 +192,7 @@
         };
 
         let service =  {
+            appointmentNotificationTypes: appointmentNotificationTypes,
             updateUserNotifications: updateUserNotifications,
             getUserNotifications: getUserNotifications,
             readNotification: readNotification,
@@ -384,6 +385,21 @@
                 }
             }
             return notifications;
+        }
+
+        /**
+         * @description Returns a list of all notification types related to appointments.
+         * @returns {(string)[]} The list of appointment notification types.
+         */
+        function appointmentNotificationTypes() {
+            return [
+                Params.NOTIFICATION_TYPES.RoomAssignment,
+                Params.NOTIFICATION_TYPES.NextAppointment,
+                Params.NOTIFICATION_TYPES.AppointmentTimeChange,
+                Params.NOTIFICATION_TYPES.CheckInNotification,
+                Params.NOTIFICATION_TYPES.AppointmentNew,
+                Params.NOTIFICATION_TYPES.AppointmentCancelled,
+            ];
         }
 
         /**

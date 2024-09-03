@@ -3,7 +3,7 @@
     <network-banner></network-banner>
     <ons-list ng-repeat="(patientSerNum, value) in checkIn.displayApps">
         <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
-            {{value.patientName}}
+            {{value.patientHeader}}
         </ons-list-header>
         <ons-list-item modifier="tappable chevron" ng-repeat="app in value.apps" ng-click="checkIn.goToAppointment(app)">
 
@@ -33,15 +33,8 @@
                 <ons-col width="1%" > <div class="{{checkIn.separatorStatus[app.CheckInStatus]}}"></div></ons-col>
                 <ons-col>
                     <div class="appointment-content">
-                        <span ng-class="fontSizeTitle">
-                            <p ng-if="checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
-                                {{app["AppointmentType_" + checkIn.language]}}
-                            </p>
-                            <p ng-if="!checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
-                                {{app["ResourceDescription"]}}
-                            </p>
+                        <span ng-class="fontSizeTitle">{{app['AppointmentType_' + checkIn.language]}}</span>
 
-                        </span>
                         <p ng-show="app.RoomLocation_EN" class="item-desc" ng-class="fontSizeDesc" >
                             {{app["RoomLocation_" + checkIn.language]}}
                         </p>
@@ -83,10 +76,10 @@
         </ons-list-item>
         <ons-list-item ng-if="!value.allCheckedIn" class="item-btn">
             <ons-button ng-class="fontSizeTitle" class="checkin-btn"
-                        ng-click="checkIn.CheckInAppointments(patientSerNum)">{{"CHECKIN_ALL_TODAY"|translate}}</ons-button>
+                        ng-click="checkIn.checkIntoAppointments(patientSerNum)">{{"CHECKIN_ALL_TODAY"|translate}}</ons-button>
         </ons-list-item>
     </ons-list>
-    <ons-list ng-show="checkIn.emptyApps">
+    <ons-list ng-show="checkIn.noAppointments">
         <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
             {{"CHECKIN_NO"|translate}}
         </ons-list-header>
