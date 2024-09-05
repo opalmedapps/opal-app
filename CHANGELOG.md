@@ -1,3 +1,10 @@
+## [1.36.6](https://gitlab.com/opalmedapps/qplus/compare/v1.36.5...v1.36.6) (2024-09-05)
+
+
+### Bug Fixes
+
+* **deps:** use legacy pdf.js build ([631bde6](https://gitlab.com/opalmedapps/qplus/commit/631bde61f4405e5725dae0319b3989243896ad2a))
+
 ## [1.36.5](https://gitlab.com/opalmedapps/qplus/compare/v1.36.4...v1.36.5) (2024-08-21)
 
 
