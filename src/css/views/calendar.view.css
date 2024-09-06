@@ -113,14 +113,6 @@
 	color: white;
 }
 
-/*
- * Removes the default orange border that appears when clicking on the calendar (ui-bootstrap 2.5.0)
- * Source: https://stackoverflow.com/questions/67115183/bootstrap-select-remove-ugly-focus-border
- */
-.uib-datepicker *:focus {
-	outline: none;
-}
-
 .calendar-marker {
 	font-size:20px;
 	opacity:0.5;
