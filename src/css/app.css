@@ -79,6 +79,7 @@ p {
 }
 
 @import url('./animations.css');
+@import url('./bootstrap.css');
 @import url('./elements/menu.element.css');
 @import url('./elements/ons-alert-dialog.element.css');
 @import url('./elements/event.element.css');
