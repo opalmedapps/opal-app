@@ -1,3 +1,10 @@
+## [1.36.7](https://gitlab.com/opalmedapps/qplus/compare/v1.36.6...v1.36.7) (2024-09-06)
+
+
+### Bug Fixes
+
+* keep date format as ISO to correctly convert to Date instance on iOS ([2693ac1](https://gitlab.com/opalmedapps/qplus/commit/2693ac14919b458117a5f4037dad171771cc9a3d))
+
 ## [1.36.6](https://gitlab.com/opalmedapps/qplus/compare/v1.36.5...v1.36.6) (2024-09-05)
 
 
