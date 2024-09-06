@@ -1,3 +1,10 @@
+## [1.36.8](https://gitlab.com/opalmedapps/qplus/compare/v1.36.7...v1.36.8) (2024-09-06)
+
+
+### Bug Fixes
+
+* minor UI fixes ([d99075c](https://gitlab.com/opalmedapps/qplus/commit/d99075c3be0bde6515fd87215f7700d5fa46c688))
+
 ## [1.36.7](https://gitlab.com/opalmedapps/qplus/compare/v1.36.6...v1.36.7) (2024-09-06)
 
 
