@@ -5,7 +5,7 @@ export class PatientTestResult {
 	constructor({ testValue, collectedDateTime, abnormalFlag }) {
 		this.testValue = Number(testValue);
 		this.testValueString = testValue;
-		this.collectedDateTime = Date.parse(collectedDateTime.replace(/-/g,"/"));
+		this.collectedDateTime = Date.parse(collectedDateTime);
 		this.abnormalFlag = abnormalFlag;
 	}
 }

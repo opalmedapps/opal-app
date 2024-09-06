@@ -11,7 +11,7 @@ export class PatientTestType {
 		this.educationalMaterialURL_FR = educationalMaterialURL_FR;
 		this.interpretationRecommended = interpretationRecommended === "1";
 		this.latestAbnormalFlag = latestAbnormalFlag;
-		this.latestCollectedDateTime = Date.parse(latestCollectedDateTime.replace(/-/g, "/"));
+		this.latestCollectedDateTime = Date.parse(latestCollectedDateTime);
 		this.latestPatientTestResultSerNum = Number(latestPatientTestResultSerNum);
 		this.latestTestValue = latestTestValue;
 		this.name_EN = name_EN;
