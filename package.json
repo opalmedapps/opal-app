@@ -4,7 +4,7 @@
   "description": "Oncology Portal and Application",
   "main": "index.js",
   "scripts": {
-    "help": "echo Append a variable at the end of each start or build command to specify which environment to use, for example: --env=dev",
+    "help": "echo Append a variable at the end of each start or build command to specify which environment to use, for example: --env=local",
     "postinstall": "node -e \"require('./opal-env.setup.js').createWWWFolder()\"",
     "prepare:version": "run-script-os",
     "prepare:version:windows": "node -e \"require('./opal-env.setup.js').updateWebVersion('%npm_config_env%')\"",

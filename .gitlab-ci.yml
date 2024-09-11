@@ -19,10 +19,12 @@ default:
 
 variables:
   ENV: "dev"  # The environment used in the app build command
-  GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEV  # The service account providing permissions to upload to Firebase App Distribution
+  ENV_CONFIG_JS: $ENV_CONFIG_JS_DEV  # The contents of the file `env/*/opal.config.js`, used globally in the app
+  ENV_GOOGLE_SERVICES: $ENV_GOOGLE_SERVICES_DEV  # The contents of the file `env/*/google-services.json`, used to build the mobile app
   FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
   FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
   FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
+  GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEV  # The service account providing permissions to upload to Firebase App Distribution
   VERSION_TAG_REGEX: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/  # The tag semver regex recognized as a release, see: https://ihateregex.io/expr/semver/
 
   # Override for SAST: https://docs.gitlab.com/ee/user/application_security/sast/#vulnerability-filters
@@ -47,11 +49,14 @@ workflow:
 
 # Project variables: the following variables must be configured in the project's CI/CD settings
 #
-# FIREBASE_APP_DEV_ANDROID (variable): The Android App ID of the dev firebase project.
-# FIREBASE_APP_DEV_IOS (variable): The iOS App ID of the dev firebase project.
-# GOOGLE_APPLICATION_CREDENTIALS (file): Google service account key that provides write permissions for Firebase App Distribution (see more details below).
-# IOS_DEVELOPMENT_TEAM (variable): The development team used by cordova to sign the build created via `cordova build ios --developmentTeam=___`.
-# GITLAB_TOKEN (variable): Token used by semantic-release to commit files (e.g. config.xml with updated version number). See: https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html.
+# ENV_CONFIG_JS_<ENV>: The contents of each environment's `opal.config.js` file.
+# ENV_GOOGLE_SERVICES_<ENV>: The contents of each environment's `google-services.json` file.
+# FIREBASE_APP_<ENV>_ANDROID: The Android App ID of each environment's firebase project.
+# FIREBASE_APP_<ENV>_IOS: The iOS App ID of each environment's firebase project.
+# FTP_HOST, FTP_PASSWORD, FTP_USER: Credentials used to deploy the web app.
+# GITLAB_TOKEN: Token used by semantic-release to commit files (e.g. config.xml with updated version number). See: https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html.
+# GOOGLE_APPLICATION_CREDENTIALS_<ENV>: Google service account key that provides write permissions for Firebase App Distribution (see more details below).
+# IOS_DEVELOPMENT_TEAM: The development team used by cordova to sign the build, created via `cordova build ios --developmentTeam=___`.
 
 stages:
   - check
@@ -107,6 +112,10 @@ increment version:
     - npm -v
     - npm ci --cache .npm --prefer-offline
     - echo "$ENV"
+    # Get the environment files needed to build the app from project-level CI/CD variables
+    - mkdir env/$ENV
+    - echo "$ENV_CONFIG_JS" > env/$ENV/opal.config.js
+    - echo "$ENV_GOOGLE_SERVICES" > env/$ENV/google-services.json
 
 # Builds the app for Android
 build android:
@@ -195,6 +204,7 @@ deploy ios to firebase:
   needs:
     - job: build ios
 
+# Deploys the web app online
 deploy web:
   stage: deploy
   environment: $ENV
@@ -305,6 +315,8 @@ build and deploy demo:
   variables:
     # Override pipeline variables to run for the Demo environment
     ENV: "demo"
+    ENV_CONFIG_JS: $ENV_CONFIG_JS_DEMO
+    ENV_GOOGLE_SERVICES: $ENV_GOOGLE_SERVICES_DEMO
     FIREBASE_APP_ANDROID: $FIREBASE_APP_DEMO_ANDROID
     FIREBASE_APP_IOS: $FIREBASE_APP_DEMO_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEMO
@@ -315,6 +327,8 @@ build and deploy devops:
   variables:
     # Override pipeline variables to run for the DevOps environment
     ENV: "devops"
+    ENV_CONFIG_JS: $ENV_CONFIG_JS_DEVOPS
+    ENV_GOOGLE_SERVICES: $ENV_GOOGLE_SERVICES_DEVOPS
     FIREBASE_APP_ANDROID: $FIREBASE_APP_DEVOPS_ANDROID
     FIREBASE_APP_IOS: $FIREBASE_APP_DEVOPS_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEVOPS
@@ -325,6 +339,8 @@ build and deploy preprod:
   variables:
     # Override pipeline variables to run for the PreProd environment
     ENV: "preprod"
+    ENV_CONFIG_JS: $ENV_CONFIG_JS_PREPROD
+    ENV_GOOGLE_SERVICES: $ENV_GOOGLE_SERVICES_PREPROD
     FIREBASE_APP_ANDROID: $FIREBASE_APP_PREPROD_ANDROID
     FIREBASE_APP_IOS: $FIREBASE_APP_PREPROD_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_PREPROD
@@ -335,6 +351,8 @@ build and deploy qa:
   variables:
     # Override pipeline variables to run for the QA environment
     ENV: "qa"
+    ENV_CONFIG_JS: $ENV_CONFIG_JS_QA
+    ENV_GOOGLE_SERVICES: $ENV_GOOGLE_SERVICES_QA
     FIREBASE_APP_ANDROID: $FIREBASE_APP_QA_ANDROID
     FIREBASE_APP_IOS: $FIREBASE_APP_QA_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_QA
@@ -345,6 +363,8 @@ build and deploy staging:
   variables:
     # Override pipeline variables to run for the Staging environment
     ENV: "staging"
+    ENV_CONFIG_JS: $ENV_CONFIG_JS_STAGING
+    ENV_GOOGLE_SERVICES: $ENV_GOOGLE_SERVICES_STAGING
     FIREBASE_APP_ANDROID: $FIREBASE_APP_STAGING_ANDROID
     FIREBASE_APP_IOS: $FIREBASE_APP_STAGING_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_STAGING
