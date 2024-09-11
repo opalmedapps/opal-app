@@ -2,7 +2,7 @@
 
 This project is configured with [GitLab CI/CD pipelines](https://docs.gitlab.com/ee/ci/pipelines/)
 to build and deploy the application automatically.
-Currently, deployment is only supported for non-prod environments.
+Currently, deployment is only supported for internal distribution, not to end users via the app stores.
 
 Two different workflows are handled by the pipeline, as follows.
 
@@ -19,8 +19,8 @@ Specifically, any commits on branches _other_ than the default branch are handle
       This provides early feedback (in the form of a failed pipeline) to alert developers that the build will later fail
       since the dependencies are unable to install successfully.
   - Stage 2: `build`
-    - `build android`/`build ios`/`build web` (manual/manual/auto): App builds are not automatically executed, to save on resources.
-      This makes sense given that developers will rarely need to build the app on every commit they push.
+    - `build android`/`build ios`/`build web` (manual/manual/auto): Mobile app builds are not automatically executed, to save on resources.
+      This makes sense given that developers will rarely need to build the mobile app on every commit they push.
       However, a manual button is available to build the app on demand (using the Dev environment settings and backend).
       The resulting `apk`, `ipa` and web files are available as artifacts for download.
   - Stage 3: `test`
@@ -31,7 +31,8 @@ Specifically, any commits on branches _other_ than the default branch are handle
 Commits on the default branch are produced as the result of approved and "squashed-and-merged" merge requests.
 These commits represent completed work that is ready for deployment to our development environment.
 As such, the bulk of the jobs described below run by default in the Dev environment.
-The last job, `build and deploy QA`, can be used after a successful deployment to Dev to promote and deploy the same version to QA.
+The last set of jobs, `build and deploy <ENV>`, can be used after a successful deployment to the Dev environment
+to promote and deploy the same version to another environment.
 
 Any commits to the default branch are handled as follows:
 
@@ -48,7 +49,7 @@ Any commits to the default branch are handled as follows:
         to determine the next version number.
       - `@semantic-release/release-notes-generator`: Generates release notes from the conventional commits.
       - `@semantic-release/changelog`: Updates [CHANGELOG.md](../../CHANGELOG.md) with the release notes.
-      - `@semantic-release/exec`: Updates `./env/*/config.xml` with the new app version number (used by cordova
+      - `@semantic-release/exec`: Updates `./env/config.xml` with the new app version number (used by cordova
         when building the app).
         This is done by executing versioning commands available in [opal-env.setup.js](../../opal-env.setup.js).
       - `@semantic-release/git`: Commits the above files to the default branch.
