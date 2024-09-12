@@ -5,6 +5,13 @@
 
 * remove committed `env` files from the repository ([5001ac6](https://gitlab.com/opalmedapps/qplus/commit/5001ac6c5767b0d6e3d2a71f5b05a037803c54a5))
 
+## [1.36.9](https://gitlab.com/opalmedapps/qplus/compare/v1.36.8...v1.36.9) (2024-09-12)
+
+
+### Bug Fixes
+
+* remove committed `env` files from the repository ([5001ac6](https://gitlab.com/opalmedapps/qplus/commit/5001ac6c5767b0d6e3d2a71f5b05a037803c54a5))
+
 ## [1.36.8](https://gitlab.com/opalmedapps/qplus/compare/v1.36.7...v1.36.8) (2024-09-06)
 
 
