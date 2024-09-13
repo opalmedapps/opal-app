@@ -72,23 +72,42 @@
                 "has_demographics": true,
                 "middle_name": "",
                 "city_of_birth": "",
-                "health_data_authorization": "",
-                "contact_authorization": ""
+                "has_health_data_consent": false,
+                "has_contact_consent": false
             };
-            // Extract the responses for the consent validation and GUID generation in Django
+
+            // String to bool mappings for *_authorization question responses
+            const authorization_mapping = {
+                "Consent": true,
+                "Accepter": true,
+                "Decline": false,
+                "Refuser": false
+            };
+
+            // Regex to extract specific question responses for the consent validation and GUID generation in Django
+            const middle_name_regex = /middle\s*name|deuxième\s*prénom/i;
+            const city_of_birth_regex = /city\s*of\s*birth|ville\s*de\s*naissance/i;
+            const has_health_data_consent_regex = /authorization\s*for\s*health\s*information|autorisation\s*de\s*collecte\s*d'informations\s*sur\s*la\s*santé/i;
+            const has_contact_consent_regex = /authorization\s*for\s*qscc\s*databank|autorisation\s*de\s*contact\s*avec\s*le\s*directeur\s*de\s*la\s*banque\s*de\s*données\s*du\s*cqsi/i;
+
             consent_questionnaire_response.sections.forEach(section => {
                 section.questions.forEach(question => {
-                    if (/middle\s*name/i.test(question.question_display)) {
+                    if (middle_name_regex.test(question.question_display)) {
                         data.middle_name = question.patient_answer.answer[0].answer_value;
-                    } else if (/city\s*of\s*birth/i.test(question.question_display)) {
+                    } else if (city_of_birth_regex.test(question.question_display)) {
                         data.city_of_birth = question.patient_answer.answer[0].answer_value;
-                    } else if (/authorization\s*for\s*health\s*information/i.test(question.question_display)) {
-                        data.health_data_authorization = question.patient_answer.answer[0].answer_option_text;
-                    } else if (/authorization\s*for\s*qscc\s*databank/i.test(question.question_display)) {
-                        data.contact_authorization = question.patient_answer.answer[0].answer_option_text;
+                    } else if (has_health_data_consent_regex.test(question.question_display)) {
+                        let answer_text = question.patient_answer.answer[0].answer_option_text;
+                        // Map the answer to a boolean value
+                        data.has_health_data_consent = authorization_mapping[answer_text] ?? false;
+                    } else if (has_contact_consent_regex.test(question.question_display)) {
+                        let answer_text = question.patient_answer.answer[0].answer_option_text;
+                        // Map the answer to a boolean value
+                        data.has_contact_consent = authorization_mapping[answer_text] ?? false;
                     }
                 });
             });
+
             const requestParams = Params.API.ROUTES.DATABANK_CONSENT;
             const formattedParams = {
                 ...requestParams,
