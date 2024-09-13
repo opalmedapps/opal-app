@@ -1,3 +1,10 @@
+## [1.36.10](https://gitlab.com/opalmedapps/qplus/compare/v1.36.9...v1.36.10) (2024-09-13)
+
+
+### Bug Fixes
+
+* fix regexes for databank consent endpoint logic ([4d7e628](https://gitlab.com/opalmedapps/qplus/commit/4d7e6287794795dec9958d1e30d93a01f36d8fe8))
+
 ## [1.36.9](https://gitlab.com/opalmedapps/qplus/compare/v1.36.8...v1.36.9) (2024-09-12)
 
 
