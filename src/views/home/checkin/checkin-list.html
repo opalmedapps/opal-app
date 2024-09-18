@@ -1,11 +1,11 @@
 <ons-page ng-controller="CheckInController as checkIn">
     <generic-toolbar title="{{'CHECKIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <ons-list ng-repeat="(patientSerNum, value) in checkIn.displayApps">
+    <ons-list ng-repeat="(patientSerNum, patient) in checkIn.displayApps">
         <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
-            {{value.patientHeader}}
+            {{patient.patientHeader}}
         </ons-list-header>
-        <ons-list-item modifier="tappable chevron" ng-repeat="app in value.apps" ng-click="checkIn.goToAppointment(app)">
+        <ons-list-item modifier="tappable chevron" ng-repeat="app in patient.apps" ng-click="checkIn.goToAppointment(app)">
 
             <!-----------------------------------------------------------------
             The appointment will show the status according to its checkin status,
@@ -67,16 +67,19 @@
                         <!-- An Error Occurred - Unsuccessful Checkin -->
                         <div ng-if="app.CheckInStatus == 'danger'">
                             <span class="item-desc color-error" ng-class="fontSizeDesc">
-                                {{"CHECKIN_ERROR"|translate}}
+                                {{"CHECKIN_ERROR_ONE"|translate}}
                             </span>
                         </div>
                     </div>
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item ng-if="!value.allCheckedIn" class="item-btn">
+        <ons-list-item ng-if="!patient.allCheckedIn" class="item-btn">
             <ons-button ng-class="fontSizeTitle" class="checkin-btn"
-                        ng-click="checkIn.checkIntoAppointments(patientSerNum)">{{"CHECKIN_ALL_TODAY"|translate}}</ons-button>
+                        ng-click="checkIn.checkIntoAppointments(patientSerNum)"
+                        ng-disabled="checkIn.patientHasAppointmentLoading(patient)">
+                {{"CHECKIN_ALL_TODAY"|translate}}
+            </ons-button>
         </ons-list-item>
     </ons-list>
     <ons-list ng-show="checkIn.noAppointments">

@@ -126,7 +126,7 @@
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
                 CheckInService.setAppointmentsForCheckIn(result.data?.daily_appointments);
-                const checkinState = await CheckInService.evaluateCheckinState();
+                const checkinState = await CheckInService.updateCheckInState();
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result?.data?.unread_notification_count;
                     vm.checkinState = checkinState;
@@ -276,7 +276,6 @@
          */
         function setInterval() {
             vm.reloadInterval = $interval(function () {
-                CheckInService.reloadingCheckinState();
                 getDisplayData();
             }, 5000);
         }

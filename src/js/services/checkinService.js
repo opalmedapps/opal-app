@@ -13,8 +13,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
  *@ngdoc service
  *@name MUHCApp.service:CheckinService
  *@requires MUHCApp.service:RequestToServer
- *@requires MUHCApp.service:Appointments
- *@requires $q
  *@description Service that deals with the checkin functionality for the app
  **/
 
@@ -25,10 +23,10 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
         .module('MUHCApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$q', 'Appointments', 'Hospital', 'Location', 'Params', 'RequestToServer', 'UserPreferences'];
+    CheckInService.$inject = ['$filter', 'Hospital', 'Location', 'Params', 'RequestToServer', 'UserPreferences'];
 
     /* @ngInject */
-    function CheckInService($q, Appointments, Hospital, Location, Params, RequestToServer, UserPreferences) {
+    function CheckInService($filter, Hospital, Location, Params, RequestToServer, UserPreferences) {
 
         /**
          * @description Array of today's appointments for check-in.
@@ -36,22 +34,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
          * @type {AppointmentFromBackend[]}
          */
         let appointmentsForCheckIn = [];
-
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#allCheckedIn
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether all of appointments are checked in or not
-         */
-        var allCheckedIn = false;
-
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#attemptedCheckin
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether the patient has attempted checking in or not
-         */
-        var attemptedCheckin = false;
 
         let initialState = {
             message: '',
@@ -73,22 +55,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#checkinStateSet
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether the checkin state has been set, used for future reference
-         */
-        var checkinStateSet = false;
-
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#stateReloading
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether or not the checkin state need to be reloaded
-         */
-        var stateReloading = false;
-
-        /**
-         *@ngdoc property
          *@name  MUHCApp.service.#errorsExist
          *@propertyOf MUHCApp.service:CheckinService
          *@description Determines whether checkin errors currently exist
@@ -101,10 +67,9 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
         return {
             attemptCheckin: attemptCheckin,
             clear: clear,
-            evaluateCheckinState: evaluateCheckinState,
             getAppointmentsForCheckIn: () => appointmentsForCheckIn,
-            reloadingCheckinState: () => stateReloading = true,
             setAppointmentsForCheckIn: setAppointmentsForCheckIn,
+            updateCheckInState: updateCheckInState,
         };
 
         ////////////////////////////////////////////
@@ -114,25 +79,16 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
             if (!isAllowed) return 'CHECKIN_NOT_ALLOWED';
 
             const checkinResult = await checkInToAllAppointments(patientSerNum);
-            attemptedCheckin = true;
             await updateCheckInState(checkinResult.appts);
             markAppointmentsCheckedIn(checkinResult.appts);
             return checkinResult.status;
-        }
-
-        async function evaluateCheckinState() {
-            if (attemptedCheckin || checkinStateSet && !stateReloading) return state;
-            await updateCheckInState();
-            checkinStateSet = true;
-            stateReloading = false;
-            return state;
         }
 
         async function updateCheckInState() {
             // Evaluate the current state of appointments, to see if they were already checked in and if so what the state is (all success or some errors)
             if (appointmentsForCheckIn.length === 0) setCheckinState("CHECKIN_NONE");
             else if (alreadyCheckedIn()) setCheckinState("CHECKIN_MESSAGE_AFTER" + getPlural(appointmentsForCheckIn));
-            else if (checkinErrorsExist()) setCheckinState("CHECKIN_ERROR");
+            else if (checkinErrorsExist()) setCheckinState("CHECKIN_ERROR_MULTIPLE");
             else {
                 try {
                     const canCheckin = await isWithinCheckinRange();
@@ -151,6 +107,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
                     setCheckinState("CHECKIN_NOT_ALLOWED", appointmentsForCheckIn.length);
                 }
             }
+            return state;
         }
 
         function alreadyCheckedIn() {
@@ -172,8 +129,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
         function setCheckinState(status, numAppointments){
             state.message = status;
             switch(status) {
-                case "CHECKIN_ERROR":
-                    attemptedCheckin = true;
+                case "CHECKIN_ERROR_MULTIPLE":
                     errorsExist = true;
                     state.canNavigate = true;
                     state.numberOfAppts = 0;
@@ -183,8 +139,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
                     break;
                 case "CHECKIN_MESSAGE_AFTER":
                 case "CHECKIN_MESSAGE_AFTER_PLURAL":
-                    attemptedCheckin = true;
-                    allCheckedIn = true;
                     state.canNavigate = true;
                     state.numberOfAppts = 0;
                     state.checkinError = false;
@@ -254,7 +208,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
          **/
         async function checkInToAllAppointments(patientSerNum){
             try {
-                const response = RequestToServer.sendRequestWithResponse(
+                const response = await RequestToServer.sendRequestWithResponse(
                     'Checkin',
                     undefined,
                     undefined,
@@ -302,11 +256,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
 
         function clear() {
             appointmentsForCheckIn = [];
-            allCheckedIn = false;
-            attemptedCheckin = false;
             state = initialState;
-            checkinStateSet = false;
-            stateReloading = false;
             errorsExist = false;
         }
     }

@@ -15,12 +15,12 @@
         .module('MUHCApp')
         .controller('CheckInController', CheckInController);
 
-    CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'Navigator', 'Params', 'Toast', 'User',
-        'UserPreferences'];
+    CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'Navigator', 'Params', 'ProfileSelector',
+        'Toast', 'User', 'UserPreferences'];
 
     /* @ngInject */
-    function CheckInController($filter, $timeout, CheckInService, Navigator, Params, Toast, User,
-                               UserPreferences) {
+    function CheckInController($filter, $timeout, CheckInService, Navigator, Params, ProfileSelector,
+                               Toast, User, UserPreferences) {
         let vm = this;
         let navigator;
 
@@ -41,6 +41,7 @@
 
         vm.checkIntoAppointments = checkIntoAppointments;
         vm.goToAppointment = goToAppointment;
+        vm.patientHasAppointmentLoading = patient => patient.apps.some(apt => apt.loading);
 
         activate();
 
@@ -57,6 +58,7 @@
 
             // For each patient, build an object containing all of their appointments for check-in
             patientSerNums.forEach(patientSerNum => {
+                const patient = ProfileSelector.getPatientBySerNum(patientSerNum);
                 const patientAppointments = vm.apps.filter(apt => apt.PatientSerNum === patientSerNum);
 
                 // Set the header based on whether the patient is the user or a care-receiver
@@ -108,18 +110,18 @@
          * @returns {Promise<void>}
          */
         async function checkIntoAppointments(patientSerNum) {
-            app.loading = vm.displayApps[patientSerNum].apps.some(app => app.CheckInStatus !== 'success');
+            vm.displayApps[patientSerNum].apps.forEach(apt => apt.loading = apt.CheckInStatus !== 'success');
 
             try {
                 const response = await CheckInService.attemptCheckin(patientSerNum);
 
                 if (response === 'CHECKIN_NOT_ALLOWED') displayError('CHECKIN_NOT_ALLOWED');
                 else if (response === 'SUCCESS') vm.apps = CheckInService.getAppointmentsForCheckIn();
-                else displayError('CHECKIN_ERROR');
+                else displayError('CHECKIN_ERROR_MULTIPLE');
             }
             catch (error) {
-                console.log(error);
-                displayError('CHECKIN_ERROR');
+                console.error(error);
+                displayError('CHECKIN_ERROR_MULTIPLE');
             }
 
             // TODO -- figure out what's being done and update it to be clearer
