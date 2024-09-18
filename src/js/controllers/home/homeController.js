@@ -83,9 +83,12 @@
                 const prepopPages = ['./views/home/checkin/checkin-list.html', 'views/personal/notifications/notifications.html'];
                 if (prepopPages.includes(event.currentPage.name) && NetworkStatus.isOnline()) getDisplayData();
 
-                //restart the reload interval when going back to the home page
+                // Refresh the display and restart the reload interval when going back to the home page
                 $timeout(() => {
-                    if (Navigator.getPageName() === 'home.html') setInterval();
+                    if (Navigator.getPageName() === 'home.html') {
+                        getDisplayData();
+                        setInterval();
+                    }
                 })
             });
 
