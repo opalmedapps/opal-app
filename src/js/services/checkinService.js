@@ -53,15 +53,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
          */
         var state = initialState;
 
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#errorsExist
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether checkin errors currently exist
-         */
-        var errorsExist = false;
-
-
         ///////////////////////////////////////////
 
         return {
@@ -130,7 +121,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
             state.message = status;
             switch(status) {
                 case "CHECKIN_ERROR_MULTIPLE":
-                    errorsExist = true;
                     state.canNavigate = true;
                     state.numberOfAppts = 0;
                     state.checkinError = true;
@@ -257,7 +247,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
         function clear() {
             appointmentsForCheckIn = [];
             state = initialState;
-            errorsExist = false;
         }
     }
 })();
