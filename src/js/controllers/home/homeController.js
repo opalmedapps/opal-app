@@ -131,8 +131,13 @@
                     vm.notificationsUnreadNumber = result?.data?.unread_notification_count;
                     vm.checkinState = checkinState;
                     vm.closestAppointment = result?.data?.closest_appointment;
+
+                    // Show or hide the chevron depending on whether check-in is possible
+                    let button = $('#checkin-button');
+                    button.toggleClass('non-navigable', !checkinState.canNavigate);
                 });
-            } catch (error) {
+            }
+            catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
                 console.error(error);
             }

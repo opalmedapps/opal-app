@@ -99,10 +99,12 @@
             CHECKIN
             ================================
             -->
-            <ons-list-item 
+            <!-- The button is initialized with the "non-navigable" class; this is updated later in the controller according to the check-in state -->
+            <ons-list-item
+                id="checkin-button"
                 ng-if="Ctrl.allowedModules.hasOwnProperty('CHK') && Ctrl.allowedModules['CHK']"
-                modifier="{{Ctrl.checkinState.canNavigate ? 'chevron tappable' : ''}}"
-                class="item"
+                modifier="chevron tappable"
+                class="item non-navigable"
                 ng-click="Ctrl.checkinState.canNavigate ? Ctrl.goToCheckinAppointments() : undefined">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
