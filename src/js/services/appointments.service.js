@@ -83,8 +83,8 @@
                 userAppointmentsArray.push(appointment);
             });
 
-            // Sort chronologically with the most recent first
-            userAppointmentsArray = $filter('orderBy')(userAppointmentsArray, 'ScheduledStartTime', false);
+            // Sort chronologically with the oldest first
+            userAppointmentsArray = $filter('orderBy')(userAppointmentsArray, 'ScheduledStartTime');
         }
 
         /**

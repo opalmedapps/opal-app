@@ -227,9 +227,8 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
                 appointmentsForCheckIn.push(formattedAppointment);
             });
 
-            // TODO why?
-            // Sort chronologically with the most recent first
-            appointmentsForCheckIn = $filter('orderBy')(appointmentsForCheckIn, 'ScheduledStartTime', false);
+            // Sort chronologically with the oldest first
+            appointmentsForCheckIn = $filter('orderBy')(appointmentsForCheckIn, 'ScheduledStartTime');
         }
 
         /**
