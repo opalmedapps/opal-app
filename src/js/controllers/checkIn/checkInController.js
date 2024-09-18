@@ -75,8 +75,7 @@
                 };
             });
 
-            // TODO needed?
-            vm.noAppointments = Object.keys(vm.displayApps).length === 0;
+            vm.noAppointments = vm.apps.length === 0;
         }
 
         /**
