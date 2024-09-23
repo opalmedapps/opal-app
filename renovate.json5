@@ -25,7 +25,7 @@
   "packageRules": [
     // Group auxiliary angular-related updates
     {
-      "matchDepNames": ["^angular"],
+      "matchDepPatterns": ["^angular"],
       "excludePackagePatterns": ["^@xlts.dev/"],
       "groupName": "auxiliary angular packages"
     },
@@ -36,28 +36,23 @@
     },
     // Group @zxcvbn-ts updates
     {
-      "matchDepNames": ["^@zxcvbn-ts"],
+      "matchPackagePatterns": ["^@zxcvbn-ts/"],
       "groupName": "@zxcvbn-ts packages"
-    },
-    // Group semantic-release updates
-    {
-      "matchDepNames": ["semantic-release"],
-      "groupName": "semantic-release packages"
     },
     // Group webpack updates
     {
-      "matchDepNames": ["webpack"],
+      "matchPackagePatterns": ["webpack"],
       "groupName": "webpack packages",
     },
     // Group webpack loader updates
     {
-      "matchDepNames": ["\\-loader$"],
+      "matchPackagePatterns": ["-loader$"],
       "groupName": "webpack loader packages",
     },
-    // Group babel updates
+    // Group angular-translate updates
     {
-      "matchDepNames": ["babel"],
-      "groupName": "babel packages"
+      "matchPackagePatterns": ["^angular-translate"],
+      "groupName": "angular-translate packages"
     },
   ],
 }
