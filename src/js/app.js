@@ -89,7 +89,6 @@ import "onsenui/css/onsenui.css";
 import "angular/angular-csp.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "animate.css";
-import "font-awesome/css/font-awesome.css";
 import "../css/app.css";
 import "../css/elements/custom-toast.element.css";
 import "../Languages/angular-locales/angular-locale_en.js";
@@ -100,6 +99,13 @@ import 'core-js/proposals/promise-with-resolvers';
 
 // Load angular module bootstrap script
 import "./app.bootstrap";
+
+// Font Awesome
+// See: https://stackoverflow.com/questions/52376720/how-to-make-font-awesome-5-work-with-webpack
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/solid';
+import '@fortawesome/fontawesome-free/js/regular';
+import '@fortawesome/fontawesome-free/js/brands';
 
 //Routes for angular views
 angular
