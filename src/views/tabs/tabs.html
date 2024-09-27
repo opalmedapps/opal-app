@@ -14,7 +14,12 @@
     </ons-tab>
     <ons-tab page="views/navigators/generalNavigator.html">
         <div class="tab">
-            <ons-icon icon="fa-th" class="tab-icon"></ons-icon>
+            <!-- Use three ellipses to form a solid grid: https://docs.fontawesome.com/web/style/layer -->
+            <span class="fa-layers fa-2x">
+                <i class="fa-solid fa-ellipsis" data-fa-transform="up-4.4"></i>
+                <i class="fa-solid fa-ellipsis" data-fa-transform=""></i>
+                <i class="fa-solid fa-ellipsis" data-fa-transform="down-4.4"></i>
+            </span>
             <div class="tab-label">{{"GENERAL"|translate}}</div>
         </div>
     </ons-tab>

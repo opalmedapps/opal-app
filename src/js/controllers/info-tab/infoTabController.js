@@ -54,12 +54,12 @@
                 description:"EDUCATION_DESCRIPTION"
             },
             research: {
-                icon: './img/microscope.png',
+                icon: 'fa-microscope',
                 name: "RESEARCH",
                 description: "RESEARCH_DESCRIPTION"
             },
             studies: {
-                icon: './img/dna.png',
+                icon: 'fa-dna',
                 name: "STUDIES",
                 description: "STUDIES_DESCRIPTION"
             }

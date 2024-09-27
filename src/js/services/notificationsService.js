@@ -111,7 +111,7 @@
                 refreshType: 'EducationalMaterial',
             },
             [Params.NOTIFICATION_TYPES.NextAppointment]: {
-                icon: 'fa fa-calendar',
+                icon: 'fa fa-calendar-days',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -119,7 +119,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.AppointmentTimeChange]: {
-                icon: 'fa fa-calendar',
+                icon: 'fa fa-calendar-days',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
