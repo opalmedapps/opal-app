@@ -23,3 +23,4 @@ import "./directives/patient-data-handler.directive";
 import "./directives/ons-pull-hook-content.directive";
 import "./directives/profile-selector.directive";
 import "./directives/profile-icon.directive";
+import "./directives/plotly-chart.directive.js"
