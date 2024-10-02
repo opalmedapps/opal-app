@@ -12,19 +12,19 @@
             <div class="navigation-bar__center">
                 <div class="button-bar" style="margin-top:10px;width:70%;left:15%;">
                     <div class="button-bar__item">
-                        <input type="radio" name="navi-segment-b" checked ng-model="testTypeCtrl.showChart"
+                        <input type="radio" name="navi-segment-b" checked ng-model="testTypeCtrl.showChartTab"
                             ng-value="true">
                         <div class="button-bar__button">{{'PLOT_VIEW'|translate}}</div>
                     </div>
 
                     <div class="button-bar__item">
-                        <input type="radio" name="navi-segment-b" ng-model="testTypeCtrl.showChart" ng-value="false">
+                        <input type="radio" name="navi-segment-b" ng-model="testTypeCtrl.showChartTab" ng-value="false">
                         <div class="button-bar__button">{{'TABLE_VIEW'|translate}}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div ng-show="!testTypeCtrl.showChart">
+        <div ng-show="!testTypeCtrl.showChartTab">
             <div style="position:sticky; top:0; z-index:9999;">
 
                 <!-- DISCLAIMER -->
@@ -75,16 +75,21 @@
                 </ons-list>
             </ons-scroller>
         </div>
-        <div ng-show="testTypeCtrl.showChart">
+        <div ng-if="testTypeCtrl.showChartTab">
 
             <!-- DISCLAIMER -->
             <labs-disclaimer></labs-disclaimer>
 
-            <center style="margin: 100px 5px">
-                {{"CHARTS_UNAVAILABLE"|translate}}
-            </center>
-
+            <plotly-chart
+                data="testTypeCtrl.chartSettings.data"
+                y-axis-label="testTypeCtrl.chartSettings.yAxisLabel"
+                has-non-numeric-values="testTypeCtrl.chartSettings.hasNonNumericValues"
+                normal-range-min="testTypeCtrl.chartSettings.normalRangeMin"
+                normal-range-max="testTypeCtrl.chartSettings.normalRangeMax"
+            >
+            </plotly-chart>
         </div>
+
         <ons-list>
             <!-- SECTION HEADER -->
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list-header>
