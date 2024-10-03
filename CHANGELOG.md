@@ -1,3 +1,11 @@
+## [1.37.3](https://gitlab.com/opalmedapps/qplus/compare/v1.37.2...v1.37.3) (2024-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pdfjs-dist to v4.6.82 ([90c74d9](https://gitlab.com/opalmedapps/qplus/commit/90c74d94d9b67dedc654fabccdb4e6692b3303ce))
+* **deps:** update node.js to v20.17.0-alpine3.20 ([3f789c6](https://gitlab.com/opalmedapps/qplus/commit/3f789c6e6133a5080063c2b4e8368076d678bf5a))
+
 ## [1.37.2](https://gitlab.com/opalmedapps/qplus/compare/v1.37.1...v1.37.2) (2024-10-03)
 
 
