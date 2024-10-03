@@ -10,6 +10,11 @@
     line-height: 28px;
 }
 
+.general-tab-icon {
+    font-size: 2em;
+    margin: 1px;
+}
+
 .tab-label {
     line-height: 11px;
     vertical-align: top;
