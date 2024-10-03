@@ -1,3 +1,10 @@
+## [1.37.1](https://gitlab.com/opalmedapps/qplus/compare/v1.37.0...v1.37.1) (2024-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency moment to v2.30.1 ([8c802e2](https://gitlab.com/opalmedapps/qplus/commit/8c802e2459989e2407fdbb3f5cebd65bd6b343c3))
+
 # [1.37.0](https://gitlab.com/opalmedapps/qplus/compare/v1.36.11...v1.37.0) (2024-10-03)
 
 
