@@ -1,3 +1,10 @@
+# [1.37.0](https://gitlab.com/opalmedapps/qplus/compare/v1.36.11...v1.37.0) (2024-10-03)
+
+
+### Features
+
+* replace highcharts with plotly ([2c0df27](https://gitlab.com/opalmedapps/qplus/commit/2c0df276c7a689e115b28531f69ad3d1bcac5e68))
+
 ## [1.36.11](https://gitlab.com/opalmedapps/qplus/compare/v1.36.10...v1.36.11) (2024-09-23)
 
 
