@@ -1,3 +1,10 @@
+## [1.37.2](https://gitlab.com/opalmedapps/qplus/compare/v1.37.1...v1.37.2) (2024-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency core-js to v3.38.1 ([592d268](https://gitlab.com/opalmedapps/qplus/commit/592d268d33722c5d7340ec0ce2acd2ec5e91200d))
+
 ## [1.37.1](https://gitlab.com/opalmedapps/qplus/compare/v1.37.0...v1.37.1) (2024-10-03)
 
 
