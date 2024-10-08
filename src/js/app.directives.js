@@ -2,6 +2,7 @@ import "./directives/loading-spinning-button.directive";
 import "./directives/watchHeightOfElementDirective.js";
 import "./directives/changeHeightDiv.js";
 import "./directives/fileReaderDirective.js";
+import "./directives/general-icon.directive.js";
 import "./directives/phoneInputDirective.js";
 import "./directives/linePlusBarChartDirective_bak.js";
 import "./directives/rateEducationalMaterialDirective.js";
