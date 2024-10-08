@@ -21,6 +21,7 @@
         <ons-carousel-item ng-repeat="section in vm.tourSections" class="tour-carousel-text-margin">
             <img ng-if="section.iconType === 'opal-logo'" src="img/Opal_Logo_Black.png" class="tour-icon-image">
             <ons-icon ng-if="section.iconType === 'icon'" icon="{{section.icon}}" class="tour-icon" aria-hidden="true"></ons-icon>
+            <general-icon ng-if="section.iconType === 'general-icon'" icon-class="tour-icon"></general-icon>
             <div ng-class="fontSizeTitle" class="tour-title">{{section.title | translate}}</div>
             <div ng-class="fontSizeDesc">{{section.description | translate | replaceAll: "%%HELP_EMAIL%%":vm.helpEmail}}</div>
         </ons-carousel-item>
