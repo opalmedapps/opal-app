@@ -77,11 +77,11 @@
                         color: '#ef5350'
                     },
                     'Factsheet': {
-                        icon: 'fa fa-list',
+                        icon: 'fa-solid fa-file-lines',
                         color: '#1E88E5'
                     },
                     'Booklet': {
-                        icon: 'fa fa-leanpub',
+                        icon: 'fa-solid fa-book-open',
                         color: '#66BB6A'
                     },
                     'Treatment Guidelines': {
@@ -93,8 +93,8 @@
                         color: '#8A5B45'
                     },
                     'Other': {
-                        icon: 'fa fa-book',
-                        color: '#FF7043'
+                        icon: 'fa-solid fa-file',
+                        color: '#FFDF80'
                     },
                 },
 

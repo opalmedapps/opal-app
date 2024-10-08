@@ -49,6 +49,7 @@
   "homepage": "https://github.com/Sable/qplus#readme",
   "dependencies": {
     "@babel/runtime": "7.24.8",
+    "@fortawesome/fontawesome-free": "6.6.0",
     "@havesource/cordova-plugin-push": "4.0.0",
     "@zxcvbn-ts/core": "3.0.4",
     "@zxcvbn-ts/language-common": "3.0.4",
@@ -92,8 +93,6 @@
     "core-js": "3.38.1",
     "es6-promise-plugin": "4.2.2",
     "firebase": "10.12.5",
-    "font-awesome": "4.7.0",
-    "ionicons": "5.5.4",
     "jquery": "3.7.1",
     "jquery.panzoom": "3.2.3",
     "moment": "2.30.1",

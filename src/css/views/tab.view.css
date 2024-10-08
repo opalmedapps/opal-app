@@ -3,11 +3,16 @@
 }
 
 .tab-icon {
-    font-size: 30px;
+    font-size: 28px;
     padding: 0;
-    margin: 0;
+    margin: 3px;
     vertical-align: top;
     line-height: 28px;
+}
+
+.general-tab-icon {
+    font-size: 2em;
+    margin: 1px;
 }
 
 .tab-label {
