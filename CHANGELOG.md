@@ -1,3 +1,10 @@
+## [1.37.4](https://gitlab.com/opalmedapps/qplus/compare/v1.37.3...v1.37.4) (2024-10-08)
+
+
+### Bug Fixes
+
+* update icons through fontawesome ([557190e](https://gitlab.com/opalmedapps/qplus/commit/557190eef3dff2bea2f9435a44d959aac2a75528))
+
 ## [1.37.3](https://gitlab.com/opalmedapps/qplus/compare/v1.37.2...v1.37.3) (2024-10-03)
 
 
