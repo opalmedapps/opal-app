@@ -45,7 +45,6 @@
             showWeeks: false,
         };
 
-        vm.HasMeaningfulAlias = HasMeaningfulAlias;
         /**
          * The list of user appointments
          * @type {Array}
@@ -78,7 +77,7 @@
         vm.getListColor = getListColor;
         vm.showHeaderEnd = showHeaderEnd;
         vm.showChosenDateHeader = showChosenDateHeader;
-        vm.goToAppointment=goToAppointment;
+        vm.goToAppointment = goToAppointment;
         vm.goToCalendarOptions = goToCalendarOptions;
         vm.onDateChange = onDateChange;
         vm.scrollToAnchor = scrollToAnchor;
@@ -118,7 +117,7 @@
          * @description Updates and displays the visible list of appointments and calendar.
          */
         function setAppointmentsView() {
-            vm.appointments=Appointments.getUserAppointments();
+            vm.appointments = Appointments.getAppointments();
             vm.noAppointments = (vm.appointments.length === 0);
             if(vm.appointments.length>0) {
 
@@ -215,8 +214,8 @@
          * @returns {string}
          */
         function showDotColor(date) {
-            if(vm.appointments.length === 0){
-                vm.appointments=Appointments.getUserAppointments();
+            if (vm.appointments.length === 0) {
+                vm.appointments = Appointments.getAppointments();
             }
 
             // TODO: this is a huge bottleneck for the situation where a user has a bunch of appointments!!
@@ -293,8 +292,8 @@
         }
 
         /**
-         * Takes the user to their appointment details
-         * @param appointment
+         * @description Opens the individual appointment view for a given appointment, and marks it as read.
+         * @param {object} appointment The appointment to open.
          */
         function goToAppointment(appointment) {
             if(appointment.ReadStatus === '0') {
@@ -302,14 +301,7 @@
                 // Mark corresponding notification as read
                 Notifications.implicitlyMarkCachedNotificationAsRead(
                     appointment.AppointmentSerNum,
-                    [
-                        Params.NOTIFICATION_TYPES.RoomAssignment,
-                        Params.NOTIFICATION_TYPES.NextAppointment,
-                        Params.NOTIFICATION_TYPES.AppointmentTimeChange,
-                        Params.NOTIFICATION_TYPES.CheckInNotification,
-                        Params.NOTIFICATION_TYPES.AppointmentNew,
-                        Params.NOTIFICATION_TYPES.AppointmentCancelled,
-                    ],
+                    Notifications.appointmentNotificationTypes(),
                 );
             }
             navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
@@ -359,14 +351,6 @@
                 case date < todaysTimeMilliseconds:
                     return '#5CE68A';
             }
-        }
-
-        /**
-         * Checks if AppointmentType has a Meaningful Alias; i.e. other than the word "Appointment" or "Rendez-vous"
-         * @returns {boolean}
-         */
-        function HasMeaningfulAlias(appointmentType) {
-            return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
         }
 
         function bindEvents() {

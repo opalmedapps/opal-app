@@ -110,9 +110,9 @@
             // Remove event listeners
             $scope.$on('$destroy', () => navigator.off('prepop'));
 
-            // Reload user profile if appointment was opened via Notifications tab,
+            // Reload user profile if appointment was opened via notifications or check-in,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler(['checkin-list.html', 'notifications.html']));
         }
     }
 })();

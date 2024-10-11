@@ -22,11 +22,6 @@
 
                 firebaseBaseUrl: 'dev3/',
 
-                appointmentType: {
-                    appointmentTypeEn: 'appointment',
-                    appointmentTypeFr: 'rendez-vous'
-                },
-
                 /** Alert Types and Classes **/
                 alertTypeDanger: 'danger',
                 alertTypeSuccess: 'success',
