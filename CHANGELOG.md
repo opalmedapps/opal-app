@@ -1,3 +1,10 @@
+## [1.37.5](https://gitlab.com/opalmedapps/qplus/compare/v1.37.4...v1.37.5) (2024-10-11)
+
+
+### Bug Fixes
+
+* refactor and fix check-in bugs impacting the appointment calendar ([213e399](https://gitlab.com/opalmedapps/qplus/commit/213e3998b4684ed66a6dc653af7f57a2bed48180))
+
 ## [1.37.4](https://gitlab.com/opalmedapps/qplus/compare/v1.37.3...v1.37.4) (2024-10-08)
 
 
