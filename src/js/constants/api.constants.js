@@ -23,6 +23,10 @@
                     method: 'get',
                     url: '/api/app/home/',
                 },
+                CHECK_IN: {
+                    method: 'get',
+                    url: '/api/app/appointments/',
+                },
                 CHART: {
                     method: 'get',
                     url: '/api/app/chart/',

@@ -1,6 +1,6 @@
+import "./services/appointments.service.js";
 import "./services/firebase.service.js";
 import "./services/utility.service";
-import "./services/appointmentsService.js";
 import "./services/notificationsService.js";
 import "./services/userPreferencesService.js";
 import "./services/userAuthorizationInfoService.js";
