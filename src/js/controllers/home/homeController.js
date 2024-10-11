@@ -20,7 +20,6 @@
 
         vm.language = 'EN';
         vm.calledApp = null;
-        vm.RoomLocation = '';
         $scope.infoModalData = [];
 
         vm.checkinState = {
@@ -83,9 +82,12 @@
                 const prepopPages = ['./views/home/checkin/checkin-list.html', 'views/personal/notifications/notifications.html'];
                 if (prepopPages.includes(event.currentPage.name) && NetworkStatus.isOnline()) getDisplayData();
 
-                //restart the reload interval when going back to the home page
+                // Refresh the display and restart the reload interval when going back to the home page
                 $timeout(() => {
-                    if (Navigator.getPageName() === 'home.html') setInterval();
+                    if (Navigator.getPageName() === 'home.html') {
+                        getDisplayData();
+                        setInterval();
+                    }
                 })
             });
 
@@ -125,13 +127,19 @@
         async function getDisplayData() {
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
-                const checkinState = await CheckInService.evaluateCheckinState(result?.data?.daily_appointments);
+                CheckInService.setAppointmentsForCheckIn(result.data?.daily_appointments);
+                const checkinState = await CheckInService.updateCheckInState();
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result?.data?.unread_notification_count;
                     vm.checkinState = checkinState;
                     vm.closestAppointment = result?.data?.closest_appointment;
+
+                    // Show or hide the chevron depending on whether check-in is possible
+                    let button = $('#check-in-button');
+                    button.toggleClass('non-navigable', !checkinState.canNavigate);
                 });
-            } catch (error) {
+            }
+            catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
                 console.error(error);
             }
@@ -246,14 +254,7 @@
         /**
          * Takes the user to the checkin view
          */
-        async function goToCheckinAppointments() {
-            if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
-            const url = {
-                method: 'get',
-                url: '/api/app/appointments/',
-            }
-            const apps = await RequestToServer.apiRequest(url);
-            Appointments.setCheckinAppointments(apps?.data?.daily_appointments);
+        function goToCheckinAppointments() {
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
 
@@ -269,7 +270,6 @@
          */
         function setInterval() {
             vm.reloadInterval = $interval(function () {
-                CheckInService.reloadingCheckinState();
                 getDisplayData();
             }, 5000);
         }

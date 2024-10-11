@@ -19,6 +19,7 @@ import {Observer} from "../models/utility/observer";
 
         return {
             init: init,
+            getPatientBySerNum: patientSerNum => patientList.find(patient => patient.patient_legacy_id == patientSerNum),
             getPatientList: () => patientList,
             loadPatientProfile: loadPatientProfile,
             getActiveProfile: () => currentSelectedProfile,

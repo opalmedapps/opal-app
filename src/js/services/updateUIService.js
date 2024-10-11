@@ -35,8 +35,8 @@
                 multiProfileEnabled: true,
             },
             'Appointments': {
-                set: Appointments.setUserAppointments,
-                update: Appointments.updateUserAppointments,
+                set: Appointments.setAppointments,
+                update: Appointments.updateAppointments,
                 lastUpdated: 0,
                 multiProfileEnabled: false,
             },
