@@ -91,7 +91,7 @@
     "crypto-js": "4.2.0",
     "core-js": "3.38.1",
     "es6-promise-plugin": "4.2.2",
-    "firebase": "10.12.5",
+    "firebase": "10.14.1",
     "jquery": "3.7.1",
     "jquery.panzoom": "3.2.3",
     "moment": "2.30.1",
