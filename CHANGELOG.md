@@ -1,3 +1,10 @@
+## [1.37.7](https://gitlab.com/opalmedapps/qplus/compare/v1.37.6...v1.37.7) (2024-10-22)
+
+
+### Bug Fixes
+
+* **deps:** update node.js to v20.18.0 ([c61fd07](https://gitlab.com/opalmedapps/qplus/commit/c61fd073a72c310dd0c433a1e6224843cccfdb24))
+
 ## [1.37.6](https://gitlab.com/opalmedapps/qplus/compare/v1.37.5...v1.37.6) (2024-10-18)
 
 
