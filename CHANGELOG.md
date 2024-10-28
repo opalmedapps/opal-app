@@ -1,3 +1,10 @@
+## [1.37.8](https://gitlab.com/opalmedapps/qplus/compare/v1.37.7...v1.37.8) (2024-10-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase-tools to v13.20.2 ([c58c098](https://gitlab.com/opalmedapps/qplus/commit/c58c0988c00a8914301815343de23b403387305d))
+
 ## [1.37.7](https://gitlab.com/opalmedapps/qplus/compare/v1.37.6...v1.37.7) (2024-10-22)
 
 
