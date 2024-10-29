@@ -1,3 +1,10 @@
+## [1.37.10](https://gitlab.com/opalmedapps/qplus/compare/v1.37.9...v1.37.10) (2024-10-29)
+
+
+### Bug Fixes
+
+* fix the if statement ([1504763](https://gitlab.com/opalmedapps/qplus/commit/1504763fd1f5f5863e3199099ac527438a6a37fa))
+
 ## [1.37.9](https://gitlab.com/opalmedapps/qplus/compare/v1.37.8...v1.37.9) (2024-10-29)
 
 
