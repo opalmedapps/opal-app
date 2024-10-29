@@ -1,3 +1,10 @@
+## [1.37.9](https://gitlab.com/opalmedapps/qplus/compare/v1.37.8...v1.37.9) (2024-10-29)
+
+
+### Bug Fixes
+
+* add warning message for deleted appointment ([3b18ac1](https://gitlab.com/opalmedapps/qplus/commit/3b18ac1254511b7df459950d304d7fc0ab5ffa1b))
+
 ## [1.37.8](https://gitlab.com/opalmedapps/qplus/compare/v1.37.7...v1.37.8) (2024-10-28)
 
 
