@@ -12,7 +12,7 @@
 import angular from "angular";
  
 /*
-Bootstraping the application
+ * Bootstrapping the application
  */
 (()=>{
     "use strict";
