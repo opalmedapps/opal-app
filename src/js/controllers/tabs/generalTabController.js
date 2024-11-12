@@ -107,7 +107,7 @@
             }
 
             function goToCarnetSante() {
-                const url = DynamicContent.getURL("carnet_sante");
+                const url = DynamicContent.getURL("carnetSante");
                 Browser.openInternal(url);
             }
         }

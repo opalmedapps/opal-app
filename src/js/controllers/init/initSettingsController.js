@@ -53,20 +53,23 @@
 		}
 
 		function secureYourDeviceNotice() {
-			$rootScope.contentType = 'secureyourdevice';
-			navigator.pushPage('./views/templates/content.html', {contentType: 'secureyourdevice'});
+			navigator.pushPage(
+				'./views/templates/content.html',
+				{contentType: 'secureYourDevice', title: 'SECURE_YOUR_DEVICE'},
+			);
 		}
 
 		function openPageLegal(type) {
-			if (type.toLowerCase() === 'tou') {
-				$rootScope.contentType = 'tou';
-				navigator.pushPage('./views/templates/content.html', {contentType: 'tou'});
-			} else if (type.toLowerCase() === 'serviceagreement') {
-				$rootScope.contentType = 'serviceagreement';
-				navigator.pushPage('./views/templates/content.html', {contentType: 'serviceagreement'});
-			} else if (type.toLowerCase() === 'privacypolicy') {
-				$rootScope.contentType = 'privacypolicy';
-				navigator.pushPage('./views/templates/content.html', {contentType: 'privacypolicy'});
+			if (type === 'termsOfUse') {
+				navigator.pushPage(
+					'./views/templates/content.html',
+					{contentType: 'termsOfUse', title: 'TERMS_OF_USE'}
+				);
+			} else if (type === 'serviceAgreement') {
+				navigator.pushPage(
+					'./views/templates/content.html',
+					{contentType: 'serviceAgreement', title: 'SERVICE_AGREEMENT'},
+				);
 			}
 		}
 	}

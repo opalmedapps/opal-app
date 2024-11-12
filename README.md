@@ -180,6 +180,11 @@ npm run start:app:ios --env=local
 This command calls in sequence `npm run prepare:app && npm run build:web && cordova run ios`, carrying along the `--env=local` variable as it goes.
 You may choose to simply execute `cordova run ios`, if you know there already exists a valid Cordova build.
 
+### External Content
+
+The app includes dynamically loaded pages such as `Terms of Use`, `Service Agreement`, `About`, etc., which are retrieved from an external server. On startup, it
+downloads a configuration file for this external content based on the `externalContentFileURL` setting in `opal.config.js`. **For testing purposes**, you can include the external configuration and content files in the webpack build, allowing them to be accessed as regular local static files. Follow the instructions in [the content folder's README](./content/README.md) to use the external content samples.
+
 ## Troubleshooting
 
 If you are getting errors during your installation, here are some things you can try.

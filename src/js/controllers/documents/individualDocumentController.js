@@ -159,7 +159,8 @@
                 // Set the options to send to the content controller
                 var contentOptions = {
                     contentType: docParams.AliasName_EN,
-                    contentLink: link
+                    contentLink: link,
+                    title: 'INFO',
                 };
 
                 navigator.pushPage('./views/templates/content.html', contentOptions);

@@ -1,6 +1,6 @@
 /*
  * Filename     :   contentController.js
- * Description  :   Manages the dynamic content grabbed from depdocs. It can take a content link as input.
+ * Description  :   Manages the dynamic content grabbed from the external server. It can take a content link as input.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   27 Apr 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
@@ -35,16 +35,15 @@
             let link = parameters.contentLink;
             let contentType = parameters.contentType;
 
-            vm.pageContent.title = "";
+            vm.pageContent.title = parameters.title;
 
             link ? loadFromURL(link, contentType) : loadPageContent(contentType);
         }
 
         function loadPageContent(contentType) {
-            // Get the content from DepDocs
+            // Get the content from the external server
             DynamicContent.getPageContent(contentType).then(response => {
                 $timeout(() => {
-                    vm.pageContent.title = response.title;
                     vm.pageContent.content = response.data;
                     vm.loading = false;
                 });
@@ -55,7 +54,6 @@
             DynamicContent.loadFromURL(url).then(response => {
                 $timeout(() => {
                     Logger.sendLog('About', contentType);
-                    vm.pageContent.title = contentType;
                     vm.pageContent.content = response.data;
                     vm.loading = false;
                 });

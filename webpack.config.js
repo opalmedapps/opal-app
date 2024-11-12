@@ -25,13 +25,16 @@ const config = env => {
 	// Parse the Opal environment to use, specified for example via webpack as `--env opal_environment=%npm_config_env%` and npm as `--env=local`
 	const OPAL_ENV = env?.opal_environment;
 
+	const EXTERNAL_CONTENT_LOCAL_FILE_PATH = './content/content.config.json';
+	const SERVICE_STATUS_FILE_PATH = './content/service-status.json';
+
 	// Throws error if the defined folder for environment does not exist.
 	OpalEnv.verifyOpalEnvironmentExists(OPAL_ENV);
 	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV}`);
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
 
 	// Read environment settings from opal.config.js
-	let requiredSettingNames = ["useSourceMap", "webpackMode"];
+	let requiredSettingNames = ["externalContentFileURL", "serviceStatusURL", "useSourceMap", "webpackMode"];
 	let settings = {};
 	requiredSettingNames.forEach(name => settings[name] = OpalEnv.getEnvSetting(name, OPAL_ENV));
 	console.log("Environment settings:", settings);
@@ -144,6 +147,22 @@ const config = env => {
 					{ from: './src/img', to: './img' },
 					{ from: './src/Languages', to: './Languages' },
 					{ from: './src/views', to: './views' },
+					// NOTE: if the external content URL (e.g., externalContentFileURL) is set to the local file path
+					// instead of the external server URL, the dynamic configurations will be loaded from local files.
+					// See content/content.config.sample.json for more details.
+					...(
+						settings.externalContentFileURL === EXTERNAL_CONTENT_LOCAL_FILE_PATH ?
+						[{ from: './content', to: './content' }] : []
+					),
+					// NOTE: if service status URL (e.g., serviceStatusURL) is set to the local file path
+					// instead of the external server URL, the message content will be loaded from local file.
+					...(
+						settings.serviceStatusURL === SERVICE_STATUS_FILE_PATH ?
+						[{
+							from: './content/service-status.json',
+							to: './content/service-status.json',
+						}] : []
+					),
 				],
 			}),
 			new webpack.ProvidePlugin({
