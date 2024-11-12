@@ -16,7 +16,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('opal_website')">
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('opalWebsite')">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -57,35 +57,6 @@
                 </ons-col>
                 <ons-col>
                     <span ng-class="fontSizeTitle">{{"OPAL_DEV"|translate}}</span>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
-
-        <!-- TODO remove if no longer needed -->
-        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openCedars()" ng-if="about.allowedModules.hasOwnProperty('CED') && about.allowedModules['CED']">
-            <ons-row align="center">
-                <ons-col width="60px" style="text-align: center">
-                    <div>
-                        <img style="width: 27px;" src="./img/cedarsLogoSmall.png">
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <span ng-class="fontSizeTitle"> {{"CEDARS"|translate}}</span>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
-
-        <!-- TODO remove if no longer needed -->
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('about_muhc')" ng-if="about.allowedModules.hasOwnProperty('HOS') && about.allowedModules['HOS']">
-            <ons-row align="center">
-                <ons-col width="60px" style="text-align: center">
-                    <div>
-                        <img style="width: 27px;" src="./img/MUHC.png">
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <span ng-class="fontSizeTitle"> {{"MUHC"|translate}}</span>
-                    <ons-icon icon="ion-android-open" style="color:#ddd; margin-right: -10px" class="pull-right" size="1.2em"> </ons-icon>
                 </ons-col>
             </ons-row>
         </ons-list-item>

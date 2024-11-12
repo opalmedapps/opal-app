@@ -96,7 +96,8 @@
         function moreEducationalMaterial() {
             navigator.pushPage('./views/templates/content.html', {
                 contentLink: vm.app["URL_"+ vm.language],
-                contentType: vm.app["AppointmentType_" + vm.language]
+                contentType: vm.app["AppointmentType_" + vm.language],
+                title: 'MORE_EDU_MATERIAL',
             });
             
         }

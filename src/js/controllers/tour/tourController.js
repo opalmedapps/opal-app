@@ -93,7 +93,7 @@ import "../../../css/views/tour.view.css";
 
         function activate() {
             // Initialize the support email value
-            let emailFromServer = DynamicContent.getConstant('support_email');
+            let emailFromServer = DynamicContent.getConstant('supportEmail');
             vm.helpEmail = emailFromServer === undefined
                 ? `{${$filter('translate')("EMAIL_LOADING_ERROR").toLowerCase()}}`
                 : emailFromServer;

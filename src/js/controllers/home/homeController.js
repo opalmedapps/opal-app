@@ -262,7 +262,10 @@
          * @description Takes the user to the acknowledgements page.
          */
         function goToAcknowledgements() {
-            homeNavigator.pushPage('./views/templates/content.html', { contentType: 'acknowledgements' });
+            homeNavigator.pushPage(
+                './views/templates/content.html',
+                { contentType: 'acknowledgements', title: 'ACKNOWLEDGEMENTS'},
+            );
         }
 
         /**
