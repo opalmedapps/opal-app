@@ -24,7 +24,7 @@
                 <ons-icon icon="fa-star fa-lg pull-left"
                           style="color:#FFEB3B; display: inline-block"></ons-icon>
                 <div class="initScreenButtonText" align="center">
-                    {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
+                    {{"ACKNOWLEDGEMENTS"|translate}}
                 </div>
             </ons-button>
         </div>
@@ -78,8 +78,7 @@
            {{init.OPAL_CONFIG.name}}-v{{init.APP_VERSION}}-{{init.APP_BUILD_NUMBER}}
         </div>
 
-        <!-- Show Message Of The Day (MOTD), if there is any. -->
-        <!-- MOTD comes from serviceStatus_EN.php -->
+        <!-- Show Service Status (a.k.a. Message Of The Day (MOTD)), if there is any. -->
         <!-- if there is a Message, then show it -->
         <div ng-show="init.globalMessageDescription !== ''">
              {{init.showMessageOfTheDay()}}

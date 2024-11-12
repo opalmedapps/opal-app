@@ -66,36 +66,35 @@ import '../../../css/views/init-page.view.css';
 
 		////////////////
 
-		function activate() {
+		async function activate() {
+			//Initialize language if not initialized
+			UserPreferences.initializeLanguage();
 
-			DynamicContent.ensureInitialized().then(() => {
-				// Read the Message Of The Day from [dev|qa|staging|preprod|prod|etc.]_serviceStatus_[EN|FR].php on depDocs
-				return DynamicContent.getPageContent(OPAL_CONFIG.settings.messageOfTheDayKey);
+			try {
+				await DynamicContent.ensureInitialized();
+				// Read the Service Status Message from the serviceStatusURL hosted on the external server.
+				const response = await DynamicContent.loadFromURL(OPAL_CONFIG.settings.serviceStatusURL);
 
-			}).then(response => {
-				// Save the Message Of The Day
-				if (typeof response.data === "object") for (let key in response.data) {
-					if (response.data[key] !== "") {
-						$timeout(() => {
-							vm.globalMessage = key;
-							vm.globalMessageDescription = response.data[key];
-						});
-						break;
-					}
+				// Save the Service Status
+				const lang = UserPreferences.getLanguage().toLowerCase();
+				const { message = '', title } = response?.data?.[lang] || {};
+
+				if (message !== '') {
+					$timeout(() => {
+						vm.globalMessage = title;
+						vm.globalMessageDescription = message;
+					});
 				}
-			}).catch(err => {
-				if (err.code === "INIT_ERROR") Toast.showToast({
+			} catch (error) {
+				// TODO: ERROR_INIT_LINKS is not translated
+				if (error.code === "INIT_ERROR") Toast.showToast({
 					message: $filter('translate')("ERROR_INIT_LINKS"),
 				});
-				else if (err.code === "NO_PAGE_CONTENT") console.warn(`No message of the day set up for environment "${OPAL_CONFIG.env}"`);
-				else console.error("Error initializing the message of the day using DynamicContent:", err);
-			});
+				else console.error("Error initializing the service status using DynamicContent:", error);
+			}
 
 			//Add the login translation
 			$translatePartialLoader.addPart('login');
-
-			//Initialize language if not initialized
-			UserPreferences.initializeLanguage();
 
 			//Initialize hospital chosen if not initialized
 			UserHospitalPreferences.initializeHospital();
@@ -121,7 +120,7 @@ import '../../../css/views/init-page.view.css';
 						Toast.showToast({
 							message: vm.globalMessage + "\n" + vm.globalMessageDescription,
 							fontSize: 18,
-							durationWordsPerMinute: 80, // Slow down the message of the day
+							durationWordsPerMinute: 80, // Slow down the service status message
 							positionOffset: 30,
 						});
 						vm.hasShownMessageOfTheDay = true;
@@ -156,7 +155,10 @@ import '../../../css/views/init-page.view.css';
 		 * Go to Acknowledgements
 		 */
 		function goToAcknowledgements() {
-			initNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
+			initNavigator.pushPage(
+				'./views/templates/content.html',
+				{contentType: 'acknowledgements', title: 'ACKNOWLEDGEMENTS'}
+			);
 		}
 
 		/**

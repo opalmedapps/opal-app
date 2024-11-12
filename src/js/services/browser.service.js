@@ -29,7 +29,7 @@
          * @date 2021-06-23
          * @param {string} url - The link to open.
          * @param {boolean} [hideURL] - Whether to hide the location bar that shows the URL in the in-app browser.
-         *                              Set this to true to show content where the link isn't relevant (e.g. an image on DepDocs).
+         *                              Set this to true to show content where the link isn't relevant (e.g. an image on the external server).
          * @param {string} [additionalOptions] - More in-app browser options to use in addition to the default options
          *                                       selected by this service. The string format to use is specified by the plugin
          *                                       documentation: https://github.com/apache/cordova-plugin-inappbrowser#readme.

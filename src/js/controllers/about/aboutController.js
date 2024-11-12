@@ -35,7 +35,6 @@
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
         vm.openTour = openTour;
-        vm.openCedars = openCedars;
         vm.allowedModules = {};
 
         let parameters;
@@ -83,11 +82,10 @@
         }
 
         function openTeam() {
-            navigator.pushPage('views/templates/content.html', {contentType: 'hig'});
-        }
-
-        function openCedars() {
-            navigator.pushPage('views/home/about/cedars.html');
+            navigator.pushPage(
+                './views/templates/content.html',
+                {contentType: 'about', title: 'TITLE_ABOUT'},
+            );
         }
     }
 })();
