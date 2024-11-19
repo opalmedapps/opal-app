@@ -10,7 +10,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Security', SecurityService);
 
     SecurityService.$inject = [];

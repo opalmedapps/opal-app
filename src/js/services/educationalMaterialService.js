@@ -11,7 +11,7 @@
  *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
  */
 
-var myApp=angular.module('MUHCApp');
+var myApp=angular.module('OpalApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:EducationalMaterial

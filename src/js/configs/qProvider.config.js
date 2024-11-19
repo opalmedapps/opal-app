@@ -1,4 +1,4 @@
-angular.module("MUHCApp").config(QProviderConfiguration);
+angular.module('OpalApp').config(QProviderConfiguration);
 
 QProviderConfiguration.$inject = ['$qProvider'];
 

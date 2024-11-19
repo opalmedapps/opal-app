@@ -20,7 +20,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('DynamicContent', DynamicContent);
 
     DynamicContent.$inject = ['$http','$q','UserPreferences'];

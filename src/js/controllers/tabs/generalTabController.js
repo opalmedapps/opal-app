@@ -9,7 +9,7 @@
         'use strict';
 
         angular
-            .module('MUHCApp')
+            .module('OpalApp')
             .controller('GeneralTabController', GeneralTabController);
 
         GeneralTabController.$inject = ['$scope', 'Navigator', 'NetworkStatus', '$timeout',

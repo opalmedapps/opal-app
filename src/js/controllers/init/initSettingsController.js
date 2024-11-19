@@ -2,7 +2,7 @@
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 (()=>{
-	angular.module("MUHCApp")
+	angular.module('OpalApp')
 		.controller("InitSettingsController", InitSettingsController);
 
 	InitSettingsController.$inject = [

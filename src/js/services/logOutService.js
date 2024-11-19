@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('LogOutService', LogOutService);
 
     LogOutService.$inject = ['Firebase', 'RequestToServer', 'CleanUp', '$window', 'UserAuthorizationInfo',

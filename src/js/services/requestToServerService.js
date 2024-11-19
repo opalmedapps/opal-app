@@ -8,7 +8,7 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('RequestToServer', RequestToServer);
 
     RequestToServer.$inject = ['$injector','UserAuthorizationInfo','EncryptionService','Firebase','Constants','UUID',

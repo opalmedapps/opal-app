@@ -10,7 +10,7 @@
 
 
 
-var myApp=angular.module('MUHCApp');
+var myApp=angular.module('OpalApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:Documents

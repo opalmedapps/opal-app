@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .filter('replaceAll', ReplaceAll);
 
     ReplaceAll.$inject = [];

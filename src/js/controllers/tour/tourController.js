@@ -11,7 +11,7 @@ import "../../../css/views/tour.view.css";
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('TourController', TourController);
 
     TourController.$inject = ['$filter', '$timeout', 'DynamicContent'];

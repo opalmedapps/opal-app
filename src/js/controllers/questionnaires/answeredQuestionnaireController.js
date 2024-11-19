@@ -8,7 +8,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('AnsweredQuestionnaireController', AnsweredQuestionnaireController);
 
     AnsweredQuestionnaireController.$inject = [

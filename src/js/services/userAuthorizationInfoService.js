@@ -9,7 +9,7 @@
 *@description Contains all the authorization data for the user
 **/
 angular
-    .module('MUHCApp')
+    .module('OpalApp')
     .service('UserAuthorizationInfo', UserAuthorizationInfo);
 
 UserAuthorizationInfo.$inject = ['Constants'];

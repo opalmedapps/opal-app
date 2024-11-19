@@ -1,7 +1,7 @@
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
-var myApp = angular.module('MUHCApp');
+var myApp = angular.module('OpalApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:FileManagerService

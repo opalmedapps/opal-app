@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("labsInfoButton", LabsInfoButton);
 
     LabsInfoButton.$inject = ['Navigator'];

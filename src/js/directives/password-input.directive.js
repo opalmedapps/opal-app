@@ -3,7 +3,7 @@ import '../../css/directives/password-input.directive.css';
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("passwordInput", PasswordInput);
 
     /**
