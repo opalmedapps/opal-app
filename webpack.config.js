@@ -206,6 +206,7 @@ const config = env => {
 					},
 					"format-detection": "telephone=no",
 					"mobile-web-app-capable": "yes",
+					// For Apple configs, see: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html
 					"apple-mobile-web-app-capable": "yes",
 					"apple-mobile-web-app-status-bar-style": "black-translucent",
 					"apple-mobile-web-app-title": webAppName,
