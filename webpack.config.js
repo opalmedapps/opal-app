@@ -6,6 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OpalEnv = require("./opal-env.setup");
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 let entry = [
 	"./src/js/app.js",
@@ -18,6 +19,9 @@ let entry = [
 	"./src/js/app.constants.js",
 	"./src/js/app.values.js",
 ];
+
+// Utility function, see: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+let capitalizeFirstLetter = word => String(word).charAt(0).toUpperCase() + String(word).slice(1);
 
 const config = env => {
 	console.log("Webpack variables:", env);
@@ -45,6 +49,9 @@ const config = env => {
 	else if (env.minimize === "true") minimize = true;
 	else if (env.minimize === "false") minimize = false;
 	else throw `Incorrect value provided for minimize variable: --env.minimize=${env.minimize}. Please use a boolean (true or false).`;
+
+	// Get the web app name (for the progressive web app, to add to manifest.json)
+	let webAppName = OPAL_ENV === 'prod' ? 'Opal Web' : `Opal Web ${capitalizeFirstLetter(OPAL_ENV)}`;
 
 	return {
 		entry: entry,
@@ -198,13 +205,43 @@ const config = env => {
 						'content': 'text/html; charset=UTF-8; X-Content-Type-Options=nosniff'
 					},
 					"format-detection": "telephone=no",
+					"mobile-web-app-capable": "yes",
+					// For Apple configs, see: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html
 					"apple-mobile-web-app-capable": "yes",
-					"mobile-web-app-capable": "yes"
+					"apple-mobile-web-app-status-bar-style": "black-translucent",
+					"apple-mobile-web-app-title": webAppName,
 				}
 			}),
 			new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fr/),
 			new NodePolyfillPlugin({
 				additionalAliases: ['process'],
+			}),
+			new WebpackManifestPlugin({
+				// Configure the web version as a progressive web app, see: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable
+				seed: {
+					name: webAppName,
+					short_name: webAppName,
+					description: "Votre portail patient / Your patient portal",
+					start_url: "/app/index.html",
+					scope: "/",
+					display: "standalone",
+					theme_color: "#4CAF50",
+					background_color: "#BADA55",
+					icons: [
+						{
+							src: "img/web-icon-192.png",
+							type: "image/png",
+							sizes: "192x192",
+						},
+						{
+							src: "img/web-icon-512.png",
+							type: "image/png",
+							sizes: "512x512",
+						},
+					],
+				},
+				// Don't add paths to other files
+				filter: () => false,
 			}),
 		],
 		optimization: {
