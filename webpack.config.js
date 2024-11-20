@@ -205,8 +205,10 @@ const config = env => {
 						'content': 'text/html; charset=UTF-8; X-Content-Type-Options=nosniff'
 					},
 					"format-detection": "telephone=no",
+					"mobile-web-app-capable": "yes",
 					"apple-mobile-web-app-capable": "yes",
-					"mobile-web-app-capable": "yes"
+					"apple-mobile-web-app-status-bar-style": "black-translucent",
+					"apple-mobile-web-app-title": webAppName,
 				}
 			}),
 			new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fr/),
