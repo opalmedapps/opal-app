@@ -7,7 +7,6 @@
 
 /**
  * @ngdoc controller
- * @name MUHCApp.controller:StudiesController
  * @requires Studies
  * @requires UserPreferences
  * @description Controller for the diagnoses view.

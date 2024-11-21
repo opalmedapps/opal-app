@@ -11,7 +11,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: AboutController
  *  @description
  *
  *  Manages the about view.
