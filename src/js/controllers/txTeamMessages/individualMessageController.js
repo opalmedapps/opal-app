@@ -9,7 +9,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualTxTeamMessageController', IndividualTxTeamMessageController);
 
     IndividualTxTeamMessageController.$inject = ['$scope', '$timeout', 'Navigator', 'ProfileSelector', 'TxTeamMessages'];

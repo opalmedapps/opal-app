@@ -109,7 +109,7 @@ import '@fortawesome/fontawesome-free/js/brands';
 
 //Routes for angular views
 angular
-    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate',
+    .module('OpalApp', ['tmh.dynamicLocale','pascalprecht.translate',
         'ngSanitize','ui.router','onsen','ngTouch','ui.bootstrap'])
     .run(initialization);
 

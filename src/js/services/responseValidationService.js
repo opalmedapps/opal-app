@@ -11,7 +11,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('ResponseValidator', ResponseValidator);
 
     ResponseValidator.$inject = ['$filter', 'Firebase', '$state', '$window', 'Security', 'EncryptionService', 'Params', 'Toast'];

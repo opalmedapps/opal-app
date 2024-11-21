@@ -7,7 +7,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Browser', Browser);
 
     Browser.$inject = ['$filter', 'Constants', 'Toast'];

@@ -5,7 +5,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('Location', Location);
 
     /**

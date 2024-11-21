@@ -1,6 +1,6 @@
 import "../../css/directives/loading-spinning-circle.directive.css";
 
-angular.module("MUHCApp").directive("loadingSpinningCircle", LoadingSpinningCircle);
+angular.module('OpalApp').directive("loadingSpinningCircle", LoadingSpinningCircle);
 
 /**
  * This directive offers a spinning loader with a default loading message

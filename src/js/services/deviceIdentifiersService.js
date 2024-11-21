@@ -10,7 +10,7 @@
  
  
  
-var app = angular.module('MUHCApp');
+var app = angular.module('OpalApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:DeviceIdentifiers

@@ -20,7 +20,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$filter', '$rootScope', '$scope', '$state', '$timeout', '$window', 'CleanUp',

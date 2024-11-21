@@ -8,7 +8,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('MainController', MainController);
 
     MainController.$inject = ["$window", "$state", '$rootScope','Firebase','DeviceIdentifiers',

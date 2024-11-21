@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('SetHospitalController', SetHospitalController);
 
     SetHospitalController.$inject = ['$filter', 'NativeNotification','UserHospitalPreferences'];

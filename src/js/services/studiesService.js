@@ -6,7 +6,7 @@
  */
 (function () {
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('Studies', StudiesService);
 
     StudiesService.$inject = ['RequestToServer', '$filter', '$q', 'Params'];

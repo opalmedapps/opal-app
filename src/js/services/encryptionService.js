@@ -5,7 +5,7 @@ import nacl from "tweetnacl";
 import util from "tweetnacl-util";
 
 nacl.util = util;
-var myApp = angular.module('MUHCApp');
+var myApp = angular.module('OpalApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:EncryptionService

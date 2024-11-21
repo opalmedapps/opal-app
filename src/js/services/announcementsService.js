@@ -20,7 +20,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Announcements', Announcements);
 
     Announcements.$inject = ['RequestToServer','$filter', 'UserPreferences'];

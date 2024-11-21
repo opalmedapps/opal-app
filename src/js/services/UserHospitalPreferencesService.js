@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('UserHospitalPreferences', UserHospitalPreferences);
 
     UserHospitalPreferences.$inject = ['Params', 'UserPreferences', 'Firebase'];

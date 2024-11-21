@@ -20,7 +20,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
     ForgotPasswordController.$inject = ['$timeout','Firebase','Params'];
