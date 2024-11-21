@@ -7,11 +7,9 @@ var myApp=angular.module('OpalApp');
 //This service will have the user preferences for language. To be used in account settings.
 /**
  *@ngdoc service
- *@name MUHCApp.service:UserPreferences
  *@requires $rootScope
  *@requires tmhDynamicLocale
  *@requires $translate
- *@requires MUHCApp.service:UserAuthorizationInfo
  *@description Service stores and manages user preferences
  **/
 myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','Constants',
@@ -20,15 +18,11 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
     //Fields for user preference and authentication
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#fontSize
-     *@propertyOf MUHCApp.service:UserPreferences
      *@description Font size property
      **/
     var fontSize = '';
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#language
-     *@propertyOf MUHCApp.service:UserPreferences
      *@description Language property
      **/
     var language = '';
@@ -42,7 +36,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
     /**
      *@ngdoc method
      *@name setLanguage
-     *@methodOf MUHCApp.service:UserPreferences
      *@param {String} lang Either 'EN' or 'FR'
      *@param isAuthenticated
      *@description Setter method for patient language of preference
@@ -88,7 +81,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
         /**
          *@ngdoc method
          *@name getFontSize
-         *@methodOf MUHCApp.service:UserPreferences
          *@returns {String} Returns font-size
          **/
         getFontSize: function() {
@@ -100,7 +92,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
         /**
          *@ngdoc method
          *@name initializeLanguage
-         *@methodOf MUHCApp.service:UserPreferences
          *@description The method accesses the globalization plugin of the device to find the actual language of device and sets default to that language.
          * If language was already set previously within the app, set default to that language. Otherwise it sets English as default.
          *@returns {Promise} Returns a promise that fulfills if the language is been found and correctly set or rejects if there was a problem using the plugin.
@@ -135,7 +126,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
         /**
          *@ngdoc method
          *@name clearUserPreferences
-         *@methodOf MUHCApp.service:UserPreferences
          *@description Clears user preferences for logout functionality
          **/
         clearUserPreferences: function() {
