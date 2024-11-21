@@ -173,7 +173,7 @@ const config = env => {
 				],
 			}),
 			new webpack.ProvidePlugin({
-				OPAL_CONFIG: path.join(OPAL_ENV_FOLDER, "opal.config.js"),
+				CONFIG: path.join(OPAL_ENV_FOLDER, "opal.config.js"),
 				WEB_VERSION: path.join(__dirname, "web-version.json"),
 				$: "jquery",
 				jQuery: "jquery",
