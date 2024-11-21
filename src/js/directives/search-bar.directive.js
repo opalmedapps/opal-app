@@ -1,6 +1,6 @@
 
 
-angular.module("MUHCApp").directive("searchBar", SearchBar);
+angular.module('OpalApp').directive("searchBar", SearchBar);
 
 /**
  * This directive offers a search bar with appropriate spacing.

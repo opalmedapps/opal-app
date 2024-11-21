@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .directive('hospitalSelector', hospitalSelector);
 
     hospitalSelector.$inject = ['UserHospitalPreferences'];

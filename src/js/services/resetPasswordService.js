@@ -18,7 +18,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('ResetPassword', ResetPassword);
 
     ResetPassword.$inject = ['Firebase','Params'];

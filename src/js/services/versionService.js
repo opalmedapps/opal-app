@@ -15,7 +15,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Version', Version);
 
     Version.$inject = ['$filter','$q','RequestToServer', 'Constants', '$http'];

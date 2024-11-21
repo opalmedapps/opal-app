@@ -25,7 +25,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('BookletMaterialController', BookletMaterialController);
 
     BookletMaterialController.$inject = ['$http', '$scope', '$timeout', 'Navigator', '$rootScope', '$filter',

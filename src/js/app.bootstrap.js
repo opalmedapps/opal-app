@@ -19,12 +19,12 @@ Bootstraping the application
 	const app = window.hasOwnProperty("cordova");
 	if (app){
 		document.addEventListener("deviceready", function() {
-			angular.bootstrap(document, ["MUHCApp"]);
+			angular.bootstrap(document, ['OpalApp']);
 		}, false);
 	}
 	else {
 		angular.element(document).ready(function(){
-			angular.bootstrap(document, ["MUHCApp"]);
+			angular.bootstrap(document, ['OpalApp']);
 		})
 	}
 })();

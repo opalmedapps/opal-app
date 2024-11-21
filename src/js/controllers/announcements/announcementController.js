@@ -19,7 +19,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualAnnouncementController', IndividualAnnouncementController);
 
     IndividualAnnouncementController.$inject = [

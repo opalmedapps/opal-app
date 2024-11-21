@@ -1,4 +1,4 @@
-var app = angular.module('MUHCApp');
+var app = angular.module('OpalApp');
 /*
 *Code by David Herrera May 20, 2015
 *Github: dherre3

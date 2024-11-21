@@ -3,7 +3,7 @@
 //
 import {Observer} from "../models/utility/observer";
 
-var myApp=angular.module('MUHCApp');
+var myApp=angular.module('OpalApp');
 //This service will have the user preferences for language. To be used in account settings.
 /**
  *@ngdoc service

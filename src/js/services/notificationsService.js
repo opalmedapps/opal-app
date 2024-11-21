@@ -25,7 +25,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Notifications', Notifications);
 
     Notifications.$inject = ['$filter','$injector','$q','Announcements','Appointments','CheckInService','Documents',

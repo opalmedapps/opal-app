@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("profileIcon", ProfileIcon);
 
     ProfileIcon.$inject = ['$filter', 'ProfileSelector'];

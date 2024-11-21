@@ -21,7 +21,7 @@
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .controller("ParkingController", ParkingController);
 
     ParkingController.$inject = [

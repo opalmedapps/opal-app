@@ -19,7 +19,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Permissions', Permissions);
 
     Permissions.$inject = ['$q', 'Constants'];

@@ -22,7 +22,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Logger', Logger);
 
     Logger.$inject = ['$filter', 'RequestToServer'];
