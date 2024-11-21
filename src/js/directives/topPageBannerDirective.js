@@ -12,7 +12,7 @@ import "../../css/directives/top-page-banner.directive.css";
      *      www/views/general/general.html
      */
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .directive('topPageBanner', topPageBanner);
 
     topPageBanner.$inject = [];

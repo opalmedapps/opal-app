@@ -5,7 +5,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('ConcurrentLogin', ConcurrentLogin);
 
     ConcurrentLogin.$inject = ['$filter','$injector','Firebase','Toast'];

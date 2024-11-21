@@ -18,7 +18,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualMaterialController', IndividualMaterialController);
 
     IndividualMaterialController.$inject = ['$scope', '$timeout', 'Navigator', 'EducationalMaterial',

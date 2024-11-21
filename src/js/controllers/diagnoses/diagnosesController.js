@@ -20,7 +20,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('DiagnosesController', DiagnosesController);
 
     /* @ngInject */

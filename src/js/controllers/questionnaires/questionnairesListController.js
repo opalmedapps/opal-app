@@ -9,7 +9,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('QuestionnairesListController', QuestionnairesListController);
 
     QuestionnairesListController.$inject = [

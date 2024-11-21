@@ -1,6 +1,6 @@
 let mobileApp = window.hasOwnProperty("cordova");
 
-angular.module("MUHCApp").constant('Constants', {
+angular.module('OpalApp').constant('Constants', {
 	app: mobileApp,
 	version: () => {
 		return mobileApp ? AppVersion.version : WEB_VERSION.version;

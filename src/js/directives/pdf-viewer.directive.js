@@ -11,7 +11,7 @@ import * as pdfjsLib from '../../lib/pdfjs_legacy_webpack.mjs';
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .directive('pdfViewer', pdfViewer);
 
     pdfViewer.$inject = ['$timeout', '$q', 'Browser', 'Constants', 'FileManagerService', 'Params'];

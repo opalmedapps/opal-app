@@ -6,7 +6,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('UpdateUI', UpdateUI);
 
     UpdateUI.$inject = ['Announcements','Appointments','Diagnoses','Documents',

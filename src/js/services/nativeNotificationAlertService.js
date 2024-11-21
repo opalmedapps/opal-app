@@ -7,7 +7,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('NativeNotification', NativeNotification);
 
     NativeNotification.$inject = ['$filter'];

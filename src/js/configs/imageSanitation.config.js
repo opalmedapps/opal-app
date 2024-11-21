@@ -1,5 +1,5 @@
 
-angular.module("MUHCApp").config(ImageSanitation);
+angular.module('OpalApp').config(ImageSanitation);
 
 ImageSanitation.$inject = [ '$compileProvider' ];
 /* @ngInject */

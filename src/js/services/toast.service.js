@@ -6,7 +6,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('Toast', Toast);
 
     Toast.$inject = ['$timeout', 'AppState', 'Constants', 'UserPreferences'];

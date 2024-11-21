@@ -18,7 +18,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('NetworkStatus', NetworkStatus);
 
     function NetworkStatus() {

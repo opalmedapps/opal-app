@@ -7,7 +7,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('TabsController', TabsController);
 
     TabsController.$inject = ['$timeout', '$translatePartialLoader'];

@@ -12,7 +12,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('accountSettingController', accountSettingController);
 
     accountSettingController.$inject = ['UserPreferences', '$scope', '$timeout', 'Navigator',

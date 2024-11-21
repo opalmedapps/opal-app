@@ -3,7 +3,7 @@
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
-angular.module('MUHCApp')
+angular.module('OpalApp')
 .directive('rateMaterial', ['ProfileSelector', 'RequestToServer', function(ProfileSelector, RequestToServer) {
   return {
     restrict: 'E',

@@ -20,7 +20,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('CheckInService', CheckInService);
 
     CheckInService.$inject = ['$filter', 'Hospital', 'Location', 'Params', 'RequestToServer'];

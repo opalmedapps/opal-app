@@ -20,7 +20,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('UUID', UUID);
 
     UUID.$inject = ['Constants'];

@@ -6,7 +6,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('FeedbackController', FeedbackController);
 
     FeedbackController.$inject = [

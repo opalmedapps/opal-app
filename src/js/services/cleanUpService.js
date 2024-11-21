@@ -12,7 +12,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('CleanUp', CleanUp);
 
     CleanUp.$inject = ['ConcurrentLogin', 'User', 'UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',

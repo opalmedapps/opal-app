@@ -4,7 +4,7 @@ import "../../css/directives/labs-disclaimer.directive.css";
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("labsDisclaimer", LabsDisclaimer);
 
     LabsDisclaimer.$inject = [];
