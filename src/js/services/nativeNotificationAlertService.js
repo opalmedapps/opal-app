@@ -18,8 +18,6 @@
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#mod
-         *@propertyOf MUHCApp.service:NativeNotification
          *@description string representing the style for the alert, 'material' for Android and undefined for IOS
          **/
         const mod = (ons.platform.isAndroid()) ? 'material' : undefined;
@@ -32,7 +30,6 @@
         /**
          *@ngdoc method
          *@name showNotificationAlert
-         *@methodOf MUHCApp.service:NativeNotification
          *@param {String} message Alert message to be displayed
          *@param {string} [title] - Optional. Alternate title to show instead of the default one ("Alert").
          *                          Must already be translated.
@@ -57,7 +54,6 @@
         /**
          *@ngdoc method
          *@name showConfirmation
-         *@methodOf MUHCApp.service:NativeNotification
          *@param {String} message Confirmation message to be displayed
          *@param {function} callback Called when the OK button is pressed.
          *@description Displays message as a native looking confirmation dialog with an OK and Cancel button

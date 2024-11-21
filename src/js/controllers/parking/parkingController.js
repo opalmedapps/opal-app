@@ -6,7 +6,6 @@
 
 /**
  * @ngdoc controller
- * @name MUHCApp.controller:ParkingController
  * @requires Browser
  * @requires $filter
  * @requires Hospital

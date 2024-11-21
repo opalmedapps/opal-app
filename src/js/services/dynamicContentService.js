@@ -10,10 +10,8 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:DynamicContent
  *@requires $q
  *@requires $http
- *@requires MUHCApp.service:UserPreferences
  *@description Service that manages the dynamic data for Opal, hosted on an external server.
  **/
 (function () {
@@ -129,7 +127,6 @@
         /**
          *@ngdoc method
          *@name getPageContent
-         *@methodOf MUHCApp.service:DynamicContent
          *@description Requests a page from the content provided by the server.
          *             Content must already have been initialized.
          *@param {String} contentKey The key for the page to request from the external server.
