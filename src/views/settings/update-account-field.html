@@ -1,12 +1,10 @@
 <ons-page style="background-color: white" ng-controller="ChangeSettingController as Ctrl" ng-cloak>
     <generic-toolbar title="{{Ctrl.title|translate}}" style-class="fontSizeTitle"></generic-toolbar>
-    <div style="margin-top: 3%; margin-bottom: 3%; text-align: center">
-        <p ng-show="Ctrl.newUpdate" ng-class="Ctrl.alertClass" >{{Ctrl.updateMessage|translate}}</p>
-    </div>
+
     <!-- PASSWORD CHANGE -->
     <div class="container" ng-show="Ctrl.value === 'PASSWORD'">
-        <p ng-class="fontSizeTitle" translate ="{{Ctrl.instructionOld}}"></p>
-        <div class="change-password--div style-4" style="width: 100%;">
+        <p class="change-password--header" ng-class="fontSizeTitle" translate="{{Ctrl.instructionOld}}"></p>
+        <div class="change-password--div style-4">
             <password-input>
                 <input 
                 id="currentPassword"
@@ -18,8 +16,8 @@
                 ng-change="Ctrl.passwordFieldChange()">
             </password-input>
         </div>
-        <div style="margin-top: 5vh">
-            <p ng-class="fontSizeTitle" translate ="{{Ctrl.instruction}}"></p>
+        <div>
+            <p class="change-password--header" ng-class="fontSizeTitle" translate="{{Ctrl.instruction}}"></p>
             <p class="change-password--instructions" ng-class="fontSizeDesc">{{"RESETINSTRUCTIONS" | translate}}</p>
             <div class="change-password--div style-4">
                 <!-- NEW PASSWORD INPUT -->
@@ -63,10 +61,17 @@
                 <button class="change-password--submit-button button button--large" ng-disabled="Ctrl.disableButton" ng-click="Ctrl.changePassword()">
                     {{"UPDATEPASSWORDBUTTON"|translate}}
                 </button>
+
+                <!-- ERROR MESSAGE -->
+                <div ng-show="Ctrl.alert.message" align="center" style="margin: 10px auto 0" ng-class="fontSizeDesc">
+                    <uib-alert style="margin: 0" type="{{Ctrl.alert.type}}">{{Ctrl.alert.message|translate}}</uib-alert>
+                </div>
             </div>
         </div>
     </div>
+
     <ul class="list">
+        <!-- LANGUAGE CHANGE -->
         <div ng-show="Ctrl.value === 'LANGUAGE'">
             <li class="list__header" translate ="{{Ctrl.instruction}}" ng-class="fontSizeDesc"></li>
             <li  class="list__item list__item--tappable" ng-repeat="option in Ctrl.settingsLanguageOptions">
@@ -77,6 +82,8 @@
                 </label>
             </li>
         </div>
+
+        <!-- FONT SIZE CHANGE -->
         <div ng-show="Ctrl.value === 'FONTSIZE'">
             <li class="list__header" translate ="{{Ctrl.instruction}}" ng-class="fontSizeDesc"></li>
             <li class="list__item list__item--tappable" ng-repeat="option in Ctrl.settingFontOptions">
