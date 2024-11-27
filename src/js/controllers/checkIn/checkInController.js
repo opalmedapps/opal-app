@@ -144,9 +144,6 @@
                     ProfileSelector.loadPatientProfile(appointment.PatientSerNum);
                 }
 
-                // Reload 'Appointments' for the patient in care in case the appointments were already loaded
-                UpdateUI.updateTimestamps('Appointments', 0);
-
                 // Mark the appointment and its notification(s) as read
                 if (appointment.ReadStatus === '0') {
                     Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);

@@ -243,9 +243,6 @@
                 let currentPageParams = Navigator.getParameters();
                 currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                 ProfileSelector.loadPatientProfile(vm.closestAppointment.patientsernum);
-
-                // Reload 'Appointments' for the patient in care in case the appointments were already loaded
-                UpdateUI.updateTimestamps('Appointments', 0);
             }
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
