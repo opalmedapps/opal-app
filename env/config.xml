@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="1.37.12" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="1.37.13" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>${APP_NAME}</name>
     <description>
         Opal is a patient portal designed to empower patients with their medical information.
