@@ -1,3 +1,10 @@
+## [1.37.13](https://gitlab.com/opalmedapps/qplus/compare/v1.37.12...v1.37.13) (2024-12-02)
+
+
+### Bug Fixes
+
+* update RequestToServer to catch permission denied errors ([38f21e4](https://gitlab.com/opalmedapps/qplus/commit/38f21e42be55738de95425fd81f7698a24211f38))
+
 ## [1.37.12](https://gitlab.com/opalmedapps/qplus/compare/v1.37.11...v1.37.12) (2024-11-27)
 
 
