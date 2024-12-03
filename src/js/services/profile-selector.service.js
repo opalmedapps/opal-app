@@ -7,12 +7,12 @@ import {Observer} from "../models/utility/observer";
         .module('OpalApp')
         .service('ProfileSelector', ProfileSelector);
 
-    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'User', 'UserPreferences'];
+    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'UpdateUI', 'User', 'UserPreferences'];
 
     /**
      * @description Service that handle loading of a patient list for a given caregiver and selection of the profile.
      */
-    function ProfileSelector($timeout, $window, Params, RequestToServer, User, UserPreferences) {
+    function ProfileSelector($timeout, $window, Params, RequestToServer, UpdateUI, User, UserPreferences) {
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
@@ -86,6 +86,23 @@ import {Observer} from "../models/utility/observer";
 
             // If no profile can be loaded (e.g. because all profiles are pending), proceed without loading one.
             if (!currentSelectedProfile) return;
+
+            // Reset the categorical data in case the categories were already loaded for the previous profile.
+            // Note that Notifications and Announcements are not updated since they're downloaded
+            // at the same time for all patients (loaded only once).
+            UpdateUI.updateTimestamps(
+                [
+                    'Appointments',
+                    'Diagnosis',
+                    'Documents',
+                    'EducationalMaterial',
+                    'PatientTestDates',
+                    'PatientTestTypes',
+                    'QuestionnaireList',
+                    'TxTeamMessages',
+                ],
+                0,
+            );
 
             $window.localStorage.setItem('profileId', currentSelectedProfile.patient_legacy_id);
             $timeout(() => {
