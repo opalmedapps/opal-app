@@ -6,15 +6,15 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'Navigator',
+        '$timeout', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
-        'Version', 'User', 'ProfileSelector', '$interval', 'UpdateUI', 'Permissions',
+        'Version', 'User', 'ProfileSelector', '$interval', 'Permissions',
     ];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, Navigator,
+    function HomeController($timeout, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
-        Version, User, ProfileSelector, $interval, UpdateUI, Permissions,
+        Version, User, ProfileSelector, $interval, Permissions,
     ) {
         let vm = this;
 
@@ -243,9 +243,6 @@
                 let currentPageParams = Navigator.getParameters();
                 currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                 ProfileSelector.loadPatientProfile(vm.closestAppointment.patientsernum);
-
-                // Reload 'Appointments' for the patient in care in case the appointments were already loaded
-                UpdateUI.updateTimestamps('Appointments', 0);
             }
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }

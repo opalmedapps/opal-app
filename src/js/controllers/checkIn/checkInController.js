@@ -16,11 +16,11 @@
         .controller('CheckInController', CheckInController);
 
     CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'NativeNotification', 'Navigator', 'Params',
-        'ProfileSelector', 'RequestToServer', 'Toast', 'UpdateUI', 'User', 'UserPreferences'];
+        'ProfileSelector', 'RequestToServer', 'Toast', 'User', 'UserPreferences'];
 
     /* @ngInject */
     function CheckInController($filter, $timeout, CheckInService, NativeNotification, Navigator, Params,
-                               ProfileSelector, RequestToServer, Toast, UpdateUI, User, UserPreferences) {
+                               ProfileSelector, RequestToServer, Toast, User, UserPreferences) {
         let vm = this;
         let navigator;
 
@@ -143,9 +143,6 @@
                     currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                     ProfileSelector.loadPatientProfile(appointment.PatientSerNum);
                 }
-
-                // Reload 'Appointments' for the patient in care in case the appointments were already loaded
-                UpdateUI.updateTimestamps('Appointments', 0);
 
                 // Mark the appointment and its notification(s) as read
                 if (appointment.ReadStatus === '0') {
