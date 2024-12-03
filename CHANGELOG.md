@@ -1,3 +1,10 @@
+## [1.37.14](https://gitlab.com/opalmedapps/qplus/compare/v1.37.13...v1.37.14) (2024-12-03)
+
+
+### Bug Fixes
+
+* clear categorical data during implicit profile change ([0b1bb50](https://gitlab.com/opalmedapps/qplus/commit/0b1bb509023eacac25f7ef5074c2bc7bc48002cf))
+
 ## [1.37.13](https://gitlab.com/opalmedapps/qplus/compare/v1.37.12...v1.37.13) (2024-12-02)
 
 
