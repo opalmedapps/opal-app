@@ -131,6 +131,25 @@ increment version:
     - echo "$ENV_CONFIG_JS" > env/$ENV/opal.config.js
     - echo "$ENV_GOOGLE_SERVICES" > env/$ENV/google-services.json
 
+# Extended job for building the app in release mode
+.build release:
+  # Use our build Mac
+  tags:
+    - macos
+  extends: .build
+  # Override the rules from .build
+  rules:
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    # On version tags for the prod environment, release builds can be executed manually as needed
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
+      when: manual
+      # Prevent later stages from being blocked: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
+      allow_failure: true
+    # TODO Testing
+    - when: manual
+
 # Builds the app for Android
 build android:
   # use our build Mac
@@ -149,21 +168,7 @@ build android:
 
 # Builds and signs the app for Android with 'release' settings
 build android release (apk):
-  # Use our build Mac
-  tags:
-    - macos
-  extends: .build
-  rules:
-    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: never
-    # On version tags for the prod environment, release builds can be executed manually as needed
-    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
-      when: manual
-      # Prevent later stages from being blocked: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
-      allow_failure: true
-    # TODO Testing
-    - when: manual
+  extends: .build release
   script:
     # Load aliases for zipalign and apksigner: https://gitlab.com/gitlab-org/gitlab-runner/-/issues/1083#note_3816106
     - shopt -s expand_aliases
@@ -188,21 +193,7 @@ build android release (apk):
 
 # Builds and signs an app bundle for Android with 'release' settings
 build android release (aab):
-  # Use our build Mac
-  tags:
-    - macos
-  extends: .build
-  rules:
-    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: never
-    # On version tags for the prod environment, release builds can be executed manually as needed
-    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
-      when: manual
-      # Prevent later stages from being blocked: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
-      allow_failure: true
-    # TODO Testing
-    - when: manual
+  extends: .build release
   script:
     # Check that all required tools are available
     - java -version
