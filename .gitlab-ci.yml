@@ -149,6 +149,8 @@ increment version:
       allow_failure: true
     # TODO Testing
     - when: manual
+      # Prevent later stages from being blocked: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
+      allow_failure: true
 
 # Builds the app for Android
 build android:
