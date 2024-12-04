@@ -160,6 +160,8 @@ build android release (apk):
     # On version tags for the prod environment, release builds can be executed manually as needed
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
       when: manual
+      # Prevent later stages from being blocked: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
+      allow_failure: true
     # TODO Testing
     - when: manual
   script:
@@ -197,6 +199,8 @@ build android release (aab):
     # On version tags for the prod environment, release builds can be executed manually as needed
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
       when: manual
+      # Prevent later stages from being blocked: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
+      allow_failure: true
     # TODO Testing
     - when: manual
   script:
