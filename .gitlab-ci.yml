@@ -158,6 +158,8 @@ build android release (apk):
     # On version tags for the prod environment, release builds can be executed manually as needed
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
       when: manual
+    # TODO Testing
+    - when: manual
   script:
     # Load aliases for zipalign and apksigner: https://gitlab.com/gitlab-org/gitlab-runner/-/issues/1083#note_3816106
     - shopt -s expand_aliases
@@ -195,6 +197,8 @@ build android release (aab):
     # On version tags for the prod environment, release builds can be executed manually as needed
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
       when: manual
+    # TODO Testing
+    - when: manual
   script:
     # Check that all required tools are available
     - java -version
