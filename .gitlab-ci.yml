@@ -49,6 +49,9 @@ workflow:
 
 # Project variables: the following variables must be configured in the project's CI/CD settings
 #
+# ANDROID_UPLOAD_KEY_ALIAS: The alias of the upload key in the keystore at $ANDROID_UPLOAD_KEY_PATH.
+# ANDROID_UPLOAD_KEY_PASSWORD: The password of the upload key (keystore) used to sign the app at $ANDROID_UPLOAD_KEY_PATH.
+# ANDROID_UPLOAD_KEY_PATH: Path to the Android upload signing key (keystore) used to sign the app on the build Mac.
 # ENV_CONFIG_JS_<ENV>: The contents of each environment's `opal.config.js` file.
 # ENV_GOOGLE_SERVICES_<ENV>: The contents of each environment's `google-services.json` file.
 # FIREBASE_APP_<ENV>_ANDROID: The Android App ID of each environment's firebase project.
@@ -141,6 +144,75 @@ build android:
     expire_in: 1 day
     paths:
       - opal-$ENV.apk
+
+# Builds and signs the app for Android with 'release' settings
+build android release (apk):
+  # Use our build Mac
+  tags:
+    - macos
+  extends: .build
+  rules:
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    # On version tags for the prod environment, release builds can be executed manually as needed
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
+      when: manual
+  script:
+    # Load aliases for zipalign and apksigner: https://gitlab.com/gitlab-org/gitlab-runner/-/issues/1083#note_3816106
+    - shopt -s expand_aliases
+    # Check that all required tools are available
+    - java -version
+    - gradle -v
+    - apksigner --version
+    # Build the apk in release mode
+    - npm run build:app:android:device:release:apk --env=$ENV
+    # Sign the apk
+    - HOME=`pwd`
+    - cd ./platforms/android/app/build/outputs/apk/release
+    - zipalign -v -f -p 4 app-release-unsigned.apk app-unsigned-aligned.apk
+    - apksigner sign --ks $ANDROID_UPLOAD_KEY_PATH --ks-pass pass:$ANDROID_UPLOAD_KEY_PASSWORD --out app-release-signed.apk app-unsigned-aligned.apk
+    # Check that the apk was signed correctly
+    - apksigner verify app-release-signed.apk
+    # Prepare the artifact
+    - cd $HOME
+    - mv ./platforms/android/app/build/outputs/apk/release/app-release-signed.apk "opal-$ENV-release-signed.apk"
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - opal-$ENV-release-signed.apk
+
+# Builds and signs an app bundle for Android with 'release' settings
+build android release (aab):
+  # Use our build Mac
+  tags:
+    - macos
+  extends: .build
+  rules:
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    # On version tags for the prod environment, release builds can be executed manually as needed
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
+      when: manual
+  script:
+    # Check that all required tools are available
+    - java -version
+    - gradle -v
+    # Build the aab in release mode
+    - npm run build:app:android:device:release --env=$ENV
+    # Sign the aab
+    - HOME=`pwd`
+    - cd ./platforms/android/app/build/outputs/bundle/release
+    - mv app-release.aab app-release-unsigned.aab
+    - jarsigner -verbose -sigalg SHA512withRSA -digestalg SHA512 -keystore $ANDROID_UPLOAD_KEY_PATH -storepass $ANDROID_UPLOAD_KEY_PASSWORD -signedjar app-release-signed.aab app-release-unsigned.aab $ANDROID_UPLOAD_KEY_ALIAS
+    # Prepare the artifact
+    - cd $HOME
+    - mv ./platforms/android/app/build/outputs/bundle/release/app-release-signed.aab "opal-$ENV-release-signed.aab"
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - opal-$ENV-release-signed.aab
 
 # Builds the app for iOS
 build ios:
