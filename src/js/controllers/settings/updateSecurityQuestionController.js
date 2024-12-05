@@ -79,6 +79,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                 })
                 .catch(function(err){
                     $timeout(function(){
+                        console.error(err);
                         handleLoadSecurityQuestionListRequestErr();
                         vm.loadingList = false;
                     })
