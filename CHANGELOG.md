@@ -1,3 +1,10 @@
+## [1.37.15](https://gitlab.com/opalmedapps/qplus/compare/v1.37.14...v1.37.15) (2024-12-05)
+
+
+### Bug Fixes
+
+* improve error handling on password change page ([32a31a7](https://gitlab.com/opalmedapps/qplus/commit/32a31a76ea176c35e4e4258fc2b8cbf749d1260f))
+
 ## [1.37.14](https://gitlab.com/opalmedapps/qplus/compare/v1.37.13...v1.37.14) (2024-12-03)
 
 
