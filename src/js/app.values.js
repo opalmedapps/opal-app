@@ -27,8 +27,6 @@
                 alertTypeSuccess: 'success',
                 alertTypeWarning: 'warning',
                 alertTypeInfo: 'info',
-                alertClassUpdateMessageError: 'bg-danger updateMessage-error',
-                alertClassUpdateMessageSuccess: "bg-success updateMessage-success",
 
                 /** Firebase Authentication Error Codes **/
                 invalidEmail: 'auth/invalid-email',

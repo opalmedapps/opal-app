@@ -93,7 +93,7 @@
                 UserAuthorizationInfo.clearUserAuthorizationInfo();
                 $timeout(function() {
                     vm.alert.type = Params.alertTypeSuccess;
-                    vm.alert.content = "PASSWORDUPDATED";
+                    vm.alert.content = "PASSWORD_UPDATED";
                     vm.resetSuccess = true;
                 });
                 localStorage.removeItem("deviceID");
