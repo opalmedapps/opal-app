@@ -100,6 +100,14 @@ const config = env => {
 						}
 					}
 				},
+				// Fix error "Can't resolve [...] in '/builds/opalmedapps/qplus/node_modules/pdfjs-dist/legacy/build' [...] The extension in the request is mandatory for it to be fully specified."
+				// See: https://stackoverflow.com/questions/69427025/programmatic-webpack-jest-esm-cant-resolve-module-without-js-file-exten
+				{
+					test: /\.m?js$/,
+					resolve: {
+						fullySpecified: false,
+					},
+				},
 				{
 					test: /\.css$/,
 					use: ['style-loader', 'css-loader']
