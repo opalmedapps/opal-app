@@ -91,10 +91,6 @@ import "animate.css";
 import "../css/app.css";
 import "../css/elements/custom-toast.element.css";
 import "../Languages/angular-locales/angular-locale_en.js";
-// Fixes an issue running on an emulator and getting "Uncaught TypeError: key.split(...).at is not a function" from pdf.js
-import 'core-js/features/array/at';
-// Fixes an issue running on an emulator and getting "Uncaught TypeError: promise.withresolvers is not a function" from pdf.js
-import 'core-js/proposals/promise-with-resolvers';
 
 // Load angular module bootstrap script
 import "./app.bootstrap";
