@@ -1,3 +1,10 @@
+## [1.37.17](https://gitlab.com/opalmedapps/qplus/compare/v1.37.16...v1.37.17) (2024-12-11)
+
+
+### Bug Fixes
+
+* show completed date instead of last updated for completed questionnaires ([7e47b1e](https://gitlab.com/opalmedapps/qplus/commit/7e47b1e0e8579e320892f818764ef850074f203b))
+
 ## [1.37.16](https://gitlab.com/opalmedapps/qplus/compare/v1.37.15...v1.37.16) (2024-12-09)
 
 
