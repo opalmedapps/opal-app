@@ -65,9 +65,17 @@
          *              and initializes the base firebase URL.
          */
         function initializeHospital() {
-            // Read the previous hospital choice stored in local storage
-            let localStorageHospitalCode = window.localStorage.getItem(localStorageHospitalKey);
-            selectedHospital = getHospitalByCode(localStorageHospitalCode);
+            const displayHospitals = getHospitalListForDisplay();
+
+            // Default to the only available hospital if there's only one choice (after checking the list displayed to the user)
+            if (displayHospitals.length === 1) {
+                selectedHospital = getHospitalByCode(displayHospitals[0].uniqueHospitalCode);
+            }
+            else {
+                // Read the previous hospital choice stored in local storage
+                const localStorageHospitalCode = window.localStorage.getItem(localStorageHospitalKey);
+                selectedHospital = getHospitalByCode(localStorageHospitalCode);
+            }
 
             // Update the firebase branch
             if (selectedHospital) Firebase.updateFirebaseUrl(selectedHospital.uniqueHospitalCode + '/');
