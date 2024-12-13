@@ -1,3 +1,10 @@
+## [1.37.18](https://gitlab.com/opalmedapps/qplus/compare/v1.37.17...v1.37.18) (2024-12-13)
+
+
+### Bug Fixes
+
+* auto-select hospital if there's only one available choice ([9c155d5](https://gitlab.com/opalmedapps/qplus/commit/9c155d5d2d7ce657c2f9b0b96df77edc8a98b956))
+
 ## [1.37.17](https://gitlab.com/opalmedapps/qplus/compare/v1.37.16...v1.37.17) (2024-12-11)
 
 
