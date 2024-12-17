@@ -1,3 +1,10 @@
+## [1.37.19](https://gitlab.com/opalmedapps/qplus/compare/v1.37.18...v1.37.19) (2024-12-17)
+
+
+### Bug Fixes
+
+* add check-in geolocation error message ([11e7c30](https://gitlab.com/opalmedapps/qplus/commit/11e7c305f449d0a3a0e59e192078386d6dd55072))
+
 ## [1.37.18](https://gitlab.com/opalmedapps/qplus/compare/v1.37.17...v1.37.18) (2024-12-13)
 
 
