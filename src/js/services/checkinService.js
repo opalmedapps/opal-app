@@ -89,7 +89,8 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
                     }
                 } catch (error) {
                     console.error(error);
-                    setCheckinState("CHECKIN_NOT_ALLOWED", appointmentsForCheckIn.length);
+                    if (error?.message === 'CHECKIN_ERROR_GEOLOCATION') setCheckinState('CHECKIN_ERROR_GEOLOCATION', appointmentsForCheckIn.length);
+                    else setCheckinState("CHECKIN_NOT_ALLOWED", appointmentsForCheckIn.length);
                 }
             }
             return state;
@@ -144,6 +145,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
                     state.noAppointments = false;
                     state.allCheckedIn = false;
                     break;
+                case "CHECKIN_ERROR_GEOLOCATION":
                 case "CHECKIN_NOT_ALLOWED":
                     state.canNavigate = false;
                     state.numberOfAppts = numAppointments;
@@ -177,8 +179,8 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
 
             // If any promise rejected, throw a new error, otherwise, return true if at least one site is in range
             if (results.some(result => result?.status === 'rejected')) {
-                console.error('Geolocation error', results);
-                throw new Error("Failed to get geolocation information for check-in");
+                console.error('Geolocation error', results.map(result => result.reason));
+                throw new Error('CHECKIN_ERROR_GEOLOCATION');
             }
             return results.some(result => result?.value === true);
         }
