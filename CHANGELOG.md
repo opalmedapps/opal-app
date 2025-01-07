@@ -1,3 +1,10 @@
+## [1.37.20](https://gitlab.com/opalmedapps/qplus/compare/v1.37.19...v1.37.20) (2025-01-07)
+
+
+### Bug Fixes
+
+* fix display of labs disclaimer icon ([6272236](https://gitlab.com/opalmedapps/qplus/commit/6272236acc586b367d17651dcd41837ecb820dd8))
+
 ## [1.37.19](https://gitlab.com/opalmedapps/qplus/compare/v1.37.18...v1.37.19) (2024-12-17)
 
 
