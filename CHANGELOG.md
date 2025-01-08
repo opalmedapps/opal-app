@@ -1,3 +1,10 @@
+## [1.37.21](https://gitlab.com/opalmedapps/qplus/compare/v1.37.20...v1.37.21) (2025-01-08)
+
+
+### Bug Fixes
+
+* fix calendar anchor scrolling ([42f502f](https://gitlab.com/opalmedapps/qplus/commit/42f502f1796cf7f2fb42360aaea8203af28cf4e2))
+
 ## [1.37.20](https://gitlab.com/opalmedapps/qplus/compare/v1.37.19...v1.37.20) (2025-01-07)
 
 
