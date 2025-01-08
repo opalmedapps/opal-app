@@ -36,8 +36,7 @@
     =============================-->
     <div ng-if="!calendar.hideContent" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
         <div class="calendar-list">
-            <uib-datepicker id="scrollTo"
-                            ng-change="calendar.onDateChange()"
+            <uib-datepicker ng-change="calendar.onDateChange()"
                             ng-model="calendar.todays_date"
                             datepicker-options="calendar.dateOptions"
                             show-color="calendar.showDotColor(date)"
@@ -52,7 +51,7 @@
     =============================-->
     <div ng-hide="calendar.hideContent" id="topListAnchor" style="height:5px; background-color:lightgrey; position:relative; z-index:1"></div>
     <!-- THE ONLY REASON FOR THIS DELAY IS A SMOOTHER LOADING OF THE LIST OF APPOINTMENTS -->
-    <ons-scroller-height ng-hide="calendar.hideContent" timer="500" callback="calendar.scrollToAnchor()">
+    <ons-scroller-height ng-hide="calendar.hideContent" timer="500">
             <div id="firstAnchor"></div>
             <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center" 
                 ng-class="fontSizeTitle">{{"NOAPPOINTMENTS"|translate}}</div>
