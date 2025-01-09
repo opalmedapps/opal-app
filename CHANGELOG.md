@@ -1,3 +1,10 @@
+## [1.37.22](https://gitlab.com/opalmedapps/qplus/compare/v1.37.21...v1.37.22) (2025-01-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-ios to v7.1.1 ([393cc74](https://gitlab.com/opalmedapps/qplus/commit/393cc74ed1371f26a577c67ec64fbebc8ab3d559))
+
 ## [1.37.21](https://gitlab.com/opalmedapps/qplus/compare/v1.37.20...v1.37.21) (2025-01-08)
 
 
