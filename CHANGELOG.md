@@ -1,3 +1,10 @@
+## [1.37.25](https://gitlab.com/opalmedapps/qplus/compare/v1.37.24...v1.37.25) (2025-01-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/fontawesome-free to v6.7.2 ([f9b938b](https://gitlab.com/opalmedapps/qplus/commit/f9b938b7f354085ac13f56916830b66f343fba60))
+
 ## [1.37.24](https://gitlab.com/opalmedapps/qplus/compare/v1.37.23...v1.37.24) (2025-01-10)
 
 
