@@ -34,6 +34,11 @@
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
       "groupName": "xlts angular packages"
     },
+    // Rate-limit firebase-tools updates: first day of each month
+    {
+      "matchPackageNames": ["firebase-tools"],
+      "schedule": ["* * 1 * *"],
+    },
     // Group plotly updates
     {
         "matchPackagePatterns": ["plotly"],
