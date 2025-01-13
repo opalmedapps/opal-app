@@ -34,6 +34,11 @@
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
       "groupName": "xlts angular packages"
     },
+    // Group plotly updates
+    {
+        "matchPackagePatterns": ["plotly"],
+        "groupName": "plotly packages",
+    },
     // Group @zxcvbn-ts updates
     {
       "matchPackagePatterns": ["^@zxcvbn-ts/"],
