@@ -1,3 +1,10 @@
+## [1.37.27](https://gitlab.com/opalmedapps/qplus/compare/v1.37.26...v1.37.27) (2025-01-14)
+
+
+### Bug Fixes
+
+* **deps:** update plotly packages to v2.35.3 (patch) ([26cc758](https://gitlab.com/opalmedapps/qplus/commit/26cc7589abbd72c6c115758a2a15f4065b189c30))
+
 ## [1.37.26](https://gitlab.com/opalmedapps/qplus/compare/v1.37.25...v1.37.26) (2025-01-13)
 
 
