@@ -58,7 +58,7 @@ import '../../../css/views/init-page.view.css';
 		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
 		vm.goToRegister = goToRegister;
 		vm.goToGeneralSettings = goToGeneralSettings;
-		vm.goToAcknowledgements = goToAcknowledgements;
+		vm.goToPartners = goToPartners;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
 
@@ -152,12 +152,12 @@ import '../../../css/views/init-page.view.css';
 		}
 
 		/**
-		 * Go to Acknowledgements
+		 * Go to Partners
 		 */
-		function goToAcknowledgements() {
+		function goToPartners() {
 			initNavigator.pushPage(
 				'./views/templates/content.html',
-				{contentType: 'acknowledgements', title: 'ACKNOWLEDGEMENTS'}
+				{contentType: 'acknowledgements', title: 'PARTNERS'}
 			);
 		}
 
