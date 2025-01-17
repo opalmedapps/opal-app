@@ -1,0 +1,5 @@
+<ons-page ng-controller="AcknowledgementsController as vm" style="background-color: white">
+    <generic-toolbar title="{{'ACKNOWLEDGEMENTS' | translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <div class="container" ng-bind-html="vm.content | trustHTML" ng-class="fontSizeDesc"></div>
+</ons-page>

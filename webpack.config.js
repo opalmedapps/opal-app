@@ -152,7 +152,11 @@ const config = env => {
 				{
 					test: /\.png$/,
 					type: 'asset/resource'
-				}
+				},
+				{
+					test: /\.md$/,
+					loader: 'raw-loader',
+				},
 			]
 		},
 		plugins: [
