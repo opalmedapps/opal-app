@@ -1,0 +1,31 @@
+/* See: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary */
+/* Show a grey border box when the details are closed */
+.acknowledgements details {
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-bottom: 1em;
+    background-color: #F5F5F5;
+}
+
+/* Hide the border box when the details are open */
+.acknowledgements details[open] {
+    border: none;
+    background-color: transparent;
+}
+
+/* Arrow in front of details summary (closed) */
+.acknowledgements details summary:before {
+    content: "🞂 ";
+    font-family: monospace;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Arrow in front of details summary (open) */
+.acknowledgements details[open] summary:before {
+    content: "🞃 ";
+    font-family: monospace;
+    color: #333;
+    font-weight: bold;
+}

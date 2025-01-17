@@ -24,7 +24,7 @@ import thirdParty from "../../../../THIRDPARTY.md";
             // Take Markdown as input and turn it into MD syntax tree
             .use(remarkParse)
             // Turn all license text headings into collapsible sections using <details><summary>
-            .use(remarkCollapseAll, {headerName: 'License', level: 3})
+            .use(remarkCollapseAll, {headerName: 'License', level: 3, summaryText: 'Show license text'})
             // Switch from MD syntax tree to HTML syntax tree (remark -> rehype)
             .use(remarkRehype, {
                 // Necessary to support HTML embeds (see next plugin)
@@ -43,6 +43,7 @@ import thirdParty from "../../../../THIRDPARTY.md";
         function remarkCollapseAll(opts) {
             let level = opts.level;
             let headerName = opts.headerName;
+            let summaryText = opts.summaryText;
 
             return function (rootNode) {
                 let nodeArray = rootNode.children;
@@ -58,7 +59,7 @@ import thirdParty from "../../../../THIRDPARTY.md";
                         // Close the <details> block
                         nodeArray.splice(i, 0, {
                             type: 'html',
-                            value: '</details>'
+                            value: '</details>',
                         });
                         insertInProgress = false;
                         // Resume iterating after this new node
@@ -69,19 +70,19 @@ import thirdParty from "../../../../THIRDPARTY.md";
                         // Open <details> and add <summary></summary>
                         nodeArray.splice(i + 1, 0, {
                             type: 'html',
-                            value: '<details>'
+                            value: '<details>',
                         });
                         nodeArray.splice(i + 2, 0, {
                             type: 'html',
-                            value: '<summary>'
+                            value: '<summary>',
                         });
                         nodeArray.splice(i + 3, 0, {
                             type: 'text',
-                            value: 'Open details' // TODO
+                            value: summaryText,
                         });
                         nodeArray.splice(i + 4, 0, {
                             type: 'html',
-                            value: '</summary>'
+                            value: '</summary>',
                         });
                         // Resume iterating after these new nodes
                         i = i + 4;
@@ -89,7 +90,7 @@ import thirdParty from "../../../../THIRDPARTY.md";
                         if (i + 1 >= nodeArray.length) {
                             nodeArray.splice(i, 0, {
                                 type: 'html',
-                                value: '</details>'
+                                value: '</details>',
                             });
                         }
                         else insertInProgress = true; // Indicates that the <details> block has not yet been closed
