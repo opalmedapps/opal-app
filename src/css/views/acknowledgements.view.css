@@ -16,16 +16,14 @@
 
 /* Arrow in front of details summary (closed) */
 .acknowledgements details summary:before {
-    content: "🞂 ";
-    font-family: monospace;
-    color: #333;
+    content: "▶ ";
+    /* The math font family allows the triangle to display on mobile (this character is not available in Roboto) */
+    font-family: math;
+    color: #444;
     font-weight: bold;
 }
 
 /* Arrow in front of details summary (open) */
 .acknowledgements details[open] summary:before {
-    content: "🞃 ";
-    font-family: monospace;
-    color: #333;
-    font-weight: bold;
+    content: "▼ ";
 }
