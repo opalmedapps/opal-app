@@ -41,7 +41,7 @@
     "Opal"
   ],
   "author": "David Herrera",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/Sable/qplus/issues"
   },
