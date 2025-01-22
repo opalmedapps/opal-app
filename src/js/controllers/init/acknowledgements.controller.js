@@ -2,6 +2,7 @@
 
 import rehypeRaw from 'rehype-raw'
 import rehypeStringify from 'rehype-stringify';
+import remarkLinkify from 'remark-linkify-regex';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
@@ -20,11 +21,16 @@ import thirdParty from "../../../../THIRDPARTY.md";
     function acknowledgementsController() {
         let vm = this;
 
+        // Source: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+        let urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&\/=]*)/;
+
         const result = unified()
             // Take Markdown as input and turn it into MD syntax tree
             .use(remarkParse)
             // Turn all license text headings into collapsible sections using <details><summary>
             .use(remarkCollapseAll, {headerName: 'License', level: 3, summaryText: 'Show license text'})
+            // Parse all links to be clickable
+            .use(remarkLinkify(urlRegex))
             // Switch from MD syntax tree to HTML syntax tree (remark -> rehype)
             .use(remarkRehype, {
                 // Necessary to support HTML embeds (see next plugin)
@@ -32,6 +38,8 @@ import thirdParty from "../../../../THIRDPARTY.md";
             })
             // Support HTML embedded inside markdown, such as <details><summary>
             .use(rehypeRaw)
+            // Convert all links to open in a new tab (or in an external browser on mobile)
+            .use(rehypeOpenLinksExternally)
             // Serialize syntax tree to HTML
             .use(rehypeStringify)
             // And finally, process the input
@@ -97,6 +105,24 @@ import thirdParty from "../../../../THIRDPARTY.md";
                     }
                 }
             }
+        }
+
+        /**
+         * @description Rehype plugin that recursively scans the syntax tree to modify all <a> tags
+         *              to open in a new tab (or in an external browser on mobile).
+         * @returns {execute} A rehype plugin function.
+         */
+        function rehypeOpenLinksExternally() {
+            function execute(rootNode) {
+                if (rootNode.children) rootNode.children.forEach(node => {
+                    if (node.type === 'element' && node.tagName === 'a') {
+                        node.properties.target = '_blank'; // Open in a new tab
+                    }
+                    // Recursively execute the replacement on the children nodes
+                    execute(node);
+                })
+            }
+            return execute;
         }
     }
 })();
