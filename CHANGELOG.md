@@ -1,3 +1,10 @@
+## [1.37.29](https://gitlab.com/opalmedapps/qplus/compare/v1.37.28...v1.37.29) (2025-01-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @havesource/cordova-plugin-push to v5 ([754d775](https://gitlab.com/opalmedapps/qplus/commit/754d775b780dcd79e8d57a9d56633832b8bb3534))
+
 ## [1.37.28](https://gitlab.com/opalmedapps/qplus/compare/v1.37.27...v1.37.28) (2025-01-14)
 
 
