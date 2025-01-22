@@ -1,29 +1,31 @@
 /* See: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary */
 /* Show a grey border box when the details are closed */
 .acknowledgements details {
+    background-color: #F5F5F5;
     border: 1px solid #CCC;
     border-radius: 4px;
-    padding: 2px 6px;
     margin-bottom: 1em;
-    background-color: #F5F5F5;
+    padding: 2px 6px;
 }
 
 /* Hide the border box when the details are open */
 .acknowledgements details[open] {
-    border: none;
     background-color: transparent;
+    border: none;
 }
 
 /* Arrow in front of details summary (closed) */
 .acknowledgements details summary:before {
-    content: "▶ ";
+    color: #444;
+    content: "▶";
     /* The math font family allows the triangle to display on mobile (this character is not available in Roboto) */
     font-family: math;
-    color: #444;
+    font-size: 0.7em;
     font-weight: bold;
+    margin-right: 4px;
 }
 
 /* Arrow in front of details summary (open) */
 .acknowledgements details[open] summary:before {
-    content: "▼ ";
+    content: "▼";
 }
