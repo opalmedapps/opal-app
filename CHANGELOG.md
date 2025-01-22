@@ -1,3 +1,10 @@
+## [1.37.30](https://gitlab.com/opalmedapps/qplus/compare/v1.37.29...v1.37.30) (2025-01-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v11.2.0 ([a5153ff](https://gitlab.com/opalmedapps/qplus/commit/a5153ff0e24715483d3a25b95cc11b7f97798803))
+
 ## [1.37.29](https://gitlab.com/opalmedapps/qplus/compare/v1.37.28...v1.37.29) (2025-01-22)
 
 
