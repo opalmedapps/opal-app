@@ -28,7 +28,7 @@ import thirdParty from "../../../../THIRDPARTY.md";
             // Take Markdown as input and turn it into MD syntax tree
             .use(remarkParse)
             // Turn all license text headings into collapsible sections using <details><summary>
-            .use(remarkCollapseAll, {headerName: 'License', level: 3, summaryText: 'Show license text'})
+            .use(remarkCollapseAll, {type: 'code', summaryText: 'Show license text'})
             // Parse all links to be clickable
             .use(remarkLinkify(urlRegex))
             // Switch from MD syntax tree to HTML syntax tree (remark -> rehype)
@@ -47,61 +47,54 @@ import thirdParty from "../../../../THIRDPARTY.md";
 
         vm.content = result.value;
 
-        // Inspired by https://github.com/Rokt33r/remark-collapse, but converts all target headings to <details> instead of just one
+        /**
+         * @description Remark plugin that scans the syntax tree to wrap all target nodes in a <details><summary> block.
+         *              Only operates on first-level nodes in the tree.
+         *              Inspired by https://github.com/Rokt33r/remark-collapse
+         * @param {object} opts The options passed to the plugin.
+         * @param {string} opts.summaryText The text displayed in each new <summary> block.
+         * @param {string} opts.type The type of target node to identify.
+         *                           All nodes of this type will be wrapped in a <details><summary> block.
+         * @returns {function} A remark plugin function.
+         */
         function remarkCollapseAll(opts) {
-            let level = opts.level;
-            let headerName = opts.headerName;
+            let nodeType = opts.type;
             let summaryText = opts.summaryText;
 
             return function (rootNode) {
                 let nodeArray = rootNode.children;
-                let insertInProgress = false;
 
                 // Iterate through all the nodes
                 for (let i = 0; i < nodeArray.length; i++) {
                     let node = nodeArray[i];
 
-                    // If we're currently inserting a <details> block, check if it's time to close it
-                    // A <details> block should be closed upon reaching a heading of the same or lower level
-                    if (insertInProgress && node.type === 'heading' && node.depth <= level) {
-                        // Close the <details> block
-                        nodeArray.splice(i, 0, {
-                            type: 'html',
-                            value: '</details>',
-                        });
-                        insertInProgress = false;
-                        // Resume iterating after this new node
-                        i = i + 1;
-                    }
-                    // Check if it's time to open a <details> block, upon finding a heading of the right level and name
-                    else if (node.type === 'heading' && node.depth === level && node.children[0].type === 'text' && node.children[0].value === headerName) {
+                    // If the current node matches the target type, wrap it in a <details> block
+                    if (node.type === nodeType) {
                         // Open <details> and add <summary></summary>
-                        nodeArray.splice(i + 1, 0, {
+                        nodeArray.splice(i, 0, {
                             type: 'html',
                             value: '<details>',
                         });
-                        nodeArray.splice(i + 2, 0, {
+                        nodeArray.splice(i + 1, 0, {
                             type: 'html',
                             value: '<summary>',
                         });
-                        nodeArray.splice(i + 3, 0, {
+                        nodeArray.splice(i + 2, 0, {
                             type: 'text',
                             value: summaryText,
                         });
-                        nodeArray.splice(i + 4, 0, {
+                        nodeArray.splice(i + 3, 0, {
                             type: 'html',
                             value: '</summary>',
                         });
+                        // Leave the target node at i + 4
+                        // Close the <details> block
+                        nodeArray.splice(i + 5, 0, {
+                            type: 'html',
+                            value: '</details>',
+                        });
                         // Resume iterating after these new nodes
-                        i = i + 4;
-                        // Special case: if the next iteration will reach the end of the list, close the <details> block immediately
-                        if (i + 1 >= nodeArray.length) {
-                            nodeArray.splice(i, 0, {
-                                type: 'html',
-                                value: '</details>',
-                            });
-                        }
-                        else insertInProgress = true; // Indicates that the <details> block has not yet been closed
+                        i = i + 5;
                     }
                 }
             }
@@ -110,7 +103,7 @@ import thirdParty from "../../../../THIRDPARTY.md";
         /**
          * @description Rehype plugin that recursively scans the syntax tree to modify all <a> tags
          *              to open in a new tab (or in an external browser on mobile).
-         * @returns {execute} A rehype plugin function.
+         * @returns {function} A rehype plugin function.
          */
         function rehypeOpenLinksExternally() {
             function execute(rootNode) {

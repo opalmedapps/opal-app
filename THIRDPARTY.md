@@ -11,8 +11,6 @@ Note: The list of dependencies does not include transitive dependencies (depende
 * Repository: https://github.com/babel/babel
 * License: `MIT`
 
-### License
-
 ```text
 MIT License
 
@@ -43,8 +41,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Homepage: https://fontawesome.com/
 * Repository: https://github.com/FortAwesome/Font-Awesome
 * License: `(CC-BY-4.0 AND OFL-1.1 AND MIT)`
-
-### License
 
 ```text
 Fonticons, Inc. (https://fontawesome.com)
@@ -224,8 +220,6 @@ We make use of the SVG+JS method.
 * Repository: https://github.com/havesource/cordova-plugin-push
 * License: `MIT`
 
-### License
-
 ```text
 Copyright 2012-2017 Adobe Systems
 
@@ -254,8 +248,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Homepage: https://github.com/zxcvbn-ts/zxcvbn
 * Repository: https://github.com/zxcvbn-ts/zxcvbn
 * License: `MIT`
-
-### License
 
 ```text
 Copyright (c) 2012-2016 Dan Wheeler and Dropbox, Inc.
@@ -286,8 +278,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Repository: https://github.com/zxcvbn-ts/zxcvbn
 * License: `MIT`
 
-### License
-
 ```text
 Copyright (c) 2012-2016 Dan Wheeler and Dropbox, Inc.
 
@@ -316,8 +306,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Homepage: https://github.com/zxcvbn-ts/zxcvbn
 * Repository: https://github.com/zxcvbn-ts/zxcvbn
 * License: `MIT`
-
-### License
 
 ```text
 Copyright (c) 2012-2015 Dan Wheeler and Dropbox, Inc.
@@ -348,8 +336,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Repository: https://github.com/jeromes80/zxcvbn
 * License: `MIT`
 
-### License
-
 ```text
 Copyright (c) 2012-2015 Dan Wheeler and Dropbox, Inc.
 
@@ -378,8 +364,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Homepage: http://angularjs.org
 * Repository: https://github.com/angular/angular.js
 * License: `MIT`
-
-### License
 
 ```text
 The MIT License
@@ -415,8 +399,6 @@ We use the extended long-term support version provided by HeroDevs (paid service
 * Repository: https://github.com/angular/angular.js
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License
 
@@ -451,8 +433,6 @@ We use the extended long-term support version provided by HeroDevs (paid service
 * Repository: https://github.com/lgalfaso/angular-dynamic-locale
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License
 
@@ -482,8 +462,6 @@ THE SOFTWARE.
 * Homepage: http://angularjs.org
 * Repository: https://github.com/angular/angular.js
 * License: `MIT`
-
-### License
 
 ```text
 The MIT License
@@ -519,8 +497,6 @@ We use the extended long-term support version provided by HeroDevs (paid service
 * Repository: https://github.com/angular/angular.js
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License
 
@@ -555,8 +531,6 @@ We use the extended long-term support version provided by HeroDevs (paid service
 * Repository: https://github.com/angular-translate/angular-translate
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -586,8 +560,6 @@ THE SOFTWARE.
 * Homepage: https://angular-translate.github.io
 * Repository: https://github.com/angular-translate/bower-angular-translate-handler-log
 * License: `MIT`
-
-### License
 
 ```text
 The MIT License (MIT)
@@ -619,8 +591,6 @@ THE SOFTWARE.
 * Repository: https://github.com/angular-translate/bower-angular-translate-interpolation-messageformat
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -651,8 +621,6 @@ THE SOFTWARE.
 * Repository: https://github.com/angular-translate/bower-angular-translate-loader-partial
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -682,8 +650,6 @@ THE SOFTWARE.
 * Homepage: https://angular-ui.github.io/bootstrap/
 * Repository: https://github.com/angular-ui/bootstrap
 * License: `MIT`
-
-### License
 
 ```text
 The MIT License
@@ -724,8 +690,6 @@ THE SOFTWARE.
 * Repository: https://github.com/angular-ui/ui-router
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License
 
@@ -755,8 +719,6 @@ THE SOFTWARE.
 * Homepage: https://animate.style/
 * Repository: https://github.com/animate-css/animate.css
 * License: `MIT`
-
-### License
 
 ```text
 The MIT License (MIT)
@@ -788,8 +750,6 @@ SOFTWARE.
 * Repository: https://github.com/twbs/bootstrap
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -819,8 +779,6 @@ THE SOFTWARE.
 * Homepage: https://github.com/apache/cordova-cli#readme
 * Repository: https://github.com/apache/cordova-cli
 * License: `Apache-2.0`
-
-### License
 
 ```text
 
@@ -1033,8 +991,6 @@ THE SOFTWARE.
 * Repository: https://github.com/apache/cordova-android
 * License: `Apache-2.0`
 
-### License
-
 ```text
 
                                  Apache License
@@ -1245,8 +1201,6 @@ THE SOFTWARE.
 * Homepage: https://github.com/apache/cordova-ios#readme
 * Repository: https://github.com/apache/cordova-ios
 * License: `Apache-2.0`
-
-### License
 
 ```text
 
@@ -1483,8 +1437,6 @@ CordovaLib/classes/NSData+Base64.*
 * Repository: https://github.com/NeoLSN/cordova-plugin-android-permission
 * License: `Apache-2.0`
 
-### License
-
 ```text
                                  Apache License
                            Version 2.0, January 2004
@@ -1695,8 +1647,6 @@ CordovaLib/classes/NSData+Base64.*
 * Repository: https://github.com/dpa99c/cordova-plugin-androidx-adapter
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License
 
@@ -1714,8 +1664,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 * Homepage: https://github.com/Rareloop/cordova-plugin-app-version
 * Repository: https://github.com/Rareloop/cordova-plugin-app-version
 * License: `MIT`
-
-### License
 
 ```text
 Copyright (c) 2015 Rareloop Ltd
@@ -1744,8 +1692,6 @@ THE SOFTWARE.
 * Homepage: https://github.com/don/cordova-plugin-ble-central#readme
 * Repository: https://github.com/don/cordova-plugin-ble-central
 * License: `Apache-2.0`
-
-### License
 
 ```text
                                  Apache License
@@ -1969,8 +1915,6 @@ The text can also be found here: https://www.apache.org/licenses/LICENSE-2.0
 * Repository: https://github.com/EddyVerbruggen/Custom-URL-scheme
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -1986,8 +1930,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 * Homepage: https://github.com/apache/cordova-plugin-device#readme
 * Repository: https://github.com/apache/cordova-plugin-device
 * License: `Apache-2.0`
-
-### License
 
 ```text
 
@@ -2200,8 +2142,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 * Repository: https://github.com/apache/cordova-plugin-file
 * License: `Apache-2.0`
 
-### License
-
 ```text
 
                                  Apache License
@@ -2413,8 +2353,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 * Repository: https://github.com/pwlin/cordova-plugin-file-opener2
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -2443,8 +2381,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Homepage: https://github.com/apache/cordova-plugin-geolocation#readme
 * Repository: https://github.com/apache/cordova-plugin-geolocation
 * License: `Apache-2.0`
-
-### License
 
 ```text
 
@@ -2657,8 +2593,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Repository: https://github.com/apache/cordova-plugin-globalization
 * License: `Apache-2.0`
 
-### License
-
 ```text
 
                                  Apache License
@@ -2869,8 +2803,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Homepage: None
 * Repository: https://github.com/apache/cordova-plugin-inappbrowser
 * License: `Apache-2.0`
-
-### License
 
 ```text
 
@@ -3083,8 +3015,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Repository: https://github.com/rossmartin/cordova-plugin-ios-detect-screenshot
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -3115,8 +3045,6 @@ SOFTWARE.
 * Repository: https://github.com/WuglyakBolgoink/cordova-plugin-iroot
 * License: `MIT`
 
-### License
-
 ```text
 MIT License
 
@@ -3146,8 +3074,6 @@ SOFTWARE.
 * Homepage: https://github.com/apache/cordova-plugin-network-information#readme
 * Repository: https://github.com/apache/cordova-plugin-network-information
 * License: `Apache-2.0`
-
-### License
 
 ```text
 
@@ -3360,8 +3286,6 @@ SOFTWARE.
 * Repository:
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -3392,8 +3316,6 @@ SOFTWARE.
 * Homepage: https://github.com/apache/cordova-plugin-splashscreen#readme
 * Repository: https://github.com/apache/cordova-plugin-splashscreen
 * License: `Apache-2.0`
-
-### License
 
 ```text
 
@@ -3606,8 +3528,6 @@ SOFTWARE.
 * Repository: https://github.com/apache/cordova-plugin-vibration
 * License: `Apache-2.0`
 
-### License
-
 ```text
 
                                  Apache License
@@ -3819,8 +3739,6 @@ SOFTWARE.
 * Repository: https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -3848,8 +3766,6 @@ SOFTWARE.
 * Homepage: http://github.com/brix/crypto-js
 * Repository: https://github.com/brix/crypto-js
 * License: `MIT`
-
-### License
 
 ```text
 # License
@@ -3884,8 +3800,6 @@ THE SOFTWARE.
 * Repository: https://github.com/vstirbu/PromisesPlugin
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -3915,8 +3829,6 @@ SOFTWARE.
 * Homepage: https://firebase.google.com/
 * Repository: https://github.com/firebase/firebase-js-sdk
 * License: `Apache-2.0`
-
-### License
 
 ```text
 This source code is licensed under Apache-2.0 apart from the protobuf library
@@ -4184,8 +4096,6 @@ file: [source code root]/packages/firestore/src/protos/google/protobuf/any.proto
 * Repository: https://github.com/jquery/jquery
 * License: `MIT`
 
-### License
-
 ```text
 Copyright OpenJS Foundation and other contributors, https://openjsf.org/
 
@@ -4215,8 +4125,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Repository: https://github.com/timmywil/jquery.panzoom
 * License: `MIT`
 
-### License
-
 ```text
 Copyright 2016-2019 Timmy Willison
 
@@ -4245,8 +4153,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * Homepage: https://momentjs.com
 * Repository: https://github.com/moment/moment
 * License: `MIT`
-
-### License
 
 ```text
 Copyright (c) JS Foundation and other contributors
@@ -4279,8 +4185,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 * Repository: https://github.com/OnsenUI/OnsenUI
 * License: `Apache-2.0`
 
-### License
-
 ```text
 Copyright 2013-2015 ASIAL CORPORATION
 
@@ -4302,8 +4206,6 @@ limitations under the License.
 * Homepage: http://mozilla.github.io/pdf.js/
 * Repository: https://github.com/mozilla/pdfjs-dist
 * License: `Apache-2.0`
-
-### License
 
 ```text
 
@@ -4491,8 +4393,6 @@ limitations under the License.
 * Repository: https://github.com/plotly/plotly.js
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -4522,8 +4422,6 @@ THE SOFTWARE.
 * Homepage: https://plotly.com/javascript/
 * Repository: https://github.com/plotly/plotly.js
 * License: `MIT`
-
-### License
 
 ```text
 The MIT License (MIT)
@@ -4555,8 +4453,6 @@ THE SOFTWARE.
 * Repository: https://github.com/danielgindi/node-python-struct
 * License: `MIT`
 
-### License
-
 ```text
 The MIT License (MIT)
 
@@ -4586,8 +4482,6 @@ SOFTWARE.
 * Homepage: https://fonts.google.com/specimen/Roboto/about
 * Repository: https://github.com/googlefonts/roboto
 * License: `Apache-2.0`
-
-### License
 
 ```text
                                  Apache License
@@ -4799,8 +4693,6 @@ SOFTWARE.
 * Repository: https://github.com/dchest/tweetnacl-js
 * License: `Unlicense`
 
-### License
-
 ```text
 This is free and unencumbered software released into the public domain.
 
@@ -4833,8 +4725,6 @@ For more information, please refer to <http://unlicense.org>
 * Homepage: https://github.com/dchest/tweetnacl-util-js
 * Repository: https://github.com/dchest/tweetnacl-util-js
 * License: `Unlicense`
-
-### License
 
 ```text
 This is free and unencumbered software released into the public domain.
