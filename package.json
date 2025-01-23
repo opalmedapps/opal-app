@@ -49,7 +49,7 @@
   "dependencies": {
     "@babel/runtime": "7.26.0",
     "@fortawesome/fontawesome-free": "6.7.2",
-    "@havesource/cordova-plugin-push": "4.0.0",
+    "@havesource/cordova-plugin-push": "5.0.5",
     "@zxcvbn-ts/core": "3.0.4",
     "@zxcvbn-ts/language-common": "3.0.4",
     "@zxcvbn-ts/language-en": "3.0.2",
@@ -90,7 +90,7 @@
     "cordova-plugin-x-socialsharing": "6.0.4",
     "crypto-js": "4.2.0",
     "es6-promise-plugin": "4.2.2",
-    "firebase": "11.1.0",
+    "firebase": "11.2.0",
     "jquery": "3.7.1",
     "jquery.panzoom": "3.2.3",
     "moment": "2.30.1",
@@ -132,7 +132,7 @@
     "style-loader": "4.0.0",
     "terser-webpack-plugin": "5.3.11",
     "webpack": "5.97.1",
-    "webpack-cli": "5.1.4",
+    "webpack-cli": "6.0.1",
     "webpack-dev-server": "5.2.0",
     "webpack-manifest-plugin": "5.0.0",
     "xml-js": "1.6.11"
