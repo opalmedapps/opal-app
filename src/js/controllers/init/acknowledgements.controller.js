@@ -24,7 +24,7 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
 
         vm.loading = true;
 
-        // Use timeout to delay execution of the unified parsing after showing the loading wheel
+        // Use timeout to delay execution of the unified parsing after the loading wheel is shown
         $timeout(() => {
             activate();
         })
