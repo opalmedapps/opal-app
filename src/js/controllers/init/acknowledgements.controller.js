@@ -7,7 +7,7 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 
-import thirdParty from "../../../../THIRDPARTY.md";
+import thirdPartyLicenses from "../../../../THIRDPARTY.md";
 
 (function () {
     'use strict';
@@ -24,28 +24,33 @@ import thirdParty from "../../../../THIRDPARTY.md";
         // Source: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
         let urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&\/=]*)/;
 
-        const result = unified()
-            // Take Markdown as input and turn it into MD syntax tree
-            .use(remarkParse)
-            // Turn all license text headings into collapsible sections using <details><summary>
-            .use(remarkCollapseAll, {type: 'code', summaryText: 'Show license text'})
-            // Parse all links to be clickable
-            .use(remarkLinkify(urlRegex))
-            // Switch from MD syntax tree to HTML syntax tree (remark -> rehype)
-            .use(remarkRehype, {
-                // Necessary to support HTML embeds (see next plugin)
-                allowDangerousHtml: true,
-            })
-            // Support HTML embedded inside markdown, such as <details><summary>
-            .use(rehypeRaw)
-            // Convert all links to open in a new tab (or in an external browser on mobile)
-            .use(rehypeOpenLinksExternally)
-            // Serialize syntax tree to HTML
-            .use(rehypeStringify)
-            // And finally, process the input
-            .processSync(thirdParty);
+        activate();
 
-        vm.content = result.value;
+        function activate() {
+            // Parse the third party license markdown file to convert it to HTML
+            const result = unified()
+                // Take markdown as input and turn it into an MD syntax tree
+                .use(remarkParse)
+                // Turn all license text headings into collapsible sections using <details><summary>
+                .use(remarkCollapseAll, {type: 'code', summaryText: 'Show license text'})
+                // Parse all links to be clickable
+                .use(remarkLinkify(urlRegex))
+                // Switch from MD syntax tree to HTML syntax tree (remark -> rehype)
+                .use(remarkRehype, {
+                    // Necessary to support HTML embeds (see next plugin)
+                    allowDangerousHtml: true,
+                })
+                // Support HTML embedded inside markdown, such as <details><summary>
+                .use(rehypeRaw)
+                // Convert all links to open in a new tab (or in an external browser on mobile)
+                .use(rehypeOpenLinksExternally)
+                // Serialize syntax tree to HTML
+                .use(rehypeStringify)
+                // And finally, process the input
+                .processSync(thirdPartyLicenses);
+
+            vm.content = result.value;
+        }
 
         /**
          * @description Remark plugin that scans the syntax tree to wrap all target nodes in a <details><summary> block.

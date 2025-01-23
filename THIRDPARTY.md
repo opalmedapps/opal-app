@@ -1,3 +1,4 @@
+<!-- This file is parsed and displayed to users via acknowledgements.html. Make sure any changes display there correctly. -->
 # Third-Party Dependencies
 
 This project makes use of the third-party dependencies listed below.
