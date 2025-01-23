@@ -1,5 +1,12 @@
 <ons-page ng-controller="AcknowledgementsController as vm" style="background-color: white">
     <generic-toolbar title="{{'ACKNOWLEDGEMENTS' | translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
+    <!-- LOADING -->
+    <loading-spinning-circle
+            ng-show="vm.loading"
+            loading-message="{{'LOADING'|translate}}">
+    </loading-spinning-circle>
+
+    <!-- LICENSE CONTENT -->
     <div class="acknowledgements container" ng-bind-html="vm.content | trustHTML" ng-class="fontSizeDesc"></div>
 </ons-page>

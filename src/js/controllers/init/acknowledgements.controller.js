@@ -1,5 +1,3 @@
-// See: https://ondrejsevcik.com/blog/building-perfect-markdown-processor-for-my-blog
-
 import rehypeRaw from 'rehype-raw'
 import rehypeStringify from 'rehype-stringify';
 import remarkLinkify from 'remark-linkify-regex';
@@ -16,18 +14,24 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
         .module('OpalApp')
         .controller('AcknowledgementsController', acknowledgementsController);
 
-    acknowledgementsController.$inject = [];
+    acknowledgementsController.$inject = ['$timeout'];
 
-    function acknowledgementsController() {
+    function acknowledgementsController($timeout) {
         let vm = this;
 
         // Source: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
         let urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&\/=]*)/;
 
-        activate();
+        vm.loading = true;
+
+        // Use timeout to delay execution of the unified parsing after showing the loading wheel
+        $timeout(() => {
+            activate();
+        })
 
         function activate() {
             // Parse the third party license markdown file to convert it to HTML
+            // See: https://ondrejsevcik.com/blog/building-perfect-markdown-processor-for-my-blog
             const result = unified()
                 // Take markdown as input and turn it into an MD syntax tree
                 .use(remarkParse)
@@ -49,7 +53,10 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
                 // And finally, process the input
                 .processSync(thirdPartyLicenses);
 
-            vm.content = result.value;
+            $timeout(() => {
+                vm.content = result.value;
+                vm.loading = false;
+            });
         }
 
         /**
