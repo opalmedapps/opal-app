@@ -1,5 +1,6 @@
 .acknowledgements {
     margin-bottom: 16px;
+    overflow-wrap: break-word;
 }
 
 /* Header font-size adjustments that scale with the user's chosen font size (using fontSizeDesc on the .acknowledgements container) */
