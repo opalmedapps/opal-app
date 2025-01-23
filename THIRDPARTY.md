@@ -4,7 +4,9 @@
 This project makes use of the third-party dependencies listed below.
 The dependencies are bundled in the release of this application.
 
-Note: The list of dependencies does not include transitive dependencies (dependencies of dependencies).
+All included or linked third-party dependencies are redistributed under the terms and conditions of their original licenses.
+
+Note that this list does not include transitive dependencies (dependencies of dependencies).
 
 ## @babel/runtime
 
