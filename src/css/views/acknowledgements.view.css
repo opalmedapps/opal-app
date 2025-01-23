@@ -2,6 +2,20 @@
     margin-bottom: 16px;
 }
 
+/* Header font-size adjustments that scale with the user's chosen font size (using fontSizeDesc on the .acknowledgements container) */
+.acknowledgements h1 {
+    font-size: 1.6em;
+}
+.acknowledgements h2 {
+    font-size: 1.3em;
+}
+.acknowledgements h3 {
+    font-size: 1.2em;
+}
+.acknowledgements h4 {
+    font-size: 1.1em;
+}
+
 /* See: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary */
 /* Show a grey border box when the details are closed */
 .acknowledgements details {
