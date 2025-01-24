@@ -314,6 +314,9 @@ include:
     inputs:
       package-file: package.json
       additional-dependencies: angular-ui-bootstrap Roboto-Font
+  # Add reuse job
+  - project: 'opalmedapps/engineering/ci-templates'
+    file: '/templates/jobs/Reuse.gitlab-ci.yml'
       
   # use latest template versions to run security scanning jobs also in merge request pipelines:
   # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
