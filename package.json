@@ -40,6 +40,7 @@
     "Health",
     "Opal"
   ],
+  "author": "Opal Health Informatics Group",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/Sable/qplus/issues"
