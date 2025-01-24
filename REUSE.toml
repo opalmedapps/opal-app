@@ -1,0 +1,72 @@
+version = 1
+
+
+[[annotations]]
+path = [
+    ".releaserc",
+    "firebase.json",
+    "src/Languages/appTranslationTablesViews/all-views/en.json",
+    "src/Languages/appTranslationTablesViews/all-views/fr.json",
+    "src/Languages/appTranslationTablesViews/login/en.json",
+    "src/Languages/appTranslationTablesViews/login/fr.json",
+    "src/Languages/appTranslationTablesViews/top-view/en.json",
+    "src/Languages/appTranslationTablesViews/top-view/es.json",
+    "src/Languages/appTranslationTablesViews/top-view/fr.json",
+    "src/Languages/appTranslationTablesViews/translations.zip",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+
+[[annotations]]
+path = [
+    "package-lock.json",
+    "package.json",
+    "res/**",
+    "static/landingpage/Opal_Name_Logo_Transparent.png",
+    "static/landingpage/opal-tiny.ico",
+    "src/img/apple-touch-icon.png",
+    "src/img/Opal_Logo_Black.png",
+    "src/img/Opal_Logo_Transparent_Inverse_Icon.png",
+    "src/img/Opal_Logo_Transparent_Inverse.png",
+    "src/img/Opal_Name_Logo_Green_Transparent.png",
+    "src/img/Opal_Name_Logo_Transparent.png",
+    "src/img/Opal_Name_Logo.png",
+    "src/img/opal_notification.png",
+    "src/img/OpalHealth_App_Apple_Icon_2.png",
+    "src/img/web-icon-512.png",
+    "src/img/web-icon-192.png",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
+SPDX-License-Identifier = "TBD"
+
+
+[[annotations]]
+path = [
+    "src/img/opal-init-photo.jpg",
+    "src/img/patient.png",
+    "src/img/pdf.jpeg",
+    "src/img/quebec.png",
+    "static/landingpage/muhc.jpg",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "TBD Copyright (C) 2020"
+SPDX-License-Identifier = "TBD"
+
+
+[[annotations]]
+path = [
+    "hooks/README.md",
+    "src/Languages/angular-locales/angular-locale_en-ca.js",
+    "src/Languages/angular-locales/angular-locale_en.js",
+    "src/Languages/angular-locales/angular-locale_fr-ca.js",
+    "src/Languages/angular-locales/angular-locale_fr.js",
+    "src/fonts/Roboto-Regular.ttf",
+    "src/lib/ui-bootstrap-tpls-2.5.6-opal.js",
+    "src/lib/ui-bootstrap-tpls-2.5.6-original.js",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "TBD Copyright (C) 2020"
+SPDX-License-Identifier = "TBD"
