@@ -33,6 +33,10 @@
     border: none;
 }
 
+.acknowledgements details[open] summary {
+    margin-bottom: 4px;
+}
+
 /* Arrow in front of details summary (closed) */
 .acknowledgements details summary:before {
     color: #444;
