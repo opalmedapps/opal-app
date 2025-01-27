@@ -9,14 +9,17 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
         .module('OpalApp')
         .controller('AcknowledgementsController', acknowledgementsController);
 
-    acknowledgementsController.$inject = [];
+    acknowledgementsController.$inject = ['$filter', 'UserPreferences'];
 
     /**
      * @description Parses and displays the content of THIRDPARTY.md to make our list of third-party dependencies visible in the app.
      * @author Anton Gladyr, Stacey Beard
      */
-    function acknowledgementsController() {
+    function acknowledgementsController($filter, UserPreferences) {
         const vm = this;
+
+        const language = UserPreferences.getLanguage();
+
         vm.loading = true;
 
         const customRenderExtension = {
@@ -25,7 +28,7 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
                 code(code) {
                     return `
                         <details>
-                          <summary>Show license text</summary>
+                          <summary>${$filter('translate')('SHOW_LICENSE_TEXT')}</summary>
                           <pre><code>${code}</code></pre>
                         </details>
                     `;
@@ -43,7 +46,14 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
         marked.setOptions({ gfm: true });
 
         // Process the Markdown file into HTML
-        vm.content = marked(thirdPartyLicenses);
+        let htmlContent = marked(thirdPartyLicenses);
+
+        // If applicable, add a paragraph at the beginning stating that the page has not been translated
+        if (language !== 'EN') htmlContent = `<p class="acknowledgements-pre">${$filter('translate')('UNTRANSLATED_PAGE_DISCLAIMER')}</p>
+            <hr>`
+            + htmlContent;
+
+        vm.content = htmlContent;
         vm.loading = false;
     }
 })();

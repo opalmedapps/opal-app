@@ -118,6 +118,7 @@
   "SETNEWPASSWORDPLACEHOLDER": "New password",
   "SETPASSWORDBUTTON": "Set Password",
   "SETPASSWORDLABEL": "Set new password",
+  "SHOW_LICENSE_TEXT": "Show license text",
   "SIGNOUT": "Sign out",
   "SUBMITTING": "Submitting... Please do not leave this page.",
   "SUCCESS": "Success",
@@ -141,10 +142,10 @@
   "TOUR_SECURITY_DESCRIPTION": "Remember to secure your information by protecting your phone with a passphrase, and do not leave your phone unattended.",
   "TRUST_DEVICE": "Set this device as a trusted device?",
   "UNATTENDED": "Do not leave your phone unattended.",
+  "UNTRANSLATED_PAGE_DISCLAIMER": "This page has not yet been translated, but its original content is provided below for reference purposes. Thank you for your understanding.",
   "USER_DISABLED": "User account has been disabled",
   "WARNING": "Warning",
   "SERVERERRORALERT": "Server problem: could not fetch data, try again later",
   "TAP_TO_SELECT_HOSPITAL": "Tap to select",
   "WHATSNEW": "What's New"
 }
-
