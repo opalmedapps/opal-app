@@ -64,10 +64,5 @@
       "matchPackagePatterns": ["^angular-translate"],
       "groupName": "angular-translate packages"
     },
-    // Group unified plugins used to process markdown
-    {
-      "matchPackagePatterns": ["(unified|remark|rehype)"],
-      "groupName": "unified markdown plugins",
-    },
   ],
 }
