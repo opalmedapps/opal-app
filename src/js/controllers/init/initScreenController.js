@@ -157,7 +157,7 @@ import '../../../css/views/init-page.view.css';
 		function goToPartners() {
 			initNavigator.pushPage(
 				'./views/templates/content.html',
-				{contentType: 'acknowledgements', title: 'PARTNERS'}
+				{contentType: 'partners', title: 'PARTNERS'}
 			);
 		}
 

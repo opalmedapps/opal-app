@@ -15,9 +15,9 @@
             "en": "./content/secure-your-device/en.html",
             "fr": "./content/secure-your-device/fr.html"
         },
-        "acknowledgements": {
-            "en": "./content/acknowledgements/en.html",
-            "fr": "./content/acknowledgements/fr.html"
+        "partners": {
+            "en": "./content/partners/en.html",
+            "fr": "./content/partners/fr.html"
         },
         "about": {
             "en": "./content/about/en.html",

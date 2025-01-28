@@ -260,7 +260,7 @@
         function goToPartners() {
             homeNavigator.pushPage(
                 './views/templates/content.html',
-                { contentType: 'acknowledgements', title: 'PARTNERS'},
+                { contentType: 'partners', title: 'PARTNERS'},
             );
         }
 
