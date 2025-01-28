@@ -80,7 +80,7 @@ const config = env => {
 			noParse: /jquery|lodash/,
 			rules: [
 				{
-					test: /\.html$/,
+					test: /\.(html|md)$/,
 					loader: 'raw-loader',
 				},
 				{
@@ -152,11 +152,7 @@ const config = env => {
 				{
 					test: /\.png$/,
 					type: 'asset/resource'
-				},
-				{
-					test: /\.md$/,
-					loader: 'raw-loader',
-				},
+				}
 			]
 		},
 		plugins: [
