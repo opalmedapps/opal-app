@@ -1,3 +1,10 @@
+## [1.37.31](https://gitlab.com/opalmedapps/qplus/compare/v1.37.30...v1.37.31) (2025-01-29)
+
+
+### Bug Fixes
+
+* display third party licenses on a new page ([df8fa36](https://gitlab.com/opalmedapps/qplus/commit/df8fa36c16b12077a8cf057ea7889b82b7f11c86))
+
 ## [1.37.30](https://gitlab.com/opalmedapps/qplus/compare/v1.37.29...v1.37.30) (2025-01-22)
 
 
