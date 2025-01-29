@@ -47,7 +47,7 @@ should be configured as shown below:
     ```
 
     **NOTE:** Content files are organized in subdirectories within
-    `content`, with each subdirectory named according to its content type  (e.g., about, acknowledgements, etc.).
+    `content`, with each subdirectory named according to its content type  (e.g., about, partners, etc.).
 
 4. In `opal.config.js`, set the `externalContentFileURL` setting to reference
 your newly created configuration file:

@@ -17,6 +17,7 @@
 
 		vm.changeLanguage = changeLanguage;
 		vm.openPageLegal = openPageLegal;
+		vm.goToAcknowledgements = () => navigator.pushPage('views/init/acknowledgements.html');
 		vm.goToFeedback = goToFeedback;
 		vm.secureYourDeviceNotice = secureYourDeviceNotice;
 
