@@ -12,11 +12,11 @@ SPDX-License-Identifier: Apache-2.0
             <!-- Style on network banner used to make it overlap the picture-logo instead of push it down. -->
             <network-banner style="position:absolute; top:0; left:0; z-index:9999"></network-banner>
             <div style="position: absolute; top: 50%;transform: translateY(-50%);" align="center">
-                <img src="img/Opal_Name_Logo_Transparent.png" style="width:75%;height:auto">
+                <img ng-src="{{ 'init-logo' | brandingSrc }}" style="width:75%;height:auto">
             </div>
         </div>
         <div style="height: 100%">
-            <img id="init-background" src="img/opal-init-photo.jpg" style="width: 100%; height: 100%; object-fit: cover">
+            <img id="init-background" ng-src="{{ 'init-background' | brandingSrc }}" style="width: 100%; height: 100%; object-fit: cover">
         </div>
     </div>
 
