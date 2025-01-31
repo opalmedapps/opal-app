@@ -1,6 +1,6 @@
 {
-  "name": "opal",
-  "description": "Oncology Portal and Application",
+  "name": "opal-app",
+  "description": "Opal Mobile App",
   "main": "index.js",
   "scripts": {
     "help": "echo Append a variable at the end of each start or build command to specify which environment to use, for example: --env=local",
@@ -40,8 +40,8 @@
     "Health",
     "Opal"
   ],
-  "author": "David Herrera",
-  "license": "ISC",
+  "author": "Opal Health Informatics Group",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/Sable/qplus/issues"
   },
