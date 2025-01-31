@@ -86,6 +86,8 @@ p {
 }
 
 @import url('./animations.css');
+@import url('./branding/init-background.css');
+@import url('./branding/init-logo.css');
 @import url('./dependencies/bootstrap.dependency.css');
 @import url('./dependencies/fontawesome.dependency.css');
 @import url('./dependencies/onsenui.dependency.css');
