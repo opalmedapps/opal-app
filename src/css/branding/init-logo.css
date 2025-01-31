@@ -1,4 +1,6 @@
 #init-logo {
-    width: 75%;
+    max-height: 50%;
+    object-fit: contain;
+    width: 60%;
     z-index: 2;
 }
