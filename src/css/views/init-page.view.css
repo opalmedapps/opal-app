@@ -4,34 +4,44 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#init-header {
+    height: 40%;
+    position: relative;
+}
+
 #listInitApp div ons-button span {
     position: absolute;
     top: 50%;
     transform: translateY(-50%) translateX(-50%);
     width: 100%;
 }
+
 .listInitApp {
     display: none;
     height: 56%;
 }
+
 .initScreenButtonDiv {
     height: 15%;
     margin: 3% auto;
     text-align: center;
     width: 90%;
 }
+
 .initScreenWhiteButton {
     background-color: #F5F5F5;
     font-size: x-large;
     height: 100%;
     position: relative;
 }
+
 .initScreenGreenButton {
     background-color: #4CAF50;
     font-size: xx-large;
     font-weight: bolder;
     height: 100%;
 }
+
 .initScreenButtonText {
     color: #757575;
     display: inline-block;
