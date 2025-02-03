@@ -1,3 +1,5 @@
+// For more information on this file, see `docs/setup/branding.md`.
+
 (function () {
     'use strict';
 
