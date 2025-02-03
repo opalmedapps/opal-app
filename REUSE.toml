@@ -5,6 +5,8 @@ version = 1
 path = [
     ".releaserc",
     "firebase.json",
+    "package-lock.json",
+    "package.json",
     "src/Languages/appTranslationTablesViews/all-views/en.json",
     "src/Languages/appTranslationTablesViews/all-views/fr.json",
     "src/Languages/appTranslationTablesViews/login/en.json",
@@ -21,8 +23,6 @@ SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
 path = [
-    "package-lock.json",
-    "package.json",
     "res/**",
     "static/landingpage/Opal_Name_Logo_Transparent.png",
     "static/landingpage/opal-tiny.ico",
