@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import './filters/branding.filter.js';
+import './filters/branding-id.filter.js';
+import './filters/branding-src.filter.js';
 import './filters/filters';
 import './filters/replaceAll.filter';
 import './filters/showHeader.filter';
