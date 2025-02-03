@@ -28,3 +28,9 @@ content/*
 !content/content.config.sample.json
 !content/service-status.sample.json
 !content/README.md
+
+# App branding
+branding/custom/*
+!branding/custom/README.md
+src/css/branding/custom/*
+!src/css/branding/custom/README.md

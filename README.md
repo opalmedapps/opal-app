@@ -238,6 +238,18 @@ After selecting it, you get a web inspector window that you can use to troublesh
 
 Using Chrome, go to `chrome://inspect/#devices`.
 
+## Branding
+
+![Opal Logo Icon](/src/img/Opal_Logo_Transparent_Inverse_Icon.png)
+
+This application comes preconfigured with Opal-branded assets such as the Opal name, logo, etc.
+
+```text
+TBA: Describe the conditions under which Opal branding can be used in a clinical deployment, versus those that would require custom branding.
+```
+
+To rebrand the application with your organization's own name, logos and assets, refer to the [Branding Setup Guide](/docs/setup/branding.md).
+
 ## Testing
 
 ### Testing with a rooted device (Android)
