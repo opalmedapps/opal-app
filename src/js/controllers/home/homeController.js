@@ -47,7 +47,7 @@
         vm.goToAppointments = goToAppointments;
         vm.goToCheckinAppointments = goToCheckinAppointments;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
-        vm.goToAcknowledgements = goToAcknowledgements;
+        vm.goToPartners = goToPartners;
         vm.getPatientFirstName = getPatientFirstName;
 
         activate();
@@ -259,12 +259,12 @@
         }
 
         /**
-         * @description Takes the user to the acknowledgements page.
+         * @description Takes the user to the partners page.
          */
-        function goToAcknowledgements() {
+        function goToPartners() {
             homeNavigator.pushPage(
                 './views/templates/content.html',
-                { contentType: 'acknowledgements', title: 'ACKNOWLEDGEMENTS'},
+                { contentType: 'partners', title: 'PARTNERS'},
             );
         }
 

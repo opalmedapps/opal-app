@@ -23,6 +23,7 @@ import "./controllers/educational/educationalMaterialController.js";
 import "./controllers/feedback/feedbackController.js";
 import "./controllers/home/homeController.js";
 import "./controllers/info-tab/infoTabController.js";
+import "./controllers/init/acknowledgements.controller.js";
 import "./controllers/init/initScreenController.js";
 import "./controllers/init/initSettingsController.js";
 import "./controllers/loading/loadingController.js";

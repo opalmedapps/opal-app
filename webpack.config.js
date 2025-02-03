@@ -84,7 +84,7 @@ const config = env => {
 			noParse: /jquery|lodash/,
 			rules: [
 				{
-					test: /\.html$/,
+					test: /\.(html|md)$/,
 					loader: 'raw-loader',
 				},
 				{

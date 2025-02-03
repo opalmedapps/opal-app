@@ -4,6 +4,21 @@ SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
+
+## [1.37.32](https://gitlab.com/opalmedapps/qplus/compare/v1.37.31...v1.37.32) (2025-01-30)
+
+
+### Bug Fixes
+
+* **deps:** update babel monorepo to v7.26.7 (patch) ([33e8353](https://gitlab.com/opalmedapps/qplus/commit/33e835328ae833b5e8f2cabc096eaf7ad261defa))
+
+## [1.37.31](https://gitlab.com/opalmedapps/qplus/compare/v1.37.30...v1.37.31) (2025-01-29)
+
+
+### Bug Fixes
+
+* display third party licenses on a new page ([df8fa36](https://gitlab.com/opalmedapps/qplus/commit/df8fa36c16b12077a8cf057ea7889b82b7f11c86))
+
 ## [1.37.30](https://gitlab.com/opalmedapps/qplus/compare/v1.37.29...v1.37.30) (2025-01-22)
 
 
