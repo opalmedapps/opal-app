@@ -169,7 +169,6 @@ const config = env => {
 			new CopyPlugin({
 				patterns: [
 					{ from: './src/img', to: './img' },
-					{ from: './branding', to: './branding' },
 					{ from: './src/Languages', to: './Languages' },
 					{ from: './src/views', to: './views' },
 					// NOTE: if the external content URL (e.g., externalContentFileURL) is set to the local file path

@@ -10,15 +10,15 @@ All customizable images in the app are listed in the file [branding.constants.js
 The keys in this file (e.g. `init-logo`) can be used to search for the location of each image in the app code.
 You won't need to edit the source, but this can be useful to locate each image in the app.
 
-To replace an image with your own branded version, upload your new image to `branding/custom`.
+To replace an image with your own branded version, upload your new image to `src/img/branding/custom`.
 
-Replace the value of `src` in [branding.constants.js](/src/js/constants/branding.constants.js) with the path to your image.
-Note that webpack has been configured to access the `branding` directory in the root of the project.
-To avoid additional changes to webpack, all image paths should begin with `branding`.
+Replace the value of `src` in [branding.constants.js](/src/js/constants/branding.constants.js) with the new path to your image.
+Note that webpack has been configured to access the `src/img` directory from the root, simply as `img`.
+To avoid additional changes to webpack, all image paths should begin with `img`.
 
 ```javascript
 'init-logo': {
-    src: 'branding/custom/my-logo.png',
+    src: 'img/branding/custom/my-logo.png',
 },
 ```
 
@@ -49,4 +49,13 @@ Overriding CSS (`src/css/branding/custom/init-logo.css`)
 #init-logo {
     width: 90%;
 }
+```
+
+Import (`src/css/branding.css`)
+```css
+@import url('branding/opal/init-logo.css');
+/* ... */
+
+/* IMPORT CUSTOM BRANDING CSS FILES HERE */
+@import url('branding/custom/init-logo.css');
 ```

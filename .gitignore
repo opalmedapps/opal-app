@@ -30,7 +30,7 @@ content/*
 !content/README.md
 
 # App branding
-branding/custom/*
-!branding/custom/README.md
+src/img/branding/custom/*
+!src/img/branding/custom/README.md
 src/css/branding/custom/*
 !src/css/branding/custom/README.md
