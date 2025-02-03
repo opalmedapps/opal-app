@@ -240,7 +240,7 @@ Using Chrome, go to `chrome://inspect/#devices`.
 
 ## Branding
 
-![Opal Logo Icon](/src/img/Opal_Logo_Transparent_Inverse_Icon.png)
+<img alt="Opal Logo Icon" src="/src/img/Opal_Logo_Transparent_Inverse_Icon.png" width="50px"/>
 
 This application comes preconfigured with Opal-branded assets such as the Opal name, logo, etc.
 
