@@ -12,7 +12,7 @@ You won't need to edit the source, but this can be useful to locate each image i
 
 To replace an image with your own branded version, upload your new image to `src/img/branding/custom`.
 
-Replace the value of `src` in [branding.constants.js](/src/js/constants/branding.constants.js) with the new path to your image.
+Replace the value of `src` in [branding.constants.js](/src/js/constants/branding.constants.js) with the path to your new image.
 Note that webpack has been configured to access the `src/img` directory from the root, simply as `img`.
 To avoid additional changes to webpack, all image paths should begin with `img`.
 
@@ -29,7 +29,7 @@ New images can be configured by overriding their CSS styles.
 To customize an image using CSS, create a CSS file in `src/css/branding/custom/`.
 Add an `@import` statement at the end of `src/css/branding.css` to link this file into the project.
 
-New CSS files should apply styles to an image's id. Ids are defined in `branding.constants.js`.
+New CSS files should apply styles to an image's id. Ids are defined in [branding.constants.js](/src/js/constants/branding.constants.js).
 
 In the following example, basic styles continue to apply to the logo;
 only the width is overridden by the new style sheet.
