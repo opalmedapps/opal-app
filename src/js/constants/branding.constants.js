@@ -9,11 +9,11 @@
             // INIT PAGE
             'init-background': {
                 id: 'init-background',
-                src: 'branding/opal/init-background.jpg',
+                src: 'img/branding/opal/init-background.jpg',
             },
             'init-logo': {
                 id: 'init-logo',
-                src: 'branding/opal/Opal_Name_Logo_Transparent.png',
+                src: 'img/branding/opal/Opal_Name_Logo_Transparent.png',
             },
         });
 })();
