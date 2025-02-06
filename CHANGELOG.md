@@ -1,3 +1,10 @@
+## [1.37.33](https://gitlab.com/opalmedapps/qplus/compare/v1.37.32...v1.37.33) (2025-02-06)
+
+
+### Bug Fixes
+
+* rename the current production hospital to the Neuro ([64d2c7c](https://gitlab.com/opalmedapps/qplus/commit/64d2c7ca89189e30329ebfaa75f9b1ade9d3a700))
+
 ## [1.37.32](https://gitlab.com/opalmedapps/qplus/compare/v1.37.31...v1.37.32) (2025-01-30)
 
 
