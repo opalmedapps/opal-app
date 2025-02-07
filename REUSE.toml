@@ -7,6 +7,8 @@ path = [
     "firebase.json",
     "package-lock.json",
     "package.json",
+    "content/content.config.sample.json",
+    "content/service-status.sample.json",
     "src/Languages/appTranslationTablesViews/all-views/en.json",
     "src/Languages/appTranslationTablesViews/all-views/fr.json",
     "src/Languages/appTranslationTablesViews/login/en.json",
