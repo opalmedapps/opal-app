@@ -5,6 +5,18 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 
+# [2.0.0](https://gitlab.com/opalmedapps/qplus/compare/v1.37.33...v2.0.0) (2025-02-07)
+
+
+### major
+
+* bump version to 2.0.0 ([573cc67](https://gitlab.com/opalmedapps/qplus/commit/573cc67d8c9a4f1e43b745e86bf09df7b6a06cf9))
+
+
+### BREAKING CHANGES
+
+* bump app version to 2.0.0
+
 ## [1.37.33](https://gitlab.com/opalmedapps/qplus/compare/v1.37.32...v1.37.33) (2025-02-06)
 
 
