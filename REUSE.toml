@@ -73,10 +73,18 @@ path = [
     "src/Languages/angular-locales/angular-locale_en.js",
     "src/Languages/angular-locales/angular-locale_fr-ca.js",
     "src/Languages/angular-locales/angular-locale_fr.js",
-    "src/fonts/Roboto-Regular.ttf",
     "src/lib/ui-bootstrap-tpls-2.5.6-opal.js",
     "src/lib/ui-bootstrap-tpls-2.5.6-original.js",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "TBD Copyright (C) 2020"
 SPDX-License-Identifier = "TBD"
+
+
+[[annotations]]
+path = [
+    "src/fonts/Roboto-Regular.ttf",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (C) 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)"
+SPDX-License-Identifier = "OFL-1.1"
