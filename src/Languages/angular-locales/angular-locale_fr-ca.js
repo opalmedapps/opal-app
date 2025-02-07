@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Angular <https://github.com/angular/bower-angular-i18n>
+//
+// SPDX-License-Identifier: MIT
+
 // Source: https://github.com/angular/bower-angular-i18n/blob/master/angular-locale_fr-ca.js
 'use strict';
 angular.module("ngLocale", [], ["$provide", function($provide) {

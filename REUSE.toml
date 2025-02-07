@@ -38,7 +38,7 @@ path = [
     "src/img/web-icon-192.png",
 ]
 precedence = "override"
-SPDX-FileCopyrightText = "Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
+SPDX-FileCopyrightText = "TBD"
 SPDX-License-Identifier = "TBD"
 
 
@@ -64,21 +64,6 @@ precedence = "override"
 #   - https://alphacoders.com/author/view/16321
 SPDX-FileCopyrightText = "Copyright (C) 2012 Adam Valstar"
 SPDX-License-Identifier = "CC-BY-NC-ND-3.0"
-
-
-[[annotations]]
-path = [
-    "hooks/README.md",
-    "src/Languages/angular-locales/angular-locale_en-ca.js",
-    "src/Languages/angular-locales/angular-locale_en.js",
-    "src/Languages/angular-locales/angular-locale_fr-ca.js",
-    "src/Languages/angular-locales/angular-locale_fr.js",
-    "src/lib/ui-bootstrap-tpls-2.5.6-opal.js",
-    "src/lib/ui-bootstrap-tpls-2.5.6-original.js",
-]
-precedence = "override"
-SPDX-FileCopyrightText = "TBD Copyright (C) 2020"
-SPDX-License-Identifier = "TBD"
 
 
 [[annotations]]
