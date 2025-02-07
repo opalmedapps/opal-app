@@ -127,8 +127,8 @@
                 hospitalList: [
                     {
                         uniqueHospitalCode: 'A6',
-                        acronymReal: 'RI_MUHC_ACRONYM',
-                        fullNameReal: 'RI_MUHC_FULL',
+                        acronymReal: 'NEURO_ACRONYM',
+                        fullNameReal: 'NEURO_FULL',
                         acronymGeneric: 'OMI',
                         fullNameGeneric: 'OMI_FULL',
                         modules: {
