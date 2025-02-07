@@ -46,12 +46,20 @@ SPDX-License-Identifier = "TBD"
 path = [
     "src/img/patient.png",
     "src/img/pdf.jpeg",
-    "src/img/quebec.png",
     "static/landingpage/muhc.jpg",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "TBD Copyright (C) 2020"
 SPDX-License-Identifier = "TBD"
+
+
+[[annotations]]
+path = [
+    "src/img/quebec.png",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "NOASSERTION"
+SPDX-License-Identifier = "LicenseRef-FlagOfQuebec"
 
 
 [[annotations]]
