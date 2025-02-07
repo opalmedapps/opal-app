@@ -14,11 +14,10 @@ path = [
     "src/Languages/appTranslationTablesViews/top-view/en.json",
     "src/Languages/appTranslationTablesViews/top-view/es.json",
     "src/Languages/appTranslationTablesViews/top-view/fr.json",
-    "src/Languages/appTranslationTablesViews/translations.zip",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
-SPDX-License-Identifier = "AGPL-3.0-or-later"
+SPDX-License-Identifier = "Apache-2.0"
 
 
 [[annotations]]
@@ -45,7 +44,6 @@ SPDX-License-Identifier = "TBD"
 
 [[annotations]]
 path = [
-    "src/img/opal-init-photo.jpg",
     "src/img/patient.png",
     "src/img/pdf.jpeg",
     "src/img/quebec.png",
@@ -54,6 +52,18 @@ path = [
 precedence = "override"
 SPDX-FileCopyrightText = "TBD Copyright (C) 2020"
 SPDX-License-Identifier = "TBD"
+
+
+[[annotations]]
+path = [
+    "src/img/opal-init-photo.jpg",
+]
+precedence = "override"
+# See:
+#   - https://www.deviantart.com/duckfarm/art/Yellow-Green-311796216
+#   - https://alphacoders.com/author/view/16321
+SPDX-FileCopyrightText = "Copyright (C) 2012 Adam Valstar"
+SPDX-License-Identifier = "CC-BY-NC-ND-3.0"
 
 
 [[annotations]]

@@ -314,7 +314,7 @@ include:
     inputs:
       package-file: package.json
       additional-dependencies: angular-ui-bootstrap Roboto-Font
-  # Add reuse job
+  # Add Reuse job: https://reuse.software/
   - project: 'opalmedapps/engineering/ci-templates'
     file: '/templates/jobs/Reuse.gitlab-ci.yml'
       
