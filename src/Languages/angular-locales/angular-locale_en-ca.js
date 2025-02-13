@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: Copyright (C) 2016 Angular <https://github.com/angular/bower-angular-i18n>
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 //
 // SPDX-License-Identifier: MIT
 
