@@ -14,7 +14,6 @@ path = [
     "src/Languages/appTranslationTablesViews/login/en.json",
     "src/Languages/appTranslationTablesViews/login/fr.json",
     "src/Languages/appTranslationTablesViews/top-view/en.json",
-    "src/Languages/appTranslationTablesViews/top-view/es.json",
     "src/Languages/appTranslationTablesViews/top-view/fr.json",
 ]
 precedence = "override"
