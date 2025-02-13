@@ -5,6 +5,13 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 
+## [2.0.1](https://gitlab.com/opalmedapps/qplus/compare/v2.0.0...v2.0.1) (2025-02-13)
+
+
+### Bug Fixes
+
+* replace pdf image in reference materials with an icon ([7172685](https://gitlab.com/opalmedapps/qplus/commit/7172685ab664404d00c0fc8f4be5d7a8bc0f5f97))
+
 # [2.0.0](https://gitlab.com/opalmedapps/qplus/compare/v1.37.33...v2.0.0) (2025-02-07)
 
 

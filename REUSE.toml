@@ -47,7 +47,6 @@ SPDX-License-Identifier = "TBD"
 [[annotations]]
 path = [
     "src/img/patient.png",
-    "src/img/pdf.jpeg",
     "static/landingpage/muhc.jpg",
 ]
 precedence = "override"
