@@ -5,6 +5,13 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 
+## [2.0.2](https://gitlab.com/opalmedapps/qplus/compare/v2.0.1...v2.0.2) (2025-02-14)
+
+
+### Bug Fixes
+
+* add Opal Demo 1 and 2 to the hospital list ([bc826e8](https://gitlab.com/opalmedapps/qplus/commit/bc826e8f85dcfba78835990583130756de86a921))
+
 ## [2.0.1](https://gitlab.com/opalmedapps/qplus/compare/v2.0.0...v2.0.1) (2025-02-13)
 
 
