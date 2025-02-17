@@ -55,7 +55,7 @@ import '../../../css/views/init-page.view.css';
 		vm.APP_VERSION = Constants.version();
 		vm.APP_BUILD_NUMBER = Constants.build();
 
-		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
+		vm.goToAboutOpal = goToAboutOpal;
 		vm.goToRegister = goToRegister;
 		vm.goToGeneralSettings = goToGeneralSettings;
 		vm.goToPartners = goToPartners;
@@ -130,9 +130,9 @@ import '../../../css/views/init-page.view.css';
 		}
 
 		/**
-		 * Go to Learn About Opal
+		 * Go to About Opal
 		 */
-		function gotoLearnAboutOpal() {
+		function goToAboutOpal() {
 			initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		}
 
