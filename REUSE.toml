@@ -39,8 +39,8 @@ path = [
     "src/img/web-icon-192.png",
 ]
 precedence = "override"
-SPDX-FileCopyrightText = "TBD"
-SPDX-License-Identifier = "TBD"
+SPDX-FileCopyrightText = "Copyright (C) 2015 Ackeem Joseph <ackeem.joseph@muhc.mcgill.ca>"
+SPDX-License-Identifier = "LicenseRef-AckeemJosephLogo"
 
 
 [[annotations]]
