@@ -33,6 +33,7 @@
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
+        vm.openTechnicalLegal = () => navigator.pushPage('views/init/init-settings.html');
         vm.openTour = openTour;
         vm.allowedModules = {};
 

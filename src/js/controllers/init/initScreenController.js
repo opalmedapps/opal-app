@@ -57,7 +57,6 @@ import '../../../css/views/init-page.view.css';
 
 		vm.goToAboutOpal = goToAboutOpal;
 		vm.goToRegister = goToRegister;
-		vm.goToGeneralSettings = goToGeneralSettings;
 		vm.goToPartners = goToPartners;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
@@ -142,13 +141,6 @@ import '../../../css/views/init-page.view.css';
 		function goToRegister() {
 			const url = DynamicContent.getURL("registration");
 			Browser.openInternal(url);
-		}
-
-		/**
-		 * Go to general settings (About)
-		 */
-		function goToGeneralSettings() {
-			initNavigator.pushPage('./views/init/init-settings.html');
 		}
 
 		/**
