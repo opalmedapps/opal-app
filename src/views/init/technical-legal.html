@@ -1,20 +1,20 @@
 <ons-page ng-controller="TechnicalLegalController as init">
-    <generic-toolbar title="{{'ABOUT'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'TECHNICAL_LEGAL'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
     <ons-list class="settings-list">
-        <ons-list-item modifier = "chevron" ng-hide="init.navigatorName == 'initNavigator'" ng-click="init.goToFeedback()" ng-class="fontSizeTitle">
+        <ons-list-item modifier = "chevron" ng-hide="init.navigatorName == 'initNavigator'" ng-click="init.goToFeedback()" ng-class="fontSizeDesc">
             {{"RATETHISAPP"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.secureYourDeviceNotice()" ng-class="fontSizeTitle">
-            {{"SECURE_YOUR_DEVICE"|translate}}
+        <ons-list-item modifier="chevron" ng-click="init.openSecurityAndPrivacy()" ng-class="fontSizeDesc">
+            {{"SECURITY_AND_PRIVACY"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('termsOfUse')" ng-class="fontSizeTitle">
+        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('termsOfUse')" ng-class="fontSizeDesc">
             {{"TERMS_OF_USE"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('serviceAgreement')" ng-class="fontSizeTitle">
+        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('serviceAgreement')" ng-class="fontSizeDesc">
             {{"SERVICE_AGREEMENT"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.goToAcknowledgements()" ng-class="fontSizeTitle">
+        <ons-list-item modifier="chevron" ng-click="init.goToAcknowledgements()" ng-class="fontSizeDesc">
             {{"ACKNOWLEDGEMENTS"|translate}}
         </ons-list-item>
     </ons-list>
