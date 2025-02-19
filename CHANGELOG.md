@@ -1,3 +1,10 @@
+## [2.0.3](https://gitlab.com/opalmedapps/qplus/compare/v2.0.2...v2.0.3) (2025-02-19)
+
+
+### Bug Fixes
+
+* replace quebec fleur-de-lys with svg and update its blue background ([5eef4df](https://gitlab.com/opalmedapps/qplus/commit/5eef4df3e375c89d14666bd4e278eaeeffa12d79))
+
 ## [2.0.2](https://gitlab.com/opalmedapps/qplus/compare/v2.0.1...v2.0.2) (2025-02-14)
 
 
