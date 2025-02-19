@@ -21,7 +21,7 @@ import "./controllers/home/homeController.js";
 import "./controllers/info-tab/infoTabController.js";
 import "./controllers/init/acknowledgements.controller.js";
 import "./controllers/init/initScreenController.js";
-import "./controllers/init/initSettingsController.js";
+import "./controllers/init/technical-legal.controller.js";
 import "./controllers/loading/loadingController.js";
 import "./controllers/main/mainController.js";
 import "./controllers/notifications/notificationsController.js";

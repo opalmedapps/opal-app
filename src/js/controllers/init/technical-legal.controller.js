@@ -3,14 +3,14 @@
 //
 (()=>{
 	angular.module('OpalApp')
-		.controller("InitSettingsController", InitSettingsController);
+		.controller("TechnicalLegalController", TechnicalLegalController);
 
-	InitSettingsController.$inject = [
+	TechnicalLegalController.$inject = [
 		'Firebase', 'Navigator', 'UserPreferences', 'Constants', '$rootScope'
 	];
 
 	/* @ngInject */
-	function InitSettingsController(Firebase, Navigator, UserPreferences, Constants, $rootScope) {
+	function TechnicalLegalController(Firebase, Navigator, UserPreferences, Constants, $rootScope) {
 
 		let vm = this;
 		let navigator;
@@ -29,10 +29,6 @@
 			navigator = Navigator.getNavigator();
 			vm.navigatorName = Navigator.getNavigatorName();
 
-			initSettings();
-		}
-
-		function initSettings() {
 			vm.authenticated = !!Firebase.getCurrentUser();
 			vm.languageSwitch = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
 			vm.currentYear = new Date().getFullYear();
