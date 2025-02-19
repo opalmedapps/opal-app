@@ -19,7 +19,7 @@
 		vm.openPageLegal = openPageLegal;
 		vm.goToAcknowledgements = () => navigator.pushPage('views/init/acknowledgements.html');
 		vm.goToFeedback = goToFeedback;
-		vm.secureYourDeviceNotice = secureYourDeviceNotice;
+		vm.openSecurityAndPrivacy = openSecurityAndPrivacy;
 
 		activate();
 
@@ -49,10 +49,10 @@
 			navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'});
 		}
 
-		function secureYourDeviceNotice() {
+		function openSecurityAndPrivacy() {
 			navigator.pushPage(
 				'./views/templates/content.html',
-				{contentType: 'secureYourDevice', title: 'SECURE_YOUR_DEVICE'},
+				{contentType: 'secureYourDevice', title: 'SECURITY_AND_PRIVACY'},
 			);
 		}
 
