@@ -1,7 +1,6 @@
 {
   "ABOUT_APP": "About This App",
   "ACCOUNT": "Account",
-  "ACKNOWLEDGEMENTS": "Acknowledgements",
   "ALERT": "Alert",
   "APPVERSION": "App Version",
   "ATTENTION": "Attention!",
@@ -126,6 +125,7 @@
   "SUCCESS": "Success",
   "TECHNICAL_LEGAL": "Technical / Legal",
   "TERMS_OF_USE": "Terms of Use",
+  "THIRD_PARTY": "Third-Party Dependencies",
   "TOO_MANY_REQUESTS": "Too many unsuccessful login attempts. Please try again later.",
   "TOUR_ACCOUNT": "On the Account tab, you will be able to log out and make changes to your account settings, including selecting your preferred font size and app language, and changing your password and security answers.",
   "TOUR_EDUCATION": "In the \"Clinical Reference Material\" section of the Chart tab, you will receive reference materials as you progress through your medical journey. We will show you videos, booklets and documents specific to you.",

@@ -1,7 +1,6 @@
 {
   "ABOUT_APP": "À propos de cette application",
   "ACCOUNT": "Réglages",
-  "ACKNOWLEDGEMENTS": "Dépendances tierces",
   "ALERT": "Alerte",
   "APPVERSION": "Version de l'application",
   "ATTENTION": "Attention!",
@@ -126,6 +125,7 @@
   "SUCCESS": "Succès",
   "TECHNICAL_LEGAL": "Technique / Légal",
   "TERMS_OF_USE": "Conditions d'utilisation",
+  "THIRD_PARTY": "Dépendances tierces",
   "TOO_MANY_REQUESTS": "Trop de tentatives de connexion erronées. Veuillez réessayer plus tard.",
   "TOUR_ACCOUNT": "Dans l'onglet «\u00A0Réglages\u00A0», vous pourrez vous déconnecter et modifier les paramètres de votre compte. Par exemple, vous pourrez sélectionner la taille de police et la langue de votre choix, ou modifier votre mot de passe et vos réponses aux questions de sécurité.",
   "TOUR_EDUCATION": "Dans la section «\u00A0Documents de référence cliniques\u00A0» de l’onglet «\u00A0Dossier\u00A0», vous recevrez des documents au fur et à mesure que vous progresserez dans votre parcours médical. Nous vous enverrons des vidéos, des livrets et des documents personnalisés pour vous.",

@@ -6,18 +6,18 @@
 		.controller("TechnicalLegalController", TechnicalLegalController);
 
 	TechnicalLegalController.$inject = [
-		'Firebase', 'Navigator', 'UserPreferences', 'Constants', '$rootScope'
+		'Firebase', 'Navigator', 'UserPreferences', 'Constants'
 	];
 
 	/* @ngInject */
-	function TechnicalLegalController(Firebase, Navigator, UserPreferences, Constants, $rootScope) {
+	function TechnicalLegalController(Firebase, Navigator, UserPreferences, Constants) {
 
 		let vm = this;
 		let navigator;
 
 		vm.changeLanguage = changeLanguage;
 		vm.openPageLegal = openPageLegal;
-		vm.goToAcknowledgements = () => navigator.pushPage('views/init/acknowledgements.html');
+		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
 		vm.goToFeedback = goToFeedback;
 		vm.openSecurityAndPrivacy = openSecurityAndPrivacy;
 

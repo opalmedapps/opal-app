@@ -11,15 +11,15 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
 
     angular
         .module('OpalApp')
-        .controller('AcknowledgementsController', acknowledgementsController);
+        .controller('ThirdPartyController', thirdPartyController);
 
-    acknowledgementsController.$inject = ['$filter', 'UserPreferences'];
+    thirdPartyController.$inject = ['$filter', 'UserPreferences'];
 
     /**
      * @description Parses and displays the content of THIRDPARTY.md to make our list of third-party dependencies visible in the app.
      * @author Anton Gladyr, Stacey Beard
      */
-    function acknowledgementsController($filter, UserPreferences) {
+    function thirdPartyController($filter, UserPreferences) {
         const vm = this;
 
         const language = UserPreferences.getLanguage();
@@ -53,7 +53,7 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
         let htmlContent = marked(thirdPartyLicenses);
 
         // If applicable, add a paragraph at the beginning stating that the page has not been translated
-        if (language !== 'EN') htmlContent = `<p class="acknowledgements-pre">${$filter('translate')('UNTRANSLATED_PAGE_DISCLAIMER')}</p>
+        if (language !== 'EN') htmlContent = `<p class="third-party-pre">${$filter('translate')('UNTRANSLATED_PAGE_DISCLAIMER')}</p>
             <hr>`
             + htmlContent;
 
