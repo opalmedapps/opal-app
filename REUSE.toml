@@ -48,11 +48,14 @@ path = [
     "static/landingpage/neuro-and-montreal.png",
 ]
 precedence = "override"
-# See: https://commons.wikimedia.org/wiki/File:The_Montreal_Neurological_Institute_and_Hospital_%28The_Neuro%29.jpg
-SPDX-FileCopyrightText = "Copyright (C) 2018 Neuro1234"
-# See: https://commons.wikimedia.org/wiki/File:Montreal-canada-parc-urban.jpg
-SPDX-FileCopyrightText = "Copyright (C) 2013 https://www.pxfuel.com/"
-SPDX-FileCopyrightText = "Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
+# See:
+#    - https://commons.wikimedia.org/wiki/File:The_Montreal_Neurological_Institute_and_Hospital_%28The_Neuro%29.jpg
+#    - https://commons.wikimedia.org/wiki/File:Montreal-canada-parc-urban.jpg
+SPDX-FileCopyrightText = [
+    "Copyright (C) 2018 Neuro1234",
+    "Copyright (C) 2013 https://www.pxfuel.com/",
+    "Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>",
+]
 SPDX-License-Identifier = "TBD"
 
 
