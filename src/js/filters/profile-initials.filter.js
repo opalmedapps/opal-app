@@ -14,8 +14,8 @@
      * @date 2022-10-13
      */
     function ProfileInitials() {
-        return (profile) => {
-            return `${profile?.first_name?.substr(0, 1)}${profile?.last_name?.substr(0, 1)}`
+        return profile => {
+            return profile ? `${profile?.first_name?.substr(0, 1)}${profile?.last_name?.substr(0, 1)}` : '';
         };
     }
 })();

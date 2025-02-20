@@ -25,9 +25,8 @@ SPDX-License-Identifier: Apache-2.0
         -->
         <div class="home-view--banner" style="background-image: url('./img/opal-init-photo.jpg');">
             <div class="text-center" align="center">
-                <img ng-hide="Ctrl.userInfo" src="./img/patient.png" class="image-profile-home">
-                <div class="image-profile--wrapper image-profile--wrapper--home" ng-hide="!Ctrl.userInfo">
-                    <div class="image-profile--icon image-profile--icon--home" ng-style="{'background-color': Ctrl.userInfo.color}">{{Ctrl.userInfo | profileInitials}}</div>
+                <div class="image-profile--wrapper image-profile--wrapper--home">
+                    <div class="image-profile--icon image-profile--icon--home" ng-style="{'background-color': Ctrl.userInfo.color || 'white'}">{{Ctrl.userInfo | profileInitials}}</div>
                 </div>
             </div>
             <div class="item item-text-wrap">
