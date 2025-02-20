@@ -1,3 +1,10 @@
+## [2.0.4](https://gitlab.com/opalmedapps/qplus/compare/v2.0.3...v2.0.4) (2025-02-20)
+
+
+### Bug Fixes
+
+* change the web app's landing page background to the Neuro and Montreal ([f58b7b4](https://gitlab.com/opalmedapps/qplus/commit/f58b7b4e9296982b4cef036eda94c4f6af323900))
+
 ## [2.0.3](https://gitlab.com/opalmedapps/qplus/compare/v2.0.2...v2.0.3) (2025-02-19)
 
 
