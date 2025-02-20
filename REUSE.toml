@@ -54,9 +54,8 @@ precedence = "override"
 SPDX-FileCopyrightText = [
     "Copyright (C) 2018 Neuro1234",
     "Copyright (C) 2013 https://www.pxfuel.com/",
-    "Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>",
 ]
-SPDX-License-Identifier = "TBD"
+SPDX-License-Identifier = "LicenseRef-NeuroAndMontreal"
 
 
 [[annotations]]
