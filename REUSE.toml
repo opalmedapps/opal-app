@@ -58,11 +58,11 @@ SPDX-License-Identifier = "TBD"
 
 [[annotations]]
 path = [
-    "src/img/quebec.png",
+    "src/img/fleur-de-lys-quebec.svg",
 ]
 precedence = "override"
-SPDX-FileCopyrightText = "NOASSERTION"
-SPDX-License-Identifier = "LicenseRef-FlagOfQuebec"
+SPDX-FileCopyrightText = "Copyright (C) 1948 Gouvernement du Québec"
+SPDX-License-Identifier = "LicenseRef-FleurDeLysDuQuebec"
 
 
 [[annotations]]
