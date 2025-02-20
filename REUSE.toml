@@ -53,7 +53,6 @@ precedence = "override"
 #    - https://commons.wikimedia.org/wiki/File:Montreal-canada-parc-urban.jpg
 SPDX-FileCopyrightText = [
     "Copyright (C) 2018 Neuro1234",
-    "Copyright (C) 2013 https://www.pxfuel.com/",
     "Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>",
 ]
 SPDX-License-Identifier = "CC-BY-SA-4.0"
