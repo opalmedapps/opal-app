@@ -55,7 +55,7 @@ import '../../../css/views/init-page.view.css';
 		vm.APP_VERSION = Constants.version();
 		vm.APP_BUILD_NUMBER = Constants.build();
 
-		vm.goToAboutOpal = goToAboutOpal;
+		vm.goToAboutOpal = () => initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		vm.goToRegister = goToRegister;
 		vm.goToTechnicalLegal = () => initNavigator.pushPage('views/init/technical-legal.html');
 		vm.goToPartners = goToPartners;
@@ -127,13 +127,6 @@ import '../../../css/views/init-page.view.css';
 					}
 				}
 			}, Constants.app ? 5000 : 0); // Add a delay on mobile equivalent to length of SplashScreenDelay to ensure message is not hidden by splash screen
-		}
-
-		/**
-		 * Go to About Opal
-		 */
-		function goToAboutOpal() {
-			initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		}
 
 		/**
