@@ -172,6 +172,12 @@
             // Mark down that the toast isn't being shown yet
             options.showing = false;
 
+            // Spam prevention: don't add the toast to the queue if an identical message has already been queued
+            if (toastQueue.some(toast => toast.message === options.message)) {
+                console.warn('Toast spam prevention: message blocked, already queued to display. Message:', options.message);
+                return;
+            }
+
             // Add the toast to the queue to be shown after any others that are already displaying
             toastQueue.push(options);
 
