@@ -1,3 +1,10 @@
+## [2.0.6](https://gitlab.com/opalmedapps/qplus/compare/v2.0.5...v2.0.6) (2025-02-21)
+
+
+### Bug Fixes
+
+* update "About Opal" for consistency ([4df55fb](https://gitlab.com/opalmedapps/qplus/commit/4df55fb9eeb454f067e48f08febda9cc43a35f62))
+
 ## [2.0.5](https://gitlab.com/opalmedapps/qplus/compare/v2.0.4...v2.0.5) (2025-02-21)
 
 
