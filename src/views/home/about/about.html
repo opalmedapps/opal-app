@@ -1,8 +1,9 @@
 <ons-page ng-controller="AboutController as about">
-    <generic-toolbar title="Opal" style-class="fontSizeTitle"></generic-toolbar>
-    
+    <generic-toolbar title="{{'OPAL_ABOUT'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
     <network-banner></network-banner>
     <ons-list>
+        <!-- TOUR -->
         <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTour()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -16,6 +17,7 @@
             </ons-row>
         </ons-list-item>
 
+        <!-- WEBSITE -->
         <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('opalWebsite')">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -32,6 +34,7 @@
             </ons-row>
         </ons-list-item>
 
+        <!-- CONTRIBUTE -->
         <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('donation', true)" ng-show="about.allowedModules.hasOwnProperty('CTB') && about.allowedModules['CTB']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -48,6 +51,7 @@
             </ons-row>
         </ons-list-item>
 
+        <!-- ABOUT THIS APP -->
         <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTeam()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -61,6 +65,7 @@
             </ons-row>
         </ons-list-item>
 
+        <!-- CONTACT SUPPORT -->
         <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('support', true)" ng-show="about.allowedModules.hasOwnProperty('SUP') && about.allowedModules['SUP']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -73,6 +78,32 @@
                     <ons-icon icon="ion-android-open" style="color:#ddd; margin-right: -10px" class="pull-right"
                               size="1.2em">
                     </ons-icon>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+
+        <!-- TECHNICAL / LEGAl -->
+        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTechnicalLegal()">
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <span class="fa-layers fa-2x">
+                        <!-- Gear icon -->
+                        <i class="fa-solid fa-gear" data-fa-transform="shrink-5 up-4 left-4" style="color:#CDD0D3"></i>
+                        <div>
+                            <!-- Copies of the scale icon in fa-inverse create a white cut-out border between the scale and the gear behind it -->
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-1"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-3 right-1"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-1 right-1"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-3"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-2 left-0.5"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-2 right-1.5"></i>
+                        </div>
+                        <!-- Main scale icon -->
+                        <i class="fa-solid fa-scale-balanced" data-fa-transform="shrink-4 down-2 right-0.5" style="color:#828893"></i>
+                    </span>
+                </ons-col>
+                <ons-col>
+                    <span ng-class="fontSizeTitle">{{"TECHNICAL_LEGAL"|translate}}</span>
                 </ons-col>
             </ons-row>
         </ons-list-item>

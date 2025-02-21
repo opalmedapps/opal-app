@@ -42,7 +42,7 @@
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.goToAppointments = goToAppointments;
         vm.goToCheckinAppointments = goToCheckinAppointments;
-        vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
+        vm.goToAboutOpal = goToAboutOpal;
         vm.goToPartners = goToPartners;
         vm.getPatientFirstName = getPatientFirstName;
 
@@ -227,9 +227,9 @@
         }
 
         /**
-         * @desc Go to learn about Opal page
+         * @desc Go to the About Opal page
          */
-        function gotoLearnAboutOpal() {
+        function goToAboutOpal() {
             homeNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': false});
         }
 

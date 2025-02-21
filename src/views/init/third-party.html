@@ -4,8 +4,8 @@ SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<ons-page ng-controller="AcknowledgementsController as vm" style="background-color: white">
-    <generic-toolbar title="{{'ACKNOWLEDGEMENTS' | translate}}" style-class="fontSizeTitle"></generic-toolbar>
+<ons-page ng-controller="ThirdPartyController as vm" style="background-color: white">
+    <generic-toolbar title="{{'THIRD_PARTY' | translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
     <!-- LOADING -->
     <loading-spinning-circle
@@ -14,5 +14,5 @@ SPDX-License-Identifier: Apache-2.0
     </loading-spinning-circle>
 
     <!-- LICENSE CONTENT -->
-    <div class="acknowledgements container" ng-bind-html="vm.content | trustHTML" ng-class="fontSizeDesc"></div>
+    <div class="third-party container" ng-bind-html="vm.content | trustHTML" ng-class="fontSizeDesc"></div>
 </ons-page>
