@@ -57,6 +57,7 @@ import '../../../css/views/init-page.view.css';
 
 		vm.goToAboutOpal = goToAboutOpal;
 		vm.goToRegister = goToRegister;
+		vm.goToTechnicalLegal = () => initNavigator.pushPage('views/init/technical-legal.html');
 		vm.goToPartners = goToPartners;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
