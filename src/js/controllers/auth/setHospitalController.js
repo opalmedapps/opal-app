@@ -57,7 +57,7 @@
         /**
          * @description Shows an optional message when clicking on a hospital to select it.
          *              Useful for giving a reason when a hospital is disabled.
-         * @param hospital
+         * @param {object} hospital The hospital which was selected.
          */
         function showOptionalMessage(hospital) {
             let message = hospitalMessages?.[hospital.uniqueHospitalCode]?.[language.toLowerCase()];
