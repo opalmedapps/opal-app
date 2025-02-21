@@ -112,7 +112,7 @@ p {
 @import url('./elements/input.element.css');
 @import url('./directives/pdf-view.directive.css');
 @import url('./elements/checkmark.element.css');
-@import url('./views/acknowledgements.view.css');
+@import url('./views/third-party.view.css');
 @import url('./views/questionnaires-list.view.css');
 @import url('./views/security-question.view.css');
 @import url('./views/feedback.view.css');
