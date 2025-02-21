@@ -1,6 +1,15 @@
 {
     "constants": {
-        "supportEmail": "support@example.org"
+        "supportEmail": "support@example.org",
+        "hospitalMessages": {
+            "_comment": "Entries can be added below to show a message when clicking on a hospital in the hospital selector. There can be up to one message per hospital (for each uniqueHospitalCode in app.values.js).",
+            "__comment": "Entries are optional and can be omitted to avoid displaying a message. For example, messages can be configured only for disabled hospital entries (to give an explanation).",
+
+            "<uniqueHospitalCode>": {
+                "en": "Login via this hospital is no longer available. Thank you for your understanding.",
+                "fr": "La connexion via cet hôpital n'est plus disponible. Merci de votre compréhension."
+            }
+        }
     },
     "contentLinks": {
         "termsOfUse": {

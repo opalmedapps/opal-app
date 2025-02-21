@@ -22,7 +22,6 @@
             getAllowedModulesBeforeLogin: () => Params.allowedModulesBeforeLogin,
             getHospitalAcronym: getHospitalAcronym,
             getHospitalAllowedModules: () => selectedHospital ? selectedHospital.modules : Params.allowedModulesBeforeLogin,
-            getHospitalByCode: getHospitalByCode,
             getHospitalCode: () => selectedHospital?.uniqueHospitalCode,
             getHospitalFullName: getHospitalFullName,
             getHospitalListForDisplay: getHospitalListForDisplay,
@@ -69,19 +68,23 @@
          *              and initializes the base firebase URL.
          */
         function initializeHospital() {
+            let hospital;
             const displayHospitals = getHospitalListForDisplay();
 
             // Default to the only available hospital if there's only one choice (after checking the list displayed to the user)
             if (displayHospitals.length === 1) {
-                selectedHospital = getHospitalByCode(displayHospitals[0].uniqueHospitalCode);
+                hospital = getHospitalByCode(displayHospitals[0].uniqueHospitalCode);
             }
             else {
                 // Read the previous hospital choice stored in local storage
                 const localStorageHospitalCode = window.localStorage.getItem(localStorageHospitalKey);
-                selectedHospital = getHospitalByCode(localStorageHospitalCode);
+                hospital = getHospitalByCode(localStorageHospitalCode);
             }
 
-            // Update the firebase branch
+            // Save the selection if it's a valid entry
+            if (hospital && hospital.enabled) selectedHospital = hospital;
+
+            // If a selection was initialized, update the firebase branch
             if (selectedHospital) Firebase.updateFirebaseUrl(selectedHospital.uniqueHospitalCode + '/');
         }
 
@@ -116,6 +119,7 @@
                 if (useRealName && (!entry.acronymReal || !entry.fullNameReal)) return undefined;
                 return {
                     uniqueHospitalCode: entry.uniqueHospitalCode,
+                    enabled: entry.enabled,
                     acronym: useRealName ? entry.acronymReal : entry.acronymGeneric,
                     fullName: useRealName ? entry.fullNameReal : entry.fullNameGeneric,
                 }

@@ -5,6 +5,13 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 
+## [2.0.5](https://gitlab.com/opalmedapps/qplus/compare/v2.0.4...v2.0.5) (2025-02-21)
+
+
+### Bug Fixes
+
+* add greyed-out MUHC option to the hospital list ([be5ccd7](https://gitlab.com/opalmedapps/qplus/commit/be5ccd75013465dfaa1846f2ddfb56a49b13ec77))
+
 ## [2.0.4](https://gitlab.com/opalmedapps/qplus/compare/v2.0.3...v2.0.4) (2025-02-20)
 
 

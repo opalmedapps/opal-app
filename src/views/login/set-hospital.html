@@ -12,8 +12,8 @@ SPDX-License-Identifier: Apache-2.0
                 {{"SELECT_HOSPITAL"|translate}}
             </li>
             <li class="list__item list__item--tappable" ng-repeat="(key, hospital) in vm.hospitalList">
-                <label class="radio-button radio-button--list-item">
-                    <input type="radio" value="{{hospital.uniqueHospitalCode}}" ng-change="vm.saveSelectedHospital()" ng-model="vm.selectedHospitalCode">
+                <label class="radio-button radio-button--list-item" ng-style="vm.styleHospitalDisabled(hospital)" ng-click="vm.showOptionalMessage(hospital)">
+                    <input type="radio" value="{{hospital.uniqueHospitalCode}}" ng-disabled="!hospital.enabled" ng-change="vm.saveSelectedHospital()" ng-model="vm.selectedHospitalCode">
                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                     {{hospital.fullName|translate}} ({{hospital.acronym|translate}})
                 </label>
