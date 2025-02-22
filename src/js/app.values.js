@@ -97,31 +97,31 @@
 
                 /** Multi-institutional hospital modules and codes **/
                 allowedModulesBeforeLogin: {
-                    "DIA": 0,
-                    "APT": 0,
-                    "LAB": 0,
-                    "DOC": 0,
-                    "TTM": 0,
-                    "QUE": 0,
-                    "CSQ": 0,
-                    "RES": 0,
-                    "STU": 0,
-                    "REF": 0,
-                    "RQU": 0,
-                    "CON": 0,
-                    "CHK": 0,
-                    "LAO": 1,
-                    "NTF": 0,
-                    "ANN": 0,
-                    "PAT": 0,
-                    "FEE": 0,
-                    "FFD": 0,
-                    "MAS": 0,
-                    "EDU": 0,
-                    "SUP": 1,
-                    "SMD": 0,
-                    "CTB": 1,
-                    "RFE": 0,
+                    "DIA": 0, // Diagnoses
+                    "APT": 0, // Appointments
+                    "LAB": 0, // Lab results
+                    "DOC": 0, // Documents (clinical reports)
+                    "TTM": 0, // Treating team messages
+                    "QUE": 0, // Questionnaires
+                    "CSQ": 0, // Carnet Santé Québec
+                    "RES": 0, // Research menu
+                    "STU": 0, // Research studies
+                    "REF": 0, // Research reference material
+                    "RQU": 0, // Research questionnaires
+                    "CON": 0, // Research consent forms
+                    "CHK": 0, // Check-in
+                    "ABT": 1, // About Opal
+                    "NTF": 0, // Notifications
+                    "ANN": 0, // Announcements
+                    "PAT": 0, // Parking and transport
+                    "FEE": 0, // Feedback
+                    "FFD": 0, // Find a family doctor
+                    "MAS": 0, // Québec Medical Appointment Scheduler
+                    "EDU": 0, // Clinical reference material (educational material)
+                    "SUP": 1, // Opal support
+                    "SMD": 0, // Smart devices
+                    "CTB": 1, // Contribute to Opal development
+                    "RFE": 0, // Research feedback
                 },
                 localStorageHospitalKey: 'hospital',
                 hospitalList: [
@@ -185,7 +185,7 @@
                             "RQU": 1,
                             "CON": 1,
                             "CHK": 1,
-                            "LAO": 1,
+                            "ABT": 1,
                             "NTF": 1,
                             "ANN": 1,
                             "PAT": 1,
@@ -223,7 +223,7 @@
                             "RQU": 0,
                             "CON": 0,
                             "CHK": 0,
-                            "LAO": 1,
+                            "ABT": 1,
                             "NTF": 1,
                             "ANN": 1,
                             "PAT": 1,
@@ -261,7 +261,7 @@
                             "RQU": 1,
                             "CON": 1,
                             "CHK": 1,
-                            "LAO": 1,
+                            "ABT": 1,
                             "NTF": 1,
                             "ANN": 1,
                             "PAT": 1,
@@ -299,7 +299,7 @@
                             "RQU": 1,
                             "CON": 1,
                             "CHK": 1,
-                            "LAO": 1,
+                            "ABT": 1,
                             "NTF": 1,
                             "ANN": 1,
                             "PAT": 1,

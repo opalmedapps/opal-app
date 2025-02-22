@@ -7,23 +7,23 @@
 //
 (()=>{
 	angular.module('OpalApp')
-		.controller("InitSettingsController", InitSettingsController);
+		.controller("TechnicalLegalController", TechnicalLegalController);
 
-	InitSettingsController.$inject = [
-		'Firebase', 'Navigator', 'UserPreferences', 'Constants', '$rootScope'
+	TechnicalLegalController.$inject = [
+		'Firebase', 'Navigator', 'UserPreferences', 'Constants'
 	];
 
 	/* @ngInject */
-	function InitSettingsController(Firebase, Navigator, UserPreferences, Constants, $rootScope) {
+	function TechnicalLegalController(Firebase, Navigator, UserPreferences, Constants) {
 
 		let vm = this;
 		let navigator;
 
 		vm.changeLanguage = changeLanguage;
 		vm.openPageLegal = openPageLegal;
-		vm.goToAcknowledgements = () => navigator.pushPage('views/init/acknowledgements.html');
+		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
 		vm.goToFeedback = goToFeedback;
-		vm.secureYourDeviceNotice = secureYourDeviceNotice;
+		vm.openSecurityAndPrivacy = openSecurityAndPrivacy;
 
 		activate();
 
@@ -33,10 +33,6 @@
 			navigator = Navigator.getNavigator();
 			vm.navigatorName = Navigator.getNavigatorName();
 
-			initSettings();
-		}
-
-		function initSettings() {
 			vm.authenticated = !!Firebase.getCurrentUser();
 			vm.languageSwitch = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
 			vm.currentYear = new Date().getFullYear();
@@ -57,10 +53,10 @@
 			navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'});
 		}
 
-		function secureYourDeviceNotice() {
+		function openSecurityAndPrivacy() {
 			navigator.pushPage(
 				'./views/templates/content.html',
-				{contentType: 'secureYourDevice', title: 'SECURE_YOUR_DEVICE'},
+				{contentType: 'secureYourDevice', title: 'SECURITY_AND_PRIVACY'},
 			);
 		}
 

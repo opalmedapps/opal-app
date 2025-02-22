@@ -62,7 +62,7 @@
         }
 
         function goToGeneralSettings() {
-            settingsNavigator.pushPage('./views/init/init-settings.html');
+            settingsNavigator.pushPage('./views/init/technical-legal.html');
         }
     }
 })();

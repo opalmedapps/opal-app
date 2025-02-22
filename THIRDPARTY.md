@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<!-- This file is parsed and displayed to users via acknowledgements.html. Make sure any changes made here display correctly on that page. -->
+<!-- This file is parsed and displayed to users via third-party.html. Make sure any changes made here display correctly on that page. -->
 
 # Third-Party Dependencies
 

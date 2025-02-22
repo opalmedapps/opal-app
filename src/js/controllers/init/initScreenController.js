@@ -56,9 +56,9 @@ import '../../../css/views/init-page.view.css';
 		vm.APP_VERSION = Constants.version();
 		vm.APP_BUILD_NUMBER = Constants.build();
 
-		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
+		vm.goToAboutOpal = () => initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		vm.goToRegister = goToRegister;
-		vm.goToGeneralSettings = goToGeneralSettings;
+		vm.goToTechnicalLegal = () => initNavigator.pushPage('views/init/technical-legal.html');
 		vm.goToPartners = goToPartners;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
@@ -131,25 +131,11 @@ import '../../../css/views/init-page.view.css';
 		}
 
 		/**
-		 * Go to Learn About Opal
-		 */
-		function gotoLearnAboutOpal() {
-			initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
-		}
-
-		/**
 		 * Go to registration page
 		 */
 		function goToRegister() {
 			const url = DynamicContent.getURL("registration");
 			Browser.openInternal(url);
-		}
-
-		/**
-		 * Go to general settings (About)
-		 */
-		function goToGeneralSettings() {
-			initNavigator.pushPage('./views/init/init-settings.html');
 		}
 
 		/**

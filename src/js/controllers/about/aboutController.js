@@ -34,6 +34,7 @@
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
+        vm.openTechnicalLegal = () => navigator.pushPage('views/init/technical-legal.html');
         vm.openTour = openTour;
         vm.allowedModules = {};
 
@@ -50,7 +51,7 @@
             navigator = Navigator.getNavigator();
 
             /**
-             * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
+             * about.html (About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
              * Different modules are enabled depending on whether it is called before or after login
              * the parameter isBeforeLogin determines whether the page is called before login or after
              * if the parameter isBeforeLogin is not passed, default to true
@@ -74,9 +75,6 @@
             openInExternalBrowser ? Browser.openExternal(url) : Browser.openInternal(url);
         }
 
-        /**
-         * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
-         */
         function openTour() {
             navigator.pushPage('views/home/tour/tour.html');
         }
