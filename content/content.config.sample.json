@@ -28,10 +28,6 @@
             "en": "./content/partners/en.html",
             "fr": "./content/partners/fr.html"
         },
-        "about": {
-            "en": "./content/about/en.html",
-            "fr": "./content/about/fr.html"
-        },
         "carnetSante": {
             "en": "https://carnetsante.gouv.qc.ca/portail",
             "fr": "https://carnetsante.gouv.qc.ca/portail"
