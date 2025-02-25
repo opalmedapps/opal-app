@@ -6,20 +6,23 @@
 		.controller("TechnicalLegalController", TechnicalLegalController);
 
 	TechnicalLegalController.$inject = [
-		'Firebase', 'Navigator', 'UserPreferences', 'Constants'
+		'Browser', 'Firebase', 'Navigator', 'UserPreferences', 'Constants'
 	];
 
 	/* @ngInject */
-	function TechnicalLegalController(Firebase, Navigator, UserPreferences, Constants) {
+	function TechnicalLegalController(Browser, Firebase, Navigator, UserPreferences, Constants) {
 
 		let vm = this;
 		let navigator;
 
 		vm.changeLanguage = changeLanguage;
-		vm.openPageLegal = openPageLegal;
-		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
 		vm.goToFeedback = goToFeedback;
+		vm.goToLicense = () => navigator.pushPage('views/init/license.html');
+		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
+		vm.openPageLegal = openPageLegal;
 		vm.openSecurityAndPrivacy = openSecurityAndPrivacy;
+		// TODO move to links file
+		vm.openSourceLink = () => Browser.openExternal('https://github.com/opalmedapps');
 
 		activate();
 

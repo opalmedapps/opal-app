@@ -1,32 +1,40 @@
 <ons-page ng-controller="TechnicalLegalController as init">
     <generic-toolbar title="{{'TECHNICAL_LEGAL'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
-    <ons-list class="settings-list">
-        <ons-list-item modifier = "chevron" ng-hide="init.navigatorName == 'initNavigator'" ng-click="init.goToFeedback()" ng-class="fontSizeDesc">
+    <ons-list class="settings-list" ng-class="fontSizeDesc">
+        <ons-list-item modifier = "chevron" ng-hide="init.navigatorName == 'initNavigator'" ng-click="init.goToFeedback()">
             {{"RATETHISAPP"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.openSecurityAndPrivacy()" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="init.openSecurityAndPrivacy()">
             {{"SECURITY_AND_PRIVACY"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('termsOfUse')" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('termsOfUse')">
             {{"TERMS_OF_USE"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('serviceAgreement')" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('serviceAgreement')">
             {{"SERVICE_AGREEMENT"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.goToThirdParty()" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="init.goToLicense()">
+            {{"LICENSE"|translate}}
+        </ons-list-item>
+        <ons-list-item ng-click="init.openSourceLink()">
+            {{"SOURCE_CODE"|translate}}
+            <ons-icon icon="ion-android-open" style="color:#ddd; padding: 10px 5px" class="pull-right" size="1.2em">
+            </ons-icon>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="init.goToThirdParty()">
             {{"THIRD_PARTY"|translate}}
         </ons-list-item>
     </ons-list>
 
     <br>
 
-    <ons-list  class="settings-list">
-        <ons-list-item ng-class="fontSizeDesc">
+    <ons-list class="settings-list" ng-class="fontSizeDesc">
+        <ons-list-item>
             {{"APPVERSION"|translate}}
-            <span style=" position: absolute;right: 20px;top: 0px;opacity:0.6">{{init.APP_VERSION}} ({{init.APP_BUILD_NUMBER}})</span>
+            <span class="app-version-number">{{init.APP_VERSION}} ({{init.APP_BUILD_NUMBER}})</span>
         </ons-list-item>
     </ons-list>
 
-    <p class="text-center" style="color:grey;margin-top:10px;font-size:15px">{{"OPAL_OWNERSHIP"|translate}} {{init.currentYear}}</p>
+    <p class="app-copyright text-center">{{init.currentYear}} {{"OPAL_COPYRIGHT"|translate}}</p>
 </ons-page>

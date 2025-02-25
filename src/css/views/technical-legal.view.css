@@ -1,0 +1,19 @@
+.app-copyright {
+    color: grey;
+    font-size: 15px;
+    margin: 10px;
+}
+
+.app-version-number {
+    opacity: 0.6;
+    position: absolute;
+    right: 20px;
+    top: 0;
+}
+
+/* Used by pages inside Technical / Legal */
+.untranslated-disclaimer {
+    font-family: monospace;
+    font-size: 0.8em;
+    margin-top: 10px;
+}

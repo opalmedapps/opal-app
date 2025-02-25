@@ -9,12 +9,6 @@
     overflow-wrap: break-word;
 }
 
-.third-party-pre {
-    font-family: monospace;
-    font-size: 0.8em;
-    margin-top: 10px;
-}
-
 /* Header font-size adjustments that scale with the user's chosen font size (using fontSizeDesc on the .third-party container) */
 .third-party h1 {
     font-size: 1.6em;
