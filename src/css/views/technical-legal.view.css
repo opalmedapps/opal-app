@@ -10,10 +10,3 @@
     right: 20px;
     top: 0;
 }
-
-/* Used by pages inside Technical / Legal */
-.untranslated-disclaimer {
-    font-family: monospace;
-    font-size: 0.8em;
-    margin-top: 10px;
-}

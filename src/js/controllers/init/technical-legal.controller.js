@@ -6,11 +6,11 @@
 		.controller("TechnicalLegalController", TechnicalLegalController);
 
 	TechnicalLegalController.$inject = [
-		'Browser', 'Firebase', 'Navigator', 'UserPreferences', 'Constants'
+		'Browser', 'Constants', 'DynamicContent', 'Firebase', 'Navigator', 'UserPreferences'
 	];
 
 	/* @ngInject */
-	function TechnicalLegalController(Browser, Firebase, Navigator, UserPreferences, Constants) {
+	function TechnicalLegalController(Browser, Constants, DynamicContent, Firebase, Navigator, UserPreferences) {
 
 		let vm = this;
 		let navigator;
@@ -20,9 +20,8 @@
 		vm.goToLicense = () => navigator.pushPage('views/init/license.html');
 		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
 		vm.openPageLegal = openPageLegal;
-		vm.openSecurityAndPrivacy = openSecurityAndPrivacy;
-		// TODO move to links file
-		vm.openSourceLink = () => Browser.openExternal('https://github.com/opalmedapps');
+		vm.openSecurityAndPrivacy = () => Browser.openInternal(DynamicContent.getURL('securityAndPrivacy'));
+		vm.openSourceLink = () => Browser.openExternal(DynamicContent.getURL('sourceCode'));
 
 		activate();
 
@@ -50,13 +49,6 @@
 
 		function goToFeedback() {
 			navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'});
-		}
-
-		function openSecurityAndPrivacy() {
-			navigator.pushPage(
-				'./views/templates/content.html',
-				{contentType: 'secureYourDevice', title: 'SECURITY_AND_PRIVACY'},
-			);
 		}
 
 		function openPageLegal(type) {

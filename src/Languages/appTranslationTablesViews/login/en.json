@@ -1,7 +1,8 @@
 {
   "ACCOUNT": "Account",
   "ALERT": "Alert",
-  "APPVERSION": "App Version",
+  "APP_LICENSE": "Unless otherwise stated, this software's source code is subject to the terms of the Apache License Version 2.0, a copy of which is linked below.",
+  "APP_VERSION": "App Version",
   "ATTENTION": "Attention!",
   "BACK": "Back",
   "BROWSER_OPEN_FAILED": "Error opening this link. Please try again later.",

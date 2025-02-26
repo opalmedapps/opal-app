@@ -24,6 +24,10 @@
             "en": "./content/secure-your-device/en.html",
             "fr": "./content/secure-your-device/fr.html"
         },
+        "securityAndPrivacy": {
+            "en": "https://<PRIVACY-WEBPAGE-ENGLISH>",
+            "fr": "https://<PRIVACY-WEBPAGE-FRENCH>"
+        },
         "partners": {
             "en": "./content/partners/en.html",
             "fr": "./content/partners/fr.html"
@@ -51,6 +55,10 @@
         "registration": {
             "en": "https://<REGISTRATION-WEBPAGE-ENGLISH>",
             "fr": "https://<REGISTRATION-WEBPAGE-FRENCH>"
+        },
+        "sourceCode": {
+            "en": "https://<SOURCE-CODE-REPOSITORY>",
+            "fr": "https://<SOURCE-CODE-REPOSITORY>"
         },
         "support": {
             "en": "https://<SUPPORT-WEBPAGE-ENGLISH>",

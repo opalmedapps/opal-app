@@ -53,7 +53,7 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
         let htmlContent = marked(thirdPartyLicenses);
 
         // If applicable, add a paragraph at the beginning stating that the page has not been translated
-        if (language !== 'EN') htmlContent = `<p class="untranslated-disclaimer">${$filter('translate')('UNTRANSLATED_PAGE_DISCLAIMER')}</p>
+        if (language !== 'EN') htmlContent = `<p class="third-party-pre">${$filter('translate')('UNTRANSLATED_PAGE_DISCLAIMER')}</p>
             <hr>`
             + htmlContent;
 

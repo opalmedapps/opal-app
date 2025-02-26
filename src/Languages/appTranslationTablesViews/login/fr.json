@@ -1,7 +1,8 @@
 {
   "ACCOUNT": "Réglages",
   "ALERT": "Alerte",
-  "APPVERSION": "Version de l'application",
+  "APP_LICENSE": "À moins d'indication contraire, le code source de ce logiciel est soumis aux termes de la licence Apache version 2.0, dont le lien est fourni ci-dessous.",
+  "APP_VERSION": "Version de l'application",
   "ATTENTION": "Attention!",
   "BACK": "Retour",
   "BROWSER_OPEN_FAILED": "Erreur lors de l'ouverture de ce lien. Veuillez réessayer plus tard.",

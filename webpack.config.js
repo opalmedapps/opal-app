@@ -152,11 +152,7 @@ const config = env => {
 				{
 					test: /\.png$/,
 					type: 'asset/resource'
-				},
-				{
-					test: path.join(__dirname, 'LICENSE'),
-					type: 'asset/source',
-				},
+				}
 			]
 		},
 		plugins: [

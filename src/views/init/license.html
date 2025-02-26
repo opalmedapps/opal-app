@@ -7,6 +7,9 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="LicenseController as vm" style="background-color: white">
     <generic-toolbar title="{{'LICENSE' | translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
-    <!-- LICENSE CONTENT -->
-    <div class="container" ng-bind-html="vm.content | trustHTML" ng-class="fontSizeDesc"></div>
+    <!-- LICENSE EXPLANATION -->
+    <div class="container" ng-class="fontSizeDesc" style="margin-top: 10px;">
+        <p>{{'APP_LICENSE' | translate}}</p>
+        <p><a href="{{vm.licenseLink}}" target="_blank">{{vm.licenseLink}}</a></p>
+    </div>
 </ons-page>
