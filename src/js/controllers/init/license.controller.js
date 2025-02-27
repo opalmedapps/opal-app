@@ -12,7 +12,7 @@
     licenseController.$inject = ['DynamicContent'];
 
     /**
-     * @description Parses and displays the content of LICENSE to make it visible in the app.
+     * @description Names the license that applies to our source code, and provides a link to users.
      * @author Stacey Beard
      */
     function licenseController(DynamicContent) {
