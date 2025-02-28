@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   loggerService.js
  * Description  :   Service that sends user activity logs to the server.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   23 Mar 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  *
  * Modification history:
  * 2018-11-30: Educational material logging added by Stacey Beard, based on work by Tongyou (Eason) Yang.
