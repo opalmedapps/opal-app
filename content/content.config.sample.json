@@ -20,17 +20,17 @@
             "en": "./content/service-agreement/en.html",
             "fr": "./content/service-agreement/fr.html"
         },
-        "secureYourDevice": {
-            "en": "./content/secure-your-device/en.html",
-            "fr": "./content/secure-your-device/fr.html"
+        "securityAndPrivacy": {
+            "en": "https://<PRIVACY-WEBPAGE-ENGLISH>",
+            "fr": "https://<PRIVACY-WEBPAGE-FRENCH>",
+
+            "_comment": "TODO: Using just one 'en' and one 'fr', make it possible to dynamically open either a link with Browser.openInternal, or a local page with content.html",
+            "en_temp": "./content/secure-your-device/en.html",
+            "fr_temp": "./content/secure-your-device/fr.html"
         },
         "partners": {
             "en": "./content/partners/en.html",
             "fr": "./content/partners/fr.html"
-        },
-        "about": {
-            "en": "./content/about/en.html",
-            "fr": "./content/about/fr.html"
         },
         "carnetSante": {
             "en": "https://carnetsante.gouv.qc.ca/portail",
@@ -44,6 +44,10 @@
             "en": "https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/",
             "fr": "https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-dun-medecin-de-famille"
         },
+        "license": {
+            "en": "https://www.apache.org/licenses/LICENSE-2.0",
+            "fr": "https://www.apache.org/licenses/LICENSE-2.0"
+        },
         "medicalScheduler": {
             "en": "https://www.rvsq.gouv.qc.ca/accueil/index-en.html",
             "fr": "https://www.rvsq.gouv.qc.ca/accueil/index.html"
@@ -55,6 +59,10 @@
         "registration": {
             "en": "https://<REGISTRATION-WEBPAGE-ENGLISH>",
             "fr": "https://<REGISTRATION-WEBPAGE-FRENCH>"
+        },
+        "sourceCode": {
+            "en": "https://<SOURCE-CODE-REPOSITORY>",
+            "fr": "https://<SOURCE-CODE-REPOSITORY>"
         },
         "support": {
             "en": "https://<SUPPORT-WEBPAGE-ENGLISH>",

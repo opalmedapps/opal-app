@@ -10,20 +10,22 @@
 		.controller("TechnicalLegalController", TechnicalLegalController);
 
 	TechnicalLegalController.$inject = [
-		'Firebase', 'Navigator', 'UserPreferences', 'Constants'
+		'Browser', 'Constants', 'DynamicContent', 'Firebase', 'Navigator', 'UserPreferences'
 	];
 
 	/* @ngInject */
-	function TechnicalLegalController(Firebase, Navigator, UserPreferences, Constants) {
+	function TechnicalLegalController(Browser, Constants, DynamicContent, Firebase, Navigator, UserPreferences) {
 
 		let vm = this;
 		let navigator;
 
 		vm.changeLanguage = changeLanguage;
-		vm.openPageLegal = openPageLegal;
-		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
 		vm.goToFeedback = goToFeedback;
-		vm.openSecurityAndPrivacy = openSecurityAndPrivacy;
+		vm.goToLicense = () => navigator.pushPage('views/init/license.html');
+		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
+		vm.openPageLegal = openPageLegal;
+		vm.openSecurityAndPrivacy = () => Browser.openInternal(DynamicContent.getURL('securityAndPrivacy'));
+		vm.openSourceLink = () => Browser.openExternal(DynamicContent.getURL('sourceCode'));
 
 		activate();
 
@@ -51,13 +53,6 @@
 
 		function goToFeedback() {
 			navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'});
-		}
-
-		function openSecurityAndPrivacy() {
-			navigator.pushPage(
-				'./views/templates/content.html',
-				{contentType: 'secureYourDevice', title: 'SECURITY_AND_PRIVACY'},
-			);
 		}
 
 		function openPageLegal(type) {

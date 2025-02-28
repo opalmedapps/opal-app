@@ -57,20 +57,6 @@ SPDX-License-Identifier: Apache-2.0
             </ons-row>
         </ons-list-item>
 
-        <!-- ABOUT THIS APP -->
-        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTeam()">
-            <ons-row align="center">
-                <ons-col width="60px" style="text-align: center">
-                    <div>
-                        <ons-icon icon="fa-solid fa-users" style="color:#2196F3" size="1.7em" fixed-width="true"></ons-icon>
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <span ng-class="fontSizeTitle">{{"ABOUT_APP"|translate}}</span>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
-
         <!-- CONTACT SUPPORT -->
         <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('support', true)" ng-show="about.allowedModules.hasOwnProperty('SUP') && about.allowedModules['SUP']">
             <ons-row align="center">

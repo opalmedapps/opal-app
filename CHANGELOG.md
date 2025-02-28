@@ -5,6 +5,20 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 
+## [2.0.8](https://gitlab.com/opalmedapps/qplus/compare/v2.0.7...v2.0.8) (2025-02-28)
+
+
+### Bug Fixes
+
+* add License and Source Code to Technical / Legal ([e65801e](https://gitlab.com/opalmedapps/qplus/commit/e65801ef112c5c2e67f7580f68960e5023ec121c))
+
+## [2.0.7](https://gitlab.com/opalmedapps/qplus/compare/v2.0.6...v2.0.7) (2025-02-25)
+
+
+### Bug Fixes
+
+* remove "About This App" (previously "Opal Dev Team") ([44264ca](https://gitlab.com/opalmedapps/qplus/commit/44264ca070822e8213a9a658deb912364a71bf53))
+
 ## [2.0.6](https://gitlab.com/opalmedapps/qplus/compare/v2.0.5...v2.0.6) (2025-02-21)
 
 

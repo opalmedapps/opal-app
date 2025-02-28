@@ -33,7 +33,6 @@
         var navigator = null;
 
         vm.openUrl = openUrl;
-        vm.openTeam = openTeam;
         vm.openTechnicalLegal = () => navigator.pushPage('views/init/technical-legal.html');
         vm.openTour = openTour;
         vm.allowedModules = {};
@@ -77,13 +76,6 @@
 
         function openTour() {
             navigator.pushPage('views/home/tour/tour.html');
-        }
-
-        function openTeam() {
-            navigator.pushPage(
-                './views/templates/content.html',
-                {contentType: 'about', title: 'ABOUT_APP'},
-            );
         }
     }
 })();
