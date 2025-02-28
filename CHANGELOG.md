@@ -1,3 +1,10 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+
 ## [2.0.8](https://gitlab.com/opalmedapps/qplus/compare/v2.0.7...v2.0.8) (2025-02-28)
 
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 // Removes android exports which we don't use, set by cordova plugins
 // Adapted from: https://stackoverflow.com/questions/25265908/cordova-remove-unnecessary-permissions
 

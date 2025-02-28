@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   bootstrap.js
  * Description  :   This file initializes the application on DOMContent Loaded. It must be placed in the
@@ -5,9 +9,6 @@
  *                  device loading as well as browser loading.
  * Created by   :   Robert Maglieri
  * Date         :   21 Feb 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 import angular from "angular";
  
