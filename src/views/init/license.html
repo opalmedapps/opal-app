@@ -1,0 +1,15 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="LicenseController as vm" style="background-color: white">
+    <generic-toolbar title="{{'LICENSE' | translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <!-- LICENSE EXPLANATION -->
+    <div class="container" ng-class="fontSizeDesc" style="margin-top: 10px;">
+        <p>{{'APP_LICENSE' | translate}}</p>
+        <p><a href="{{vm.licenseLink}}" target="_blank">{{vm.licenseLink}}</a></p>
+    </div>
+</ons-page>
