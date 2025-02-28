@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Angular <https://github.com/angular/bower-angular-i18n>
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: MIT
+
 // Source: https://github.com/angular/bower-angular-i18n/blob/master/angular-locale_fr-ca.js
 'use strict';
 angular.module("ngLocale", [], ["$provide", function($provide) {

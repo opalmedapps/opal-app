@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: Copyright (C) 2012-2017 the AngularUI Team, https://github.com/organizations/angular-ui/teams/291112
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: MIT
+
 // Downloaded by installing https://www.npmjs.com/package/angular-ui-bootstrap and copying "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"
 /*
  * This library has been edited.
@@ -5,7 +10,7 @@
  * To view the changes added to this file, run a diff against `ui-bootstrap-tpls-2.5.6-original.js`,
  * which is included in this project for comparison and reference purposes.
  *
- * Any changes made to this file must be summarized in the THIRDPARTY.md file included in this repository (under "angular-ui-bootstrap"), to comply with the terms of this library's license.
+ * Any changes made to this file must be summarized in the THIRDPARTY.md file included in this repository (under "angular-ui-bootstrap").
  *
  * angular-ui-bootstrap
  * https://angular-ui.github.io/bootstrap/

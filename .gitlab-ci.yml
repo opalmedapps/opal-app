@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
 # For a more human-readable description of the workflows outlined in this file, see `.docs/deployment/ci-cd.md`
 # When editing this file, please make sure to also keep `ci-cd.md` up to date.
 
@@ -310,6 +314,9 @@ include:
     inputs:
       package-file: package.json
       additional-dependencies: angular-ui-bootstrap Roboto-Font
+  # Add Reuse job: https://reuse.software/
+  - project: 'opalmedapps/engineering/ci-templates'
+    file: '/templates/jobs/Reuse.gitlab-ci.yml'
       
   # use latest template versions to run security scanning jobs also in merge request pipelines:
   # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
