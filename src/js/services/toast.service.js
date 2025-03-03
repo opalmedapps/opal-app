@@ -169,8 +169,9 @@
             // Validate input options
             if (!validateToastOptions(options)) return;
 
-            // Mark down that the toast isn't being shown yet
+            // Mark down that the toast isn't being shown yet, and give it a unique ID
             options.showing = false;
+            options.id = Math.random().toString(16).slice(2);
 
             // Spam prevention: don't add the toast to the queue if an identical message has already been queued
             if (toastQueue.some(toast => toast.message === options.message)) {
@@ -181,8 +182,11 @@
             // Add the toast to the queue to be shown after any others that are already displaying
             toastQueue.push(options);
 
-            // If the toast is the only one in the queue, display it (if not, it will display after the others)
+            // If the toast is the first to be added to the queue, display it (if not, it will display after the others)
+            // Also register a listener that will dismiss the current toast if the user clicks away
             if (toastQueue.length === 1) {
+                $timeout(() => window.addEventListener("click", dismissOnClick));
+                console.log('Dismiss on click registered');
                 showNextToastIfPossible();
             }
         }
@@ -208,6 +212,20 @@
                 showNextToastIfPossible();
             });
         }
+
+        /**
+         * @description Function to be used with the 'click' event listener to listen for clicks
+         *              and dismiss the current toast if a click is registered.
+         *              This allows users to dismiss toasts by clicking away or switching to another page.
+         */
+        function dismissOnClick() {
+            if (toastQueue[0]?.showing) {
+                console.log('CLICK hiding', toastQueue[0].id);
+                hideCustomToast(toastQueue[0]).then(dequeueAndContinue);
+            }
+        }
+
+        // TODO fix display issue (toasts getting stuck) by adding a cron that dismisses old toasts every second
 
         /**
          * @description Validates toast options to make sure they are correctly formatted.
@@ -288,20 +306,15 @@
             // Fill in any missing options for the toast message
             toast = addDefaultOptions(toast);
 
-            showCustomToast(toast).then(() => {
-                // Force a delay between toasts to ensure correct display, then show the next one
-                $timeout(() => {
-                    toastQueue.splice(0, 1); // Remove the finished toast from the queue
-                    showNextToastIfPossible(); // Recurse to show toasts until the queue is empty
-                }, 500);
-            }).catch(error => {
+            showCustomToast(toast).catch(error => {
                 console.error("An error occurred while showing a toast message: ", error, toast);
 
-                // If an error occurred, still clear the current toast and continue showing the next ones
-                $timeout(() => {
-                    toastQueue.splice(0, 1);
-                    showNextToastIfPossible();
-                }, 500);
+            }).finally(() => {
+                // On success or error, dismiss the finished toast, then show the next one (with a delay between toasts to ensure correct display)
+                // Also check that the toast being dismissed is the correct one (it could have already been dismissed by clicking away)
+                if (toastQueue[0]?.id === toast.id) {
+                    $timeout(dequeueAndContinue, 500);
+                }
             });
         }
 
@@ -339,6 +352,7 @@
          * @returns {Promise<unknown>} Resolves when the toast is done displaying (after executing its callback).
          */
         async function showCustomToast(toast) {
+            console.log('Showing', toast);
             return new Promise(resolve => {
                 // Get the toast divs
                 let toastContainer = document.getElementById("custom-toast-container");
@@ -363,20 +377,59 @@
                 // Display the toast by fading in, waiting for the duration, then fading out
                 $("#custom-toast").fadeIn(fadeTime, undefined, () => {
                     $timeout(() => {
-                        $("#custom-toast").fadeOut(fadeTime, undefined, () => {
-                            // Reset values to prevent a faulty display in case of a broken parameter on the next toast
-                            toastElement.style.color = toastParams.textColor.default;
-                            toastElement.style["background-color"] = toastParams.backgroundColor.default;
-                            toastElement.style["font-size"] = toastParams.fontSize.automaticFontSizes.loggedOut + "px";
-                            toastElement.innerHTML = toastParams.message.default;
-
-                            // If a callback was provided, call it now
-                            if (toast.callback) toast.callback();
-                            resolve();
-                        });
+                        console.log('TIME hiding', toast.id);
+                        hideCustomToast(toast).then(resolve);
                     }, toast.duration);
                 });
             });
+        }
+
+        /**
+         * @description Hides a toast message from the screen, displayed using a custom HTML/CSS component.
+         *              Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
+         *              Animations were replaced with jQuery calls.
+         * @author Stacey Beard
+         * @date 2021-09-01
+         * @param {Object} toast - An object containing toast options. Assumes that all options have a value
+         *                 (i.e. that all missing options have been filled in with defaults).
+         * @returns {Promise<unknown>} Resolves when the toast is done being hidden (after executing its callback).
+         */
+        function hideCustomToast(toast) {
+            console.log('Hiding', toast);
+            return new Promise(resolve => {
+                // The toast can only be hidden if it's currently showing
+                console.log('Hiding check:', 'Currently showing:', toastQueue[0]?.id, toastQueue[0]?.showing, '; want to hide:', toast.id, '. Verdict can hide =', toastQueue[0]?.id === toast.id && toastQueue[0].showing);
+                if (toastQueue[0]?.id === toast.id && toastQueue[0]?.showing) {
+                    let toastElement = document.getElementById("custom-toast");
+
+                    $("#custom-toast").fadeOut(fadeTime, undefined, () => {
+                        // Reset values to prevent a faulty display in case of a broken parameter on the next toast
+                        toastElement.style.color = toastParams.textColor.default;
+                        toastElement.style["background-color"] = toastParams.backgroundColor.default;
+                        toastElement.style["font-size"] = toastParams.fontSize.automaticFontSizes.loggedOut + "px";
+                        toastElement.innerHTML = toastParams.message.default;
+
+                        // If a callback was provided, call it now
+                        if (toast.callback) toast.callback();
+                        resolve();
+                    });
+                }
+                else resolve();
+            });
+        }
+
+        /**
+         * @description Removes the first toast from the queue, and continues execution by showing the next toast if possible.
+         */
+        function dequeueAndContinue() {
+            // Remove the finished toast from the queue
+            toastQueue.splice(0, 1);
+
+            // If all toasts have been cleared, turn off the listener for clicks
+            if (toastQueue.length === 0) window.removeEventListener("click", dismissOnClick);
+            console.log('Dismiss on click destroyed');
+
+            showNextToastIfPossible();
         }
 
         /**
