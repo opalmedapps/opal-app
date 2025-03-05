@@ -135,7 +135,7 @@
          *              Each toast's lifecycle follows these states, in order:
          *                - PENDING
          *                - VISIBLE
-         *                - DISMISS_REQUESTED (optional, if the users clicks to dismiss the toast; not used if a toast expires by time)
+         *                - DISMISS_REQUESTED (optional, if the user clicks to dismiss the toast; not used if a toast expires by time)
          *                - DISMISS_IN_PROGRESS
          *                - DONE
          * @author Stacey Beard

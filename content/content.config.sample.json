@@ -2,7 +2,7 @@
     "constants": {
         "supportEmail": "support@example.org",
         "hospitalMessages": {
-            "_comment": "A general message can be configured below to to display on the hospital selector page, without having to select a hospital.",
+            "_comment": "Optionally, a general message can be configured below to to display on the hospital selector page, without having to select a hospital.",
             "general": {
                 "en": "",
                 "fr": ""
