@@ -89,7 +89,15 @@ const config = env => {
 				},
 				{
 					test: /\.js$/,
-					exclude: /node_modules/,
+					// See: https://www.npmjs.com/package/babel-loader#some-files-in-my-node_modules-are-not-transpiled-for-ie-11
+					exclude: {
+						// By default, exclude all node_modules (recommended by babel-loader)
+						and: [/node_modules/],
+						not: [
+							// Use babel to transpile pdfjs, which as of v4.6.82 is written with modern syntax and crashes on old devices (e.g. on iOS 16).
+							/pdfjs-dist/,
+						]
+					},
 					use: {
 						loader: 'babel-loader',
 						options: {
