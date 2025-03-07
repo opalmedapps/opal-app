@@ -94,7 +94,7 @@ const config = env => {
 						// By default, exclude all node_modules (recommended by babel-loader)
 						and: [/node_modules/],
 						not: [
-							// Use babel to transpile pdfjs, which as of v4.6.82 is written with modern syntax and crashes on old devices (e.g. on iOS 16).
+							// Use babel to transpile pdfjs, which includes modern syntax that crashes on old devices (e.g. on iOS 16).
 							/pdfjs-dist/,
 						]
 					},
