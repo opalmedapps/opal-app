@@ -88,7 +88,7 @@ const config = env => {
 					loader: 'raw-loader',
 				},
 				{
-					test: /\.js$/,
+					test: /\.m?js$/,
 					// See: https://www.npmjs.com/package/babel-loader#some-files-in-my-node_modules-are-not-transpiled-for-ie-11
 					exclude: {
 						// By default, exclude all node_modules (recommended by babel-loader)
@@ -110,29 +110,12 @@ const config = env => {
 								}]
 							]
 						}
-					}
-				},
-				// Fix error "Can't resolve [...] in '/builds/opalmedapps/qplus/node_modules/pdfjs-dist/legacy/build' [...] The extension in the request is mandatory for it to be fully specified."
-				// See: https://stackoverflow.com/questions/69427025/programmatic-webpack-jest-esm-cant-resolve-module-without-js-file-exten
-				{
-					test: /\.m?js$/,
+					},
+					// Fix error "Can't resolve [...] in '/builds/opalmedapps/qplus/node_modules/pdfjs-dist/legacy/build' [...] The extension in the request is mandatory for it to be fully specified."
+					// See: https://stackoverflow.com/questions/69427025/programmatic-webpack-jest-esm-cant-resolve-module-without-js-file-exten
 					resolve: {
 						fullySpecified: false,
 					},
-					// TODO test
-					use: {
-						loader: 'babel-loader',
-						options: {
-							presets: ['@babel/preset-env'],
-							plugins: [
-								["@babel/plugin-transform-runtime", {
-									// Note: this option will be removed with @babel/core version 8
-									// See: https://babeljs.io/docs/babel-plugin-transform-runtime#regenerator
-									regenerator: true
-								}]
-							]
-						}
-					}
 				},
 				{
 					test: /\.css$/,
