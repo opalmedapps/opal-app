@@ -119,6 +119,20 @@ const config = env => {
 					resolve: {
 						fullySpecified: false,
 					},
+					// TODO test
+					use: {
+						loader: 'babel-loader',
+						options: {
+							presets: ['@babel/preset-env'],
+							plugins: [
+								["@babel/plugin-transform-runtime", {
+									// Note: this option will be removed with @babel/core version 8
+									// See: https://babeljs.io/docs/babel-plugin-transform-runtime#regenerator
+									regenerator: true
+								}]
+							]
+						}
+					}
 				},
 				{
 					test: /\.css$/,
