@@ -1,3 +1,10 @@
+## [2.0.11](https://gitlab.com/opalmedapps/qplus/compare/v2.0.10...v2.0.11) (2025-03-10)
+
+
+### Bug Fixes
+
+* rename Source Code to Opal Open Source Community ([6993b35](https://gitlab.com/opalmedapps/qplus/commit/6993b35c37429e94b56cb751db8a39caf67e7b8c))
+
 ## [2.0.10](https://gitlab.com/opalmedapps/qplus/compare/v2.0.9...v2.0.10) (2025-03-10)
 
 
