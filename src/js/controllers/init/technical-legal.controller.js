@@ -25,7 +25,7 @@
 		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
 		vm.openPageLegal = openPageLegal;
 		vm.openSecurityAndPrivacy = () => Browser.openInternal(DynamicContent.getURL('securityAndPrivacy'));
-		vm.openSourceLink = () => Browser.openExternal(DynamicContent.getURL('sourceCode'));
+		vm.openSourceLink = () => Browser.openExternal(DynamicContent.getURL('openSource'));
 
 		activate();
 

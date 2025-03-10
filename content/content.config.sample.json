@@ -61,13 +61,13 @@
             "en": "https://<YOUR-WEBSITE-ENGLISH>",
             "fr": "https://<YOUR-WEBSITE-FRENCH>"
         },
+        "openSource": {
+            "en": "https://www.opalmedapps.com/en/community",
+            "fr": "https://www.opalmedapps.com/communauté"
+        },
         "registration": {
             "en": "https://<REGISTRATION-WEBPAGE-ENGLISH>",
             "fr": "https://<REGISTRATION-WEBPAGE-FRENCH>"
-        },
-        "sourceCode": {
-            "en": "https://<SOURCE-CODE-REPOSITORY>",
-            "fr": "https://<SOURCE-CODE-REPOSITORY>"
         },
         "support": {
             "en": "https://<SUPPORT-WEBPAGE-ENGLISH>",
