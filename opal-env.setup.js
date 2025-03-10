@@ -150,7 +150,7 @@ class OpalEnv {
      */
     static getVersion() {
         let configFile = this.getConfigXML('./env', true);
-        return configFile.elements[0].attributes.version;
+        return configFile.elements[1].attributes.version;
     }
 
     /**
