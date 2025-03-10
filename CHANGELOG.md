@@ -1,3 +1,11 @@
+## [2.0.9](https://gitlab.com/opalmedapps/qplus/compare/v2.0.8...v2.0.9) (2025-03-10)
+
+
+### Bug Fixes
+
+* fix getVersion() setup function ([4bd0175](https://gitlab.com/opalmedapps/qplus/commit/4bd01751a8099aa75c260516851d3880fce7794f))
+* setXMLWidgetAttributeText() setup function ([29d72cb](https://gitlab.com/opalmedapps/qplus/commit/29d72cbd728e33e1e30fad946f382444a5e30a42))
+
 <!--
 SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 
