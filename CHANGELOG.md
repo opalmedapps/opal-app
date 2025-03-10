@@ -1,3 +1,10 @@
+## [2.0.10](https://gitlab.com/opalmedapps/qplus/compare/v2.0.9...v2.0.10) (2025-03-10)
+
+
+### Bug Fixes
+
+* make toast messages dismissible and add general toast to hospital page ([e9af640](https://gitlab.com/opalmedapps/qplus/commit/e9af640af9fb6006f4717f1887426d694e4f94a3))
+
 ## [2.0.9](https://gitlab.com/opalmedapps/qplus/compare/v2.0.8...v2.0.9) (2025-03-10)
 
 
