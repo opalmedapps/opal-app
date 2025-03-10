@@ -274,7 +274,7 @@ class OpalEnv {
      */
     static setXMLWidgetAttributeText(xmlObject, attributeName, newValue) {
         if (xmlObject && attributeName && newValue) {
-            xmlObject.elements[0].attributes[String(attributeName)] = String(newValue);
+            xmlObject.elements[1].attributes[String(attributeName)] = String(newValue);
         }
         return xmlObject;
     }
