@@ -88,8 +88,16 @@ const config = env => {
 					loader: 'raw-loader',
 				},
 				{
-					test: /\.js$/,
-					exclude: /node_modules/,
+					test: /\.m?js$/,
+					// See: https://www.npmjs.com/package/babel-loader#some-files-in-my-node_modules-are-not-transpiled-for-ie-11
+					exclude: {
+						// By default, exclude all node_modules (recommended by babel-loader)
+						and: [/node_modules/],
+						not: [
+							// Use babel to transpile pdfjs, which includes modern syntax that crashes on old devices (e.g. on iOS 16).
+							/pdfjs-dist/,
+						]
+					},
 					use: {
 						loader: 'babel-loader',
 						options: {
@@ -102,12 +110,9 @@ const config = env => {
 								}]
 							]
 						}
-					}
-				},
-				// Fix error "Can't resolve [...] in '/builds/opalmedapps/qplus/node_modules/pdfjs-dist/legacy/build' [...] The extension in the request is mandatory for it to be fully specified."
-				// See: https://stackoverflow.com/questions/69427025/programmatic-webpack-jest-esm-cant-resolve-module-without-js-file-exten
-				{
-					test: /\.m?js$/,
+					},
+					// Fix error "Can't resolve [...] in '/builds/opalmedapps/qplus/node_modules/pdfjs-dist/legacy/build' [...] The extension in the request is mandatory for it to be fully specified."
+					// See: https://stackoverflow.com/questions/69427025/programmatic-webpack-jest-esm-cant-resolve-module-without-js-file-exten
 					resolve: {
 						fullySpecified: false,
 					},
