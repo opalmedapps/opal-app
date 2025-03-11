@@ -1,3 +1,10 @@
+## [2.0.12](https://gitlab.com/opalmedapps/qplus/compare/v2.0.11...v2.0.12) (2025-03-11)
+
+
+### Bug Fixes
+
+* transpile pdfjs-dist with babel-loader to fix iOS 16 issue ([312d6ac](https://gitlab.com/opalmedapps/qplus/commit/312d6acb42fbe49d4d5f7cf8b038706b928da20a))
+
 ## [2.0.11](https://gitlab.com/opalmedapps/qplus/compare/v2.0.10...v2.0.11) (2025-03-10)
 
 
