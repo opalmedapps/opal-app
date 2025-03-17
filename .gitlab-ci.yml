@@ -132,6 +132,10 @@ increment version:
     - mkdir env/$ENV
     - echo "$ENV_CONFIG_JS" > env/$ENV/opal.config.js
     - echo "$ENV_GOOGLE_SERVICES" > env/$ENV/google-services.json
+    # add npmrc file with XLTS.dev registry token
+    - '[ -z "$NPMRC_FILE"] && echo "Error: environment variable NPMRC_FILE must be defined for this job" && exit 1'
+    - echo "$NPMRC_FILE" > .npmrc
+
 
 # Extended job for building the app in release mode
 .build release:
