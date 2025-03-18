@@ -1,20 +1,20 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   app.js
  * Description  :   Contains all app configurations and routes.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   July 2015
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**
  * @ngdoc overview
- * @name MUHCApp
  * @description <img src="img/Opal_Name_Logo.png" alt="Opal logo" /><br>
  A multiplatform application built using {@link https://cordova.apache.org Apache Cordova}. The main frameworks for the project are {@link https://angularjs.org/ AngularJS} framework, {@link https://onsen.io/ OnsenUI} Framework, and {@link https://cordova.apache.org Apache Cordova}
  This guide is the first version of the documentation for the Opal mobile app
- Main module for the project: {@link MUHCApp}.3
+ Main module for the project: {@link OpalApp}.3
  The external dependecies for the project: {@link ProjectDependencies}.
  **/
 
@@ -96,10 +96,6 @@ import "animate.css";
 import "../css/app.css";
 import "../css/elements/custom-toast.element.css";
 import "../Languages/angular-locales/angular-locale_en.js";
-// Fixes an issue running on an emulator and getting "Uncaught TypeError: key.split(...).at is not a function" from pdf.js
-import 'core-js/features/array/at';
-// Fixes an issue running on an emulator and getting "Uncaught TypeError: promise.withresolvers is not a function" from pdf.js
-import 'core-js/proposals/promise-with-resolvers';
 
 // Load the angular module bootstrapping script, which initializes the application
 import "./app.bootstrap";
@@ -113,7 +109,7 @@ import '@fortawesome/fontawesome-free/js/brands';
 
 //Routes for angular views
 angular
-    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate',
+    .module('OpalApp', ['tmh.dynamicLocale','pascalprecht.translate',
         'ngSanitize','ui.router','onsen','ngTouch','ui.bootstrap'])
     .run(initialization);
 
@@ -121,7 +117,6 @@ initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$transl
 
 /**
  *@ngdoc service
- *@name MUHCApp.run
  *@description Service is in charge of checking that the user is authorized at every state change by checking the parameters stored
  in the Firebase localstorage,  Check run service on angular {{link}}
  **/

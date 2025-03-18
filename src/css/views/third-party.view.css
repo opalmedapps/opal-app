@@ -1,0 +1,66 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.third-party {
+    margin-bottom: 16px;
+    overflow-wrap: break-word;
+}
+
+.third-party-pre {
+    font-family: monospace;
+    font-size: 0.8em;
+    margin-top: 10px;
+}
+
+/* Header font-size adjustments that scale with the user's chosen font size (using fontSizeDesc on the .third-party container) */
+.third-party h1 {
+    font-size: 1.6em;
+}
+.third-party h2 {
+    font-size: 1.3em;
+}
+.third-party h3 {
+    font-size: 1.2em;
+}
+.third-party h4 {
+    font-size: 1.1em;
+}
+
+/* See: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary */
+/* Show a grey border box when the details are closed */
+.third-party details {
+    background-color: #F5F5F5;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    margin-top: 14px;
+    padding: 2px 6px;
+}
+
+/* Hide the border box when the details are open */
+.third-party details[open] {
+    background-color: transparent;
+    border: none;
+}
+
+.third-party details[open] summary {
+    margin-bottom: 4px;
+}
+
+/* Arrow in front of details summary (closed) */
+.third-party details summary:before {
+    color: #444;
+    content: "▶";
+    /* The math font family allows the triangle to display on mobile (this character is not available in Roboto) */
+    font-family: math;
+    font-size: 0.7em;
+    font-weight: bold;
+    margin-right: 4px;
+}
+
+/* Arrow in front of details summary (open) */
+.third-party details[open] summary:before {
+    content: "▼";
+}

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * Created by PhpStorm.
  * User: James Brace
@@ -9,7 +13,7 @@
         'use strict';
 
         angular
-            .module('MUHCApp')
+            .module('OpalApp')
             .controller('GeneralTabController', GeneralTabController);
 
         GeneralTabController.$inject = ['$scope', 'Navigator', 'NetworkStatus', '$timeout',
@@ -107,7 +111,7 @@
             }
 
             function goToCarnetSante() {
-                const url = DynamicContent.getURL("carnet_sante");
+                const url = DynamicContent.getURL("carnetSante");
                 Browser.openInternal(url);
             }
         }

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core';
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
 import * as zxcvbnEnPackage from '@zxcvbn-ts/language-en';
@@ -8,7 +12,7 @@ import '../../css/directives/password-strength-checker.directive.css';
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("passwordStrengthChecker", passwordStrengthChecker);
 
     passwordStrengthChecker.$inject = ['Params', 'UserAuthorizationInfo'];

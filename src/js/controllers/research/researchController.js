@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   researchController.js
  * Description  :   Manages the research view.
@@ -10,7 +14,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('ResearchController', ResearchController);
 
     ResearchController.$inject = ['$scope', '$timeout', 'Navigator', 'Params', 'ProfileSelector',

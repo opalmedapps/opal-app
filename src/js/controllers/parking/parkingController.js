@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
 *Code by David Herrera May 20, 2015
 *Github: dherre3
@@ -6,7 +10,6 @@
 
 /**
  * @ngdoc controller
- * @name MUHCApp.controller:ParkingController
  * @requires Browser
  * @requires $filter
  * @requires Hospital
@@ -21,7 +24,7 @@
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .controller("ParkingController", ParkingController);
 
     ParkingController.$inject = [

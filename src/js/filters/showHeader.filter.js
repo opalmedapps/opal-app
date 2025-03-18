@@ -1,8 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .filter('showHeader', ShowHeader);
 
     /**

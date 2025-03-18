@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function() {
     'use strict';
 
@@ -7,7 +11,7 @@
      * This file is injected into the Params (src/js/app.values.js) and the constants are accessed from there.
      */
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .constant('NotificationConstants', {
             NOTIFICATION_TYPES: {
                 'Document': 'Document',

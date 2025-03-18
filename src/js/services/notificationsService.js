@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
  * Refactored by Stacey Beard on 2020-07-14 according to the JohnPapa style guide
@@ -5,19 +9,8 @@
 
 /**
  * @ngdoc service
- * @name MUHCApp.service:Notifications
  * @requires $filter
  * @requires $q
- * @requires MUHCApp.service:Announcements
- * @requires MUHCApp.service:Appointments
- * @requires MUHCApp.service:CheckInService
- * @requires MUHCApp.service:Documents
- * @requires MUHCApp.service:EducationalMaterial
- * @requires MUHCApp.service:Questionnaires
- * @requires MUHCApp.service:PatientTestResults
- * @requires MUHCApp.service:RequestToServer
- * @requires MUHCApp.service:TxTeamMessages
- * @requires MUHCApp.service:UserPreferences
  * @description API service used for patient notifications. This service is deeply linked to other services to extract
  *              information about the actual content of each notification.
  **/
@@ -25,7 +18,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Notifications', Notifications);
 
     Notifications.$inject = ['$filter','$injector','$q','Announcements','Appointments','CheckInService','Documents',
@@ -35,8 +28,6 @@
                            EducationalMaterial, PatientTestResults, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences, Params) {
         /**
          * @ngdoc property
-         * @name MUHCApp.service.#Notifications
-         * @propertyOf MUHCApp.service:Notifications
          * @description Initializing array that represents all the information for Notifications.
          *              This array is passed to appropriate controllers.
          */
@@ -44,8 +35,6 @@
 
         /**
          * @ngdoc property
-         * @name MUHCApp.service.#notificationTypes
-         * @propertyOf MUHCApp.service:Notifications
          * @description Array containing all the mappings to search the actual post for the notification, the icon,
          *              the color and the name of the field.
          *
@@ -251,7 +240,6 @@
         /**
          * @ngdoc method
          * @name setNotifications
-         * @methodOf MUHCApp.service:Notifications
          * @param {Object} notifications Notifications array that contains the new notifications
          * @description Setter method for Notifications
          **/
@@ -267,7 +255,6 @@
         /**
          *@ngdoc method
          *@name updateUserNotifications
-         *@methodOf MUHCApp.service:Notifications
          *@param {Object} notifications Finds notifications to update or adds new notifications if not found
          *@description Updates the notificationsArray with the new information contained in the notifications parameter
          **/
@@ -279,7 +266,6 @@
         /**
          * @ngdoc method
          * @name getUserNotifications
-         * @methodOf MUHCApp.service:Notifications
          * @description Getter for the Notifications array
          * @returns {Array} Notifications array
          **/
@@ -290,7 +276,6 @@
         /**
          * @ngdoc method
          * @name readNotification
-         * @methodOf MUHCApp.service:Notifications
          * @param {Number} index Index in the Notification array which belongs to the notification to be read.
          * @param {String} notification Notification to be read
          * @description Sets ReadStatus in the notification to 1, sends request to backend, and syncs with device storage
@@ -337,7 +322,6 @@
         /**
          * @ngdoc method
          * @name getNotificationPost
-         * @methodOf MUHCApp.service:Notifications
          * @param {Object} notification Notification that belongs to the post
          * @description Finds the post that belongs to a given notification by using the search service function for that post
          * @returns {Object} Returns object containing the post
@@ -364,10 +348,9 @@
         /**
          * @ngdoc method
          * @name setNotificationsLanguage
-         * @methodOf MUHCApp.service:Notifications
          * @param {Array} notifications Array with notifications
          * @description Translates the array parameter containing notifications to the appropriate preferred language
-         *              specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+         *              specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *
          *              Note: notifications that cannot be processed successfully are removed from the list of
          *              notifications passed as a parameter to this function.
@@ -406,8 +389,7 @@
         /**
          * @ngdoc method
          * @name clearNotifications
-         * @methodOf MUHCApp.service:Notifications
-         * @description Clears the service of any saved state; function used by {@link MUHCApp.service:CleanUp CleanUp}.
+         * @description Clears the service of any saved state; function used by {@link OpalApp.service:CleanUp CleanUp}.
          **/
         function clearNotifications() {
             Notifications = [];
@@ -416,7 +398,6 @@
         /**
          * @ngdoc method 
          * @name implicitlyMarkCachedNotificationAsRead
-         * @methodOf MUHCApp.service:Notifications
          * @desc Implicitly mark cached notifications as read.
          *       E.g., cached notification linked to a new/updated/canceled appointment.
          * @param {string} serNum Serial number of a category item for which a corresponding notifications is being updated.

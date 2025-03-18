@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @description Service that helps manage the Onsen navigator.
  * @author David Herrera, Summer 2016, Email:davidfherrerar@gmail.com
@@ -7,12 +11,12 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Navigator', Navigator);
 
-    Navigator.$inject = ['$timeout', 'ProfileSelector', 'UpdateUI'];
+    Navigator.$inject = ['$timeout', 'ProfileSelector'];
 
-    function Navigator($timeout, ProfileSelector, UpdateUI) {
+    function Navigator($timeout, ProfileSelector) {
         let navigator;
 
         return {
@@ -58,9 +62,8 @@
          *                              This is needed because prepop events can occur when backing out of deeper pages
          *                              in the navigation stack (e.g. a deeper page inside lab results).
          *                              An array can be used if there are multiple possible previous pages.
-         * @param {Array<string>} [categories=[]] The categories to update (force to refresh).
          **/
-        function reloadPreviousProfilePrepopHandler(previousPage, categories = []) {
+        function reloadPreviousProfilePrepopHandler(previousPage) {
             // The previousPage parameter can contain a single value or an array of possible values
             if (!Array.isArray(previousPage)) previousPage = [previousPage];
 
@@ -76,14 +79,6 @@
                     && previousPage.includes(getPageName())
                 ) {
                     ProfileSelector.loadPatientProfile(prevPageProfileID);
-
-                    // Special case for the 'NewLabResult' and 'Appointments' categories:
-                    // reload these categories in case they were already loaded.
-                    // Reload lab results in case user decides to open them through Notifications page.
-                    // Reload appointments in case user decides to open them through Home page (e.g., Upcoming appointment)
-                    let forceRefreshCategories = ['Appointments', 'PatientTestDates', 'PatientTestTypes'];
-                    let categoriesToRefresh = categories.filter(category => forceRefreshCategories.includes(category));
-                    UpdateUI.updateTimestamps(categoriesToRefresh, 0);
                 }
             }, 0);
         }

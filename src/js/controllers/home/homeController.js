@@ -1,20 +1,24 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'Navigator',
+        '$timeout', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
-        'Version', 'User', 'ProfileSelector', '$interval', 'UpdateUI', 'Permissions',
+        'Version', 'User', 'ProfileSelector', '$interval', 'Permissions',
     ];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, Navigator,
+    function HomeController($timeout, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
-        Version, User, ProfileSelector, $interval, UpdateUI, Permissions,
+        Version, User, ProfileSelector, $interval, Permissions,
     ) {
         let vm = this;
 
@@ -42,8 +46,8 @@
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.goToAppointments = goToAppointments;
         vm.goToCheckinAppointments = goToCheckinAppointments;
-        vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
-        vm.goToAcknowledgements = goToAcknowledgements;
+        vm.goToAboutOpal = goToAboutOpal;
+        vm.goToPartners = goToPartners;
         vm.getPatientFirstName = getPatientFirstName;
 
         activate();
@@ -73,7 +77,6 @@
         /**
          * @ngdoc function
          * @name bindEvents
-         * @methodOf MUHCApp.controllers.homeController
          * @description Sets up event bindings for this controller.
          */
         function bindEvents() {
@@ -228,9 +231,9 @@
         }
 
         /**
-         * @desc Go to learn about Opal page
+         * @desc Go to the About Opal page
          */
-        function gotoLearnAboutOpal() {
+        function goToAboutOpal() {
             homeNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': false});
         }
 
@@ -244,9 +247,6 @@
                 let currentPageParams = Navigator.getParameters();
                 currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                 ProfileSelector.loadPatientProfile(vm.closestAppointment.patientsernum);
-
-                // Reload 'Appointments' for the patient in care in case the appointments were already loaded
-                UpdateUI.updateTimestamps('Appointments', 0);
             }
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
@@ -259,10 +259,13 @@
         }
 
         /**
-         * @description Takes the user to the acknowledgements page.
+         * @description Takes the user to the partners page.
          */
-        function goToAcknowledgements() {
-            homeNavigator.pushPage('./views/templates/content.html', { contentType: 'acknowledgements' });
+        function goToPartners() {
+            homeNavigator.pushPage(
+                './views/templates/content.html',
+                { contentType: 'partners', title: 'PARTNERS'},
+            );
         }
 
         /**

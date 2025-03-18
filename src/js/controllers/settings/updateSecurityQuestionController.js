@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import {SecurityQuestion} from "../../models/settings/SecurityQuestion";
 import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
@@ -5,7 +9,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('UpdateSecurityQuestionController', UpdateSecurityQuestionController);
 
     UpdateSecurityQuestionController.$inject = [
@@ -79,6 +83,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                 })
                 .catch(function(err){
                     $timeout(function(){
+                        console.error(err);
                         handleLoadSecurityQuestionListRequestErr();
                         vm.loadingList = false;
                     })

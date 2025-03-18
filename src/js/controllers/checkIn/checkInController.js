@@ -1,26 +1,27 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   checkInController.js
  * Description  :   Manages user checkin to their appointments
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   27 Apr 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('CheckInController', CheckInController);
 
     CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'NativeNotification', 'Navigator', 'Params',
-        'ProfileSelector', 'RequestToServer', 'Toast', 'UpdateUI', 'User', 'UserPreferences'];
+        'ProfileSelector', 'RequestToServer', 'Toast', 'User', 'UserPreferences'];
 
     /* @ngInject */
     function CheckInController($filter, $timeout, CheckInService, NativeNotification, Navigator, Params,
-                               ProfileSelector, RequestToServer, Toast, UpdateUI, User, UserPreferences) {
+                               ProfileSelector, RequestToServer, Toast, User, UserPreferences) {
         let vm = this;
         let navigator;
 
@@ -143,9 +144,6 @@
                     currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                     ProfileSelector.loadPatientProfile(appointment.PatientSerNum);
                 }
-
-                // Reload 'Appointments' for the patient in care in case the appointments were already loaded
-                UpdateUI.updateTimestamps('Appointments', 0);
 
                 // Mark the appointment and its notification(s) as read
                 if (appointment.ReadStatus === '0') {

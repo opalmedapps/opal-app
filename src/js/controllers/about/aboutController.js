@@ -1,17 +1,17 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   aboutController.js
  * Description  :   Manages the about view.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   18 Apr 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: AboutController
  *  @description
  *
  *  Manages the about view.
@@ -20,7 +20,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('AboutController', AboutController);
 
     AboutController.$inject = ['UserPreferences', 'Navigator', 'Params', 'UserHospitalPreferences',
@@ -33,9 +33,8 @@
         var navigator = null;
 
         vm.openUrl = openUrl;
-        vm.openTeam = openTeam;
+        vm.openTechnicalLegal = () => navigator.pushPage('views/init/technical-legal.html');
         vm.openTour = openTour;
-        vm.openCedars = openCedars;
         vm.allowedModules = {};
 
         let parameters;
@@ -51,7 +50,7 @@
             navigator = Navigator.getNavigator();
 
             /**
-             * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
+             * about.html (About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
              * Different modules are enabled depending on whether it is called before or after login
              * the parameter isBeforeLogin determines whether the page is called before login or after
              * if the parameter isBeforeLogin is not passed, default to true
@@ -75,19 +74,8 @@
             openInExternalBrowser ? Browser.openExternal(url) : Browser.openInternal(url);
         }
 
-        /**
-         * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
-         */
         function openTour() {
             navigator.pushPage('views/home/tour/tour.html');
-        }
-
-        function openTeam() {
-            navigator.pushPage('views/templates/content.html', {contentType: 'hig'});
-        }
-
-        function openCedars() {
-            navigator.pushPage('views/home/about/cedars.html');
         }
     }
 })();

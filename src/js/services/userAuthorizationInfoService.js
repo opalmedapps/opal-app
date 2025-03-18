@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
@@ -5,11 +9,10 @@
 
 /**
 *@ngdoc service
-*@name MUHCApp.service:UserAuthorizationInfo
 *@description Contains all the authorization data for the user
 **/
 angular
-    .module('MUHCApp')
+    .module('OpalApp')
     .service('UserAuthorizationInfo', UserAuthorizationInfo);
 
 UserAuthorizationInfo.$inject = ['Constants'];
@@ -17,36 +20,26 @@ UserAuthorizationInfo.$inject = ['Constants'];
 function UserAuthorizationInfo(Constants) {
     /**
      *@ngdoc property
-    *@name  MUHCApp.service.#username
-    *@propertyOf MUHCApp.service:UserAuthorizationInfo
     *@description Firebase Username property 
     **/
     var username = '';
     /**
      *@ngdoc property
-    *@name  MUHCApp.service.#expires
-    *@propertyOf MUHCApp.service:UserAuthorizationInfo
     *@description Firebase Username property 
     **/
     var expires = '';
     /**
      *@ngdoc property
-    *@name  MUHCApp.service.#password
-    *@propertyOf MUHCApp.service:UserAuthorizationInfo
     *@description Hash of the user's password
     **/
     var password='';
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#email
-     *@propertyOf MUHCApp.service:UserAuthorizationInfo
      *@description Email property
      */
     var email = '';
     /**
      * @ngdoc property
-     * @name  MUHCApp.service.#trusted
-     * @propertyOf MUHCApp.service:UserAuthorizationInfo
      * @description whether the device is trusted or not
      * @type {boolean}
      */
@@ -61,7 +54,6 @@ function UserAuthorizationInfo(Constants) {
         /**
         *@ngdoc method
         *@name setUserAuthData
-        *@methodOf MUHCApp.service:UserAuthorizationInfo
         *@param {String} user Username
         *@param {String} pass Hashed of password
         *@param {String} exp  Expires
@@ -79,7 +71,6 @@ function UserAuthorizationInfo(Constants) {
         /**
         *@ngdoc method
         *@name setPassword
-        *@methodOf MUHCApp.service:UserAuthorizationInfo
         *@param {String} pass Hashed of password
         *@description Sets the user hashed password representation.
         */
@@ -92,7 +83,6 @@ function UserAuthorizationInfo(Constants) {
         /**
         *@ngdoc method
         *@name getUserAuthData
-        *@methodOf MUHCApp.service:UserAuthorizationInfo
         *@returns {Object} Returns all the properties of the service as a single object.
         */
         getUserAuthData: function () {
@@ -106,7 +96,6 @@ function UserAuthorizationInfo(Constants) {
         /**
          *@ngdoc method
          *@name setEmail
-         *@methodOf MUHCApp.service:UserAuthorizationInfo
          *@description  Sets user email
          */
         setEmail:function(Email)
@@ -116,7 +105,6 @@ function UserAuthorizationInfo(Constants) {
         /**
         *@ngdoc method
         *@name clearUserAuthorizationInfo
-        *@methodOf MUHCApp.service:UserAuthorizationInfo
         *@description Clears service
         */
         clearUserAuthorizationInfo:function()

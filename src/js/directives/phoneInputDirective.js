@@ -1,10 +1,14 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
 *Code by David Herrera May 20, 2015
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
 
-var myApp = angular.module('MUHCApp');
+var myApp = angular.module('OpalApp');
 
 myApp.directive('phoneInput', ['$filter', '$browser', function($filter, $browser) {
     return {

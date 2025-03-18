@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  *Code by David Herrera May 20, 2015
  *Github: dherre3
@@ -8,7 +12,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('MainController', MainController);
 
     MainController.$inject = ["$window", "$state", '$rootScope','Firebase','DeviceIdentifiers',
@@ -190,7 +194,7 @@
             window.addEventListener('screenshotDidTake', onScreenshotDidTake, false);
 
             function onScreenshotDidTake() {
-                if (!OPAL_CONFIG.settings.screenshotsAllowed) {
+                if (!CONFIG.settings.screenshotsAllowed) {
                     screenshotTakenModal.show();
                 }
             }
@@ -203,7 +207,7 @@
          *****************************************/
         function preventAndroidScreenshot() {
             if (Constants.app && ons.platform.isAndroid()) {
-                if (OPAL_CONFIG.settings.screenshotsAllowed) {
+                if (CONFIG.settings.screenshotsAllowed) {
                     window.plugins.preventscreenshot.enable(
                         () => console.log('Android screenshot successfully enabled'),
                         (err) => console.log('Android screenshot cannot be enabled:', err)

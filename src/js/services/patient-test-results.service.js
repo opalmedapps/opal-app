@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import { PatientTestType } from "../models/personal/test-results/PatientTestType";
 import { PatientTestResultDetailed } from "../models/personal/test-results/PatientTestResultDetailed";
 
@@ -9,7 +13,7 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 	'use strict';
 
 	angular
-		.module('MUHCApp')
+		.module('OpalApp')
 		.factory('PatientTestResults', PatientTestResults);
 
 	PatientTestResults.$inject = ["RequestToServer"];

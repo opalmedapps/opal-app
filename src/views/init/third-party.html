@@ -1,0 +1,18 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="ThirdPartyController as vm" style="background-color: white">
+    <generic-toolbar title="{{'THIRD_PARTY' | translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <!-- LOADING -->
+    <loading-spinning-circle
+            ng-show="vm.loading"
+            loading-message="{{'LOADING'|translate}}">
+    </loading-spinning-circle>
+
+    <!-- LICENSE CONTENT -->
+    <div class="third-party container" ng-bind-html="vm.content | trustHTML" ng-class="fontSizeDesc"></div>
+</ons-page>

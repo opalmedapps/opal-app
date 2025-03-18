@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * Class handlers to controller to show the test results by date
  */
@@ -154,5 +158,5 @@ class PatientTestResultsByDatetimeController {
 PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator', 'UserPreferences',
 													'$timeout', '$filter', 'UpdateUI', '$locale'];
 angular
-	.module('MUHCApp')
+	.module('OpalApp')
 	.controller('PatientTestResultsByDatetimeController', PatientTestResultsByDatetimeController);

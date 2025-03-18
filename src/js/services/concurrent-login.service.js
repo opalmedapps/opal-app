@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @description Service that manages concurrent logins in the app.
  */
@@ -5,7 +9,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('ConcurrentLogin', ConcurrentLogin);
 
     ConcurrentLogin.$inject = ['$filter','$injector','Firebase','Toast'];
@@ -59,11 +63,11 @@
          * @description If applicable (based on the environment settings), adds a listener on Firebase to detect
          *              other user logins, in order to kick out the current user if someone else logs into the same
          *              account on another device.
-         *              Note: only executes if OPAL_CONFIG.settings.kickOutConcurrentUsers is true.
+         *              Note: only executes if CONFIG.settings.kickOutConcurrentUsers is true.
          */
         function listenForConcurrentUserLogins() {
             // Only execute the rest if kickOutConcurrentUsers is true
-            if (!OPAL_CONFIG.settings.kickOutConcurrentUsers) return;
+            if (!CONFIG.settings.kickOutConcurrentUsers) return;
 
             const LogOutService = $injector.get('LogOutService');
 

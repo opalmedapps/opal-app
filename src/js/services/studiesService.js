@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   studiesService.js
  * Description  :   Service that store and manages the studies information.
@@ -6,7 +10,7 @@
  */
 (function () {
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('Studies', StudiesService);
 
     StudiesService.$inject = ['RequestToServer', '$filter', '$q', 'Params'];

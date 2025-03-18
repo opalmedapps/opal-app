@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 // The following example is well-suited for a development environment. Check each variable carefully before using in production.
 const config = {
     // The name of your app
@@ -6,10 +10,19 @@ const config = {
     env: "local",
     // Environment-specific settings
     settings: {
+        // String: URL to the external content file that is hosted on an external server.
+        // E.g., https://<YOUR-EXTERNAL-HOST>/<PATH-TO-THE-EXTERNAL-CONTENT-FILE>
+        // For testing purposes (e.g., if no external server is setup), it's possible to provide a path to
+        // a local configuration file (e.g., `./content/content.config.json`).
+        externalContentFileURL: "./content/content.config.json",
         // Boolean: whether to kick out a user when another person logs into the same user account on another device.
         kickOutConcurrentUsers: false,
-        // String: the key in the links file on DepDocs which contains a 'message of the day' URL for this environment. Leave empty if no message of the day URL has been set on DepDocs.
-        messageOfTheDayKey: "",
+        // String: the service status URL is used to display a 'service status message' to the user when they log in.
+        // Leave empty if no service status URL has been set on the external server.
+        // E.g., https://<YOUR-EXTERNAL-HOST>/<PATH-TO-THE-SERVICE-STATUS>
+        // For testing purposes (e.g., if no external server is setup), it's possible to provide a path to
+        // a local configuration file (e.g., `./content/service-status.json`).
+        serviceStatusURL: "./content/service-status.json",
         // Boolean: whether to show the app's version and build number on the front page.
         showVersionOnInit: true,
         // Boolean: whether to use real (production-ready) institution names and acronyms (such as "RI-MUHC"). If false, generic names are used.

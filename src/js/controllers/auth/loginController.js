@@ -1,18 +1,18 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   loginController.js
  * Description  :   Controller in charge of the login process using FireBase as the authentication API.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   May 20, 2015
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 import { CancelledPromiseError } from "../../models/utility/cancelled-promise-error";
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: LoginController
  *  @description
  *  Controller in charge of the login process using FireBase as the authentication API.
  */
@@ -20,7 +20,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$filter', '$rootScope', '$scope', '$state', '$timeout', '$window', 'CleanUp',
@@ -153,7 +153,6 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         /**
          * @ngdoc function
          * @name authHandler
-         * @methodOf MUHCApp.controllers.LoginController
          * @param firebaseUserCredential Firebase UserCredential object returned after login
          * @description
          * Receives an authenticated FireBase User Object and handles the next step of the logging process
@@ -206,7 +205,6 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         /**
          * @ngdoc function
          * @name loginAsTrustedUser
-         * @methodOf MUHCApp.controllers.LoginController
          * @param deviceID a string containing the user's device ID
          * @description
          * If a user has been deemed as trusted, then this allows them to skip the security question process and go straight to loading screen
@@ -257,7 +255,6 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         /**
          * @ngdoc function
          * @name loginAsUntrustedUser
-         * @methodOf MUHCApp.controllers.LoginController
          * @param deviceID a string containing the user's device ID
          * @description
          * If a user has been deemed as untrusted, then this takes the user to the security question process
@@ -299,7 +296,6 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         /**
          * @ngdoc function
          * @name handleError
-         * @methodOf MUHCApp.controllers.LoginController
          * @param error an error object
          * @description
          * Evaluates the error object it receives and displays the appropriate error message to the user
@@ -358,7 +354,6 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         /**
          * @ngdoc method
          * @name clearErrors
-         * @methodOf MUHCApp.controllers.LoginController
          * @description
          * Clears errors
          */
@@ -393,7 +388,6 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         /**
          * @ngdoc method
          * @name submit
-         * @methodOf MUHCApp.controllers.LoginController
          * @description
          * Validates a user's credentials using FireBase's API and then takes the user to the next steps
          */
@@ -416,7 +410,6 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         /**
          * @ngdoc method
          * @name goToReset
-         * @methodOf MUHCApp.controllers.LoginController
          * @description
          * Brings user to password reset screen
          */
@@ -428,7 +421,6 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         /**
          * @ngdoc method
          * @name isThereSelectedHospital
-         * @methodOf MUHCApp.controllers.LoginController
          * @description Returns whether the user has already selected a hospital.
          * @returns {boolean} True if there is a hospital selected; false otherwise.
          */

@@ -1,16 +1,16 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   appointmentController.js
  * Description  :   This file controls the individual appointment view.
  * Created by   :   James Brace
  * Date         :   25 Sept 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: AppointmentController
  *  @description
  *
  *  Manages the individual appointment detail view. It receives parameters via the Navigator service
@@ -20,7 +20,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('AppointmentController', AppointmentController);
 
     AppointmentController.$inject = ['$scope', 'Navigator', 'UserPreferences', '$timeout', 'Browser'];
@@ -89,14 +89,14 @@
         /**
          * @ngdoc method
          * @name aboutAppointment
-         * @methodOf MUHCApp.controllers.AppointmentController
          * @description
          * Takes the user to the About-This-Appointment view of the specified appointment
          */
         function moreEducationalMaterial() {
             navigator.pushPage('./views/templates/content.html', {
                 contentLink: vm.app["URL_"+ vm.language],
-                contentType: vm.app["AppointmentType_" + vm.language]
+                contentType: vm.app["AppointmentType_" + vm.language],
+                title: 'MORE_EDU_MATERIAL',
             });
             
         }

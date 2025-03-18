@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @author Stacey Beard, refactor of appointmentsService.js by David Herrera
  * @date 2024-08-27
@@ -6,7 +10,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('Appointments', Appointments);
 
     Appointments.$inject = ['$filter', 'RequestToServer'];

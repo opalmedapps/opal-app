@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 /* See: https://docs.angularjs.org/api/ng/directive/ngCloak */
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
@@ -97,6 +103,7 @@ p {
 @import url('./elements/tab-bar.element.css');
 @import url('./elements/card.element.css');
 @import url('./views/tab.view.css');
+@import url('./views/technical-legal.view.css');
 @import url('./elements/profile.element.css');
 @import url('./elements/list.element.css');
 @import url('./elements/info.element.css');
@@ -112,12 +119,14 @@ p {
 @import url('./elements/input.element.css');
 @import url('./directives/pdf-view.directive.css');
 @import url('./elements/checkmark.element.css');
+@import url('./views/third-party.view.css');
 @import url('./views/questionnaires-list.view.css');
 @import url('./views/security-question.view.css');
 @import url('./views/feedback.view.css');
 @import url('./views/forgot-password.view.css');
 @import url('./views/login.view.css');
 @import url('./views/new-password.view.css');
+@import url('./views/general.view.css');
 @import url('./views/home.view.css');
 @import url('./views/individual-appointment.view.css');
 @import url('./views/info-page-tabs.view.css');

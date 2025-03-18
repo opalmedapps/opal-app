@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
@@ -33,6 +37,16 @@
     {
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
       "groupName": "xlts angular packages"
+    },
+    // Rate-limit firebase-tools updates: first day of each month
+    {
+      "matchPackageNames": ["firebase-tools"],
+      "schedule": ["* * 1 * *"],
+    },
+    // Group plotly updates
+    {
+        "matchPackagePatterns": ["plotly"],
+        "groupName": "plotly packages",
     },
     // Group @zxcvbn-ts updates
     {

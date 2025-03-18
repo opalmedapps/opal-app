@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import initPage from "../views/navigators/initNavigator.html";
 import loadingPage from "../views/login/loading.html";
 import tabsPage from "../views/tabs/tabs.html";
@@ -7,7 +11,7 @@ import tabsPage from "../views/tabs/tabs.html";
  */
 (()=>{
 	angular
-		.module('MUHCApp')
+		.module('OpalApp')
 		.config(RoutesConfiguration);
 
 	RoutesConfiguration.$inject = ['$stateProvider', '$uiRouterProvider', '$urlServiceProvider'];

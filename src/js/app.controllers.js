@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import "./controllers/about/aboutController.js";
 import "./controllers/announcements/announcementsController.js";
 import "./controllers/announcements/announcementController.js";
@@ -20,7 +24,9 @@ import "./controllers/feedback/feedbackController.js";
 import "./controllers/home/homeController.js";
 import "./controllers/info-tab/infoTabController.js";
 import "./controllers/init/initScreenController.js";
-import "./controllers/init/initSettingsController.js";
+import "./controllers/init/license.controller.js";
+import "./controllers/init/technical-legal.controller.js";
+import "./controllers/init/third-party.controller.js";
 import "./controllers/loading/loadingController.js";
 import "./controllers/main/mainController.js";
 import "./controllers/notifications/notificationsController.js";

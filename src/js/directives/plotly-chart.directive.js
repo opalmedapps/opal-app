@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import Plotly from 'plotly.js-basic-dist-min';
 import frLocale from 'plotly.js-locales/fr';
 
@@ -14,7 +18,7 @@ Plotly.register([frLocale]);
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .directive('plotlyChart', plotlyChart);
 
     plotlyChart.$inject = ['$window', '$filter', 'UserPreferences'];

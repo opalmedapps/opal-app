@@ -1,9 +1,13 @@
+// SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import '../../css/directives/password-input.directive.css';
 (function () {
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("passwordInput", PasswordInput);
 
     /**

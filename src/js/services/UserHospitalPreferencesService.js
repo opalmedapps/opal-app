@@ -1,8 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('UserHospitalPreferences', UserHospitalPreferences);
 
     UserHospitalPreferences.$inject = ['Params', 'UserPreferences', 'Firebase'];
@@ -18,7 +22,6 @@
             getAllowedModulesBeforeLogin: () => Params.allowedModulesBeforeLogin,
             getHospitalAcronym: getHospitalAcronym,
             getHospitalAllowedModules: () => selectedHospital ? selectedHospital.modules : Params.allowedModulesBeforeLogin,
-            getHospitalByCode: getHospitalByCode,
             getHospitalCode: () => selectedHospital?.uniqueHospitalCode,
             getHospitalFullName: getHospitalFullName,
             getHospitalListForDisplay: getHospitalListForDisplay,
@@ -47,7 +50,7 @@
          */
         function getHospitalFullName() {
             if (!selectedHospital) return '';
-            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.fullNameReal : selectedHospital.fullNameGeneric;
+            return CONFIG.settings.useRealInstitutionNames ? selectedHospital.fullNameReal : selectedHospital.fullNameGeneric;
         }
 
         /**
@@ -57,7 +60,7 @@
          */
         function getHospitalAcronym() {
             if (!selectedHospital) return '';
-            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.acronymReal : selectedHospital.acronymGeneric;
+            return CONFIG.settings.useRealInstitutionNames ? selectedHospital.acronymReal : selectedHospital.acronymGeneric;
         }
 
         /**
@@ -65,11 +68,23 @@
          *              and initializes the base firebase URL.
          */
         function initializeHospital() {
-            // Read the previous hospital choice stored in local storage
-            let localStorageHospitalCode = window.localStorage.getItem(localStorageHospitalKey);
-            selectedHospital = getHospitalByCode(localStorageHospitalCode);
+            let hospital;
+            const displayHospitals = getHospitalListForDisplay();
 
-            // Update the firebase branch
+            // Default to the only available hospital if there's only one choice (after checking the list displayed to the user)
+            if (displayHospitals.length === 1) {
+                hospital = getHospitalByCode(displayHospitals[0].uniqueHospitalCode);
+            }
+            else {
+                // Read the previous hospital choice stored in local storage
+                const localStorageHospitalCode = window.localStorage.getItem(localStorageHospitalKey);
+                hospital = getHospitalByCode(localStorageHospitalCode);
+            }
+
+            // Save the selection if it's a valid entry
+            if (hospital && hospital.enabled) selectedHospital = hospital;
+
+            // If a selection was initialized, update the firebase branch
             if (selectedHospital) Firebase.updateFirebaseUrl(selectedHospital.uniqueHospitalCode + '/');
         }
 
@@ -98,12 +113,13 @@
          * @returns {{uniqueHospitalCode: string, acronym: string, fullName: string}[]} The list of hospitals for display.
          */
         function getHospitalListForDisplay() {
-            let useRealName = OPAL_CONFIG.settings.useRealInstitutionNames;
+            let useRealName = CONFIG.settings.useRealInstitutionNames;
             return hospitalList.map(entry => {
                 // Special case: ignore generic-only hospitals (those without a real name) if real hospitals are used
                 if (useRealName && (!entry.acronymReal || !entry.fullNameReal)) return undefined;
                 return {
                     uniqueHospitalCode: entry.uniqueHospitalCode,
+                    enabled: entry.enabled,
                     acronym: useRealName ? entry.acronymReal : entry.acronymGeneric,
                     fullName: useRealName ? entry.fullNameReal : entry.fullNameGeneric,
                 }

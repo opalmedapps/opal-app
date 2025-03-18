@@ -1,0 +1,77 @@
+{
+    "constants": {
+        "supportEmail": "support@example.org",
+        "hospitalMessages": {
+            "_comment": "Optionally, a general message can be configured below to to display on the hospital selector page, without having to select a hospital.",
+            "general": {
+                "en": "",
+                "fr": ""
+            },
+
+            "__comment": "Entries can be added below to show a message when clicking on a hospital in the hospital selector. There can be up to one message per hospital (for each uniqueHospitalCode in app.values.js).",
+            "___comment": "Entries are optional and can be omitted to avoid displaying a message. For example, messages can be configured only for disabled hospital entries (to give an explanation).",
+            "<uniqueHospitalCode>": {
+                "en": "Login via this hospital is no longer available. Thank you for your understanding.",
+                "fr": "La connexion via cet hôpital n'est plus disponible. Merci de votre compréhension."
+            }
+        }
+    },
+    "contentLinks": {
+        "termsOfUse": {
+            "en": "./content/terms-of-use/en.html",
+            "fr": "./content/terms-of-use/fr.html"
+        },
+        "serviceAgreement": {
+            "en": "./content/service-agreement/en.html",
+            "fr": "./content/service-agreement/fr.html"
+        },
+        "securityAndPrivacy": {
+            "en": "https://<PRIVACY-WEBPAGE-ENGLISH>",
+            "fr": "https://<PRIVACY-WEBPAGE-FRENCH>",
+
+            "_comment": "TODO: Using just one 'en' and one 'fr', make it possible to dynamically open either a link with Browser.openInternal, or a local page with content.html",
+            "en_temp": "./content/secure-your-device/en.html",
+            "fr_temp": "./content/secure-your-device/fr.html"
+        },
+        "partners": {
+            "en": "./content/partners/en.html",
+            "fr": "./content/partners/fr.html"
+        },
+        "carnetSante": {
+            "en": "https://carnetsante.gouv.qc.ca/portail",
+            "fr": "https://carnetsante.gouv.qc.ca/portail"
+        },
+        "donation": {
+            "en": "https://<DONATION-WEBPAGE-ENGLISH>",
+            "fr": "https://<DONATION-WEBPAGE-FRENCH>"
+        },
+        "findDoctor": {
+            "en": "https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/",
+            "fr": "https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-dun-medecin-de-famille"
+        },
+        "license": {
+            "en": "https://www.apache.org/licenses/LICENSE-2.0",
+            "fr": "https://www.apache.org/licenses/LICENSE-2.0"
+        },
+        "medicalScheduler": {
+            "en": "https://www.rvsq.gouv.qc.ca/accueil/index-en.html",
+            "fr": "https://www.rvsq.gouv.qc.ca/accueil/index.html"
+        },
+        "opalWebsite": {
+            "en": "https://<YOUR-WEBSITE-ENGLISH>",
+            "fr": "https://<YOUR-WEBSITE-FRENCH>"
+        },
+        "openSource": {
+            "en": "https://www.opalmedapps.com/en/community",
+            "fr": "https://www.opalmedapps.com/communauté"
+        },
+        "registration": {
+            "en": "https://<REGISTRATION-WEBPAGE-ENGLISH>",
+            "fr": "https://<REGISTRATION-WEBPAGE-FRENCH>"
+        },
+        "support": {
+            "en": "https://<SUPPORT-WEBPAGE-ENGLISH>",
+            "fr": "https://<SUPPORT-WEBPAGE-FRENCH>"
+        }
+    }
+}

@@ -1,17 +1,18 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   aboutController.spec.js
  * Description  :   Tests the aboutController
  * Created by   :   James Brace
  * Date         :   25 Sept 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 "use strict";
 describe('AboutController', function() {
     beforeEach(function() {spyOn(ons, 'isWebView').and.returnValue(true)});
-    beforeEach(module('MUHCApp'));
+    beforeEach(module('OpalApp'));
 
     var $controller;
     var controller;

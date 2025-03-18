@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function() {
     'use strict';
 
@@ -9,7 +13,7 @@
      * Note: Change this will probably break the questionnaire
      */
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .constant('QuestionnaireConstants', {
             QUESTIONNAIRE_DB_TYPE_CONVENTIONS: {
                 'DATE_TYPE_ID': 7,

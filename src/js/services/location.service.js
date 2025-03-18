@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @author Stacey Beard, based on code from checkinService.js
  */
@@ -5,7 +9,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('Location', Location);
 
     /**
@@ -39,15 +43,7 @@
          *                             less than or equal to the maximum allowed distance.
          */
         async function isInRange(targetLatitude, targetLongitude, maxDistanceMeters) {
-            let current;
-            try {
-                current = (await getCurrentPosition(geolocationOptions)).coords;
-            }
-            catch (error) {
-                console.error(error);
-                throw new Error("Failed to get the device's current position via geolocation");
-            }
-
+            let current = (await getCurrentPosition(geolocationOptions)).coords;
             let distanceMeters = 1000 * getDistanceFromLatLonInKm(current.latitude, current.longitude, targetLatitude, targetLongitude);
             return distanceMeters <= maxDistanceMeters;
         }

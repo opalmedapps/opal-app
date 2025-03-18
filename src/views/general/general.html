@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="GeneralTabController as tab" ng-device-backbutton="tab.generalDeviceBackButton()">
     <generic-toolbar title="{{'GENERAL'|translate}}" back-button="false" style-class="fontSizeTitle">
         <right-content>
@@ -66,11 +72,11 @@
             </ons-list-item>
             <ons-list-item class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('FFD') && tab.allowedModules['FFD']"
-                           ng-click="tab.goToUrl('find_doctor')">
+                           ng-click="tab.goToUrl('findDoctor')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <div class="fa-layers fa-2x" style="background-color: #0575B7; border-radius: 6px">
+                            <div class="fa-layers fa-2x rounded-icon" style="background-color: #0575B7">
                                 <i class="fa-solid fa-stethoscope" style="color: white" data-fa-transform="shrink-5 left-1"></i>
                             </div>
                         </div>
@@ -88,7 +94,7 @@
             </ons-list-item>
             <ons-list-item class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('MAS') && tab.allowedModules['MAS']"
-                           ng-click="tab.goToUrl('medical_scheduler')">
+                           ng-click="tab.goToUrl('medicalScheduler')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -116,8 +122,7 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <!-- https://commons.wikimedia.org/wiki/File:New_Quebec_flag.svg -->
-                            <img style="width: 34px; border-radius: 6px" src="./img/quebec.png">
+                            <img class="quebec-icon rounded-icon" src="./img/fleur-de-lys-quebec.svg">
                         </div>
                     </ons-col>
                     <ons-col>

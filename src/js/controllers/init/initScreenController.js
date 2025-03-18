@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   initScreenController.js
  * Description  :   Manages app initialization
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   28 Apr 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 import '../../../css/views/init-page.view.css';
@@ -14,7 +15,7 @@ import '../../../css/views/init-page.view.css';
 	'use strict';
 
 	angular
-		.module('MUHCApp')
+		.module('OpalApp')
 		.controller('InitScreenController', InitScreenController);
 
 	InitScreenController.$inject = [
@@ -51,14 +52,14 @@ import '../../../css/views/init-page.view.css';
 		vm.globalMessage = '';
 		vm.globalMessageDescription = '';
 		vm.hasShownMessageOfTheDay = false;
-		vm.OPAL_CONFIG = OPAL_CONFIG;
+		vm.CONFIG = CONFIG;
 		vm.APP_VERSION = Constants.version();
 		vm.APP_BUILD_NUMBER = Constants.build();
 
-		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
+		vm.goToAboutOpal = () => initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		vm.goToRegister = goToRegister;
-		vm.goToGeneralSettings = goToGeneralSettings;
-		vm.goToAcknowledgements = goToAcknowledgements;
+		vm.goToTechnicalLegal = () => initNavigator.pushPage('views/init/technical-legal.html');
+		vm.goToPartners = goToPartners;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
 
@@ -66,36 +67,35 @@ import '../../../css/views/init-page.view.css';
 
 		////////////////
 
-		function activate() {
+		async function activate() {
+			//Initialize language if not initialized
+			UserPreferences.initializeLanguage();
 
-			DynamicContent.ensureInitialized().then(() => {
-				// Read the Message Of The Day from [dev|qa|staging|preprod|prod|etc.]_serviceStatus_[EN|FR].php on depDocs
-				return DynamicContent.getPageContent(OPAL_CONFIG.settings.messageOfTheDayKey);
+			try {
+				await DynamicContent.ensureInitialized();
+				// Read the Service Status Message from the serviceStatusURL hosted on the external server.
+				const response = await DynamicContent.loadFromURL(CONFIG.settings.serviceStatusURL);
 
-			}).then(response => {
-				// Save the Message Of The Day
-				if (typeof response.data === "object") for (let key in response.data) {
-					if (response.data[key] !== "") {
-						$timeout(() => {
-							vm.globalMessage = key;
-							vm.globalMessageDescription = response.data[key];
-						});
-						break;
-					}
+				// Save the Service Status
+				const lang = UserPreferences.getLanguage().toLowerCase();
+				const { message = '', title } = response?.data?.[lang] || {};
+
+				if (message !== '') {
+					$timeout(() => {
+						vm.globalMessage = title;
+						vm.globalMessageDescription = message;
+					});
 				}
-			}).catch(err => {
-				if (err.code === "INIT_ERROR") Toast.showToast({
+			} catch (error) {
+				// TODO: ERROR_INIT_LINKS is not translated
+				if (error.code === "INIT_ERROR") Toast.showToast({
 					message: $filter('translate')("ERROR_INIT_LINKS"),
 				});
-				else if (err.code === "NO_PAGE_CONTENT") console.warn(`No message of the day set up for environment "${OPAL_CONFIG.env}"`);
-				else console.error("Error initializing the message of the day using DynamicContent:", err);
-			});
+				else console.error("Error initializing the service status using DynamicContent:", error);
+			}
 
 			//Add the login translation
 			$translatePartialLoader.addPart('login');
-
-			//Initialize language if not initialized
-			UserPreferences.initializeLanguage();
 
 			//Initialize hospital chosen if not initialized
 			UserHospitalPreferences.initializeHospital();
@@ -121,20 +121,13 @@ import '../../../css/views/init-page.view.css';
 						Toast.showToast({
 							message: vm.globalMessage + "\n" + vm.globalMessageDescription,
 							fontSize: 18,
-							durationWordsPerMinute: 80, // Slow down the message of the day
+							durationWordsPerMinute: 80, // Slow down the service status message
 							positionOffset: 30,
 						});
 						vm.hasShownMessageOfTheDay = true;
 					}
 				}
 			}, Constants.app ? 5000 : 0); // Add a delay on mobile equivalent to length of SplashScreenDelay to ensure message is not hidden by splash screen
-		}
-
-		/**
-		 * Go to Learn About Opal
-		 */
-		function gotoLearnAboutOpal() {
-			initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		}
 
 		/**
@@ -146,17 +139,13 @@ import '../../../css/views/init-page.view.css';
 		}
 
 		/**
-		 * Go to general settings (About)
+		 * Go to Partners
 		 */
-		function goToGeneralSettings() {
-			initNavigator.pushPage('./views/init/init-settings.html');
-		}
-
-		/**
-		 * Go to Acknowledgements
-		 */
-		function goToAcknowledgements() {
-			initNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
+		function goToPartners() {
+			initNavigator.pushPage(
+				'./views/templates/content.html',
+				{contentType: 'partners', title: 'PARTNERS'}
+			);
 		}
 
 		/**

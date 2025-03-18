@@ -1,8 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('EtekcityScaleController', EtekcityScaleController);
 
         EtekcityScaleController.$inject = [

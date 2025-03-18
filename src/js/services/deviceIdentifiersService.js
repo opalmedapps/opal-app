@@ -1,20 +1,19 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   deviceIdentifiersService.js
  * Description  :   Service that manages user device identifiers and registration ids for push notifications
  * Created by   :   Robert Maglieri 
  * Date         :   02 Mar 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
  
  
  
-var app = angular.module('MUHCApp');
+var app = angular.module('OpalApp');
 /**
  *@ngdoc service
- *@name MUHCApp.service:DeviceIdentifiers
- *@requires MUHCApp.service:RequestToServer
  *@description Service that deals with the device identifiers, sends the identifiers to backend to be used by the push notifications system.
  **/
 app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuthorizationInfo', 'EncryptionService',
@@ -22,8 +21,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
 {
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#deviceIdentifiers
-     *@propertyOf MUHCApp.service:DeviceIdentifiers
      *@description Object contains three properties registrationId, deviceUUID, and deviceType, the object is sent to the server to update the devices for a particular user.
      **/
     var deviceIdentifiers = {
@@ -36,7 +33,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         /**
          *@ngdoc method
          *@name setDeviceIdentifiers
-         *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Sets the deviceIdentifiers property.
          **/
         setDeviceIdentifiers:function(browserUUID)
@@ -52,7 +48,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         /**
          *@ngdoc method
          *@name updateRegistrationId
-         *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Sets the deviceIdentifiers property.
          **/
         updateRegistrationId:function(id)
@@ -62,7 +57,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         /**
          *@ngdoc method
          *@name sendDeviceIdentifiersToServer
-         *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Sends the device identifiers to the listener.
          *@returns {{promise: Promise, cancel: function}} Cancellable Promise.
          */
@@ -74,7 +68,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         /**
          *@ngdoc method
          *@name sendFirstTimeIdentifierToServer
-         *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Sends the device identifiers to the listener, while also requesting a security question.
          *@returns {{promise: Promise, cancel: function}} Cancellable Promise which resolves with security question data.
          **/
@@ -87,7 +80,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         /**
          *@ngdoc method
          *@name sendDevicePasswordRequest
-         *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Makes a request to the server on password reset.
          **/
         sendDevicePasswordRequest:function(email)
@@ -99,7 +91,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         /**
          *@ngdoc method
          *@name destroy
-         *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Wipes all data and local storage
          **/
         destroy: function () {

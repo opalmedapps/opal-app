@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * Created by Visual Studio.
  * User: Jinal Vyas
@@ -11,7 +15,7 @@ import "../../../css/views/tour.view.css";
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('TourController', TourController);
 
     TourController.$inject = ['$filter', '$timeout', 'DynamicContent'];
@@ -93,7 +97,7 @@ import "../../../css/views/tour.view.css";
 
         function activate() {
             // Initialize the support email value
-            let emailFromServer = DynamicContent.getConstant('support_email');
+            let emailFromServer = DynamicContent.getConstant('supportEmail');
             vm.helpEmail = emailFromServer === undefined
                 ? `{${$filter('translate')("EMAIL_LOADING_ERROR").toLowerCase()}}`
                 : emailFromServer;

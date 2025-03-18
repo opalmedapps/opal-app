@@ -1,18 +1,19 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   accountSettingsController.js
  * Description  :   Controllers that manage the account setting and subviews.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   03 Mar 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('accountSettingController', accountSettingController);
 
     accountSettingController.$inject = ['UserPreferences', '$scope', '$timeout', 'Navigator',
@@ -61,7 +62,7 @@
         }
 
         function goToGeneralSettings() {
-            settingsNavigator.pushPage('./views/init/init-settings.html');
+            settingsNavigator.pushPage('./views/init/technical-legal.html');
         }
     }
 })();

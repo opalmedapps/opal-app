@@ -1,10 +1,14 @@
+# SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
 # For a more human-readable description of the workflows outlined in this file, see `.docs/deployment/ci-cd.md`
 # When editing this file, please make sure to also keep `ci-cd.md` up to date.
 
 default:
   # run jobs on GitLab shared runners by default
   # only run those jobs that need our own build machine (macOS) specifically
-  image: node:20.18.0-alpine3.20
+  image: node:22.13.1-alpine3.21
   # Cache modules in between pipelines
   # See: https://javascript.plainenglish.io/improving-ci-performance-aka-how-to-save-your-money-31ff691360e4
   cache:
@@ -35,7 +39,7 @@ variables:
 workflow:
   rules:
     # Rules for semantic-release: do not run on commits made by semantic-release, only run on the version tags it creates
-    - if: $GITLAB_USER_NAME == "opal-release-bot" && $CI_COMMIT_BRANCH
+    - if: $GITLAB_USER_LOGIN == "opal-release-bot" && $CI_COMMIT_BRANCH
       when: never
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
 
@@ -49,6 +53,9 @@ workflow:
 
 # Project variables: the following variables must be configured in the project's CI/CD settings
 #
+# ANDROID_UPLOAD_KEY_ALIAS: The alias of the upload key in the keystore at $ANDROID_UPLOAD_KEY_PATH.
+# ANDROID_UPLOAD_KEY_PASSWORD: The password of the upload key (keystore) used to sign the app at $ANDROID_UPLOAD_KEY_PATH.
+# ANDROID_UPLOAD_KEY_PATH: Path to the Android upload signing key (keystore) used to sign the app on the build Mac.
 # ENV_CONFIG_JS_<ENV>: The contents of each environment's `opal.config.js` file.
 # ENV_GOOGLE_SERVICES_<ENV>: The contents of each environment's `google-services.json` file.
 # FIREBASE_APP_<ENV>_ANDROID: The Android App ID of each environment's firebase project.
@@ -74,6 +81,10 @@ check dependencies:
   stage: check
   rules:
     - when: always
+  before_script:
+      # add npmrc file with XLTS.dev registry token
+    - '[ -z "$NPMRC_FILE"] && echo "Error: environment variable NPMRC_FILE must be defined for this job" && exit 1'
+    - echo "$NPMRC_FILE" > .npmrc
   script:
     - npm -v
     - npm ci --cache .npm --prefer-offline
@@ -90,6 +101,9 @@ increment version:
   before_script:
     # Set semantic-release author to our own bot user for correct attribution
     - apk add --no-cache curl jq
+    # add npmrc file with XLTS.dev registry token
+    - '[ -z "$NPMRC_FILE"] && echo "Error: environment variable NPMRC_FILE must be defined for this job" && exit 1'
+    - echo "$NPMRC_FILE" > .npmrc
     # use pipe operator to be able to use a colon in the command
     - | 
       RESPONSE=$(curl -s -X GET -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" "${CI_API_V4_URL}/user")
@@ -118,6 +132,9 @@ increment version:
       # see: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
       allow_failure: true
   before_script:
+    # add npmrc file with XLTS.dev registry token
+    - '[ -z "$NPMRC_FILE"] && echo "Error: environment variable NPMRC_FILE must be defined for this job" && exit 1'
+    - echo "$NPMRC_FILE" > .npmrc
     - npm -v
     - npm ci --cache .npm --prefer-offline
     - echo "$ENV"
@@ -125,6 +142,24 @@ increment version:
     - mkdir env/$ENV
     - echo "$ENV_CONFIG_JS" > env/$ENV/opal.config.js
     - echo "$ENV_GOOGLE_SERVICES" > env/$ENV/google-services.json
+
+
+# Extended job for building the app in release mode
+.build release:
+  # Use our build Mac
+  tags:
+    - macos
+  extends: .build
+  # Override the rules from .build
+  rules:
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    # On version tags for the prod environment, release builds can be executed manually as needed
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
+      when: manual
+      # Prevent later stages from being blocked: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
+      allow_failure: true
 
 # Builds the app for Android
 build android:
@@ -141,6 +176,50 @@ build android:
     expire_in: 1 day
     paths:
       - opal-$ENV.apk
+
+# Builds and signs the app for Android with 'release' settings
+build android release (apk):
+  extends: .build release
+  script:
+    # Load aliases for zipalign and apksigner: https://gitlab.com/gitlab-org/gitlab-runner/-/issues/1083#note_3816106
+    - shopt -s expand_aliases
+    # Check that all required tools are available
+    - java -version
+    - gradle -v
+    - apksigner --version
+    # Build the apk in release mode
+    - npm run build:app:android:device:release:apk --env=$ENV
+    - mv ./platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk app-release-unsigned.apk
+    # Sign the apk
+    - zipalign -v -f -p 4 app-release-unsigned.apk app-unsigned-aligned.apk
+    - apksigner sign --ks $ANDROID_UPLOAD_KEY_PATH --ks-pass pass:$ANDROID_UPLOAD_KEY_PASSWORD --out app-release-signed.apk app-unsigned-aligned.apk
+    # Check that the apk was signed correctly
+    - apksigner verify app-release-signed.apk
+    # Prepare the artifact
+    - mv app-release-signed.apk "opal-$ENV-release-signed.apk"
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - opal-$ENV-release-signed.apk
+
+# Builds and signs an app bundle for Android with 'release' settings
+build android release (aab):
+  extends: .build release
+  script:
+    # Check that all required tools are available
+    - java -version
+    - gradle -v
+    # Build the aab in release mode
+    - npm run build:app:android:device:release --env=$ENV
+    - mv ./platforms/android/app/build/outputs/bundle/release/app-release.aab app-release-unsigned.aab
+    # Sign the aab
+    - jarsigner -verbose -sigalg SHA512withRSA -digestalg SHA512 -keystore $ANDROID_UPLOAD_KEY_PATH -storepass $ANDROID_UPLOAD_KEY_PASSWORD -signedjar app-release-signed.aab app-release-unsigned.aab $ANDROID_UPLOAD_KEY_ALIAS
+    # Prepare the artifact
+    - mv app-release-signed.aab "opal-$ENV-release-signed.aab"
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - opal-$ENV-release-signed.aab
 
 # Builds the app for iOS
 build ios:
@@ -235,7 +314,7 @@ deploy web:
         set cmd:fail-exit yes; 
         open $FTP_HOST; 
         user $FTP_USER $FTP_PASSWORD; 
-        mirror --exclude='app' --reverse --delete --verbose ./static/landingpage/ ./app/${CI_ENVIRONMENT_NAME}/;
+        mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${CI_ENVIRONMENT_NAME}/;
         mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${CI_ENVIRONMENT_NAME}/app/;
         ls -la app/${CI_ENVIRONMENT_NAME}; 
         bye
@@ -246,6 +325,9 @@ include:
     inputs:
       package-file: package.json
       additional-dependencies: angular-ui-bootstrap Roboto-Font
+  # Add Reuse job: https://reuse.software/
+  - project: 'opalmedapps/engineering/ci-templates'
+    file: '/templates/jobs/Reuse.gitlab-ci.yml'
       
   # use latest template versions to run security scanning jobs also in merge request pipelines:
   # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
@@ -269,27 +351,9 @@ secret_detection:
   needs: []
 
 # SAST Scanning Customization:
-# ensure that mobsf jobs depend on builds
 # https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
 # https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
-mobsf-android-sast:
-  needs:
-    - build android
-  rules:
-    # override rules since at the time the job is created the apk does not exist yet
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    # Automatically built for release tags only (see .build)
-    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
-
-mobsf-ios-sast:
-  needs:
-    - build ios
-  rules:
-    # override rules since at the time the job is created the apk does not exist yet
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    # Automatically built for release tags only (see .build)
-    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
 
 # DAST Scanning Customization:
 # https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/requirements.html

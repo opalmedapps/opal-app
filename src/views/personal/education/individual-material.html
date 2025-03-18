@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <!-- TODO consolidate duplicate error messages and loading wheels on this page -->
 <ons-page ng-controller="IndividualMaterialController as edu">
     <generic-toolbar title="{{edu.edumaterial.Type}}" style-class="fontSizeTitle">
@@ -31,19 +37,18 @@
             <div ng-show="edu.errorLoadingContents" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
                 <uib-alert type="{{edu.alert.type}}">{{edu.alert.message|translate}}</uib-alert>
             </div>
+
             <!-- Loading wheel while the pdf is being downloaded -->
             <loading-spinning-circle
                     ng-show="edu.loadingContents"
                     loading-message="{{'LOADINGMATERIAL'|translate}}"
                     margintop="15vh">
             </loading-spinning-circle>
-            <!-- Download image and button -->
-            <div ng-show="!edu.loadingContents" ng-click="edu.openPDF()" align="center">
-                <div>
-                    <img class="animate__animated animate__swing" style="height:175px; margin-top: 25%;" src="./img/pdf.jpeg">
-                    <h4 style="margin-top: 2%">{{"CLICKTOOPEN" | translate}}</h4>
-                </div>
-                <h3 ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</h3>
+
+            <!-- Download icon and button -->
+            <div ng-show="!edu.loadingContents" class="item" ng-click="edu.openPDF()" align="center">
+                <i class="fa-regular fa-file-pdf animate__animated animate__swing" style="color:#4282CC; margin-top:25%; font-size:100px"></i>
+                <br><ons-button ng-class="fontSizeDesc" style="margin-top:30px">{{"OPEN_PDF" | translate}}</ons-button>
             </div>
         </div>
 

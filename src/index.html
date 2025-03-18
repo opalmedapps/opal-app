@@ -1,8 +1,16 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>OPAL</title>
     <meta charset="utf-8">
+    <!-- Manifest used to configure progressive web app settings. See webpack.config.js for details (WebpackManifestPlugin) -->
+    <link rel="manifest" href="manifest.json"/>
     <!-- Cordova -->
     <script src="./cordova.js"></script>
     <!-- Immediately Accessible Functions -->
@@ -31,6 +39,8 @@
             }
         }
     </script>
+    <!-- Icon shown when installing the web app on Apple devices. See: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 
 </head>
 <body ng-cloak>

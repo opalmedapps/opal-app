@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: Copyright (C) 2012-2017 the AngularUI Team, https://github.com/organizations/angular-ui/teams/291112
+//
+// SPDX-License-Identifier: MIT
+
+
 // Downloaded by installing https://www.npmjs.com/package/angular-ui-bootstrap and copying "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"
 /*
  * angular-ui-bootstrap

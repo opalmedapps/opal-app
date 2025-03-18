@@ -1,16 +1,16 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   announcementController.js
  * Description  :   Manages the individual announcement view
  * Created by   :   James Brace
  * Date         :   25 Sept 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: IndividualAnnouncementController
  *  @description
  *
  *  Manages the individual announcement view. No public functions exist on this controller, it simply activate and renders the necessary announcement object
@@ -19,7 +19,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualAnnouncementController', IndividualAnnouncementController);
 
     IndividualAnnouncementController.$inject = [

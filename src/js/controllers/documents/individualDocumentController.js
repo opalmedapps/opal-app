@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * Created by PhpStorm.
  * User: James Brace
@@ -13,7 +17,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
     IndividualDocumentController.$inject = ['$rootScope', '$scope', 'Navigator', 'Documents', '$timeout',
@@ -159,7 +163,8 @@
                 // Set the options to send to the content controller
                 var contentOptions = {
                     contentType: docParams.AliasName_EN,
-                    contentLink: link
+                    contentLink: link,
+                    title: 'INFO',
                 };
 
                 navigator.pushPage('./views/templates/content.html', contentOptions);

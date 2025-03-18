@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * Created by PhpStorm.
  * User: James Brace
@@ -10,7 +14,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['$timeout', 'Navigator', 'NetworkStatus', 'Params',

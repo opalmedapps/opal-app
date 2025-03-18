@@ -1,0 +1,17 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.rounded-icon {
+    border-radius: 6px;
+}
+
+.quebec-icon {
+    background-color: #003DA5;
+    height: 34px;
+    object-fit: contain;
+    padding:3px;
+    width: 34px;
+}

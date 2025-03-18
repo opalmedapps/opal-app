@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   calendarController.js
  * Description  :   This file controls the displaying of appointments on the calendar and the UI interactions with it.
  * Created by   :   David Herrera
  * Date         :   May 20, 2015
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**
@@ -18,13 +19,15 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['$scope', 'Appointments', '$location', '$anchorScroll', 'Navigator', 'UserPreferences', 'Params', 'Notifications'];
+    CalendarController.$inject = ['$scope', '$timeout', 'Appointments', '$location', '$anchorScroll', 'Navigator',
+        'UserPreferences', 'Params', 'Notifications'];
 
     /* @ngInject */
-    function CalendarController($scope, Appointments, $location, $anchorScroll, Navigator, UserPreferences, Params, Notifications) {
+    function CalendarController($scope, $timeout, Appointments, $location, $anchorScroll, Navigator,
+                                UserPreferences, Params, Notifications) {
         const vm = this;
 
         let todaysTimeMilliseconds;
@@ -136,6 +139,9 @@
                 vm.todays_date = new Date();
                 vm.todays_date.setHours(0,0,0,0);
             }
+
+            // Scroll after a short delay to make sure the UI is fully loaded
+            $timeout(scrollToAnchor, 500);
         }
 
         /**
@@ -152,7 +158,7 @@
                     return 'anchorAppointments'+ ind;
                 }
             }
-            return 'firstAnchor';
+            return 'lastAnchor';
         }
 
         /**
@@ -355,7 +361,10 @@
 
         function bindEvents() {
             // Remove event listeners
-            $scope.$on('$destroy', () => navigator.off('prepop'));
+            $scope.$on('$destroy', () => {
+                $location.hash('');
+                navigator.off('prepop');
+            });
 
             // Reload user profile if appointments calendar was opened via Home tab,
             // and profile was implicitly changed.

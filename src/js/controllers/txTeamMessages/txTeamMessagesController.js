@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  *Code by David Herrera May 20, 2015
  *Github: dherre3
@@ -8,7 +12,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
     TxTeamMessagesController.$inject = ['$filter', '$timeout', 'Navigator', 'Notifications', 'Params', 'TxTeamMessages'];

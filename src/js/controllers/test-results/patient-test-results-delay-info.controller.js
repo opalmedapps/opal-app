@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file Controller for the delay info page
  */
@@ -5,7 +9,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('PatientTestResultsDelayInfoController', PatientTestResultsDelayInfoController);
 
     PatientTestResultsDelayInfoController.$inject = ['$timeout', 'Hospital', 'Params'];

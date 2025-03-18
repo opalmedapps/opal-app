@@ -1,18 +1,17 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   checkinService.js
  * Description  :   service that manages patient checkin
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   Mar 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 import { AppointmentFromBackend } from '../models/personal/appointments/AppointmentFromBackend.js';
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:CheckinService
- *@requires MUHCApp.service:RequestToServer
  *@description Service that deals with the checkin functionality for the app
  **/
 
@@ -20,7 +19,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('CheckInService', CheckInService);
 
     CheckInService.$inject = ['$filter', 'Hospital', 'Location', 'Params', 'RequestToServer'];
@@ -47,8 +46,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#state
-         *@propertyOf MUHCApp.service:CheckinService
          *@description Determines the current state of check-in for a given patient
          */
         let state = initialState;
@@ -93,7 +90,8 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
                     }
                 } catch (error) {
                     console.error(error);
-                    setCheckinState("CHECKIN_NOT_ALLOWED", appointmentsForCheckIn.length);
+                    if (error?.message === 'CHECKIN_ERROR_GEOLOCATION') setCheckinState('CHECKIN_ERROR_GEOLOCATION', appointmentsForCheckIn.length);
+                    else setCheckinState("CHECKIN_NOT_ALLOWED", appointmentsForCheckIn.length);
                 }
             }
             return state;
@@ -148,6 +146,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
                     state.noAppointments = false;
                     state.allCheckedIn = false;
                     break;
+                case "CHECKIN_ERROR_GEOLOCATION":
                 case "CHECKIN_NOT_ALLOWED":
                     state.canNavigate = false;
                     state.numberOfAppts = numAppointments;
@@ -181,8 +180,8 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
 
             // If any promise rejected, throw a new error, otherwise, return true if at least one site is in range
             if (results.some(result => result?.status === 'rejected')) {
-                console.error('Geolocation error', results);
-                throw new Error("Failed to get geolocation information for check-in");
+                console.error('Geolocation error', results.map(result => result.reason));
+                throw new Error('CHECKIN_ERROR_GEOLOCATION');
             }
             return results.some(result => result?.value === true);
         }
@@ -190,7 +189,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
         /**
          *@ngdoc method
          *@name checkInToAllAppointments
-         *@methodOf MUHCApp.service:CheckinService
          *@description Checks in a patient for all their appointments today.
          *@returns {Promise} Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.
          **/

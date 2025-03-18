@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 class PatientTestResultsByTypeController {
 	/**
 	 * @type {string}
@@ -184,7 +188,7 @@ class PatientTestResultsByTypeController {
 }
 
 angular
-	.module('MUHCApp')
+	.module('OpalApp')
 	.controller('PatientTestResultsByTypeController', PatientTestResultsByTypeController);
 
 PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences',

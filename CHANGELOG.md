@@ -1,3 +1,268 @@
+## [2.0.12](https://gitlab.com/opalmedapps/qplus/compare/v2.0.11...v2.0.12) (2025-03-11)
+
+
+### Bug Fixes
+
+* transpile pdfjs-dist with babel-loader to fix iOS 16 issue ([312d6ac](https://gitlab.com/opalmedapps/qplus/commit/312d6acb42fbe49d4d5f7cf8b038706b928da20a))
+
+## [2.0.11](https://gitlab.com/opalmedapps/qplus/compare/v2.0.10...v2.0.11) (2025-03-10)
+
+
+### Bug Fixes
+
+* rename Source Code to Opal Open Source Community ([6993b35](https://gitlab.com/opalmedapps/qplus/commit/6993b35c37429e94b56cb751db8a39caf67e7b8c))
+
+## [2.0.10](https://gitlab.com/opalmedapps/qplus/compare/v2.0.9...v2.0.10) (2025-03-10)
+
+
+### Bug Fixes
+
+* make toast messages dismissible and add general toast to hospital page ([e9af640](https://gitlab.com/opalmedapps/qplus/commit/e9af640af9fb6006f4717f1887426d694e4f94a3))
+
+## [2.0.9](https://gitlab.com/opalmedapps/qplus/compare/v2.0.8...v2.0.9) (2025-03-10)
+
+
+### Bug Fixes
+
+* fix getVersion() setup function ([4bd0175](https://gitlab.com/opalmedapps/qplus/commit/4bd01751a8099aa75c260516851d3880fce7794f))
+* setXMLWidgetAttributeText() setup function ([29d72cb](https://gitlab.com/opalmedapps/qplus/commit/29d72cbd728e33e1e30fad946f382444a5e30a42))
+
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+
+## [2.0.8](https://gitlab.com/opalmedapps/qplus/compare/v2.0.7...v2.0.8) (2025-02-28)
+
+
+### Bug Fixes
+
+* add License and Source Code to Technical / Legal ([e65801e](https://gitlab.com/opalmedapps/qplus/commit/e65801ef112c5c2e67f7580f68960e5023ec121c))
+
+## [2.0.7](https://gitlab.com/opalmedapps/qplus/compare/v2.0.6...v2.0.7) (2025-02-25)
+
+
+### Bug Fixes
+
+* remove "About This App" (previously "Opal Dev Team") ([44264ca](https://gitlab.com/opalmedapps/qplus/commit/44264ca070822e8213a9a658deb912364a71bf53))
+
+## [2.0.6](https://gitlab.com/opalmedapps/qplus/compare/v2.0.5...v2.0.6) (2025-02-21)
+
+
+### Bug Fixes
+
+* update "About Opal" for consistency ([4df55fb](https://gitlab.com/opalmedapps/qplus/commit/4df55fb9eeb454f067e48f08febda9cc43a35f62))
+
+## [2.0.5](https://gitlab.com/opalmedapps/qplus/compare/v2.0.4...v2.0.5) (2025-02-21)
+
+
+### Bug Fixes
+
+* add greyed-out MUHC option to the hospital list ([be5ccd7](https://gitlab.com/opalmedapps/qplus/commit/be5ccd75013465dfaa1846f2ddfb56a49b13ec77))
+
+## [2.0.4](https://gitlab.com/opalmedapps/qplus/compare/v2.0.3...v2.0.4) (2025-02-20)
+
+
+### Bug Fixes
+
+* change the web app's landing page background to the Neuro and Montreal ([f58b7b4](https://gitlab.com/opalmedapps/qplus/commit/f58b7b4e9296982b4cef036eda94c4f6af323900))
+
+## [2.0.3](https://gitlab.com/opalmedapps/qplus/compare/v2.0.2...v2.0.3) (2025-02-19)
+
+
+### Bug Fixes
+
+* replace quebec fleur-de-lys with svg and update its blue background ([5eef4df](https://gitlab.com/opalmedapps/qplus/commit/5eef4df3e375c89d14666bd4e278eaeeffa12d79))
+
+## [2.0.2](https://gitlab.com/opalmedapps/qplus/compare/v2.0.1...v2.0.2) (2025-02-14)
+
+
+### Bug Fixes
+
+* add Opal Demo 1 and 2 to the hospital list ([bc826e8](https://gitlab.com/opalmedapps/qplus/commit/bc826e8f85dcfba78835990583130756de86a921))
+
+## [2.0.1](https://gitlab.com/opalmedapps/qplus/compare/v2.0.0...v2.0.1) (2025-02-13)
+
+
+### Bug Fixes
+
+* replace pdf image in reference materials with an icon ([7172685](https://gitlab.com/opalmedapps/qplus/commit/7172685ab664404d00c0fc8f4be5d7a8bc0f5f97))
+
+# [2.0.0](https://gitlab.com/opalmedapps/qplus/compare/v1.37.33...v2.0.0) (2025-02-07)
+
+
+### major
+
+* bump version to 2.0.0 ([573cc67](https://gitlab.com/opalmedapps/qplus/commit/573cc67d8c9a4f1e43b745e86bf09df7b6a06cf9))
+
+
+### BREAKING CHANGES
+
+* bump app version to 2.0.0
+
+## [1.37.33](https://gitlab.com/opalmedapps/qplus/compare/v1.37.32...v1.37.33) (2025-02-06)
+
+
+### Bug Fixes
+
+* rename the current production hospital to the Neuro ([64d2c7c](https://gitlab.com/opalmedapps/qplus/commit/64d2c7ca89189e30329ebfaa75f9b1ade9d3a700))
+
+## [1.37.32](https://gitlab.com/opalmedapps/qplus/compare/v1.37.31...v1.37.32) (2025-01-30)
+
+
+### Bug Fixes
+
+* **deps:** update babel monorepo to v7.26.7 (patch) ([33e8353](https://gitlab.com/opalmedapps/qplus/commit/33e835328ae833b5e8f2cabc096eaf7ad261defa))
+
+## [1.37.31](https://gitlab.com/opalmedapps/qplus/compare/v1.37.30...v1.37.31) (2025-01-29)
+
+
+### Bug Fixes
+
+* display third party licenses on a new page ([df8fa36](https://gitlab.com/opalmedapps/qplus/commit/df8fa36c16b12077a8cf057ea7889b82b7f11c86))
+
+## [1.37.30](https://gitlab.com/opalmedapps/qplus/compare/v1.37.29...v1.37.30) (2025-01-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v11.2.0 ([a5153ff](https://gitlab.com/opalmedapps/qplus/commit/a5153ff0e24715483d3a25b95cc11b7f97798803))
+
+## [1.37.29](https://gitlab.com/opalmedapps/qplus/compare/v1.37.28...v1.37.29) (2025-01-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @havesource/cordova-plugin-push to v5 ([754d775](https://gitlab.com/opalmedapps/qplus/commit/754d775b780dcd79e8d57a9d56633832b8bb3534))
+
+## [1.37.28](https://gitlab.com/opalmedapps/qplus/compare/v1.37.27...v1.37.28) (2025-01-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v11 ([7534fe1](https://gitlab.com/opalmedapps/qplus/commit/7534fe18d4b84936b16f137a0db2b0a86ba05c41))
+
+## [1.37.27](https://gitlab.com/opalmedapps/qplus/compare/v1.37.26...v1.37.27) (2025-01-14)
+
+
+### Bug Fixes
+
+* **deps:** update plotly packages to v2.35.3 (patch) ([26cc758](https://gitlab.com/opalmedapps/qplus/commit/26cc7589abbd72c6c115758a2a15f4065b189c30))
+
+## [1.37.26](https://gitlab.com/opalmedapps/qplus/compare/v1.37.25...v1.37.26) (2025-01-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pdfjs-dist to v4.10.38 ([7b6c8de](https://gitlab.com/opalmedapps/qplus/commit/7b6c8de56bf24d62879f358d15d6cccd4b660359))
+
+## [1.37.25](https://gitlab.com/opalmedapps/qplus/compare/v1.37.24...v1.37.25) (2025-01-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/fontawesome-free to v6.7.2 ([f9b938b](https://gitlab.com/opalmedapps/qplus/commit/f9b938b7f354085ac13f56916830b66f343fba60))
+
+## [1.37.24](https://gitlab.com/opalmedapps/qplus/compare/v1.37.23...v1.37.24) (2025-01-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-file to v8.1.3 ([5b736e1](https://gitlab.com/opalmedapps/qplus/commit/5b736e1dcd08f4a7ed34a78bed3fb770342450a5))
+
+## [1.37.23](https://gitlab.com/opalmedapps/qplus/compare/v1.37.22...v1.37.23) (2025-01-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-ble-central to v1.7.8 ([31822a5](https://gitlab.com/opalmedapps/qplus/commit/31822a573269eeb3c8e7bce5abe7dcadeabea0ce))
+
+## [1.37.22](https://gitlab.com/opalmedapps/qplus/compare/v1.37.21...v1.37.22) (2025-01-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-ios to v7.1.1 ([393cc74](https://gitlab.com/opalmedapps/qplus/commit/393cc74ed1371f26a577c67ec64fbebc8ab3d559))
+
+## [1.37.21](https://gitlab.com/opalmedapps/qplus/compare/v1.37.20...v1.37.21) (2025-01-08)
+
+
+### Bug Fixes
+
+* fix calendar anchor scrolling ([42f502f](https://gitlab.com/opalmedapps/qplus/commit/42f502f1796cf7f2fb42360aaea8203af28cf4e2))
+
+## [1.37.20](https://gitlab.com/opalmedapps/qplus/compare/v1.37.19...v1.37.20) (2025-01-07)
+
+
+### Bug Fixes
+
+* fix display of labs disclaimer icon ([6272236](https://gitlab.com/opalmedapps/qplus/commit/6272236acc586b367d17651dcd41837ecb820dd8))
+
+## [1.37.19](https://gitlab.com/opalmedapps/qplus/compare/v1.37.18...v1.37.19) (2024-12-17)
+
+
+### Bug Fixes
+
+* add check-in geolocation error message ([11e7c30](https://gitlab.com/opalmedapps/qplus/commit/11e7c305f449d0a3a0e59e192078386d6dd55072))
+
+## [1.37.18](https://gitlab.com/opalmedapps/qplus/compare/v1.37.17...v1.37.18) (2024-12-13)
+
+
+### Bug Fixes
+
+* auto-select hospital if there's only one available choice ([9c155d5](https://gitlab.com/opalmedapps/qplus/commit/9c155d5d2d7ce657c2f9b0b96df77edc8a98b956))
+
+## [1.37.17](https://gitlab.com/opalmedapps/qplus/compare/v1.37.16...v1.37.17) (2024-12-11)
+
+
+### Bug Fixes
+
+* show completed date instead of last updated for completed questionnaires ([7e47b1e](https://gitlab.com/opalmedapps/qplus/commit/7e47b1e0e8579e320892f818764ef850074f203b))
+
+## [1.37.16](https://gitlab.com/opalmedapps/qplus/compare/v1.37.15...v1.37.16) (2024-12-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pdfjs-dist to v4.9.155 ([a898c69](https://gitlab.com/opalmedapps/qplus/commit/a898c694e33300e114089c2380f335c3e781c5c7))
+
+## [1.37.15](https://gitlab.com/opalmedapps/qplus/compare/v1.37.14...v1.37.15) (2024-12-05)
+
+
+### Bug Fixes
+
+* improve error handling on password change page ([32a31a7](https://gitlab.com/opalmedapps/qplus/commit/32a31a76ea176c35e4e4258fc2b8cbf749d1260f))
+
+## [1.37.14](https://gitlab.com/opalmedapps/qplus/compare/v1.37.13...v1.37.14) (2024-12-03)
+
+
+### Bug Fixes
+
+* clear categorical data during implicit profile change ([0b1bb50](https://gitlab.com/opalmedapps/qplus/commit/0b1bb509023eacac25f7ef5074c2bc7bc48002cf))
+
+## [1.37.13](https://gitlab.com/opalmedapps/qplus/compare/v1.37.12...v1.37.13) (2024-12-02)
+
+
+### Bug Fixes
+
+* update RequestToServer to catch permission denied errors ([38f21e4](https://gitlab.com/opalmedapps/qplus/commit/38f21e42be55738de95425fd81f7698a24211f38))
+
+## [1.37.12](https://gitlab.com/opalmedapps/qplus/compare/v1.37.11...v1.37.12) (2024-11-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency babel-loader to v9.2.1 ([30e4fe5](https://gitlab.com/opalmedapps/qplus/commit/30e4fe53013e130dbfcbeacabb0169499a7bb76d))
+
+## [1.37.11](https://gitlab.com/opalmedapps/qplus/compare/v1.37.10...v1.37.11) (2024-11-20)
+
+
+### Bug Fixes
+
+* add progressive web app configurations ([a445b06](https://gitlab.com/opalmedapps/qplus/commit/a445b06116ad4f77330a2077e51c522a811e60df))
+
 ## [1.37.10](https://gitlab.com/opalmedapps/qplus/compare/v1.37.9...v1.37.10) (2024-10-29)
 
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
@@ -5,7 +9,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('LoadingController', LoadingController);
 
     LoadingController.$inject = ['$state', '$filter', 'ConcurrentLogin', 'DeviceIdentifiers', 'Logger',
