@@ -100,7 +100,7 @@ increment version:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
     # Set semantic-release author to our own bot user for correct attribution
-    - apk add --no-cache curl j
+    - apk add --no-cache curl jq
     # add npmrc file with XLTS.dev registry token
     - '[ -z "$NPMRC_FILE"] && echo "Error: environment variable NPMRC_FILE must be defined for this job" && exit 1'
     - echo "$NPMRC_FILE" > .npmrc
