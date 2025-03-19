@@ -1,3 +1,10 @@
+# [2.1.0](https://gitlab.com/opalmedapps/qplus/compare/v2.0.12...v2.1.0) (2025-03-19)
+
+
+### Features
+
+* BLE communication with the VitalTracer watch ([675ba8c](https://gitlab.com/opalmedapps/qplus/commit/675ba8cef8ab7ce309ca24f313baa33854c9b2f3))
+
 ## [2.0.12](https://gitlab.com/opalmedapps/qplus/compare/v2.0.11...v2.0.12) (2025-03-11)
 
 
