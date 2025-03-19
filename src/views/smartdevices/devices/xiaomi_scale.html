@@ -1,11 +1,11 @@
 <!--
-SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<ons-page ng-controller="EtekcityScaleController as ctrl">
-    <generic-toolbar title="{{ 'SMARTDEVICES_ETEKCITY' | translate }}" style-class="fontSizeTitle">
+<ons-page ng-controller="XiaomiScaleController as ctrl">
+    <generic-toolbar title="{{ 'SMARTDEVICES_XIAOMI_SCALE' | translate }}" style-class="fontSizeTitle">
     </generic-toolbar>
     <network-banner></network-banner>
     
@@ -69,7 +69,7 @@ SPDX-License-Identifier: Apache-2.0
                     <ons-row align="center">
                         <div class="smartdevices-content">
                             <div class="smartdevices-content--icon">
-                                <i class="fa fa-heartbeat fa-2x"
+                                <i class="fa fa-heartbeat fa-lg"
                               style="color:red; display: inline-block"></i>
                             </div>
                             <div class="smartdevices-content--text">
