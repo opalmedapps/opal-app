@@ -31,6 +31,21 @@ SPDX-License-Identifier: Apache-2.0
 
     <div ng-if="ctrl.bluetoothEnabled">
         <ons-list>
+            <!-- NOTE! Remove ng-show="false" to return VitalTracer watch back to the list of the devices -->
+            <ons-list-item ng-show="false" modifier="chevron" class="item"
+                ng-click="ctrl.goToDevice('vitaltracer_watch.html')">
+                <ons-row align="center">
+                    <div class="smartdevices-content">
+                        <div class="smartdevices-content--icon">
+                            <i class="fa fa-heartbeat fa-2x pull-left"
+                            style="color:red; display: inline-block"></i>
+                        </div>
+                        <div class="smartdevices-content--text">
+                            <p ng-class="fontSizeTitle">{{"SMARTDEVICES_VITALTRACER"|translate}}</p>
+                        </div>
+                    </div>
+                </ons-row>
+            </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                 ng-click="ctrl.goToDevice('etekcity_scale.html')">
                 <ons-row align="center">
