@@ -1,3 +1,10 @@
+# [2.2.0](https://gitlab.com/opalmedapps/qplus/compare/v2.1.0...v2.2.0) (2025-03-19)
+
+
+### Features
+
+* BLE communication with the Xiaomi Mi Scale ([4566e3e](https://gitlab.com/opalmedapps/qplus/commit/4566e3e556b89477e3815f2a4ef0a19d0aa52524))
+
 # [2.1.0](https://gitlab.com/opalmedapps/qplus/compare/v2.0.12...v2.1.0) (2025-03-19)
 
 
