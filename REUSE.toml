@@ -40,7 +40,7 @@ path = [
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "Copyright (C) 2015 Ackeem Joseph <ackeem.joseph@muhc.mcgill.ca>"
-SPDX-License-Identifier = "LicenseRef-AckeemJosephLogo"
+SPDX-License-Identifier = "LicenseRef-OpalTrademarks"
 
 
 [[annotations]]
