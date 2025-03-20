@@ -1,3 +1,10 @@
+## [2.2.1](https://gitlab.com/opalmedapps/qplus/compare/v2.2.0...v2.2.1) (2025-03-20)
+
+
+### Bug Fixes
+
+* **deps:** update babel monorepo (patch) ([87237cc](https://gitlab.com/opalmedapps/qplus/commit/87237cca429c2859107a241686c1b67646fac604))
+
 # [2.2.0](https://gitlab.com/opalmedapps/qplus/compare/v2.1.0...v2.2.0) (2025-03-19)
 
 
