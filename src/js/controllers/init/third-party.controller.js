@@ -29,18 +29,18 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
         const customRenderExtension = {
             renderer: {
                 // Turn all license text blocks into collapsible sections using <details><summary>
-                code(code) {
+                code(token) {
                     return `
                         <details>
                           <summary>${$filter('translate')('SHOW_LICENSE_TEXT')}</summary>
-                          <pre><code>${code}</code></pre>
+                          <pre><code>${token.text}</code></pre>
                         </details>
                     `;
                 },
                 // Convert all links to open in a new tab (or in an external browser on mobile) using a _blank target
-                link(href, title, text) {
-                    const titleAttr = title ? ` title="${title}"` : '';
-                    return `<a href="${href}"${titleAttr} target="_blank" rel="noopener">${text}</a>`;
+                link(token) {
+                    const titleAttr = token.title ? ` title="${token.title}"` : '';
+                    return `<a href="${token.href}"${titleAttr} target="_blank" rel="noopener">${token.text}</a>`;
                 }
             }
         };
