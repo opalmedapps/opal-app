@@ -1,3 +1,10 @@
+## [2.2.3](https://gitlab.com/opalmedapps/qplus/compare/v2.2.2...v2.2.3) (2025-03-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency marked to v15 ([2abba77](https://gitlab.com/opalmedapps/qplus/commit/2abba77478ee45c171e1e4c433a37e969233d37a))
+
 ## [2.2.2](https://gitlab.com/opalmedapps/qplus/compare/v2.2.1...v2.2.2) (2025-03-21)
 
 
