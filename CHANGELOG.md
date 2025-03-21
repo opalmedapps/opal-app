@@ -1,3 +1,10 @@
+## [2.2.4](https://gitlab.com/opalmedapps/qplus/compare/v2.2.3...v2.2.4) (2025-03-21)
+
+
+### Bug Fixes
+
+* **deps:** update plotly packages to v3 (major) ([ecce3ea](https://gitlab.com/opalmedapps/qplus/commit/ecce3ea437963e0aad2e20365fccd8c896050e8b))
+
 ## [2.2.3](https://gitlab.com/opalmedapps/qplus/compare/v2.2.2...v2.2.3) (2025-03-21)
 
 
