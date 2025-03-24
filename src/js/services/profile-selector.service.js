@@ -45,8 +45,6 @@ import {Observer} from "../models/utility/observer";
 
         /**
          * @description When the language changes, force patients list to be repopulated.
-         *
-         * @returns The list of patients related to the current user.
          */
         function observeLanguageChanges() {
             UserPreferences.observeLanguage(async () => {
