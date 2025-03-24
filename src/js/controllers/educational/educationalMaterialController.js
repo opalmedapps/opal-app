@@ -46,8 +46,8 @@
         ///////////////////////////////////
 
         function activate(){
-            NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
-            NavigatorParameters.setNavigator(educationNavigator);
+            NavigatorParameters.setParameters({'Navigator':'personalNavigator'});
+            NavigatorParameters.setNavigator(personalNavigator);
 
             bindEvents();
             configureState();
@@ -83,14 +83,14 @@
         }
 
         function bindEvents() {
-            educationNavigator.on('prepop',function()
+            personalNavigator.on('prepop',function()
             {
                 backButtonPressed = 0;
                 configureState();
             });
 
-            educationNavigator.on('prepush', function(event) {
-                if (educationNavigator._doorLock.isLocked()) {
+            personalNavigator.on('prepush', function(event) {
+                if (personalNavigator._doorLock.isLocked()) {
                     event.cancel();
                 }
             });
@@ -98,7 +98,7 @@
             //Cleaning up
             $scope.$on('$destroy',function()
             {
-                educationNavigator.off('prepop');
+                personalNavigator.off('prepop');
             });
         }
         
@@ -119,8 +119,8 @@
             }
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
-            NavigatorParameters.setParameters({ 'Navigator': 'educationNavigator', 'Post': edumaterial, 'RStep':1 });
-            educationNavigator.pushPage('./views/education/individual-material.html');
+            NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator', 'Post': edumaterial, 'RStep':1 });
+            personalNavigator.pushPage('./views/personal/education/individual-material.html');
         }
 
         // Function used to filter the materials shown based on the search string.

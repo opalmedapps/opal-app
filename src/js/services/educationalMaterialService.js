@@ -396,7 +396,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
          **/
         getEducationalMaterialUrl:function()
         {
-            return {Url:'./views/education/individual-material.html'};
+            return {Url:'./views/personal/education/individual-material.html'};
         },
         /**
          *@ngdoc method
@@ -426,7 +426,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             //Get type of material
             let type = getDisplayType(edumaterial);
 
-            if (type === "booklet") return {Url:'./views/education/education-booklet.html'};
+            if (type === "booklet") return {Url:'./views/personal/education/education-booklet.html'};
             else if (type === 'link')
             {
                 // If it's a url, set the language, then open the url in another page
@@ -434,7 +434,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
                 FileManagerService.openUrl(edumaterial.Url);
                 return -1;
             }
-            else if (type === 'html') return {Url:'./views/education/education-individual-page.html'};
+            else if (type === 'html') return {Url:'./views/personal/education/education-individual-page.html'};
             else return -1;
         },
 
