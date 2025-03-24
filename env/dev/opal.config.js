@@ -6,6 +6,8 @@ const config = {
         kickOutConcurrentUsers: false,
         messageOfTheDayKey: "",
         showVersionOnInit: true,
+        useSourceMap: true,
+        webpackMode: 'development',
     },
     firebase: {
         apiKey: "AIzaSyC_2PJUxJlGTd16BmuRxCiPEq3mGLYq2m8",
@@ -16,7 +18,6 @@ const config = {
         messagingSenderId: "452605759067",
         appId: "1:452605759067:web:b372ac4ea85be458e7797e",
     },
-    opalProtocolURI: "opal://",
 };
 
 module.exports = config;

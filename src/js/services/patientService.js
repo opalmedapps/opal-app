@@ -13,8 +13,8 @@ var myApp=angular.module('MUHCApp');
  *@description API service used to access the patient fields.
  **/
 myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorage',
-    'UserPreferences', 'UserAuthorizationInfo', 'Params', 'Constants',
-    function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences, UserAuthorizationInfo, Params, Constants) {
+    'UserPreferences', 'UserAuthorizationInfo',
+    function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences, UserAuthorizationInfo) {
 
     /**
      *@ngdoc property
