@@ -138,8 +138,8 @@
 
             try {
                 const response = await CheckInService.attemptCheckin(PatientSerNum);
-                if(response === 'NOT_ALLOWED'){
-                    displayError('NOT_ALLOWED');
+                if(response === 'CHECKIN_NOT_ALLOWED'){
+                    displayError('CHECKIN_NOT_ALLOWED');
                 } else if (response === 'SUCCESS') {
                     vm.apps = CheckInService.getCheckInApps();
                 } else {

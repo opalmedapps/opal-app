@@ -264,6 +264,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         setCheckinAppointments: function (appointments) {
             //Initializing Variables
             userAppointmentsArray = [];
+            if (!appointments) return;
             appointments.forEach(appointment => {
                 let patientName = `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`;
                 if ((UserPreferences.getLanguage()=='FR')) {
