@@ -26,8 +26,7 @@
             <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()" loading-message="{{'LOADING'|translate}}" margintop="15vh"></loading-spinning-circle>
 
             <!-- SECURITY ANSWER FIELDS -->
-            <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()"
-                 class="container security-question--container">
+            <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()" class="container security-question--container">
                 <form name="formPassword" novalidate>
                     <div class="form-group">
                         <label name="text">{{security.Question}}</label>
@@ -54,18 +53,14 @@
                                 <ons-icon icon="ion-load-d" spin="true"></ons-icon>
                             </span>
                         </button>
+
+                        <uib-alert class="security-question--alert" ng-show="security.alert.type && security.alertShow"
+                                   type="{{security.alert.type}}">
+                            {{security.alert.content|translate}}
+                        </uib-alert>
                     </div>
                 </form>
             </div>
-
-            <div class="container">
-                <uib-alert class="security-question--alert"
-                           ng-if="security.alert.type && security.alertShow && !security.loading && !security.invalidCode && security.isThereSelectedHospital()"
-                           type="{{security.alert.type}}">
-                    {{security.alert.content|translate}}
-                </uib-alert>
-            </div>
-
         </ons-col>
     </ons-row>
     <ons-modal var="errormodal" class="security-question--modal">
