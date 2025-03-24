@@ -85,7 +85,7 @@
 
         function openReferenceMaterial() {
             NavigatorParameters.setParameters({ Navigator: navigatorName, category: 'research' });
-            navigator.pushPage('views/personal/research/research-feedback/research-feedback.html');
+            navigator.pushPage('views/personal/education/education.html');
         }
 
         function openResearchQuestionnaires() {
