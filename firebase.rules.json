@@ -1,0 +1,74 @@
+{
+    "rules": {
+        "dev3": {
+            "$hospitalId": {
+                "requests": {
+                    "$request_id": {
+                        ".write": "auth.uid !== null",
+                        ".read": "auth.uid !== null",
+                        ".validate": "newData.hasChildren(['Request', 'DeviceId', 'Token', 'UserID'])&& newData.child('UserID').val() === auth.uid"
+                    }
+                },
+                "api": {
+                    "$request_id": {
+                        ".write": "auth.uid !== null",
+                        ".read": "auth.uid !== null",
+                        ".validate": "newData.hasChildren(['Request', 'DeviceId', 'Token', 'UserID']) && newData.child('UserID').val() === auth.uid"
+                    }
+                },
+                "passwordResetRequests": {
+                    "$request_id": {
+                        ".write": "true",
+                        ".read": "true"
+                    }
+                },
+                "passwordResetResponses": {
+                    "$request_id": {
+                        ".write": "true",
+                        ".read": "true"
+                    }
+                },
+                "users": {
+                    "$user_id": {
+                        "$request_id": {
+                            ".write": "auth.uid !== null && auth.uid === $user_id",
+                            ".read": "auth.uid !== null && auth.uid === $user_id"
+                        }
+                    }
+                },
+                "logged_in_users": {
+                    "$user_id": {
+                        ".write": "auth.uid !== null && auth.uid === $user_id",
+                        ".read": "auth.uid !== null && auth.uid === $user_id"
+                    }
+                },
+                "registration": {
+                    "branch": {
+                        ".write": "false",
+                        ".read": "false",
+                        "$branchId": {
+                            ".read": "true",
+                            ".write": "false"
+                        }
+                    },
+                    "requests": {
+                        ".read": "false",
+                        ".write": "false",
+                        "$requestId": {
+                            ".read": "false",
+                            ".write": "newData.child('BranchName').val() != \"\"  && newData.child('BranchName').val() != null  && newData.hasChild('BranchName')  &&  root.child('dev3').child($hospitalId).child('registration').child('branch').hasChild(newData.child('BranchName').val())"
+                        }
+                    },
+                    "users": {
+                        ".read": "false",
+                        ".write": "false",
+                        "$requestId": {
+                            ".read": "true",
+                            ".write": "true"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
