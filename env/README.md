@@ -4,8 +4,8 @@ This guide will walk you through connecting this project (the frontend Opal app)
 hosted either on a server or on your local machine for development.
 A connection to a running backend environment is required to log into the app and receive data.
 
-If you haven't already configured a backend environment, refer to the following
-[set up guide](https://opalmedapps.gitlab.io/docs/development/setup/)
+If you haven't already configured a backend environment, refer to
+[the official Opal set up guide](https://opalmedapps.gitlab.io/docs/development/setup/)
 for instructions on how to get started.
 
 ## Setup
@@ -43,5 +43,5 @@ npm run start --env=local
 ## Additional Environments
 
 Any number of additional environments can be set up by creating a new folder in the `env` directory,
-then following the same instructions as above for the `local` environment, simply using a different name.
+then following the same instructions as above for the `local` environment, just using a different name.
 The name of the folder determines the name of the new environment.

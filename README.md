@@ -31,7 +31,7 @@ The app installed via this guide can be configured to communicate either with a 
 
 This section covers installation steps to build the app's web code on your local machine.
 
-1.  Node.js is required to run and build the app. Install Node.js version `20.11.X`, ideally via the [Node Version Manager for Mac](https://github.com/nvm-sh/nvm) or
+1.  Node.js is required to run and build the app. Install Node.js version `20.17.X`, ideally via the [Node Version Manager for Mac](https://github.com/nvm-sh/nvm) or
     [Node Version Manager for Windows](https://github.com/coreybutler/nvm-windows) (`nvm`).
     Using `nvm` instead of installing Node.js directly greatly facilitates updates, and makes switching between versions convenient and easy.
 
@@ -39,10 +39,10 @@ This section covers installation steps to build the app's web code on your local
     nvm list
     ```
     ```shell
-    nvm install 20.11.0
+    nvm install 20.17.0
     ```
     ```shell
-    nvm use 20.11.0
+    nvm use 20.17.0
     ```
 
     To verify that Node was set up correctly, run:
@@ -141,7 +141,7 @@ This section covers installation steps to build the mobile app on your local mac
 
     If you encounter any issues, the folders `platforms` and `plugins` can safely be deleted to build from a clean state.
 
-5.  Finally, to run the app in an emulator, execute one of the following commands.
+5.  Finally, to run the app on an emulator, execute one of the following commands.
     <br>
     _Note_: on Mac, you may need to install
     cordova globally first (`npm install -g cordova`).
@@ -161,39 +161,40 @@ A few notes:
   As mentioned above, on Mac, you may need to install cordova globally to access the CLI commands.
 - Only the build commands containing the word `release` are used to create production-ready application builds.
   All other commands produce builds suited for development.
-- Production settings (in `opal.config.js`) and cordova's release mode should be used for any builds that are sent in for penetration or security testing,
-  to ensure that common security vulnerabilities such as debugging being enabled are not flagged.
+- When sending builds to third-party vendors for security testing, or when running security scans,
+  production settings (in `opal.config.js`) and cordova's release mode should be used.
+  This ensures that common security vulnerabilities (such as debugging being enabled) are not flagged.
 
 ### Opal App Scripts
 
 Commands for developer convenience can be found in the [package.json](./package.json) file (in the `"scripts"` section).
 
-Note that these commands are explicitly related in terms of dependent steps, so once you understand the structure,
-you may choose to run them differently. For instance, the command:
+Note that these commands are explicitly related in terms of dependent steps, so once you understand their structure,
+you may choose to run them differently. For instance, consider the following command:
 
 ```shell
-# Build and run in iOS
+# Build and run for iOS
 npm run start:app:ios --env=local
 ```
 
 This command calls in sequence `npm run prepare:app && npm run build:web && cordova run ios`, carrying along the `--env=local` variable as it goes.
-You may choose to simply execute `cordova run ios`, if you know there is a current valid Cordova build.
+You may choose to simply execute `cordova run ios`, if you know there already exists a valid Cordova build.
 
 ## Troubleshooting
 
 If you are getting errors during your installation, here are some things you can try.
 
 ### Dependency Installation Issues
-- If you got unexpected errors in the developer console, and the app's UI looks jumbled, it's likely that one of the packages used by Opal was not properly installed. 
-  If you want to try installing the packages again from a clean state, you can delete `node_modules` and retry `npm install`.
-  If one or many packages didn't install correctly, one of the reasons below may be preventing `npm install` from executing correctly.
+- If you get unexpected errors in the developer console, and the app's UI looks jumbled, it's likely that one of the packages used by Opal was not properly installed. 
+  To reinstall the packages from a clean state, delete `node_modules` and rerun `npm install`.
+  If one or more packages didn't install correctly, one of the reasons below may be preventing `npm install` from executing correctly.
   - You don't have the required permissions to perform the installation. Make sure you are logged in as an administrator on your computer, and try re-installing the packages. If you have a Mac, precede your npm commands with `sudo` to run the command with administrator permissions.
   - You have an extra firewall or security plugin installed, which is preventing the packages from installing.
     Try disabling them or whitelisting `npm` and re-installing the packages.
-  - You have a too recent (or too old) version of node installed. Try installing the version recommended above, and re-install the packages.
-- If you got an error from `npm install` like `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` or you are behind a firewall, you can try the following:
+  - You have a too recent (or too old) version of node installed. Try installing the version recommended above, and re-installing the packages.
+- If you got the error `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` from `npm install`, or if you are behind a firewall, you can try the following:
   - Run `npm config set strict-ssl false` and `set NODE_TLS_REJECT_UNAUTHORIZED=0` on the terminal.
-    You'll also need to run `set NODE_TLS_REJECT_UNAUTHORIZED=0` everytime you restart the terminal.
+    You'll also need to run `set NODE_TLS_REJECT_UNAUTHORIZED=0` every time you restart the terminal.
     This solution can also be applied when installing dependencies for other projects, such as the listener.
 
 ### Build issues
