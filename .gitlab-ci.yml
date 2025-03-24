@@ -325,6 +325,16 @@ build and deploy preprod:
     FIREBASE_APP_IOS: $FIREBASE_APP_PREPROD_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_PREPROD
 
+# Launches a downstream pipeline to build for the research prod environment
+build and deploy research prod:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the research prod environment
+    ENV: "research"
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_RESEARCH_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_RESEARCH_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_RESEARCH
+
 # Launches a downstream pipeline to build for the QA environment
 build and deploy qa:
   extends: .build and deploy downstream
