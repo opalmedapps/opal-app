@@ -132,7 +132,7 @@
             findInProgressQuestionIndex: findInProgressQuestionIndex,
             getCarouselItems: () => carouselItems,
             getCurrentQuestionnaire: getCurrentQuestionnaire,
-            getNumberOfUnreadQuestionnairesByPurpose: (questionnairePurpose = 'default') => PURPOSE_THANKS_MAP[questionnairePurpose], // is used for showing the badge by the personalTabController.js and researchController.js for the appropriate purpose
+            getNumberOfUnreadQuestionnairesByPurpose: (questionnairePurpose = 'default') => numberOfUnreadQuestionnaires[questionnairePurpose], // is used for showing the badge by the personalTabController.js and researchController.js for the appropriate purpose
             getQuestionnaireBackToListByPurpose: (questionnairePurpose = 'default') => PURPOSE_LIST_MAP[questionnairePurpose], //  gets the correct translation key for the questionnaire back to list message. It assumes that the purpose has been validated.
             getQuestionnaireBeginByPurpose: (questionnairePurpose = 'default') => PURPOSE_BEGIN_MAP[questionnairePurpose], // gets the correct translation key for the begin questionnaire instruction. It assumes that the purpose has been validated.
             getQuestionnaireCount: getQuestionnaireCount,
