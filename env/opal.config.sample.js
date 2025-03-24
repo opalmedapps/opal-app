@@ -17,7 +17,7 @@ const config = {
         // String: the mode to use when building with WebPack: [production, development].
         webpackMode: 'development',
     },
-    // Block of Firebase web configurations, with contents provided by the Firebase Console
+    // Block of Firebase web configurations, with contents pasted from the Firebase Console
     firebase: {
         apiKey: "",
         authDomain: "",
