@@ -25,11 +25,11 @@
 }
 
 .info-modal-text::-webkit-scrollbar-track {
-    background: #f9f9f91a;
+    background: #f9f9f9;
 }
 
 .info-modal-text::-webkit-scrollbar-thumb {
     border-radius: 2px;
-    background: #f9f9f929;
+    background: #f9f9f9;
     -webkit-box-shadow: inset 0 0 3px rgba(1.0,1.0,1.0,0.5);
 }
