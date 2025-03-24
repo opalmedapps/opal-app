@@ -63,7 +63,7 @@
                             <ons-col align="left" style="border:1px solid white;color:white">
                                 <div style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
                                     <span style="color:rgba(38,100,171,0.81)">#{{$index+1}}</span>
-                                    <span ng-bind-html="question.question_display"></span>
+                                    <span ng-bind-html="question.question_display | trustHTML"></span>
                                 </div>
                             </ons-col>
                             <ons-col align="center" width="25%">

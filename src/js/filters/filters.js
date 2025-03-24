@@ -260,6 +260,7 @@ myApp.filter('trustHTML', function ($sce) {
         return $sce.trustAsHtml(value);
     };
 });
+
 myApp.filter('capitalize', function () {
     /**
      * Capitalizes the string

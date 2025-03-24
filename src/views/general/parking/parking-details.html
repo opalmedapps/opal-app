@@ -11,6 +11,6 @@
         </svg>
     </div>
     <div ng-hide="parking.loading" class="container" style="background-color:white;padding-top:10px;margin:1px">
-        <div ng-bind-html="parking.htmlBind"></div>
+        <div ng-bind-html="parking.htmlBind | trustHTML"></div>
     </div>
 </ons-page>
