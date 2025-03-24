@@ -85,13 +85,13 @@ import {Observer} from "../models/utility/observer";
 
         function assignColor(profiles) {
             const colorList = [
+                '#53BB96',
                 '#037AFF',
                 '#FF8351',
                 '#FEC63D',
                 '#B38DF7',
                 '#C9BB1C',
                 '#1CC925',
-                '#1CC99B',
                 '#1C59C9',
                 '#871CC9'
             ];

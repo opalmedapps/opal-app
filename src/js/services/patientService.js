@@ -54,7 +54,6 @@ angular
                 ? `data:image/${patientFields.DocumentType};base64,${patientFields.ProfileImage}`
                 : '';
             patientFields.ProfileImage = ProfileImage;
-            console.log('==>', patientFields);
             return patientFields;
         }
 

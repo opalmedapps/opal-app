@@ -4,17 +4,17 @@
 
     angular
         .module("MUHCApp")
-        .directive("profileIcon", ProfileSelector);
+        .directive("profileIcon", ProfileIcon);
 
-    ProfileSelector.$inject = ['$timeout', 'ProfileSelector'];
+    ProfileIcon.$inject = ['Patient', 'ProfileSelector'];
 
     /**
      * @name ProfileIcon
      * @author David Gagne
      * @date 2022-09-23
-     * @desc Display the rounf icon with active profile initials
+     * @desc Display the round icon with active profile initials
      */
-    function ProfileSelector($timeout, ProfileSelector)
+    function ProfileIcon(Patient, ProfileSelector)
     {
         return {
             restrict: 'E',

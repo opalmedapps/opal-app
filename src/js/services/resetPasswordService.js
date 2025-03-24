@@ -64,8 +64,13 @@
          *@returns {Promise} Returns promise containing void.
          **/
         function completePasswordChange(oobCode, newPassword) {
-
-            return auth.confirmPasswordReset(oobCode[1], newPassword)
+            try {
+                return auth.confirmPasswordReset(oobCode[1], newPassword);
+            }
+            catch (error) {
+                // Needed because the above line sometimes throws an error instead of rejecting
+                return Promise.reject(error);
+            }
         }
 
         /**

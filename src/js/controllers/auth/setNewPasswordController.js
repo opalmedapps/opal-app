@@ -96,8 +96,13 @@
 
                 ResetPassword.completePasswordChange(parameters.oobCode, vm.newValue)
                     .then(function () {
-
-                        return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: vm.newValue}, EncryptionService.getTempEncryptionHash() ,
+                        const emailAndSecurityAnswerKey = EncryptionService.generateSpecificEncryptionKey(
+                            EncryptionService.hash(UserAuthorizationInfo.getEmail()),
+                            EncryptionService.getSecurityAns(),
+                        );
+                        return RequestToServer.sendRequestWithResponse('SetNewPassword',
+                            {newPassword: vm.newValue},
+                            emailAndSecurityAnswerKey,
                             'passwordResetRequests',
                             'passwordResetResponses'
                         );
@@ -105,7 +110,6 @@
                     .then(function() {
                         vm.submitting = false;
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
-                        EncryptionService.removeTempEncryptionHash();
                         $timeout(function() {
                             vm.alert.type = Params.alertTypeSuccess;
                             vm.alert.content = "PASSWORDUPDATED";
@@ -116,6 +120,7 @@
                     })
                     .catch(function (error) {
                         $timeout(function(){
+                            console.error(error);
                             vm.submitting = false;
                             vm.alert.type = Params.alertTypeDanger;
                             switch (error.code) {

@@ -16,7 +16,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
 
     var securityAnswerHash = '';
     var encryptionHash = '';
-    var tempEncryptionHash = '';
 
     const main_fields = ['UserID', 'Timestamp', 'Code', 'DeviceId'];
 
@@ -212,29 +211,18 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
         },
 
         /**
-         *@ngdoc method
-         *@name generateTempEncryptionHash
-         *@methodOf MUHCApp.service:EncryptionService
-         *@description returns a one-time encryption hash based on inputted parameters
-         *@return {String} Returns temporary encryption hash
-         **/
-        generateTempEncryptionHash: function (ssn, answer) {
-            tempEncryptionHash = CryptoJS.PBKDF2(ssn, answer, {
+         * @desc Generates a specific encryption key using the provided secret and salt (via PBKDF2).
+         *       This function is typically used to get an encryption key for specific types of requests which cannot
+         *       be encrypted in the usual way (e.g. password reset).
+         * @param {string} secret The secret passed to PBKDF2 (also called 'password').
+         * @param {string} salt The salt passed to PBKDF2.
+         * @returns {string} The key derived from PBKDF2 based on the provided inputs.
+         */
+        generateSpecificEncryptionKey: function (secret, salt) {
+            return CryptoJS.PBKDF2(secret, salt, {
                 keySize: 512 / 32,
                 iterations: 1000
             }).toString(CryptoJS.enc.Hex);
-
-        },
-
-        /**
-         *@ngdoc method
-         *@name removeTempEncryptionHash
-         *@methodOf MUHCApp.service:EncryptionService
-         *@description deletes existing Temporary Encryption Hash
-         **/
-        removeTempEncryptionHash: function () {
-            tempEncryptionHash = "";
-
         },
 
         /**
@@ -249,15 +237,10 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
                 keySize: 512 / 32,
                 iterations: 1000
             }).toString(CryptoJS.enc.Hex);
-
         },
 
         generateNonce: function () {
             return nacl.randomBytes(nacl.secretbox.nonceLength)
         },
-
-        getTempEncryptionHash: function () {
-            return tempEncryptionHash;
-        }
     };
 }]);
