@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .controller('CaregiversController', CaregiversController);
 
-    CaregiversController.$inject = ['$timeout', 'RequestToServer', 'Params', 'ProfileSelector'];
+    CaregiversController.$inject = ['$timeout', 'RequestToServer', 'Params', 'User'];
 
     /* @ngInject */
-    function CaregiversController($timeout, RequestToServer, Params, ProfileSelector) {
+    function CaregiversController($timeout, RequestToServer, Params, User) {
         var vm = this;
         vm.error = null;
         vm.notFound = null;
@@ -21,7 +21,7 @@
 
         async function getCaregiversList() {
             try {
-                const patientSerNum = ProfileSelector.getLoggedInUserPatientId();
+                const patientSerNum = User.getLoggedinUserId();
                 const requestParams = Params.API.ROUTES.CAREGIVERS;
                 const formatedParams = {
                     ...requestParams,
