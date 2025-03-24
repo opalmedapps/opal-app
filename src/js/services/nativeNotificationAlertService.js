@@ -34,12 +34,12 @@
          *@name showNotificationAlert
          *@methodOf MUHCApp.service:NativeNotification
          *@param {String} message Alert message to be displayed
-         *@param {function} [callback] - Optional. Called when the OK button is pressed.
          *@param {string} [title] - Optional. Alternate title to show instead of the default one ("Alert").
          *                          Must already be translated.
+         *@param {function} [callback] - Optional. Called when the OK button is pressed.
          *@description Displays message as a native looking alert
          **/
-        function showNotificationAlert(message, callback, title) {
+        function showNotificationAlert(message, title, callback) {
             if (currentAlert && message === currentAlert) return;
             currentAlert = message;
             ons.notification.confirm({

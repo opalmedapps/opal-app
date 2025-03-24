@@ -223,6 +223,7 @@
   "QUESTIONNAIRE_NONE_NEW": "No new questionnaires.",
   "QUESTIONNAIRE_NONE_OF_THE_ABOVE": "None of the above",
   "QUESTIONNAIRE_NONE_PROGRESS": "No questionnaires in progress.",
+  "QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER": "This questionnaire can be completed only by patient. Once this user has completed the questionnaire, you'll be able to view the answers on the Completed tab.",
   "QUESTIONNAIRE_RESUME_INSTRUCTION": "Tap \"Resume\" or swipe to the left to resume the questionnaire.",
   "QUESTIONNAIRE_SECTION_INSTRUCTION": "Section instruction:",
   "QUESTIONNAIRE_SELECT": "Select",
