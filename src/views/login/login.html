@@ -28,9 +28,11 @@
                     </div>
 
                     <!-- TRUSTED / UNTRUSTED -->
-                    <div>
-                        <span id="trusted-toggle"><ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch></span>
+                    <div id="trusted-flex-container">
                         <p id="trusted-text">{{"TRUST_DEVICE"|translate}}</p>
+                        <span id="trusted-toggle">
+                             <ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch>
+                        </span>
                     </div>
                     <br>
 
