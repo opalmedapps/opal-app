@@ -136,7 +136,7 @@
                     vm.closestAppointment = result?.data?.closest_appointment;
 
                     // Show or hide the chevron depending on whether check-in is possible
-                    let button = $('#checkin-button');
+                    let button = $('#check-in-button');
                     button.toggleClass('non-navigable', !checkinState.canNavigate);
                 });
             }
@@ -255,7 +255,6 @@
         /**
          * Takes the user to the checkin view
          */
-        // TODO need loading wheel?
         async function goToCheckinAppointments() {
             if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
             const url = {

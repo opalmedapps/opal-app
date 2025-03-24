@@ -49,7 +49,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
          *@ngdoc property
          *@name  MUHCApp.service.#state
          *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines the current state of checkin for a given patient
+         *@description Determines the current state of check-in for a given patient
          */
         var state = initialState;
 

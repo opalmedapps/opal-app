@@ -35,6 +35,6 @@
 }
 
 /* Hide the chevron (the ::before element) when check-in is disabled */
-#checkin-button.non-navigable::before {
+#check-in-button.non-navigable::before {
     visibility: hidden;
 }
