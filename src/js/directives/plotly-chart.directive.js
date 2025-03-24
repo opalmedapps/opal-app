@@ -33,7 +33,9 @@ Plotly.register([frLocale]);
             scope: {
                 data: '=',
                 yAxisLabel: '=',
-                hasNonNumericValues: '='
+                hasNonNumericValues: '=',
+                normalRangeMin: '=?',
+                normalRangeMax: '=?'
             },
             link: function (scope, element) {
                 scope.isChartEmpty = false;
@@ -57,6 +59,18 @@ Plotly.register([frLocale]);
                     scope.noChartMessage = $filter('translate')('CHART_NO_PLOT_AVAILABLE');
                     return;
                 }
+
+                // Compute min and max values
+                const yValues = scope.data.y;
+                const minValue = Math.min(...yValues);
+                const maxValue = Math.max(...yValues);
+
+                // Compute y-axis bounds
+                const normalRangeMin = scope.normalRangeMin !== undefined ? scope.normalRangeMin : minValue;
+                const normalRangeMax = scope.normalRangeMax !== undefined ? scope.normalRangeMax : maxValue;
+
+                const minChart = Math.min(minValue, normalRangeMin) * 0.95;
+                const maxChart = Math.max(maxValue, normalRangeMax) * 1.05;
 
                 const data = [{
                     ...scope.data,
@@ -110,7 +124,6 @@ Plotly.register([frLocale]);
                     xaxis: {
                         autorange: true,
                         tickangle: -45,
-                        zeroline: false,
                         fixedrange: true,
                         rangeselector: selectorOptions,
                         rangeslider: {},
@@ -119,7 +132,8 @@ Plotly.register([frLocale]);
                     },
                     yaxis: {
                         fixedrange: true,
-                        zeroline: false
+                        zerolinecolor: '#969696',
+                        range: [minChart, maxChart],
                     },
                     margin: {
                         b: 10,

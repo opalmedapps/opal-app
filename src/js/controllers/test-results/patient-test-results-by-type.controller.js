@@ -118,7 +118,9 @@ class PatientTestResultsByTypeController {
 		this.chartSettings = {
 			data: data,
 			yAxisLabel: yAxisLabel,
-			hasNonNumericValues: test.results && test.results.length > 0 && !test.hasNumericValues
+			hasNonNumericValues: test.results && test.results.length > 0 && !test.hasNumericValues,
+			normalRangeMax: test.results.normalRangeMin,
+			normalRangeMin: test.results.normalRangeMax
 		};
 	};
 
