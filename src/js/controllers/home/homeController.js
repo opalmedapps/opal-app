@@ -101,10 +101,15 @@
          * @description Function to get view specific data from Django API
          */
         async function getDisplayData() {
-            const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
-            $timeout(() => {
-                vm.notificationsUnreadNumber = result.data.unread_notification_count;
-            });
+            try {
+                const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
+                $timeout(() => {
+                    vm.notificationsUnreadNumber = result.data.unread_notification_count;
+                });
+            } catch (error) {
+                // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
+                console.error(error);
+            }
         }
 
         /**

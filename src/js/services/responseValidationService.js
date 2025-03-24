@@ -65,12 +65,6 @@
         function validateApiResponse(response) {
             let decryptedresponse = (typeof response.status_code === 'number') ? response : EncryptionService.decryptData(response);
             if (response.status_code !== Params.API.SUCCESS) {
-                Toast.showToast({
-                    message: `${$filter('translate')(response.data.errorMessage)}
-                        ERROR CODE: ${response.status_code}
-                    `,
-                    duration: 4000
-                });
                 return new Error(`API ERROR: ${response.status_code}: ${response.data.errorMessage}`);
             }
             return decryptedresponse;
