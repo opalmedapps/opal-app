@@ -14,6 +14,7 @@
 
 		const vm = this;
 		vm.loading = true;
+		vm.alert = undefined;
 
 		activate();
 
