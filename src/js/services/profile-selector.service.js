@@ -88,10 +88,10 @@ import {Observer} from "../models/utility/observer";
             if (!currentSelectedProfile) return;
 
             // Reset the categorical data in case the categories were already loaded for the previous profile.
-            // Note that Notifications category is not updated since it needs to be loaded only once.
+            // Note that Notifications and Announcements are not updated since they're downloaded
+            // at the same time for all patients (loaded only once).
             UpdateUI.updateTimestamps(
                 [
-                    'Announcements',
                     'Appointments',
                     'Diagnosis',
                     'Documents',
