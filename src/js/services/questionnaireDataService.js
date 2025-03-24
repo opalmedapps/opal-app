@@ -17,11 +17,10 @@
     QuestionnaireDataService.$inject = [
         'RequestToServer',
         'Params',
-        'User'
     ];
 
     /* @ngInject */
-    function QuestionnaireDataService(RequestToServer, Params, User) {
+    function QuestionnaireDataService(RequestToServer, Params) {
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const validType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
         const api = Params.QUESTIONNAIRE_API;
@@ -52,10 +51,9 @@
          * @param {int} newStatus the new status to be updated in
          * @return {Promise}
          */
-        async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus){
+        async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userProfile){
             // flag for property check
             let isStatusCorrect = false;
-            let userProfile = User.getLoggedinUserProfile();
 
             // verify property
             for (let status in allowedStatus){

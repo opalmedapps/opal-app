@@ -19,10 +19,11 @@
         '$sce',
         'Params',
         'QuestionnaireDataService',
+        'User'
     ];
 
     /* @ngInject */
-    function Questionnaires($sce, Params, QuestionnaireDataService) {
+    function Questionnaires($sce, Params, QuestionnaireDataService, User) {
         // constants for DB conventions
         const questionnaireValidStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const questionnaireValidType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
@@ -170,8 +171,9 @@
          *
          */
         async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus){
-            await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus);
-            let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus);
+            let userProfile = User.getLoggedinUserProfile(); 
+            await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userProfile);
+            let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus, userProfile);
             if (!isFailure) throw new Error("Error updating status internal to app");
             return {Success: true, Location: 'Server'};
         }
@@ -670,7 +672,7 @@
          * @param {int} oldStatus the old status of the questionnaire. If this parameter is non-existent then the function has to check if the questionnaire exist in every object.
          * @return {boolean} true if success, false if failure
          */
-        function updateAppQuestionnaireStatus (answerQuestionnaireId, newStatus, oldStatus){
+        function updateAppQuestionnaireStatus (answerQuestionnaireId, newStatus, oldStatus, userProfile){
             let questionnaire_to_be_updated;
 
             // verify status
@@ -723,6 +725,7 @@
 
             // update the status of the questionnaire
             questionnaire_to_be_updated.status = newStatus;
+            questionnaire_to_be_updated.respondent_display_name = `${userProfile.first_name} ${userProfile.last_name}`;
 
             // re-classify the questionnaire
             switch (newStatus) {
