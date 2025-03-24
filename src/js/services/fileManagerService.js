@@ -24,7 +24,10 @@ function ($injector, Constants, Browser, RequestToServer) {
      * The dataDirectory path can be used for both iOS and Android.
      * Important: on iOS, dataDirectory is NOT synced to the cloud; a no-sync folder must be used to prevent cloud sync of medical data.
      */
-    if (Constants.app) urlDeviceDocuments = cordova.file.dataDirectory + 'Documents/';
+    if (Constants.app) {
+        if (ons.platform.isAndroid()) urlDeviceDocuments = cordova.file.dataDirectory + "Documents/";
+        else urlDeviceDocuments = cordova.file.dataDirectory;
+    }
 
     /**
      * @ngdoc method
