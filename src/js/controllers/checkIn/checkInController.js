@@ -57,27 +57,6 @@
             vm.language = UserPreferences.getLanguage();
 
             vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
-
-            CheckInService.attemptCheckin()
-                .then(function(response){
-
-                    if(response === "NOT_ALLOWED"){
-                        Toast.showToast({
-                            message: $filter('translate')("NOT_ALLOWED"),
-                        });
-                        vm.alert.type = Params.alertTypeWarning;
-                        vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-                    } else if (response === "SUCCESS") {
-                        vm.alert.type = Params.alertTypeSuccess;
-                        vm.checkInMessage = "CHECKED_IN";
-                        vm.apps = CheckInService.getCheckInApps();
-                    } else {
-                        displayError();
-                    }
-                }).catch(error => {
-                    console.log(error);
-                    displayError();
-                });
         }
 
         /**
@@ -122,6 +101,29 @@
             return HasNonCheckinable;
         }
 
+        /**
+         * @return void
+         * @description Check-in all the appointments and update appointment array
+         */
+        async function CheckInAppointments() {
+            const response = await CheckInService.attemptCheckin();
+            if(response === "NOT_ALLOWED"){
+                Toast.showToast({
+                    message: $filter('translate')("NOT_ALLOWED"),
+                });
+                vm.alert.type = Params.alertTypeWarning;
+                vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+            } else if (response === "SUCCESS") {
+                vm.alert.type = Params.alertTypeSuccess;
+                vm.checkInMessage = "CHECKED_IN";
+                vm.apps = CheckInService.getCheckInApps();
+            } else {
+                vm.alert.type = Params.alertTypeDanger;
+                vm.checkInMessage = "CHECKIN_ERROR";
+                vm.apps = CheckInService.getCheckInApps();
+                vm.error = "ERROR";
+            }
+        }
     }
 })();
 
