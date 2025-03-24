@@ -12,12 +12,39 @@
   "assignees": ["staceybeard", "yickmo"],
   "labels": ["dependencies"],
   "separateMinorPatch": true,
+  "ignoreDeps": [
+    "@babel/runtime",
+    "@havesource/cordova-plugin-push",
+    "animate.css",
+    "bootstrap",
+    "crypto-js",
+    "es6-promise-plugin",
+    "font-awesome",
+    "highcharts",
+    "ionicons",
+    "jquery",
+    "jquery.panzoom",
+    "moment",
+    "onsenui",
+    "tweetnacl",
+    "tweetnacl-util",
+    "@babel/core",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-transform-runtime",
+    "@babel/preset-env",
+    "babel-loader",
+    "exports-loader",
+    "html-loader",
+    "imports-loader",
+    "raw-loader",
+    "run-script-os",
+    "shelljs",
+    "style-loader",
+    "xml-js",
+  ],
   "packageRules": [
-    // Exclude all the dependencies except for AngularJS/xlts
-    // TODO: group all the dependencies
-    {
-      "excludePackagePatterns": ["/.*/"],
-    },
+    // TODO: add the missing dependencies and group them if possible
     // Group auxiliary angular-related updates
     {
       "matchPackagePatterns": ["^angular"],
@@ -28,6 +55,11 @@
     {
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
       "groupName": "xlts angular packages"
+    },
+    // Group cordova related updates
+    {
+      "matchPackagePatterns": ["^cordova"],
+      "groupName": "cordova packages"
     },
   ],
 }
