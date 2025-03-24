@@ -298,8 +298,8 @@
         async function isWithinCheckinRange() {
             // Get the list of sites and their coordinates from the backend
             const response = await Hospital.requestSiteInfo(UserHospitalPreferences.getHospital());
-            if (response.count === '0') throw new Error("No sites are defined for this institution");
-            const sites = response.results;
+            if (!response?.count || response?.count === '0') throw new Error("No sites are defined for this institution");
+            const sites = response?.results;
 
             // To be in range, the user must be close enough to at least one of the available hospital sites
             let results = await Promise.allSettled(
@@ -307,11 +307,11 @@
             );
 
             // If any promise rejected, throw a new error, otherwise, return true if at least one site is in range
-            if (results.some(result => result.status === 'rejected')) {
+            if (results.some(result => result?.status === 'rejected')) {
                 console.error('Geolocation error', results);
                 throw new Error("Failed to get geolocation information for check-in");
             }
-            return results.some(result => result.value === true);
+            return results.some(result => result?.value === true);
         }
 
         /**
