@@ -8,8 +8,6 @@
         .module('MUHCApp')
         .service('Location', Location);
 
-    Location.$inject = [];
-
     /**
      * @description Provides functionality related to the GPS position of the user's device.
      * @author Stacey Beard
@@ -75,23 +73,16 @@
          * @returns {number} The distance between the two locations (km).
          */
         function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-            let R = 6371; // Radius of the earth in km
+            // Converts an angle from degrees to radians
+            let deg2rad = deg => deg * (Math.PI / 180);
+
+            let earthRadiusKm = 6371;
             let dLat = deg2rad(lat2 - lat1);
             let dLon = deg2rad(lon2 - lon1);
             let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
             let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            let d = R * c; // Distance in km
-            return d;
-        }
-
-        /**
-         * @desc Converts degrees to radians.
-         * @author Originally from checkinService.js
-         * @param {number} deg A value in degrees.
-         * @returns {number} The equivalent value in radians.
-         */
-        function deg2rad(deg) {
-            return deg * (Math.PI / 180);
+            let distanceKm = earthRadiusKm * c;
+            return distanceKm;
         }
     }
 })();
