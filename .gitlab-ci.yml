@@ -236,7 +236,8 @@ include:
 # Secret Detection Customization: 
 # https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
 secret_detection:
-  variables:
-    SECRET_DETECTION_HISTORIC_SCAN: "true"
+  # variables:
+    # enable historic scan
+    # SECRET_DETECTION_HISTORIC_SCAN: "true"
   rules:
     - when: always
