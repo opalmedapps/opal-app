@@ -157,7 +157,18 @@
             validateQuestionnairePurpose: (questionnairePurpose) => allowedPurpose.includes(questionnairePurpose.toLowerCase()), // check whether the questionnaire purpose is valid (true if it is valid, false otherwise)
             setQuestionnaireList: setQuestionnaireList,
             updateQuestionnaireList: updateQuestionnaireList,
+            setNumberOfUnreadQuestionnairesByPurpose: setNumberOfUnreadQuestionnairesByPurpose,
         };
+
+        /**
+         * @desc Set the unreadNum for related purpose questionnaire.
+         * @param purpose The purpose of the questionnaire to find.
+         * @param unreadNum The unreadNum of the purpose questionnaire.
+         * @returns void.
+         */
+        function setNumberOfUnreadQuestionnairesByPurpose(purpose, unreadNum) {
+            numberOfUnreadQuestionnaires[purpose] = unreadNum;
+        }
 
         /**
          * @name findInProgressQuestionIndex

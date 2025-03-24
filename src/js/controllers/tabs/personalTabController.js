@@ -13,10 +13,10 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['NavigatorParameters', 'Patient', 'NetworkStatus', '$timeout', 'UserPreferences',
+    PersonalTabController.$inject = ['NavigatorParameters', 'Patient', 'NetworkStatus', '$timeout', 'UserPreferences', 'Questionnaires',
         'UserHospitalPreferences', 'RequestToServer', 'Params'];
 
-    function PersonalTabController(NavigatorParameters, Patient, NetworkStatus, $timeout, UserPreferences,
+    function PersonalTabController(NavigatorParameters, Patient, NetworkStatus, $timeout, UserPreferences, Questionnaires,
         UserHospitalPreferences, RequestToServer, Params) {
         var vm = this;
 
@@ -80,6 +80,14 @@
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
                     vm.questionnairesUnreadNumber = result.data.unread_questionnaire_count;
                     vm.educationalMaterialsNumber = result.data.unread_educationalmaterial_count;
+                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
+                        'research',
+                        result.data.unread_research_questionnaire_count,
+                    );
+                    Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
+                        'consent',
+                        result.data.unread_consent_questionnaire_count,
+                    );
                     // TODO: fetch badges for the research menu items
                 });
             } catch (error) {
