@@ -1,0 +1,22 @@
+<ons-page>
+    <generic-toolbar title="{{ 'LAB_DELAY' | translate }}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <div class="container text-left" style="margin-top: 4px;" ng-class="fontSizeDesc">
+
+        <!-- part of phase 1b (see QSCCD-1555)
+        <p style="font-weight: bold">{{ "LAB_DELAY_INFO_HEADER" | translate }}</p>
+        <p>{{"LAB_DELAY_INFO_TEXT"|translate}}</p>
+        -->
+        <p style="font-weight: bold">{{ "LAB_DELAY_DEFAULTS_HEADER" | translate }}</p>
+        <p>
+            <span style="font-weight: bold">{{ "LAB_DELAY_DEFAULTS_INTERPRETABLE" | translate: { yesno: "yes" } }}</span>
+            {{ "DAYS" | translate: { days: 2 } }}
+        </p>
+        <p>{{ "LAB_DELAY_INTERPRETABLE" | translate }}</p>
+        <p>
+            <span style="font-weight: bold">{{ "LAB_DELAY_DEFAULTS_INTERPRETABLE" | translate: { yesno: "no" } }}</span>
+            {{ "DAYS" | translate: { days: 2 } }}
+        </p>
+        <p>{{ "LAB_DELAY_NONINTERPRETABLE" | translate }}</p>
+    </div>
+</ons-page>
