@@ -68,7 +68,7 @@ build ios:
 .deploy to firebase:
   stage: deploy
   before_script:
-    - RELEASE_NOTES="Build created and deployed by GitLab CI/CD on $(git log --format=short -n 1)"
+    - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=short -n 1)"
     - echo "$RELEASE_NOTES"
 
 deploy android to firebase:
