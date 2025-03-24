@@ -126,7 +126,7 @@ const config = env => {
 						{
 							loader: 'imports-loader',
 							options: {
-								additionalCode: 'var define = false; module.exports = false;'
+								additionalCode: 'var define = false; module.exports = false;',
 							},
 						},
 					],
