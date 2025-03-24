@@ -74,7 +74,7 @@
     "cordova-plugin-customurlscheme": "5.0.2",
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-file": "6.0.2",
-    "cordova-plugin-file-opener2": "3.0.5",
+    "cordova-plugin-file-opener2": "4.0.0",
     "cordova-plugin-geolocation": "4.1.0",
     "cordova-plugin-globalization": "1.11.0",
     "cordova-plugin-inappbrowser": "5.0.0",
