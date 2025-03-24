@@ -140,9 +140,9 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
      * @return {String} The storage key.
      */
     function getStorageKey() {
-        var hospitalCode = UserHospitalPreferences.getHospital();
+        var hospitalCode = UserHospitalPreferences.getHospitalInstitutionCode();
         var username = UserAuthorizationInfo.getUsername();
-        return username + ":" + hospitalCode + "/securityAns";
+        return `${username}:${hospitalCode}:securityAns`;
     }
 
     return {
@@ -270,8 +270,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
          * Public interface to get the storage key from outside the service.
          * @return {String} The storage key.
          */
-        getStorageKey: function(){
-            return getStorageKey();
-        },
+        getStorageKey: getStorageKey,
     };
 }]);

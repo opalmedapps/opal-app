@@ -24,6 +24,7 @@
             getHospital: getHospital,
             getHospitalList: getHospitalList,
             getAllowedModulesBeforeLogin: getAllowedModulesBeforeLogin,
+            getHospitalInstitutionCode: getHospitalInstitutionCode,
         };
 
         return service;
@@ -85,6 +86,15 @@
 
         function getHospital (){
             return selectedHospitalKey;
+        }
+
+        /**
+         * @name getHospitalInstitutionCode
+         * @desc Return the unique institution code of the selected hospital e.g A0, A4 etc
+         * @returns institurionCode {string} Instituion code string
+         */
+        function getHospitalInstitutionCode(){
+            return hospitalList[window.localStorage.getItem(localStorageHospitalKey)].uniqueHospitalCode;
         }
 
         /**
