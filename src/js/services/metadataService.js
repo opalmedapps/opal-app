@@ -32,6 +32,7 @@
         var firstTimePersonal = true;
         var firstTimeGeneral = true;
         var firstTimeEducational = true;
+        var firstTimeResearch = true;
 
         var personalTabData = {
             appointmentsUnreadNumber: null,
