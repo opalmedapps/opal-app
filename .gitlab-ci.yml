@@ -239,9 +239,26 @@ include:
 # https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
 # https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
-semgrep-sast-mobsf:
+semgrep-sast-mobsf-android:
   extends:
     - semgrep-sast
+  needs:
+    - build android
+  variables:
+    SECURE_LOG_LEVEL: debug
+  rules:
+    # override rules since at the time the job is created the apk does not exist yet
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Automatically built for release tags only (see .build)
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+
+semgrep-sast-mobsf-ios:
+  extends:
+    - semgrep-sast
+  needs:
+    - build ios
+  variables:
+    SECURE_LOG_LEVEL: debug
   rules:
     # override rules since at the time the job is created the apk does not exist yet
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
