@@ -414,7 +414,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
          *@ngdoc method
          *@name setLanguage
          *@param {Array} array Array with educational material
-         *@description Translates the array parameter containing educational material to appropiate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
+         *@description Translates the array parameter containing educational material to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
         setLanguage:function(array)

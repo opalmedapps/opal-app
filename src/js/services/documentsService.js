@@ -22,7 +22,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
     //Array documentsArray contains all the documents for the patient
     /**
      *@ngdoc property
-     *@description Initializing array that represents all the information for documents, this array is passed to appropiate controllers.
+     *@description Initializing array that represents all the information for documents, this array is passed to appropriate controllers.
      **/
     var documentsArray=[];
 
@@ -262,7 +262,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
          *@ngdoc method
          *@name setDocumentsLanguage
          *@param {Array} array Array with documents
-         *@description Translates the array parameter containing documents to appropiate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
+         *@description Translates the array parameter containing documents to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
         setDocumentsLanguage:function(array)

@@ -11,7 +11,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
     //Initializing array that represents all the informations for TxTeamMessages
     /**
      *@ngdoc property
-     *@description Initializing array that represents all the information for TxTeamMessages, this array is passed to appropiate controllers.
+     *@description Initializing array that represents all the information for TxTeamMessages, this array is passed to appropriate controllers.
      **/
     var txTeamMessagesArray=[];
 
@@ -157,7 +157,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
          *@ngdoc method
          *@name setLanguageTxTeamMessages
          *@param {Array} array Array with TxTeamMessages
-         *@description Translates the array parameter containing announcements to appropiate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
+         *@description Translates the array parameter containing announcements to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
         setLanguageTxTeamMessages :function(array)
