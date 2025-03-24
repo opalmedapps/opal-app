@@ -20,7 +20,7 @@
                     </div>
                     <div class="patient-content--text">
                         <p ng-class="fontSizeTitle">{{patient.first_name}} {{patient.last_name}}</p>
-                        <p class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate}} {{Ctrl.getRelationshipStatusText(patient.status) | translate | lowercase}} ({{patient.relationship_type_name | translate}})</p>
+                        <p class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate}} {{Ctrl.getRelationshipStatusText(patient.status) | translate | lowercase}} ({{patient.relationship_type_name}})</p>
                     </div>
                 </div>
             </ons-row>
