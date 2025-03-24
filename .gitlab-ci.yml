@@ -186,8 +186,8 @@ deploy web app:
         ls -la app/${CI_ENVIRONMENT_NAME}; 
         bye
       "
-  # rules:
-    # - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 # Launches a downstream pipeline to build for the QA environment
 # See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
