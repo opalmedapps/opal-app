@@ -78,23 +78,22 @@
          * @desc This function request the questionnaire selected from back-end and push it to the carousel
          * @param {int} answerQuestionnaireId
          */
-        function goToQuestionnaire(answerQuestionnaireId) {
+        async function goToQuestionnaire(answerQuestionnaireId) {
             // putting editQuestion false to claim that we are not coming from a summary page
             // Get questionnaire purpose to display correct page contents
-            Questionnaires.requestQuestionnairePurpose(answerQuestionnaireId)
-                .then(function (purposeData) {
-                    let purpose = purposeData.purpose;
+            let purposeData = await Questionnaires.requestQuestionnairePurpose(answerQuestionnaireId);
 
-                    // putting editQuestion false to claim that we are not coming from a summary page
-                    NavigatorParameters.setParameters({
-                        Navigator: navigatorName,
-                        answerQuestionnaireId: answerQuestionnaireId,
-                        editQuestion: false,
-                        questionnairePurpose: purpose.toLowerCase()
-                    });
+            let purpose = purposeData.purpose;
 
-                    navigator.replacePage('views/personal/questionnaires/questionnaires.html', { animation: 'fade' });
-                })
+            // putting editQuestion false to claim that we are not coming from a summary page
+            NavigatorParameters.setParameters({
+                Navigator: navigatorName,
+                answerQuestionnaireId: answerQuestionnaireId,
+                editQuestion: false,
+                questionnairePurpose: purpose.toLowerCase()
+            });
+
+            navigator.replacePage('views/personal/questionnaires/questionnaires.html', { animation: 'fade' });
         }
 
         /**

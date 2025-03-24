@@ -173,20 +173,25 @@
          * @param {int} answerQuestionnaireID ID of that particular questionnaire
          * @returns {Promise} resolves to the questionnaire's data if success
          */
-        function requestQuestionnaire(answerQuestionnaireID) {
+        async function requestQuestionnaire(answerQuestionnaireID) {
             // Parameters
             let params = {
                 'qp_ser_num': answerQuestionnaireID,
             };
+            try {
+                let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
 
-            return RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params)
-                .then(function (response) {
-                    // this is in case firebase deletes the property when it is empty
-                    if (response.hasOwnProperty('Data')) {
-                        return response.Data;
-                    }
-                    return {};
-                });
+                // this is in case firebase deletes the property when it is empty
+                if (response?.Data) {
+                    return response.Data;
+                }
+
+                return {};
+            } catch (error) {
+                console.log('Error in requestQuestionnaire: ', error);
+
+                return {};
+            }
         }
 
         /**
@@ -195,19 +200,25 @@
          * @param {string} qp_ser_num the qp_ser_num or answerQuestionnaireId of the questionnaire
          * @returns {Promise} resolves to the questionnaire purpose data
          */
-        function requestQuestionnairePurpose(qp_ser_num) {
+        async function requestQuestionnairePurpose(qp_ser_num) {
             let params = {
                 qp_ser_num: qp_ser_num
             };
 
-            return RequestToServer.sendRequestWithResponse(api.GET_PURPOSE, params)
-                .then(function (response) {
-                    // this is in case firebase deletes the property when it is empty
-                    if (response.hasOwnProperty('Data')) {
-                        return response.Data;
-                    }
-                    return { purpose: "default" };
-                });
+            try {
+                let response = await RequestToServer.sendRequestWithResponse(api.GET_PURPOSE, params);
+
+                // this is in case firebase deletes the property when it is empty
+                if (response?.Data) {
+                    return response.Data;
+                }
+
+                return { purpose: "default" };
+            } catch (error) {
+                console.log('Error in requestQuestionnairePurpose: ', error);
+
+                return {};
+            }
         }
 
         /**
@@ -216,18 +227,25 @@
        * @param {string} questionnairePurpose the purpose of questionnaires requested
        * @returns {Promise} resolves to the number of unread questionnaires data
        */
-        function requestQuestionnaireUnreadNumber(questionnairePurpose) {
+        async function requestQuestionnaireUnreadNumber(questionnairePurpose) {
             let params = {
                 purpose: questionnairePurpose
             };
-            return RequestToServer.sendRequestWithResponse(api.GET_NUMBER_UNREAD, params)
-                .then(function (response) {
-                    // this is in case firebase deletes the property when it is empty
-                    if (response.hasOwnProperty('Data')) {
-                        return response.Data;
-                    }
-                    return { numberUnread: "0" };
-                });
+
+            try {
+                let response = await RequestToServer.sendRequestWithResponse(api.GET_NUMBER_UNREAD, params);
+
+                // this is in case firebase deletes the property when it is empty
+                if (response.hasOwnProperty('Data')) {
+                    return response.Data;
+                }
+
+                return { numberUnread: "0" };
+            } catch (error) {
+                console.log('Error in requestQuestionnaireUnreadNumber: ', error);
+
+                return { numberUnread: "0" };
+            }
         }
     }
 })();

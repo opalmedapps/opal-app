@@ -274,14 +274,18 @@
          * @param {string} questionnairePurpose the purpose of questionnaires requested
          * @returns {Promise}
          */
-        function requestQuestionnaireUnreadNumber(questionnairePurpose) {
-            return QuestionnaireDataService.requestQuestionnaireUnreadNumber(questionnairePurpose)
-                .then(function(responseUnreadNumber){
+        async function requestQuestionnaireUnreadNumber(questionnairePurpose) {
+            try {
+                let responseUnreadNumber = await QuestionnaireDataService.requestQuestionnaireUnreadNumber(questionnairePurpose);
 
-                    numberOfUnreadQuestionnaires[questionnairePurpose] = parseInt(responseUnreadNumber.numberUnread);
+                numberOfUnreadQuestionnaires[questionnairePurpose] = parseInt(responseUnreadNumber.numberUnread);
 
-                    return {Success: true, Location: 'Server'};
-                });
+                return { Success: true, Location: 'Server' };
+            } catch (error) {
+                console.log('Error in requestQuestionnaireUnreadNumber: ', error);
+
+                return { Success: false, Location: 'Server' };
+            }
         }
 
         /**
@@ -303,22 +307,24 @@
          * @return {Promise}
          *
          */
-        function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus){
+        async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus) {
+            try {
+                let response = await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus);
 
-            return QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus)
-                .then(function (response) {
-                    if (newStatus === 1) {
-                        numberOfUnreadQuestionnaires[currentPurpose] -= 1;
-                    }
+                if (newStatus === 1) {
+                    numberOfUnreadQuestionnaires[currentPurpose] -= 1;
+                }
 
-                    let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus);
+                let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus);
 
-                    if (!isFailure) {
-                        throw new Error("Error updating status internal to app");
-                    }
+                if (!isFailure) {
+                    throw new Error("Error updating status internal to app");
+                }
 
-                    return {Success: true, Location: 'Server'};
-                });
+                return { Success: true, Location: 'Server' };
+            } catch (error) {
+                throw new Error("Error updating questionnaire status internal to app", { cause: error });
+            }
         }
 
         /**
