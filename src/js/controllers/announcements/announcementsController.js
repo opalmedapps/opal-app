@@ -96,7 +96,7 @@
 
         /**
          * @ngdoc method
-         * @name openDonation
+         * @name showHeader
          * @methodOf MUHCApp.controllers.AboutController
          * @param index integer representing the index of the announcement in vm.announcements
          * @return boolean

@@ -19,37 +19,6 @@
                 maxIdleTimeAllowed: 300000,
                 tenMinutesMilliSeconds: 600000,
 
-                /** About Controller URLs **/
-                aboutMuhcCase: 'aboutmuhc',
-                aboutMuhcUrl: {
-                    aboutMuhcUrlEn: 'https://muhc.ca/homepage/page/about-muhc',
-                    aboutMuhcUrlFr: 'https://cusm.ca/homepage/page/propos-du-cusm'
-                },
-                cedarsCancerCenterCase: 'cedarscancercenter',
-                cedarsCancerCenterUrl: {
-                    cedarsCancerCenterUrlEn: 'https://muhc.ca/glen/cedars-cancer-centre',
-                    cedarsCancerCenterUrlFr: 'https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres'
-                },
-                cedarsCancerFoundationCase: 'cedarscancerfoundation',
-                cedarsCancerFoundationUrl: {
-                    cedarsCancerFoundationUrlEn: 'https://www.cedars.ca',
-                    cedarsCancerFoundationUrlFr: 'https://www.cedars.ca'
-                },
-                cedarsCancerSupportCase: 'cedarscansupport',
-                cedarsCanSupportUrl: {
-                    cedarsCanSupportUrlEn: 'https://www.cansupport.ca/',
-                    cedarsCanSupportUrlFr: 'https://www.cansupport.ca/fr/'
-                },
-                donationCase: 'donation',
-                donationUrl: {
-                    donationUrlEn: 'https://www.opalmedapps.com/contribute',
-                    donationUrlFr: 'https://www.opalmedapps.com/contribute/fr'
-                },
-                opalWebsiteCase: 'opalwebsite',
-                opalWebsiteUrl: {
-                    opalWebsiteUrlEn: 'https://www.opalmedapps.com',
-                    opalWebsiteUrlFr: 'https://www.opalmedapps.com/fr-selected'
-                },
                 appointmentType: {
                     appointmentTypeEn: 'appointment',
                     appointmentTypeFr: 'rendez-vous'
@@ -62,9 +31,6 @@
                 alertTypeInfo: 'info',
                 alertClassUpdateMessageError: 'bg-danger updateMessage-error',
                 alertClassUpdateMessageSuccess: "bg-success updateMessage-success",
-
-                /** Registration Link **/
-                registrationPage: 'https://registration.opalmedapps.ca/#!/welcomePage',
 
                 /** Firebase Authentication Error Codes **/
                 invalidEmail: 'auth/invalid-email',
@@ -139,25 +105,6 @@
                     rangeSelectorToEr: 'to'
                 },
 
-                /** Parking Controller **/
-                general: {
-                    generalParkingTitleEn: 'Parking',
-                    generalParkingTitleFr: 'Stationnement',
-                    generalParkingUrl: 'https://www.depdocs.com/opal/parking/parking.php',
-                    generalParkingGlenUrlEn: 'https://muhc.ca/patient-and-visitor-parking#glen',
-                    generalParkingGlenUrlFr: 'https://cusm.ca/stationnement'
-                },
-                oncology: {
-                    oncologyParkingTitleEn: 'Oncology Parking',
-                    oncologyParkingTitleFr: 'Stationnement Radiothérapie',
-                    oncologyParkingUrlEn: 'https://www.depdocs.com/opal/parking/oncology_parking.php',
-                    oncologyParkingUrlFr: 'https://www.depdocs.com/opal/parking/radiotherapie_stationnement.php'
-                },
-                gettingHospitalUrl: {
-                    gettingHospitalUrlEn: 'https://muhc.ca/glen',
-                    gettingHospitalUrlFr: 'https://cusm.ca/glen'
-                },
-
                 /** ChangeSettingsController Constants **/
                 setAliasParam: 'ALIAS',
                 setAliasLowerCaseParam: 'Alias',
@@ -196,20 +143,6 @@
                     'Physics Quality Control': [],
                     'Scheduling Treatments': []
                 },
-
-                /** GeneralTab Controller **/
-                findDoctorCase: 'finddoctor',
-                findDoctorUrl: {
-                    findDoctorUrlEn: 'https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/',
-                    findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-dun-medecin-de-famille'
-                },
-                medicalSchedulerCase: 'medicalscheduler',
-                medicalSchedulerUrl: {
-                    medicalSchedulerUrlEn: 'https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx',
-                    medicalSchedulerUrlFr: 'https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx'
-                },
-                carnetSanteCase: 'carnetsante',
-                carnetSanteUrl: 'https://carnetsante.gouv.qc.ca/portail',
 
                 /** CheckIn Service Constants **/
                 hospitalSite: {
@@ -335,156 +268,6 @@
                             "SUP": 1,
                             "CED": 1,
                             "HOS": 1,
-                        },
-                    },
-                    'CHUM': {
-                        acronym: 'CHUM_ACRONYM',
-                        fullName: 'CHUM_FULL',
-                        uniqueHospitalCode: 'A2',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "TRP": 0,
-                            "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
-                        },
-                    },
-                    'HMR': {
-                        acronym: 'HMR_ACRONYM',
-                        fullName: 'HMR_FULL',
-                        uniqueHospitalCode: 'A3',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "TRP": 0,
-                            "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
-                        },
-                    },
-                    'SMHC': {
-                        acronym: 'SMHC_ACRONYM',
-                        fullName: 'SMHC_FULL',
-                        uniqueHospitalCode: 'A1',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "TRP": 0,
-                            "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
-                        },
-                    },
-                    'CHU_SJ': {
-                        acronym: 'CHU_SJ_ACRONYM',
-                        fullName: 'CHU_SJ_FULL',
-                        uniqueHospitalCode: 'A4',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "TRP": 0,
-                            "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
-                        },
-                    },
-                    'Cite-de-la-sante': {
-                        acronym: 'CITE_ACRONYM',
-                        fullName: 'CITE_FULL',
-                        uniqueHospitalCode: 'A5',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "TRP": 0,
-                            "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
                         },
                     },
                     'RI-MUHC': {

@@ -23,7 +23,7 @@
     </style>
 
     <div class="container" ng-bind-html="about.pageContent.content | trustHTML" ng-class="fontSizeDesc"></div>{{about.alert}}
-    <div ng-show="about.alert.type" align="center" style="margin-top: 60px; width: 95%; margin: auto" ng-class="fontSizeDesc">
+    <div ng-show="about.alert.type" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
         <uib-alert type="{{about.alert.type}}">{{about.alert.content|translate}}</uib-alert>
     </div>
 </ons-page>

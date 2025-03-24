@@ -71,6 +71,10 @@
         <allow-intent href="market:*"/>
     </platform>
     <platform name="ios">
+        <!-- Required to access location data since iOS 10 -->
+        <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+            <string>Localisation nécessaire pour l'enregistrement aux rendez-vous / Location needed for appointment check-in</string>
+        </config-file>
         <preference name="deployment-target" value="11.0"/>
         <preference name="WKWebViewOnly" value="true"/>
         <splash src="res/screen/ios/Default@2x~universal~anyany.png"/>
@@ -89,6 +93,7 @@
         <icon height="144" src="res/ios/Icon-72@2x.png" width="144"/>
         <icon height="29" src="res/ios/Icon-small.png" width="29"/>
         <icon height="58" src="res/ios/Icon-small@2x.png" width="58"/>
+        <icon height="167" src="res/ios/Icon-167.png" width="167"/>
     </platform>
     <plugin name="com.cordova.plugins.cookiemaster" spec="^1.0.1"/>
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.2"/>
