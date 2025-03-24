@@ -15,12 +15,12 @@
         .module('MUHCApp')
         .controller('CheckInController', CheckInController);
 
-    CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'Navigator', 'Params', 'ProfileSelector',
-        'Toast', 'User', 'UserPreferences'];
+    CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'NativeNotification', 'Navigator', 'Params',
+        'ProfileSelector', 'Toast', 'User', 'UserPreferences'];
 
     /* @ngInject */
-    function CheckInController($filter, $timeout, CheckInService, Navigator, Params, ProfileSelector,
-                               Toast, User, UserPreferences) {
+    function CheckInController($filter, $timeout, CheckInService, NativeNotification, Navigator, Params,
+                               ProfileSelector, Toast, User, UserPreferences) {
         let vm = this;
         let navigator;
 
@@ -106,15 +106,30 @@
          * @param {object} appointment The appointment to open.
          */
         function goToAppointment(appointment) {
-            if(appointment.ReadStatus === '0') {
-                Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
-                // Mark corresponding notification as read
-                Notifications.implicitlyMarkCachedNotificationAsRead(
-                    appointment.AppointmentSerNum,
-                    Notifications.appointmentNotificationTypes(),
-                );
+            try {
+                // Clicking on an appointment for a patient should switch the profile behind the scenes
+                if (ProfileSelector.getActiveProfile().patient_legacy_id !== appointment.PatientSerNum) {
+                    let currentPageParams = Navigator.getParameters();
+                    currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
+                    ProfileSelector.loadPatientProfile(appointment.PatientSerNum);
+                }
+
+                // Mark the appointment and its notification(s) as read
+                if (appointment.ReadStatus === '0') {
+                    Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+                    // Mark corresponding notification as read
+                    Notifications.implicitlyMarkCachedNotificationAsRead(
+                        appointment.AppointmentSerNum,
+                        Notifications.appointmentNotificationTypes(),
+                    );
+                }
+
+                navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
             }
-            navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
+            catch(error) {
+                console.error(error);
+                NativeNotification.showNotificationAlert($filter('translate')('APPOINTMENT_OPEN_ERROR'));
+            }
         }
 
         /**
