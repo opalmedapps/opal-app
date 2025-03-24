@@ -164,6 +164,7 @@
 
                 unsubscribe(result.id, HEART_RATE_SERVICE_UUID, HEART_RATE_MEASUREMENT_CHARACTERISTIC_UUID);
                 unsubscribe(result.id, BLOOD_PRESSURE_SERVICE_UUID, BLOOD_PRESSURE_CHARACTERISTIC_UUID);
+                vm.dataSubmitted = true;
                 disconnect(device);
             }, 40000);
         }
@@ -226,8 +227,6 @@
                 let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
                 
                 addMessage('Vital signs successfully sent to backend');
-                
-                vm.dataSubmitted = true;
             } catch (error) {
                 vm.errorMessage = `${ERROR_BACKEND}: ${error}`;
             }
