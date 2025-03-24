@@ -177,6 +177,7 @@
                     "CED": 0,
                     "HOS": 0,
                     "SMD": 0,
+                    "CTB": 1,
                 },
                 localStorageHospitalKey: 'hospital',
                 hospitalList: {
@@ -211,6 +212,7 @@
                             "CED": 1,
                             "HOS": 1,
                             "SMD": 1,
+                            "CTB": 1,
                         },
                     },
                     'RI-MUHC': {
@@ -244,6 +246,7 @@
                             "CED": 0,
                             "HOS": 0,
                             "SMD": 0,
+                            "CTB": 1,
                         },
                     },
                     'CHU_SJ': {
@@ -277,6 +280,7 @@
                             "CED": 0,
                             "HOS": 0,
                             "SMD": 0,
+                            "CTB": 1,
                         },
                     }
                 },
