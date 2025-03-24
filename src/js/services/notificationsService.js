@@ -184,7 +184,7 @@
          *  PRIVATE FUNCTIONS
          ******************************/
 
-        //Used by the update function, it iterates through the notifications if it finds the notification then it deletes it.
+        // Used by the update function, it iterates through the notifications if it finds the notification then it deletes it.
         function searchAndDeleteNotifications(notifications) {
             for (let i = 0; i < notifications.length; i++) {
                 for (let j = 0; j < Notifications.length; j++) {
@@ -196,12 +196,15 @@
             }
         }
 
-        //Adds the notification to the notifications array and the localStorage array.
+        // Adds the notification to the notifications array and the localStorage array.
         function addUserNotifications(notifications) {
             if (typeof notifications === 'undefined') return;
             let temp = angular.copy(notifications);
             for (let i = 0; i < notifications.length; i++) {
-                if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') continue;
+                if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') {
+                    console.warn(`Notification with unsupported type ${temp[i].NotificationType}:`, temp[i]);
+                    continue;
+                } 
 
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
