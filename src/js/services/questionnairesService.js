@@ -593,6 +593,17 @@
                 if (isNaN(intProp)) throw new Error(`Questionnaire stub's '${prop}' cannot be parsed as an int: ${questionnaireStub[prop]}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
                 questionnaireStub[prop] = intProp;
             });
+
+            // Format and validate the questionnaire's date properties
+            let dateProperties = ['completed_date', 'created', 'last_updated'];
+            dateProperties.forEach(prop => {
+                // Only format date properties that were provided and that haven't been formatted already (must still be strings)
+                if (typeof questionnaireStub[prop] == 'string') {
+                    const dateProp = Date.parse(questionnaireStub[prop]);
+                    if (isNaN(dateProp)) throw new Error(`Questionnaire stub's '${prop}' cannot be parsed as a date: ${questionnaireStub[prop]}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
+                    questionnaireStub[prop] = dateProp;
+                }
+            });
         }
 
         /**
@@ -889,32 +900,20 @@
          * @name updateAppQuestionnaireLastUpdated
          * @desc This private function helps update the last updated time for the list of questionnaire. The last updated will have ISO 8601 format and have zero UTC offset
          * @param {int} qp_ser_num the qp_ser_num or the answerQuestionnaireId of the questionnaire to be updated
-         * @param {status} status the status of the questionnaire to be updated
+         * @param {number} status the status of the questionnaire to be updated
          * @returns {boolean} true if success, false otherwise
          */
         function updateAppQuestionnaireLastUpdated(qp_ser_num, status){
-            let d = new Date();
-
-            // we know the old status -> clean up old status
-            switch (status) {
-                case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS:
-                    newQuestionnaires[qp_ser_num].last_updated = d.toISOString();
-                    break;
-
-                case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS:
-                    inProgressQuestionnaires[qp_ser_num].last_updated = d.toISOString();
-                    break;
-
-                case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS:
-                    completeQuestionnaires[qp_ser_num].last_updated = d.toISOString();
-                    break;
-
-                default:
-                    console.error("ERROR: error in updating the questionnaire status, it does not have a valid new status");
-                    return false;
+            try {
+                let now = new Date();
+                let questionnaires = getQuestionnaireMap(status);
+                questionnaires[qp_ser_num].last_updated = now.toISOString();
+                return true;
             }
-
-            return true;
+            catch (error) {
+                console.error("Error updating a questionnaire's 'last_updated' attribute", error);
+                return false;
+            }
         }
 
         /**
