@@ -158,7 +158,8 @@
                         }
                         r.resolve()
                     })
-                    .catch(function() {
+                    .catch(function(error) {
+                        console.error(error);
                         setCheckinState("NOT_ALLOWED", appts.length);
                         r.reject()
                     })
