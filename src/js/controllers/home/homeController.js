@@ -26,7 +26,6 @@
         vm.appointmentShown = null;
         vm.todaysAppointments = [];
         vm.calledApp = null;
-        //vm.checkInMessage = '';
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
@@ -96,7 +95,7 @@
                 });
 
             // Initialize the page data if online
-            if(NetworkStatus.isOnline()) {
+            if (NetworkStatus.isOnline()) {
                 homePageInit();
             } else {
                 //Basic patient information that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
