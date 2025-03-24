@@ -11,9 +11,11 @@ for instructions on how to get started.
 ## Setup
 
 The following instructions assume an environment name of `local`.
-You can replace this with any name you prefer, without any spaces or special characters.
+You can replace this with any name you prefer, without any spaces or special characters (except `-` or `_`).
 
-First create a folder called `local` inside `env`, and copy the sample config file to `env/local`:
+First, create a folder called `local` inside `env`.
+
+Copy the sample config file to `env/local`:
 
 ```shell
 cp env/opal.config.sample.js env/local/opal.config.js
