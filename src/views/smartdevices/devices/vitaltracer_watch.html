@@ -36,11 +36,6 @@
             <!-- Currently hidden but might be helpful to show to users -->
             <p><strong>Name:</strong> {{ctrl.selectedDevice.name}} ({{ctrl.selectedDevice.id}})</p>
             <p><strong>Battery level:</strong> {{ctrl.batteryLevel}}%</p>
-
-            <!-- <button class="button--large--cta"
-                    ng-click="ctrl.submitData()">
-                {{ "SMARTDEVICES_ETEKCITY_SUBMIT" | translate }}
-            </button> -->
         </div>
 
         <div ng-if="!ctrl.scanning && ctrl.selectedDevice == null && ctrl.getDeviceList().length > 1">
