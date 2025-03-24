@@ -3,7 +3,7 @@
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
         <div class="center">{{edu.edumaterial.Type}}</div>
-        <div class="right" ng-show="edu.edumaterial.ShareURL_EN && edu.edumaterial.ShareURL_EN!==''">
+        <div class="right" ng-show="edu.isShareable()">
             <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial">
                 <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
             </ons-toolbar-button>

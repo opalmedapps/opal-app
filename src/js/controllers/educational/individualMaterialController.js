@@ -43,7 +43,7 @@
 
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.openPDF = openPDF;
-        vm.share = share;
+        vm.isShareable = isShareable;
 
         // Logging functions
         vm.scrollDown = scrollDown;
@@ -51,6 +51,10 @@
 
         // Function used to open a material contained in a package
         vm.goInPackage = goInPackage;
+
+        // Used by the share popover
+        $scope.popoverSharing = undefined;
+        $scope.share = share;
 
         activate();
         /////////////////////////////
@@ -184,25 +188,38 @@
         }
 
         /**
-         * @description Shares a document using Cordova's social sharing plugin.
+         * @description Determines whether the material can be shared, based on whether it has a URL for this.
+         * @returns {boolean} True if the material can be shared; false otherwise.
+         */
+        function isShareable() {
+            return getURLToShare() !== "";
+        }
+
+        /**
+         * @description Returns the URL to use when sharing the material: if a ShareURL is provided, it is used.
+         *              Otherwise, it defaults to using the regular material URL, if one exists.
+         *              Note: materials without either URL (e.g. a booklet for which no ShareURL was provided)
+         *                    are not shareable.
+         * @author Stacey Beard
+         * @date 2021-10-08
+         * @returns {string} The URL to use to share the material if possible, or otherwise an empty string.
+         */
+        function getURLToShare() {
+            let shareURL = vm.edumaterial.ShareURL;
+            let regularURL = vm.edumaterial.Url;
+
+            if (shareURL && shareURL !== "") return shareURL;
+            else if (regularURL && regularURL !== "") return regularURL;
+            else return "";
+        }
+
+        /**
+         * @description Shares a document using cordova's social sharing plugin.
          *              The document must first be saved to the device's internal memory.
          *              Note: document sharing is not supported on a browser (a warning will be shown).
          */
         function share() {
-            // Sharing is only available on mobile devices
-            if (!Constants.app) {
-                ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
-                return;
-            }
-
-            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL).catch(error => {
-                console.error(`Error sharing document: ${JSON.stringify(error)}`);
-                Toast.showToast({
-                    message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),
-                });
-            });
-
-            $scope.popoverSharing.hide();
+            FileManagerService.share(vm.edumaterial.Name, getURLToShare());
         }
 
         function downloadIndividualPage()

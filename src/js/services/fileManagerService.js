@@ -7,8 +7,8 @@ var myApp = angular.module('MUHCApp');
  *@name MUHCApp.service:FileManagerService
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
-myApp.service('FileManagerService', ['$injector', 'Constants', 'Browser', 'RequestToServer',
-function ($injector, Constants, Browser, RequestToServer) {
+myApp.service('FileManagerService', ['$filter', '$injector', 'Browser', 'Constants', 'RequestToServer', 'Toast',
+function ($filter, $injector, Browser, Constants, RequestToServer, Toast) {
 
     /**
      *@ngdoc property
@@ -348,6 +348,27 @@ function ($injector, Constants, Browser, RequestToServer) {
     }
 
     /**
+     * @description UI-facing function to share a document using cordova's social sharing plugin.
+     *              Shows a warning to the user if the document cannot be shared.
+     * @param {string} name - The name of the document to share.
+     * @param {string} url - The url to the document, either in base64 format or on the web.
+     */
+    function share(name, url) {
+        // Sharing is only available on mobile devices
+        if (!Constants.app) {
+            ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
+            return;
+        }
+
+        shareDocument(name, url).catch(error => {
+            console.error(`Error sharing document: ${JSON.stringify(error)}`);
+            Toast.showToast({
+                message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),
+            });
+        });
+    }
+
+    /**
      * @description Promise wrapper for the shareWithOptions() function of cordova's social sharing plugin.
      * @param {Object} options - The options to pass to the plugin's share function.
      * @returns {Promise<unknown>}
@@ -359,10 +380,10 @@ function ($injector, Constants, Browser, RequestToServer) {
     }
 
     /**
-     * @description Shares a file using cordova's social sharing plugin.
-     *              If the url to the file is in base64 format, the file will first be saved to the device.
-     * @param {string} name - The name of the file to share.
-     * @param {string} url - The url to the file, either in base64 format or on the web.
+     * @description Shares a document using cordova's social sharing plugin.
+     *              If the url to the document is in base64 format, the document will first be saved to the device.
+     * @param {string} name - The name of the document to share.
+     * @param {string} url - The url to the document, either in base64 format or on the web.
      * @returns {Promise<void>} Resolves when the plugin success callback is triggered, or rejects with an error.
      */
     async function shareDocument(name, url) {
@@ -383,12 +404,12 @@ function ($injector, Constants, Browser, RequestToServer) {
             message: name,
         };
 
-        // Determine whether to share the file by link or by attachment
+        // Determine whether to share the document by link or by attachment
         fileWasDownloaded || toShareByAttachment(url)
             ? options.files = [url] // Share by attachment (the file itself is shared)
-            : options.url = url;    // Share by link (a link to the file is shared)
+            : options.url = url;    // Share by link (a link to the document is shared)
 
-        // Share the file using a cordova plugin
+        // Share the document using a cordova plugin
         let shareResult = await shareWithPlugin(options);
 
         console.log(`Share plugin result: ${JSON.stringify(shareResult)}`);
@@ -451,7 +472,7 @@ function ($injector, Constants, Browser, RequestToServer) {
     return {
         getFileExtension: getFileExtension,
 
-        shareDocument: shareDocument,
+        share: share,
 
         openPDF: openPDF,
 

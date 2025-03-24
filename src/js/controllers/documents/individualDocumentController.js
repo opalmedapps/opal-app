@@ -119,24 +119,11 @@
         /**
          * @description Shares a document using cordova's social sharing plugin.
          *              The document must first be saved to the device's internal memory.
-         *              Since clinical documents may contain sensitive medical data, the shareSensitiveDocument function
-         *              is used to ensure that the document is deleted immediately after sharing.
          *              Note: document sharing is not supported on a browser (a warning will be shown).
          */
         function share() {
-            // Sharing is only available on mobile devices
-            if (!Constants.app) {
-                ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
-                return;
-            }
-
             let base64URL = `data:application/pdf;base64,${docParams.Content}`;
-            FileManagerService.shareDocument(docParams.fileName, base64URL).catch(error => {
-                console.error(`Error sharing document: ${JSON.stringify(error)}`);
-                Toast.showToast({
-                    message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),
-                });
-            });
+            FileManagerService.share(docParams.fileName, base64URL);
         }
 
         function warn() {
