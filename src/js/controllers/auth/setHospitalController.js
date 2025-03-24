@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .controller('SetHospitalController', SetHospitalController);
 
-    SetHospitalController.$inject = ['UserHospitalPreferences'];
+    SetHospitalController.$inject = ['$filter', 'NativeNotification','UserHospitalPreferences'];
 
     /* @ngInject */
-    function SetHospitalController(UserHospitalPreferences) {
+    function SetHospitalController($filter, NativeNotification, UserHospitalPreferences) {
         var vm = this;
 
         vm.hospitalList = {};
