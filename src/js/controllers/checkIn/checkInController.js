@@ -38,12 +38,21 @@
 
         var vm = this;
         vm.apps = [];
+        vm.displayApps = {};
+        vm.patients = {};
+        vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
         vm.error = '';
         vm.checkInMessage = "";
         vm.alert = {};
         vm.HasNonCheckinableAppt = false;
+
+        vm.statusColor = []
+        vm.statusColor[Params.alertTypeSuccess] = 'green';
+        vm.statusColor[Params.alertTypeInfo] = 'rgba(38,100,171,0.81)';
+        vm.statusColor[Params.alertTypeDanger] = 'red';
+
 
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
@@ -55,9 +64,21 @@
 
         function activate() {
             vm.apps = CheckInService.getCheckInApps();
+            vm.apps.forEach(app => {
+                if (!vm.displayApps[app.PatientSerNum]) {
+                    vm.displayApps[app.PatientSerNum] = [];
+                }
+                vm.displayApps[app.PatientSerNum].push(app);
+                vm.patients[app.PatientSerNum] = app.patientName;
+            });
             vm.language = UserPreferences.getLanguage();
 
             vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
+
+            const parameters = NavigatorParameters.getParameters();
+            if (parameters.hasOwnProperty('apps')) {
+                vm.checkedInApps[parameters.apps.key] = parameters.apps.apps;
+            }
         }
 
         /**
@@ -102,13 +123,18 @@
             return HasNonCheckinable;
         }
 
-        /**
-         * @return void
-         * @description Check-in all the appointments and update appointment array
+         /*
+         * @param PatientSerNum
+         * @return {void}
+         * @description Checks if in the list of Appointments,for the target patient
          */
-        async function checkInAppointments() {
+        async function CheckInAppointments(PatientSerNum) {
+            vm.displayApps[PatientSerNum].forEach(app => {
+                app.loading = true;
+            })
+
             try {
-                const response = await CheckInService.attemptCheckin();
+                const response = await CheckInService.attemptCheckin(PatientSerNum);
                 if(response === "NOT_ALLOWED"){
                     Toast.showToast({
                         message: $filter('translate')("NOT_ALLOWED"),
@@ -131,6 +157,18 @@
                 displayError();
             }
 
+            $timeout(() => {
+                let allCheckedIn = true;
+                vm.displayApps[PatientSerNum].forEach(app => {
+                    const appt = response.appts.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
+                    if (appt) {
+                        app.Checkin = appt.Checkin;
+                        app.loading = false;
+                        allCheckedIn =  allCheckedIn && app.CheckInStatus == 'success';
+                    }
+                })
+                vm.displayApps[PatientSerNum].allCheckedIn = allCheckedIn;
+            },);
         }
     }
 })();
