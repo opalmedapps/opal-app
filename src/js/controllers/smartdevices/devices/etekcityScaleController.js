@@ -54,8 +54,8 @@
         vm.scanAndConnect = scanAndConnect;
         vm.selectDevice = selectDevice;
         vm.submitData = submitData;
-        vm.shouldShowInstructions = () => !vm.scanning && vm.selectedDevice == null && vm.devices.length == 0;
-        vm.isLoading = () => vm.scanning && vm.selectedDevice == null;
+        vm.showInstructions = !vm.scanning && vm.selectedDevice == null && vm.devices.length == 0;
+        vm.isLoading = vm.scanning && vm.selectedDevice == null;
         vm.done = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
 
         async function submitData() {

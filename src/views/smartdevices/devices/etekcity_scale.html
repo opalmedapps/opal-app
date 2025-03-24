@@ -17,7 +17,7 @@
             <p class="error">{{ ctrl.errorMessage }}</p>
         </div>
 
-        <div ng-if="ctrl.shouldShowInstructions()">
+        <div ng-if="ctrl.showInstructions">
             <div style="text-align: justify;">
                 <p>{{ "SMARTDEVICES_ETEKCITY_INSTRUCTIONS" | translate }}</p>
             </div>
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div ng-if="ctrl.isLoading()">
+        <div ng-if="ctrl.isLoading">
             <loading-spinning-circle loading-message="{{'SMARTDEVICES_CONNECTING'|translate}}">
             </loading-spinning-circle>
         </div>
