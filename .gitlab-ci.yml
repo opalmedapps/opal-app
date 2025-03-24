@@ -171,7 +171,7 @@ build web:
 deploy android to firebase:
   extends: .deploy app to firebase
   script:
-    - npx firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+    - npx firebase-tools appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build android
 
@@ -179,7 +179,7 @@ deploy android to firebase:
 deploy ios to firebase:
   extends: .deploy app to firebase
   script:
-    - npx firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+    - npx firebase-tools appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build ios
 
