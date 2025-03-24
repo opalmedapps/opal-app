@@ -18,13 +18,13 @@
         'NativeNotification',
         'NavigatorParameters',
         'Params',
+        'ProfileSelector',
         'Questionnaires',
-        'Studies',
-        'ProfileSelector'
+        'Studies'
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, Questionnaires, Studies, ProfileSelector) {
+    function AnsweredQuestionnaireController($filter, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
