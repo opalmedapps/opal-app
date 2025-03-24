@@ -38,7 +38,7 @@
     </div>
 
     <!-- LIST OF EDUCATIONAL MATERIALS -->
-    <ons-scroller-height ng-hide="edu.noMaterials" offset-height="78">
+    <ons-scroller-height ng-hide="edu.noMaterials" offset-height="10">
         <ons-list
             ng-repeat="edumaterial in (edu.filteredEduMaterials = (edu.edumaterials | filter: edu.searchString | orderBy: '-DateAdded'))"
             ng-click="edu.goToEducationalMaterial(edumaterial)">
