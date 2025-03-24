@@ -32,20 +32,9 @@
 
         function activate() {
             vm.stage = NavigatorParameters.getParameters().Post;
-
-            var language = UserPreferences.getLanguage();
-
-            if (vm.stage) {
-                if ("AppointmentDescription_" + language in vm.stage) {
-                    vm.stage.appointmentDescription = vm.stage["AppointmentDescription_" + language];
-                }
-                if ("TaskDescription_" + language in vm.stage) {
-                    vm.stage.taskDescription = vm.stage["TaskDescription_" + language];
-                }
-            }
-
             vm.name = NavigatorParameters.getParameters().StepName;
             Logger.sendLog('Treatment Plan', vm.stage);
+
         }
 
         //Links to the about page controlled by the contentController
@@ -57,6 +46,5 @@
         }
 
     }
-
 
 })();
