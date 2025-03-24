@@ -131,6 +131,9 @@
                 dateFirst=(new Date(vm.appointments[0].ScheduledStartTime.getTime()));
                 dateFirst.setHours(0,0,0,0);
                 dateFirst = dateFirst.getTime();
+
+                // reset tody's date and refresh calendar appointments' dots
+                vm.todays_date = new Date();
             }
         }
 
