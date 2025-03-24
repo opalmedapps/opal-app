@@ -1,3 +1,24 @@
+## [1.24.1](https://gitlab.com/opalmedapps/qplus/compare/v1.24.0...v1.24.1) (2024-01-12)
+
+
+### Bug Fixes
+
+* remove unwanted android exports added by plugins ([a04b7ca](https://gitlab.com/opalmedapps/qplus/commit/a04b7ca7ff264d58804251ff6bd0e66cfdc5c6f1))
+
+# [1.24.0](https://gitlab.com/opalmedapps/qplus/compare/v1.23.1...v1.24.0) (2024-01-12)
+
+
+### Features
+
+* adjust databank consent creation logic with new questions ([5c7e83a](https://gitlab.com/opalmedapps/qplus/commit/5c7e83a42a8b3677b056c571659cdf5aa23af21c))
+
+## [1.23.1](https://gitlab.com/opalmedapps/qplus/compare/v1.23.0...v1.23.1) (2024-01-10)
+
+
+### Bug Fixes
+
+* remove unnecessary storage access permissions ([c4424c0](https://gitlab.com/opalmedapps/qplus/commit/c4424c0b330dbd504031ecfd7ebb0cddb21cea80))
+
 # [1.23.0](https://gitlab.com/opalmedapps/qplus/compare/v1.22.0...v1.23.0) (2024-01-09)
 
 
