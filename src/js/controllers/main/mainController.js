@@ -34,6 +34,7 @@
 
             /*
                 Detect jailbroken and rooted devices and prevent continuing.
+                Suggested in the pentest report 2023.
                 Note that this is not a fool-proof solution and some disagree whether it should be done at all.
                 See: https://developer.apple.com/forums/thread/66363#191199022
             */
