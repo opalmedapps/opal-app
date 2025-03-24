@@ -1,3 +1,10 @@
+## [1.36.4](https://gitlab.com/opalmedapps/qplus/compare/v1.36.3...v1.36.4) (2024-08-14)
+
+
+### Bug Fixes
+
+* improve "About this appointment" button UI ([af66703](https://gitlab.com/opalmedapps/qplus/commit/af6670399e0c5fbf8cffe1b6e4f02442e4c56c9a))
+
 ## [1.36.3](https://gitlab.com/opalmedapps/qplus/compare/v1.36.2...v1.36.3) (2024-08-12)
 
 

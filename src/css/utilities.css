@@ -115,8 +115,10 @@
 }
 .about-link {
 	background-color: #E3F2FD;
-	font-weight: bold;
-	color:#666;
+}
+.about-link label {
+	color: #444444;
+	font-weight: normal;
 }
 .hyphens {
 	hyphens:auto;
