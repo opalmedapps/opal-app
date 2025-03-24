@@ -14,16 +14,14 @@
     AnsweredQuestionnaireController.$inject = [
         '$filter',
         '$timeout',
-        'FirebaseService',
         'NativeNotification',
         'NavigatorParameters',
         'Params',
-        'Questionnaires',
-        'Studies'
+        'Questionnaires'
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $timeout, FirebaseService, NativeNotification, NavigatorParameters, Params, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -32,7 +30,6 @@
         const NON_EXISTING_ANSWER = Params.QUESTIONNAIRE_DISPLAY_STRING.NON_EXISTING_ANSWER;
 
         // variables for controller
-        let purpose = 'default';
         let navigator = null;
         let navigatorName = '';
 
@@ -42,23 +39,15 @@
         vm.answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
 
         // variables that can be seen from view, sorted alphabetically
-        vm.consentStatus = null;
-        vm.isConsent = false;
-        vm.hasDescription = false;
         vm.loadingQuestionnaire = true;     // the loading circle for one questionnaire
         vm.loadingSubmitQuestionnaire = false;  // the loading circle for saving questionnaire
-        vm.password = '';   // the password that the user may enter for consent form
         vm.questionnaire = {};  // the questionnaire itself
-        vm.requirePassword = false;     // determine whether the password is required for submission or not
         vm.submitAllowed = false;   // if all questions are completed, then the user is allowed to submit.
-        vm.submitButtonText = '';
-        vm.submitInstructions = '';
 
         // functions that can be seen from view, sorted alphabetically
         vm.editQuestion = editQuestion;
         vm.questionOnClick = questionOnClick;
         vm.submitQuestionnaire = submitQuestionnaire;
-        vm.updateRequirePassword = updateRequirePassword
 
         activate();
 
@@ -114,8 +103,7 @@
                 sectionIndex: sIndex,
                 questionIndex: qIndex,
                 editQuestion: true,
-                answerQuestionnaireId: vm.questionnaire.qp_ser_num,
-                questionnairePurpose: purpose
+                answerQuestionnaireId: vm.questionnaire.qp_ser_num
             });
             navigator.replacePage('views/personal/questionnaires/questionnaires.html', {animation: 'slide'});
         }
@@ -127,29 +115,24 @@
         function submitQuestionnaire(){
             vm.loadingSubmitQuestionnaire = true;
 
-            verifyPassword(vm.requirePassword, vm.password)
-                .then(function(){
-
-                    // Update consent status to opalConsented or declined
-                    if (vm.isConsent && !vm.requirePassword) Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined');
-                    else Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented')
-
-                    // mark questionnaire as finished
-                    return Questionnaires.updateQuestionnaireStatus(
-                        vm.questionnaire.qp_ser_num,
-                        vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS,
-                        vm.questionnaire.status
-                    );
-                })
+            // mark questionnaire as finished
+            Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS, vm.questionnaire.status)
                 .then(function(){
                     vm.loadingSubmitQuestionnaire = false;
                     vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
 
-                    NavigatorParameters.setParameters({Navigator: navigatorName, questionnairePurpose: purpose});
+                    NavigatorParameters.setParameters({Navigator: navigatorName});
                     navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {animation: 'slide'});
-
                 })
-                .catch(handleSubmitErr)
+                .catch(function(){
+                    vm.loadingSubmitQuestionnaire = false;
+
+                    // go to the questionnaire list page if there is an error
+                    NavigatorParameters.setParameters({Navigator: navigatorName});
+                    navigator.popPage();
+
+                    NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_QUESTIONNAIRE"));
+                })
         }
 
         /**
@@ -209,29 +192,14 @@
          *      2) initialize the answers in case they do not exist due to the migration
          *      3) verify if the questionnaire is properly completed and ready to be submitted
          *      4) add / reset the show hide property of the question itself
-         *      5) decide whether or not to prompt for the password depending on the questionnaire purpose
          */
         function init(){
             vm.submitAllowed = true;
-            vm.hasDescription = vm.questionnaire.description !== '' && vm.questionnaire.description !== null && vm.questionnaire.description !== undefined;
-
-            if (!vm.questionnaire.hasOwnProperty('questionnaire_purpose')) {
-                vm.submitAllowed = false;
-                handleLoadQuestionnaireErr();
-            }
-
-            purpose = vm.questionnaire.questionnaire_purpose.toLowerCase();
-            vm.isConsent = purpose === 'consent';
-            setPageText(purpose);
-
-            // this if for consent forms
-            // setRequirePassword(purpose);
 
             for (let i = 0; i < vm.questionnaire.sections.length; i++) {
 
                 if (!vm.questionnaire.sections[i].hasOwnProperty('questions')){
-                    vm.submitAllowed = false;
-                    handleLoadQuestionnaireErr();
+                    // TODO: error handling
                 }
 
                 for (let j = 0; j < vm.questionnaire.sections[i].questions.length; j++) {
@@ -240,9 +208,7 @@
                         !vm.questionnaire.sections[i].questions[j].patient_answer.hasOwnProperty('is_defined') ||
                         !vm.questionnaire.sections[i].questions[j].hasOwnProperty('type_id') ||
                         !vm.questionnaire.sections[i].questions[j].hasOwnProperty('optional')){
-
-                        vm.submitAllowed = false;
-                        handleLoadQuestionnaireErr();
+                        // TODO: error handling
                     }
 
                     if (!vm.questionnaire.sections[i].questions[j].patient_answer.hasOwnProperty('answer')) {
@@ -250,9 +216,7 @@
                     }
 
                     if (!Array.isArray(vm.questionnaire.sections[i].questions[j].patient_answer.answer)){
-
-                        vm.submitAllowed = false;
-                        handleLoadQuestionnaireErr();
+                        // TODO: error handling
                     }
 
                     // if the question is complete (this is for when the migration does not migrate the answers)
@@ -269,17 +233,13 @@
                                 if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_value')){
 
                                     vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].answer_value = NON_EXISTING_ANSWER;
-
-                                    vm.submitAllowed = false;
-                                    handleLoadQuestionnaireErr();
+                                    // TODO: error handling
                                 }
 
                                 // this check is separated because slider and textbox do not need this property and will not have it if the user has just filled the question out
                                 if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_option_text')){
                                     vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].answer_option_text = NON_EXISTING_ANSWER;
-
-                                    vm.submitAllowed = false;
-                                    handleLoadQuestionnaireErr();
+                                    // TODO: error handling
                                 }
                             }
                         }
@@ -308,17 +268,6 @@
          */
         function resetShowAnswer(question){
             question.showAnswer = false;
-        }
-
-         /**
-         * @name setPageText
-         * @desc set the page text and descriptions according to the questionnaire purpose requested 
-         *      if the purpose is not passed as an argument, the text will default to the default's translation
-         * @param {string} questionnairePurpose
-         */
-        function setPageText(questionnairePurpose='default') {
-            vm.submitButtonText = $filter('translate')(Questionnaires.getQuestionnaireSubmitButtonByPurpose(questionnairePurpose));
-            vm.submitInstructions = $filter('translate')(Questionnaires.getQuestionnaireSubmitInstructionByPurpose(questionnairePurpose));
         }
 
         /**
@@ -371,68 +320,6 @@
             question.showAnswer = !question.showAnswer
         }
 
-        /**
-         * @name verifyPassword
-         * @desc verify whether the password entered is correct if it is required
-         * @param {boolean} requirePassword
-         * @param {string} password
-         * @returns {firebase.Promise|Promise<void>}
-         */
-        function verifyPassword(requirePassword, password) {
-            if (requirePassword) {
-                const user = FirebaseService.getAuthenticationCredentials();
-                const credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.password);
-
-                return user.reauthenticateWithCredential(credential);
-            }
-
-            return Promise.resolve();
-        }
-
-        /**
-         * @name handleSubmitErr
-         * @desc shows a notification to the user in case the submission fails
-         * @param {Error} error
-         */
-        function handleSubmitErr(error) {
-            if (error.code === Params.invalidPassword) {
-
-                $timeout(function() {
-                    vm.loadingSubmitQuestionnaire = false;
-
-                    NativeNotification.showNotificationAlert($filter('translate')("INVALID_PASSWORD"));
-                });
-            } else if (error.code === Params.largeNumberOfRequests) {
-                vm.loadingSubmitQuestionnaire = false;
-
-                // go to the questionnaire list page if there is an error
-                NavigatorParameters.setParameters({Navigator: navigatorName});
-                navigator.popPage();
-
-                NativeNotification.showNotificationAlert($filter('translate')("TOO_MANY_REQUESTS_CONSENT"));     
-            } else {
-                vm.loadingSubmitQuestionnaire = false;
-
-                // go to the questionnaire list page if there is an error
-                NavigatorParameters.setParameters({Navigator: navigatorName});
-                navigator.popPage();
-
-                NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_QUESTIONNAIRE"));
-            }
-        }
-
-        /**
-         * @name setRequirePassword
-         * @desc set the flag vm.requirePassword depending on purpose of the questionnaire
-         * @param {string} purpose
-         */
-        function setRequirePassword(purpose) {
-            vm.requirePassword = purpose === 'consent';
-        }
-
-        function updateRequirePassword() {
-            vm.requirePassword = purpose === 'consent' && vm.consentStatus === true;
-        }
     }
 
 })();
