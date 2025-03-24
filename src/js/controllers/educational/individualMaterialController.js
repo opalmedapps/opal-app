@@ -26,7 +26,7 @@
 
     /* @ngInject */
     function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial,
-                                          FileManagerService, $filter, Logger, Params, Toast, Constants) {
+        FileManagerService, $filter, Logger, Params, Toast, Constants) {
         var vm = this;
 
         var param;
@@ -59,7 +59,7 @@
         activate();
         /////////////////////////////
 
-        function activate(){
+        function activate() {
             //Getting Parameters from navigation
             param = NavigatorParameters.getParameters();
             navigatorPage = param.Navigator;
@@ -70,10 +70,10 @@
             vm.edumaterial = EducationalMaterial.setLanguage(param.Post);
 
             // Log the activity
-            if (param.Post.EducationalMaterialSerNum){
+            if (param.Post.EducationalMaterialSerNum) {
                 Logger.sendLog('EducationalMaterialSerNum', param.Post.EducationalMaterialSerNum);
             }
-            else if (param.Post.EducationalMaterialControlSerNum){
+            else if (param.Post.EducationalMaterialControlSerNum) {
                 Logger.sendLog('EducationalMaterialControlSerNum', param.Post.EducationalMaterialControlSerNum);
             }
 
@@ -90,7 +90,7 @@
             }
 
             // If the material is an html page to be shown immediately, download it
-            if(vm.displayType === "html") downloadIndividualPage();
+            if (vm.displayType === "html") downloadIndividualPage();
 
             // Determine if it's a package.
             if (vm.displayType === "package") {
@@ -98,9 +98,9 @@
                 vm.loadingContents = true;
 
                 // Get the package contents from the database if it hasn't been downloaded already.
-                if(!vm.edumaterial.PackageContents){
+                if (!vm.edumaterial.PackageContents) {
 
-                    EducationalMaterial.getPackageContents(vm.edumaterial.EducationalMaterialControlSerNum).then((packageContents)=>{
+                    EducationalMaterial.getPackageContents(vm.edumaterial.EducationalMaterialControlSerNum).then((packageContents) => {
                         vm.edumaterial.PackageContents = packageContents;
 
                         // Translate the package materials to the correct language.
@@ -116,7 +116,7 @@
                         vm.errorLoadingContents = true;
                     });
                 }
-                else{
+                else {
                     // If the package materials were already downloaded, translate them anyways (in case the user switched language).
                     EducationalMaterial.setLanguage(vm.edumaterial.PackageContents);
 
@@ -125,10 +125,10 @@
             }
         }
 
-        function bindEvents(){
+        function bindEvents() {
             //Instantiating popover controller
-            $timeout(function () {
-                ons.createPopover('./views/personal/education/share-popover.html', {parentScope: $scope}).then(function (popover) {
+            $timeout(() => {
+                ons.createPopover('./views/personal/education/share-popover.html', { parentScope: $scope }).then(function (popover) {
                     $scope.popoverSharing = popover;
                 });
             }, 300);
@@ -139,12 +139,12 @@
             });
         }
 
-        function goToEducationalMaterial(index){
+        function goToEducationalMaterial(index) {
             try {
                 let nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
                 if (nextStatus !== -1) {
                     NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
-                    window[navigatorPage].pushPage(nextStatus.Url);
+                    navigatorPage.pushPage(nextStatus.Url);
 
                     /* Most calls to logSubClickedEduMaterial() are handled by the function handlePostChangeEventCarousel()
                      * in bookletMaterialController.js. However, the one special case (clicking on the first material in
@@ -222,18 +222,16 @@
             FileManagerService.share(vm.edumaterial.Name, getURLToShare());
         }
 
-        function downloadIndividualPage()
-        {
-            if(!vm.edumaterial.hasOwnProperty('Content'))
-            {
+        function downloadIndividualPage() {
+            if (!vm.edumaterial.hasOwnProperty('Content')) {
                 vm.loadingContents = true;
 
                 EducationalMaterial.getMaterialPage(vm.edumaterial.Url)
-                    .then(function(response){
+                    .then(function (response) {
                         vm.edumaterial.Content = response.data;
                         vm.loadingContents = false;
                     })
-                    .catch(function(){
+                    .catch(function () {
                         vm.loadingContents = false;
                         vm.errorLoadingContents = true;
                     })
@@ -241,7 +239,7 @@
         }
 
         // Author: Tongyou (Eason) Yang
-        function scrollDown(){
+        function scrollDown() {
 
             $timeout(function () {
 
@@ -263,7 +261,7 @@
                         });
                     }
                 }
-            },0);
+            }, 0);
 
         }
 
@@ -275,16 +273,15 @@
 
         // Opens a material contained in a package.
         // Author: Tongyou (Eason) Yang
-        function goInPackage(material){
+        function goInPackage(material) {
             // Logs the material as clicked.
             Logger.logClickedEduMaterial(material.EducationalMaterialControlSerNum);
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             var rstep = vm.recursive_step + 1;
-            NavigatorParameters.setParameters({ 'Navigator': navigatorPage,'Post': material, 'RStep':rstep });
-            window[navigatorPage].pushPage('./views/personal/education/individual-material.html');
+            NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Post': material, 'RStep': rstep });
+            navigatorPage.pushPage('./views/personal/education/individual-material.html');
 
         }
     }
 })();
-
