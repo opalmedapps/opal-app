@@ -50,7 +50,6 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 			getTestTypes: () => testTypes,
 			getTestResultsByDate: getTestResultsByDate,
 			getTestResultsByType: getTestResultsByType,
-			getTestClass: getTestClass,
 			clear: clear,
 
 			// Exported for testing
@@ -208,22 +207,6 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 		 */
 		function testResultByTypeDeleteCached(typeSerNum) {
 			if (testResultByTypeIsCached(typeSerNum)) delete testResultsByType[typeSerNum];
-		}
-
-		/**
-		 * Returns the class for a given test based on its criticality (within normal range, outside normal range,
-		 * critically outside normal range). The resulting class will be used to change the colour of test results
-		 * outside the normal range.
-		 * @param {*} test Test for which to get the class.
-		 * @returns {string} Name of the class to use with this test.
-		 */
-		function getTestClass(test) {
-			let flag;
-			if (test.abnormalFlag) flag = test.abnormalFlag;
-			else if (test.latestAbnormalFlag) flag = test.latestAbnormalFlag;
-			else return "";
-			flag = flag.toLowerCase();
-			return (flag === "h" || flag === "l" || flag === "c") ? "lab-results-test" : "";
 		}
 
 		/**
