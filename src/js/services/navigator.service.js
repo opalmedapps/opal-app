@@ -10,9 +10,9 @@
         .module('OpalApp')
         .factory('Navigator', Navigator);
 
-    Navigator.$inject = ['$timeout', 'ProfileSelector', 'UpdateUI'];
+    Navigator.$inject = ['$timeout', 'ProfileSelector'];
 
-    function Navigator($timeout, ProfileSelector, UpdateUI) {
+    function Navigator($timeout, ProfileSelector) {
         let navigator;
 
         return {

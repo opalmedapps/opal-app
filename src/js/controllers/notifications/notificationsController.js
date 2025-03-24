@@ -11,11 +11,11 @@
         .controller('NotificationsController', NotificationsController);
 
     NotificationsController.$inject = ['$filter','$scope','$timeout','NativeNotification','Navigator',
-        'Notifications','Permissions','ProfileSelector', 'RequestToServer', 'UpdateUI', 'Utility', 'Params'];
+        'Notifications','Permissions','ProfileSelector', 'RequestToServer', 'Utility'];
 
     /* @ngInject */
     function NotificationsController($filter, $scope, $timeout, NativeNotification, Navigator,
-                                     Notifications, Permissions, ProfileSelector, RequestToServer, UpdateUI, Utility, Params) {
+                                     Notifications, Permissions, ProfileSelector, RequestToServer, Utility) {
         let vm = this;
         let navigator;
 

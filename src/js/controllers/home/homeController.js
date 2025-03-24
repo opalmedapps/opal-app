@@ -8,13 +8,13 @@
     HomeController.$inject = [
         '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
-        'Version', 'User', 'ProfileSelector', '$interval', 'UpdateUI', 'Permissions',
+        'Version', 'User', 'ProfileSelector', '$interval', 'Permissions',
     ];
 
     /* @ngInject */
     function HomeController($timeout, Appointments, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
-        Version, User, ProfileSelector, $interval, UpdateUI, Permissions,
+        Version, User, ProfileSelector, $interval, Permissions,
     ) {
         let vm = this;
 

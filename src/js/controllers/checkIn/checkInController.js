@@ -16,11 +16,11 @@
         .controller('CheckInController', CheckInController);
 
     CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'NativeNotification', 'Navigator', 'Params',
-        'ProfileSelector', 'RequestToServer', 'Toast', 'UpdateUI', 'User', 'UserPreferences'];
+        'ProfileSelector', 'RequestToServer', 'Toast', 'User', 'UserPreferences'];
 
     /* @ngInject */
     function CheckInController($filter, $timeout, CheckInService, NativeNotification, Navigator, Params,
-                               ProfileSelector, RequestToServer, Toast, UpdateUI, User, UserPreferences) {
+                               ProfileSelector, RequestToServer, Toast, User, UserPreferences) {
         let vm = this;
         let navigator;
 
