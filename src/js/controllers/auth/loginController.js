@@ -99,6 +99,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
 
         /**
          * @description Tracks whether the login attempt on this page has been successful; used to decide whether to cancel login on destruction of the controller.
+         * @type {boolean}
          */
         vm.attemptSuccessful = false;
 
@@ -357,7 +358,11 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         function cancelLoginAttempt() {
             Firebase.signOut();
 
-            // Cancel any in-progress promise to prevent a timeout from being triggered after a later successful login
+            /*
+             * Cancel any in-progress promise when leaving the page.
+             * This fixes a bug where a first attempt made to an invalid hospital would time out after leaving the page.
+             * In particular, it could time out after a successful login at a valid hospital, leading to errors.
+             */
             let promises = [vm.trustedPromise, vm.untrustedPromise];
             promises.forEach(promise => {
                 if (promise && typeof promise.cancel === 'function') {

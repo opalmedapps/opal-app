@@ -131,11 +131,16 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
         /**
          * @description Cancellable version of `sendRequestWithResponse`.
          *              Sends a request to the listener and resolves after receiving a response (or after a timeout).
+         *              To cancel the request, call the `cancel` function in the return object.
+         *              When cancelled, an unfinished request will still execute in the listener, but the response will be
+         *              ignored and .then() will not be triggered. Instead, a CancelledPromiseError will be rejected.
+         *
          *              For information about the parameters, see `sendRequestWithResponse`.
          *
          *              Implementation based on: https://medium.com/@masnun/creating-cancellable-promises-33bf4b9da39c
          * @returns {{promise: Promise<object>, cancel: function}} Returns an object containing the Promise for the request,
          *                                                         and a function that can be called to cancel it.
+         *                                                         If cancelled, the promise rejects with a CancelledPromiseError.
          */
         function sendRequestWithResponseCancellable(typeOfRequest, parameters, encryptionKey, referenceField, responseField, patientID) {
             let returnObject = {}
