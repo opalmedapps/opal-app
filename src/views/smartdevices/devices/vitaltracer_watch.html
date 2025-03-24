@@ -26,16 +26,15 @@
             </loading-spinning-circle>
         </div>
 
-        <div ng-if="ctrl.heartRate" align="center">
-            <!-- <p><strong>{{ "SMARTDEVICES_WEIGHT" | translate }}</strong></p> -->
+        <div ng-if="ctrl.heartRate && ctrl.bloodPressureSystolic && ctrl.bloodPressureDiastolic" align="center">
+            <p><strong>{{ "SMARTDEVICES_VITAL_SIGNS" | translate }}</strong></p>
             <p class="data">
                 <span>{{ ctrl.heartRate }}</span>bpm
-                <span>{{ ctrl.bloodPressure }}</span>mm Hg
+                <span>{{ ctrl.bloodPressureSystolic }} / {{ ctrl.bloodPressureDiastolic }}</span>mm Hg
             </p>
 
             <!-- Currently hidden but might be helpful to show to users -->
             <p><strong>Name:</strong> {{ctrl.selectedDevice.name}} ({{ctrl.selectedDevice.id}})</p>
-            <p><strong>Battery level:</strong> {{ctrl.batteryLevel}}%</p>
         </div>
 
         <div ng-if="!ctrl.scanning && ctrl.selectedDevice == null && ctrl.getDeviceList().length > 1">
