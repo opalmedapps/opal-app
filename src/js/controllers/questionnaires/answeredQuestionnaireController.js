@@ -14,7 +14,7 @@
     AnsweredQuestionnaireController.$inject = [
         '$filter',
         '$timeout',
-        'FirebaseService',
+        'Firebase',
         'NativeNotification',
         'NavigatorParameters',
         'Params',
@@ -24,7 +24,7 @@
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $timeout, FirebaseService, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -133,7 +133,11 @@
 
             // mark questionnaire as finished
             verifyPassword(vm.requirePassword, vm.password)
-                .then(function (userCredential) {
+                .then(function () {
+                    // reauthenticateWithCredential will return undefined if it succeeds, otherwise will
+                    // throw exception, so we do not need return value from it.
+                    // see https://firebase.google.com/docs/auth/web/manage-users#re_authenticate_a_user
+
                     // Grab the patient uuid from the ProfileSelector
                     const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
 
@@ -141,7 +145,7 @@
                     if (vm.isConsent && !vm.requirePassword) {
                         Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined', patient_uuid);
                     }
-                    else if (vm.isConsent && vm.requirePassword) {  // TODO: Replace userCredential when firebase auth bug fixed: QSCCD-1583
+                    else if (vm.isConsent && vm.requirePassword) {
                         Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented', patient_uuid);
                     }
 
@@ -387,14 +391,8 @@
          * @param {string} password
          * @returns {firebase.Promise|Promise<void>}
          */
-        function verifyPassword(requirePassword, password) {
-            if (requirePassword) {
-                const user = FirebaseService.getAuthenticationCredentials();
-                const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
-                return user.reauthenticateWithCredential(credential);
-            }
-
-            return Promise.resolve();
+        async function verifyPassword(requirePassword, password) {
+            if (requirePassword) await Firebase.reauthenticateCurrentUser(password);
         }
 
         /**

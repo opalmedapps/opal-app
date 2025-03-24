@@ -14,7 +14,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         '$filter',
         'UserPreferences',
         'Params',
-        'FirebaseService',
+        'Firebase',
         'LogOutService',
         'RequestToServer',
         'EncryptionService'
@@ -22,7 +22,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
     /* @ngInject */
     function UpdateSecurityQuestionController(NavigatorParameters, $timeout, $filter, UserPreferences, Params,
-                                              FirebaseService, LogOutService, RequestToServer, EncryptionService) {
+                                              Firebase, LogOutService, RequestToServer, EncryptionService) {
 
         let vm = this;
 
@@ -186,38 +186,35 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         }
 
         /**
-         * submit
-         * @desc submit the form containing current password, modified security questions and their corresponding answers
+         * @description Re-authenticates the user with their old password, then sets their new security questions
+         *              and answers on the server.
+         * @returns {Promise<void>}
          */
-        function submit() {
-            loadingSubmit.show();
+        async function submit() {
+            try {
+                loadingSubmit.show();
 
-            // verify password first
-            const user = FirebaseService.getAuthenticationCredentials();
-            const credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.password);
+                // Verify the user's password
+                await Firebase.reauthenticateCurrentUser(vm.password);
 
-            user.reauthenticateWithCredential(credential)
-                .then(function(){
-                    // if password is correct, send the request to backend
-                    let params = {
-                        'questionAnswerArr': formatSecurityQuestionWithAnsListForSubmission(vm.securityQuestionWithAnsList),
-                    };
+                // If the password is correct (no error is thrown), send the request to the backend
+                let params = {
+                    'questionAnswerArr': formatSecurityQuestionWithAnsListForSubmission(vm.securityQuestionWithAnsList),
+                };
+                await RequestToServer.sendRequestWithResponse(UPDATE_SECURITY_QUESTION_AND_ANSWER_API, params);
 
-                    return RequestToServer.sendRequestWithResponse(UPDATE_SECURITY_QUESTION_AND_ANSWER_API, params);
-                })
-                .then(function(){
-                    // confirm that the request has been successful and force logout
-                    $timeout(function() {
-                        loadingSubmit.hide();
-                        successfulUpdateConfirmationAndLogout();
-                    });
-                })
-                .catch(function(err) {
-                    $timeout(function() {
-                        loadingSubmit.hide();
-                        handleSubmitErr(err);
-                    });
-                })
+                // Inform the user that the request was successful and force logout
+                $timeout(function() {
+                    loadingSubmit.hide();
+                    successfulUpdateConfirmationAndLogout();
+                });
+            }
+            catch (error) {
+                $timeout(function() {
+                    loadingSubmit.hide();
+                    handleSubmitErr(error);
+                });
+            }
         }
 
         /**
@@ -226,6 +223,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @param {Error} error
          */
         function handleSubmitErr(error) {
+            console.error(error);
             if (error.code === Params.invalidPassword) {
 
                 ons.notification.alert({

@@ -52,7 +52,7 @@ import '../../../css/views/init-page.view.css';
 		var vm = this;
 		vm.globalMessage = '';
 		vm.globalMessageDescription = '';
-		vm.firstTime = true;
+		vm.hasShownMessageOfTheDay = false;
 		vm.OPAL_CONFIG = OPAL_CONFIG;
 		vm.APP_VERSION = Constants.version();
 		vm.APP_BUILD_NUMBER = Constants.build();
@@ -121,14 +121,14 @@ import '../../../css/views/init-page.view.css';
 
 		function showMessageOfTheDay() {
 			if (vm.globalMessageDescription !== '') {
-				if (vm.firstTime) {
-					vm.firstTime = false;
+				if (!vm.hasShownMessageOfTheDay) {
 					Toast.showToast({
 						message: vm.globalMessage + "\n" + vm.globalMessageDescription,
 						fontSize: 18,
 						durationWordsPerMinute: 80, // Slow down the message of the day
 						positionOffset: 30,
 					});
+					vm.hasShownMessageOfTheDay = true;
 				}
 			}
 		}
