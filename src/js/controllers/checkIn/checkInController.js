@@ -130,7 +130,9 @@
          */
         async function CheckInAppointments(PatientSerNum) {
             vm.displayApps[PatientSerNum].forEach(app => {
-                app.loading = true;
+                if (app.CheckInStatus != 'success') {
+                    app.loading = true;
+                }
             })
 
             //TODO check-in apps for the target patient
