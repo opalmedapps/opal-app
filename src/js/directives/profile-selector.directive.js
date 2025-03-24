@@ -35,6 +35,7 @@ import "../../css/directives/profile-selector.directive.css"
                             <div ng-show="profileList.length > 1"><ons-icon class="profile-selector--title--icon" icon="fa-solid fa-caret-down"></ons-icon></div>
                         </div>
                         <ul ng-show="listVisible" class="profile-selector--list">
+                            <top-page-banner title="'RELATIONSHIPS_PATIENTS_AVAILABLE'"></top-page-banner>
                             <li 
                             ng-repeat="profile in profileList"
                             ng-if="profile.patient_legacy_id"
@@ -44,7 +45,7 @@ import "../../css/directives/profile-selector.directive.css"
                             }"
                             ng-click="selectProfile(profile.patient_legacy_id, profile.status)">
                                 {{profile.first_name}} {{profile.last_name}}
-                                <span ng-show="profile.status == 'PEN'">({{pendingMsg | lowercase}})</span>
+                                <span ng-show="profile.status == 'PEN'">({{'RELATIONSHIPS_PATIENTS_STATUS_PEN' | translate | lowercase}})</span>
                             </li>
                         </ul>
                     </div>
@@ -59,7 +60,6 @@ import "../../css/directives/profile-selector.directive.css"
 
                 const updateDisplayInfo = () => {
                     scope.currentProfile = Patient.getSelectedProfile();
-                    scope.pendingMsg = $filter('translate')("RELATIONSHIPS_PATIENTS_STATUS_PEN");
                     scope.title = scope.profileList.length > 1 ? `${scope.currentProfile.first_name} ${scope.currentProfile.last_name}` : $filter('translate')('MYCHART');
                 }
 
