@@ -89,5 +89,6 @@ var resposeCodes =
     {
         '1':'Authentication problem',
         '2':'Server Response Error',
-        '3':'Success'
+        '3':'Success',
+        '4':'Too many attempts for answer'
     };

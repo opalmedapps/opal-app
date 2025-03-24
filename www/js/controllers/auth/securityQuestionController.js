@@ -5,7 +5,7 @@
  * Date         :   May 20, 2015
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
  * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
+ *                  file 'LICENSE.txt', which is part of this source Code package.
  */
 
 
@@ -77,16 +77,43 @@
          */
         vm.answer = "";
 
+        /**
+         * @ngdoc property
+         * @name invalidCode
+         * @propertyOf SecurityQuestionController
+         * @returns boolean
+         * @description hides input div if set to true
+         */
+        vm.invalidCode=false;
+
+        /**
+         * @ngdoc property
+         * @name passwordReset
+         * @propertyOf SecurityQuestionController
+         * @returns boolean
+         * @description determines which back button to show
+         */
+        vm.passwordReset = false;
+	    /**
+	     * @ngdoc property
+	     * @name alertShow
+	     * @propertyOf SecurityQuestionController
+	     * @returns boolean
+	     * @description momentarily hides the button while submitting
+	     */
+	    vm.alertShow = true;
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
+        vm.goToInit = goToInit;
+        vm.goToReset = goToReset;
 
         activate();
 
         //////////////////////////////////////////
 
-        /*************************
+        /************************************************
          *  PRIVATE FUNCTIONS
-         *************************/
+         ************************************************/
 
         function activate(){
             deviceID = UUID.getUUID();
@@ -158,12 +185,11 @@
         function handleError(error) {
             $timeout(function(){
                 vm.alert.type='danger';
-                switch (error.code){
-                    case "auth/expired-action-code":
-                        vm.alert.content = "CODE_EXPIRED";
-                        break;
-                    case "auth/invalid-action-code":
-                        vm.alert.content = "INVALID_CODE";
+                switch (error.Code){
+                    case "auth/expired-action-Code":
+                    case "auth/invalid-action-Code":
+                        vm.invalidCode=true;
+                        modal.show();
                         break;
                     case "auth/user-disabled":
                         vm.alert.content = "USER_DISABLED";
@@ -171,9 +197,8 @@
                     case "auth/user-not-found":
                         vm.alert.content = "INVALID_USER";
                         break;
-                    case "three-tries":
+                    case 4:
                         vm.alert.content = "OUTOFTRIES";
-                        vm.threeTries=true;
                         break;
                     case "corrupted-data":
                         vm.alert.content = "CONTACTHOSPITAL";
@@ -200,9 +225,9 @@
             $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
         }
 
-        /*************************
+        /************************************************
          *  PUBLIC METHODS
-         *************************/
+         ************************************************/
 
         /**
          * @ngdoc method
@@ -231,6 +256,7 @@
                 vm.alert.content = 'ENTERANANSWER';
 
             } else {
+                vm.alertShow = false;
                 vm.submitting = true;
 
                 answer = answer.toUpperCase();
@@ -244,52 +270,58 @@
                     Question: vm.Question,
                     Answer: hash,
                     SSN: vm.ssn,
-                    Trusted: trusted
+                    Trusted: trusted,
+                    PasswordReset: passwordReset || false
                 };
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
+	                vm.alertShow = true;
                     vm.submitting = false;
-                    if(data.Data.AnswerVerified === "true")
-                    {
+                    if(data.Data.AnswerVerified === "true") {
                         handleSuccess(key)
-
                     } else if(data.Data.AnswerVerified === "false"){
-                        vm.attempts = vm.attempts + 1;
-
-                        $timeout(function()
-                        {
-                            removeUserData();
-
-                            if(vm.attempts >= 3)
-                            {
-                                handleError({code: "three-tries"});
-                            }else{
-                                handleError({code: "wrong-answer"});
-                            }
-                        });
-                    } else{
-                        handleError({code: ""});
+                        removeUserData();
+                        handleError({Code: "wrong-answer"});
+                    }else{
+                        handleError({Code: ""});
                     }
                 })
                 .catch(function(error)
                 {
-                    vm.submitting = false;
-                    removeUserData();
-                    if(error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
-                        handleError({code: "corrupted-data"});
+	                vm.alertShow = true;
+	                vm.submitting = false;
+	                removeUserData();
+                    if(error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
+                        handleError({Code: "corrupted-data"});
                     } else {
-                        vm.attempts = vm.attempts + 1;
-                        if(vm.attempts >= 3)
-                        {
-                            handleError({code: "three-tries"});
-                        }else{
-                            handleError({code: "wrong-answer"});
-                        }
+                        handleError(error);
                     }
 
                 });
             }
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToInit
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description
+         * Brings user to init screen
+         */
+        function goToInit(){
+            initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToReset
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description
+         * Brings user to password reset screen
+         */
+        function goToReset(){
+            initNavigator.pushPage('./views/login/forgot-password.html',{})
         }
     }
 })();
