@@ -20,7 +20,8 @@
         var params;
         vm.changeLanguage = changeLanguage;
         vm.openPageLegal = openPageLegal;
-        vm.goToRateThisApp = goToRateThisApp;
+        vm.goToFeedback = goToFeedback;
+        vm.secureYourDeviceNotice = secureYourDeviceNotice;
 
         activate();
 
@@ -65,20 +66,25 @@
             }
         }
 
-        function goToRateThisApp()
+        function goToFeedback()
         {
-
+            vm.navigator.pushPage('views/general/feedback/feedback.html');
         }
 
+        function secureYourDeviceNotice()
+        {
+        //    TODO
+            vm.navigator.pushPage('views/settings/secure-device.html');
+        }
 
         function openPageLegal(type)
         {
-            if(type === 0)
+            if(type === 'TOU')
             {
-                NavigatorParameters.setParameters({type:type, title:'Terms of Use',Navigator:vm.navigatorName});
+                NavigatorParameters.setParameters({type:type, title:'Terms of Use', Navigator:vm.navigatorName});
                 vm.navigator.pushPage('./views/init/init-legal.html');
             }else{
-                NavigatorParameters.setParameters({type:type, title:'Privacy Policy',Navigator:vm.navigatorName});
+                NavigatorParameters.setParameters({type:type, title:'Privacy Policy', Navigator:vm.navigatorName});
                 vm.navigator.pushPage('./views/init/init-legal.html');
 
             }
