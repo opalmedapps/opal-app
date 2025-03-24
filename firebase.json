@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "static/firebase",
+    "public": "static/passwordreset",
     "ignore": [
       "firebase.json",
       "**/.*",
