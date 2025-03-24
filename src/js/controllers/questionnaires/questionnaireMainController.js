@@ -926,13 +926,15 @@
             // go to the questionnaire list page if there is an error
             navigator.popPage();
 
-            if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+            if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR 
+                || error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
                 NativeNotification.showNotificationAlert(
                     $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
                     $filter('translate')("TITLE"),
                 );
             }
-            else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+            else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER 
+                || error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
                 NativeNotification.showNotificationAlert(
                     $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
                     $filter('translate')("TITLE"),
