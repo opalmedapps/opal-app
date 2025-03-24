@@ -104,7 +104,7 @@
 
             // array to prevent the encryption of the answerArray since it is passing by reference
             let answerToSave = [];
-            if (!Array.isArray(answerArray)) return 'ERROR: error in saving the questionnaire answer, it does not have a valid answerArray';
+            if (!Array.isArray(answerArray)) throw new Error('ERROR: error in saving the questionnaire answer, it does not have a valid answerArray');
 
             for (let type in validType){
                 if (validType[type] === questionTypeId){
@@ -112,8 +112,7 @@
                     break;
                 }
             }
-
-            if (!isTypeCorrect) return 'ERROR: error in saving the questionnaire answer, it does not have a valid typeID';
+            if (!isTypeCorrect) throw new Error('ERROR: error in saving the questionnaire answer, it does not have a valid typeID');
 
             // this is to prevent the encryption of the answerArray since it is passing by reference
             answerArray.forEach(function (ans) {
