@@ -63,6 +63,7 @@
         vm.goToMap = goToMap;
         vm.aboutAppointment = aboutAppointment;
         vm.moreEducationalMaterial = moreEducationalMaterial;
+        vm.mapOpened = false;
         vm.openMap = openMap;
 
         activate();
@@ -118,8 +119,7 @@
         }
 
         function openMap(){
-            let url = vm.app["MapUrl_"+ vm.language];
-            Browser.openInternal(url, true);
+            vm.mapOpened = true;
         }
 
         function bindEvents() {

@@ -27,7 +27,8 @@
 
             <ons-list class="settings-list" align="center">
                 <ons-list-item ng-click="vm.openMap()" align="center">
-                    <div align="center" class="text-center" style="padding:5px">
+                    <i ng-show="!vm.mapOpened" class="fa fa-map" align="center" style="font-size:48px;padding:10px"></i>
+                    <div ng-show="vm.mapOpened" align="center" class="text-center" style="padding:5px">
                         <img ng-src="{{vm.app['MapUrl_'+ vm.language]}}" style="max-width:100%;height:auto">
                     </div>
                 </ons-list-item>
