@@ -72,20 +72,20 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
     {
 
         //Initializing local variables
-        var year = -1;
-        var month = -1;
-        var day = -1;
+        let year = -1;
+        let month = -1;
+        let day = -1;
         calendar = {};
-        var calendarYear = {};
-        var calendarMonth = {};
+        let calendarYear = {};
+        let calendarMonth = {};
         //Loop goes through all the appointments in the sorted array of appointments, remember this only works if ap
         //appointments are already sorted
-        for (var i = 0; i < appointments.length; i++) {
+        for (let i = 0; i < appointments.length; i++) {
 
             //Gets year, month and day for appointment
-            var tmpYear = appointments[i].ScheduledStartTime?.getFullYear();
-            var tmpMonth = appointments[i].ScheduledStartTime?.getMonth() + 1;
-            var tmpDay = appointments[i].ScheduledStartTime?.getDate();
+            let tmpYear = appointments[i].ScheduledStartTime?.getFullYear();
+            let tmpMonth = appointments[i].ScheduledStartTime?.getMonth() + 1;
+            let tmpDay = appointments[i].ScheduledStartTime?.getDate();
 
             //if month has changed, since appointments in order, add the resulting appointments to for that month to the correspongding
             //calendar year.
@@ -125,11 +125,11 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
     }
     function findClosestAppointmentForCheckin(todayAppointments)
     {
-        var todayTime = (new Date()).getTime();
-        var min = todayAppointments[0];
-        var minDifference = Infinity;
-        for (var i = 1; i < todayAppointments.length; i++) {
-            var difference = Math.abs((todayAppointments[i].ScheduledStartTime).getTime() - todayTime);
+        const todayTime = (new Date()).getTime();
+        let min = todayAppointments[0];
+        let minDifference = Infinity;
+        for (let i = 1; i < todayAppointments.length; i++) {
+            const difference = Math.abs((todayAppointments[i].ScheduledStartTime).getTime() - todayTime);
             if(difference<minDifference)
             {
                 minDifference = difference;
