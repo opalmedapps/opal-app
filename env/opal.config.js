@@ -1,7 +1,7 @@
 // The following example is well-suited for a development environment. Check each variable carefully before using in production.
 const config = {
     // The name of your app
-    name: "Opal Sample",
+    name: "Opal Local",
     // The name of your environment. Should match the parent folder name.
     env: "sample",
     // Environment-specific settings
@@ -19,13 +19,13 @@ const config = {
     },
     // Block of Firebase web configurations, with contents pasted from the Firebase Console
     firebase: {
-        apiKey: "",
-        authDomain: "",
-        databaseURL: "",
-        projectId: "",
-        storageBucket: "",
-        messagingSenderId: "",
-        appId: "",
+        apiKey: "AIzaSyAkTZzkrp_1NVrdrShN3hDZ-1O-4fbWBfw",
+        authDomain: "opal-local-dadaa.firebaseapp.com",
+        databaseURL: "https://opal-local-dadaa-default-rtdb.firebaseio.com",
+        projectId: "opal-local-dadaa",
+        storageBucket: "opal-local-dadaa.appspot.com",
+        messagingSenderId: "15181088656",
+        appId: "1:15181088656:web:5adb0fa75c4587ea221515",
     },
 };
 
