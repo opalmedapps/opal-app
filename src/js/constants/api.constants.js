@@ -55,7 +55,7 @@
                 },
                 RELATIONSHIP_TYPES: {
                     method: 'get',
-                    url: '/api/patients/relationship-types/'
+                    url: '/api/relationship-types/'
                 },
                 QUANTITY_SAMPLES: {
                     method: 'post',
