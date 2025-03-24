@@ -19,10 +19,10 @@
 
     /* @ngInject */
     function Hospital(RequestToServer, Params) {
-        const endpoint = Params.API.ROUTES.HOSPITAL_SETTINGS.SITES;
 
         let requestHospitalService = {
             requestSiteInfo: requestSiteInfo,
+            requestInstitutionInfo: requestInstitutionInfo,
         };
 
         return requestHospitalService;
@@ -34,8 +34,17 @@
          * @desc this function gets site info for the sites linked to a particular hospital
          * @returns {Promise} resolves to the sites' data if success
          */
-        async function requestSiteInfo(){
-            const result = await RequestToServer.apiRequest(endpoint);
+        async function requestSiteInfo() {
+            const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOSPITAL_SETTINGS.SITES);
+            return result.data;
+        }
+
+        /**
+         * @desc this function gets institution info for the institution the user is connected to
+         * @returns {Promise} resolves to the institution data if success
+         */
+        async function requestInstitutionInfo() {
+            const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOSPITAL_SETTINGS.INSTITUTION);
             return result.data;
         }
     }
