@@ -16,11 +16,12 @@
 
     QuestionnaireDataService.$inject = [
         'RequestToServer',
-        'Params'
+        'Params',
+        'UserPreferences',
     ];
 
     /* @ngInject */
-    function QuestionnaireDataService(RequestToServer, Params) {
+    function QuestionnaireDataService(RequestToServer, Params, UserPreferences) {
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const validType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
         const api = Params.QUESTIONNAIRE_API;
@@ -151,7 +152,8 @@
                     'questionSection_id': questionSectionId,
                     'answer': answerToSave,
                     'question_type_id': questionTypeId,
-                    'is_skipped': isSkipped
+                    'is_skipped': isSkipped,
+                    'language': UserPreferences.getLanguage(),
                 };
 
                 return RequestToServer.sendRequestWithResponse(api.SAVE_ANSWER, params)
@@ -175,6 +177,7 @@
             // Parameters
             let params = {
                 'qp_ser_num': answerQuestionnaireID,
+                'language': UserPreferences.getLanguage(),
             };
 
             return RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params)
@@ -188,4 +191,3 @@
         }
     }
 })();
-
