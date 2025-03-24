@@ -2,9 +2,14 @@ default:
   tags:
     - macos
 
+# Prevent duplicate pipelines when a commit is pushed to an open merge request
+# See: https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
 workflow:
   rules:
-    - when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
 
 variables:
   ENV: "dev"  # The environment used in the app build command
