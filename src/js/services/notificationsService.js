@@ -202,7 +202,7 @@
             let temp = angular.copy(notifications);
             for (let i = 0; i < notifications.length; i++) {
                 if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') {
-                    console.log(`notification with unsupported type ${temp[i].NotificationType}:`, temp[i]);
+                    console.warn(`notification with unsupported type ${temp[i].NotificationType}:`, temp[i]);
                     continue;
                 } 
 
