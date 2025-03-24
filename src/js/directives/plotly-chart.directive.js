@@ -56,7 +56,7 @@ const fontSizesMap = {
                         step: 'all',
                         label: $filter('translate')('CHART_ALL_RANGE_SELECTOR')
                     }],
-                    x: 1,  // Position horizontally
+                    x: 1.05,  // Position horizontally
                     xanchor: 'right'  // Align the buttons to the right side
                 };
 
@@ -76,7 +76,7 @@ const fontSizesMap = {
                     autosize: true,
                     xaxis: {
                         autorange: true,
-                        showgrid: false,
+                        tickangle: 60,
                         zeroline: true,
                         fixedrange: true,
                         rangeselector: selectorOptions,
@@ -91,7 +91,7 @@ const fontSizesMap = {
                     margin: {
                         b: 10,
                         l: 30,
-                        r: 10,
+                        r: 30,
                         t: 30
                     },
                     width: $(window).innerWidth()
@@ -107,29 +107,10 @@ const fontSizesMap = {
                 Plotly.register(locale);
                 Plotly.newPlot(element[0].firstChild, data, layout, config);
 
-                // Add a listener to resize the chart when the screen is rotated
-                // NOTE: orientationchange event is deprecated, however it might be still used by browsers with older versions.
-                // Browsers with newer versions provide 'change' event of the ScreenOrientation interface.
-                // See: https://developer.mozilla.org/en-US/docs/Web/API/Window/orientationchange_event
-                $window.addEventListener("orientationchange", resizeChart);
-                $window.addEventListener("change", resizeChart);
-                $window.addEventListener("resize", resizeChart);
-
                 // Remove listeners on destroy
                 scope.$on('$destroy', function () {
-                    $window.removeEventListener("orientationchange", resizeChart);
-                    $window.removeEventListener("change", resizeChart);
-                    $window.removeEventListener("resize", resizeChart);
                     Plotly.purge(element[0].firstChild);
                 });
-
-                /**
-                 * @description Resizes the chart based on the screen size.
-                 */
-                function resizeChart() {
-                    // Update the chart with its new size
-                    Plotly.relayout(element[0].firstChild, { width: $window.innerWidth });
-                }
             }
         }
     }
