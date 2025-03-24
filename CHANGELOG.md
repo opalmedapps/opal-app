@@ -1,3 +1,17 @@
+## [1.14.4](https://gitlab.com/opalmedapps/qplus/compare/v1.14.3...v1.14.4) (2023-04-27)
+
+
+### Bug Fixes
+
+* add contact Opal support to About Opal page ([6e3965d](https://gitlab.com/opalmedapps/qplus/commit/6e3965d1ba72be1b037dd3792ce6d5ea3b20059e))
+
+## [1.14.3](https://gitlab.com/opalmedapps/qplus/compare/v1.14.2...v1.14.3) (2023-04-26)
+
+
+### Bug Fixes
+
+* fix patient name for patient service (QSCCD-1104) ([dd01858](https://gitlab.com/opalmedapps/qplus/commit/dd01858e50bd68e067ab1646ac646ea77d51efba))
+
 ## [1.14.2](https://gitlab.com/opalmedapps/qplus/compare/v1.14.1...v1.14.2) (2023-04-21)
 
 
