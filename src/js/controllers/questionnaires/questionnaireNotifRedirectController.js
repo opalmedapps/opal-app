@@ -18,11 +18,12 @@
         'NavigatorParameters',
         'Questionnaires',
         'Utility',
+        'ProfileSelector'
     ];
 
     /* @ngInject */
     function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, NavigatorParameters,
-                                                  Questionnaires, Utility) {
+                                                  Questionnaires, Utility, ProfileSelector) {
         let vm = this;
 
         // variables global to this controller
@@ -59,6 +60,20 @@
 
                 // Validate that all required parameters are there; an error will be thrown if not
                 Questionnaires.formatQuestionnaireStub(questionnaireInfo);
+                // If the relationship type is not 'SELF' and can_answer_questionnaire is False, the questionnaire cannot be opened
+                let relationshipType = ProfileSelector.getActiveProfile().relationship_type.role_type;
+                let answerable = ProfileSelector.getActiveProfile().relationship_type.can_answer_questionnaire;
+                // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
+                if(vm.refreshQuestionnaires) vm.refreshQuestionnaires();
+                // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
+                if ((!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) || (relationshipType !== 'SELF' && !answerable)) {
+                    NativeNotification.showNotificationAlert(
+                        $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                        $filter('translate')("TITLE"),
+                    );
+                    goToQuestionnaireSummary(answerQuestionnaireId);
+                    return;
+                }
 
                 $timeout(function () {
                     let answerQuestionnaireId = getAnswerQuestionnaireId(questionnaireInfo);

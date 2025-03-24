@@ -89,14 +89,22 @@
          * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
         async function goToQuestionnaire(selectedQuestionnaire) {
+            // If the relationship type is not 'SELF' and can_answer_questionnaire is False, the questionnaire cannot be opened
+            let relationshipType = ProfileSelector.getActiveProfile().relationship_type.role_type;
+            let answerable = ProfileSelector.getActiveProfile().relationship_type.can_answer_questionnaire;
+            if (relationshipType !== 'SELF' && !answerable) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
+                return;
+            }
+            
             // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
             if (vm.refreshQuestionnaires) {
                 await vm.refreshQuestionnaires();
-                let relationshipType = ProfileSelector.getActiveProfile().relationship_type.role_type;
-                let answerable = ProfileSelector.getActiveProfile().relationship_type.can_answer_questionnaire;
                 // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
-                // If the relationship type is not 'SELF' and can_answer_questionnaire is False, the questionnaire cannot be opened
-                if ((!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) || (relationshipType !== 'SELF' && !answerable)) {
+                if (!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) {
                     NativeNotification.showNotificationAlert(
                         $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
                         $filter('translate')("TITLE"),
