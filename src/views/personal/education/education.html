@@ -3,7 +3,7 @@
     <!-- TOOLBAR -->
     <generic-toolbar title="{{edu.pageTitle}}" style-class="fontSizeTitle">
         <left-content>
-            <ons-back-button ng-if="edu.eduCategory==='research'">{{"BACK"|translate}}</ons-back-button>
+            <ons-back-button>{{ edu.eduCategory === 'research' ? "BACK" : "" | translate}}</ons-back-button>
         </left-content>
         <right-content>
             <ons-toolbar-button ng-click="edu.openInfoPage()" ng-if="edu.eduCategory==='clinical'">
@@ -24,8 +24,11 @@
     </ons-pull-hook>
 
     <!-- DATA HANDLER AND LOADING WHEEL -->
-    <patient-data-handler categories="EducationalMaterial" display-function="edu.configureState"
-        refresh="edu.pullHookRefresh" hide-content="edu.hideContent"></patient-data-handler>
+    <patient-data-handler categories="EducationalMaterial"
+                          display-function="edu.configureState"
+                          refresh="edu.pullHookRefresh"
+                          hide-content="edu.hideContent">
+    </patient-data-handler>
 
     <!-- SEARCH BAR -->
     <search-bar ng-hide="edu.hideContent || edu.noMaterials" search-text="edu.searchString"
