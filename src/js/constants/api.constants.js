@@ -20,7 +20,7 @@
             ROUTES: {
                 HOME: {
                     method: 'get',
-                    url: '/api/app/home',
+                    url: '/api/app/home/',
                 },
                 CHART: {
                     method: 'get',
