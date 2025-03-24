@@ -33,7 +33,6 @@
             `,
             link: function (scope) {
                 scope.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
-                console.log('==>', ons.platform.isIOS())
             }
         };
     }
