@@ -90,7 +90,7 @@
     "cordova-plugin-x-socialsharing": "6.0.4",
     "crypto-js": "4.2.0",
     "es6-promise-plugin": "4.2.2",
-    "firebase": "10.14.1",
+    "firebase": "11.1.0",
     "jquery": "3.7.1",
     "jquery.panzoom": "3.2.3",
     "moment": "2.30.1",
