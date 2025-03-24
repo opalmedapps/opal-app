@@ -193,9 +193,6 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
 
         if (appointments === undefined) return;
 
-        //Setting min date for upcoming appointment
-        var min=Infinity;
-
         //Format date to javascript date
         numberOfSessions=0;
         
@@ -215,18 +212,8 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         //Sets the calendar for easy extraction in the calendar view
         setCalendar(userAppointmentsArray);
     }
-    function findAppointmentIndexInArray(array, serNum)
-    {
-        for (var i = 0; i < array.length; i++) {
-            if(array[i].AppointmentSerNum==serNum)
-            {
-                return i;
-            }
-        }
-        return -1;
 
-    }
-    function setTreatmentSessions(appointments)
+    function setTreatmentSessions()
     {
         var array = [];
         var number = 0;
