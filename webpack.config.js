@@ -5,7 +5,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const OpalEnv = require("./opal_env.setup");
+const OpalEnv = require("./opal-env.setup");
 
 let entry = [
 	"./src/js/app.js",
@@ -16,17 +16,18 @@ let entry = [
 	"./src/js/app.filters.js",
 	"./src/js/app.controllers.js",
 	"./src/js/app.constants.js",
-	"./src/js/app.values.js"];
+	"./src/js/app.values.js",
+];
 
 const config = env => {
 	console.log("Webpack variables:", env);
 
-	// Parse the Opal environment to use, specified via e.g. `webpack --env.opal_environment=preprod`
-	const OPAL_ENV = env ? env.opal_environment : null;
-	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV || "default (root directory)"}`);
+	// Parse the Opal environment to use, specified for example via webpack as `--env opal_environment=%npm_config_env%` and npm as `--env=dev`
+	const OPAL_ENV = env?.opal_environment;
 
 	// Throws error if the defined folder for environment does not exist.
 	OpalEnv.verifyOpalEnvironmentExists(OPAL_ENV);
+	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV}`);
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
 
 	// Read environment settings from opal.config.js

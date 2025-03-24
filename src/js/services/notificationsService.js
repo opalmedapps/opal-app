@@ -29,10 +29,10 @@
         .factory('Notifications', Notifications);
 
     Notifications.$inject = ['$filter','$injector','$q','Announcements','Appointments','CheckInService','Documents',
-        'EducationalMaterial', 'PatientTestResults', 'Questionnaires', 'RequestToServer','TxTeamMessages','UserPreferences'];
+        'EducationalMaterial', 'PatientTestResults', 'Questionnaires', 'RequestToServer','TxTeamMessages','UserPreferences', 'Params'];
 
     function Notifications($filter, $injector, $q, Announcements, Appointments, CheckInService, Documents,
-                           EducationalMaterial, PatientTestResults, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
+                           EducationalMaterial, PatientTestResults, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences, Params) {
         /**
          * @ngdoc property
          * @name MUHCApp.service.#Notifications
@@ -62,7 +62,7 @@
          *                    } ...
          */
         let notificationTypes = {
-            'Document': {
+            [Params.NOTIFICATION_TYPES.Document]: {
                 icon: 'ion-android-document',
                 color: '#90CAF9',
                 readFunction: Documents.readDocument,
@@ -70,7 +70,7 @@
                 PageUrl: Documents.getDocumentUrl,
                 refreshType: 'Documents',
             },
-            'UpdDocument': {
+            [Params.NOTIFICATION_TYPES.UpdDocument]: {
                 icon: 'ion-android-document',
                 color: '#BA68C8',
                 readFunction: Documents.readDocument,
@@ -78,7 +78,7 @@
                 PageUrl: Documents.getDocumentUrl,
                 refreshType: 'Documents',
             },
-            'RoomAssignment': {
+            [Params.NOTIFICATION_TYPES.RoomAssignment]: {
                 icon: 'fa fa-calendar-o',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -86,7 +86,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
-            'TxTeamMessage': {
+            [Params.NOTIFICATION_TYPES.TxTeamMessage]: {
                 icon: 'fa fa-user-md ',
                 color: '#2196F3',
                 readFunction: TxTeamMessages.readTxTeamMessage,
@@ -94,7 +94,7 @@
                 PageUrl: TxTeamMessages.getTxTeamMessageUrl,
                 refreshType: 'TxTeamMessages',
             },
-            'Announcement': {
+            [Params.NOTIFICATION_TYPES.Announcement]: {
                 icon: 'fa fa-bullhorn',
                 color: '#FFC107',
                 readFunction: Announcements.readAnnouncementBySerNum,
@@ -102,7 +102,7 @@
                 PageUrl: Announcements.getAnnouncementUrl,
                 refreshType: 'Announcements',
             },
-            'EducationalMaterial': {
+            [Params.NOTIFICATION_TYPES.EducationalMaterial]: {
                 icon: 'fa fa-book',
                 color: '#9575CD',
                 readFunction: EducationalMaterial.readEducationalMaterial,
@@ -110,7 +110,7 @@
                 PageUrl: EducationalMaterial.getEducationalMaterialUrl,
                 refreshType: 'EducationalMaterial',
             },
-            'NextAppointment': {
+            [Params.NOTIFICATION_TYPES.NextAppointment]: {
                 icon: 'fa fa-calendar',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -118,7 +118,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
-            'AppointmentTimeChange': {
+            [Params.NOTIFICATION_TYPES.AppointmentTimeChange]: {
                 icon: 'fa fa-calendar',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -126,7 +126,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
-            'CheckInNotification': {
+            [Params.NOTIFICATION_TYPES.CheckInNotification]: {
                 icon: 'fa fa-check-square-o',
                 color: '#4CAF50',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -134,7 +134,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
-            'CheckInError': {
+            [Params.NOTIFICATION_TYPES.CheckInError]: {
                 icon: 'fa fa-check-square-o',
                 color: '#F44336',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -143,7 +143,7 @@
                 refreshType: 'Appointments',
             },
             // Special case: uses a dedicated download page in 'PageUrl' (questionnaireNotifRedirect.html) instead of 'refreshType'
-            'Questionnaire': {
+            [Params.NOTIFICATION_TYPES.Questionnaire]: {
                 icon: 'ion-clipboard',
                 color: '#607d8b',
                 PageUrl: Questionnaires.getQuestionnaireStartUrl,
@@ -153,7 +153,7 @@
                 },
             },
             // Special case: uses a dedicated download page in 'PageUrl' (questionnaireNotifRedirect.html) instead of 'refreshType'
-            'LegacyQuestionnaire': {
+            [Params.NOTIFICATION_TYPES.LegacyQuestionnaire]: {
                 icon: 'ion-clipboard',
                 color: '#607d8b',
                 PageUrl: Questionnaires.getQuestionnaireStartUrl,
@@ -162,7 +162,7 @@
                     return true;
                 },
             },
-            'AppointmentNew': {
+            [Params.NOTIFICATION_TYPES.AppointmentNew]: {
                 icon: 'fa fa-calendar-plus-o',
                 color: '#5FAB61',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -170,7 +170,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
-            'AppointmentCancelled': {
+            [Params.NOTIFICATION_TYPES.AppointmentCancelled]: {
                 icon: 'fa fa-calendar-times-o',
                 color: '#ff0787',
                 readFunction: Appointments.readAppointmentBySerNum,
@@ -179,10 +179,11 @@
                 refreshType: 'Appointments',
             },
             // Special case: opens the general lab results page, not a specific lab
-            'NewLabResult': {
+            [Params.NOTIFICATION_TYPES.NewLabResult]: {
                 icon: 'fa fa-flask ',
                 color: '#8BC34A',
                 PageUrl: PatientTestResults.getTestResultsUrl,
+                refreshType: ['PatientTestDates', 'PatientTestTypes'],
                 searchFunction: (refTableRowSerNum => refTableRowSerNum),
                 readFunction: function () {
                     return true;
@@ -201,6 +202,7 @@
             setNotificationsLanguage: setNotificationsLanguage,
             clearNotifications: clearNotifications,
             markAllRead: markAllRead,
+            implicitlyMarkNotificationAsRead: implicitlyMarkNotificationAsRead,
         };
 
         return service;
@@ -301,9 +303,10 @@
          * @methodOf MUHCApp.service:Notifications
          * @param {Number} index Index in the Notification array which belongs to the notification to be read.
          * @param {String} notification Notification to be read
+         * @param {boolean} [isImplicit=false] A flag that indicates if notification is being read implicitly
          * @description Sets ReadStatus in the notification to 1, sends request to backend, and syncs with device storage
          **/
-        function readNotification(index, notification) {
+        function readNotification(index, notification, isImplicit = false) {
             //If index is defined it the notification at that index matches the NotificationSerNum, then we can save
             //an array iteration look up.
             //Notification SerNum
@@ -316,7 +319,9 @@
             //If the index is not defined and the notificationSerNum matches then read that notification and sync the state of all services
             if (typeof Notifications[index] !== 'undefined' && Notifications[index].NotificationSerNum === serNum) {
                 Notifications[index].ReadStatus = '1';
-                notificationTypes[type].readFunction(refSerNum);
+                // Do not invoke readFunction if notification is implicitly read
+                // since it's already invoked in the corresponding category item.
+                if (!isImplicit) notificationTypes[type].readFunction(refSerNum);
                 RequestToServer.sendRequest('Read', {'Id': serNum, 'Field': 'Notifications'});
             } else {
                 //If it doesn't match, iterate, find notification and update read status in all the states, i.e. localStorage, server, model.
@@ -325,7 +330,7 @@
 
                     if (Notifications[i].NotificationSerNum === serNum) {
                         Notifications[i].ReadStatus = '1';
-                        notificationTypes[type].readFunction(refSerNum);
+                        if (!isImplicit) notificationTypes[type].readFunction(refSerNum);
                         RequestToServer.sendRequest('Read', {'Id': serNum, 'Field': 'Notifications'});
                         break;
                     }
@@ -417,6 +422,30 @@
          **/
         function clearNotifications() {
             Notifications = [];
+        }
+
+        /**
+         * @ngdoc method 
+         * @name implicitlyMarkNotificationAsRead
+         * @methodOf MUHCApp.service:Notifications
+         * @desc Implicitly mark category item's notifications as read.
+         *       E.g., new/update/cancel notifications linked to an appointment.
+         * @param {string} serNum Serial number of a category item for which a corresponding notifications is being updated.
+         * @param {Array} notificationTypes Notification types that are associated with the category item.
+         *        E.g., Document record is associated with "Document" and "UpdDocument" notification types.
+         */
+        function implicitlyMarkNotificationAsRead(serNum, notificationTypes) {
+            if (Array.isArray(Notifications) && Notifications.length)
+            {
+                Notifications.forEach(
+                    (notif, index) => {
+                        if (
+                            notif.RefTableRowSerNum === serNum
+                            && notificationTypes.includes(notif.NotificationType)
+                        )
+                            readNotification(index, notif, true);
+                    });
+            }
         }
     }
 })();

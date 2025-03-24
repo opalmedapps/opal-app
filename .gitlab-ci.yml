@@ -56,6 +56,7 @@ stages:
   # Required for security scanning jobs
   - test
   - deploy
+  - dast
   - post
 
 
@@ -230,6 +231,9 @@ include:
   # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
   # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
+  # DAST Scanning: https://docs.gitlab.com/ee/user/application_security/dast/
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Security/DAST.latest.gitlab-ci.yml
+  - template: DAST.latest.gitlab-ci.yml
 
 # SAST Scanning Customization:
 # ensure that mobsf jobs depend on builds
@@ -250,6 +254,23 @@ mobsf-ios-sast:
     # override rules since at the time the job is created the apk does not exist yet
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     # Automatically built for release tags only (see .build)
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+
+# DAST Scanning Customization:
+# https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/requirements.html
+# https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/enabling_the_analyzer.html
+dast:
+  needs: ["deploy web"]
+  # https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/variables.html
+  variables:
+    DAST_WEBSITE: "https://dev.app.opalmedapps.ca"
+    DAST_BROWSER_SCAN: "true"
+    # enables active scanning
+    # https://docs.gitlab.com/ee/user/application_security/dast/browser/checks/#active-checks
+    # DAST_FULL_SCAN_ENABLED: "true"
+  # can only run in the same pipeline as the dependent job (deploy web)
+  rules:
+    # Only release the web version from release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
 
 # Extended job for launching a downstream pipeline in another environment

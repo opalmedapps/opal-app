@@ -21,10 +21,10 @@
         .module('MUHCApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params', 'ProfileSelector', 'UpdateUI', 'User'];
+    CalendarController.$inject = ['$scope', 'Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params', 'Notifications'];
 
     /* @ngInject */
-    function CalendarController(Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params, ProfileSelector, UpdateUI, User) {
+    function CalendarController($scope, Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params, Notifications) {
         const vm = this;
 
         let todaysTimeMilliseconds;
@@ -95,6 +95,7 @@
          *************************/
 
         function activate() {
+            bindEvents();
 
             // Get the user's language
             vm.language = UserPreferences.getLanguage();
@@ -112,26 +113,6 @@
 
             // Get the name of the current navigator
             navigatorName = NavigatorParameters.getParameters().Navigator;
-
-            let navigator = NavigatorParameters.getNavigator();
-
-            // Patient profile that was active/set on the previous page
-            let prevPageProfileID = NavigatorParameters.getParameters()?.currentProfile;
-            let previousProfile = ProfileSelector.getPatientList().find(
-                (item) => item.patient_legacy_id == prevPageProfileID
-            )
-            navigator.on('prepop', () => {
-                // Reload profile that was active/set on the previous page
-                if (
-                    NavigatorParameters.getParameters()?.isCareReceiver
-                    && previousProfile
-                ) {
-                    ProfileSelector.loadPatientProfile(prevPageProfileID);
-                    
-                    // Reload 'Appointments' for the current user
-                    UpdateUI.updateTimestamps('Appointments', 0);
-                }
-            });
         }
 
         /**
@@ -317,7 +298,21 @@
          * @param appointment
          */
         function goToAppointment(appointment) {
-            if(appointment.ReadStatus === '0') Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+            if(appointment.ReadStatus === '0') {
+                Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+                // Mark corresponding notification as read
+                Notifications.implicitlyMarkNotificationAsRead(
+                    appointment.AppointmentSerNum,
+                    [
+                        Params.NOTIFICATION_TYPES.RoomAssignment,
+                        Params.NOTIFICATION_TYPES.NextAppointment,
+                        Params.NOTIFICATION_TYPES.AppointmentTimeChange,
+                        Params.NOTIFICATION_TYPES.CheckInNotification,
+                        Params.NOTIFICATION_TYPES.AppointmentNew,
+                        Params.NOTIFICATION_TYPES.AppointmentCancelled,
+                    ],
+                );
+            }
             NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':appointment});
             $window[navigatorName].pushPage('./views/personal/appointments/individual-appointment.html');
         }
@@ -376,6 +371,16 @@
             return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
         }
 
+        function bindEvents() {
+            let navigator = NavigatorParameters.getNavigator();
+
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if appointments calendar was opened via Home tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler('Appointments'));
+        }
     }
 })();
 

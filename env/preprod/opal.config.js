@@ -8,7 +8,13 @@ const config = {
         showVersionOnInit: true,
         useSourceMap: false,
         screenshotsAllowed: false,
-        webpackMode: 'production',
+        webpackMode: "production",
+    },
+    configXml: {
+        "APP_ID": "com.hig.opalpreprod",
+        "APP_NAME": "Opal Pre Prod",
+        "BUILD_NUMBER": 1,
+        "ANDROID_DEBUGGABLE": false,
     },
     firebase: {
         apiKey: "AIzaSyAGBV2Zwr0SYKy_J92jceof-OFeeFmm0Gw",

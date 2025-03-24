@@ -50,7 +50,7 @@ Any commits to the default branch are handled as follows:
       - `@semantic-release/changelog`: Updates [CHANGELOG.md](../../CHANGELOG.md) with the release notes.
       - `@semantic-release/exec`: Updates `./env/*/config.xml` with the new app version number (used by cordova
         when building the app).
-        This is done by executing versioning commands available in [opal_env.setup.js](../../opal_env.setup.js).
+        This is done by executing versioning commands available in [opal-env.setup.js](../../opal-env.setup.js).
       - `@semantic-release/git`: Commits the above files to the default branch.
         This commit is also tagged by semantic-release to identify the new version number (e.g. `v1.0.0`).
   - Note: The first pipeline ends here. This is because the first pipeline is not running on

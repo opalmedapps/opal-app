@@ -9,10 +9,10 @@
     This factory keeps track of all constants across the app.
      */
 
-    Params.$inject = ['QuestionnaireConstants', 'RequestConstants', 'ApiConstants'];
+    Params.$inject = ['QuestionnaireConstants', 'RequestConstants', 'ApiConstants', 'NotificationConstants'];
 
     /* @ngInject */
-    function Params (QuestionnaireConstants, RequestConstants, ApiConstants) {
+    function Params (QuestionnaireConstants, RequestConstants, ApiConstants, NotificationConstants) {
 
         let appConstants =
             {
@@ -308,6 +308,7 @@
         return {
             ...appConstants,
             ...QuestionnaireConstants,
+            ...NotificationConstants,
             REQUEST: {
                 ...RequestConstants
             },

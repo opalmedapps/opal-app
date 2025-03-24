@@ -1,3 +1,31 @@
+## [1.29.2](https://gitlab.com/opalmedapps/qplus/compare/v1.29.1...v1.29.2) (2024-02-22)
+
+
+### Bug Fixes
+
+* repair semantic-release commit issue after !1124 ([ba83b43](https://gitlab.com/opalmedapps/qplus/commit/ba83b43774db28e0f8008f4d5cf1caa24642909d))
+
+## [1.29.1](https://gitlab.com/opalmedapps/qplus/compare/v1.29.0...v1.29.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* add new environments and integrate config.xml duplicates ([91f32c2](https://gitlab.com/opalmedapps/qplus/commit/91f32c2f3936fad7abd258733d9d4edade901a65))
+
+# [1.29.0](https://gitlab.com/opalmedapps/qplus/compare/v1.28.0...v1.29.0) (2024-02-22)
+
+
+### Features
+
+* implicitly mark notifications as read ([1563e2c](https://gitlab.com/opalmedapps/qplus/commit/1563e2cc5e9fe6b3afa69284c3aa9548c2ed7dd0))
+
+# [1.28.0](https://gitlab.com/opalmedapps/qplus/compare/v1.27.4...v1.28.0) (2024-02-20)
+
+
+### Features
+
+* enable care receivers' in app notifications ([49e5344](https://gitlab.com/opalmedapps/qplus/commit/49e534464148eb8ea02404076332a2436905fe22))
+
 ## [1.27.4](https://gitlab.com/opalmedapps/qplus/compare/v1.27.3...v1.27.4) (2024-02-20)
 
 

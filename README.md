@@ -45,7 +45,9 @@ The following is the top level anatomy of the folders and their description. As 
 ├── .gitlab-ci.yml # GitLab CI/CD pipeline description file
 ├── docs # Project-specific documentation
 ├── env # Folder where the environment specific files live
+    ├── demo
     ├── dev
+    ├── devops
     ├── local
     ├── preprod
     ├── prod
@@ -57,7 +59,7 @@ The following is the top level anatomy of the folders and their description. As 
 ├── plugins # Cordova plugins folder, interfaces for native functionalities (Camera, Calendar etc.)
 ├── node_modules # App production and development dependencies
 ├── .gitignore
-├── opal_env.setup.js # File to manage the Opal environments and versions
+├── opal-env.setup.js # File to manage the Opal environments and versions
 ├── package-lock.json
 ├── package.json # Contains scripts for development
 ├── static # Contains static pages such as the landing page and password-reset site (Password reset functionality in Opal)
@@ -69,7 +71,7 @@ The following is the top level anatomy of the folders and their description. As 
 
 In Opal, we have several environments which represent different stages along the release pipeline.
 These environments, in order from closest to the developers to closest to its users, are
-`local`, `dev`, `qa`, `staging`, `preprod` and `prod`.
+`local`, `devops`, `dev`, `qa`, `demo`, `staging`, `preprod` and `prod`.
 
 The default project branch is used as the base for developers to write new code (which can be run in their `local` environment).
 All new code is submitted for review via merge requests, and is then squashed-and-merged to the default branch.
