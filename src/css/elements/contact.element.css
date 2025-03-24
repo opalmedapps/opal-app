@@ -17,16 +17,6 @@
 	margin-left:5px;
 	border-radius: 3px;
 }
-.prop-desc {
-	font-size: 14px;
-	opacity: 0.7;
-}
-.image-conversation {
-	height: 30px;
-	width: 30px;
-	border-radius: 50%;
-	-webkit-border-radius: 50%;
-}
 .list-item-left {
 	width: 60px;
 	margin-right: -60px;
