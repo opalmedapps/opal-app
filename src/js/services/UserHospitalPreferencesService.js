@@ -94,7 +94,11 @@
          * @returns institurionCode {string} Instituion code string
          */
         function getHospitalInstitutionCode(){
-            return hospitalList[window.localStorage.getItem(localStorageHospitalKey)].uniqueHospitalCode;
+            if (hospitalList[window.localStorage.getItem(localStorageHospitalKey)]){
+                return hospitalList[window.localStorage.getItem(localStorageHospitalKey)].uniqueHospitalCode;
+            }
+            return '';
+            
         }
 
         /**
