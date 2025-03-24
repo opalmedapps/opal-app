@@ -11,6 +11,8 @@ export class AppointmentFromBackend {
             checkininstruction_en,
             checkininstruction_fr,
             checkinpossible,
+            educational_material_url_en,
+            educational_material_url_fr,
             hospitalmap,
             lastupdated,
             patient,
@@ -23,6 +25,8 @@ export class AppointmentFromBackend {
         language,
     ) {
         this.AppointmentSerNum = appointmentsernum;
+        this.AppointmentDescription_EN = alias?.alias_description_en;
+        this.AppointmentDescription_FR = alias?.alias_description_fr;
         this.AppointmentType_EN = alias?.aliasname_en;
         this.AppointmentType_FR = alias?.aliasname_fr;
         this.Checkin = checkin;
@@ -43,5 +47,7 @@ export class AppointmentFromBackend {
         this.ScheduledStartTime = Date.parse(scheduledstarttime);
         this.ScheduledEndTime = Date.parse(scheduledendtime);
         this.State = state;
+        this.URL_EN = educational_material_url_en;
+        this.URL_FR = educational_material_url_fr;
     }
 }

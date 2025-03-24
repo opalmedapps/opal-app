@@ -81,6 +81,7 @@ p {
 @import url('./animations.css');
 @import url('./elements/menu.element.css');
 @import url('./elements/ons-alert-dialog.element.css');
+@import url('./elements/ons-list-item.element.css');
 @import url('./elements/event.element.css');
 @import url('./elements/contact.element.css');
 @import url('./elements/checkout.element.css');

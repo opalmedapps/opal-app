@@ -7,11 +7,6 @@
     margin: 0 6px;
 }
 
-/* Darken the chevron slightly to be visible against the background */
-#about-appointment::before {
-    color: #A6A6A6;
-}
-
 #map-desc {
     margin: 14px 0;
 }
