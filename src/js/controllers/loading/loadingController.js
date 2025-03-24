@@ -8,12 +8,14 @@
         .module('MUHCApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', '$filter', 'ConcurrentLogin', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences',
-        'RequestToServer', 'LogOutService', 'NativeNotification', 'ProfileSelector'];
+    LoadingController.$inject = ['$state', '$filter', 'ConcurrentLogin', 'DeviceIdentifiers', 'Logger',
+    'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'RequestToServer', '$stateParams', 'LogOutService',
+    'NativeNotification', 'ProfileSelector'];
 
     /* @ngInject */
-    function LoadingController($state, $filter, ConcurrentLogin, UpdateUI, UserAuthorizationInfo, UserPreferences,
-                               RequestToServer, LogOutService, NativeNotification, ProfileSelector) {
+    function LoadingController($state, $filter, ConcurrentLogin, DeviceIdentifiers, Logger, UpdateUI,
+        UserAuthorizationInfo, UserPreferences, RequestToServer, $stateParams, LogOutService, NativeNotification,
+        ProfileSelector) {
 
         activate();
 
@@ -26,7 +28,13 @@
 
                 loadingmodal.show();
 
-                RequestToServer.sendRequest('Login'); // For analytics only; don't wait for a response
+                Logger.sendLog(  // For analytics only; don't wait for a response
+                    'Login',
+                    {
+                        "isTrustedDevice": $stateParams.isTrustedDevice,
+                        "deviceType": DeviceIdentifiers.getDeviceIdentifiers().deviceType,
+                    },
+                );
                 await UserPreferences.initFontSize();
                 await UpdateUI.init();
                 await ProfileSelector.init();
