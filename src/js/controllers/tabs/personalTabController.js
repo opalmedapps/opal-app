@@ -83,11 +83,8 @@
                     vm.txTeamMessagesUnreadNumber = result.data.unread_txteammessage_count;
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
                     vm.questionnairesUnreadNumber = result.data.unread_questionnaire_count;
-                    vm.educationalMaterialsUnreadNumber = parseInt(result.data.unread_educationalmaterial_count);
-                    vm.researchReferenceUnreadNumber = parseInt(result.data.unread_research_reference_count);
-                    vm.researchQuestionnairesUnreadNumber = parseInt(result.data.unread_research_questionnaire_count);
-                    vm.consentQuestionnairesUnreadNumber = parseInt(result.data.unread_consent_questionnaire_count);
-                    vm.researchUnreadNumber = calculateResearchBadge();
+                    vm.educationalMaterialsUnreadNumber = result.data.unread_educationalmaterial_count;
+                    vm.researchUnreadNumber = calculateResearchBadge(result.data);
 
                     // Refresh the visible menu items based on access level when changing profiles
                     setAccessLevel();
@@ -99,18 +96,20 @@
         }
 
         /**
-         * @description Calculates the total value of the research badge based on the badges of enabled research modules.
-         *              If a module is not enabled (not visible), it shouldn't be included in the count.
+         * @description Calculates the total value of the "unread items" badge for the research menu based on
+         *              the enabled research modules. If a module is not enabled (not visible), then it
+         *              won't be included in the count.
+         * @param {object} unreadCounts Object containing the number of unread items for each module.
          * @returns {number} The total value of all visible badges inside the research menu.
          */
-        function calculateResearchBadge() {
+        function calculateResearchBadge(unreadCounts) {
             let total = 0;
             let enabledREF = vm.allowedModules.hasOwnProperty('REF') && vm.allowedModules['REF'];
             let enabledRQU = vm.allowedModules.hasOwnProperty('RQU') && vm.allowedModules['RQU'];
             let enabledCON = vm.allowedModules.hasOwnProperty('CON') && vm.allowedModules['CON'];
-            if (enabledREF) total += vm.researchReferenceUnreadNumber;
-            if (enabledRQU) total += vm.researchQuestionnairesUnreadNumber;
-            if (enabledCON) total += vm.consentQuestionnairesUnreadNumber;
+            if (enabledREF) total += parseInt(unreadCounts.unread_research_reference_count);
+            if (enabledRQU) total += parseInt(unreadCounts.unread_research_questionnaire_count);
+            if (enabledCON) total += parseInt(unreadCounts.unread_consent_questionnaire_count);
             return total;
         }
 
