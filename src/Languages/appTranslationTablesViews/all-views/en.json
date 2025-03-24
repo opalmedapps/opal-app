@@ -86,6 +86,7 @@
   "EXIT_APP": "Are you sure you wish to exit Opal?",
   "Electrolytes": "Electrolytes",
   "FEEDBACK": "Feedback",
+  "FEEDBACK_ERROR": "An error occurred while sending your feedback. Please try again later.",
   "FEEDBACK_MESSAGE": "Your feedback is invaluable to us. Please take a moment to let us know what you think about Opal.",
   "FEEDBACK_RECEIVED": "Your feedback has been received.",
   "FIELD_UPDATED": "Field has been updated",

@@ -86,6 +86,7 @@
     "EXIT_APP": "Voulez-vous vraiment quitter Opal?",
     "Electrolytes": "Électrolytes",
     "FEEDBACK": "Commentaires",
+    "FEEDBACK_ERROR": "Une erreur s'est produite lors de l'envoi de vos commentaires. Veuillez réessayer plus tard.",
     "FEEDBACK_MESSAGE": "Votre commentaire est important pour nous. S'il vous plaît, prenez le temps de nous faire savoir ce que vous pensez d'Opal. Chaque commentaire est apprécié.",
     "FEEDBACK_RECEIVED": "Vos commentaires ont été reçus.",
     "FIELD_UPDATED": "Le champ a été mis à jour",
