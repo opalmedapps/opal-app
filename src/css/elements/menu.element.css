@@ -1,16 +1,13 @@
 .page--menu-page__background {
     background-color: #EBEBEA;
 }
-
 .page--menu-page__content {
     color: white;
 }
-
 .menu-close,
 .menu-close > .toolbar-button {
     color: #999;
 }
-
 .menu-list,
 .menu-item:first-child,
 .menu-item:last-child,
@@ -31,23 +28,18 @@
     min-height: 20px;
     height: 100%;
 }
-
 .popover {
     display: inline;
 }
-
 .menu-item {
     color:#2B6197;
     padding: 0 0 0 20px;
     line-height: 52px;
     height: 52px;
-    /*text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;*/
 }
-
 .menu-item:active {
     background-color: rgba(255, 255, 255, 0.1);
 }
-
 .menu-notification {
     display: inline-block;
     margin-top: 12px;
@@ -57,7 +49,6 @@
     min-width: 16px;
     font-weight: 600;
 }
-
 .bottom-menu-list,
 .bottom-menu-item:first-child,
 .bottom-menu-item:last-child,
@@ -66,7 +57,6 @@
     background-image: none !important;
     color: #626262;
 }
-
 .bottom-menu-item:active {
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -76,7 +66,6 @@
 .hoverFirstNameEdit:hover+.editFirstNameIcon{
     display:block;
 }
-
 .hbtn {
     height: 44px;
     line-height: 44px;
@@ -84,16 +73,13 @@
     background: #eee;
     display:inline-block;
 }
-
 .list__item, .navigation-bar{
     border-bottom: 1px solid #ddd !important;
 }
-
 .navigation-bar {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
-
 .tab-bar{
     border-top: 1px solid #ddd !important;
 }

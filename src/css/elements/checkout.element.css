@@ -15,11 +15,9 @@
         top: -50px;
         z-index: 0;
     }
-
     .checkout-wrap {
         margin: 80px auto;
     }
-
     ul.checkout-bar {
         -webkit-box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
         box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
@@ -47,8 +45,8 @@
         left: 0;
         position: absolute;
         width: 10%;
-        }
-        ul.checkout-bar li {
+    }
+    ul.checkout-bar li {
         display: inline-block;
         margin: 50px 0 0;
         padding: 0;
