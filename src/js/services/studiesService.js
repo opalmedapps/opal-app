@@ -62,23 +62,19 @@
          * @param {string} status The consent status submitted, either "opalConsented" or "declined".
          * @return {promise} 
          */
-        function updateConsentStatus(questionnaireId, status) {
-            var q = $q.defer();
-
+        async function updateConsentStatus(questionnaireId, status) {
             let params = {
                 questionnaire_id: questionnaireId,
                 status: status
+            };
+
+            try {
+                let response = await RequestToServer.sendRequestWithResponse('StudyUpdateStatus', params);
+
+                return { Success: true, Location: 'Server' };
+            } catch (error) {
+                throw { Success: false, Location: '', Error: error };
             }
-
-            RequestToServer.sendRequestWithResponse('StudyUpdateStatus', params)
-                .then(function (response) {
-                    q.resolve({ Success: true, Location: 'Server' });
-                })
-                .catch(function (err) {
-                    q.reject({ Success: false, Location: '', Error: err });
-                });
-
-            return q.promise;
         }
 
         /**
