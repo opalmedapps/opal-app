@@ -12,6 +12,7 @@
     padding: 0px;
     height: 85%;
     overflow: scroll !important;
+    position: absolute;
 }
 .info-modal-title {
     margin: 5%;
