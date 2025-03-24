@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    // https://docs.renovatebot.com/presets-default/#pinallexceptpeerdependencies
+    ":pinAllExceptPeerDependencies",
+    // https://docs.renovatebot.com/presets-default/#separatemultiplemajorreleases
+    ":separateMultipleMajorReleases",
+    // https://docs.renovatebot.com/presets-default/#separatepatchreleases
+    ":separatePatchReleases",
+  ],
+  "assignees": ["staceybeard", "yickmo"],
+  "labels": ["dependencies"],
+  "separateMinorPatch": true,
+  "packageRules": [
+    // Exclude all the dependencies except for AngularJS/xlts
+    // TODO: group all the dependencies
+    {
+      "excludePackagePatterns": ["/.*/"],
+    },
+    // Group xlts angular-related updates
+    {
+      "matchRepositories": ["/.*xlts.*/"],
+      "groupName": "xlts angular packages"
+    },
+    // Group auxiliary angular-related updates
+    {
+      "matchPackagePatterns": ["^angular", "ng-table"],
+      "excludeRepositories": ["/.*xlts.*/"],
+      "groupName": "auxiliary angular packages"
+    },
+  ],
+}
