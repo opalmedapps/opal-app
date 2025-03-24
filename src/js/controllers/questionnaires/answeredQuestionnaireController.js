@@ -379,7 +379,7 @@
         function verifyPassword(requirePassword, password) {
             if (requirePassword) {
                 const user = FirebaseService.getAuthenticationCredentials();
-                const credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.password);
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
 
                 return user.reauthenticateWithCredential(credential);
             }
