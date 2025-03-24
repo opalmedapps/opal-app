@@ -9,12 +9,12 @@
         .module('MUHCApp')
         .factory('UpdateUI', UpdateUI);
 
-    UpdateUI.$inject = ['$filter','$injector','$q','Announcements','Appointments','Diagnoses','Documents',
-        'EducationalMaterial','NativeNotification','Notifications','Patient','PatientTestResults',
+    UpdateUI.$inject = ['Announcements','Appointments','Diagnoses','Documents',
+        'EducationalMaterial', 'Notifications', 'PatientTestResults',
         'Questionnaires','RequestToServer','TxTeamMessages','UserPreferences'];
 
-    function UpdateUI($filter, $injector, $q, Announcements, Appointments, Diagnoses, Documents,
-                      EducationalMaterial, NativeNotification, Notifications, Patient, PatientTestResults,
+    function UpdateUI(Announcements, Appointments, Diagnoses, Documents,
+                      EducationalMaterial, Notifications, PatientTestResults,
                       Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
         /**
          * @desc Mapping of all request types made by this service to the listener. Each key is the name of a
@@ -24,6 +24,7 @@
          *       - set: Saves the data into the service by first clearing away all existing data.
          *       - update: Saves the data by overwriting duplicate data (according to SerNum) and leaving the rest alone.
          *       - lastUpdated: Timestamp at which data was last requested from the listener.
+         *       - multiProfileEnabled: Enable getting data for multiple patient for a single category (Only supports one request type in Fields).
          * @type {{'Category': {set: function, lastUpdated: number, update: function}}}
          */
         let sectionServiceMappings = {
@@ -31,51 +32,61 @@
                 set: Announcements.setAnnouncements,
                 update: Announcements.updateAnnouncements,
                 lastUpdated: 0,
+                multiProfileEnabled: true,
             },
             'Appointments': {
                 set: Appointments.setUserAppointments,
                 update: Appointments.updateUserAppointments,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'Diagnosis': {
                 set: Diagnoses.setDiagnoses,
                 update: Diagnoses.updateDiagnoses,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'Documents': {
                 set: Documents.setDocuments,
                 update: Documents.updateDocuments,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'EducationalMaterial': {
                 set: EducationalMaterial.setEducationalMaterial,
                 update: EducationalMaterial.updateEducationalMaterial,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'Notifications': {
                 set: Notifications.initNotifications,
                 update: Notifications.updateUserNotifications,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'PatientTestDates': {
                 set: PatientTestResults.setTestDates,
                 update: PatientTestResults.updateTestDates,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'PatientTestTypes': {
                 set: PatientTestResults.setTestTypes,
                 update: PatientTestResults.updateTestTypes,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'QuestionnaireList': {
                 set: Questionnaires.setQuestionnaireList,
                 update: Questionnaires.updateQuestionnaireList,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'TxTeamMessages': {
                 set: TxTeamMessages.setTxTeamMessages,
                 update: TxTeamMessages.updateTxTeamMessages,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
         };
 
@@ -153,8 +164,7 @@
                 purpose: auxiliaryParams?.purpose,
                 Timestamp: findSmallestTimestamp(parameters),
             };
-
-            let response = await RequestToServer.sendRequestWithResponse('Refresh', refreshParams);
+            let response = await cueRequests('Refresh', refreshParams); 
             validateResponse(response);
             await updateServices(response.Data);
             updateTimestamps(parameters, response.Timestamp);
@@ -173,10 +183,22 @@
                 purpose: auxiliaryParams?.purpose
             };
 
-            let response = await RequestToServer.sendRequestWithResponse('Refresh', params);
+            let response = await cueRequests('Refresh', {Fields: params});
             validateResponse(response);
             await setServices(response.Data, parameters);
             updateTimestamps(parameters, response.Timestamp);
+        }
+
+        /**
+         * @description - Cue request between multiple patient requests for announcements or normal single request to server.
+         * @param {string} typeOfRequest - Type of request send to the listener
+         * @param {object} parameters - Extra parameters to identify data to be query
+         * @returns Requested data from the listener.
+         */
+        async function cueRequests(typeOfRequest, parameters) {
+            return sectionServiceMappings[parameters.Fields[0]].multiProfileEnabled
+                ? RequestToServer.handleMultiplePatientsRequests(typeOfRequest, parameters, parameters.Fields[0])
+                : RequestToServer.sendRequestWithResponse(typeOfRequest, parameters);
         }
 
         /**
@@ -246,6 +268,7 @@
          */
         async function getData(categories, parameters = null) {
             // Validate input
+            
             validateCategories(categories);
             if (typeof categories === "string" || typeof parameters === "string")
                 return getData([categories], JSON.parse(parameters));
