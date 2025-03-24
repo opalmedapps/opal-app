@@ -1,0 +1,20 @@
+{
+  "branches": ["staging"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/exec", {
+        "prepareCmd": "node -e \"require('./opal_env.setup.js').setVersionAndBuild('${nextRelease.version}', '1', '$ENV')\""
+      }
+    ],
+    [
+      "@semantic-release/git", {
+        "message": "chore(release): version ${nextRelease.version}\n\n${nextRelease.notes}",
+        "assets": ["CHANGELOG.md", "./env/*/config.xml"]
+      }
+    ]
+  ],
+  "tagFormat": "v${version}"
+}
