@@ -175,48 +175,45 @@
          * @param {boolean} bySwipe if it is activated by swiping to the right then True
          * @desc This function is used to update the questionnaire status when beginning a questionnaire and, in case that the user uses the button "begin" instead of swiping, move the carousel
          */
-        function beginQuestionnaire(bySwipe){
+        async function beginQuestionnaire(bySwipe){
             let inProgress = vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS;
             let oldStatus = vm.questionnaire.status;
 
             // if the questionnaire was not started yet, start it
-            if (vm.questionnaireStart){
+            if (vm.questionnaireStart) {
                 vm.loadingQuestionnaire = true;
 
-                // update status for the questionnaire of service and listener / database
-                // send the request before setting the status locally, because the request can fail if the questionnaire was locked by another user
-                Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, inProgress, oldStatus)
-                    .then(function(){
-                        $timeout(function(){
-                            vm.questionnaire.status = inProgress;
+                try {
+                    // update status for the questionnaire of service and listener / database
+                    // send the request before setting the status locally, because the request can fail if the questionnaire was locked by another user
+                    await Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, inProgress, oldStatus);
 
-                            // we are no longer at the home page
-                            vm.questionnaireStart = false;
+                    $timeout(() => {
+                        vm.questionnaire.status = inProgress;
 
-                            // set the indices (mere formality)
-                            vm.startIndex = 1;  // skip questionnaire home page
-                            vm.sectionIndex = 0;
-                            vm.questionIndex = 0;
+                        // we are no longer at the home page
+                        vm.questionnaireStart = false;
 
-                            vm.loadingQuestionnaire = false;
+                        // set the indices (mere formality)
+                        vm.startIndex = 1;  // skip questionnaire home page
+                        vm.sectionIndex = 0;
+                        vm.questionIndex = 0;
 
-                            if (!bySwipe){
-                                next();
-                            } else {
-                                // this is to force update the carousel even by swiping it
-                                vm.carousel.setActiveCarouselItemIndex(vm.startIndex);
-                            }
+                        vm.loadingQuestionnaire = false;
 
-                            vm.carousel.refresh();
-                        });
-                    })
-                    .catch(error => {
-                        $timeout(() => {
-                            console.error(error);
-                            vm.loadingQuestionnaire = false;
-                            handleLoadQuestionnaireErr(error);
-                        });
+                        // this is to force update the carousel even by swiping it
+                        bySwipe ? vm.carousel.setActiveCarouselItemIndex(vm.startIndex) : next();
+
+                        vm.carousel.refresh();
                     });
+                }
+                catch(error) {
+                    $timeout(() => {
+                        console.error(error);
+                        vm.loadingQuestionnaire = false;
+                        handleLoadQuestionnaireErr(error);
+                    });
+                }
             }
         }
 
