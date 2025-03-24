@@ -362,6 +362,45 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         /**
          *@ngdoc method
+         *@name setCheckinAppointments
+         *@methodOf MUHCApp.service:Appointments
+         *@param {Array} appointments Appointments array obtain from Firebase
+         *@description Function is called from the {@link MUHCApp.services:UpdateUI}. The function is an initializer for the service, it sets all the properties for the checkin used.
+         **/
+        setCheckinAppointments: function (appointments) {
+            //Initializing Variables
+            userAppointmentsArray = [];
+            appointments.forEach(appointment => {
+                let patientName = `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`;
+                if (appointment.patient.patientsernum == 51) {
+                    patientName = 'Your appointments';
+                }
+                const localAppointment = {
+                    AppointmentSerNum: appointment.appointmentsernum,
+                    Checkin: appointment.checkin,
+                    CheckinPossible: appointment.checkinpossible,
+                    PatientSerNum: appointment.patient.patientsernum,
+                    ScheduledStartTime: $filter('formatDate')(appointment.scheduledstarttime),
+                    ScheduledEndTime: $filter('formatDate')(appointment.scheduledendtime),
+                    LastUpdated: $filter('formatDate')(appointment.lastupdated),
+                    State: appointment.state,
+                    RoomLocation_EN: appointment.roomlocation_en,
+                    RoomLocation_FR: appointment.roomlocation_fr,
+                    AppointmentType_EN: appointment.alias.aliasname_en,
+                    ResourceDescription: appointment.alias.aliasname_en,
+                    patientName: patientName,
+                    CheckInStatus: appointment.checkin == 1 ? 'success' : 'info',
+                }
+                userAppointmentsArray.push(localAppointment);
+            });
+
+            LocalStorage.WriteToLocalStorage('Appointments',userAppointmentsArray);
+
+            //Sort Appointments chronologically most recent first
+            userAppointmentsArray = $filter('orderBy')(userAppointmentsArray, 'ScheduledStartTime', false);
+        },
+        /**
+         *@ngdoc method
          *@name updateUserAppoinments
          *@methodOf MUHCApp.service:Appointments
          *@param {Object} appointments Appointments array that containts the new appointments
