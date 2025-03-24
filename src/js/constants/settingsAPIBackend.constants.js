@@ -12,7 +12,7 @@
         .module('MUHCApp')
         .constant('SettingsAPIConstants', {
             HOSPITAL_SETTINGS: {
-               'PARKING_INFO' : 'ParkingInfo'
+               'PARKING_INFO' : 'HospitalSettings'
             },
         });
 })();
