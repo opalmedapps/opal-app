@@ -99,7 +99,7 @@
     "moment": "2.29.4",
     "onsenui": "1.3.17",
     "pdfjs-dist": "4.3.136",
-    "plotly.js-dist-min": "2.35.2",
+    "plotly.js-basic-dist-min": "2.35.2",
     "plotly.js-locales": "2.35.2",
     "python-struct": "1.1.3",
     "tweetnacl": "1.0.3",
