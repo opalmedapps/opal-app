@@ -14,12 +14,10 @@ var myApp=angular.module('MUHCApp');
  *@name MUHCApp.service:Appointments
  *@requires $filter
  *@requires MUHCApp.service:RequestToServer
- *@requires $q
- *@requires MUHCApp.service:UserAuthorizationInfo
  *@description Sets the appointments and provides an API to access them
  **/
-myApp.service('Appointments', ['$q','RequestToServer','UserAuthorizationInfo','$filter','UserPreferences','LocalStorage',
-    function ($q, RequestToServer, UserAuthorizationInfo, $filter, UserPreferences, LocalStorage) {
+myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserPreferences',
+    function ($filter, LocalStorage, RequestToServer, UserPreferences) {
 
     /**
      *@ngdoc property
