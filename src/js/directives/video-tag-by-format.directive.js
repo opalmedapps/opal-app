@@ -43,6 +43,11 @@
 
         /**
           * This function check the video url (youtube or vimeo link) and format (other link with mp4, ogv and webm file extention)
+          * 
+          * Some notes of one possible idea about video tag attribute "autopalay"
+          *     - Video tag with or without autoplay depending on the device.
+          *     - For iPhones it is set to autoplay so the poster image automatically appears on initial load.
+          *     - iPhones will prevent the video from auto playing, but the poster image appears as the result.
           */
         function checkVideoFormat(scope, element, attrs) {
             scope.iframeTag = false;
@@ -64,9 +69,7 @@
                     else if (['mp4', 'ogv', 'webm'].indexOf(scope.fileExt.toLowerCase()) !== -1) {
                         scope.videoTag = true;
                         /**
-                        * Video tag with or without autoplay depending on the device.
-                        * For iPhones it is set to autoplay so the poster image automatically appears on initial load. 
-                        * iPhones will prevent the video from auto playing, but the poster image appears as the result.
+                        *  Modify the video url when using iPhone deice to show the poster at a specific time frame.
                         */
                         if(ons.platform.isIOS()){
                             scope.formatedUrl = scope.formatedUrl + "#t=0.05";
