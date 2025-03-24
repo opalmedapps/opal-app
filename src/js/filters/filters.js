@@ -4,7 +4,6 @@
  *Email:davidfherrerar@gmail.com
  */
 import moment from "moment";
-import "moment-timezone";
 
 var myApp=angular.module('MUHCApp');
 
