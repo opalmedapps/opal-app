@@ -60,6 +60,10 @@
             // Initialize the navigator for push and pop of pages.
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             NavigatorParameters.setNavigator(homeNavigator);
+
+            // Get location permission
+			Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
+            
             //Initialize the page interval to refresh checkin state every 5 second
             setInterval();
             bindEvents();
@@ -67,9 +71,6 @@
             NetworkStatus.isOnline() ? homePageInit() : setPatientInfo();
             // set the hospital banner and available modules
             configureSelectedHospital();
-
-            // Get location permission
-			Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
         }
 
         /**
