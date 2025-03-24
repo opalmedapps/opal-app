@@ -142,11 +142,11 @@ build web:
 #   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the pipeline variables
 #   This service account provides permissions for uploading to Firebase App Distribution
 #   See: https://firebase.google.com/docs/app-distribution/authenticate-service-account.md?platform=android
-.deploy to firebase:
+.deploy app to firebase:
   stage: deploy
   # require web app to be deployed (which uses the environment)
   needs:
-    - deploy web app
+    - deploy web
   rules:
     # Only release the app from release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
@@ -160,7 +160,7 @@ build web:
 
 # Deploys the Android app to Firebase
 deploy android to firebase:
-  extends: .deploy to firebase
+  extends: .deploy app to firebase
   script:
     - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
@@ -168,13 +168,13 @@ deploy android to firebase:
 
 # Deploys the iOS app to Firebase
 deploy ios to firebase:
-  extends: .deploy to firebase
+  extends: .deploy app to firebase
   script:
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build ios
 
-deploy web app:
+deploy web:
   stage: deploy
   environment: $ENV
   needs:
@@ -197,7 +197,8 @@ deploy web app:
         bye
       "
   rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    # Only release the web version from release tags
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
 
 # Launches a downstream pipeline to build for the QA environment
 # See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
