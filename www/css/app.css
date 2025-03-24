@@ -199,6 +199,11 @@ img
   min-height: 20px;
   height: 100%;
 }
+
+.popover {
+    display: inline;
+}
+
 .menu-item {
   color:#2B6197;
   padding: 0 0 0 20px;
