@@ -20,6 +20,7 @@
     "CHARACTERS_LEFT": "caractères restants",
     "CHECKED_IN": "Vous êtes enregistré.",
     "CHECKIN": "Enregistrement",
+    "CHECKINALLTODAY": "Enregistrez-vous pour les rendez-vous d'aujourd'hui",
     "CHECKIN_ERROR": "Impossible de s'enregistrer pour ce rendez-vous. S'il vous plaît, veuillez vous rendre à la réception.",
     "CHECKIN_IN_HOSPITAL_ONLY": "L'enregistrement sera disponible dès l'arrivée à l'hôpital.",
     "CHECKIN_MESSAGE_AFTER": "Vous êtes enregistré pour votre rendez-vous.",
