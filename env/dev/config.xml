@@ -26,7 +26,7 @@
         See: https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/
     -->
     <!-- <access origin="*"/> -->
-    <allow-navigation href="https://www.youtube.com/*"/>
+    <allow-navigation href="https://www.youtube.com/*" requires-certificate-transparency="true" />
     <allow-intent href="https://*/*"/>
     <allow-intent href="tel:*"/>
     <allow-intent href="sms:*"/>
@@ -37,8 +37,8 @@
     <preference name="scheme" value="app"/>
     <preference name="hostname" value="localhost"/>
     <!-- Fix for cordova-android 11.0.0/12.0.0 -->
-    <allow-navigation href="https://app/*"/>
-    <allow-navigation href="https://localhost/*"/>
+    <allow-navigation href="https://app/*"/ requires-certificate-transparency="true">
+    <allow-navigation href="https://localhost/*"/ requires-certificate-transparency="true">
     <!-- Splash screen settings -->
     <preference name="SplashScreenDelay" value="5000"/>
     <preference name="FadeSplashScreen" value="true"/>
