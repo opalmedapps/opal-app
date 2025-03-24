@@ -152,6 +152,6 @@
   "REENTER_PASSWORD": "Confirmer le mot de passe",
   "SERVERERRORALERT": "Problème de serveur: impossible de télécharger les données, veuillez réessayer plus tard",
   "TAP_TO_SELECT_HOSPITAL": "Appuyez pour choisir",
-  "LONGERTIMEALERT": "La demande prend plus de temps que prévu... veuillez réessayer plus tard.",
+  "LONGERTIMEALERT": "La requête prend plus de temps que prévu... veuillez réessayer plus tard.",
   "WHATSNEW": "Nouveautés"
 }

@@ -110,7 +110,6 @@
 .info-modal-text {
     background: rgba(0,0,0,0.0);
     padding: 0px;
-    width: 100%;
     height: 85%;
     overflow: scroll !important;
 }

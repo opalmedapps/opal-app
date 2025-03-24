@@ -33,37 +33,12 @@
         const version_url = 'https://app.opalmedapps.ca/versions.json';
 
         let service =  {
-            requestVersionUpdates: requestVersionUpdates,
             getVersionUpdates: getVersionUpdates,
             currentVersion: currentVersion,
         };
 
         return service;
 
-        /**
-         * @ngdoc method
-         * @name requestVersionUpdates
-         * @methodOf MUHCApp.service:Version
-         * @description Grabs all the version updates from the server.
-         **/
-        function requestVersionUpdates() {
-            let r = $q.defer();
-
-            RequestToServer.sendRequestWithResponse('VersionUpdates')
-                .then(function (response) {
-                    if (response.Data && response.Data.length > 0) {
-                        r.resolve(response.Data);
-                    } else {
-                        r.reject('No updates');
-                    }
-                })
-                .catch(function (error) {
-                    console.log('Error in VersionUpdates: ', error);
-                    r.reject(error);
-                });
-
-            return r.promise;
-        }
 
         /**
          * @ngdoc method
