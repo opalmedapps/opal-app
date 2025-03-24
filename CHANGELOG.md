@@ -1,3 +1,25 @@
+## [1.20.14](https://gitlab.com/opalmedapps/qplus/compare/v1.20.13...v1.20.14) (2023-12-19)
+
+
+### Bug Fixes
+
+* **android:** prevent third party activities and receivers from being exported ([bb5dce5](https://gitlab.com/opalmedapps/qplus/commit/bb5dce5219c0579d758320bb7b4165e157a97e4f))
+* **ios:** ensure App Transport Security is enabled ([905b4d1](https://gitlab.com/opalmedapps/qplus/commit/905b4d142ed29414c740f0214a112a20340f836c))
+
+## [1.20.13](https://gitlab.com/opalmedapps/qplus/compare/v1.20.12...v1.20.13) (2023-12-19)
+
+
+### Bug Fixes
+
+* change description for Bluetooth permission ([e22d625](https://gitlab.com/opalmedapps/qplus/commit/e22d625d4a555b95328c4cfbe63d79a1daa87ae8))
+
+## [1.20.12](https://gitlab.com/opalmedapps/qplus/compare/v1.20.11...v1.20.12) (2023-12-18)
+
+
+### Bug Fixes
+
+* add a polyfill to patch Array.prototype.at on emulators ([4d18015](https://gitlab.com/opalmedapps/qplus/commit/4d18015e880d1836e7c9a90f952740b3d24be83b)), closes [/github.com/wojtekmaj/react-pdf/issues/1465#issuecomment-1537669572](https://gitlab.com//github.com/wojtekmaj/react-pdf/issues/1465/issues/issuecomment-1537669572)
+
 ## [1.20.11](https://gitlab.com/opalmedapps/qplus/compare/v1.20.10...v1.20.11) (2023-12-07)
 
 
