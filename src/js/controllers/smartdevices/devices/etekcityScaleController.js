@@ -25,7 +25,10 @@
         const ERROR_NO_DEVICE = $filter('translate')('SMARTDEVICES_ERROR_NO_DEVICE');
         const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
 
+        // body mass
         const SAMPLE_TYPE_WEIGHT = 'BM';
+        // the patient
+        const SAMPLE_SOURCE = 'P';
         const UNIT_KG = 1;
 
         let vm = this;
@@ -61,7 +64,8 @@
                 value: vm.weight,
                 type: SAMPLE_TYPE_WEIGHT,
                 start_date: new Date().toISOString(),
-                source: vm.selectedDevice.name,
+                source: 'P',
+                device: vm.selectedDevice.name,
             };
 
             const patient_id = User.getLoggedinUserProfile().patient_id;
@@ -152,8 +156,6 @@
 
             $timeout(() => {
                 device.connecting = false;
-                // need to reset some variables to show the instructions
-                vm.selectedDevice = null;
                 devices.clear();
             });
             
