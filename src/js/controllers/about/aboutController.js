@@ -11,7 +11,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: AboutController
  *  @description
  *
  *  Manages the about view.
@@ -20,14 +19,14 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences',
+    AboutController.$inject = ['UserPreferences', 'Navigator', 'Params', 'UserHospitalPreferences',
         'Browser', 'DynamicContent'];
 
     /* @ngInject */
-    function AboutController(UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser,
+    function AboutController(UserPreferences, Navigator, Params, UserHospitalPreferences, Browser,
                              DynamicContent) {
         const vm = this;
         var navigator = null;
@@ -35,7 +34,6 @@
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
         vm.openTour = openTour;
-        vm.openCedars = openCedars;
         vm.allowedModules = {};
 
         let parameters;
@@ -47,8 +45,8 @@
 
         function activate() {
 
-            parameters = NavigatorParameters.getParameters();
-            navigator = NavigatorParameters.getNavigator();
+            parameters = Navigator.getParameters();
+            navigator = Navigator.getNavigator();
 
             /**
              * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
@@ -76,10 +74,6 @@
         }
 
         /**
-         * navigatorName = 'initNavigator' or 'homeNavigator'
-         * navigatorName = 'initNavigator' when about.html is called from init-Screen.html (initScreenController)
-         * navigatorName = 'homeNavigator' when about.html is called from home.html (homeController)
-         *
          * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
          */
         function openTour() {
@@ -87,11 +81,10 @@
         }
 
         function openTeam() {
-            navigator.pushPage('views/templates/content.html', {contentType: 'hig'});
-        }
-
-        function openCedars() {
-            navigator.pushPage('views/home/about/cedars.html');
+            navigator.pushPage(
+                './views/templates/content.html',
+                {contentType: 'about', title: 'ABOUT_APP'},
+            );
         }
     }
 })();

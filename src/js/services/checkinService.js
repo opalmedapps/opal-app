@@ -7,13 +7,10 @@
  * Licence      :   This file is subject to the terms and conditions defined in
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
+import { AppointmentFromBackend } from '../models/personal/appointments/AppointmentFromBackend.js';
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:CheckinService
- *@requires MUHCApp.service:RequestToServer
- *@requires MUHCApp.service:Appointments
- *@requires $q
  *@description Service that deals with the checkin functionality for the app
  **/
 
@@ -21,37 +18,22 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$q', 'Appointments', 'Hospital', 'Location', 'Params', 'RequestToServer', 'UserHospitalPreferences'];
+    CheckInService.$inject = ['$filter', 'Hospital', 'Location', 'Params', 'RequestToServer'];
 
     /* @ngInject */
-    function CheckInService($q, Appointments, Hospital, Location, Params, RequestToServer, UserHospitalPreferences) {
+    function CheckInService($filter, Hospital, Location, Params, RequestToServer) {
 
         /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#allCheckedIn
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether all of appointments are checked in or not
+         * @description Array of today's appointments for check-in.
+         *              This array may contain appointments from several different patients (in a caregiver context).
+         * @type {AppointmentFromBackend[]}
          */
-        var allCheckedIn = false;
+        let appointmentsForCheckIn = [];
 
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#attemptedCheckin
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether the patient has attempted checking in or not
-         */
-        var attemptedCheckin = false;
-
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#state
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines the current state of checkin for a given patient
-         */
-        var state = {
+        let initialState = {
             message: '',
             canNavigate: false,
             numberOfAppts: 0,
@@ -63,37 +45,18 @@
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#checkinStateSet
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether the checkin state has been set, used for future reference
+         *@description Determines the current state of check-in for a given patient
          */
-        var checkinStateSet = false;
-
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#stateReloading
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether or not the checkin state need to be reloaded
-         */
-        var stateReloading = false;
-
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#errorsExist
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Determines whether checkin errors currently exist
-         */
-        var errorsExist = false;
-
+        let state = initialState;
 
         ///////////////////////////////////////////
 
         return {
             attemptCheckin: attemptCheckin,
-            evaluateCheckinState: evaluateCheckinState,
-            getCheckInApps: getCheckInApps,
             clear: clear,
-            reloadingCheckinState: reloadingCheckinState,
+            getAppointmentsForCheckIn: () => appointmentsForCheckIn,
+            setAppointmentsForCheckIn: setAppointmentsForCheckIn,
+            updateCheckInState: updateCheckInState,
         };
 
         ////////////////////////////////////////////
@@ -102,136 +65,57 @@
             const isAllowed = await isWithinCheckinRange();
             if (!isAllowed) return 'CHECKIN_NOT_ALLOWED';
 
-            const checkinResult = await checkinToAllAppointments(patientSerNum);
-            attemptedCheckin = true;
-            updateCheckinState(checkinResult.appts);
+            const checkinResult = await checkInToAllAppointments(patientSerNum);
+            await updateCheckInState(checkinResult.appts);
+            markAppointmentsCheckedIn(checkinResult.appts);
             return checkinResult.status;
         }
 
-        async function evaluateCheckinState(dailyAppointments = []){
-            if (attemptedCheckin || checkinStateSet && !stateReloading) return state;
-            dailyAppointments.forEach(app => {
-                app.Checkin = app.checkin;
-            });
-            try {
-                await initCheckinState(dailyAppointments);
-                checkinStateSet = true;
-                stateReloading = false;
-                return state;
-            } catch (error) {
-                return error;
-            }
-        }
-
-        async function initCheckinState(appts){
-            //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
-            if (appts.length === 0){
-                setCheckinState("CHECKIN_NONE");
-            } else if (alreadyCheckedIn(appts)){
-                setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
-            } else if (checkinErrorsExist(appts)) {
-                setCheckinState("CHECKIN_ERROR");
-            } else {
+        async function updateCheckInState() {
+            // Evaluate the current state of appointments, to see if they were already checked in and if so what the state is (all success or some errors)
+            if (appointmentsForCheckIn.length === 0) setCheckinState("CHECKIN_NONE");
+            else if (alreadyCheckedIn()) setCheckinState("CHECKIN_MESSAGE_AFTER" + getPlural(appointmentsForCheckIn));
+            else if (checkinErrorsExist()) setCheckinState("CHECKIN_ERROR_MULTIPLE");
+            else {
                 try {
                     const canCheckin = await isWithinCheckinRange();
                     if (canCheckin) {
-                        const unCheckinAppts = getUncheckinApps(appts);
-                        let checkinStatus = "CHECKIN_MESSAGE_BEFORE" + setPlural(unCheckinAppts);
-                        if (unCheckinAppts.length == 0) {
-                            checkinStatus = "CHECKIN_MESSAGE_AFTER";
-                        }
-                        setCheckinState(checkinStatus, unCheckinAppts.length);
+                        const unCheckedInAppts = getUncheckedInApps();
+                        let status = "CHECKIN_MESSAGE_BEFORE" + getPlural(unCheckedInAppts);
+                        if (unCheckedInAppts.length === 0) status = "CHECKIN_MESSAGE_AFTER";
+                        setCheckinState(status, unCheckedInAppts.length);
                     } else {
-                        setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                        setCheckinState("CHECKIN_NOT_ALLOWED", appointmentsForCheckIn.length);
                     }
                 } catch (error) {
                     console.error(error);
-                    setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
+                    if (error?.message === 'CHECKIN_ERROR_GEOLOCATION') setCheckinState('CHECKIN_ERROR_GEOLOCATION', appointmentsForCheckIn.length);
+                    else setCheckinState("CHECKIN_NOT_ALLOWED", appointmentsForCheckIn.length);
                 }
             }
-            return;
+            return state;
         }
 
-        async function updateCheckinState(checkedInAppts){
-            if(checkedInAppts && checkedInAppts.length > 0) Appointments.updateCheckedInAppointments(checkedInAppts);
-            let appts = Appointments.getTodaysAppointments();
-
-            //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
-            if(alreadyCheckedIn(appts)){
-                setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
-            } else if (checkinErrorsExist(appts)) {
-                setCheckinState("CHECKIN_ERROR");
-            } else {
-                try {
-                    const canCheckin = await isWithinCheckinRange();
-                    if (canCheckin) {
-                        const unCheckinAppts = getUncheckinApps(appts);
-                        let checkinStatus = "CHECKIN_MESSAGE_BEFORE" + setPlural(unCheckinAppts);
-                        if (unCheckinAppts.length == 0) {
-                            checkinStatus = "CHECKIN_MESSAGE_AFTER";
-                        }
-                        setCheckinState(checkinStatus, unCheckinAppts.length);
-                    } else {
-                        setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
-                    }
-                } catch (error) {
-                    console.error(error);
-                    setCheckinState("CHECKIN_NOT_ALLOWED", appts.length);
-                }
-            }
+        function alreadyCheckedIn() {
+            return appointmentsForCheckIn.every(apt => apt.Checkin == 1);
         }
 
-        function alreadyCheckedIn(appts){
-            allCheckedIn = true;
-
-            appts.map(function(app){
-                if(app.Checkin === '0') allCheckedIn = false;
-            });
-
-            return allCheckedIn;
+        function checkinErrorsExist() {
+            return appointmentsForCheckIn.some(apt => apt.Checkin == -1);
         }
 
-        function checkinErrorsExist(appts){
-            let checkinExists = false;
-
-            appts.map(function(app){
-                if(app.Checkin === '1') checkinExists = true;
-            });
-
-            if(!checkinExists) return false;
-
-            let errors = false;
-
-            appts.map(function(app){
-                if(app.Checkin === '-1') errors = true;
-            });
-
-            return errors;
+        function getUncheckedInApps() {
+            return appointmentsForCheckIn.filter(apt => apt.Checkin == 0);
         }
 
-        function getUncheckinApps(appts) {
-            let appointments = [];
-            appts.forEach(app => {
-                if (app.Checkin == 0) {
-                    appointments.push(app);
-                }
-            });
-            return appointments;
+        function getPlural(appointments) {
+            return appointments.length > 1 ? '_PLURAL' : '';
         }
 
-        function setPlural(apps) {
-            if (apps.length > 1) {
-                return "_PLURAL";
-            }
-            return "";
-        }
-
-        function setCheckinState(status, numAppts){
+        function setCheckinState(status, numAppointments){
             state.message = status;
-            switch(status){
-                case "CHECKIN_ERROR":
-                    attemptedCheckin = true;
-                    errorsExist = true;
+            switch(status) {
+                case "CHECKIN_ERROR_MULTIPLE":
                     state.canNavigate = true;
                     state.numberOfAppts = 0;
                     state.checkinError = true;
@@ -240,8 +124,6 @@
                     break;
                 case "CHECKIN_MESSAGE_AFTER":
                 case "CHECKIN_MESSAGE_AFTER_PLURAL":
-                    attemptedCheckin = true;
-                    allCheckedIn = true;
                     state.canNavigate = true;
                     state.numberOfAppts = 0;
                     state.checkinError = false;
@@ -258,31 +140,21 @@
                 case "CHECKIN_MESSAGE_BEFORE":
                 case "CHECKIN_MESSAGE_BEFORE_PLURAL":
                     state.canNavigate = true;
-                    state.numberOfAppts = numAppts;
+                    state.numberOfAppts = numAppointments;
                     state.checkinError = false;
                     state.noAppointments = false;
                     state.allCheckedIn = false;
                     break;
+                case "CHECKIN_ERROR_GEOLOCATION":
                 case "CHECKIN_NOT_ALLOWED":
                     state.canNavigate = false;
-                    state.numberOfAppts = numAppts;
+                    state.numberOfAppts = numAppointments;
                     state.checkinError = false;
                     state.noAppointments = false;
                     state.allCheckedIn = false;
                     state.inRange = false;
                     break;
             }
-        }
-
-        /**
-         *@ngdoc method
-         *@name getCheckInApps
-         *@methodOf MUHCApp.service:CheckinService
-         *@description Gets today's appointments that are able to be checked into
-         *@returns {Array} Todays checkinable appointments
-         */
-        function getCheckInApps() {
-            return Appointments.getTodaysAppointments();
         }
 
         /**
@@ -307,46 +179,68 @@
 
             // If any promise rejected, throw a new error, otherwise, return true if at least one site is in range
             if (results.some(result => result?.status === 'rejected')) {
-                console.error('Geolocation error', results);
-                throw new Error("Failed to get geolocation information for check-in");
+                console.error('Geolocation error', results.map(result => result.reason));
+                throw new Error('CHECKIN_ERROR_GEOLOCATION');
             }
             return results.some(result => result?.value === true);
         }
 
         /**
          *@ngdoc method
-         *@name checkinToAllAppointments
-         *@methodOf MUHCApp.service:CheckinService
-         *@description Checks the users in to all todays appointments.
+         *@name checkInToAllAppointments
+         *@description Checks in a patient for all their appointments today.
          *@returns {Promise} Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.
          **/
-        function checkinToAllAppointments(patientSerNum){
+        async function checkInToAllAppointments(patientSerNum){
+            try {
+                const response = await RequestToServer.sendRequestWithResponse(
+                    'Checkin',
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    patientSerNum
+                );
+                return {status: 'SUCCESS', appts: response.Data};
+            }
+            catch (error) {
+                throw {status: 'ERROR', appts: null};
+            }
+        }
 
-            //Create a promise so this can be run asynchronously
-            let r = $q.defer();
+        /**
+         * @description Formats and saves the list of today's appointments for check-in.
+         * @param appointments The list of appointments for check-in.
+         */
+        function setAppointmentsForCheckIn(appointments) {
+            if (!appointments) return;
 
-            RequestToServer.sendRequestWithResponse(
-                'Checkin',
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                patientSerNum
-            ).then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
-                .catch(function () { r.reject({status: 'ERROR', appts: null}); });
+            // Format appointments from the backend format to the app's format
+            appointmentsForCheckIn = [];
+            appointments.forEach(appointment => {
+                const formattedAppointment = new AppointmentFromBackend(appointment);
+                appointmentsForCheckIn.push(formattedAppointment);
+            });
 
-            return r.promise;
+            // Sort chronologically with the oldest first
+            appointmentsForCheckIn = $filter('orderBy')(appointmentsForCheckIn, 'ScheduledStartTime');
+        }
+
+        /**
+         * @description Updates appointments to set them as checked-in locally.
+         * @param appointments The list of appointments to update. The appointments are not updated directly,
+         *                     instead, they're matched to those in the service by AppointmentSerNum, and updated there.
+         */
+        function markAppointmentsCheckedIn(appointments) {
+            let serNumsToUpdate = appointments ? appointments.map(apt => apt.AppointmentSerNum) : [];
+            appointmentsForCheckIn.forEach(apt => {
+                if(serNumsToUpdate.includes(apt.AppointmentSerNum)) apt.Checkin = 1;
+            });
         }
 
         function clear() {
-            allCheckedIn= false;
-            attemptedCheckin = false;
-            checkinStateSet = false;
-            stateReloading= false;
-        }
-
-        function reloadingCheckinState(){
-            stateReloading= true;
+            appointmentsForCheckIn = [];
+            state = initialState;
         }
     }
 })();

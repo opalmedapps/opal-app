@@ -12,77 +12,72 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['$filter', '$scope', 'NavigatorParameters'];
+    InfoTabController.$inject = ['$filter', '$scope', 'Navigator'];
 
     /* @ngInject */
-    function InfoTabController($filter, $scope, NavigatorParameters) {
+    function InfoTabController($filter, $scope, Navigator) {
         let vm = this;
         vm.view = {};
 
         const views = {
             home: {
-                icon: 'fa-home',
+                iconType: 'icon',
+                icon: 'fa-solid fa-home',
                 name: "HOME",
                 description: "HOME_DESCRIPTION"
             },
             chart: {
-                icon: 'fa-user',
+                iconType: 'icon',
+                icon: 'fa-solid fa-user',
                 name: "MYCHART",
                 description: "MYCHART_DESCRIPTION"
             },
             general: {
-                icon: 'fa-th',
+                iconType: 'general-icon',
+                icon: 'general-icon',
                 name: "GENERAL",
                 description: "GENERAL_DESCRIPTION"
             },
             caregivers: {
-                icon: 'fa-user',
+                iconType: 'icon',
+                icon: 'fa-solid fa-user',
                 name: "RELATIONSHIPS_CAREGIVERS",
                 description: "RELATIONSHIPS_CAREGIVERS_DESCRIPTION"
             },
             patients: {
-                icon: 'fa-user',
+                iconType: 'icon',
+                icon: 'fa-solid fa-user',
                 name: "RELATIONSHIPS_PATIENTS",
                 description: "RELATIONSHIPS_PATIENTS_DESCRIPTION"
             },
             education: {
-                icon:'fa-book',
-                color:'Chocolate',
+                iconType: 'icon',
+                icon:'fa-solid fa-book',
                 name:"EDUCATION",
                 description:"EDUCATION_DESCRIPTION"
             },
             research: {
-                icon: './img/microscope.png',
+                iconType: 'icon',
+                icon: 'fa-solid fa-microscope',
                 name: "RESEARCH",
                 description: "RESEARCH_DESCRIPTION"
             },
             studies: {
-                icon: './img/dna.png',
+                iconType: 'icon',
+                icon: 'fa-solid fa-dna',
                 name: "STUDIES",
                 description: "STUDIES_DESCRIPTION"
             }
         };
 
-        vm.isIcon = isIcon;
-
         activate();
 
         function activate() {
-            let params = NavigatorParameters.getNavigator().getCurrentPage().options;
+            let params = Navigator.getNavigator().getCurrentPage().options;
             vm.view = views[params.id];
         }
-
-        /**
-         * @name isIcon
-         * @desc Check if icon is an uploaded image (in img/ directory) or is otherwise a regular ons-icon
-         * @returns true if the icon is a proper icon, false if it is an image stored in the ./img/ folder 
-         */
-        function isIcon() {
-            return !vm.view.icon.includes("img/");
-        }
     }
-
 })();

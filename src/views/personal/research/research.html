@@ -21,8 +21,7 @@
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <img style="width: 35px;" src="./img/dna.png"><span class="notification"
-                            ng-show="tab.studiesUnreadNumber>0">{{tab.studiesUnreadNumber}}</span>
+                        <i class="fa-solid fa-dna fa18x" style="color: #FFA13D"></i>
                     </div>
                 </ons-col>
                 <ons-col>
@@ -39,14 +38,14 @@
 
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <ons-icon icon="fa-book" size="2x" style="color:rgb(0, 192, 166)"></ons-icon><span
+                        <ons-icon icon="fa-book" size="2x" style="color: #9575CD"></ons-icon><span
                             class="notification"
-                            ng-show="tab.eduMaterialUnreadNumber>0">{{tab.eduMaterialUnreadNumber}}</span>
+                            ng-show="tab.researchReferenceUnreadNumber > 0">{{tab.researchReferenceUnreadNumber}}</span>
                     </div>
                 </ons-col>
                 <ons-col>
                     <header>
-                        <span class="item-title" ng-class="fontSizeTitle">{{"REFERENCE_MATERIAL"|translate}}</span>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH_REFERENCE_MATERIAL"|translate}}</span>
                     </header>
                     <p class="item-desc"></p>
                 </ons-col>
@@ -57,7 +56,7 @@
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <ons-icon icon="ion-clipboard" size="2x" style="color:darkslateblue"></ons-icon><span
+                        <ons-icon icon="ion-clipboard" size="2x" style="color: #607d8b"></ons-icon><span
                             class="notification"
                             ng-show="tab.researchQuestionnairesUnreadNumber>0">{{tab.researchQuestionnairesUnreadNumber}}</span>
                     </div>
@@ -75,8 +74,10 @@
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <img style="width: 35px;" src="./img/file-signature.png"><span class="notification"
-                            ng-show="tab.consentQuestionnairesUnreadNumber>0">{{tab.consentQuestionnairesUnreadNumber}}</span>
+                        <i class="fa-solid fa-file-signature fa18x" style="color: #7D3B82; margin-left: 8px"></i>
+                        <span class="notification" ng-show="tab.consentQuestionnairesUnreadNumber>0" style="margin-left: -14px">
+                            {{tab.consentQuestionnairesUnreadNumber}}
+                        </span>
                     </div>
                 </ons-col>
                 <ons-col>
@@ -93,7 +94,7 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-thumbs-up" size="2x" style="color:#4CAF50"></ons-icon>
+                            <ons-icon icon="fa-thumbs-up fa18x" style="color: #4CAF50"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>

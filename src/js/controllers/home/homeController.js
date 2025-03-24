@@ -2,25 +2,24 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
+        '$timeout', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
-        'Version', 'User', 'ProfileSelector', '$interval', 'UpdateUI', 'Permissions',
+        'Version', 'User', 'ProfileSelector', '$interval', 'Permissions',
     ];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
+    function HomeController($timeout, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
-        Version, User, ProfileSelector, $interval, UpdateUI, Permissions,
+        Version, User, ProfileSelector, $interval, Permissions,
     ) {
         let vm = this;
 
         vm.language = 'EN';
         vm.calledApp = null;
-        vm.RoomLocation = '';
         $scope.infoModalData = [];
 
         vm.checkinState = {
@@ -57,9 +56,7 @@
          */
 
         function activate() {
-            // Initialize the navigator for push and pop of pages.
-            NavigatorParameters.setParameters({ 'Navigator': 'homeNavigator' });
-            NavigatorParameters.setNavigator(homeNavigator);
+            Navigator.setNavigator(homeNavigator);
 
             // Get location permission
             Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
@@ -76,7 +73,6 @@
         /**
          * @ngdoc function
          * @name bindEvents
-         * @methodOf MUHCApp.controllers.homeController
          * @description Sets up event bindings for this controller.
          */
         function bindEvents() {
@@ -84,8 +80,14 @@
             homeNavigator.on('prepop', function (event) {
                 const prepopPages = ['./views/home/checkin/checkin-list.html', 'views/personal/notifications/notifications.html'];
                 if (prepopPages.includes(event.currentPage.name) && NetworkStatus.isOnline()) getDisplayData();
-                //restart the reload interval when going back to the home page
-                setInterval();
+
+                // Refresh the display and restart the reload interval when going back to the home page
+                $timeout(() => {
+                    if (Navigator.getPageName() === 'home.html') {
+                        getDisplayData();
+                        setInterval();
+                    }
+                })
             });
 
             //This avoids constant repushing which causes bugs
@@ -124,13 +126,19 @@
         async function getDisplayData() {
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
-                const checkinState = await CheckInService.evaluateCheckinState(result?.data?.daily_appointments);
+                CheckInService.setAppointmentsForCheckIn(result.data?.daily_appointments);
+                const checkinState = await CheckInService.updateCheckInState();
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result?.data?.unread_notification_count;
                     vm.checkinState = checkinState;
                     vm.closestAppointment = result?.data?.closest_appointment;
+
+                    // Show or hide the chevron depending on whether check-in is possible
+                    let button = $('#check-in-button');
+                    button.toggleClass('non-navigable', !checkinState.canNavigate);
                 });
-            } catch (error) {
+            }
+            catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
                 console.error(error);
             }
@@ -222,42 +230,27 @@
          * @desc Go to learn about Opal page
          */
         function gotoLearnAboutOpal() {
-            NavigatorParameters.setParameters({ 'Navigator': 'homeNavigator', 'isBeforeLogin': false });
-            homeNavigator.pushPage('./views/home/about/about.html');
+            homeNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': false});
         }
 
         /**
          * Takes the user to the selected appointment to view more details about it
          */
         function goToAppointments() {
-            let params = { 'Navigator': 'homeNavigator' };
             // When the nearest appointment is for a patient in care,
             // by clicking on the widget should open the calendar for that patient (e.g., care receiver's calendar)
             if (ProfileSelector.getActiveProfile().patient_legacy_id !== vm?.closestAppointment?.patientsernum) {
-                params['isCareReceiver'] = true;
-                params['currentProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
+                let currentPageParams = Navigator.getParameters();
+                currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                 ProfileSelector.loadPatientProfile(vm.closestAppointment.patientsernum);
-
-                // Reload 'Appointments' for the patient in care in case the appointments were already loaded
-                UpdateUI.updateTimestamps('Appointments', 0);
             }
-            NavigatorParameters.setParameters(params);
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
 
         /**
          * Takes the user to the checkin view
          */
-        async function goToCheckinAppointments() {
-            if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
-            const url = {
-                method: 'get',
-                url: '/api/app/appointments/',
-            }
-            const apps = await RequestToServer.apiRequest(url);
-            Appointments.setCheckinAppointments(apps?.data?.daily_appointments);
-
-            NavigatorParameters.setParameters({ 'Navigator': 'homeNavigator' });
+        function goToCheckinAppointments() {
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
 
@@ -265,7 +258,10 @@
          * @description Takes the user to the acknowledgements page.
          */
         function goToAcknowledgements() {
-            homeNavigator.pushPage('./views/templates/content.html', { contentType: 'acknowledgements' });
+            homeNavigator.pushPage(
+                './views/templates/content.html',
+                { contentType: 'acknowledgements', title: 'ACKNOWLEDGEMENTS'},
+            );
         }
 
         /**
@@ -273,7 +269,6 @@
          */
         function setInterval() {
             vm.reloadInterval = $interval(function () {
-                CheckInService.reloadingCheckinState();
                 getDisplayData();
             }, 5000);
         }

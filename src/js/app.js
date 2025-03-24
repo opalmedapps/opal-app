@@ -9,18 +9,11 @@
  */
 
 /**
- * @author MUHC Hospital, David Herrera, Robert Maglieri
- * @copyright 2016 MUHC Hospital
- *
- */
-
-/**
  * @ngdoc overview
- * @name MUHCApp
- *@description <img src="img/Opal_Name_Logo.png" alt="MUHCLogo" /><br>
- A multiplatform application built using {@link https://cordova.apache.org Apache Cordova}. The main frameworks for the project are {@link https://angularjs.org/ AngularJS} framework , {@link https://onsen.io/ OnsenUI} Framework, and {@link https://cordova.apache.org Apache Cordova} This project aims to aid patients in radiation oncology
- * at the Glen Hospital in Montreal, Quebec. This guide is the first version of the documentation for the Opal Hybrid Mobile app
- Main module for the project: {@link MUHCApp}.3
+ * @description <img src="img/Opal_Name_Logo.png" alt="Opal logo" /><br>
+ A multiplatform application built using {@link https://cordova.apache.org Apache Cordova}. The main frameworks for the project are {@link https://angularjs.org/ AngularJS} framework, {@link https://onsen.io/ OnsenUI} Framework, and {@link https://cordova.apache.org Apache Cordova}
+ This guide is the first version of the documentation for the Opal mobile app
+ Main module for the project: {@link OpalApp}.3
  The external dependecies for the project: {@link ProjectDependencies}.
  **/
 
@@ -74,8 +67,7 @@
 import "jquery";
 import angular from "angular";
 import "angular-animate";
-import "angular-ui-bootstrap";
-import "../lib/ui-bootstrap-tpls-1.1.2";
+import "../lib/ui-bootstrap-tpls-2.5.6-opal.js";
 import "angular-translate";
 import "angular-dynamic-locale";
 import "angular-translate-handler-log";
@@ -96,17 +88,23 @@ import "onsenui/css/onsenui.css";
 import "angular/angular-csp.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "animate.css";
-import "font-awesome/css/font-awesome.css";
 import "../css/app.css";
 import "../css/elements/custom-toast.element.css";
-import "../Languages/angular-locales/angular-locale_en.js"
+import "../Languages/angular-locales/angular-locale_en.js";
 
 // Load angular module bootstrap script
 import "./app.bootstrap";
 
+// Font Awesome
+// See: https://stackoverflow.com/questions/52376720/how-to-make-font-awesome-5-work-with-webpack
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/solid';
+import '@fortawesome/fontawesome-free/js/regular';
+import '@fortawesome/fontawesome-free/js/brands';
+
 //Routes for angular views
 angular
-    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate',
+    .module('OpalApp', ['tmh.dynamicLocale','pascalprecht.translate',
         'ngSanitize','ui.router','onsen','ngTouch','ui.bootstrap'])
     .run(initialization);
 
@@ -114,7 +112,6 @@ initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$transl
 
 /**
  *@ngdoc service
- *@name MUHCApp.run
  *@description Service is in charge of checking that the user is authorized at every state change by checking the parameters stored
  in the Firebase localstorage,  Check run service on angular {{link}}
  **/

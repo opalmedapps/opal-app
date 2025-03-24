@@ -9,7 +9,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Questionnaires', Questionnaires);
 
     /*
@@ -121,12 +121,6 @@
 
         // Variables for questionnaire notifications
         let currentPurpose = 'default';
-        let numberOfUnreadQuestionnaires = {
-            clinical: 0,
-            research: 0,
-            consent: 0,
-            default: 0,
-        }
 
         // this is redundant but written for clarity, ordered alphabetically
         return {
@@ -135,7 +129,6 @@
             getQuestionnaireBySerNum: getQuestionnaireBySerNum,
             getCarouselItems: () => carouselItems,
             getCurrentQuestionnaire: () => currentQuestionnaire, // getter for the current questionnaire
-            getNumberOfUnreadQuestionnairesByPurpose: (questionnairePurpose = 'default') => numberOfUnreadQuestionnaires[questionnairePurpose], // is used for showing the badge by the personalTabController.js and researchController.js for the appropriate purpose
             getQuestionnaireBackToListByPurpose: (questionnairePurpose = 'default') => PURPOSE_LIST_MAP[questionnairePurpose], //  gets the correct translation key for the questionnaire back to list message. It assumes that the purpose has been validated.
             getQuestionnaireBeginByPurpose: (questionnairePurpose = 'default') => PURPOSE_BEGIN_MAP[questionnairePurpose], // gets the correct translation key for the begin questionnaire instruction. It assumes that the purpose has been validated.
             getQuestionnaireCount: getQuestionnaireCount,
@@ -153,23 +146,12 @@
             formatQuestionnaireStub: formatQuestionnaireStub,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnairePurpose: (qp_ser_num) => QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num), // gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
-            requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer,
             validateQuestionnairePurpose: (questionnairePurpose) => allowedPurpose.includes(questionnairePurpose.toLowerCase()), // check whether the questionnaire purpose is valid (true if it is valid, false otherwise)
             setQuestionnaireList: setQuestionnaireList,
             updateQuestionnaireList: updateQuestionnaireList,
-            setNumberOfUnreadQuestionnairesByPurpose: setNumberOfUnreadQuestionnairesByPurpose,
-        };
 
-        /**
-         * @desc Set the unreadNum for related purpose questionnaire.
-         * @param purpose The purpose of the questionnaire to find.
-         * @param unreadNum The unreadNum of the purpose questionnaire.
-         * @returns void.
-         */
-        function setNumberOfUnreadQuestionnairesByPurpose(purpose, unreadNum) {
-            numberOfUnreadQuestionnaires[purpose] = unreadNum;
-        }
+        };
 
         /**
          * @name findInProgressQuestionIndex
@@ -283,26 +265,6 @@
         }
 
         /**
-         * @name requestQuestionnaireUnreadNumber
-         * @desc this function is requesting the number of unread (e.g. 'New') questionnaires from questionnaireDataService and
-         *       processes this response to set the number of unread questionnaires variable for notifications 
-         * @param {string} questionnairePurpose the purpose of questionnaires requested
-         * @returns {Promise}
-         */
-        async function requestQuestionnaireUnreadNumber(questionnairePurpose) {
-            try {
-                let responseUnreadNumber = await QuestionnaireDataService.requestQuestionnaireUnreadNumber(questionnairePurpose);
-
-                numberOfUnreadQuestionnaires[questionnairePurpose] = parseInt(responseUnreadNumber.numberUnread);
-
-                return { Success: true, Location: 'Server' };
-            } catch (error) {
-                console.error('Error in requestQuestionnaireUnreadNumber', error);
-                return { Success: false, Location: 'Server' };
-            }
-        }
-
-        /**
          * @name updateQuestionnaireStatus
          * @desc this function updates the status of a given questionnaire in the app and also in the database.
          *       Note that this function does not do any input check. It is relayed to the helper functions
@@ -321,10 +283,6 @@
 
                 if (!isFailure) {
                     throw new Error("Error updating status internal to app");
-                }
-
-                if (newStatus === 1) {
-                    numberOfUnreadQuestionnaires[currentPurpose] -= 1;
                 }
 
                 return { Success: true, Location: 'Server', QuestionnaireSerNum: response?.QuestionnaireSerNum};
@@ -629,11 +587,22 @@
             });
 
             // Format and validate the questionnaire's integer properties
-            let intProperties = ['status', 'respondent_id'];
+            const intProperties = ['status', 'respondent_id'];
             intProperties.forEach(prop => {
                 const intProp = parseInt(questionnaireStub[prop]);
                 if (isNaN(intProp)) throw new Error(`Questionnaire stub's '${prop}' cannot be parsed as an int: ${questionnaireStub[prop]}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
                 questionnaireStub[prop] = intProp;
+            });
+
+            // Format and validate the questionnaire's date properties
+            const dateProperties = ['completed_date', 'created', 'last_updated'];
+            dateProperties.forEach(prop => {
+                // Only format date properties that were provided and that haven't been formatted already (must still be strings)
+                if (typeof questionnaireStub[prop] === 'string') {
+                    const dateProp = Date.parse(questionnaireStub[prop]);
+                    if (isNaN(dateProp)) throw new Error(`Questionnaire stub's '${prop}' cannot be parsed as a date: ${questionnaireStub[prop]}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
+                    questionnaireStub[prop] = dateProp;
+                }
             });
         }
 
@@ -931,32 +900,20 @@
          * @name updateAppQuestionnaireLastUpdated
          * @desc This private function helps update the last updated time for the list of questionnaire. The last updated will have ISO 8601 format and have zero UTC offset
          * @param {int} qp_ser_num the qp_ser_num or the answerQuestionnaireId of the questionnaire to be updated
-         * @param {status} status the status of the questionnaire to be updated
+         * @param {number} status the status of the questionnaire to be updated
          * @returns {boolean} true if success, false otherwise
          */
         function updateAppQuestionnaireLastUpdated(qp_ser_num, status){
-            let d = new Date();
-
-            // we know the old status -> clean up old status
-            switch (status) {
-                case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS:
-                    newQuestionnaires[qp_ser_num].last_updated = d.toISOString();
-                    break;
-
-                case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS:
-                    inProgressQuestionnaires[qp_ser_num].last_updated = d.toISOString();
-                    break;
-
-                case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS:
-                    completeQuestionnaires[qp_ser_num].last_updated = d.toISOString();
-                    break;
-
-                default:
-                    console.error("ERROR: error in updating the questionnaire status, it does not have a valid new status");
-                    return false;
+            try {
+                let now = new Date();
+                let questionnaires = getQuestionnaireMap(status);
+                questionnaires[qp_ser_num].last_updated = now.toISOString();
+                return true;
             }
-
-            return true;
+            catch (error) {
+                console.error("Error updating a questionnaire's 'last_updated' attribute", error);
+                return false;
+            }
         }
 
         /**

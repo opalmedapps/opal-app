@@ -9,7 +9,7 @@
     <network-banner></network-banner>
 
     <div ng-if="!ctrl.bluetoothEnabled" class="container" align="center">
-        <ons-icon icon="fa-bluetooth" class="smartdevices-fa-logo" style="color: #0082fc;"></ons-icon>
+        <i class="fa-brands fa-bluetooth smartdevices-fa-logo" style="color: #0082fc"></i>
         <div ng-if="ctrl.bluetoothAvailable">
             <h3>{{"SMARTDEVICES_BLUETOOTH_DISABLED"|translate}}</h3>
             <p style="color:grey">{{"SMARTDEVICES_BLUETOOTH_PROMPT"|translate}}</p>
@@ -22,41 +22,15 @@
             <h3>{{"SMARTDEVICES_BLUETOOTH_UNAVAILABLE"|translate}}</h3>
         </div>
     </div>
-    
+
     <div ng-if="ctrl.bluetoothEnabled">
         <ons-list>
-            <ons-list-item modifier="chevron" class="item">
-                <ons-row align="center">
-                    <div class="smartdevices-content">
-                        <div class="smartdevices-content--icon">
-                            <i class="fa fa-heartbeat fa-lg pull-left"
-                            style="color:red; display: inline-block"></i>
-                        </div>
-                        <div class="smartdevices-content--text">
-                            <p ng-class="fontSizeTitle">{{"SMARTDEVICES_VITALTRACER"|translate}}</p>
-                        </div>
-                    </div>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" class="item">
-                <ons-row align="center">
-                    <div class="smartdevices-content">
-                        <div class="smartdevices-content--icon">
-                            <i class="fa fa-heartbeat fa-lg pull-left"
-                            style="color:red; display: inline-block"></i>
-                        </div>
-                        <div class="smartdevices-content--text">
-                            <p ng-class="fontSizeTitle">{{"SMARTDEVICES_IMD"|translate}}</p>
-                        </div>
-                    </div>
-                </ons-row>
-            </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                 ng-click="ctrl.goToDevice('etekcity_scale.html')">
                 <ons-row align="center">
                     <div class="smartdevices-content">
                         <div class="smartdevices-content--icon">
-                            <i class="fa fa-heartbeat fa-lg pull-left"
+                            <i class="fa fa-heartbeat fa-2x pull-left"
                             style="color:red; display: inline-block"></i>
                         </div>
                         <div class="smartdevices-content--text">
@@ -67,5 +41,4 @@
             </ons-list-item>
         </ons-list>
     </div>
-        
 </ons-page>

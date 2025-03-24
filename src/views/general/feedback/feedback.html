@@ -13,18 +13,26 @@
 
     <network-banner></network-banner>
 
-    <ons-row ng-cloak class="shadow-2" style="width: 90%; margin: 10px 5%; text-align: center; background-color: #E3F2FD; padding: 9px 9px">
+    <ons-row ng-cloak class="feedback--element-spacing shadow-2" style="text-align: center; background-color: #E3F2FD; padding: 9px 9px">
         <span ng-class="fontSizeDesc">{{feedback.description | translate}}</span>
     </ons-row>
-    <ons-row ng-cloak class="shadow-2" ng-hide="feedback.submitted" style="width: 90%; margin: 10px 5%; background-color: white">
-        <textarea class="textarea textarea--transparent" placeholder="{{feedback.placeholder | translate}}" ng-model="feedbackText" style="width: 100%; height: 50vh; margin: 10px" ng-class="fontSizeDesc"></textarea>
+    <ons-row ng-cloak class="feedback--element-spacing shadow-2" ng-hide="feedback.submitted" style="background-color: white">
+        <textarea class="textarea textarea--transparent" placeholder="{{feedback.placeholder | translate}}" ng-model="feedbackText" style="width: 100%; height: 50vh; margin: 10px" ng-class="fontSizeDesc" ng-disabled="feedback.isSubmitting"></textarea>
     </ons-row>
-    <ons-row ng-show="!feedback.submitted" style="width: 90%; margin: 10px 5% 0% 5%">
-        <ons-button class="shadow-2" ng-class="fontSizeTitle" style="width: 100%; text-align: center; background-color: #4CAF50; margin-bottom: 5%"
-                    ng-click="feedback.submitFeedback(feedback.feedbackType)" ng-disabled="feedback.submitted||!feedback.enableSend">{{"SEND"|translate}}</ons-button>
+    <ons-row ng-show="!feedback.submitted" class="feedback--element-spacing">
+        <ons-button class="shadow-2" ng-class="fontSizeTitle" style="width: 100%; text-align: center; background-color: #4CAF50"
+                    ng-click="feedback.submitFeedback(feedback.feedbackType)" ng-disabled="feedback.submitted||!feedback.enableSend||feedback.isSubmitting">
+            {{"SEND"|translate}}
+            <ons-icon icon="ion-load-d" spin="true" ng-show="feedback.isSubmitting"></ons-icon>
+        </ons-button>
     </ons-row>
-    <div ng-cloak ng-show="feedback.submitted" class="shadow-2" style="width: 90%; margin: 10px 5%; height: 50vh; background-color: white;">
-        <ons-row style="width: 90%; margin: 10px 5%;">
+    <!-- User's name, to make it clear that feedback is not submitted anonymously -->
+    <ons-row ng-hide="feedback.submitted" class="light-grey-comment feedback--element-spacing">
+        {{'FEEDBACK_SUBMIT_AS'|translate}} {{feedback.userInfo.first_name}} {{feedback.userInfo.last_name}}
+    </ons-row>
+    <div ng-cloak ng-show="feedback.submitted" class="shadow-2" style="height: 50vh; background-color: white;"
+         class="feedback--element-spacing">
+        <ons-row class="feedback--element-spacing">
             <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
                 <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
                 <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />

@@ -2,15 +2,15 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('EtekcityScaleController', EtekcityScaleController);
 
         EtekcityScaleController.$inject = [
-        '$scope', '$filter', '$timeout', 'NavigatorParameters', 'RequestToServer', 'Params', 'ProfileSelector'
+        '$scope', '$filter', '$timeout', 'Navigator', 'RequestToServer', 'Params', 'ProfileSelector'
     ];
 
     /* @ngInject */
-    function EtekcityScaleController($scope, $filter, $timeout, NavigatorParameters, RequestToServer, Params, ProfileSelector)
+    function EtekcityScaleController($scope, $filter, $timeout, Navigator, RequestToServer, Params, ProfileSelector)
     {
         // UUIDs for smart scale
         const SERVICE_UUID = 'FFE0';
@@ -53,7 +53,7 @@
         vm.showInstructions = () => !vm.scanning && vm.selectedDevice == null && devices.size == 0 && !vm.weight;
         // show loading spinner while scanning and while reading data from device
         vm.isLoading = () => (vm.scanning && vm.selectedDevice == null) || (vm.selectedDevice?.connecting && !vm.weight);
-        vm.done = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
+        vm.done = () => Navigator.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
         // ng-repeat does not support iterating through maps
         vm.getDeviceList = () => Array.from(devices.values());
 

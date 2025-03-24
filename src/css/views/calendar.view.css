@@ -8,6 +8,7 @@
 	border-top:1px solid lightgrey;
 	border-radius:1px;
 }
+
 .appointment-calendar .uib-monthpicker .uib-month button {
 	border:0;
 	height:10vh;
@@ -18,6 +19,7 @@
 	border-top:1px solid lightgrey;
 	border-radius:1px;
 }
+
 .appointment-calendar .uib-yearpicker thead button {
 	border:0;
 	height:7.2vh;
@@ -26,6 +28,7 @@
 	border-top:1px solid lightgrey;
 	border-radius:1px;
 }
+
 .appointment-calendar .uib-yearpicker .uib-year button {
 	border:0;
 	height:10vh;
@@ -36,6 +39,7 @@
 	border-top:1px solid lightgrey;
 	border-radius:1px;
 }
+
 .appointment-calendar  .uib-daypicker thead button {
 	border:0;
 	height:7vh;
@@ -44,6 +48,7 @@
 	border-top:1px solid lightgrey;
 	border-radius:1px;
 }
+
 .appointment-calendar .uib-daypicker .btn-sm {
 	border:0;
 	height:7vh;
@@ -54,6 +59,7 @@
 	border-top:1px solid lightgrey;
 	border-radius:1px;
 }
+
 .uib-daypicker .uib-monthpicker .uib-months .uib-month button {
 	border:0;
 	border-top:1px solid black;
@@ -67,7 +73,6 @@
 	border-top:1px solid lightgrey;
 	border-radius:1px;
 }
-
 
 .uib-weeks .full button {
 	opacity: 0.8;
@@ -94,6 +99,7 @@
 	background-color: #5CE68A !important;
 	border-color:lightgrey;
 }
+
 .uib-weeks .today button {
 	opacity: 0.8;
 	width:50px;
@@ -110,15 +116,6 @@
 .calendar-marker {
 	font-size:20px;
 	opacity:0.5;
-}
-.active_btn_calendar{
-	background-color: red;
-}
-.display-none {
-	display:none;
-}
-.display-block {
-	display:block;
 }
 
 @media all and (orientation:landscape) {

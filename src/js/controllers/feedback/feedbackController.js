@@ -6,18 +6,20 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('FeedbackController', FeedbackController);
 
     FeedbackController.$inject = [
-        '$filter', '$scope', '$timeout', 'NativeNotification', 'NavigatorParameters',
-        'NetworkStatus', 'RequestToServer',
+        '$filter', '$scope', '$timeout', 'NativeNotification', 'Navigator',
+        'NetworkStatus', 'RequestToServer', 'User'
     ];
 
     /* @ngInject */
-    function FeedbackController($filter, $scope, $timeout, NativeNotification, NavigatorParameters,
-                                NetworkStatus, RequestToServer) {
+    function FeedbackController($filter, $scope, $timeout, NativeNotification, Navigator,
+                                NetworkStatus, RequestToServer, User) {
         var vm = this;
+        vm.isSubmitting = false;
+        vm.userInfo = {};
 
         vm.submitFeedback = submitFeedback;
         vm.reset = reset;
@@ -27,13 +29,14 @@
         //////////////////////
 
         function activate() {
-            let navigator = NavigatorParameters.getNavigator();
+            let navigator = Navigator.getNavigator();
             let parameters = navigator.getCurrentPage().options;
 
             vm.enableSend = false;
             bindEvents();
 
             initializeContentBasedOnType(parameters.contentType);
+            vm.userInfo = User.getUserInfo();
         }
 
         /**
@@ -69,7 +72,8 @@
         }
 
         function submitFeedback(type) {
-            if (vm.enableSend) {
+            if (vm.enableSend && !vm.isSubmitting) {
+                vm.isSubmitting = true;
                 RequestToServer.sendRequestWithResponse('Feedback', {
                     FeedbackContent: $scope.feedbackText,
                     AppRating: 3,
@@ -79,10 +83,14 @@
                         $scope.feedbackText = '';
                         vm.submitted = true;
                         vm.enableSend = false; 
+                        vm.isSubmitting = false;
                     });
                 }).catch(function(error){
                     console.error(error);
-                    NativeNotification.showNotificationAlert($filter('translate')("FEEDBACK_ERROR"));
+                    $timeout(function() {
+                        NativeNotification.showNotificationAlert($filter('translate')("FEEDBACK_ERROR"));
+                        vm.isSubmitting = false;
+                    });
                 });
                 
             }
@@ -91,6 +99,7 @@
         function reset() {
             vm.submitted = false;
             $scope.feedbackText = '';
+            vm.isSubmitting = false;
         }
     }
 })();

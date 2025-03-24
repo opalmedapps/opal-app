@@ -36,12 +36,9 @@
     =============================-->
     <div ng-if="!calendar.hideContent" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
         <div class="calendar-list">
-            <uib-datepicker id="scrollTo"
-                            ng-change="calendar.onDateChange()"
+            <uib-datepicker ng-change="calendar.onDateChange()"
                             ng-model="calendar.todays_date"
-                            datepicker-mode="calendar.calendarMode"
                             datepicker-options="calendar.dateOptions"
-                            show-weeks="false"
                             show-color="calendar.showDotColor(date)"
                             style="width:100vw;"
                             ng-class="fontSizeDesc">
@@ -54,7 +51,7 @@
     =============================-->
     <div ng-hide="calendar.hideContent" id="topListAnchor" style="height:5px; background-color:lightgrey; position:relative; z-index:1"></div>
     <!-- THE ONLY REASON FOR THIS DELAY IS A SMOOTHER LOADING OF THE LIST OF APPOINTMENTS -->
-    <ons-scroller-height ng-hide="calendar.hideContent" timer="500" callback="calendar.scrollToAnchor()">
+    <ons-scroller-height ng-hide="calendar.hideContent" timer="500">
             <div id="firstAnchor"></div>
             <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center" 
                 ng-class="fontSizeTitle">{{"NOAPPOINTMENTS"|translate}}</div>
@@ -67,20 +64,17 @@
                     ng-class="fontSizeTitle">{{app.ScheduledStartTime|date:'fullDate'}}</ons-list-header>
                 <ons-list-item modifier="chevron">
                     <ons-row>
-                        <ons-col align="center" width="60px">
+                        <ons-col align="center" width="64px">
                             <div align="center" style="line-height:1">
-                                <span style="color:grey;" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'shortTime'}}</span>
+                                <span style="color:grey; margin-left:4px" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'veryShortTime'}}</span>
                             </div>
                         </ons-col>
                         <ons-col width="5px" style="opacity:0.8" ng-style="{ 'background-color': calendar.getListColor($index) }"></ons-col>
                         <ons-col>
                             <div style="line-height:1;padding:2px">
                                 <header>
-                                    <span ng-if="calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="[fontSizeTitle, {'item-unread': app.ReadStatus==='0'}]">
+                                    <span class="item-title" ng-class="[fontSizeTitle, {'item-unread': app.ReadStatus==='0'}]">
                                         {{app["AppointmentType_" + calendar.language]}}
-                                    </span>
-                                    <span ng-if="!calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="[fontSizeTitle, {'item-unread': app.ReadStatus==='0'}]">
-                                        {{app["ResourceDescription"]}}
                                     </span>
                                 </header>
                                 <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+ calendar.language]}}</p>

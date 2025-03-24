@@ -9,25 +9,26 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('ChangeSettingController', ChangeSettingController);
 
-    ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params',
-        'EncryptionService'];
+    ChangeSettingController.$inject = ['$filter', '$timeout', 'EncryptionService', 'Firebase', 'LogOutService',
+        'NativeNotification', 'Navigator', 'Params', 'RequestToServer', 'UserPreferences'];
 
     /* @ngInject */
-    function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout,
-                                    UserAuthorizationInfo, NavigatorParameters, $window, Params,
-                                    EncryptionService) {
-        var vm = this;
-        var page;
-        var parameters;
-        var navigatorName;
+    function ChangeSettingController($filter, $timeout, EncryptionService, Firebase, LogOutService,
+                                     NativeNotification, Navigator, Params, RequestToServer, UserPreferences) {
+        let vm = this;
 
         // Values set by the password strength checker directive
         vm.passwordIsValid = false;
         vm.passwordErrors = [];
+
+        // Error message displayed when an issue occurs
+        vm.alert = {
+            type: Params.alertTypeDanger,
+            message: '',
+        }
 
         vm.changePassword = changePassword;
         vm.changeFont = changeFont;
@@ -42,12 +43,9 @@
 
         //Sets all the account settings depending on the field that needs to be changed
         function activate() {
-            //Mappings between parameters and translation
-            //Navigator parameter
-            navigatorName = NavigatorParameters.getParameters().Navigator;
-            page = $window[navigatorName].getCurrentPage();
-            parameters = page.options.param;
+            let parameters = Navigator.getParameters().param;
 
+            // Mapping between parameters and their translations
             $timeout(function () {
                 //Instantiates values and parameters
                 vm.disableButton = true;
@@ -94,7 +92,7 @@
         function passwordFieldChange() {
             // Use $timeout to compute the changes after vm.passwordIsValid is set
             $timeout(() => {
-                vm.newUpdate = false;
+                vm.alert.message = '';
                 vm.disableButton = !vm.oldValue || !vm.passwordIsValid || vm.passwordConfirmationInvalid();
             });
         }
@@ -108,85 +106,76 @@
                 vm.disableButton = true;
                 await Firebase.reauthenticateCurrentUser(vm.oldValue);
                 await Firebase.updateCurrentUserPassword(vm.newValue);
-                await updateOnServer();
+                await updatePasswordOnServer();
+                localStorage.removeItem("deviceID");
+                localStorage.removeItem(EncryptionService.getStorageKey());
+
+                // Update the UI to reflect success
+                $timeout(() => {
+                    clearForm();
+                    NativeNotification.showNotificationAlert(
+                        $filter('translate')('PASSWORD_UPDATED_LOG_IN'),
+                        $filter('translate')('SUCCESS'),
+                        LogOutService.logOut,
+                    );
+                });
             }
             catch (error) {
                 handleError(error);
             }
         }
 
-        // Change the password on Opal servers
-        function updateOnServer() {
-            var objectToSend = {};
-            objectToSend.FieldToChange = Params.setPasswordField;
-            objectToSend.NewValue = vm.newValue;
-            RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
-                .then(function () {
-                    $timeout(function(){
-                        vm.alertClass = Params.alertClassUpdateMessageSuccess;
-                        vm.updateMessage = "PASSWORDUPDATED";
-                        vm.newUpdate = true;
-                    });
-
-                    localStorage.removeItem("deviceID");
-                    localStorage.removeItem(EncryptionService.getStorageKey());
-                })
-                .catch(function (error) {
-                    console.error(error);
-                    $timeout(function() {
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "ERROR_GENERIC";
-                    });
-                })
+        /**
+         * @description Sends an AccountChange request to the listener with a password update.
+         * @returns {Promise<void>}
+         */
+        async function updatePasswordOnServer() {
+            let requestParameters = {
+                FieldToChange: Params.setPasswordField,
+                NewValue: vm.newValue,
+            }
+            await RequestToServer.sendRequestWithResponse('AccountChange', requestParameters);
         }
 
+        /**
+         * @description Handles and displays an error to the user.
+         * @param {object} error The error to be processed.
+         */
         function handleError(error) {
             console.error(error);
-            $timeout(function(){
-                switch(error.code){
-                    case Params.userMismatch:
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_ASSOCIATION";
-                        break;
+            $timeout(() => {
+                switch(error.code) {
                     case Params.invalidUser:
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_USER";
-                        break;
-                    case Params.invalidCredentials:
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_CREDENTIAL";
+                        vm.alert.message = "INVALID_USER";
                         break;
                     case Params.invalidEmail:
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_EMAIL";
+                        vm.alert.message = "INVALID_EMAIL";
                         break;
                     case Params.invalidPassword:
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "INVALID_OLD_PASSWORD";
-                        break;
-                    case Params.emailInUse:
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.newUpdate = true;
-                        vm.updateMessage = "EMAIL_TAKEN";
+                        vm.alert.message = "INVALID_OLD_PASSWORD";
                         break;
                     case Params.weakPassword:
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "PASSWORD_CRITERIA";
+                        vm.alert.message = "PASSWORD_CRITERIA";
                         break;
                     default:
-                        vm.newUpdate = true;
-                        vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = "ERROR_GENERIC";
+                        clearForm();
+                        vm.alert.message = "ERROR_GENERIC";
                         break;
                 }
             })
+        }
+
+        /**
+         * @description Clears all form data from the UI.
+         *              Usually called upon successful form submission, or if an error occurs that the user
+         *              can't correct immediately by updating the form content.
+         */
+        function clearForm() {
+            vm.alert.message = '';
+            vm.newValue = '';
+            vm.newValueValidate = '';
+            vm.oldValue = '';
+            vm.disableButton = false;
         }
     }
 })();

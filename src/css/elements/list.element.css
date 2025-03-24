@@ -111,6 +111,7 @@
 .item-btn {
     text-align: center;
     background-color:rgba(0,0,0,0);
+    padding: 8px 10px;
 }
 
 .checkin-btn {

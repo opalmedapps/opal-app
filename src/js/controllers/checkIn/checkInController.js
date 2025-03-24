@@ -12,77 +12,114 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('CheckInController', CheckInController);
 
-    CheckInController.$inject = [
-        '$timeout',
-        'CheckInService',
-        'NavigatorParameters',
-        'UserPreferences',
-        'Toast',
-        '$filter',
-        'Params'
-    ];
+    CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'NativeNotification', 'Navigator', 'Params',
+        'ProfileSelector', 'RequestToServer', 'Toast', 'User', 'UserPreferences'];
 
     /* @ngInject */
-    function CheckInController(
-        $timeout,
-        CheckInService,
-        NavigatorParameters,
-        UserPreferences,
-        Toast,
-        $filter,
-        Params
-    ) {
+    function CheckInController($filter, $timeout, CheckInService, NativeNotification, Navigator, Params,
+                               ProfileSelector, RequestToServer, Toast, User, UserPreferences) {
+        let vm = this;
+        let navigator;
 
-        var vm = this;
         vm.apps = [];
         vm.displayApps = {};
-        vm.emptyApps = true;
+        vm.noAppointments = true;
         vm.language = '';
-        vm.response = '';
-        vm.error = '';
-        vm.checkInMessage = "";
-        vm.alert = {};
-        vm.HasNonCheckinableAppt = false;
+        vm.loadingError = false;
+        vm.loadingPage = true;
+        vm.errorAlertType = Params.alertTypeDanger;
 
-        vm.separatorStatus = [];
-        vm.separatorStatus[Params.alertTypeInfo] = 'separator-info';
-        vm.separatorStatus[Params.alertTypeSuccess] = 'separator-success';
-        vm.separatorStatus[Params.alertTypeWarning] = 'separator-warning';
-        vm.separatorStatus[Params.alertTypeDanger] = 'separator-error';
+        vm.separatorStatus = {
+            [Params.alertTypeInfo]: 'separator-info',
+            [Params.alertTypeSuccess]: 'separator-success',
+            [Params.alertTypeWarning]: 'separator-warning',
+            [Params.alertTypeDanger]: 'separator-error',
+        }
 
-
+        vm.checkIntoAppointments = checkIntoAppointments;
         vm.goToAppointment = goToAppointment;
-        vm.HasMeaningfulAlias = HasMeaningfulAlias;
-        vm.CheckInAppointments = CheckInAppointments;
+        vm.patientHasAppointmentLoading = patient => patient.apps.some(apt => apt.loading);
 
         activate();
 
         ////////////////
 
-        function activate() {
-            vm.apps = CheckInService.getCheckInApps();
-            vm.apps.forEach(app => {
-                if (!vm.displayApps[app.PatientSerNum]) {
-                    vm.displayApps[app.PatientSerNum] = {};
-                    vm.displayApps[app.PatientSerNum].apps = [];
-                    vm.displayApps[app.PatientSerNum].patientName = app.patientName;
-                    vm.displayApps[app.PatientSerNum].allCheckedIn = true;
-                }
-                vm.displayApps[app.PatientSerNum].apps.push(app);
-                vm.displayApps[app.PatientSerNum].patientName = app.patientName;
-                const allCheckedIn = vm.displayApps[app.PatientSerNum].allCheckedIn;
-                vm.displayApps[app.PatientSerNum].allCheckedIn = allCheckedIn && ['warning', 'success'].indexOf(app.CheckInStatus) > -1;
-            });
-            vm.language = UserPreferences.getLanguage();
+        async function activate() {
+            try {
+                navigator = Navigator.getNavigator();
+                vm.language = UserPreferences.getLanguage();
 
-            if (Object.keys(vm.displayApps).length > 0) {
-                vm.emptyApps = false;
+                await initializeCheckInData();
+                vm.apps = CheckInService.getAppointmentsForCheckIn();
+
+                // Set the CheckInStatus used in this controller
+                vm.apps.forEach(apt => setAppointmentCheckInStatus(apt));
+
+                formatAppointmentsForDisplay();
+
+                vm.noAppointments = vm.apps.length === 0;
             }
+            catch (error) {
+                console.error(error);
+                vm.loadingError = true;
+            }
+            finally {
+                $timeout(() => {
+                    vm.loadingPage = false;
+                });
+            }
+        }
 
-            vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
+        /**
+         * @description Calls the backend to get appointment data for check-in, and saves it to the Check-In service.
+         * @returns {Promise<void>}
+         */
+        async function initializeCheckInData() {
+                const response = await RequestToServer.apiRequest(Params.API.ROUTES.CHECK_IN);
+                CheckInService.setAppointmentsForCheckIn(response.data?.daily_appointments);
+        }
+
+        /**
+         * @description Organizes the check-in-able appointments in the right data structure for display in the view.
+         */
+        function formatAppointmentsForDisplay() {
+            const selfPatientSerNum = User.getSelfPatientSerNum();
+
+            // Get the list of unique patientSerNums for check-in
+            let patientSerNums = new Set(vm.apps.map(apt => apt.PatientSerNum));
+
+            // For each patient, build an object containing all of their appointments for check-in
+            patientSerNums.forEach(patientSerNum => {
+                const patient = ProfileSelector.getPatientBySerNum(patientSerNum);
+                const patientAppointments = vm.apps.filter(apt => apt.PatientSerNum === patientSerNum);
+
+                // Set the header based on whether the patient is the user or a care-receiver
+                const patientIsSelf = patientSerNum === selfPatientSerNum;
+                let patientHeader = $filter('translate')(
+                    patientIsSelf ? 'CHECKIN_PATIENT_HEADER_SELF' : 'CHECKIN_PATIENT_HEADER_NON_SELF',
+                    { name: `${patient.first_name} ${patient.last_name}` }
+                )
+
+                vm.displayApps[patientSerNum] = {
+                    apps: patientAppointments,
+                    allCheckedIn: patientAppointments.every(apt => ['warning', 'success'].includes(apt.CheckInStatus)),
+                    patientHeader: patientHeader,
+                };
+            });
+        }
+
+        /**
+         * @description Sets the CheckInStatus used only by this controller and view to control the display of each appointment.
+         * @param appointment The appointment to update.
+         */
+        function setAppointmentCheckInStatus(appointment) {
+            if (appointment.CheckinPossible == 0) appointment.CheckInStatus = 'warning';
+            else if (appointment.Checkin == 1) appointment.CheckInStatus = 'success';
+            else if (appointment.Checkin == -1) appointment.CheckInStatus = 'danger';
+            else appointment.CheckInStatus = 'info';
         }
 
         /**
@@ -94,93 +131,67 @@
             });
         }
 
-        // View appointment details
-        function goToAppointment(appointment){
-            if(appointment.ReadStatus === '0') {
-                Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
-                // Mark corresponding notification as read
-                Notifications.implicitlyMarkCachedNotificationAsRead(
-                    appointment.AppointmentSerNum,
-                    [
-                        Params.NOTIFICATION_TYPES.RoomAssignment,
-                        Params.NOTIFICATION_TYPES.NextAppointment,
-                        Params.NOTIFICATION_TYPES.AppointmentTimeChange,
-                        Params.NOTIFICATION_TYPES.CheckInNotification,
-                        Params.NOTIFICATION_TYPES.AppointmentNew,
-                        Params.NOTIFICATION_TYPES.AppointmentCancelled,
-                    ],
-                );
-            }
-            NavigatorParameters.setParameters({'Navigator': 'homeNavigator', 'Post': appointment});
-            homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
-        }
-
         /**
-         * Checks if AppointmentType has a Meaningful Alias; i.e. other than the word "Appointment" or "Rendez-vous"
-         * @returns {boolean}
+         * @description Opens the individual appointment view for a given appointment, and marks it as read.
+         * @param {object} appointment The appointment to open.
          */
-        function HasMeaningfulAlias(appointmentType) {
-            return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
-        }
-
-        /**
-         *
-         * @param apps
-         * @return {boolean}
-         * @description Checks if in the list of Appointments, there is "at least" one Non-Checkinable appointment,
-         *              like a Blood Test
-         */
-        function HasNonCheckinableAppointment(apps) {
-            var HasNonCheckinable = false;
-            apps.map(function (app) {
-                if (app.CheckinPossible === '0')  HasNonCheckinable = true;
-            });
-
-            return HasNonCheckinable;
-        }
-
-        /**
-         * @param PatientSerNum
-         * @return {void}
-         * @description Checks if in the list of Appointments,for the target patient
-         */
-        async function CheckInAppointments(PatientSerNum) {
-            vm.displayApps[PatientSerNum].apps.forEach(app => {
-                if (app.CheckInStatus != 'success') {
-                    app.loading = true;
+        function goToAppointment(appointment) {
+            try {
+                // Clicking on an appointment for a patient should switch the profile behind the scenes
+                if (ProfileSelector.getActiveProfile().patient_legacy_id !== appointment.PatientSerNum) {
+                    let currentPageParams = Navigator.getParameters();
+                    currentPageParams['previousProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
+                    ProfileSelector.loadPatientProfile(appointment.PatientSerNum);
                 }
-            });
+
+                // Mark the appointment and its notification(s) as read
+                if (appointment.ReadStatus === '0') {
+                    Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+                    // Mark corresponding notification as read
+                    Notifications.implicitlyMarkCachedNotificationAsRead(
+                        appointment.AppointmentSerNum,
+                        Notifications.appointmentNotificationTypes(),
+                    );
+                }
+
+                navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
+            }
+            catch(error) {
+                console.error(error);
+                NativeNotification.showNotificationAlert($filter('translate')('APPOINTMENT_OPEN_ERROR'));
+            }
+        }
+
+        /**
+         * @description Checks in all appointments for the target patient.
+         * @param patientSerNum The SerNum of the patient to check in.
+         * @returns {Promise<void>}
+         */
+        async function checkIntoAppointments(patientSerNum) {
+            const patient = vm.displayApps[patientSerNum];
+            let patientAppointments = patient.apps;
+            patientAppointments.forEach(apt => apt.loading = !['warning', 'success'].includes(apt.CheckInStatus));
 
             try {
-                const response = await CheckInService.attemptCheckin(PatientSerNum);
-                if(response === 'CHECKIN_NOT_ALLOWED'){
-                    displayError('CHECKIN_NOT_ALLOWED');
-                } else if (response === 'SUCCESS') {
-                    vm.apps = CheckInService.getCheckInApps();
-                } else {
-                    displayError('CHECKIN_ERROR');
-                }
-            } catch (error) {
-                console.log(error);
-                displayError('CHECKIN_ERROR');
+                const response = await CheckInService.attemptCheckin(patientSerNum);
+
+                if (response === 'CHECKIN_NOT_ALLOWED') displayError('CHECKIN_NOT_ALLOWED');
+                else if (response === 'SUCCESS') vm.apps = CheckInService.getAppointmentsForCheckIn();
+                else displayError('CHECKIN_ERROR_MULTIPLE');
+            }
+            catch (error) {
+                console.error(error);
+                displayError('CHECKIN_ERROR_MULTIPLE');
             }
 
-
+            // Update the display
             $timeout(() => {
-                let allCheckedIn = true;
-                vm.displayApps[PatientSerNum].apps.forEach(app => {
-                    const appt = vm.apps.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
-                    if (appt) {
-                        app.Checkin = appt.Checkin;
-                        app.loading = false;
-                        app.CheckInStatus = appt.Checkin == '1' ? 'success' : 'danger';
-                        app.CheckInStatus = appt.checkinpossible == 0 ? 'warning' : app.CheckInStatus;
-                        allCheckedIn =  allCheckedIn && ['warning', 'success'].indexOf(app.CheckInStatus) > -1;
-                    }
-                })
-                vm.displayApps[PatientSerNum].allCheckedIn = allCheckedIn;
+                patientAppointments.forEach(apt => {
+                    apt.loading = false;
+                    setAppointmentCheckInStatus(apt);
+                });
+                patient.allCheckedIn = patientAppointments.every(apt => ['warning', 'success'].includes(apt.CheckInStatus));
             });
         }
     }
 })();
-

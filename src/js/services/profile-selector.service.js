@@ -4,21 +4,22 @@ import {Observer} from "../models/utility/observer";
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('ProfileSelector', ProfileSelector);
 
-    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'User', 'UserPreferences'];
+    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'UpdateUI', 'User', 'UserPreferences'];
 
     /**
      * @description Service that handle loading of a patient list for a given caregiver and selection of the profile.
      */
-    function ProfileSelector($timeout, $window, Params, RequestToServer, User, UserPreferences) {
+    function ProfileSelector($timeout, $window, Params, RequestToServer, UpdateUI, User, UserPreferences) {
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
 
         return {
             init: init,
+            getPatientBySerNum: patientSerNum => patientList.find(patient => patient.patient_legacy_id == patientSerNum),
             getPatientList: () => patientList,
             loadPatientProfile: loadPatientProfile,
             getActiveProfile: () => currentSelectedProfile,
@@ -27,6 +28,7 @@ import {Observer} from "../models/utility/observer";
             clearProfile: clearProfile,
 
             // Functions to get info from the current profile
+            currentProfileIsSelf: () => currentSelectedProfile.relationship_type.role_type === 'SELF',
             getFirstName: () => currentSelectedProfile?.first_name,
             getPatientSerNum: () => currentSelectedProfile?.patient_legacy_id,
             getAccessLevel: () => currentSelectedProfile?.data_access,
@@ -84,6 +86,23 @@ import {Observer} from "../models/utility/observer";
 
             // If no profile can be loaded (e.g. because all profiles are pending), proceed without loading one.
             if (!currentSelectedProfile) return;
+
+            // Reset the categorical data in case the categories were already loaded for the previous profile.
+            // Note that Notifications and Announcements are not updated since they're downloaded
+            // at the same time for all patients (loaded only once).
+            UpdateUI.updateTimestamps(
+                [
+                    'Appointments',
+                    'Diagnosis',
+                    'Documents',
+                    'EducationalMaterial',
+                    'PatientTestDates',
+                    'PatientTestTypes',
+                    'QuestionnaireList',
+                    'TxTeamMessages',
+                ],
+                0,
+            );
 
             $window.localStorage.setItem('profileId', currentSelectedProfile.patient_legacy_id);
             $timeout(() => {

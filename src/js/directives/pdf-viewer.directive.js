@@ -4,13 +4,14 @@
  *         Refactored by James Brace, Sept 2017 (individualDocumentController.js).
  *         Refactored as a directive by Stacey Beard, Aug 2021 (pdf-viewer.directive.js).
  */
-import * as PDFJS from "pdfjs-dist/webpack";
+// See: https://github.com/mozilla/pdf.js/tree/master/examples/webpack
+import * as pdfjsLib from '../../lib/pdfjs_legacy_webpack.mjs';
 
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .directive('pdfViewer', pdfViewer);
 
     pdfViewer.$inject = ['$timeout', '$q', 'Browser', 'Constants', 'FileManagerService', 'Params'];
@@ -88,7 +89,7 @@ import * as PDFJS from "pdfjs-dist/webpack";
 
                     uint8pf = FileManagerService.convertToUint8Array(scope.pdfContent);
 
-                    PDFJS.getDocument(uint8pf).promise.then(function (_pdfDoc) {
+                    pdfjsLib.getDocument(uint8pf).promise.then(function (_pdfDoc) {
                         uint8pf = null;
 
                         let promises = [];

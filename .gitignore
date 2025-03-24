@@ -15,7 +15,11 @@
 /www
 
 # Environments
-# 1- local: user-specific
-env/local/config.xml
-env/local/google-services.json
-env/local/opal.config.js
+env/*/*
+
+# External content
+content/*
+!content/samples/
+!content/content.config.sample.json
+!content/service-status.sample.json
+!content/README.md

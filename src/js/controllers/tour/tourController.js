@@ -11,7 +11,7 @@ import "../../../css/views/tour.view.css";
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('TourController', TourController);
 
     TourController.$inject = ['$filter', '$timeout', 'DynamicContent'];
@@ -51,8 +51,8 @@ import "../../../css/views/tour.view.css";
                 description: "TOUR_MYCHART",
             },
             {
-                iconType: "icon",
-                icon: "fa-th",
+                iconType: "general-icon",
+                icon: "general-icon",
                 title: "GENERAL",
                 description: "TOUR_GENERAL",
             },
@@ -93,7 +93,7 @@ import "../../../css/views/tour.view.css";
 
         function activate() {
             // Initialize the support email value
-            let emailFromServer = DynamicContent.getConstant('support_email');
+            let emailFromServer = DynamicContent.getConstant('supportEmail');
             vm.helpEmail = emailFromServer === undefined
                 ? `{${$filter('translate')("EMAIL_LOADING_ERROR").toLowerCase()}}`
                 : emailFromServer;

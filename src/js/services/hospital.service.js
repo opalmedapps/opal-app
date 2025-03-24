@@ -1,8 +1,5 @@
 /**
  *@ngdoc service
- *@name MUHCApp.service:Hospital
- * @requires MUHCApp.service:RequestToServer
- * @requires MUHCApp.service:Params
  *@description Service used to manage patient's hospital settings (e.g., parking info)
  **/
 
@@ -10,7 +7,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Hospital', Hospital);
 
     Hospital.$inject = [

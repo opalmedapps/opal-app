@@ -38,19 +38,15 @@
             </ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center">
-                    <ons-col width="80px" align="center">
-                        <div style="margin-left:10px">
-                            <i class="iconHomeView" ng-class="notification.Icon"
-                               ng-style="{color: notification.Color}">
-                            </i>
-                        </div>
+                    <ons-col width="70px" class="ons-col-icon">
+                        <i class="fa18x" ng-class="notification.Icon" ng-style="{color: notification.Color}"></i>
                     </ons-col>
                     <ons-col>
                         <header>
                             <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.Title}}</span>
+                            <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.RefTableRowTitle}}</p>
+                            <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{"SENT_TO"|translate}}: {{notification.PatientFirstName}} {{notification.PatientLastName}}</p>
                         </header>
-                        <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.RefTableRowTitle}}</p>
-                        <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{"SENT_TO"|translate}}: {{notification.PatientFirstName}} {{notification.PatientLastName}}</p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>

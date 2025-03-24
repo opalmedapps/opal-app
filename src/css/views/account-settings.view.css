@@ -17,21 +17,6 @@
     font-size: 14px;
 }
 
-.updateMessage-success {
-    border:1px solid;
-    border-radius:5px;
-    border-color: #3c763d;
-    color: #3c763d;
-    padding:1vh;
-}
-.updateMessage-error {
-    border:1px solid;
-    border-radius:5px;
-    border-color: #a94442;
-    color: #a94442;
-    padding:1vh;
-}
-
 .relationship-list--status {
     color: gray;
     font-size: 1.5rem !important;
@@ -61,6 +46,10 @@
     margin-bottom: 20px;
     padding: 14px 10px;
     width: 100%;
+}
+
+.change-password--header {
+    margin-top: 10px;
 }
 
 .change-password--instructions {

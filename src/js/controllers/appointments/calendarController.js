@@ -18,13 +18,15 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['$scope', 'Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params', 'Notifications'];
+    CalendarController.$inject = ['$scope', '$timeout', 'Appointments', '$location', '$anchorScroll', 'Navigator',
+        'UserPreferences', 'Params', 'Notifications'];
 
     /* @ngInject */
-    function CalendarController($scope, Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params, Notifications) {
+    function CalendarController($scope, $timeout, Appointments, $location, $anchorScroll, Navigator,
+                                UserPreferences, Params, Notifications) {
         const vm = this;
 
         let todaysTimeMilliseconds;
@@ -32,7 +34,7 @@
         let today;
         let dateLast;
         let dateFirst;
-        let navigatorName;
+        let navigator;
 
         /**
          * The date options that are fed into the appointment calendar
@@ -41,11 +43,10 @@
         vm.dateOptions = {
             formatYear: 'yyyy',
             startingDay: 0,
-            formatDay:'d',
-            showWeeks:false
+            formatDay: 'd',
+            showWeeks: false,
         };
 
-        vm.HasMeaningfulAlias = HasMeaningfulAlias;
         /**
          * The list of user appointments
          * @type {Array}
@@ -78,7 +79,7 @@
         vm.getListColor = getListColor;
         vm.showHeaderEnd = showHeaderEnd;
         vm.showChosenDateHeader = showChosenDateHeader;
-        vm.goToAppointment=goToAppointment;
+        vm.goToAppointment = goToAppointment;
         vm.goToCalendarOptions = goToCalendarOptions;
         vm.onDateChange = onDateChange;
         vm.scrollToAnchor = scrollToAnchor;
@@ -95,6 +96,8 @@
          *************************/
 
         function activate() {
+            navigator = Navigator.getNavigator();
+
             bindEvents();
 
             // Get the user's language
@@ -110,16 +113,13 @@
 
             // Initialize calendar styling
             initializeCalendarStyle();
-
-            // Get the name of the current navigator
-            navigatorName = NavigatorParameters.getParameters().Navigator;
         }
 
         /**
          * @description Updates and displays the visible list of appointments and calendar.
          */
         function setAppointmentsView() {
-            vm.appointments=Appointments.getUserAppointments();
+            vm.appointments = Appointments.getAppointments();
             vm.noAppointments = (vm.appointments.length === 0);
             if(vm.appointments.length>0) {
 
@@ -138,6 +138,9 @@
                 vm.todays_date = new Date();
                 vm.todays_date.setHours(0,0,0,0);
             }
+
+            // Scroll after a short delay to make sure the UI is fully loaded
+            $timeout(scrollToAnchor, 500);
         }
 
         /**
@@ -154,7 +157,7 @@
                     return 'anchorAppointments'+ ind;
                 }
             }
-            return 'firstAnchor';
+            return 'lastAnchor';
         }
 
         /**
@@ -216,8 +219,8 @@
          * @returns {string}
          */
         function showDotColor(date) {
-            if(vm.appointments.length === 0){
-                vm.appointments=Appointments.getUserAppointments();
+            if (vm.appointments.length === 0) {
+                vm.appointments = Appointments.getAppointments();
             }
 
             // TODO: this is a huge bottleneck for the situation where a user has a bunch of appointments!!
@@ -294,8 +297,8 @@
         }
 
         /**
-         * Takes the user to their appointment details
-         * @param appointment
+         * @description Opens the individual appointment view for a given appointment, and marks it as read.
+         * @param {object} appointment The appointment to open.
          */
         function goToAppointment(appointment) {
             if(appointment.ReadStatus === '0') {
@@ -303,25 +306,17 @@
                 // Mark corresponding notification as read
                 Notifications.implicitlyMarkCachedNotificationAsRead(
                     appointment.AppointmentSerNum,
-                    [
-                        Params.NOTIFICATION_TYPES.RoomAssignment,
-                        Params.NOTIFICATION_TYPES.NextAppointment,
-                        Params.NOTIFICATION_TYPES.AppointmentTimeChange,
-                        Params.NOTIFICATION_TYPES.CheckInNotification,
-                        Params.NOTIFICATION_TYPES.AppointmentNew,
-                        Params.NOTIFICATION_TYPES.AppointmentCancelled,
-                    ],
+                    Notifications.appointmentNotificationTypes(),
                 );
             }
-            NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':appointment});
-            $window[navigatorName].pushPage('./views/personal/appointments/individual-appointment.html');
+            navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
         }
 
         /**
          * Opens the calendar legend
          */
         function goToCalendarOptions() {
-            $window[navigatorName].pushPage('./views/personal/appointments/calendar-options.html');
+            navigator.pushPage('./views/personal/appointments/calendar-options.html');
         }
 
         /**
@@ -363,26 +358,16 @@
             }
         }
 
-        /**
-         * Checks if AppointmentType has a Meaningful Alias; i.e. other than the word "Appointment" or "Rendez-vous"
-         * @returns {boolean}
-         */
-        function HasMeaningfulAlias(appointmentType) {
-            return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
-        }
-
         function bindEvents() {
-            let navigator = NavigatorParameters.getNavigator();
-
             // Remove event listeners
-            $scope.$on('$destroy', () => navigator.off('prepop'));
+            $scope.$on('$destroy', () => {
+                $location.hash('');
+                navigator.off('prepop');
+            });
 
             // Reload user profile if appointments calendar was opened via Home tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler(['Appointments']));
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('home.html', ['Appointments']));
         }
     }
 })();
-
-
-

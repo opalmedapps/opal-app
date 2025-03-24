@@ -4,7 +4,7 @@ import "../../css/directives/labs-disclaimer.directive.css";
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("labsDisclaimer", LabsDisclaimer);
 
     LabsDisclaimer.$inject = [];
@@ -23,7 +23,7 @@ import "../../css/directives/labs-disclaimer.directive.css";
             scope: { },
             template: `
                 <div class="labs-disclaimer">
-                    <ons-icon icon="fas fa-exclamation-triangle"></ons-icon>
+                    <ons-icon icon="fa-solid fa-triangle-exclamation"></ons-icon>
                     <span>{{"LAB_DISCLAIMER"|translate}}</span>
                 </div>
             `,

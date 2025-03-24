@@ -4,9 +4,8 @@
  *Email:davidfherrerar@gmail.com
  */
 import moment from "moment";
-import "moment-timezone";
 
-var myApp=angular.module('MUHCApp');
+var myApp=angular.module('OpalApp');
 
 myApp.filter('removeTitleEducationalMaterial',function()
 {
@@ -245,18 +244,5 @@ myApp.filter('capitalize', function () {
      */
     return function (value) {
         return value.charAt(0).toUpperCase()+ value.slice(1);
-    };
-});
-
-myApp.filter('convertTimezone', function () {
-    /**
-     * Converts a given date from one timezone to another.
-     * @param {string} inputDate - The input date to convert.
-     * @param {string} selectedFormat - Desired format for the output date. 
-     * @param {string} timezone - The target time zone (e.g. 'America/New_York').
-     */
-    return function (inputDate, selectedFormat, timezone) {
-        if (!inputDate) return '';
-        return moment(inputDate).tz(timezone).format(selectedFormat);
     };
 });

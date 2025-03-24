@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('UserHospitalPreferences', UserHospitalPreferences);
 
     UserHospitalPreferences.$inject = ['Params', 'UserPreferences', 'Firebase'];
@@ -47,7 +47,7 @@
          */
         function getHospitalFullName() {
             if (!selectedHospital) return '';
-            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.fullNameReal : selectedHospital.fullNameGeneric;
+            return CONFIG.settings.useRealInstitutionNames ? selectedHospital.fullNameReal : selectedHospital.fullNameGeneric;
         }
 
         /**
@@ -57,7 +57,7 @@
          */
         function getHospitalAcronym() {
             if (!selectedHospital) return '';
-            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.acronymReal : selectedHospital.acronymGeneric;
+            return CONFIG.settings.useRealInstitutionNames ? selectedHospital.acronymReal : selectedHospital.acronymGeneric;
         }
 
         /**
@@ -65,9 +65,17 @@
          *              and initializes the base firebase URL.
          */
         function initializeHospital() {
-            // Read the previous hospital choice stored in local storage
-            let localStorageHospitalCode = window.localStorage.getItem(localStorageHospitalKey);
-            selectedHospital = getHospitalByCode(localStorageHospitalCode);
+            const displayHospitals = getHospitalListForDisplay();
+
+            // Default to the only available hospital if there's only one choice (after checking the list displayed to the user)
+            if (displayHospitals.length === 1) {
+                selectedHospital = getHospitalByCode(displayHospitals[0].uniqueHospitalCode);
+            }
+            else {
+                // Read the previous hospital choice stored in local storage
+                const localStorageHospitalCode = window.localStorage.getItem(localStorageHospitalKey);
+                selectedHospital = getHospitalByCode(localStorageHospitalCode);
+            }
 
             // Update the firebase branch
             if (selectedHospital) Firebase.updateFirebaseUrl(selectedHospital.uniqueHospitalCode + '/');
@@ -93,17 +101,21 @@
         /**
          * @description Returns the list of available hospitals, formatted for display.
          *              The values in the returned object depend on the environment setting useRealInstitutionNames.
+         *              Note: when useRealInstitutionNames = true, if a hospital has no real name or acronym, then it's
+         *                    omitted from the list of real hospitals.
          * @returns {{uniqueHospitalCode: string, acronym: string, fullName: string}[]} The list of hospitals for display.
          */
         function getHospitalListForDisplay() {
-            let useRealName = OPAL_CONFIG.settings.useRealInstitutionNames;
+            let useRealName = CONFIG.settings.useRealInstitutionNames;
             return hospitalList.map(entry => {
+                // Special case: ignore generic-only hospitals (those without a real name) if real hospitals are used
+                if (useRealName && (!entry.acronymReal || !entry.fullNameReal)) return undefined;
                 return {
                     uniqueHospitalCode: entry.uniqueHospitalCode,
                     acronym: useRealName ? entry.acronymReal : entry.acronymGeneric,
                     fullName: useRealName ? entry.fullNameReal : entry.fullNameGeneric,
                 }
-            });
+            }).filter(entry => !!entry); // Filter out undefined entries
         }
     }
 })();

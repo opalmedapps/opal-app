@@ -7,7 +7,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('AppState', AppState);
 
     AppState.$inject = ['Constants'];

@@ -1,4 +1,4 @@
-angular.module('MUHCApp')
+angular.module('OpalApp')
   .factory('d3', [function() {
     return d3;
   }])

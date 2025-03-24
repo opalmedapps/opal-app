@@ -44,7 +44,7 @@
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"OPAL_ACKNOWLEDGEMENTS"|translate}}</span>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"ACKNOWLEDGEMENTS"|translate}}</span>
                         </header>
                     </ons-col>
                 </ons-row>
@@ -99,21 +99,28 @@
             CHECKIN
             ================================
             -->
-            <ons-list-item 
+            <!-- The button is initialized with the "non-navigable" class; this is updated later in the controller according to the check-in state -->
+            <ons-list-item
+                id="check-in-button"
                 ng-if="Ctrl.allowedModules.hasOwnProperty('CHK') && Ctrl.allowedModules['CHK']"
-                modifier="{{Ctrl.checkinState.canNavigate ? 'chevron tappable' : ''}}"
-                class="item"
+                modifier="chevron tappable"
+                class="item non-navigable"
                 ng-click="Ctrl.checkinState.canNavigate ? Ctrl.goToCheckinAppointments() : undefined">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <div ng-if="Ctrl.checkinState.canNavigate">
-                            <i ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError" class="fa fa-square-o fa-2x" style="color:#4CAF50;"></i>
-                            <i ng-if="Ctrl.checkinState.allCheckedIn || Ctrl.checkinState.checkinError" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
-                            <span ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> {{ Ctrl.checkinState.numberOfAppts }}</span>
-                            <span ng-if="Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> ! </span>
+                            <!-- Never use a changing ng-if directly on a font-awesome icon to prevent issues caused by DOM-manipulation -->
+                            <div ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError">
+                                <i class="fa-regular fa-square fa-2x" style="color:#4CAF50"></i>
+                                <span class="notification" style="position: absolute; margin-left: -7px"> {{ Ctrl.checkinState.numberOfAppts }}</span>
+                            </div>
+                            <div ng-if="Ctrl.checkinState.allCheckedIn || Ctrl.checkinState.checkinError">
+                                <i class="fa-regular fa-check-square fa-2x" style="color:#4CAF50"></i>
+                                <span ng-if="Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> ! </span>
+                            </div>
                         </div>
                         <div ng-if="!Ctrl.checkinState.canNavigate">
-                            <i class="fa fa-square-o fa-2x" style="color:#9E9E9E;"></i>
+                            <i class="fa-regular fa-square fa-2x" style="color:#9E9E9E"></i>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -121,7 +128,7 @@
                             <span class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
                         </header>
                         <div ng-if="Ctrl.checkinState.canNavigate">
-                            <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message | translate}} {{Ctrl.RoomLocation}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message | translate}}</p>
                             <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.calledApp["AppointmentType_"+Ctrl.language]}}</p>
                         </div>
                         <div ng-if="!Ctrl.checkinState.canNavigate">
@@ -139,14 +146,14 @@
             <ons-list-item modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('APT') && Ctrl.allowedModules['APT']" ng-click="Ctrl.goToAppointments()">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
-                        <i class="fa fa-calendar fa-2x" style="color: #ffc107"></i>
+                        <i class="fa-regular fa-calendar-days fa-2x" style="color: #ffc107"></i>
                     </ons-col>
                     <ons-col>
                         <header>
                             <span class="item-title" ng-class="fontSizeTitle">{{"UPCOMING_APPOINTMENTS"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc" ng-if="Ctrl.closestAppointment.scheduledstarttime">
-                            {{"FOR"|translate}} {{Ctrl.getPatientFirstName()}}: {{Ctrl.closestAppointment.scheduledstarttime|date:'medium'}}
+                            {{"FOR"|translate}} {{Ctrl.getPatientFirstName()}}: {{Ctrl.closestAppointment.scheduledstarttime|date:'mediumNoSeconds'}}
                         </p>
                         <p class="item-desc" ng-class="fontSizeDesc" ng-if="!Ctrl.closestAppointment.scheduledstarttime">
                             {{"NO_UPCOMING_APPOINTMENTS"|translate}}

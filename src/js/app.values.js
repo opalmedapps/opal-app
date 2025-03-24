@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Params', Params);
 
     /*
@@ -22,18 +22,11 @@
 
                 firebaseBaseUrl: 'dev3/',
 
-                appointmentType: {
-                    appointmentTypeEn: 'appointment',
-                    appointmentTypeFr: 'rendez-vous'
-                },
-
                 /** Alert Types and Classes **/
                 alertTypeDanger: 'danger',
                 alertTypeSuccess: 'success',
                 alertTypeWarning: 'warning',
                 alertTypeInfo: 'info',
-                alertClassUpdateMessageError: 'bg-danger updateMessage-error',
-                alertClassUpdateMessageSuccess: "bg-success updateMessage-success",
 
                 /** Firebase Authentication Error Codes **/
                 invalidEmail: 'auth/invalid-email',
@@ -48,65 +41,6 @@
                 invalidCredentials: 'auth/invalid-credential',
                 emailInUse: 'auth/email-already-in-use',
                 weakPassword: 'auth/weak-password',
-
-                monthsArray: {
-                    monthsArrayEn: ["January", "February", "March", "April", "May",
-                        "June", "July", "August", "September", "October", "November", "December"],
-                    monthsShortEn: ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                    monthsArrayFr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-                        'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-                    monthsShortFr: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
-                        'août', 'sept.', 'oct.', 'nov.', 'déc.'],
-                },
-                daysArray: {
-                    daysArrayFr: ['dimanche', 'lundi', 'mardi', 'mercredi',
-                        'jeudi', 'vendredi', 'samedi'],
-                    daysArrayEn: ["Sunday", "Monday", "Tuesday", "Wednesday",
-                        "Thursday", "Friday", "Saturday"]
-                },
-                download: {
-                    imageDownloadPngFr: 'Télécharger en image PNG',
-                    imageDownloadPngEn: 'Download PNG image',
-                    imageDownloadJpegFr: 'Télécharger en image JPEG',
-                    imageDownloadJpegEn: 'Download JPEG image',
-                    downloadPdfFr: 'Télécharger en document PDF',
-                    downloadPdfEn: 'Download PDF document',
-                    downloadSvgFr: 'Télécharger en document Vectoriel',
-                    downloadSvgEn: 'Download SVG vector image'
-                },
-                exportButtonTitle: {
-                    exportButtonTitleFr: 'Export du graphique',
-                    exportButtonTitleEn: 'Graphics export'
-                },
-                loadingMessage: {
-                    loadingMessageFr: 'Chargement en cours...',
-                    loadingMessageEn: 'Loading...'
-                },
-                noPlotGeneric: {
-                    noPlotGenericEn: "No plot available",
-                    noPlotGenericFr: "Aucun graphique disponible",
-                },
-                noPlotNonNumeric: {
-                    noPlotNonNumericEn: "These results can't be charted because at least one of them isn't a number",
-                    noPlotNonNumericFr: "Ces résultats ne peuvent pas être représentés car au moins l'un d'entre eux n'est pas un nombre",
-                },
-                printChart: {
-                    printChartFr: 'Imprimer le graphique',
-                    printChartEn: 'Print chart'
-                },
-                resetZoom: {
-                    resetZoomMessageFr: 'Réinitialiser le zoom',
-                    resetZoomMessageTitleFr: 'Réinitialiser le zoom au niveau 1:1',
-                    resetZoomMessageEn: 'Reset zoom',
-                    resetZoomMessageTitleEn: 'Reset zoom level 1:1'
-                },
-                rangeSelector: {
-                    rangeSelectorFromFr: 'Du',
-                    rangeSelectorToFr: 'au',
-                    rangeSelectorFromEn: 'From',
-                    rangeSelectorToEr: 'to'
-                },
 
                 /** ChangeSettingsController Constants **/
                 setPasswordField: 'Password',
@@ -136,11 +70,11 @@
                         color: '#ef5350'
                     },
                     'Factsheet': {
-                        icon: 'fa fa-list',
+                        icon: 'fa-solid fa-file-lines',
                         color: '#1E88E5'
                     },
                     'Booklet': {
-                        icon: 'fa fa-leanpub',
+                        icon: 'fa-solid fa-book-open',
                         color: '#66BB6A'
                     },
                     'Treatment Guidelines': {
@@ -152,8 +86,8 @@
                         color: '#8A5B45'
                     },
                     'Other': {
-                        icon: 'fa fa-book',
-                        color: '#FF7043'
+                        icon: 'fa-solid fa-file',
+                        color: '#FFDF80'
                     },
                 },
 
@@ -181,8 +115,6 @@
                     "MAS": 0,
                     "EDU": 0,
                     "SUP": 1,
-                    "CED": 0,
-                    "HOS": 0,
                     "SMD": 0,
                     "CTB": 1,
                     "RFE": 0,
@@ -190,9 +122,9 @@
                 localStorageHospitalKey: 'hospital',
                 hospitalList: [
                     {
-                        uniqueHospitalCode: 'A0',
-                        acronymReal: 'MUHC',
-                        fullNameReal: 'MUHC_FULL',
+                        uniqueHospitalCode: 'A6',
+                        acronymReal: 'RI_MUHC_ACRONYM',
+                        fullNameReal: 'RI_MUHC_FULL',
                         acronymGeneric: 'OMI',
                         fullNameGeneric: 'OMI_FULL',
                         modules: {
@@ -206,7 +138,7 @@
                             "CSQ": 1,
                             "RES": 1,
                             "STU": 0,
-                            "REF": 0,
+                            "REF": 1,
                             "RQU": 1,
                             "CON": 1,
                             "CHK": 1,
@@ -219,45 +151,8 @@
                             "MAS": 1,
                             "EDU": 1,
                             "SUP": 1,
-                            "CED": 1,
-                            "HOS": 1,
-                            "SMD": 1,
-                            "CTB": 1,
-                            "RFE": 1,
-                        },
-                    },
-                    {
-                        uniqueHospitalCode: 'A6',
-                        acronymReal: 'RI_MUHC_ACRONYM',
-                        fullNameReal: 'RI_MUHC_FULL',
-                        acronymGeneric: 'ORI',
-                        fullNameGeneric: 'ORI_FULL',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "APT": 1,
-                            "LAB": 1,
-                            "DOC": 1,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "RES": 1,
-                            "STU": 0,
-                            "REF": 0,
-                            "RQU": 1,
-                            "CON": 1,
-                            "CHK": 1,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 1,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 1,
-                            "HOS": 1,
+                            "CED": 0,
+                            "HOS": 0,
                             "SMD": 1,
                             "CTB": 1,
                             "RFE": 1,
@@ -265,8 +160,8 @@
                     },
                     {
                         uniqueHospitalCode: 'A4',
-                        acronymReal: 'CHU_SJ_ACRONYM',
-                        fullNameReal: 'CHU_SJ_FULL',
+                        acronymReal: '',
+                        fullNameReal: '',
                         acronymGeneric: 'OHIGPH',
                         fullNameGeneric: 'OHIGPH_FULL',
                         modules: {
@@ -280,7 +175,7 @@
                             "CSQ": 1,
                             "RES": 0,
                             "STU": 0,
-                            "REF": 0,
+                            "REF": 1,
                             "RQU": 0,
                             "CON": 0,
                             "CHK": 0,

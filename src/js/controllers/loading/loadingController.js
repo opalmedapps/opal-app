@@ -5,15 +5,17 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', '$filter', 'ConcurrentLogin', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences',
-        'RequestToServer', 'MetaData', 'LogOutService', 'NativeNotification', 'ProfileSelector'];
+    LoadingController.$inject = ['$state', '$filter', 'ConcurrentLogin', 'DeviceIdentifiers', 'Logger',
+    'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'RequestToServer', '$stateParams', 'LogOutService',
+    'NativeNotification', 'ProfileSelector'];
 
     /* @ngInject */
-    function LoadingController($state, $filter, ConcurrentLogin, UpdateUI, UserAuthorizationInfo, UserPreferences,
-                               RequestToServer, MetaData, LogOutService, NativeNotification, ProfileSelector) {
+    function LoadingController($state, $filter, ConcurrentLogin, DeviceIdentifiers, Logger, UpdateUI,
+        UserAuthorizationInfo, UserPreferences, RequestToServer, $stateParams, LogOutService, NativeNotification,
+        ProfileSelector) {
 
         activate();
 
@@ -26,10 +28,15 @@
 
                 loadingmodal.show();
 
-                RequestToServer.sendRequest('Login'); // For analytics only; don't wait for a response
+                Logger.sendLog(  // For analytics only; don't wait for a response
+                    'Login',
+                    {
+                        "isTrustedDevice": $stateParams.isTrustedDevice,
+                        "deviceType": DeviceIdentifiers.getDeviceIdentifiers().deviceType,
+                    },
+                );
                 await UserPreferences.initFontSize();
                 await UpdateUI.init();
-                await MetaData.init();
                 await ProfileSelector.init();
                 
                 // TODO: Currently, the app isn't able to handle a state in which there are no confirmed profiles. In this case, cancel login.

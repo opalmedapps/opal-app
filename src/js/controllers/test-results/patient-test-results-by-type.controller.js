@@ -1,16 +1,3 @@
-import Highcharts from 'highcharts/highstock';
-import addMore from "highcharts/highcharts-more";
-import addDrilldown from "highcharts/modules/drilldown";
-import addNoData from "highcharts/modules/no-data-to-display";
-import addOfflineExporting from "highcharts/modules/offline-exporting";
-import addExporting from "highcharts/modules/exporting";
-
-addMore(Highcharts);
-addDrilldown(Highcharts);
-addNoData(Highcharts);
-addOfflineExporting(Highcharts);
-addExporting(Highcharts);
-
 class PatientTestResultsByTypeController {
 	/**
 	 * @type {string}
@@ -30,45 +17,46 @@ class PatientTestResultsByTypeController {
 	 */
 	loading = true;
 	/**
-	 * HcChart configuration object
+	 * Settings for the lab results chart
 	 * @type {*}
 	 */
-	chartOptions = {};
+	chartSettings = {};
 	/**
 	 * Variable to control whether to show the table view or the chart view
 	 */
-	showChart = true;
+	showChartTab = true;
 
 	#patientTestResults;
 	#navigator;
-	#labsChartConfigurationFactory;
 	#$timeout;
 	#$filter;
 	#browser;
 	#profileSelector;
+	#updateUI;
+
 
 	/**
 	 * Class constructor for controller
 	 * @param {PatientTestResults} patientTestResults
 	 * @param {UserPreferences} userPreferences
-	 * @param {HcChartLabsConfiguration} hcChartLabsConfiguration
-	 * @param {NavigatorParameters} navigatorParameters
+	 * @param {Navigator} navigator
 	 * @param {$filter} $filter Angular filter
 	 * @param {$timeout} $timeout Angular module
 	 * @param {Browser} browser Browser service
 	 * @param {ProfileSelector} profileSelector profile selector service
+	 * @param {UpdateUI} updateUI update UI service
 	 */
-	constructor(patientTestResults, userPreferences, hcChartLabsConfiguration,
-		navigatorParameters, $filter, $timeout, browser, profileSelector) {
+	constructor(patientTestResults, userPreferences, navigator, $filter,
+		$timeout, browser, profileSelector, updateUI) {
 		this.#patientTestResults = patientTestResults;
 		this.#language = userPreferences.getLanguage();
 		this.#fontSize = userPreferences.getFontSize();
-		this.#navigator = navigatorParameters.getNavigator();
+		this.#navigator = navigator.getNavigator();
 		this.#$timeout = $timeout;
 		this.#$filter = $filter;
-		this.#labsChartConfigurationFactory = hcChartLabsConfiguration;
 		this.#browser = browser;
 		this.#profileSelector = profileSelector;
+		this.#updateUI = updateUI;
 		this.#initialize(this.#navigator.getCurrentPage().options);
 	}
 
@@ -122,20 +110,18 @@ class PatientTestResultsByTypeController {
 	#configureChart = (test) => {
 		// Non-numeric tests are not plotted (no data or axis label)
 		const data = (test.hasNumericValues) ?
-			test.results.map((testResult) => [testResult.collectedDateTime,
-			testResult.testValue]) : [];
+			{
+				x: test.results.map((testResult) => testResult.collectedDateTime),
+				y: test.results.map((testResult) => testResult.testValue),
+			} : [];
 		const yAxisLabel = test.hasNumericValues ? test.unitWithBrackets : "";
-
-		Highcharts.setOptions(this.#labsChartConfigurationFactory.getChartLanguageOptions(this.#language,
-			test.hasNumericValues));
-		Highcharts.dateFormat(this.#labsChartConfigurationFactory.getDateFormat(this.#language));
-		this.chartOptions = this.#labsChartConfigurationFactory.getChartConfiguration(data,
-			test.hasNumericValues,
-			this.#$filter("translate")("RESULT"),
-			yAxisLabel,
-			test.normalRangeMin,
-			test.normalRangeMax,
-			this.#getAppFontSizeInPixels());
+		this.chartSettings = {
+			data: data,
+			yAxisLabel: yAxisLabel,
+			hasNonNumericValues: test.results && test.results.length > 0 && !test.hasNumericValues,
+			normalRangeMax: test.results.normalRangeMin,
+			normalRangeMin: test.results.normalRangeMax
+		};
 	};
 
 	/**
@@ -148,12 +134,26 @@ class PatientTestResultsByTypeController {
 			if (results) {
 				this.test = results;
 
+				// Updates testDates array in the patient-test-results service and in the patient-test-results view.
+				// Since both arrays share the same reference, updating one will automatically update the other.
+				// Once the arrays are updated, the UI will also be automatically updated (bolding on "By Date" tab).
+				// NOTE: this.#updateUI.updateTimestamps('PatientTestDates', 0) will not work because it creates
+				// an array with a new reference (e.g., setTestDates function in the service), so the array in the view
+				// won't be automatically updated.
+				// NOTE: default UpdateUI update call (e.g., PatientTestResults.updateTestDates) will return
+				// only updated records that will result in incorrect readStatuses (the query in the listener
+				// needs to aggregate the read statuses on all the testDates labs, not just on the updated ones).
+				// To reload all testDates records from listener and update the existing array in the patient-test-results
+				// service, set lastUpdated to 1 (e.g., updateTimestamps('PatientTestDates', 1)).
+				this.#updateUI.updateTimestamps('PatientTestDates', 1);
+				this.#updateUI.getData('PatientTestDates');
+
 				let nonInterpretableDelay = this.#profileSelector.getActiveProfile().non_interpretable_lab_result_delay;
 				let interpretableDelay = this.#profileSelector.getActiveProfile().interpretable_lab_result_delay;
-				
+
 				this.labDelay = this.test.interpretationRecommended ? nonInterpretableDelay : interpretableDelay;
-				
-				this.showChart = results.hasNumericValues;
+
+				this.showChartTab = results.hasNumericValues;
 				this.#configureChart(this.test);
 			}
 		});
@@ -184,8 +184,8 @@ class PatientTestResultsByTypeController {
 }
 
 angular
-	.module('MUHCApp')
+	.module('OpalApp')
 	.controller('PatientTestResultsByTypeController', PatientTestResultsByTypeController);
 
-PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences', 'HcChartLabsConfiguration',
-	'NavigatorParameters', '$filter', '$timeout', 'Browser', 'ProfileSelector'];
+PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences',
+	'Navigator', '$filter', '$timeout', 'Browser', 'ProfileSelector', 'UpdateUI'];

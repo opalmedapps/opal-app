@@ -25,21 +25,20 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('BookletMaterialController', BookletMaterialController);
 
-    BookletMaterialController.$inject = ['$http', '$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter',
+    BookletMaterialController.$inject = ['$http', '$scope', '$timeout', 'Navigator', '$rootScope', '$filter',
         'EducationalMaterial', 'Logger', 'Params'];
 
 
     /* @ngInject */
-    function BookletMaterialController($http, $scope, $timeout, NavigatorParameters, $rootScope, $filter,
+    function BookletMaterialController($http, $scope, $timeout, Navigator, $rootScope, $filter,
                                        EducationalMaterial, Logger, Params) {
 
         var vm = this;
 
         var parameters;
-        var navigatorName;
 
         vm.goBack = goBack;
         vm.goNext = goNext;
@@ -58,8 +57,7 @@
         /////////////////////////////
 
         function activate(){
-            parameters = NavigatorParameters.getParameters();
-            navigatorName = parameters.Navigator;
+            parameters = Navigator.getParameters();
 
             initBooklet();
             bindEvents();

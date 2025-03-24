@@ -21,6 +21,11 @@ class PatientTestResultsByDatetimeController {
 	 */
 	loading = true;
 	/**
+	 * Variable containing current locale
+	 */
+	locale = "";
+
+	/**
 	* @type {string}
 	*/
 	#language = "";
@@ -29,22 +34,27 @@ class PatientTestResultsByDatetimeController {
 	#navigator;
 	#$timeout;
 	#$filter;
+	#updateUI;
 
 	/**
 	 *
 	 * @param {PatientTestResults} patientTestResults
-	 * @param {NavigatorParameters} navigatorParameters
+	 * @param {Navigator} navigator
 	 * @param {UserPreferences} userPreferences
 	 * @param {$timeout} $timeout
 	 * @param {$filter} $filter
+	 * @param {UpdateUI} updateUI update UI service
+	 * @param {$locale} $locale
 	 */
-	constructor(patientTestResults, navigatorParameters,
-	            userPreferences, $timeout, $filter) {
+	constructor(patientTestResults, navigator,
+	            userPreferences, $timeout, $filter, updateUI, $locale) {
 		this.#patientTestResults = patientTestResults;
-		this.#navigator = navigatorParameters.getNavigator();
+		this.#navigator = navigator.getNavigator();
 		this.#language = userPreferences.getLanguage();
 		this.#$filter = $filter;
 		this.#$timeout = $timeout;
+		this.#updateUI = updateUI;
+		this.locale = $locale.id;
 		this.#initialize(this.#navigator.getCurrentPage().options);
 	}
 
@@ -122,14 +132,27 @@ class PatientTestResultsByDatetimeController {
 	 */
 	#updateView=(results=null) =>{
 		this.#$timeout(()=>{
-			this.loading = false;
+			// Updates testTypes array in the patient-test-results service and in the patient-test-results view.
+			// Since both arrays share the same reference, updating one will automatically update the other.
+			// Once the arrays are updated, the UI will also be automatically updated (bolding on the "By Type" tab).
+			// NOTE: this.#updateUI.updateTimestamps('PatientTestTypes', 0) will not work because it creates
+			// an array with a new reference (e.g., setTestTypes function in the service), so the array in the view
+			// won't be automatically updated.
+			// NOTE: default UpdateUI update call (e.g., PatientTestResults.updateTestTypes) will return
+			// only updated records that will result in incorrect readStatuses (the query in the listener
+			// needs to aggregate the read statuses on all the testTypes labs, not just on the updated ones).
+			// To reload all testTypes records from listener and update the existing array in the patient-test-results
+			// service, set lastUpdated to 1 (e.g., updateTimestamps('PatientTestTypes', 1)).
+			this.#updateUI.updateTimestamps('PatientTestTypes', 1);
+			this.#updateUI.getData('PatientTestTypes');
 			this.results = results??[];
+			this.loading = false;
 		});
 	}
 }
 
-PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'NavigatorParameters', 'UserPreferences',
-													'$timeout', '$filter'];
+PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator', 'UserPreferences',
+													'$timeout', '$filter', 'UpdateUI', '$locale'];
 angular
-	.module('MUHCApp')
+	.module('OpalApp')
 	.controller('PatientTestResultsByDatetimeController', PatientTestResultsByDatetimeController);

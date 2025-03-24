@@ -11,7 +11,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('QuestionnaireDataService', QuestionnaireDataService);
 
     QuestionnaireDataService.$inject = [
@@ -32,7 +32,6 @@
             requestQuestionnaireStubFromSerNum: requestQuestionnaireStubFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnairePurpose: requestQuestionnairePurpose,
-            requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer
         };
 
@@ -160,15 +159,8 @@
                 'qp_ser_num': answerQuestionnaireID,
                 'language': UserPreferences.getLanguage(),
             };
-            try {
-                let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
-
-                // this is in case firebase deletes the property when it is empty
-                return response?.Data ? response.Data : {};
-            } catch (error) {
-                console.error('Error in requestQuestionnaire', error);
-                return {};
-            }
+            let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
+            return response?.Data ? response.Data : {};
         }
 
         /**
@@ -194,32 +186,6 @@
             } catch (error) {
                 console.error('Error in requestQuestionnairePurpose', error);
                 return {};
-            }
-        }
-
-        /**
-       * @name requestQuestionnaireUnreadNumber
-       * @desc Asks the listener for the number of unread (e.g. 'New') questoinnaires under a specific purpose for this user
-       * @param {string} questionnairePurpose the purpose of questionnaires requested
-       * @returns {Promise} resolves to the number of unread questionnaires data
-       */
-        async function requestQuestionnaireUnreadNumber(questionnairePurpose) {
-            let params = {
-                purpose: questionnairePurpose
-            };
-
-            try {
-                let response = await RequestToServer.sendRequestWithResponse(api.GET_NUMBER_UNREAD, params);
-
-                // this is in case firebase deletes the property when it is empty
-                if (response.hasOwnProperty('Data')) {
-                    return response.Data;
-                }
-
-                return { numberUnread: "0" };
-            } catch (error) {
-                console.error('Error in requestQuestionnaireUnreadNumber', error);
-                return { numberUnread: "0" };
             }
         }
     }

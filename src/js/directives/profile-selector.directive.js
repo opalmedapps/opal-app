@@ -4,10 +4,10 @@ import "../../css/directives/profile-selector.directive.css"
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("profileSelector", ProfileSelector);
 
-    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'UpdateUI', 'Params'];
+    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'Params'];
 
     /**
      * @name ProfileSelector
@@ -15,7 +15,7 @@ import "../../css/directives/profile-selector.directive.css"
      * @date 2022-08-18
      * @desc Directive to display the profile selector and scope it's business logic.
      */
-    function ProfileSelector($filter, $timeout, ProfileSelector, UpdateUI, Params)
+    function ProfileSelector($filter, $timeout, ProfileSelector, Params)
     {
         return {
             restrict: 'E',
@@ -84,7 +84,6 @@ import "../../css/directives/profile-selector.directive.css"
 
                 scope.selectProfile = (lecagyId, relStatus) => {
                     if (relStatus !== scope.relationshipStatus.confirmed) return;
-                    UpdateUI.clearUpdateUI();
                     ProfileSelector.loadPatientProfile(lecagyId);
                     updateDisplayInfo();
                     if (scope.refreshFunction) scope.refreshFunction();

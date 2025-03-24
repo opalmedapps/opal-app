@@ -1,0 +1,7 @@
+/*
+ * Removes the default orange border that appears when clicking on "btn" elements, especially in the calendar (ui-bootstrap 2.5.0)
+ * Source: https://stackoverflow.com/questions/67115183/bootstrap-select-remove-ugly-focus-border
+ */
+.btn:focus, .btn:focus-visible, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus, .uib-daypicker:focus-visible {
+    outline: none;
+}

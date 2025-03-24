@@ -9,7 +9,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('QuestionnairesListController', QuestionnairesListController);
 
     QuestionnairesListController.$inject = [
@@ -17,14 +17,15 @@
         '$scope',
         '$timeout',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Params',
         'Questionnaires',
         'UpdateUI'
     ];
 
     /* @ngInject */
-    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires, UpdateUI) {
+    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires, UpdateUI) {
+
         let vm = this;
 
         // constants
@@ -32,7 +33,6 @@
 
         // variables for controller
         let navigator = null;
-        let navigatorName = '';
         let purpose = 'default';
 
         // variables seen from view
@@ -61,9 +61,8 @@
         // //////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
-            let params = NavigatorParameters.getParameters();
+            navigator = Navigator.getNavigator();
+            let params = Navigator.getParameters();
 
             purpose = params.questionnairePurpose.toLowerCase();
             vm.dataHandlerParameters.purpose = purpose;
@@ -79,6 +78,10 @@
             // listen to the event of destroy the controller in order to do clean up
             $scope.$on('$destroy', function() {
                 removeListener();
+
+                // Reload user profile if questionnaire was opened and completed via Notifications tab,
+                // and profile was implicitly changed.
+                Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
             });
         }
 
@@ -87,29 +90,13 @@
          * @desc This function request the questionnaire selected from back-end and push it to the carousel
          * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
-        async function goToQuestionnaire(selectedQuestionnaire) {
-            // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
-            if (vm.refreshQuestionnaires) {
-                await vm.refreshQuestionnaires();
-                // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
-                if (!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) {
-                    NativeNotification.showNotificationAlert(
-                        $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
-                        $filter('translate')("TITLE"),
-                    );
-                    return;
-                }
-            }
-
+        function goToQuestionnaire(selectedQuestionnaire) {
             // putting editQuestion false to claim that we are not coming from a summary page
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.pushPage('views/personal/questionnaires/questionnaires.html', {
                 answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
                 editQuestion: false,
                 questionnairePurpose: purpose
             });
-
-            navigator.pushPage('views/personal/questionnaires/questionnaires.html');
         }
 
         /**
@@ -118,12 +105,10 @@
          * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
         function goToQuestionnaireSummary(selectedQuestionnaire){
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {
+                animation: 'slide', // OnsenUI
                 answerQuestionnaireId: selectedQuestionnaire.qp_ser_num
             });
-
-            navigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {animation: 'slide'});
         }
 
         /**

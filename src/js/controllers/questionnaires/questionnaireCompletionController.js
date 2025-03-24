@@ -8,19 +8,18 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('QuestionnaireCompletionController', QuestionnaireCompletionController);
 
-    QuestionnaireCompletionController.$inject = ['$filter', 'NavigatorParameters', 'Questionnaires'];
+    QuestionnaireCompletionController.$inject = ['$filter', '$scope', 'Navigator', 'Questionnaires'];
 
     /* @ngInject */
-    function QuestionnaireCompletionController($filter, NavigatorParameters, Questionnaires) {
+    function QuestionnaireCompletionController($filter, $scope, Navigator, Questionnaires) {
         var vm = this;
 
         // variables for controller
         let purpose = 'default';
         let navigator = null;
-        let navigatorName = '';
 
         vm.backToListMessage = '';  // the message varies according to the questionnaire purpose
         vm.pageTitle = '';          // the page title varies according to the questionnaire purpose
@@ -34,10 +33,9 @@
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
 
-            let params = NavigatorParameters.getParameters();
+            let params = Navigator.getParameters();
 
             if (!params?.questionnairePurpose
                 || !Questionnaires.validateQuestionnairePurpose(params?.questionnairePurpose)
@@ -52,12 +50,15 @@
         }
 
         /**
-         * goBackToList
-         * @desc this function allows the user to go back to the questionnaire list, it has the same use as back button
+         * @description Sends the user to the questionnaire list, either by popping the current page off the stack (same as the back button),
+         *              or by replacing the page (necessary if the user came from notifications).
          */
         function goBackToList() {
-            NavigatorParameters.setParameters({Navigator: navigatorName});
-            navigator.popPage();
+            let previousPage = Navigator.getPreviousPageName();
+            if (previousPage === 'questionnairesList.html') navigator.popPage();
+            else navigator.replacePage('views/personal/questionnaires/questionnairesList.html', {
+                questionnairePurpose: purpose,
+            });
         }
 
         /**

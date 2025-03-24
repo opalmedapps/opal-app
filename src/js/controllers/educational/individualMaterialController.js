@@ -18,20 +18,19 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualMaterialController', IndividualMaterialController);
 
-    IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial',
+    IndividualMaterialController.$inject = ['$scope', '$timeout', 'Navigator', 'EducationalMaterial',
         'FileManagerService', '$filter', 'Logger', 'Params', 'Toast'];
 
     /* @ngInject */
-    function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial,
+    function IndividualMaterialController($scope, $timeout, Navigator, EducationalMaterial,
         FileManagerService, $filter, Logger, Params, Toast) {
         var vm = this;
 
         var param;
         let navigator;
-        var navigatorPage;
 
         vm.loadingContents = false;
         vm.errorLoadingContents = false;
@@ -62,9 +61,8 @@
 
         function activate() {
             //Getting Parameters from navigation
-            param = NavigatorParameters.getParameters();
-            navigator = NavigatorParameters.getNavigator();
-            navigatorPage = param.Navigator;
+            param = Navigator.getParameters();
+            navigator = Navigator.getNavigator();
 
             bindEvents();
 
@@ -141,15 +139,20 @@
                 $scope.popoverSharing.destroy();
             });
 
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
+            // Reload user profile if educational/reference material was opened via Notifications,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
 
         function goToEducationalMaterial(index) {
             try {
                 let nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
                 if (nextStatus !== -1) {
-                    NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
-                    navigator.pushPage(nextStatus.Url);
+                    navigator.pushPage(nextStatus.Url, {
+                        'Index': index,
+                        'Booklet': vm.edumaterial,
+                        'TableOfContents': vm.tableOfContents,
+                    });
 
                     /* Most calls to logSubClickedEduMaterial() are handled by the function handlePostChangeEventCarousel()
                      * in bookletMaterialController.js. However, the one special case (clicking on the first material in
@@ -284,8 +287,10 @@
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             var rstep = vm.recursive_step + 1;
-            NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Post': material, 'RStep': rstep });
-            navigator.pushPage('./views/personal/education/individual-material.html');
+            navigator.pushPage('./views/personal/education/individual-material.html', {
+                'Post': material,
+                'RStep': rstep,
+            });
         }
     }
 })();

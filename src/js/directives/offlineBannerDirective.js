@@ -9,7 +9,7 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
-angular.module('MUHCApp')
+angular.module('OpalApp')
     .directive('networkBanner', ['$timeout', 'NetworkStatus', function($timeout, NetworkStatus) {
 
     return {

@@ -7,7 +7,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('User', User);
 
     User.$inject = ['$injector','Params','RequestToServer'];

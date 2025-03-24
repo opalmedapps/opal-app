@@ -2,29 +2,43 @@
     <generic-toolbar title="{{'APPOINTMENT'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <div style="border-top: 1px solid lightsteelblue">
         <ons-list ng-hide="vm.corrupted_appointment">
-
+            <!-- APPOINTMENT SUMMARY -->
             <ons-list-item class="item" >
                 <div style="line-height:1" align="left">
                     <header>
                         <span class="item-title" ng-class="fontSizeTitle">{{vm.app["AppointmentType_"+vm.language]}}</span>
                     </header>
-                    <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ResourceDescription}}</p>
-                    <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ScheduledStartTime|date:'medium'}}</p>
-                    <p class="item-desc" ng-class="fontSizeDesc" ng-show="vm.app.RoomLocation">
-                        {{"GOTO_ROOM"|translate}}{{vm.app.RoomLocation}}
+                    <p class="item-desc" ng-class="fontSizeDesc" ng-if="vm.app['Status'] === 'Deleted' || vm.app['Status'] === 'Cancelled'" style="color:rgb(243, 33, 33)"> 
+                        {{"APPOINTMENT_CANCELLED"|translate}}
+                    </p>
+                    <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ScheduledStartTime|date:'mediumNoSeconds'}}</p>
+                    <p class="item-desc" ng-class="fontSizeDesc" ng-show="vm.app['RoomLocation_'+vm.language]">
+                        {{"GOTO_ROOM"|translate}} {{vm.app["RoomLocation_"+vm.language]}}
                     </p>
                 </div>
             </ons-list-item>
 
-            <ons-list-item class="about-link" modifier="chevron tappable" ng-class="fontSizeDesc"
-                           ng-click="vm.aboutAppointment()" >
-                <label class="item-desc" ng-class="fontSizeDesc"> <ons-icon icon="fas fa-info-circle"></ons-icon> {{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </label>
+            <!-- ABOUT THIS APPOINTMENT BUTTON -->
+            <ons-list-item id="about-appointment" class="item about-link dark-chevron" modifier="chevron tappable" ng-class="fontSizeDesc"
+                           ng-click="vm.aboutAppointment()">
+                <ons-row align="center">
+                    <ons-col width="60px" class="ons-col-icon">
+                        <i class="fas fa-info-circle fa12x" style="color: #777777; margin-left: 6px"></i>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT" | translate}}</span>
+                        </header>
+                    </ons-col>
+                </ons-row>
             </ons-list-item>
 
+            <!-- MAP DESCRIPTION -->
             <ons-list-item ng-class="fontSizeDesc">
-                <p class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app['MapDescription_' + vm.language] | trustHTML" align="center"></p>
+                <p id="map-desc" class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app['MapDescription_' + vm.language] | trustHTML" align="center"></p>
             </ons-list-item>
 
+            <!-- MAP -->
             <ons-list class="settings-list" align="center">
                 <ons-list-item ng-click="vm.openMap()" align="center">
                     <div align="center" class="text-center" style="padding:5px">
@@ -32,7 +46,6 @@
                     </div>
                 </ons-list-item>
             </ons-list>
-
         </ons-list>
         <div style="color:grey;margin-top:10vh" ng-show="vm.corrupted_appointment" align="center" ng-class="fontSizeTitle">{{"NOAPPOINTMENTINFO"|translate}}</div>
     </div>

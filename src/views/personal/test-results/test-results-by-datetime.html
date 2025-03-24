@@ -1,5 +1,11 @@
 <ons-page ng-controller="PatientTestResultsByDatetimeController as testsByDate">
-    <generic-toolbar title="{{testsByDate.testDate|convertTimezone:'MMM d, y h:mm a':'America/Toronto'}}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{
+            testsByDate.testDate.toLocaleString(
+                testsByDate.locale,
+                { timeZone: 'America/Toronto', dateStyle: 'medium', timeStyle: 'short', }
+            )
+        }}"
+        style-class="fontSizeTitle">
         <right-content>
             <labs-info-button></labs-info-button>
         </right-content>

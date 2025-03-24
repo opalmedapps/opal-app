@@ -4,7 +4,7 @@
 *Email:davidfherrerar@gmail.com
 */
 
-var myApp = angular.module('MUHCApp');
+var myApp = angular.module('OpalApp');
 
 myApp.directive('phoneInput', ['$filter', '$browser', function($filter, $browser) {
     return {

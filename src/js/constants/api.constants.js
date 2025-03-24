@@ -7,7 +7,7 @@
      * @date 2022-06-10
      */
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .constant("ApiConstants", {
             /** Response codes **/
             SUCCESS: '200',
@@ -22,6 +22,10 @@
                 HOME: {
                     method: 'get',
                     url: '/api/app/home/',
+                },
+                CHECK_IN: {
+                    method: 'get',
+                    url: '/api/app/appointments/',
                 },
                 CHART: {
                     method: 'get',

@@ -1,4 +1,0 @@
-/* Override the onsen alert dialog's background to remove its transparency */
-.alert-dialog {
-    background-color: #FFFFFF;
-}

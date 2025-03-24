@@ -12,19 +12,19 @@
             <div class="navigation-bar__center">
                 <div class="button-bar" style="margin-top:10px;width:70%;left:15%;">
                     <div class="button-bar__item">
-                        <input type="radio" name="navi-segment-b" checked ng-model="testTypeCtrl.showChart"
+                        <input type="radio" name="navi-segment-b" checked ng-model="testTypeCtrl.showChartTab"
                             ng-value="true">
                         <div class="button-bar__button">{{'PLOT_VIEW'|translate}}</div>
                     </div>
 
                     <div class="button-bar__item">
-                        <input type="radio" name="navi-segment-b" ng-model="testTypeCtrl.showChart" ng-value="false">
+                        <input type="radio" name="navi-segment-b" ng-model="testTypeCtrl.showChartTab" ng-value="false">
                         <div class="button-bar__button">{{'TABLE_VIEW'|translate}}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div ng-show="!testTypeCtrl.showChart">
+        <div ng-show="!testTypeCtrl.showChartTab">
             <div style="position:sticky; top:0; z-index:9999;">
 
                 <!-- DISCLAIMER -->
@@ -61,7 +61,7 @@
                         <ons-row align="center" ng-class="fontSizeDesc" style="line-height: 1.5;">
                             <ons-col width="60%" align="center" class="labtest-col" vertical-align="center">
                                 <div style="text-align: center; margin-left:4px;">
-                                    {{testResult.collectedDateTime|date:'medium'}}
+                                    {{testResult.collectedDateTime|date:'mediumNoSeconds'}}
                                 </div>
                             </ons-col>
                             <ons-col width="38%" align="center" class="labtest-col" vertical-align="center">
@@ -75,15 +75,21 @@
                 </ons-list>
             </ons-scroller>
         </div>
-        <div ng-show="testTypeCtrl.showChart">
+        <div ng-if="testTypeCtrl.showChartTab">
 
             <!-- DISCLAIMER -->
             <labs-disclaimer></labs-disclaimer>
 
-            <hc-chart options="testTypeCtrl.chartOptions">
-                [Lab results chart]
-            </hc-chart>
+            <plotly-chart
+                data="testTypeCtrl.chartSettings.data"
+                y-axis-label="testTypeCtrl.chartSettings.yAxisLabel"
+                has-non-numeric-values="testTypeCtrl.chartSettings.hasNonNumericValues"
+                normal-range-min="testTypeCtrl.chartSettings.normalRangeMin"
+                normal-range-max="testTypeCtrl.chartSettings.normalRangeMax"
+            >
+            </plotly-chart>
         </div>
+
         <ons-list>
             <!-- SECTION HEADER -->
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list-header>
@@ -166,7 +172,7 @@
                 <ons-row ng-class="fontSizeDesc">
                     <ons-col class="labtest-col lucent-subtle" vertical-align="center">
                         <div style="margin-left: 4px">
-                            {{testTypeCtrl.test.latestCollectedDateTime|date:'medium'}}
+                            {{testTypeCtrl.test.latestCollectedDateTime|date:'mediumNoSeconds'}}
                         </div>
                     </ons-col>
                 </ons-row>

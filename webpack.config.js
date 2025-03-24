@@ -6,6 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OpalEnv = require("./opal-env.setup");
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 let entry = [
 	"./src/js/app.js",
@@ -19,11 +20,17 @@ let entry = [
 	"./src/js/app.values.js",
 ];
 
+// Utility function, see: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+let capitalizeFirstLetter = word => String(word).charAt(0).toUpperCase() + String(word).slice(1);
+
 const config = env => {
 	console.log("Webpack variables:", env);
 
-	// Parse the Opal environment to use, specified for example via webpack as `--env opal_environment=%npm_config_env%` and npm as `--env=dev`
+	// Parse the Opal environment to use, specified for example via webpack as `--env opal_environment=%npm_config_env%` and npm as `--env=local`
 	const OPAL_ENV = env?.opal_environment;
+
+	const EXTERNAL_CONTENT_LOCAL_FILE_PATH = './content/content.config.json';
+	const SERVICE_STATUS_FILE_PATH = './content/service-status.json';
 
 	// Throws error if the defined folder for environment does not exist.
 	OpalEnv.verifyOpalEnvironmentExists(OPAL_ENV);
@@ -31,7 +38,7 @@ const config = env => {
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
 
 	// Read environment settings from opal.config.js
-	let requiredSettingNames = ["useSourceMap", "webpackMode"];
+	let requiredSettingNames = ["externalContentFileURL", "serviceStatusURL", "useSourceMap", "webpackMode"];
 	let settings = {};
 	requiredSettingNames.forEach(name => settings[name] = OpalEnv.getEnvSetting(name, OPAL_ENV));
 	console.log("Environment settings:", settings);
@@ -42,6 +49,9 @@ const config = env => {
 	else if (env.minimize === "true") minimize = true;
 	else if (env.minimize === "false") minimize = false;
 	else throw `Incorrect value provided for minimize variable: --env.minimize=${env.minimize}. Please use a boolean (true or false).`;
+
+	// Get the web app name (for the progressive web app, to add to manifest.json)
+	let webAppName = OPAL_ENV === 'prod' ? 'Opal Web' : `Opal Web ${capitalizeFirstLetter(OPAL_ENV)}`;
 
 	return {
 		entry: entry,
@@ -80,14 +90,23 @@ const config = env => {
 						loader: 'babel-loader',
 						options: {
 							presets: ['@babel/preset-env'],
-							plugins: ['@babel/plugin-proposal-private-methods',
-								'@babel/plugin-proposal-class-properties',
+							plugins: [
 								["@babel/plugin-transform-runtime", {
+									// Note: this option will be removed with @babel/core version 8
+									// See: https://babeljs.io/docs/babel-plugin-transform-runtime#regenerator
 									regenerator: true
-								}]]
-
+								}]
+							]
 						}
 					}
+				},
+				// Fix error "Can't resolve [...] in '/builds/opalmedapps/qplus/node_modules/pdfjs-dist/legacy/build' [...] The extension in the request is mandatory for it to be fully specified."
+				// See: https://stackoverflow.com/questions/69427025/programmatic-webpack-jest-esm-cant-resolve-module-without-js-file-exten
+				{
+					test: /\.m?js$/,
+					resolve: {
+						fullySpecified: false,
+					},
 				},
 				{
 					test: /\.css$/,
@@ -100,16 +119,20 @@ const config = env => {
 				{
 					// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, Modernizr has a weird passing of document, window properties
 					// to make it work I looked at this issue: basically it re-attaches this to window.
+					// This solution was found online, see: https://github.com/webpack/webpack/issues/512#issuecomment-288143187
+					// Original code: loader: 'imports-loader?this=>window!exports-loader?window.Modernizr'
+					// It has since been rewritten to a new syntax due to Webpack / imports-loader / exports-loader updates
 					test: /onsenui.js/,
 					use: [
+						// Adds the following to the output bundle: (function () { ... }).call(window);
 						{
-							loader: 'imports-loader?this=>window'
+							loader: 'imports-loader?type=commonjs&wrapper=window',
 						},
+						// Adds the following to the output bundle: module.exports = window.Modernizr;
 						{
-							loader: 'exports-loader?window.Modernizr'
-						}
+							loader: 'exports-loader?type=commonjs&exports=single|window.Modernizr',
+						},
 					],
-
 				},
 				// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, When compiling with Webpack, the Fastclick library
 				// in onsenui (get rid of the 300ms delay) has a set of if statements to determine the sort of
@@ -119,8 +142,11 @@ const config = env => {
 					test: /onsenui.js/,
 					use: [
 						{
-							loader: 'imports-loader?define=>false,module.exports=>false'
-						}
+							loader: 'imports-loader',
+							options: {
+								additionalCode: 'var define = false; module.exports = false;',
+							},
+						},
 					],
 				},
 				{
@@ -136,16 +162,31 @@ const config = env => {
 					{ from: './src/img', to: './img' },
 					{ from: './src/Languages', to: './Languages' },
 					{ from: './src/views', to: './views' },
+					// NOTE: if the external content URL (e.g., externalContentFileURL) is set to the local file path
+					// instead of the external server URL, the dynamic configurations will be loaded from local files.
+					// See content/content.config.sample.json for more details.
+					...(
+						settings.externalContentFileURL === EXTERNAL_CONTENT_LOCAL_FILE_PATH ?
+						[{ from: './content', to: './content' }] : []
+					),
+					// NOTE: if service status URL (e.g., serviceStatusURL) is set to the local file path
+					// instead of the external server URL, the message content will be loaded from local file.
+					...(
+						settings.serviceStatusURL === SERVICE_STATUS_FILE_PATH ?
+						[{
+							from: './content/service-status.json',
+							to: './content/service-status.json',
+						}] : []
+					),
 				],
 			}),
 			new webpack.ProvidePlugin({
-				OPAL_CONFIG: path.join(OPAL_ENV_FOLDER, "opal.config.js"),
+				CONFIG: path.join(OPAL_ENV_FOLDER, "opal.config.js"),
 				WEB_VERSION: path.join(__dirname, "web-version.json"),
 				$: "jquery",
 				jQuery: "jquery",
 				firebase: "firebase",
 				CryptoJS: "crypto-js",
-				Highcharts: "highcharts",
 			}),
 			new HtmlWebpackPlugin({
 				template: './src/index.html',
@@ -172,12 +213,44 @@ const config = env => {
 						'content': 'text/html; charset=UTF-8; X-Content-Type-Options=nosniff'
 					},
 					"format-detection": "telephone=no",
+					"mobile-web-app-capable": "yes",
+					// For Apple configs, see: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html
 					"apple-mobile-web-app-capable": "yes",
-					"mobile-web-app-capable": "yes"
+					"apple-mobile-web-app-status-bar-style": "black-translucent",
+					"apple-mobile-web-app-title": webAppName,
 				}
 			}),
 			new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fr/),
-			new NodePolyfillPlugin()
+			new NodePolyfillPlugin({
+				additionalAliases: ['process'],
+			}),
+			new WebpackManifestPlugin({
+				// Configure the web version as a progressive web app, see: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable
+				seed: {
+					name: webAppName,
+					short_name: webAppName,
+					description: "Votre portail patient / Your patient portal",
+					start_url: "/app/index.html",
+					scope: "/",
+					display: "standalone",
+					theme_color: "#4CAF50",
+					background_color: "#BADA55",
+					icons: [
+						{
+							src: "img/web-icon-192.png",
+							type: "image/png",
+							sizes: "192x192",
+						},
+						{
+							src: "img/web-icon-512.png",
+							type: "image/png",
+							sizes: "512x512",
+						},
+					],
+				},
+				// Don't add paths to other files
+				filter: () => false,
+			}),
 		],
 		optimization: {
 			minimize: minimize,

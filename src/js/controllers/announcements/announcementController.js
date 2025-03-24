@@ -10,7 +10,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: IndividualAnnouncementController
  *  @description
  *
  *  Manages the individual announcement view. No public functions exist on this controller, it simply activate and renders the necessary announcement object
@@ -19,19 +18,19 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualAnnouncementController', IndividualAnnouncementController);
 
     IndividualAnnouncementController.$inject = [
         '$scope',
-        'NavigatorParameters',
+        'Navigator',
         'Announcements'
     ];
 
     /* @ngInject */
     function IndividualAnnouncementController(
         $scope,
-        NavigatorParameters,
+        Navigator,
         Announcements
     ) {
         var vm = this;
@@ -44,19 +43,19 @@
         function activate() {
             bindEvents();
 
-            var parameters=NavigatorParameters.getParameters();
+            var parameters = Navigator.getParameters();
             vm.announcement = Announcements.setLanguage(parameters.Post);
         }
 
         function bindEvents() {
-            let navigator = NavigatorParameters.getNavigator();
+            let navigator = Navigator.getNavigator();
 
             // Remove event listeners
             $scope.$on('$destroy', () => navigator.off('prepop'));
 
             // Reload user profile if announcement was opened via Notifications tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
     }
 })();

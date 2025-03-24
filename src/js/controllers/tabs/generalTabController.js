@@ -9,13 +9,13 @@
         'use strict';
 
         angular
-            .module('MUHCApp')
+            .module('OpalApp')
             .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'NavigatorParameters', 'NetworkStatus', '$timeout',
+        GeneralTabController.$inject = ['$scope', 'Navigator', 'NetworkStatus', '$timeout',
             'UserPreferences', 'UserHospitalPreferences', 'Browser', 'DynamicContent', 'RequestToServer', 'Params'];
 
-        function GeneralTabController($scope, NavigatorParameters, NetworkStatus, $timeout,
+        function GeneralTabController($scope, Navigator, NetworkStatus, $timeout,
                                       UserPreferences, UserHospitalPreferences, Browser, DynamicContent, RequestToServer, Params) {
             var vm = this;
 
@@ -36,8 +36,7 @@
              */
 
             function activate() {
-                NavigatorParameters.setParameters({'Navigator': 'generalNavigator'});
-                NavigatorParameters.setNavigator(generalNavigator);
+                Navigator.setNavigator(generalNavigator);
 
                 bindEvents();
 
@@ -95,7 +94,6 @@
              */
 
             function goToParking() {
-                NavigatorParameters.setParameters('generalNavigator');
                 generalNavigator.pushPage('views/general/parking/parking.html');
             }
 
@@ -109,7 +107,7 @@
             }
 
             function goToCarnetSante() {
-                const url = DynamicContent.getURL("carnet_sante");
+                const url = DynamicContent.getURL("carnetSante");
                 Browser.openInternal(url);
             }
         }

@@ -10,9 +10,8 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: SecurityQuestionController
  *  @requires '$scope', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService', 'UUID', 'UserAuthorizationInfo',
- *  '$state', 'Constants', 'DeviceIdentifiers', 'NavigatorParameters'
+ *  '$state', 'Constants', 'DeviceIdentifiers', 'Navigator'
  *  @description
  *
  *  Controller that submits the user's security question to be validated by our servers. This leads to the generation of the user's encryption key.
@@ -21,16 +20,16 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope', 'Params',
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'Navigator', '$scope', 'Params',
         'UserHospitalPreferences'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope,
+                                        UserAuthorizationInfo, $state, DeviceIdentifiers, Navigator, $scope,
                                         Params, UserHospitalPreferences) {
 
         var vm = this;
@@ -140,7 +139,7 @@
 
         function activate(){
             deviceID = UUID.getUUID();
-            var nav = NavigatorParameters.getNavigator();
+            var nav = Navigator.getNavigator();
             parameters = nav.getCurrentPage().options;
             trusted = parameters.trusted;
 
@@ -152,7 +151,6 @@
         /**
          * @ngdoc function
          * @name initializeData
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description Fetches and sets the data for this controller. This function is called again after the postpop
          *              event (to attempt to load data after the user has chosen a hospital to target).
          */
@@ -200,7 +198,6 @@
         /**
          * @ngdoc function
          * @name bindEvents
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description Sets up event bindings for this controller.
          */
         function bindEvents() {
@@ -237,7 +234,6 @@
         /**
          * @ngdoc function
          * @name handleSuccess
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @param {string} securityAnswerHash Hash of the user's security answer
          * @description
          * Handles verified security question answer that returns in success. Brings user to the loading page.
@@ -255,14 +251,15 @@
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {
-                $state.go('loading');
+                $state.go('loading', {
+                    isTrustedDevice: trusted,
+                });
             }
         }
 
         /**
          * @ngdoc function
          * @name handleError
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @param error error object
          * @description
          * Handles errors in order to display the proper message to the user.
@@ -312,7 +309,6 @@
         /**
          * @ngdoc function
          * @name removeUserData
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Removes user data from local storage
          */
@@ -328,7 +324,6 @@
         /**
          * @ngdoc method
          * @name clearErrors
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Clears errors
          */
@@ -344,7 +339,6 @@
         /**
          * @ngdoc method
          * @name submitAnswer
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @param answer user inputted answer string
          * @description
          * Sends request object containing user-inputted answer to our servers to be validated
@@ -406,7 +400,6 @@
         /**
          * @ngdoc method
          * @name lockout
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * lock the screen for too many failed security answer attempts
          */
@@ -423,7 +416,6 @@
         /**
          * @ngdoc method
          * @name goToInit
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Brings user to init screen
          */
@@ -434,7 +426,6 @@
         /**
          * @ngdoc method
          * @name goToReset
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Brings user to password reset screen
          */
@@ -445,7 +436,6 @@
         /**
          * @ngdoc method
          * @name isThereSelectedHospital
-         * @methodOf MUHCApp.controllers.LoginController
          * @description Returns whether the user has already selected a hospital.
          * @returns {boolean} True if there is a hospital selected; false otherwise.
          */

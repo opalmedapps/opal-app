@@ -5,11 +5,11 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('UpdateSecurityQuestionController', UpdateSecurityQuestionController);
 
     UpdateSecurityQuestionController.$inject = [
-        'NavigatorParameters',
+        'Navigator',
         '$timeout',
         '$filter',
         'UserPreferences',
@@ -21,7 +21,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
     ];
 
     /* @ngInject */
-    function UpdateSecurityQuestionController(NavigatorParameters, $timeout, $filter, UserPreferences, Params,
+    function UpdateSecurityQuestionController(Navigator, $timeout, $filter, UserPreferences, Params,
                                               Firebase, LogOutService, RequestToServer, EncryptionService) {
 
         let vm = this;
@@ -29,7 +29,6 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         // variables for controller
         let lang = UserPreferences.getLanguage();
         let navigator = null;
-        let navigatorName = '';
 
         // constants for controller
         const GET_SECURITY_QUESTION_AND_ANSWER_LIST_API = 'SecurityQuestionAnswerList';
@@ -63,8 +62,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          *      and initialize the latter for front-end use
          */
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
 
             RequestToServer.sendRequestWithResponse(GET_SECURITY_QUESTION_AND_ANSWER_LIST_API)
                 .then(function(response){
@@ -81,6 +79,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                 })
                 .catch(function(err){
                     $timeout(function(){
+                        console.error(err);
                         handleLoadSecurityQuestionListRequestErr();
                         vm.loadingList = false;
                     })
@@ -163,7 +162,6 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @desc show a notification to the user in case a request to server fails
          */
         function handleLoadSecurityQuestionListRequestErr (){
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
             ons.notification.alert({

@@ -2,20 +2,20 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('SmartDevicesController', SmartDevicesController);
 
     SmartDevicesController.$inject = [
-        '$scope', '$timeout', 'NavigatorParameters',
+        '$scope', '$timeout', 'Navigator',
     ];
 
     /* @ngInject */
-    function SmartDevicesController($scope, $timeout, NavigatorParameters)
+    function SmartDevicesController($scope, $timeout, Navigator)
     {
         let vm = this;
         
-        vm.showInfo = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices-info.html');
-        vm.goToDevice = (deviceView) => NavigatorParameters.getNavigator().pushPage(`./views/smartdevices/devices/${deviceView}`);
+        vm.showInfo = () => Navigator.getNavigator().pushPage('./views/smartdevices/smartdevices-info.html');
+        vm.goToDevice = (deviceView) => Navigator.getNavigator().pushPage(`./views/smartdevices/devices/${deviceView}`);
 
         vm.bluetoothAvailable = window.hasOwnProperty('ble');
         vm.bluetoothEnabled = false;

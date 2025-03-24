@@ -2,35 +2,31 @@
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 (()=>{
-	angular.module("MUHCApp")
+	angular.module('OpalApp')
 		.controller("InitSettingsController", InitSettingsController);
 
 	InitSettingsController.$inject = [
-		'Firebase', 'NavigatorParameters', 'UserPreferences', 'Constants', '$timeout', '$window', '$rootScope'
+		'Firebase', 'Navigator', 'UserPreferences', 'Constants', '$rootScope'
 	];
 
 	/* @ngInject */
-	function InitSettingsController(Firebase, NavigatorParameters, UserPreferences, Constants, $timeout, $window, $rootScope) {
+	function InitSettingsController(Firebase, Navigator, UserPreferences, Constants, $rootScope) {
 
 		let vm = this;
-		var params;
+		let navigator;
+
 		vm.changeLanguage = changeLanguage;
 		vm.openPageLegal = openPageLegal;
 		vm.goToFeedback = goToFeedback;
 		vm.secureYourDeviceNotice = secureYourDeviceNotice;
-
-		var navigatorName;
 
 		activate();
 
 		/////////////////////////
 
 		function activate() {
-			params = NavigatorParameters.getParameters();
-			vm.navigatorName = params.Navigator;
-			vm.navigator = $window[vm.navigatorName];
-
-			navigatorName = params.Navigator;
+			navigator = Navigator.getNavigator();
+			vm.navigatorName = Navigator.getNavigatorName();
 
 			initSettings();
 		}
@@ -53,29 +49,28 @@
 		}
 
 		function goToFeedback() {
-			vm.navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'});
+			navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'});
 		}
 
 		function secureYourDeviceNotice() {
-			$rootScope.contentType = 'secureyourdevice';
-			vm.navigator.pushPage('./views/templates/content.html', {contentType: 'secureyourdevice'});
+			navigator.pushPage(
+				'./views/templates/content.html',
+				{contentType: 'secureYourDevice', title: 'SECURE_YOUR_DEVICE'},
+			);
 		}
 
 		function openPageLegal(type) {
-			if (type.toLowerCase() === 'tou') {
-				$rootScope.contentType = 'tou';
-				vm.navigator.pushPage('./views/templates/content.html', {contentType: 'tou'});
-				// NavigatorParameters.setParameters({type: type, title: 'Terms of Use', Navigator: vm.navigatorName});
-				// vm.navigator.pushPage('./views/init/init-legal.html');
-			} else if (type.toLowerCase() === 'serviceagreement') {
-				$rootScope.contentType = 'serviceagreement';
-				vm.navigator.pushPage('./views/templates/content.html', {contentType: 'serviceagreement'});
-
-			} else if (type.toLowerCase() === 'privacypolicy') {
-				$rootScope.contentType = 'privacypolicy';
-				vm.navigator.pushPage('./views/templates/content.html', {contentType: 'privacypolicy'});
+			if (type === 'termsOfUse') {
+				navigator.pushPage(
+					'./views/templates/content.html',
+					{contentType: 'termsOfUse', title: 'TERMS_OF_USE'}
+				);
+			} else if (type === 'serviceAgreement') {
+				navigator.pushPage(
+					'./views/templates/content.html',
+					{contentType: 'serviceAgreement', title: 'SERVICE_AGREEMENT'},
+				);
 			}
-
 		}
 	}
 })();

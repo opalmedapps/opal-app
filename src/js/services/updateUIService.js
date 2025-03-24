@@ -6,7 +6,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('UpdateUI', UpdateUI);
 
     UpdateUI.$inject = ['Announcements','Appointments','Diagnoses','Documents',
@@ -35,8 +35,8 @@
                 multiProfileEnabled: true,
             },
             'Appointments': {
-                set: Appointments.setUserAppointments,
-                update: Appointments.updateUserAppointments,
+                set: Appointments.setAppointments,
+                update: Appointments.updateAppointments,
                 lastUpdated: 0,
                 multiProfileEnabled: false,
             },
@@ -59,7 +59,7 @@
                 multiProfileEnabled: false,
             },
             'Notifications': {
-                set: Notifications.initNotifications,
+                set: Notifications.setNotifications,
                 update: Notifications.updateUserNotifications,
                 lastUpdated: 0,
                 multiProfileEnabled: true,

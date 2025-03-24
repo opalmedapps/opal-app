@@ -1,10 +1,9 @@
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
-var myApp = angular.module('MUHCApp');
+var myApp = angular.module('OpalApp');
 /**
  *@ngdoc service
- *@name MUHCApp.service:FileManagerService
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
 myApp.service('FileManagerService', ['$filter', '$injector', 'Browser', 'Constants', 'RequestToServer', 'Toast',
@@ -12,8 +11,6 @@ function ($filter, $injector, Browser, Constants, RequestToServer, Toast) {
 
     /**
      *@ngdoc property
-     *@name MUHCApp.service.#urlDeviceDocuments
-     *@propertyOf MUHCApp.service:FileManagerService
      *@description String representing the path to which documents are downloaded on the device.
      *             Documents containing medical data should not be stored permanently (see Documents.deleteDocumentsDownloaded).
      *             For more information refer to {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}.
@@ -34,7 +31,6 @@ function ($filter, $injector, Browser, Constants, RequestToServer, Toast) {
      * @name downloadFileIntoStorage
      * @author Stacey Beard
      * @date 2021-08-20
-     * @methodOf MUHCApp.service:FileManagerService
      * @description Downloads the file from the url (via the listener) to the targetPath on the device.
      *              Checks if the document has been downloaded already; if so, it is not downloaded again.
      *              Code for intermediate functions based on: https://cordova.apache.org/blog/2017/10/18/from-filetransfer-to-xhr2.html
@@ -418,7 +414,6 @@ function ($filter, $injector, Browser, Constants, RequestToServer, Toast) {
     /**
      *@ngdoc method
      *@name openPDF
-     *@methodOf MUHCApp.service:FileManagerService
      *@param {String} url The URL of the file to open from the web, or in base64 format.
      *@param {String} newDocName New name to give the file if it needs to be downloaded.
      *@description If on an Android device, it opens the pdf using a third party software.
@@ -487,7 +482,6 @@ function ($filter, $injector, Browser, Constants, RequestToServer, Toast) {
         /**
          *@ngdoc method
          *@name openUrl
-         *@methodOf MUHCApp.service:FileManagerService
          *@param {String} url Url to be opened
          *@description Opens a url in the in-app browser, or in another browser window if not on a device.
          **/

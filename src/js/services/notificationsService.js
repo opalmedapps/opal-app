@@ -5,19 +5,8 @@
 
 /**
  * @ngdoc service
- * @name MUHCApp.service:Notifications
  * @requires $filter
  * @requires $q
- * @requires MUHCApp.service:Announcements
- * @requires MUHCApp.service:Appointments
- * @requires MUHCApp.service:CheckInService
- * @requires MUHCApp.service:Documents
- * @requires MUHCApp.service:EducationalMaterial
- * @requires MUHCApp.service:Questionnaires
- * @requires MUHCApp.service:PatientTestResults
- * @requires MUHCApp.service:RequestToServer
- * @requires MUHCApp.service:TxTeamMessages
- * @requires MUHCApp.service:UserPreferences
  * @description API service used for patient notifications. This service is deeply linked to other services to extract
  *              information about the actual content of each notification.
  **/
@@ -25,7 +14,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Notifications', Notifications);
 
     Notifications.$inject = ['$filter','$injector','$q','Announcements','Appointments','CheckInService','Documents',
@@ -35,8 +24,6 @@
                            EducationalMaterial, PatientTestResults, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences, Params) {
         /**
          * @ngdoc property
-         * @name MUHCApp.service.#Notifications
-         * @propertyOf MUHCApp.service:Notifications
          * @description Initializing array that represents all the information for Notifications.
          *              This array is passed to appropriate controllers.
          */
@@ -44,8 +31,6 @@
 
         /**
          * @ngdoc property
-         * @name MUHCApp.service.#notificationTypes
-         * @propertyOf MUHCApp.service:Notifications
          * @description Array containing all the mappings to search the actual post for the notification, the icon,
          *              the color and the name of the field.
          *
@@ -63,7 +48,7 @@
          */
         let notificationTypes = {
             [Params.NOTIFICATION_TYPES.Document]: {
-                icon: 'ion-android-document',
+                icon: 'fa-solid fa-file-circle-plus',
                 color: '#90CAF9',
                 readFunction: Documents.readDocument,
                 searchFunction: Documents.getDocumentBySerNum,
@@ -71,7 +56,7 @@
                 refreshType: 'Documents',
             },
             [Params.NOTIFICATION_TYPES.UpdDocument]: {
-                icon: 'ion-android-document',
+                icon: 'fa-solid fa-file-circle-check',
                 color: '#BA68C8',
                 readFunction: Documents.readDocument,
                 searchFunction: Documents.getDocumentBySerNum,
@@ -79,7 +64,7 @@
                 refreshType: 'Documents',
             },
             [Params.NOTIFICATION_TYPES.RoomAssignment]: {
-                icon: 'fa fa-calendar-o',
+                icon: 'fa-regular fa-calendar-days',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -87,7 +72,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.TxTeamMessage]: {
-                icon: 'fa fa-user-md ',
+                icon: 'fa fa-user-md',
                 color: '#2196F3',
                 readFunction: TxTeamMessages.readTxTeamMessage,
                 searchFunction: TxTeamMessages.getTxTeamMessageBySerNum,
@@ -111,7 +96,7 @@
                 refreshType: 'EducationalMaterial',
             },
             [Params.NOTIFICATION_TYPES.NextAppointment]: {
-                icon: 'fa fa-calendar',
+                icon: 'fa-regular fa-calendar-days',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -119,7 +104,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.AppointmentTimeChange]: {
-                icon: 'fa fa-calendar',
+                icon: 'fa-regular fa-calendar-days',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -127,7 +112,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.CheckInNotification]: {
-                icon: 'fa fa-check-square-o',
+                icon: 'fa-solid fa-square-check',
                 color: '#4CAF50',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -135,7 +120,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.CheckInError]: {
-                icon: 'fa fa-check-square-o',
+                icon: 'fa-solid fa-circle-xmark',
                 color: '#F44336',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -163,7 +148,7 @@
                 },
             },
             [Params.NOTIFICATION_TYPES.AppointmentNew]: {
-                icon: 'fa fa-calendar-plus-o',
+                icon: 'fa-regular fa-calendar-plus',
                 color: '#5FAB61',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -171,7 +156,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.AppointmentCancelled]: {
-                icon: 'fa fa-calendar-times-o',
+                icon: 'fa-regular fa-calendar-times',
                 color: '#ff0787',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -180,7 +165,7 @@
             },
             // Special case: opens the general lab results page, not a specific lab
             [Params.NOTIFICATION_TYPES.NewLabResult]: {
-                icon: 'fa fa-flask ',
+                icon: 'ion-erlenmeyer-flask',
                 color: '#8BC34A',
                 PageUrl: PatientTestResults.getTestResultsUrl,
                 refreshType: ['PatientTestDates', 'PatientTestTypes'],
@@ -192,13 +177,13 @@
         };
 
         let service =  {
-            initNotifications: initNotifications,
+            appointmentNotificationTypes: appointmentNotificationTypes,
             updateUserNotifications: updateUserNotifications,
             getUserNotifications: getUserNotifications,
             readNotification: readNotification,
-            getNumberUnreadNotifications: getNumberUnreadNotifications,
             getNotificationPost: getNotificationPost,
             downloadNotificationTarget: downloadNotificationTarget,
+            setNotifications: setNotifications,
             setNotificationsLanguage: setNotificationsLanguage,
             clearNotifications: clearNotifications,
             markAllRead: markAllRead,
@@ -250,12 +235,11 @@
 
         /**
          * @ngdoc method
-         * @name setUserNotifications
-         * @methodOf MUHCApp.service:Notifications
+         * @name setNotifications
          * @param {Object} notifications Notifications array that contains the new notifications
          * @description Setter method for Notifications
          **/
-        function setUserNotifications(notifications) {
+        function setNotifications(notifications) {
             Notifications = [];
             addUserNotifications(notifications);
         }
@@ -264,20 +248,9 @@
          *  PUBLIC FUNCTIONS
          ******************************/
 
-        function initNotifications(notifications) {
-            setUserNotifications(notifications);
-
-            /* SetNotificationsLanguage removes all broken notifications from the list.
-             * Calling it here ensures that the unread notifications badge is initialized to the right value before
-             * showing the Home tab.
-             * -SB */
-            setNotificationsLanguage(Notifications);
-        }
-
         /**
          *@ngdoc method
          *@name updateUserNotifications
-         *@methodOf MUHCApp.service:Notifications
          *@param {Object} notifications Finds notifications to update or adds new notifications if not found
          *@description Updates the notificationsArray with the new information contained in the notifications parameter
          **/
@@ -289,7 +262,6 @@
         /**
          * @ngdoc method
          * @name getUserNotifications
-         * @methodOf MUHCApp.service:Notifications
          * @description Getter for the Notifications array
          * @returns {Array} Notifications array
          **/
@@ -300,7 +272,6 @@
         /**
          * @ngdoc method
          * @name readNotification
-         * @methodOf MUHCApp.service:Notifications
          * @param {Number} index Index in the Notification array which belongs to the notification to be read.
          * @param {String} notification Notification to be read
          * @description Sets ReadStatus in the notification to 1, sends request to backend, and syncs with device storage
@@ -346,23 +317,7 @@
 
         /**
          * @ngdoc method
-         * @name getNumberUnreadNotifications
-         * @methodOf MUHCApp.service:Notifications
-         * @description Iterates through the Notifications array and returns the number of unread notifications.
-         * @returns {Number} Returns number of unread notifications
-         **/
-        function getNumberUnreadNotifications() {
-            let number = 0;
-            for (let i = 0; i < Notifications.length; i++) {
-                if (Notifications[i].ReadStatus === '0') number++;
-            }
-            return number;
-        }
-
-        /**
-         * @ngdoc method
          * @name getNotificationPost
-         * @methodOf MUHCApp.service:Notifications
          * @param {Object} notification Notification that belongs to the post
          * @description Finds the post that belongs to a given notification by using the search service function for that post
          * @returns {Object} Returns object containing the post
@@ -389,10 +344,9 @@
         /**
          * @ngdoc method
          * @name setNotificationsLanguage
-         * @methodOf MUHCApp.service:Notifications
          * @param {Array} notifications Array with notifications
          * @description Translates the array parameter containing notifications to the appropriate preferred language
-         *              specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+         *              specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *
          *              Note: notifications that cannot be processed successfully are removed from the list of
          *              notifications passed as a parameter to this function.
@@ -405,6 +359,7 @@
                     notifications[i].Title = notifications[i][`Name_${language}`];
                     notifications[i].RefTableRowTitle = notifications[i][`RefTableRowTitle_${language}`];
                 } catch (e) {
+                    console.error('Incorrectly formatted notification, not shown', notifications[i]);
                     notifications.splice(i, 1);
                 }
             }
@@ -412,10 +367,25 @@
         }
 
         /**
+         * @description Returns a list of all notification types related to appointments.
+         * @returns {(string)[]} The list of appointment notification types.
+         */
+        function appointmentNotificationTypes() {
+            return [
+                Params.NOTIFICATION_TYPES.RoomAssignment,
+                Params.NOTIFICATION_TYPES.NextAppointment,
+                Params.NOTIFICATION_TYPES.AppointmentTimeChange,
+                Params.NOTIFICATION_TYPES.CheckInNotification,
+                Params.NOTIFICATION_TYPES.CheckInError,
+                Params.NOTIFICATION_TYPES.AppointmentNew,
+                Params.NOTIFICATION_TYPES.AppointmentCancelled,
+            ];
+        }
+
+        /**
          * @ngdoc method
          * @name clearNotifications
-         * @methodOf MUHCApp.service:Notifications
-         * @description Clears the service of any saved state; function used by {@link MUHCApp.service:CleanUp CleanUp}.
+         * @description Clears the service of any saved state; function used by {@link OpalApp.service:CleanUp CleanUp}.
          **/
         function clearNotifications() {
             Notifications = [];
@@ -424,7 +394,6 @@
         /**
          * @ngdoc method 
          * @name implicitlyMarkCachedNotificationAsRead
-         * @methodOf MUHCApp.service:Notifications
          * @desc Implicitly mark cached notifications as read.
          *       E.g., cached notification linked to a new/updated/canceled appointment.
          * @param {string} serNum Serial number of a category item for which a corresponding notifications is being updated.

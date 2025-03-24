@@ -1,6 +1,6 @@
 /*
  * Filename     :   dynamicContentService.js
- * Description  :   Service that manages the dynamic data for Opal, hosted on depdocs.com.
+ * Description  :   Service that manages the dynamic data for Opal, hosted on an external server.
  * Created by   :   Robert Maglieri 
  * Date         :   02 Mar 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
@@ -10,27 +10,21 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:DynamicContent
  *@requires $q
  *@requires $http
- *@requires MUHCApp.service:UserPreferences
- *@description Service that manages the dynamic data for Opal, hosted on depdocs.com.
+ *@description Service that manages the dynamic data for Opal, hosted on an external server.
  **/
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('DynamicContent', DynamicContent);
 
     DynamicContent.$inject = ['$http','$q','UserPreferences'];
 
     /* @ngInject */
     function DynamicContent($http, $q, UserPreferences) {
-
-        // Locations of the data files on the external server
-        const linksURL = "https://www.depdocs.com/opal/links/links_1.11.5.php";
-        const constantsURL = "https://www.depdocs.com/opal/constants/constants.php";
 
         /**
          * @description Content mapping for links downloaded from the server.
@@ -62,18 +56,21 @@
          * @param sourceLink The link on the server from which to fetch the data.
          * @returns {Promise<void>}
          */
-        async function initialize(variable, sourceLink) {
+        async function initialize(sourceLink) {
             try {
                 const response = await $http({
                     method: 'GET',
                     url: sourceLink
                 });
 
-                // Alter the variable to save the new content
-                Object.keys(variable).forEach(key => { delete variable[key] });
-                Object.assign(variable, response.data);
+                if (
+                    response.status !== 200
+                    || response.data.constants === undefined
+                    || response.data.contentLinks === undefined
+                ) throw {...response, code: "INIT_ERROR"};
 
-                if (response.status !== 200) throw {...response, code: "INIT_ERROR"};
+                constants = response.data.constants;
+                links = response.data.contentLinks;
             }
             catch(err) { throw {...err, code: "INIT_ERROR" } }
         }
@@ -101,7 +98,7 @@
          * @returns {string} The URL key.
          */
         function getURLKey() {
-            return `url_${UserPreferences.getLanguage()}`;
+            return `${UserPreferences.getLanguage()}`.toLowerCase();
         }
 
         /**
@@ -123,14 +120,13 @@
          * @throws Throws an error if initialization fails.
          */
         async function ensureInitialized() {
-            if (objectIsEmpty(links)) await initialize(links, linksURL);
-            if (objectIsEmpty(constants)) await initialize(constants, constantsURL);
+            if (objectIsEmpty(constants) || objectIsEmpty(links))
+                await initialize(CONFIG.settings.externalContentFileURL);
         }
 
         /**
          *@ngdoc method
          *@name getPageContent
-         *@methodOf MUHCApp.service:DynamicContent
          *@description Requests a page from the content provided by the server.
          *             Content must already have been initialized.
          *@param {String} contentKey The key for the page to request from the external server.

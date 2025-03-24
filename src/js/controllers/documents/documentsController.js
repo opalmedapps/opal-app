@@ -6,16 +6,18 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('DocumentsController', DocumentsController);
 
     DocumentsController.$inject = [
-        'Documents', '$filter', 'NavigatorParameters', 'Permissions', 'Logger', '$timeout', 'Notifications', 'Params'
+        'Documents', '$filter', 'Navigator', 'Permissions', 'Logger', '$timeout', 'Notifications', 'Params'
     ];
 
     /* @ngInject */
-    function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger, $timeout, Notifications, Params) {
-        var vm = this;
+    function DocumentsController(Documents, $filter, Navigator, Permissions, Logger, $timeout, Notifications, Params) {
+        let vm = this;
+        let navigator;
+
         vm.noDocuments = true;
         vm.documents = [];
 
@@ -29,6 +31,7 @@
         ////////////////
 
         function activate() {
+            navigator = Navigator.getNavigator();
             Logger.sendLog('Documents', 'all');
         }
 
@@ -58,8 +61,7 @@
                     [Params.NOTIFICATION_TYPES.Document, Params.NOTIFICATION_TYPES.UpdDocument],
                 );
             }
-            NavigatorParameters.setParameters({'navigatorName':'personalNavigator', 'Post':doc});
-            personalNavigator.pushPage('./views/personal/documents/individual-document.html');
+            navigator.pushPage('./views/personal/documents/individual-document.html', {'Post': doc});
         }
     }
 })();

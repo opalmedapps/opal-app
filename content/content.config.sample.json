@@ -1,0 +1,55 @@
+{
+    "constants": {
+        "supportEmail": "support@example.org"
+    },
+    "contentLinks": {
+        "termsOfUse": {
+            "en": "./content/terms-of-use/en.html",
+            "fr": "./content/terms-of-use/fr.html"
+        },
+        "serviceAgreement": {
+            "en": "./content/service-agreement/en.html",
+            "fr": "./content/service-agreement/fr.html"
+        },
+        "secureYourDevice": {
+            "en": "./content/secure-your-device/en.html",
+            "fr": "./content/secure-your-device/fr.html"
+        },
+        "acknowledgements": {
+            "en": "./content/acknowledgements/en.html",
+            "fr": "./content/acknowledgements/fr.html"
+        },
+        "about": {
+            "en": "./content/about/en.html",
+            "fr": "./content/about/fr.html"
+        },
+        "carnetSante": {
+            "en": "https://carnetsante.gouv.qc.ca/portail",
+            "fr": "https://carnetsante.gouv.qc.ca/portail"
+        },
+        "donation": {
+            "en": "https://<DONATION-WEBPAGE-ENGLISH>",
+            "fr": "https://<DONATION-WEBPAGE-FRENCH>"
+        },
+        "findDoctor": {
+            "en": "https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/",
+            "fr": "https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-dun-medecin-de-famille"
+        },
+        "medicalScheduler": {
+            "en": "https://www.rvsq.gouv.qc.ca/accueil/index-en.html",
+            "fr": "https://www.rvsq.gouv.qc.ca/accueil/index.html"
+        },
+        "opalWebsite": {
+            "en": "https://<YOUR-WEBSITE-ENGLISH>",
+            "fr": "https://<YOUR-WEBSITE-FRENCH>"
+        },
+        "registration": {
+            "en": "https://<REGISTRATION-WEBPAGE-ENGLISH>",
+            "fr": "https://<REGISTRATION-WEBPAGE-FRENCH>"
+        },
+        "support": {
+            "en": "https://<SUPPORT-WEBPAGE-ENGLISH>",
+            "fr": "https://<SUPPORT-WEBPAGE-FRENCH>"
+        }
+    }
+}

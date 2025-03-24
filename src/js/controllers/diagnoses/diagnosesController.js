@@ -10,7 +10,6 @@
 
 /**
  * @ngdoc controller
- * @name MUHCApp.controller:DiagnosesController
  * @requires Diagnoses
  * @requires UserPreferences
  * @description Controller for the diagnoses view.
@@ -20,7 +19,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('DiagnosesController', DiagnosesController);
 
     /* @ngInject */
