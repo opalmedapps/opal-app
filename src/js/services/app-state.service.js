@@ -30,8 +30,8 @@
         let service = {
             addActiveEvent: addActiveEvent,
             addInactiveEvent: addInactiveEvent,
-            isInitialized: () => { return appInitialized },
-            setInitialized: (value) => { appInitialized = value },
+            isInitialized: () => appInitialized,
+            setInitialized: value => appInitialized = value,
         };
 
         return service;
