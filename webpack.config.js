@@ -144,6 +144,10 @@ const config = env => {
 					{ from: './src/img', to: './img' },
 					{ from: './src/Languages', to: './Languages' },
 					{ from: './src/views', to: './views' },
+					// include dynamic content if dynamicContentFileURL is not provided
+					...(settings.dynamicContentFileURL ? [] : [
+						{ from: './dynamic-content-samples', to: './dynamic-content-samples', }
+					]),
 				],
 			}),
 			new webpack.ProvidePlugin({
