@@ -1,4 +1,4 @@
-// Removes permissions which we don't use, set by cordova plugins
+// Removes android permissions which we don't use, set by cordova plugins
 // Source: https://stackoverflow.com/questions/25265908/cordova-remove-unnecessary-permissions
 
 let permissionsToRemove = ['READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE'];
