@@ -197,6 +197,7 @@ deploy web:
     - lftp --version
     - echo "listing working directory..."
     - ls -la
+    - echo "deploying to environment ${CI_ENVIRONMENT_NAME}"
     - echo "transferring files and listing remote directory..."
     # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
     - >
