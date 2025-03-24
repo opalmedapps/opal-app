@@ -80,9 +80,9 @@ p {
 
 @import url('./animations.css');
 @import url('./bootstrap.css');
+@import url('./dependencies/fontawesome.dependency.css');
+@import url('./dependencies/onsenui.dependency.css');
 @import url('./elements/menu.element.css');
-@import url('./elements/ons-alert-dialog.element.css');
-@import url('./elements/ons-grid.element.css');
 @import url('./elements/event.element.css');
 @import url('./elements/contact.element.css');
 @import url('./elements/checkout.element.css');
