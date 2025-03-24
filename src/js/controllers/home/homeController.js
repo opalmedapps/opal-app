@@ -7,11 +7,11 @@
 
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'Notifications', 'NavigatorParameters',
-        'Permissions', 'UserPreferences', 'NetworkStatus', 'MetaData', 'UserHospitalPreferences'];
+        'Permissions', 'UserPreferences', 'NetworkStatus', 'MetaData', 'UserHospitalPreferences','$interval'];
 
     /* @ngInject */
     function HomeController(Appointments, CheckInService, Patient, $scope, $filter, Notifications, NavigatorParameters,
-                            Permissions, UserPreferences, NetworkStatus, MetaData, UserHospitalPreferences)
+                            Permissions, UserPreferences, NetworkStatus, MetaData, UserHospitalPreferences, $interval)
     {
         var vm = this;
 
@@ -277,5 +277,12 @@
         function goToAcknowledgements() {
             homeNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
         }
+
+        /**
+         * interval to refresh the GPS location every 5 seconds
+         */
+        $interval(function(){
+            CheckInService.isAllowedToCheckin();
+        },5000)
     }
 })();

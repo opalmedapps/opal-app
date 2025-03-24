@@ -115,7 +115,8 @@
             getCheckInApps: getCheckInApps,
             clear: clear,
             checkinNotificationsExist: checkinNotificationsExist,
-            retrievedCheckinNotifications: retrievedCheckinNotifications
+            retrievedCheckinNotifications: retrievedCheckinNotifications,
+            isAllowedToCheckin: isAllowedToCheckin
         };
 
         ////////////////////////////////////////////
@@ -154,7 +155,7 @@
                         isWithinCheckinRange()
                             .then(function (isInRange) {
 
-                                // console.log('is allowed to checkin ... is in range: ' + isInRange);
+                                //console.log('is allowed to checkin ... is in range: ' + isInRange);
 
                                 r.resolve(isInRange)
                             });
