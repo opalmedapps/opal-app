@@ -237,7 +237,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
             if (error.code === Params.invalidPassword) {
 
                 ons.notification.alert({
-                    message: $filter('translate')(Params.invalidPasswordMessage),
+                    message: $filter('translate')("INVALID_PASSWORD"),
                     modifier: (ons.platform.isAndroid())?'material':null
                 });
             } else {

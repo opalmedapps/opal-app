@@ -5,7 +5,7 @@ angular.module("MUHCApp").constant('Constants', {
 		if(app){
 			return AppVersion.version;
 		}else{
-			return "100.100.100";
+			return WEB_VERSION.version;
 		}
 	},
 	build: ()=>{
@@ -13,7 +13,7 @@ angular.module("MUHCApp").constant('Constants', {
 		if(app){
 			return AppVersion.build;
 		}else{
-			return "1";
+			return WEB_VERSION.build;
 		}
 	}
 });
