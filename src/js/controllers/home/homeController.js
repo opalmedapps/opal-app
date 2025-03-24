@@ -6,12 +6,12 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'Notifications', 'NavigatorParameters',
-        'UserPreferences', 'NetworkStatus', 'MetaData', 'UserHospitalPreferences', 'RequestToServer', 'Params'];
+        '$timeout', 'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'NavigatorParameters',
+        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params'];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, Patient, $scope, $filter, Notifications, NavigatorParameters,
-                            UserPreferences, NetworkStatus, MetaData, UserHospitalPreferences, RequestToServer, Params)
+    function HomeController($timeout, Appointments, CheckInService, Patient, $scope, $filter, NavigatorParameters,
+                            UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params)
     {
         var vm = this;
 
@@ -64,7 +64,7 @@
             // Refresh the page on coming back from other pages
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name === "./views/home/checkin/checkin-list.html" && NetworkStatus.isOnline()) evaluateCheckIn();
-                if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) setBadges();
+                if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) getDisplayData();
             });
             //This avoids constant repushing which causes bugs
             homeNavigator.on('prepush', (event) => {
@@ -101,21 +101,10 @@
          * @description Function to get view specific data from Django API
          */
         async function getDisplayData() {
-            let requestParameters = {
-                method: 'get',
-                url: '/api/app/home',
-                headers: Params.API.REQUEST_HEADERS,
-            }
-            const result = await RequestToServer.apiRequest(requestParameters);
+            const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
             $timeout(() => {
-                setBadges(result.data.unread_notification_count);
+                vm.notificationsUnreadNumber = result.data.unread_notification_count;
             });
-        }
-
-        //Setting up numbers on the
-        function setBadges(value = undefined)
-        {
-            vm.notificationsUnreadNumber = value || Notifications.getNumberUnreadNotifications();
         }
 
         /**

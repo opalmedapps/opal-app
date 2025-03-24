@@ -287,5 +287,6 @@
   "WAITING_ROOM": "Waiting Room:",
   "WARNING": "Warning",
   "YES": "Yes",
-  "VIDEO": "Video"
+  "VIDEO": "Video",
+  "API_ERROR_NOT_FOUND": "The requested ressource was not found."
 }

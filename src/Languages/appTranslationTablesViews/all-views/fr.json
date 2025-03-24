@@ -287,5 +287,6 @@
     "WAITING_ROOM": "Salle d'attente:",
     "WARNING": "Attention",
     "YES": "Oui",
-    "VIDEO": "Vidéo"
+    "VIDEO": "Vidéo",
+    "API_ERROR_NOT_FOUND": "La ressource demandé est introuvable."
 }

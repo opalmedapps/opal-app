@@ -2,13 +2,19 @@
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 
-angular.module('MUHCApp').service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
-    'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params',
-    function( UserAuthorizationInfo, EncryptionService, FirebaseService,
-              Constants, UUID, ResponseValidator, Params){
+angular
+    .module('MUHCApp')
+    .service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService', 'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params', 'UserPreferences',
+    function( UserAuthorizationInfo, EncryptionService, FirebaseService, Constants, UUID, ResponseValidator, Params, UserPreferences){
 
         let firebase_url;
         let response_url;
+
+        return {
+            sendRequestWithResponse: sendRequestWithResponse,
+            sendRequest: sendRequest,
+            apiRequest: apiRequest
+        };
         
         /**
          * @description Encrypt and send data to firebase
@@ -34,11 +40,13 @@ angular.module('MUHCApp').service('RequestToServer',['UserAuthorizationInfo', 'E
         /**
          * @description Call the new listener structure that relays the request to Django backend
          * @param {object} parameters Required fields to process request
+         * @param {object | null} Data the is needed to be passed to the request.
          * @returns Promise that contains the response data
          */
-        function apiRequest(parameters) {
-            return new Promise((resolve, reject) => {
-                let requestKey = sendRequest('api', parameters);
+        function apiRequest(parameters, data = null) {
+            return new Promise(async (resolve, reject) => {
+                let formatedParams = formatParams(parameters, data);
+                let requestKey = sendRequest('api', formatedParams);
                 let firebasePath = `${UserAuthorizationInfo.getUsername()}/${requestKey}`;
                 let dbReference = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
     
@@ -53,6 +61,13 @@ angular.module('MUHCApp').service('RequestToServer',['UserAuthorizationInfo', 'E
             });
         }
 
+        function formatParams(parameters, data){
+            if (data) parameters.data = data;
+            return {
+                ...parameters,
+                headers: {...Params.API.REQUEST_HEADERS, 'Accept-Language': UserPreferences.getLanguage()},
+            }
+        }
 
         function sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField) {
             return new Promise((resolve, reject) => {
@@ -116,10 +131,4 @@ angular.module('MUHCApp').service('RequestToServer',['UserAuthorizationInfo', 'E
                 Timestamp: firebase.database.ServerValue.TIMESTAMP
             };
         }
-
-        return {
-            sendRequestWithResponse: sendRequestWithResponse,
-            sendRequest: sendRequest,
-            apiRequest: apiRequest
-        };
 }]);

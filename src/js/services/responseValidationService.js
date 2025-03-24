@@ -14,10 +14,10 @@
         .module('MUHCApp')
         .factory('ResponseValidator', ResponseValidator);
 
-    ResponseValidator.$inject = ['FirebaseService', '$state', '$window', 'Security', 'EncryptionService', 'Params'];
+    ResponseValidator.$inject = ['$filter', 'FirebaseService', '$state', '$window', 'Security', 'EncryptionService', 'Params', 'Toast'];
 
     /* @ngInject */
-    function ResponseValidator(FirebaseService, $state, $window, Security, EncryptionService, Params) {
+    function ResponseValidator($filter, FirebaseService, $state, $window, Security, EncryptionService, Params, Toast) {
 
         /**
          * Expose API to consumers
@@ -58,15 +58,21 @@
         }
 
         /**
-         * @description Validate response incoming from the new listener's section
+         * @description Validate response incoming from the new listener's section. On error show the toast with the error message.
          * @param {object} response Object fetch from firebase 
          * @returns {object} A decrypted response object on success, an error data object on error
          */
         function validateApiResponse(response) {
-            let decryptedresponse = EncryptionService.decryptData(response);
-            // TODO: Error handling need to be done here but before we need to establish error handling in the listener.
-            // Jira ticket for reference: https://o-hig.atlassian.net/browse/QSCCD-233
-            if (response.status_code !== Params.API.SUCCESS) return new Error({errorCode: response.status_code, message: 'TODO error message'});
+            let decryptedresponse = (typeof response.status_code === 'number') ? response : EncryptionService.decryptData(response);
+            if (response.status_code !== Params.API.SUCCESS) {
+                Toast.showToast({
+                    message: `${$filter('translate')(response.data.errorMessage)}
+                        ERROR CODE: ${response.status_code}
+                    `,
+                    duration: 4000
+                });
+                return new Error(`API ERROR: ${response.status_code}: ${response.data.errorMessage}`);
+            }
             return decryptedresponse;
         }
 
