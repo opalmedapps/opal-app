@@ -36,7 +36,8 @@
          */
         function getLocalStoragePatientSernum(currentPatientSerNum) {
             let savedPatientSernum = $window.localStorage.getItem('profileId') || null;
-            return (savedPatientSernum && (currentPatientSerNum !== savedPatientSernum)) ? savedPatientSernum : currentPatientSerNum;
+            let savedPatientStatus = patientList.find(item => item.patient_legacy_id === savedPatientSernum).status;
+            return (savedPatientSernum && savedPatientStatus === 'CON' && (currentPatientSerNum !== savedPatientSernum)) ? savedPatientSernum : currentPatientSerNum;
         }
 
         /**

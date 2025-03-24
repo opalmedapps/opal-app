@@ -60,13 +60,10 @@ import "../../css/directives/profile-selector.directive.css"
 
                 const updateDisplayInfo = () => {
                     scope.currentProfile = Patient.getSelectedProfile();
-                    scope.title = scope.profileList.length > 1 ? `${scope.currentProfile.first_name} ${scope.currentProfile.last_name}` : $filter('translate')('MYCHART');
+                    scope.title = `${scope.currentProfile.first_name} ${scope.currentProfile.last_name}`;
                 }
 
-                scope.toggleList = () => {
-                    if (scope.profileList.length <= 1) return;
-                    scope.listVisible = !scope.listVisible;
-                }
+                scope.toggleList = () => scope.listVisible = !scope.listVisible;
 
                 scope.selectProfile = (lecagyId, relStatus) => {
                     if (relStatus !== 'CON') return;
