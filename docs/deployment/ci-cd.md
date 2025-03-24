@@ -31,7 +31,8 @@ Specifically, any commits on branches _other_ than the default branch are handle
 Commits on the default branch are produced as the result of approved and "squashed-and-merged" merge requests.
 These commits represent completed work that is ready for deployment to our development environment.
 As such, the bulk of the jobs described below run by default in the Dev environment.
-The last set of jobs, `build and deploy <ENV>`, can be used after a successful deployment to Dev to promote and deploy the same version to another environment.
+The last set of jobs, `build and deploy <ENV>`, can be used after a successful deployment to the Dev environment
+to promote and deploy the same version to another environment.
 
 Any commits to the default branch are handled as follows:
 
