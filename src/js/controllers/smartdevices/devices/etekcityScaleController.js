@@ -208,15 +208,8 @@
                 await ble.withPromises.write(device_id, SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
             } else if (packetType === 0x14) {
                 addDebugMessage('Device responded with unknown packet type')
-                // send response with timestamp with current time instead of hard-coded timestamp
-                // in seconds
-                const Y2K_START = 946684800;
-                // time is returned in milliseconds
-                let timestamp = (Date.now() / 1000) - Y2K_START
-                // TODO: currently a hard-coded time, use the actual timestamp
-                // Python equivalent to: struct.pack("<I", int(timestamp))
-                // see: https://github.com/banksy-git/etekcity_scale/blob/master/etekcity_scale/packet.py#L50
-                let response = new Uint8Array([0x20, 8, 0x15, 65, 239, 255, 42, 150]);
+                
+                let response = mergeArraysWithChecksum([0x20, 8, 0x15], dateToBytes());
                 addDebugMessage(`Sending response: ${toHexString(response)}`);
 
                 await ble.withPromises.write(device_id, SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
@@ -283,6 +276,33 @@
             });
 
             return hexString;
+        }
+
+        function dateToBytes() {
+            // send response with timestamp with current time instead of hard-coded timestamp
+            // in seconds
+            const struct = require('python-struct');
+
+            const Y2K_START = 946684800;
+            // time is returned in milliseconds
+            let timestamp = (Date.now() / 1000) - Y2K_START;
+
+            // Python equivalent to: struct.pack("<I", int(timestamp))
+            // see: https://github.com/banksy-git/etekcity_scale/blob/master/etekcity_scale/packet.py#L50
+            return struct.pack('<I', parseInt(timestamp));
+        }
+
+        function mergeArraysWithChecksum(array1, array2) {
+            // sum of individual array lengths plus an element for the checksum
+            length = array1.length + array2.length;
+            let mergedArray = new Uint8Array(length + 1);
+            mergedArray.set(array1);
+            mergedArray.set(array2, array1.length);
+
+            let checksum = mergedArray.reduce((partialSum, value) => partialSum + value, 0) & 0xFF;
+            mergedArray.set([checksum], length);
+
+            return mergedArray;
         }
     }
 })();
