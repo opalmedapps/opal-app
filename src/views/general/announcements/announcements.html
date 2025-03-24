@@ -15,7 +15,7 @@
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span ng-class="[fontSizeTitle, {'item-title': announcement.ReadStatus==='0'}, {'item-desc': announcement.ReadStatus!=='0'}]">{{announcement.Title}}</span>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{announcement.Title}}</span>
                         </header>
                     </ons-col>
                 </ons-row>

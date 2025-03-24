@@ -19,7 +19,9 @@
                     </ons-col>
                     <ons-col style="word-wrap: break-word;">
                         <div style="line-height:1;padding:5px;" >
-                            <span ng-class="[fontSizeTitle, {'item-title': doc.ReadStatus==='0'}, {'item-desc': doc.ReadStatus!=='0'}]"> <strong>{{doc.Title}}</strong></span> <br>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': doc.ReadStatus!=='0'}]">
+                                {{doc.Title}}<br>
+                            </span>
                             <span class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{doc.CreatedTimeStamp|date:'shortTime'}}</span>
                         </div>
                     </ons-col>

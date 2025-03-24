@@ -42,10 +42,10 @@
                         <!-- Bold is when class="item-title" -->
                         <!-- Non-Bold is when class="item-desc" -->
                         <header>
-                            <span ng-class="[fontSizeTitle, {'item-title': notification.ReadStatus==='0'}, {'item-desc': notification.ReadStatus!=='0'}]">{{notification.Title}}</span>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.Title}}</span>
                         </header>
 
-                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc}}</p>
+                        <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.Desc}}</p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
