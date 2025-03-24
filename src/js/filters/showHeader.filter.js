@@ -8,6 +8,9 @@
     /**
      * @description Filter that evaluates if a date header should be rendered in a list view.
      * @author David Gagne
+     * @param {array} sourceArray Array from where values to be compared are coming from.
+     * @param {int} index Index of the current value to be evaluated.
+     * @param {String} sortBy Name of the key used to compare two values from the sourceArray.
      * @date 2021-12-14
      */
     function ShowHeader() {
