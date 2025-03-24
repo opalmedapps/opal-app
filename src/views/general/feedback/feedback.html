@@ -21,7 +21,9 @@
     </ons-row>
     <ons-row ng-show="!feedback.submitted" style="width: 90%; margin: 10px 5% 0% 5%">
         <ons-button class="shadow-2" ng-class="fontSizeTitle" style="width: 100%; text-align: center; background-color: #4CAF50; margin-bottom: 5%"
-                    ng-click="feedback.submitFeedback(feedback.feedbackType)" ng-disabled="feedback.submitted||!feedback.enableSend">{{"SEND"|translate}}</ons-button>
+                    ng-click="feedback.submitFeedback(feedback.feedbackType)" ng-disabled="feedback.submitted||!feedback.enableSend||feedback.isSubmitting">{{"SEND"|translate}}
+                    <ons-icon icon="ion-load-d" spin="true" ng-show="feedback.isSubmitting"></ons-icon>
+        </ons-button>
     </ons-row>
     <div ng-cloak ng-show="feedback.submitted" class="shadow-2" style="width: 90%; margin: 10px 5%; height: 50vh; background-color: white;">
         <ons-row style="width: 90%; margin: 10px 5%;">
