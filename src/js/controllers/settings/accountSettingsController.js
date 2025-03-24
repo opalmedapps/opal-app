@@ -28,7 +28,6 @@
         vm.mobilePlatform = (ons.platform.isIOS() || ons.platform.isAndroid());
         vm.FirstName = Patient.getFirstName();
         vm.LastName = Patient.getLastName();
-        vm.PatientId = Patient.getPatientId();
         vm.Email = Patient.getEmail();
         vm.TelNum = Patient.getTelNum();
         vm.Language = UserPreferences.getLanguage();
@@ -92,7 +91,6 @@
             vm.mobilePlatform = (ons.platform.isIOS() || ons.platform.isAndroid());
             vm.FirstName = Patient.getFirstName();
             vm.LastName = Patient.getLastName();
-            vm.PatientId = Patient.getPatientId();
             vm.Email = Patient.getEmail();
             vm.TelNum = Patient.getTelNum();
             vm.Language = UserPreferences.getLanguage();

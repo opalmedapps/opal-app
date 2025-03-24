@@ -66,7 +66,7 @@
                 <!-- PAGE CONTENT -->
                 <div ng-attr-id="{{$index + 'sub'}}" style="height: 100%;width: auto;overflow: auto; ">
                     <div class="container" style="background-color:white;"  ng-show="section.Content" >
-                        <div ng-bind-html="section.Content | toTrusted" ng-class="fontSizeDesc"></div>
+                        <div ng-bind-html="section.Content | trustHTML" ng-class="fontSizeDesc"></div>
                     </div>
                 </div>
             </ons-page>

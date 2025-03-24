@@ -82,7 +82,7 @@
                                                 {{"QUESTIONNAIRE_DESCRIPTION"|translate}}
                                             </span>
                                         </b>
-                                        <span ng-bind-html="vm.questionnaire.description"></span>
+                                        <span ng-bind-html="vm.questionnaire.description | trustHTML"></span>
                                     </p>
                                     <p ng-if="vm.hasInstruction" style="margin-top:2vh; margin-bottom:2vh"
                                        ng-class="fontSizeDesc">
@@ -91,7 +91,7 @@
                                                 {{"QUESTIONNAIRE_INSTRUCTION"|translate}}
                                             </span>
                                         </b>
-                                        <span ng-bind-html="vm.questionnaire.instruction"></span>
+                                        <span ng-bind-html="vm.questionnaire.instruction | trustHTML"></span>
                                     </p>
                                 </div>
                             </div>
@@ -160,7 +160,7 @@
                                                     {{"QUESTIONNAIRE_SECTION_INSTRUCTION"|translate}}
                                                 </span>
                                     </b>
-                                    <span ng-bind-html="item.instruction"></span>
+                                    <span ng-bind-html="item.instruction | trustHTML"></span>
                                 </p>
                             </div>
                         </div>
@@ -200,7 +200,7 @@
                     <div style="height:93%; position: relative">
                         <!-- QUESTION -->
                         <div class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
-                            <h4 ng-class="fontSizeDesc" ng-bind-html="item.data.question_text">
+                            <h4 ng-class="fontSizeDesc" ng-bind-html="item.data.question_text | trustHTML">
                             </h4>
                         </div>
 

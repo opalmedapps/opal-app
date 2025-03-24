@@ -23,21 +23,22 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences',
+    AboutController.$inject = ['UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences',
         'Browser', 'DynamicContent'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser,
+    function AboutController(UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser,
                              DynamicContent) {
         const vm = this;
+        var navigator = null;
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
+        vm.openTour = openTour;
         vm.openCedars = openCedars;
         vm.allowedModules = {};
 
         let parameters;
-        let navigatorName;
         let isBeforeLogin = true;
 
         activate();
@@ -47,7 +48,7 @@
         function activate() {
 
             parameters = NavigatorParameters.getParameters();
-            navigatorName = parameters.Navigator;
+            navigator = NavigatorParameters.getNavigator();
 
             /**
              * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
@@ -81,12 +82,16 @@
          *
          * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
          */
+        function openTour() {
+            navigator.pushPage('views/home/tour/tour.html');
+        }
+
         function openTeam() {
-            window[navigatorName].pushPage('views/templates/content.html', {contentType: 'hig'});
+            navigator.pushPage('views/templates/content.html', {contentType: 'hig'});
         }
 
         function openCedars() {
-            window[navigatorName].pushPage('views/home/about/cedars.html');
+            navigator.pushPage('views/home/about/cedars.html');
         }
     }
 })();

@@ -15,7 +15,6 @@
     {
         var vm = this;
 
-        vm.PatientId ='';
         vm.FirstName = '';
         vm.LastName = '';
         vm.ProfileImage = null;
@@ -86,9 +85,9 @@
             });
 
             // Initialize the page data if online
-            if(NetworkStatus.isOnline()){
+            if (NetworkStatus.isOnline()) {
                 homePageInit();
-            }else if(Patient.getPatientId()){
+            } else {
                 //Basic patient information that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
                 setPatientInfo();
             }
@@ -154,7 +153,6 @@
          */
         function setPatientInfo(){
             //Basic patient information
-            vm.PatientId = Patient.getPatientId();
             vm.FirstName = Patient.getFirstName();
             vm.LastName = Patient.getLastName();
             vm.ProfileImage=Patient.getProfileImage();

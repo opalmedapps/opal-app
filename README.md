@@ -31,7 +31,7 @@ The following is the top level anatomy of the folders and their description. As 
 .
 ├── CHANGES # Description of changes per version
 ├── README.md
-├── .github # Contains templates for Github issues
+├── .gitlab # Contains templates used in GitLab
 ├── deploy.sh # CI set of instructions for given a commit
 ├── env # Folder where the environment specific files live
     ├── preprod
@@ -50,11 +50,15 @@ The following is the top level anatomy of the folders and their description. As 
 ├── res # Contains app splash and icon images
 ├── src # This is where your source code lives
 ├── www  # The build/distribution folder, source code gets compiled into this directory
-├── versioning.md # Contains guidelines followed for versioning
 └── webpack.config.js # Webpack configuration file
 ```
 
-In Opal we have three main branches: `staging`, `preprod`, and `prod`. In terms of development, our main development branch is `staging`. This branch serves as base for developers to develop new code. Once a set of features has been merged and tested in `staging` by the developers, the `staging` code is merged into  `preprod`. The `preprod` version of the app evaluated by clinicians and medical staff. Once that version is ready, a new release of the app is made by merging into the `prod` branch. For more information about versioning please read [Opal versioning guidelines](./versioning.md)
+In Opal, we have three main environments: `staging`, `preprod`, and `prod`. In terms of development, our main development branch is `staging`. 
+This branch serves as a base for developers to write new code. Once a set of features has been merged and tested in `staging`, 
+the `staging` code is merged into `preprod`. The `preprod` version of the app is then tested as well.
+Once that version is ready, a new release of the app is made by merging into the `master` branch. 
+For more information about versioning, please read [Versioning](https://github.com/Sable/qplus/wiki/Versioning).
+
 ### Installing, building and serving web code
 
 1. Clone the repository to the desired folder in your computer (create a dedicated folder for this). **(NOTE: If you have a permission error, please ask to be added as a contributor to the Github project before being able to do this)**

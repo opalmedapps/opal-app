@@ -2,7 +2,7 @@
 <ons-page ng-controller="IndividualMaterialController as edu">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center">{{edu.edumaterial.Type}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{edu.edumaterial.Type}}</div>
         <div class="right" ng-show="edu.isShareable()">
             <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial">
                 <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
@@ -145,8 +145,8 @@
 
             <!-- Contents -->
             <ons-list-item class="item">
-                <div class="container" style="background-color:white;overflow-y:scroll" ng-style="{height:edu.heightSection}" ng-show="edu.edumaterial.Content">
-                    <div ng-bind-html="edu.edumaterial.Content" ng-class="fontSizeDesc"></div>
+                <div class="container" style="background-color:white; overflow-y:scroll" ng-style="{height:edu.heightSection}" ng-show="edu.edumaterial.Content">
+                    <div ng-bind-html="edu.edumaterial.Content | trustHTML" ng-class="fontSizeDesc"></div>
                 </div>
             </ons-list-item>
         </ons-list>
