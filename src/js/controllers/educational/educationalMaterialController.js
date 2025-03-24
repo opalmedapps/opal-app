@@ -104,10 +104,6 @@
          *       Needed since navigator does not automatically update when switching to education tab.
          */
         function configureNavigator(){
-            // Set navigator to educationNavigator when in clinical educational material
-            if(vm.eduCategory === 'clinical'){
-                NavigatorParameters.setNavigator(educationNavigator);
-            }
             navigator = NavigatorParameters.getNavigator();
         }
 
