@@ -25,6 +25,10 @@
                 CHART: {
                     method: 'get',
                     url: '/api/app/chart',
+                },
+                GENERAL: {
+                    method: 'get',
+                    url: '/api/app/general'
                 }
             }
         });
