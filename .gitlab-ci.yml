@@ -114,11 +114,10 @@ build web:
   extends: .build
   script:
     - npm run build:web --env=$ENV
-    - zip -r -X opal-$ENV-www.zip www
   artifacts:
     expire_in: 1 day
     paths:
-      - opal-$ENV-www.zip
+      - www
 
 # Extended job for deploying the app; deploys to Firebase automatically based on release tags
 #   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the pipeline variables
@@ -154,6 +153,32 @@ deploy ios to firebase:
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build ios
+
+deploy web app to development:
+  stage: deploy
+  environment: development
+  image: alpine:3.19
+  needs:
+    - build web
+  script:
+    - apk add --no-cache lftp
+    - lftp --version
+    - echo "listing working directory..."
+    - ls -la
+    - echo "transferring files and listing remote directory..."
+    # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
+    - >
+      lftp -e "
+        set cmd:fail-exit yes; 
+        open $FTP_HOST; 
+        user $FTP_USER $FTP_PASSWORD; 
+        mirror --reverse --delete --parallel=20 --verbose ./static/landingpage/ ./app/${CI_ENVIRONMENT_NAME}/;
+        mirror --reverse --delete --parallel=20 --verbose ./www/ ./app/${CI_ENVIRONMENT_NAME}/app/;
+        ls -la app/${CI_ENVIRONMENT_NAME}; 
+        bye
+      "
+  # rules:
+    # - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 # Launches a downstream pipeline to build for the QA environment
 # See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
