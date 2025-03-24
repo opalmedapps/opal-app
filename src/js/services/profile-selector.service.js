@@ -7,12 +7,12 @@ import {Observer} from "../models/utility/observer";
         .module('MUHCApp')
         .service('ProfileSelector', ProfileSelector);
 
-    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'User'];
+    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'User', 'UserPreferences'];
 
     /**
      * @description Service that handle loading of a patient list for a given caregiver and selection of the profile.
      */
-    function ProfileSelector($timeout, $window, Params, RequestToServer, User) {
+    function ProfileSelector($timeout, $window, Params, RequestToServer, User, UserPreferences) {
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
@@ -37,9 +37,21 @@ import {Observer} from "../models/utility/observer";
          */
         async function init() {
             patientList = await requestPatientList();
+            observeLanguageChanges();
             await User.initUser();
             const patientSerNum = getLocalStoragePatientSerNum();
             loadPatientProfile(patientSerNum);
+        }
+
+        /**
+         * @description When the language changes, force patients list to be repopulated.
+         *
+         * @returns The list of patients related to the current user.
+         */
+        function observeLanguageChanges() {
+            UserPreferences.observeLanguage(async () => {
+                patientList = await requestPatientList();
+            });
         }
 
         /**
