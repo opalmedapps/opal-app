@@ -143,10 +143,10 @@
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"NEXTAPPOINTMENT"|translate}}</span>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"UPCOMING_APPOINTMENTS"|translate}}</span>
                         </header>
-                        <p class="item-desc" ng-class="fontSizeDesc" ng-show="Ctrl.appointmentShown.ScheduledStartTime">
-                            {{"UPCOMING"|translate}}: {{Ctrl.appointmentShown.ScheduledStartTime|date:'medium'}}
+                        <p class="item-desc" ng-class="fontSizeDesc" ng-show="Ctrl.closestAppointmentDate">
+                            {{"FOR"|translate}} {{Ctrl.closestAppointmentPatientName}}: {{Ctrl.closestAppointmentDate|date:'medium'}}
                         </p>
                     </ons-col>
                 </ons-row>

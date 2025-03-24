@@ -19,7 +19,6 @@
         vm.LastName = '';
         vm.ProfileImage = null;
         vm.language = 'EN';
-        vm.appointmentShown = null;
         vm.calledApp = null;
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
@@ -39,6 +38,10 @@
         vm.selectedHospitalToDisplay = "";
         // control the modules to display to users
         vm.allowedModules = {};
+
+        // For displaying the closest upcoming endpoint
+        vm.closestAppointmentDate = null;
+        vm.closestAppointmentPatientName = null;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.goToAppointments = goToAppointments;
@@ -111,8 +114,6 @@
             initModalSize();
             //Set patient info
             setPatientInfo();
-            //display next appointment
-            setNextAppointment();
             // display version updates info, if any
             checkForVersionUpdates();
         }
@@ -123,24 +124,27 @@
         async function getDisplayData() {
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
-                const checkinState = await CheckInService.evaluateCheckinState(result.data.daily_appointments);
+                const checkinState = await CheckInService.evaluateCheckinState(result?.data?.daily_appointments);
                 $timeout(() => {
-                    vm.notificationsUnreadNumber = result.data.unread_notification_count;
+                    vm.notificationsUnreadNumber = result?.data?.unread_notification_count;
                     vm.checkinState = checkinState;
+                    vm.closestAppointmentDate = result?.data?.closest_appointment?.date_time;
+                    let patient_owner_legacy_id = result?.data?.closest_appointment?.patient_owner_legacy_id;
+                    if (User.getLoggedinUserProfile().patient_legacy_id === patient_owner_legacy_id) {
+                        vm.closestAppointmentPatientName = $filter('translate')("YOU");
+                    }
+                    else {
+                        let confirmedProfiles = ProfileSelector.getConfirmedProfiles();
+                        let patient = confirmedProfiles.find(
+                            patient_profile => patient_profile.patient_legacy_id === patient_owner_legacy_id
+                        );
+                        vm.closestAppointmentPatientName = patient ? patient.first_name : "";
+                    }
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
                 console.error(error);
             }
-        }
-
-        /**
-         * @name setNextAppointment
-         * @desc if appointments exist for the user, display the next upcoming appointment
-         */
-        function setNextAppointment() {
-            //Next appointment information
-            if(Appointments.appointmentsExist() && Appointments.nextAppointmentExists()) vm.appointmentShown=Appointments.getUpcomingAppointment();
         }
 
         /**

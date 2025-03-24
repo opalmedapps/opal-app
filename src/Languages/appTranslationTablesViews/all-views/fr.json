@@ -92,6 +92,7 @@
     "FIELD_UPDATED": "Le champ a été mis à jour",
     "FIND_DOCTOR": "Accès à un médecin de famille",
     "FONTSIZE": "Taille de la police",
+    "FOR": "Pour",
     "FUTURE": "Rendez-vous à venir",
     "GENERAL": "Général",
     "GENERALANNOUNCEMENTS": "Annonces générales",
@@ -158,7 +159,6 @@
     "MYCHART_DESCRIPTION": "L'onglet Dossier contient toutes les données éléctroniques concernant votre santé.",
     "NAME": "Nom",
     "NEWPASSWORD": "Créez un mot de passe",
-    "NEXTAPPOINTMENT": "Mes rendez-vous",
     "NO": "Non",
     "NOAPPOINTMENTS": "Aucun rendez-vous",
     "NOAPPOINTMENTINFO": "Aucune information concernant ce rendez-vous n'est disponible pour le moment.",
@@ -336,7 +336,7 @@
     "Tumor markers": "Marqueurs tumoraux",
     "UNABLE_TO_SHARE_DOCUMENT": "Impossible de partager le document",
     "UNATTENDED": "Ne laissez pas votre appareil sans surveillance.",
-    "UPCOMING": "À venir ",
+    "UPCOMING_APPOINTMENTS": "Les rendez-vous à venir",
     "UPDATE": "Mettre à jour",
     "UPDATED_EMAIL": "Courriel mis à jour avec succès",
     "UPDATEPASSWORDBUTTON": "Mettre à jour le mot de passe",
@@ -345,5 +345,6 @@
     "WAITING_ROOM": "Salle d'attente:",
     "WARNING": "Attention",
     "YES": "Oui",
+    "YOU": "vous",
     "VIDEO": "Vidéo"
 }
