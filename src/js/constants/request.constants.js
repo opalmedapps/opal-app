@@ -24,6 +24,7 @@
              * TODO Add checkin requests, and adapt them to use TargetPatientID
              */
             PATIENT_TARGETED_REQUESTS: [
+                'Checkin',
                 'DocumentContent',
                 'GetOneItem',
                 'PatientTestDateResults',
