@@ -510,21 +510,6 @@
         }
 
         /**
-         * @desc Deletes all "in progress" questionnaires that are locked by another user.
-         *       "New" questionnaires are not checked because they are all unlocked by definition.
-         *       "Completed" questionnaires are not checked because users are allowed to see questionnaires completed
-         *       by other users, as long as they have access to the right patient.
-         */
-        function deleteQuestionnairesLockedByOthers() {
-            for (const [qp_ser_num, questionnaire] of Object.entries(inProgressQuestionnaires)) {
-                const respondent = questionnaire.respondent_username;
-                if (respondent && respondent !== '' && respondent !== UserAuthorizationInfo.getUsername()) {
-                    delete inProgressQuestionnaires[qp_ser_num];
-                }
-            }
-        }
-
-        /**
          * @name clearAllQuestionnaire
          * @desc this function re-initiate all the questionnaires related variables. Also used in cleanUpService.js
          */
