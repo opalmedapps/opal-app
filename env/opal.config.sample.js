@@ -14,7 +14,7 @@ const config = {
         showVersionOnInit: true,
         // Boolean: whether to use a sourcemap when building the web code. Should be false in production.
         useSourceMap: true,
-        // String: the mode to use when building with WebPack: [production, development].
+        // String: the mode to use when building with Webpack: [production, development].
         webpackMode: 'development',
     },
     // Block of Firebase web configurations, with contents pasted from the Firebase Console

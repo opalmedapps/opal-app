@@ -269,8 +269,7 @@ class OpalEnv {
 	}
 
 	/**
-	 * @description Reads and returns the contents of opal.config.js (a JSON object).
-	 *              Contract: Assumes the file exists in the current directory.
+	 * @description Reads and returns the contents of opal.config.js from the current directory (a JSON object).
 	 * @author Stacey Beard
 	 * @date 2022-03-23
 	 * @returns {object} The JSON object provided in the file.
