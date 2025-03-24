@@ -30,14 +30,8 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
 
     // Title mapping depending on educational material category
     const CATEGORY_TITLE_MAP = {
-        clinical: 'EDUCATION',
-        research: 'REFERENCE_MATERIAL',
-    };
-
-    // No material message mapping depending on educational material category
-    const CATEGORY_EMPTY_MAP = {
-        clinical: 'NOEDUCATIONALMATERIAL',
-        research: 'REFERENCE_MATERIAL_NONE',
+        clinical: 'EDUCATION_SHORT',
+        research: 'RESEARCH_REFERENCE_SHORT',
     };
 
     /**
@@ -129,19 +123,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             }
         }
     }
-    // Returns educational material object matching that EducationalMaterialSerNum parameter
-    // is returned as a service function in return{} section: getEducationaMaterialBySerNum
-    function getEducationalMaterialByControlSerNum(cserNum)
-    {
 
-
-        for (var i = 0; i < educationalMaterialArray.length; i++) {
-            if(educationalMaterialArray[i].EducationalMaterialControlSerNum==cserNum)
-            {
-                return angular.copy(educationalMaterialArray[i]);
-            }
-        }
-    }
     //Formats the input dates and gets it ready for controllers, updates announcementsArray
     function addEducationalMaterial(edumaterial)
     {
@@ -482,19 +464,5 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         {
             return $filter('translate')(CATEGORY_TITLE_MAP[eduCategory]);
         },
-        /**
-         *@ngdoc method
-         *@name getEducationalMaterialEmptyMessage
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
-         *@description Gets translated message to display when no education material is available for the given category.
-         *@returns {String} The translated message when no material is available for the education views
-         **/
-        getEducationalMaterialEmptyMessage:function(eduCategory='clinical')
-        {
-            return $filter('translate')(CATEGORY_EMPTY_MAP[eduCategory]);
-        }
     };
-
-
 }]);

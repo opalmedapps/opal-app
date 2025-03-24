@@ -174,7 +174,8 @@ For more information about versioning, please read [Versioning](https://gitlab.c
     ```plain
     email: marge@opalmedapps.ca
     password: 12345Opal!!
-    hospital: McGill University Health Centre (MUHC)
+    hospital(French): Établissement médical Opal (ÉMO)
+    hospital(English): Opal Medical Institution (OMI)
     security answer (depending on the question): red, superman, meg
     ```
 

@@ -45,7 +45,6 @@
         // Variables to store the current category of material (clinical or research) and corresponding page title
         vm.eduCategory = '';
         vm.pageTitle = '';
-        vm.noMaterialMessage = '';
 
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
@@ -91,7 +90,6 @@
 
             // Set corresponding page title and no material message
             vm.pageTitle = EducationalMaterial.getEducationalMaterialTitle(vm.eduCategory);
-            vm.noMaterialMessage = EducationalMaterial.getEducationalMaterialEmptyMessage(vm.eduCategory);
         }
 
         /**
