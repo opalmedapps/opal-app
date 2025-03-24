@@ -45,9 +45,6 @@
             // remove the saved authorized user info from session storage
             $window.sessionStorage.removeItem('UserAuthorizationInfo');
 
-            // wipe all data
-            CleanUp.clear();
-
             if (!safeDevice || !UserAuthorizationInfo.getTrusted()) {
                 // device becomes untrusted
                 localStorage.removeItem("deviceID");
@@ -67,6 +64,9 @@
                     );
                 }
             }
+
+            // wipe all data
+            CleanUp.clear();
 
             // take user to init page
             $state.go('init').then(() => {
