@@ -70,9 +70,10 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                 .then(function(response){
                     $timeout(function(){
                         let securityQuestionList = response.data.securityQuestionList || [];
+                        let activeSecurityQuestions = response.data.activeSecurityQuestions || [];
                         
                         vm.activeSecurityQuestionList =
-                            securityQuestionList.map((securityQuestion) => new SecurityQuestion(securityQuestion));
+                            activeSecurityQuestions.map((securityQuestion) => new SecurityQuestion(securityQuestion));
                         vm.securityQuestionWithAnsList =
                             securityQuestionList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer));
                         vm.loadingList = false;
@@ -92,7 +93,6 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          */
         function evaluateSubmission() {
 
-            let allQuestionActive = true;
             let allQuestionAnswered = true;
             let haveAQuestionAnswerModified = false;
 
@@ -112,15 +112,10 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                     allQuestionAnswered = false;
                     break;
                 }
-
-                if (!answerQuestionObj.question.active){
-                    allQuestionActive = false;
-                    break;
-                }
             }
 
             vm.submitDisabled = !(vm.passwordChanged && vm.password.length > 0 &&
-                allQuestionActive && allQuestionAnswered && haveAQuestionAnswerModified);
+                allQuestionAnswered && haveAQuestionAnswerModified);
         }
 
         /**
@@ -130,7 +125,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @returns {string} the text of that question in the language of the app
          */
         function displayQuestionName(question){
-            return question[`question`];
+            return question[`questionText_${lang}`];
         }
 
         /**
@@ -158,9 +153,9 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @returns {boolean}
          */
         function filterQuestionList(question){
-            return question.securityQuestionSerNum !== vm.securityQuestionWithAnsList[0].question.securityQuestionSerNum &&
-                question.securityQuestionSerNum !== vm.securityQuestionWithAnsList[1].question.securityQuestionSerNum &&
-                question.securityQuestionSerNum !== vm.securityQuestionWithAnsList[2].question.securityQuestionSerNum;
+            return question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[0].question[`questionText_${lang}`] &&
+                question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[1].question[`questionText_${lang}`] &&
+                question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[2].question[`questionText_${lang}`];
         }
 
         /**
@@ -287,8 +282,8 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
                 // answer is hashed in the objects of this array
                 arrToBeSent.push({
-                    question: answerQuestionObj.question.question,
-                    questionId: answerQuestionObj.question.securityQuestionSerNum,
+                    question: answerQuestionObj.question[`questionText_${lang}`],
+                    questionId: answerQuestionObj.securityAnswerSerNum,
                     answer: EncryptionService.hash(answerQuestionObj.answer.toUpperCase()),
                 });
 

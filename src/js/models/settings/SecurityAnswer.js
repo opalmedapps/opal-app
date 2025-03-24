@@ -5,8 +5,10 @@ import {SecurityQuestion} from "./SecurityQuestion";
  */
 export class SecurityAnswer {
     constructor({id, question}) {
+        let title_en = question;
+        let title_fr = question;
         this.securityAnswerSerNum = Number(id);
-        this.question = new SecurityQuestion({id, question});
+        this.question = new SecurityQuestion({title_en, title_fr});
         this.answer = "";
         this.answerHasChanged = false;
         this.questionHasChanged = false;
