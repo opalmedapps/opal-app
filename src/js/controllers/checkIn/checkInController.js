@@ -55,6 +55,7 @@
 
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
+        vm.CheckInAppointments = CheckInAppointments;
 
         activate();
 
