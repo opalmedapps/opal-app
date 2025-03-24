@@ -22,14 +22,16 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'Toast', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
+        'UserPreferences', 'Toast', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService',
+        '$rootScope', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, Toast, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers,
+                             UserPreferences, Toast, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService,
+                             $rootScope, Params, UserHospitalPreferences) {
 
         var vm = this;
 
-        var patientSerNum = "";
         var sameUser = false;
         var savedEmail;
 
@@ -102,8 +104,6 @@
             //Obtain email from localStorage and show that email
             savedEmail = $window.localStorage.getItem('Email');
             if(savedEmail) vm.email = savedEmail;
-
-            patientSerNum = Patient.getPatientSerNum();
 
             // Switch for trusting device
             $timeout(function(){
@@ -366,7 +366,7 @@
                 var myAuth = firebase.auth().currentUser;
 
                 //If the user information is still on the phone, they are logged in, and were active in the past 10 minutes.. then skip the logging in and loading process entirely.
-                if(myAuth && patientSerNum && stillActive && authDetails.Email === vm.email && vm.trusted){
+                if (myAuth && stillActive && authDetails.Email === vm.email && vm.trusted) {
                     firebase.auth().signInWithEmailAndPassword(vm.email, vm.password)
                         .then(function () {
                             localStorage.removeItem('locked');

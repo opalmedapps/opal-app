@@ -16,12 +16,12 @@
         .factory('CleanUp', CleanUp);
 
     CleanUp.$inject = ['UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
-        'Appointments', 'Patient', 'TxTeamMessages', 'Questionnaires',
+        'Appointments', 'TxTeamMessages', 'Questionnaires',
         'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
         'UpdateUI', 'PatientTestResults', 'CheckInService'];
 
     function CleanUp(UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
-                     Appointments, Patient, TxTeamMessages, Questionnaires,
+                     Appointments, TxTeamMessages, Questionnaires,
                      Announcements, EducationalMaterial, Notifications, UserPreferences,
                      UpdateUI, PatientTestResults, CheckInService) {
         let service = {
@@ -39,7 +39,6 @@
             Documents.deleteDocumentsDownloaded(); // delete documents downloaded to be shared or viewed on Android (open in external viewer option)
             Diagnoses.clearDiagnoses();
             Appointments.clearAppointments();
-            Patient.clearPatient();
             TxTeamMessages.clearTxTeamMessages();
             Questionnaires.clearAllQuestionnaire();
             Announcements.clearAnnouncements();

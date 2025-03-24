@@ -13,13 +13,13 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['NavigatorParameters', 'Patient', 'NetworkStatus', '$timeout', 'UserPreferences',
+    PersonalTabController.$inject = ['NavigatorParameters', 'ProfileSelector', 'NetworkStatus', '$timeout', 'UserPreferences',
         'UserHospitalPreferences', 'RequestToServer', 'Params'];
 
-    function PersonalTabController(NavigatorParameters, Patient, NetworkStatus, $timeout, UserPreferences,
+    function PersonalTabController(NavigatorParameters, ProfileSelector, NetworkStatus, $timeout, UserPreferences,
         UserHospitalPreferences, RequestToServer, Params) {
         let vm = this;
-        let setAccessLevel = () => vm.accessLevelAll = Patient.getAccessLevel() === "ALL";
+        let setAccessLevel = () => vm.accessLevelAll = ProfileSelector.getAccessLevel() === "ALL";
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
@@ -69,7 +69,7 @@
          */
         async function getDisplayData() {
             try {
-                const patientSernum = Patient.getPatientSerNum();
+                const patientSernum = ProfileSelector.getPatientSerNum();
                 const requestConfig = Params.API.ROUTES.CHART
                 const result = await RequestToServer.apiRequest({
                     ...requestConfig,

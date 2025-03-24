@@ -20,7 +20,6 @@
 
         async function getCaregiversList() {
             try {
-                // TODO test
                 const selfPatientSerNum = User.getSelfPatientSerNum();
                 // Special case: if the user doesn't have a self relationship, then this user has no caregivers
                 if (!selfPatientSerNum) {

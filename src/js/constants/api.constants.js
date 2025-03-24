@@ -47,7 +47,7 @@
                 },
                 USER: {
                     method: 'get',
-                    url: '/api/caregivers/<USERNAME>/',
+                    url: '/api/caregivers/profile/',
                 },
                 CAREGIVERS: {
                     method: 'get',

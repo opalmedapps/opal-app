@@ -8,53 +8,45 @@
         .module('MUHCApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', '$filter', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient',
+    LoadingController.$inject = ['$state', '$filter', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences',
         'RequestToServer', 'MetaData', 'LogOutService', 'NativeNotification', 'ProfileSelector'];
 
     /* @ngInject */
-    function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient,
+    function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences,
                                RequestToServer, MetaData, LogOutService, NativeNotification, ProfileSelector) {
 
         activate();
+
         ///////////////////////////
 
-        function activate() {
+        async function activate() {
+            try {
+                let userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
+                if (!userAuthorizationInfo) $state.go('init');
 
-            var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
+                loadingmodal.show();
 
-            if (!userAuthorizationInfo) $state.go('init');
-
-            loadingmodal.show();
-
-            Patient.initPatient().then(UpdateUI.init).then(async () => {
-                RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
-
-                //fetch all the tab metadata TODO: add the fetching of all the other data
-                MetaData.init();
-
-                // Init the profile selector and load the patient list. Needs to be await to prevent profile icon from flickering at login.
+                await UserPreferences.initFontSize();
+                await UpdateUI.init();
+                await RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
+                await MetaData.init();
                 await ProfileSelector.init();
                 $state.go('Home');
+
                 loadingmodal.hide();
                 clearTimeout(timeOut);
-
-            }).catch(error => {
+            }
+            catch (error) {
                 console.error(error);
-                // If UpdateUI initialization fails, then the user cannot log in
+                // If any part of the initialization fails, then the user cannot log in
                 NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), LogOutService.logOut);
-            });
+            }
         }
 
         //Timeout to show, alerting user of server problems.
-        var timeOut = setTimeout(function(){
+        let timeOut = setTimeout(function(){
             loadingmodal.hide();
-            if(typeof Patient.getFirstName()==='undefined'||Patient.getFirstName()===''){
-                NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"), LogOutService.logOut);
-            }
-            //This means server is working, but being slow
-            else{
-                NativeNotification.showNotificationAlert($filter('translate')("LONGERTIMEALERT"), LogOutService.logOut);
-            }
+            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"), LogOutService.logOut);
         }, 90000);
     }
 })();

@@ -7,12 +7,12 @@ import {Observer} from "../models/utility/observer";
         .module('MUHCApp')
         .service('ProfileSelector', ProfileSelector);
 
-    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'Patient', 'User'];
+    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'User'];
 
     /**
      * @description Service that handle loading of a patient list for a given caregiver and selection of the profile.
      */
-    function ProfileSelector($timeout, $window, Params, RequestToServer, Patient, User) {
+    function ProfileSelector($timeout, $window, Params, RequestToServer, User) {
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
@@ -24,6 +24,11 @@ import {Observer} from "../models/utility/observer";
             getActiveProfile: () => currentSelectedProfile,
             getConfirmedProfiles: getConfirmedProfiles,
             clearProfile: clearProfile,
+
+            // Functions to get info from the current profile
+            getFirstName: () => currentSelectedProfile?.first_name,
+            getPatientSerNum: () => currentSelectedProfile?.patient_legacy_id,
+            getAccessLevel: () => currentSelectedProfile?.data_access,
         }
 
         /**
@@ -66,7 +71,6 @@ import {Observer} from "../models/utility/observer";
             currentSelectedProfile = getConfirmedProfiles().find((item) => item.patient_legacy_id == requestedPatientSerNum)
                 || getConfirmedProfiles()[0];
 
-            Patient.setSelectedProfile(currentSelectedProfile);
             $window.localStorage.setItem('profileId', currentSelectedProfile.patient_legacy_id);
             $timeout(() => {
                 profileObserver.notify();

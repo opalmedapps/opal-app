@@ -12,10 +12,10 @@
         .module('MUHCApp')
         .controller('IndividualTxTeamMessageController', IndividualTxTeamMessageController);
 
-    IndividualTxTeamMessageController.$inject = ['TxTeamMessages', 'NavigatorParameters', 'Patient', '$timeout'];
+    IndividualTxTeamMessageController.$inject = ['TxTeamMessages', 'NavigatorParameters', 'ProfileSelector', '$timeout'];
 
     /* @ngInject */
-    function IndividualTxTeamMessageController(TxTeamMessages, NavigatorParameters, Patient, $timeout) {
+    function IndividualTxTeamMessageController(TxTeamMessages, NavigatorParameters, ProfileSelector, $timeout) {
         var vm = this;
 
         activate();
@@ -27,10 +27,7 @@
 
             $timeout(function(){
                 vm.message = TxTeamMessages.setLanguageTxTeamMessages(parameters.Post);
-                vm.FirstName = Patient.getFirstName();
-
-
-                // console.log(parameters.Post);
+                vm.FirstName = ProfileSelector.getFirstName();
             });
         }
     }

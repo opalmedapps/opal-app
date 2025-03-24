@@ -147,7 +147,6 @@
   "REENTER_PASSWORD": "Re-enter new password",
   "SERVERERRORALERT": "Server problem: could not fetch data, try again later",
   "TAP_TO_SELECT_HOSPITAL": "Tap to select",
-  "LONGERTIMEALERT": "Request is taking longer than usual...please try again later..",
   "WHATSNEW": "What's New"
 }
 

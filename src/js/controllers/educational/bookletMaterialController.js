@@ -29,12 +29,12 @@
         .controller('BookletMaterialController', BookletMaterialController);
 
     BookletMaterialController.$inject = ['$http', '$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter',
-        'EducationalMaterial', 'Patient', 'Logger', 'Params'];
+        'EducationalMaterial', 'Logger', 'Params'];
 
 
     /* @ngInject */
     function BookletMaterialController($http, $scope, $timeout, NavigatorParameters, $rootScope, $filter,
-                                       EducationalMaterial, Patient, Logger, Params) {
+                                       EducationalMaterial, Logger, Params) {
 
         var vm = this;
 
