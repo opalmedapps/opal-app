@@ -60,7 +60,7 @@
                         </p>
 
                         <p ng-if="app.CheckinPossible == 0" class="item-desc" ng-class="fontSizeDesc" style="color:#FF803E;"
-                           ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
+                           ng-bind-html="app['CheckinInstruction_' + checkIn.language] | trustHTML">
                         </p>
 
                         <p></p>
@@ -85,7 +85,7 @@
                             </span>
 
                             <span class="item-desc" ng-class="fontSizeDesc"
-                                  ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
+                                  ng-bind-html="app['CheckinInstruction_' + checkIn.language] | trustHTML">
                             </span>
                         </div>
 
