@@ -157,13 +157,10 @@ build android:
     - gradle -v
     - npm run build:app:android:device --env=$ENV
     - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-$ENV.apk"
-    - ls -la "./platforms/android/app/build/outputs"
-    - ls -la "./platforms/android/app/build/"
   artifacts:
     expire_in: 1 day
     paths:
       - opal-$ENV.apk
-      - platforms/android
 
 # Builds and signs the app for Android with 'release' settings
 build android release (apk):
@@ -225,7 +222,6 @@ build ios:
     expire_in: 1 day
     paths:
       - opal-$ENV.ipa
-      - platforms/ios
 
 # Builds the web version of the app
 build web:
