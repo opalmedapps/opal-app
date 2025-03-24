@@ -153,3 +153,9 @@
 .question-not-answered {
 	background-color: #d9534f;
 }
+
+.button--questionnaire-back-to-list {
+	line-height: 1.5;
+	width: 80%;
+	white-space: initial;
+}
