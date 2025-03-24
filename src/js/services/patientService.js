@@ -63,7 +63,6 @@ angular
         async function initPatient() {
             let RequestToServer = $injector.get('RequestToServer');
             let result = await RequestToServer.sendRequestWithResponse('UserPatient');
-            result.Data = [];
             if (!result.Data || result.Data === "empty") throw new Error("Failed to download the user's patient information; no data was returned");
             return setPatient(result.Data);
         }
