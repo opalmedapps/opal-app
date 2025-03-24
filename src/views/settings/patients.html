@@ -6,6 +6,11 @@
             </ons-toolbar-button>
         </right-content> 
     </generic-toolbar>
+
+
+    <div ng-show="Ctrl.error" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="{{Ctrl.alert.type}}">{{Ctrl.alert.message|translate}}</uib-alert>
+    </div>
     
     <div ng-if="Ctrl.message" class="container" align="center">
         <p style="margin-top:25vh;color:grey">{{Ctrl.message|translate}}</p>

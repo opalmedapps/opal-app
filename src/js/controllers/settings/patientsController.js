@@ -18,6 +18,11 @@
         vm.getInitials = getInitials;
         vm.getIconColor = getIconColor;
 
+        vm.alert = {
+            type: Params.alertTypeDanger,
+            message: "RELATIONSHIPS_ERROR",
+        };
+
         activate();
 
         function activate() {
@@ -51,7 +56,7 @@
          */
         function handleDisplay() {
             $timeout(() => {
-                if (vm.error) return vm.message = 'RELATIONSHIPS_ERROR';
+                if (vm.error) return vm.error = true;
                 if (vm.notFound) return vm.message = 'RELATIONSHIPS_PATIENTS_NOT_FOUND';
                 vm.patients = vm.apiData;
             });
