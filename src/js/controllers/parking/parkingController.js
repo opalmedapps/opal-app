@@ -102,7 +102,6 @@
 		function handleError(response) {
 			$timeout(() => {
 				vm.loading = false;
-				console.log(response);
 				switch (response.Code) {
 					case Params.REQUEST.ENCRYPTION_ERROR:
 						vm.alert = {
