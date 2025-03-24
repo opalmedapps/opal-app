@@ -67,12 +67,12 @@
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.CHART);
                 $timeout(() => {
-                    vm.appointmentsUnreadNumber = result.data.unread_appointment_count;
-                    vm.documentsUnreadNumber = result.data.unread_document_count;
-                    vm.txTeamMessagesUnreadNumber = result.data.unread_txteammessage_count;
-                    vm.notificationsUnreadNumber = result.data.unread_notification_count;
-                    vm.questionnairesUnreadNumber = result.data.unread_questionnaire_count;
-                    vm.educationalMaterialsNumber = result.data.unread_educationalmaterial_count;
+                    vm.appointmentsUnreadNumber = result.data.unread_count.unread_appointment_count;
+                    vm.documentsUnreadNumber = result.data.unread_count.unread_document_count;
+                    vm.txTeamMessagesUnreadNumber = result.data.unread_count.unread_txteammessage_count;
+                    vm.notificationsUnreadNumber = result.data.unread_count.unread_notification_count;
+                    vm.questionnairesUnreadNumber = result.data.unread_count.unread_questionnaire_count;
+                    vm.educationalMaterialsNumber = result.data.unread_count.unread_educationalmaterial_count;
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
