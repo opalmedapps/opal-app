@@ -132,8 +132,10 @@
                 dateFirst.setHours(0,0,0,0);
                 dateFirst = dateFirst.getTime();
 
-                // reset tody's date and refresh calendar appointments' dots
+                // Reset today's date and refresh calendar appointments' dots
+                // When we click refresh circle button on the top-right corner.
                 vm.todays_date = new Date();
+                vm.todays_date.setHours(0,0,0,0);
             }
         }
 
