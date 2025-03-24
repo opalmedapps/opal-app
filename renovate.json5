@@ -9,7 +9,7 @@
     // https://docs.renovatebot.com/presets-default/#separatepatchreleases
     ":separatePatchReleases",
   ],
-  "assignees": ["staceybeard", "yickmo"],
+  "assignees": ["staceybeard", "yickmo", "anton.gladyr"],
   "labels": ["dependencies"],
   "separateMinorPatch": true,
   "ignoreDeps": [
