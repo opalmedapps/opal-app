@@ -11,6 +11,7 @@
     background: rgba(0,0,0,0.0);
     padding: 0px;
     height: 85%;
+    width: 93%;
     overflow: scroll !important;
     position: absolute;
 }
