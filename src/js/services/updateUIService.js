@@ -199,7 +199,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     r.resolve(true);
                 });
             }).catch(function(error) {
-                console.log(error);
+                console.error(error);
                 if(error.Code !== '3')
                 {
                     NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));

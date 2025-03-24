@@ -119,6 +119,7 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
         {
           showCustomBanner(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue);
         }
+        else console.log("Toast message:\n" + messageValue);
       },
         /**
 		*@ngdoc method
