@@ -1038,7 +1038,6 @@
                     console.error('Questionnaire stub failed validation; not including it.', err, questionnaire);
                 }
             });
-            deleteQuestionnairesLockedByOthers();
         }
 
         /**
