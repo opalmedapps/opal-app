@@ -104,9 +104,6 @@ const config = env => {
 					// to make it work I looked at this issue: basically it re-attaches this to window.
 					test: /onsenui.js/,
 					use: [
-						// {
-						// 	loader: 'imports-loader?this=>window!exports-loader?window.Modernizr'
-						// },
 						{
 							loader: 'imports-loader?this=>window'
 						},
