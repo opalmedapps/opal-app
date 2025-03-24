@@ -117,14 +117,6 @@
                     {size: 'large', style: 'fontDescLarge', text: 'MEDIUM'},
                     {size: 'xlarge', style: 'fontDescXlarge', text: 'LARGE'}
                 ],
-                /** Status Controller **/
-                setMap: {
-                    'CT for Radiotherapy Planning': 1,
-                    'Physician Plan Preparation': 2,
-                    'Calculation of Dose': 3,
-                    'Physics Quality Control': 4,
-                    'Scheduling Treatments': 5
-                },
 
                 /** CheckIn Service Constants **/
                 hospitalSite: {

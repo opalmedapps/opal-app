@@ -47,7 +47,6 @@
                 vm.censor = Patient.getAccessLevel() == 3;
             });
 
-            //Sets appointments and treatment plan stage tab
             if(NetworkStatus.isOnline()){
                 setBadges();
             }
