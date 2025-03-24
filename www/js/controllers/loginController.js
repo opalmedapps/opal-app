@@ -199,30 +199,32 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 });
         }
     }
-    function authenticate(authData)
+    function authenticate(firebaseUser)
     {
-        console.log(authData);
+
         //Get Firebase authentication state
-        $scope.authenticated = !!authData;
+        $scope.authenticated = !!firebaseUser;
         console.log($scope.authenticated );
         //If authenticated update the user authentication state
         if( $scope.authenticated)
         {
-            var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
-            if(authInfoLocalStorage){
-                var authInfoObject=JSON.parse(authInfoLocalStorage);
-                UserAuthorizationInfo.setUserAuthData(authData.uid, authInfoObject.Password , myAuth.$getAuth().expires,sessionToken);
-                var authenticationToLocalStorage={
-                    UserName:authData.uid,
-                    Password: authInfoObject.Password ,
-                    Expires:authData.expires,
-                    Email:authData.email,
-                    Token:authData.auth
-                };
-                window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-            }else{
-                return false;
-            }
+            firebaseUser.getToken().then(function(sessionToken){
+                var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
+                if(authInfoLocalStorage){
+                    var authInfoObject=JSON.parse(authInfoLocalStorage);
+                    UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, authInfoObject.Password , myAuth.$getAuth().expires,sessionToken);
+                    var authenticationToLocalStorage={
+                        UserName:firebaseUser.uid,
+                        Password: authInfoObject.Password ,
+                        Expires:myAuth.$getAuth().expires,
+                        Email:firebaseUser.email,
+                        Token:sessionToken
+                    };
+                    window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
+                }else{
+                    return false;
+                }
+            });
         }
         return $scope.authenticated;
     }
