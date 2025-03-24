@@ -119,7 +119,7 @@
   "LAB_DELAY_INFO_TEXT": "The delay parameters for lab results can be changed upon request. You can find a printable “Access to lab results” form in the Opal General tab or by making a request at the hospital.",
   "LAB_DELAY_DEFAULTS_HEADER": "The default delay parameters set by the institution are:",
   "LAB_DELAY_DEFAULTS_INTERPRETABLE": "Interpretable result ({ yesno, select, yes{yes} no{no} other{?} }) :",
-  "LAB_DELAY_INTERPRETABLE": "You will be able to interpret these results yourself after receiving education from your healthcare team.",
+  "LAB_DELAY_INTERPRETABLE": "Interpretable: You will be able to interpret these results yourself after receiving instruction from your healthcare team.",
   "LAB_DELAY_NONINTERPRETABLE": "Non-interpretable: These results are generally subject to interpretation by a healthcare professional and cannot be interpreted by yourself.",
   "LAB_DISCLAIMER": "Not for clinical use",
   "LAB_INFO_FLAGS": "Results outside the normal range are accompanied by (L), (H) or (C), where (L) indicates a low value, (H) indicates a high value and (C) indicates a critical value.",
