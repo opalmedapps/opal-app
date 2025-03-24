@@ -29,7 +29,7 @@ Commits on the default branch are produced as the result of approved and "squash
 These commits represent completed work that is ready for deployment to our development environment.
 Any commits to the default branch are handled as follows:
 
-- First pipeline runs on the pushed commit
+- The first pipeline runs on the pushed commit
   - Stage 1: `check`
       - `check dependencies`: The npm dependencies are installed, as a smoke test.
         The build will not proceed if dependencies cannot be installed, and a clear failing test alerts developers
@@ -51,7 +51,7 @@ Any commits to the default branch are handled as follows:
     the brand-new commit made by semantic-release. For the build to use to the newly committed version in `config.xml`,
     it must be on a new pipeline running on the latest commit, i.e. the commit created by semantic-release
     and tagged with a version number.
-- Second pipeline runs on the _tag_ created by semantic-release (which is on the new commit)
+- The second pipeline runs on the _tag_ created by semantic-release (which is on the new commit)
   - Stage 1: `build`
     - `build android`/`build ios`: The build executes automatically using the new version number in `config.xml`
       committed by semantic-release.
