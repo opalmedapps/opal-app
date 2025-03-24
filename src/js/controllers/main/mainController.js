@@ -40,7 +40,6 @@
 
             // Listen to the Firebase authentication state; if the user gets unauthenticated, log out
             Firebase.onAuthStateChanged(function (authData) {
-                console.log('Firebase auth state change', authData);
                 var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
                 if (!authData) {
                     if ($state.current.name === 'Home') {

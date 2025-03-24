@@ -23,8 +23,8 @@
 
         /**
          * @description Encrypt and send data to firebase
-         * @param {string} typeOfRequest Type of request being process
-         * @param {object} parameters Data being use to make the request
+         * @param {string} typeOfRequest Type of request being process 
+         * @param {object} parameters Data being use to make the request 
          * @param {string} encryptionKey Optional encrytion key
          * @param {string} referenceField Option refenrece field for the listener's legacy section
          * @returns Firebase unique reference key where the data is uploaded
@@ -43,7 +43,7 @@
         /**
          * @description Call the new listener structure that relays the request to Django backend
          * @param {object} parameters Required fields to process request
-         * @param {object | null} data Optional params (for get) or data (for post) that are passed in the request.
+         * @param {object | null} data Optional params (for 'get') or data (for 'post') that are passed in the request.
          * @returns Promise that contains the response data
          */
         function apiRequest(parameters, data = null) {
