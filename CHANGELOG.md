@@ -1,3 +1,31 @@
+# [1.15.0](https://gitlab.com/opalmedapps/qplus/compare/v1.14.5...v1.15.0) (2023-05-05)
+
+
+### Features
+
+* redirect to the care receiver's calendar when click on the appointment widget ([b08e523](https://gitlab.com/opalmedapps/qplus/commit/b08e5234e8e23cdaac94353392cafb0f7111a27d))
+
+## [1.14.5](https://gitlab.com/opalmedapps/qplus/compare/v1.14.4...v1.14.5) (2023-05-04)
+
+
+### Bug Fixes
+
+* remove unused Token request parameter ([08aa8a6](https://gitlab.com/opalmedapps/qplus/commit/08aa8a6cd8ebaf2f1ea94274825b99f7d8d93f29))
+
+## [1.14.4](https://gitlab.com/opalmedapps/qplus/compare/v1.14.3...v1.14.4) (2023-04-27)
+
+
+### Bug Fixes
+
+* add contact Opal support to About Opal page ([6e3965d](https://gitlab.com/opalmedapps/qplus/commit/6e3965d1ba72be1b037dd3792ce6d5ea3b20059e))
+
+## [1.14.3](https://gitlab.com/opalmedapps/qplus/compare/v1.14.2...v1.14.3) (2023-04-26)
+
+
+### Bug Fixes
+
+* fix patient name for patient service (QSCCD-1104) ([dd01858](https://gitlab.com/opalmedapps/qplus/commit/dd01858e50bd68e067ab1646ac646ea77d51efba))
+
 ## [1.14.2](https://gitlab.com/opalmedapps/qplus/compare/v1.14.1...v1.14.2) (2023-04-21)
 
 

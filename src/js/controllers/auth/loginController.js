@@ -140,7 +140,7 @@
 
 
             //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
-            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email, vm.trusted);
+            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, vm.email, vm.trusted);
 
 
             //This is for the user case where a user gets logged out automatically by the app after 5 minutes of inactivity.
@@ -150,14 +150,11 @@
             var lastActive = new Date();
             lastActive = lastActive.getTime();
 
-            var authenticationToLocalStorage={
-                UserName:firebaseUser.uid,
+            let authenticationToLocalStorage = {
+                UserName: firebaseUser.uid,
                 Email: vm.email,
-            //    Password: vm.password,
-                Token:sessionToken,
-                LastActive: lastActive
+                LastActive: lastActive,
             };
-
 
             $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
             $window.localStorage.setItem('Email', vm.email);
