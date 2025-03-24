@@ -32,6 +32,11 @@
             bindEvents();
             setPushPermissions();
 
+            /*
+                Detect jailbroken and rooted devices and prevent continuing.
+                Note that this is not a fool-proof solution and some disagree whether it should be done at all.
+                See: https://developer.apple.com/forums/thread/66363#191199022
+            */
             if (Constants.app) {
                 IRoot.isRooted(jailbreakOrRootedDevice, console.error);
             }
