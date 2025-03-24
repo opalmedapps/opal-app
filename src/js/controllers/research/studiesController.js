@@ -73,8 +73,7 @@
         }
 
         function openInfoPage() {
-            NavigatorParameters.setParameters({ Navigator: navigatorName, subView: 'studies' });
-            navigator.pushPage('views/tabs/info-page-tabs.html');
+            navigator.pushPage('views/tabs/info-page-tabs.html', {id: 'studies'});
         }
 
         async function loadStudies() {
