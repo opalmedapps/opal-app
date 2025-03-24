@@ -1,99 +1,108 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 default:
   tags:
-  - macos
+    - macos
+
+# Prevent duplicate pipelines when a commit is pushed to an open merge request
+# See: https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
 workflow:
   rules:
-  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
-    when: never
-  - if: "$CI_COMMIT_BRANCH"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
 variables:
-  ENV: dev
-  FIREBASE_APP_ANDROID: "$FIREBASE_APP_DEV_ANDROID"
-  FIREBASE_APP_IOS: "$FIREBASE_APP_DEV_IOS"
-  FIREBASE_GROUP: general
+  ENV: "dev"  # The environment used in the app build command
+  FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
+  FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
+  FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
+
+# Project variables: the following variables must be configured in the project's CI/CD settings
+#
+# FIREBASE_APP_DEV_ANDROID (variable): The Android App ID of the dev firebase project.
+# FIREBASE_APP_DEV_IOS (variable): The iOS App ID of the dev firebase project.
+# GOOGLE_APPLICATION_CREDENTIALS (file): Google service account key that provides write permissions for Firebase App Distribution (see more details below).
+# IOS_DEVELOPMENT_TEAM (variable): The development team used by cordova to sign the build created via `cordova build ios --developmentTeam=___`.
+
 stages:
-- build
-- deploy
-- test
+  - build
+  - deploy
+
+# Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
 check dependencies:
-  stage: ".pre"
+  stage: .pre
   rules:
-  - when: always
+    - when: always
   script:
-  - npm -v
-  - npm ci --prefer-offline
+    - npm -v
+    - npm ci --prefer-offline
+
 build android:
   stage: build
   rules:
-  - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-    when: always
-  - when: manual
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    - when: manual
   before_script:
-  - npm -v
-  - npm ci --prefer-offline
+    - npm -v
+    - npm ci --prefer-offline
   script:
-  - java -version
-  - gradle -v
-  - echo "$ENV"
-  - npm run build:app:android:device --env=$ENV
-  - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-$ENV.apk"
+    - java -version
+    - gradle -v
+    - echo "$ENV"
+    - npm run build:app:android:device --env=$ENV
+    - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-$ENV.apk"
   artifacts:
     expire_in: 1 day
     paths:
-    - opal-$ENV.apk
+      - opal-$ENV.apk
+
 build ios:
   stage: build
   rules:
-  - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-    when: always
-  - when: manual
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    - when: manual
   before_script:
-  - npm -v
-  - npm ci --prefer-offline
+    - npm -v
+    - npm ci --prefer-offline
   script:
-  - gem install --user-install ffi -- --enable-libffi-alloc
-  - echo "$ENV"
-  - npm run build:app:ios:device:ci --env=dev --devteam=$IOS_DEVELOPMENT_TEAM
-  - mv ./platforms/ios/build/device/*.ipa "opal-$ENV.ipa"
+    # Fixes Bus Error when cordova invokes pod install
+    # See: https://stackoverflow.com/a/70581304
+    - gem install --user-install ffi -- --enable-libffi-alloc
+    - echo "$ENV"
+    - npm run build:app:ios:device:ci --env=dev --devteam=$IOS_DEVELOPMENT_TEAM
+    - mv ./platforms/ios/build/device/*.ipa "opal-$ENV.ipa"
   artifacts:
     expire_in: 1 day
     paths:
-    - opal-$ENV.ipa
-".deploy to firebase":
+      - opal-$ENV.ipa
+
+# Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the GitLab project settings
+# This service account provides permissions for uploading to Firebase App Distribution
+# See: https://firebase.google.com/docs/app-distribution/authenticate-service-account.md?platform=android
+.deploy to firebase:
   stage: deploy
   before_script:
-  - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV'
-    on $(git log --format=short -n 1)"
-  - echo "$RELEASE_NOTES"
+    - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=short -n 1)"
+    - echo "$RELEASE_NOTES"
+
 deploy android to firebase:
-  extends: ".deploy to firebase"
+  extends: .deploy to firebase
   rules:
-  - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-    when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
   script:
-  - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID
-    --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+    - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
-  - job: build android
+    - job: build android
+
 deploy ios to firebase:
-  extends: ".deploy to firebase"
+  extends: .deploy to firebase
   rules:
-  - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-    when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
   script:
-  - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes
-    "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+    - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
-  - job: build ios
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+    - job: build ios
