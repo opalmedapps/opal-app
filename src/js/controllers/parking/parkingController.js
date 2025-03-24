@@ -3,28 +3,57 @@
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
-(()=>{
-	angular.module("MUHCApp")
+
+/**
+ * @ngdoc controller
+ * @name MUHCApp.controller:ParkingController
+ * @requires Browser
+ * @requires $filter
+ * @requires Hospital
+ * @requires NativeNotification
+ * @requires Params
+ * @requires $timeout
+ * @requires UserHospitalPreferences
+ * @requires UserPreferences
+ * @description Controller for the parking view.
+ */
+
+(function () {
+	'use strict';
+
+	angular
+		.module("MUHCApp")
 		.controller("ParkingController", ParkingController);
 
 	ParkingController.$inject = [
-		'$filter', '$timeout', 'NativeNotification', 'NavigatorParameters', 'UserPreferences', 'UserHospitalPreferences',
-		'Hospital', 'Params', 'Browser', 'DynamicContent'
+		'Browser',
+		'$filter',
+		'Hospital',
+		'NativeNotification',
+		'Params',
+		'$timeout',
+		'UserHospitalPreferences',
+		'UserPreferences',
 	];
 
 	/* @ngInject */
 	function ParkingController(
-		$filter, $timeout, NativeNotification, NavigatorParameters, UserPreferences, UserHospitalPreferences,
-		Hospital, Params, Browser, DynamicContent
+		Browser,
+		$filter,
+		Hospital,
+		NativeNotification,
+		Params,
+		$timeout,
+		UserHospitalPreferences,
+		UserPreferences,
 	) {
 		const vm = this;
 
-		// variables for controller
-		let navigator;
-
 		// variables seen from view
-		vm.loading = true;  // This is for loading the list of questionnaires
+		vm.loading = true;  // This is for loading the list of sites
 		vm.sites = [];
+		vm.noParkingSites = false;
+		vm.alert = undefined;
 
 		// functions that can be used from view
 		vm.goToParkingLink = goToParkingLink;
@@ -37,22 +66,24 @@
 
 			vm.loading = true;
 
-			navigator = NavigatorParameters.getNavigator();
+			Hospital.requestParkingInfo(
+				UserHospitalPreferences.getHospital(),
+				UserPreferences.getLanguage()
+			).then(function (parkingInfo) {
+				$timeout(function () {
+					vm.sites = parkingInfo.results;
 
-			Hospital.requestParkingInfo(UserHospitalPreferences.getHospital(), UserPreferences.getLanguage())
-				.then(function(parkingInfo) {
-					$timeout(function(){
-						vm.sites = parkingInfo.results;
-					});
+					if (vm.sites.length === 0) {
+						vm.noParkingSites = true;
+						vm.alert = {
+							type: Params.alertTypeInfo,
+							content: "NOPARKINGSITES"
+						};
+					}
+				});
 
-					vm.loading = false;
-				})
-				.catch(function(error){
-					$timeout(function(){
-						vm.loading = false;
-						handleRequestError();
-					})
-			});
+				vm.loading = false;
+			}).catch(handleError);
 		}
 
 		/**
@@ -61,16 +92,49 @@
 		 * @param {string} url Parking url
 		 */
 		function goToParkingLink(url) {
-				Browser.openInternal(url);
+			Browser.openInternal(url);
 		}
 
 		/**
-		 * @name handleRequestError
+		 * @name handleError
 		 * @desc show a notification to the user in case a request to server fails
 		 */
-		function handleRequestError (){
-			//message: 'Server problem: could not fetch data, try again later',
-			NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+		function handleError(response) {
+			$timeout(() => {
+				vm.loading = false;
+				console.log(response);
+				switch (response.Code) {
+					case Params.REQUEST.ENCRYPTION_ERROR:
+						vm.alert = {
+							type: Params.alertTypeDanger,
+							content: "PAGE_ACCESS_ERROR"
+						};
+						break;
+					case Params.REQUEST.SERVER_ERROR:
+						vm.alert = {
+							type: Params.alertTypeDanger,
+							content: "SERVERERRORALERT"
+						};
+						break;
+					case Params.REQUEST.TOO_MANY_ATTEMPTS:
+						vm.alert = {
+							type: Params.alertTypeDanger,
+							content: "PAGE_ACCESS_ERROR"
+						};
+						break;
+					case Params.REQUEST.CLIENT_ERROR:
+						vm.alert = {
+							type: Params.alertTypeDanger,
+							content: "PAGE_ACCESS_ERROR"
+						};
+						break;
+					default:
+						vm.alert = {
+							type: Params.alertTypeDanger,
+							content: "ERROR_GENERIC"
+						};
+				}
+			});
 		}
 	}
 })();
