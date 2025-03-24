@@ -29,10 +29,10 @@
         .factory('Notifications', Notifications);
 
     Notifications.$inject = ['$filter','$injector','$q','Announcements','Appointments','CheckInService','Documents',
-        'EducationalMaterial','Questionnaires', 'PatientTestResults', 'RequestToServer','TxTeamMessages','UserPreferences'];
+        'EducationalMaterial', 'PatientTestResults', 'Questionnaires', 'RequestToServer','TxTeamMessages','UserPreferences'];
 
     function Notifications($filter, $injector, $q, Announcements, Appointments, CheckInService, Documents,
-                           EducationalMaterial, Questionnaires, PatientTestResults, RequestToServer, TxTeamMessages, UserPreferences) {
+                           EducationalMaterial, PatientTestResults, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
         /**
          * @ngdoc property
          * @name MUHCApp.service.#Notifications
@@ -164,7 +164,7 @@
             },
             'AppointmentNew': {
                 icon: 'fa fa-calendar-plus-o',
-                color: '#07ff83',
+                color: '#5FAB61',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
                 PageUrl: Appointments.getAppointmentUrl,
@@ -178,6 +178,7 @@
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments',
             },
+            // Special case: opens the general lab results page, not a specific lab
             'NewLabResult': {
                 icon: 'fa fa-flask ',
                 color: '#8BC34A',
