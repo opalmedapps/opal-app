@@ -5,16 +5,15 @@
         </right-content>
     </generic-toolbar>
 
-    <loading-spinning-circle ng-show="testTypeCtrl.loading"
-                             loading-message="{{'LOADINGLABRESULTS'|translate}}">
+    <loading-spinning-circle ng-show="testTypeCtrl.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
     </loading-spinning-circle>
     <div ng-if="!testTypeCtrl.loading" ng-class="fontSizeDesc">
         <div class="navigation-bar">
-            <div class="navigation-bar__center" >
+            <div class="navigation-bar__center">
                 <div class="button-bar" style="margin-top:10px;width:70%;left:15%;">
                     <div class="button-bar__item">
                         <input type="radio" name="navi-segment-b" checked ng-model="testTypeCtrl.showChart"
-                               ng-value="true">
+                            ng-value="true">
                         <div class="button-bar__button">{{'PLOT_VIEW'|translate}}</div>
                     </div>
 
@@ -57,9 +56,9 @@
             </div>
             <ons-scroller style="height: 320px;">
                 <ons-list style="margin-top: 20px">
-                    <ons-list-item ng-repeat="testResult in testTypeCtrl.test.results|orderBy:'-'" style="padding-top:10px;">
-                        <ons-row align="center" ng-class="fontSizeDesc"
-                                 style="line-height: 1.5;">
+                    <ons-list-item ng-repeat="testResult in testTypeCtrl.test.results|orderBy:'-'"
+                        style="padding-top:10px;">
+                        <ons-row align="center" ng-class="fontSizeDesc" style="line-height: 1.5;">
                             <ons-col width="60%" align="center" class="labtest-col" vertical-align="center">
                                 <div style="text-align: center; margin-left:4px;">
                                     {{testResult.collectedDateTime|date:'medium'}}
@@ -91,7 +90,7 @@
 
             <!-- LEARN ABOUT (LINK) -->
             <ons-list-item class="about-link list-item-container-narrow" modifier="tappable"
-                           ng-click="testTypeCtrl.showAboutTestAlert()">
+                ng-click="testTypeCtrl.showAboutTestAlert()">
                 <ons-row ng-class="fontSizeDesc" vertical-align="center">
 
                     <!-- LEARN ABOUT - LEFT (LABEL) -->
@@ -106,6 +105,35 @@
                     <ons-col width="13%" class="labtest-col" align="right" vertical-align="center">
                         <div style="margin-left: 4px">
                             <ons-icon icon="ion-android-open" size="25px"></ons-icon>
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
+            <!-- LAB DELAYS -->
+            <ons-list-item class="list-item-container-narrow" modifier="chevron tappable"
+                ng-click="alert('not implemented')">
+                <ons-row ng-class="fontSizeDesc" vertical-align="center">
+                    <ons-col class="labtest-col" align="left" vertical-align="center">
+                        <div align="left" style="margin-left: 4px">
+                            <p class="hyphens">
+                                <ons-icon icon="fas fa-hourglass-half" size="20px"></ons-icon>
+                                <span style="font-weight: bold;">
+                                    {{ "LAB_RESULT_INTERPRETABLE" | translate }}
+                                </span>
+                                <span ng-if="testTypeCtrl.test.interpretationRecommended">{{ "NO" | translate }}</span>
+                                <span ng-if="!testTypeCtrl.test.interpretationRecommended">{{ "YES" | translate }}</span>
+                            </p>
+                        </div>
+                    </ons-col>
+                </ons-row>
+                <ons-row ng-class="fontSizeDesc">
+                    <ons-col class="labtest-col" vertical-align="center">
+                        <div style="margin-left: 4px; color: red">
+                            <span style="font-weight: bold">
+                                {{ "LAB_RESULT_DELAY" | translate }}
+                            </span>
+                            {{ testTypeCtrl.dayTranslationKey | translate: { days: testTypeCtrl.labDelay } }}
                         </div>
                     </ons-col>
                 </ons-row>
@@ -159,7 +187,8 @@
                     <ons-col width="48%" class="labtest-col" vertical-align="center">
                         <div align="right">
                             {{testTypeCtrl.test.normalRange}}
-                            <span ng-if="testTypeCtrl.test.normalRange" class="break-words"> {{testTypeCtrl.test.unitWithBrackets}}</span>
+                            <span ng-if="testTypeCtrl.test.normalRange" class="break-words">
+                                {{testTypeCtrl.test.unitWithBrackets}}</span>
                         </div>
                     </ons-col>
                 </ons-row>

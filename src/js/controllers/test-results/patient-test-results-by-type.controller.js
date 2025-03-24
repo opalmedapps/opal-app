@@ -45,6 +45,7 @@ class PatientTestResultsByTypeController {
 	#$timeout;
 	#$filter;
 	#browser;
+	#profileSelector;
 
 	/**
 	 * Class constructor for controller
@@ -55,9 +56,10 @@ class PatientTestResultsByTypeController {
 	 * @param {$filter} $filter Angular filter
 	 * @param {$timeout} $timeout Angular module
 	 * @param {Browser} browser Browser service
+	 * @param {ProfileSelector} profileSelector profile selector service
 	 */
 	constructor(patientTestResults, userPreferences, hcChartLabsConfiguration,
-		navigatorParameters, $filter, $timeout, browser) {
+		navigatorParameters, $filter, $timeout, browser, profileSelector) {
 		this.#patientTestResults = patientTestResults;
 		this.#language = userPreferences.getLanguage();
 		this.#fontSize = userPreferences.getFontSize();
@@ -66,6 +68,7 @@ class PatientTestResultsByTypeController {
 		this.#$filter = $filter;
 		this.#labsChartConfigurationFactory = hcChartLabsConfiguration;
 		this.#browser = browser;
+		this.#profileSelector = profileSelector;
 		this.#initialize(this.#navigator.getCurrentPage().options);
 	}
 
@@ -140,6 +143,13 @@ class PatientTestResultsByTypeController {
 			this.loading = false;
 			if (results) {
 				this.test = results;
+
+				let nonInterpretableDelay = this.#profileSelector.getActiveProfile().non_interpretable_lab_result_delay;
+				let interpretableDelay = this.#profileSelector.getActiveProfile().interpretable_lab_result_delay;
+				
+				this.labDelay = this.test.interpretationRecommended ? nonInterpretableDelay : interpretableDelay;
+				this.dayTranslationKey = this.labDelay == 1 ? 'DAY' : 'DAYS';
+				
 				this.showChart = results.hasNumericValues;
 				this.#configureChart(this.test);
 			}
@@ -175,4 +185,4 @@ angular
 	.controller('PatientTestResultsByTypeController', PatientTestResultsByTypeController);
 
 PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences', 'HcChartLabsConfiguration',
-	'NavigatorParameters', '$filter', '$timeout', 'Browser'];
+	'NavigatorParameters', '$filter', '$timeout', 'Browser', 'ProfileSelector'];
