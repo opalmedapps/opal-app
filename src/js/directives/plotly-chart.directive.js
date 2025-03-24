@@ -1,6 +1,5 @@
 import Plotly from 'plotly.js-dist';
 import frLocale from 'plotly.js-locales/fr';
-import enLocale from 'plotly.js-locales/en';
 
 const fontSizesMap = {
     medium: 12,
@@ -9,7 +8,7 @@ const fontSizesMap = {
 };
 
 // Register the locales
-Plotly.register([frLocale, enLocale]);
+Plotly.register([frLocale]);
 
 (function () {
     'use strict';
