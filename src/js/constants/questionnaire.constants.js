@@ -28,7 +28,6 @@
             QUESTIONNAIRE_API: {
                 'UPDATE_STATUS': 'QuestionnaireUpdateStatus',
                 'SAVE_ANSWER': 'QuestionnaireSaveAnswer',
-                'GET_LIST': 'QuestionnaireList',
                 'GET_QUESTIONNAIRE': 'Questionnaire',
                 'GET_OPAL_QUESTIONNAIRE_FROM_SERNUM': 'QuestionnaireInOpalDBFromSerNum',
             },

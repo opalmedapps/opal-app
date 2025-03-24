@@ -104,6 +104,33 @@ class OpalEnv {
 	}
 
 	/**
+	 * @description Reads and returns a specific environment setting from opal.config.js.
+	 * @author Stacey Beard
+	 * @date 2022-03-23
+	 * @param {string} settingName - The name of the setting to read from the file.
+	 * @param {string|null} [env] - The name of the environment to use.
+	 * @returns {*} The setting provided in the file.
+	 */
+	static getEnvSetting(settingName, env = null) {
+		const settings = this.getEnvSettings(env);
+		if (!settings || typeof settings[settingName] === "undefined") throw new Error(`opal.config.js for environment "${env}" is missing the setting: "${settingName}". See env/opal.config.sample.js for details.`);
+		return settings[settingName];
+	}
+
+	/**
+	 * @description Reads and returns the environment settings from opal.config.js.
+	 * @author Stacey Beard
+	 * @date 2022-03-23
+	 * @param {string|null} [env] - The name of the environment to use.
+	 * @returns {object} The settings object provided in the file.
+	 */
+	static getEnvSettings(env = null) {
+		const config = this.getOpalConfigJSON(env);
+		if (!config || !config.settings) throw new Error(`opal.config.js for environment "${env}" is not correctly formatted with a "settings" property.`);
+		return config.settings;
+	}
+
+	/**
 	 * Sets the name of the application in the config.xml, useful when changing environment and name of the app
 	 * @param {string} newName New name for the application
 	 * @param {string} env string value representing the environment
@@ -241,6 +268,20 @@ class OpalEnv {
 			return xmlJs.xml2js(fs.readFileSync("./config.xml").toString());
 		}
 		throw new Error("config.xml file not found");
+	}
+
+	/**
+	 * @description Reads and returns the contents of opal.config.js (a JSON object) from the directory for
+	 *              the given environment.
+	 * @author Stacey Beard
+	 * @date 2022-03-23
+	 * @param {string|null} [env] - The name of the environment to use. If none is provided, the root folder is used.
+	 * @returns {object} The JSON object provided in the file.
+	 */
+	static getOpalConfigJSON(env = null) {
+		const path = env ? `./env/${env}/opal.config.js` : './opal.config.js';
+		if (!fs.existsSync(path)) throw new Error(`File not found: ${path}`);
+		return require(path);
 	}
 
 	static writeToConfigXML(configFile) {
