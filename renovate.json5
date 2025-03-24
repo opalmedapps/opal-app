@@ -45,10 +45,5 @@
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
       "groupName": "xlts angular packages"
     },
-    // Group cordova related updates
-    {
-      "matchPackagePatterns": ["^cordova"],
-      "groupName": "cordova packages"
-    },
   ],
 }
