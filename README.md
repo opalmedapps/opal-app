@@ -123,14 +123,7 @@ For more information about versioning, please read [Versioning](https://gitlab.c
      This package manager is in charge of installing all the libraries and dependencies required by the app. 
    - The main description file for a Node.js application is the [package.json](./package.json) file. This file states all the dependencies for the app and the versions for each of them. _npm_'s job is to manage these dependencies.
 
-4. Install `cordova` globally. 
-   **Note: you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access. 
-   If this is the case, use `sudo npm` for all the `npm` steps that follow.**
-    ```
-    npm install -g cordova
-    ```
-
-5. Install the app's dependencies
+4. Install the app's dependencies
     ```
     npm install
     ```
@@ -147,7 +140,7 @@ For more information about versioning, please read [Versioning](https://gitlab.c
    - [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) is a web server which is used to serve _webpack_'s bundles 
      from localhost while working on development.
 
-6. Test the installation on your localhost.
+5. Test the installation on your localhost.
     ```
     npm run start --env=staging
     ```
@@ -167,15 +160,15 @@ For more information about versioning, please read [Versioning](https://gitlab.c
       ```
     For more information on `webpack-dev-server`, go to: https://webpack.js.org/guides/development/ under the `webpack-dev-server` section.
 
-7. Try logging in; navigate to the login page and enter the following credentials:
+6. Try logging in; navigate to the login page and enter the following credentials:
     ```
     email: muhc.app.mobile@gmail.com
-    password: 12345opal
+    password: 12345Opal!!
     hospital: McGill University Health Centre (MUHC)
     security answer (depending on the question): red, guitar, superman, (first pet's name) dog or meg, bob, cuba
     ```
 
-8. (Optional) If setting up a local development environment of Opal with your own backend system, you'll want
+7. (Optional) If setting up a local development environment of Opal with your own backend system, you'll want
    to redirect Opal to connect to this backend instead of `staging`. In this case, follow the instructions at
    [env/local/README.md](./env/local/README.md) to set up your installation to use the `local` environment
     (e.g. `npm run start --env=local`).
