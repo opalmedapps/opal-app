@@ -17,18 +17,20 @@ angular
         let AccessLevel = '';
         let Email = '';
         let PatientSerNum = '';
+        let TestUser = '';
         let SelectedProfile = {};
 
         return {
             setSelectedProfile: profile => SelectedProfile = profile,
             initPatient: initPatient,
             getFirstName: () => FirstName,
-            getLastName: () => FirstName,
+            getLastName: () => LastName,
             getEmail: () => Email,
             getPatientSerNum: () => SelectedProfile?.patient_legacy_id || PatientSerNum,
             getProfileImage: () => ProfileImage,
             getAccessLevel: () => AccessLevel,
             clearPatient: clearPatient,
+            getTestUser: () => parseInt(TestUser, 10) === 1,
         };
 
         /**
@@ -41,11 +43,12 @@ angular
         function setPatient(patientFields) {
             if (!patientFields) throw new Error("Failed to set empty patientFields");
             let font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
-            UserPreferences.setFontSize(font||'large');
+            UserPreferences.setFontSize(font || 'large');
             FirstName = patientFields.FirstName;
             LastName = patientFields.LastName;
             AccessLevel = patientFields.AccessLevel;
             Email = patientFields.Email;
+            TestUser = patientFields.TestUser;
             PatientSerNum = patientFields.PatientSerNum;
             ProfileImage = (patientFields.ProfileImage && patientFields.ProfileImage !== '')
                 ? `data:image/${patientFields.DocumentType};base64,${patientFields.ProfileImage}`
