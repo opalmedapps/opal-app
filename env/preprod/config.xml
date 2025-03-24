@@ -62,6 +62,18 @@
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:requestLegacyExternalStorage="true"/>
         </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity" mode="merge">
+            <activity android:exported="false"/>
+        </edit-config>  
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/service" mode="merge">
+            <service android:exported="false" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/provider" mode="merge">
+            <provider android:exported="false" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/receiver" mode="merge">
+            <receiver android:exported="false" />
+        </edit-config>
         <resource-file src="google-services.json" target="/app/google-services.json"/>
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/Opal-splash-android-inverse-1400x1400.png"/>
         <access origin="cdvfile://*"/>
