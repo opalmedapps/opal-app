@@ -173,6 +173,7 @@
     "NOTIFICATION_OPEN_ERROR": "Une erreur s'est produite lors du chargement de cette notification.",
     "NOTIFICATIONS": "Notifications",
     "NOT_ALLOWED": "L'enregistrement sera disponible dès l'arrivée à l'hôpital.",
+    "NO_UPCOMING_APPOINTMENTS": "Vous n'avez aucun rendez-vous à venir.",
     "OF": "de",
     "ONCOLOGIST": "Oncologues",
     "OPALPROBLEMSUBJECT": "Trouvé un bogue / problème en utilisant Opal",

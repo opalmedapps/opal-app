@@ -173,6 +173,7 @@
   "NOTIFICATION_OPEN_ERROR": "An error occurred while loading this notification.",
   "NOTIFICATIONS": "Notifications",
   "NOT_ALLOWED": "Check-in will be available on arrival at the hospital.",
+  "NO_UPCOMING_APPOINTMENTS": "You have no upcoming appointments.",
   "OF": "of",
   "ONCOLOGIST": "Oncologist",
   "OPALPROBLEMSUBJECT": "Found a Bug/Problem using Opal",

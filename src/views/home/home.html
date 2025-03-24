@@ -145,8 +145,11 @@
                         <header>
                             <span class="item-title" ng-class="fontSizeTitle">{{"UPCOMING_APPOINTMENTS"|translate}}</span>
                         </header>
-                        <p class="item-desc" ng-class="fontSizeDesc" ng-show="Ctrl.closestAppointment.scheduledstarttime">
+                        <p class="item-desc" ng-class="fontSizeDesc" ng-if="Ctrl.closestAppointment.scheduledstarttime">
                             {{"FOR"|translate}} {{Ctrl.getPatientFirstName()}}: {{Ctrl.closestAppointment.scheduledstarttime|date:'medium'}}
+                        </p>
+                        <p class="item-desc" ng-class="fontSizeDesc" ng-if="!Ctrl.closestAppointment.scheduledstarttime">
+                            {{"NO_UPCOMING_APPOINTMENTS"|translate}}
                         </p>
                     </ons-col>
                 </ons-row>
