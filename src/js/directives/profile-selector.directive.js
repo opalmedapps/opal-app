@@ -83,11 +83,11 @@ import "../../css/directives/profile-selector.directive.css"
 
                 scope.selectProfile = (lecagyId, relStatus) => {
                     if (relStatus !== 'CON') return;
+                    UpdateUI.clearUpdateUI();
                     ProfileSelector.loadPatientProfile(lecagyId);
                     updateDisplayInfo();
                     if (scope.refreshFunction) scope.refreshFunction();
                     scope.listVisible = false;
-                    UpdateUI.clearUpdateUI();
                 };
 
                 scope.canDisplayProfile = (profile) => {

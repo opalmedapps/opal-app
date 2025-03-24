@@ -108,7 +108,7 @@
          *       using the 'set' functions in sectionServiceMappings.
          * @param responseData A response from the listener containing data in one or many categories.
          */
-         function setServices(responseData, requestedCategories) {
+        function setServices(responseData, requestedCategories) {
             if (responseData === 'empty') responseData = handleEmptyResponse(requestedCategories);
             Object.entries(responseData).forEach(([category, data]) => {
                 if(sectionServiceMappings.hasOwnProperty(category)) sectionServiceMappings[category].set(data);
