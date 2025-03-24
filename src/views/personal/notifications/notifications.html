@@ -15,20 +15,19 @@
         <ons-pull-hook-content></ons-pull-hook-content>
     </ons-pull-hook>
 
-    <!--
-      -- Temporary multi-category data handler to allow notifications to work until they are refactored.
-      -- This temporary fix downloads ALL data which may be referenced by a notification.
-      -- Notifications should be refactored instead to deal with patient data no longer being available at login,
-      -- and this handler should be removed.
-      -- See QSCCD-122 (especially subtask QSCCD-123), and QSCCD-43.
-      -->
-    <patient-data-handler categories="Announcements,Appointments,Documents,EducationalMaterial,Notifications,TxTeamMessages"
+    <!-- DATA HANDLER AND INITIAL LOADING WHEEL -->
+    <patient-data-handler categories="Notifications"
                           display-function="notif.displayNotifications"
                           refresh="notif.pullHookRefresh"
                           hide-content="notif.hideContent">
     </patient-data-handler>
 
-    <div ng-hide="notif.hideContent">
+    <!-- LOADING WHEEL SHOWN AFTER CLICKING ON AN ITEM THAT NEEDS DOWNLOADING -->
+    <loading-spinning-circle ng-show="notif.loading"
+                             loading-message="{{'LOADING'|translate}}">
+    </loading-spinning-circle>
+
+    <div ng-hide="notif.hideContent || notif.loading">
         <ons-list ng-repeat="notification in notif.notifications"
                   ng-click="notif.goToNotification($index,notification)">
             <ons-list-header class="person-list-header" ng-show="{{notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">

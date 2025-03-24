@@ -18,6 +18,12 @@
                                      $timeout, $scope) {
         var vm = this;
 
+        /**
+         * @desc Variable used to show a loading wheel while the target of a notification is loading.
+         * @type {boolean}
+         */
+        vm.loading = false;
+
         vm.goToNotification = goToNotification;
 
         // Popover variables
@@ -63,15 +69,18 @@
             });
         }
 
-        function goToNotification(index,notification){
+        async function goToNotification(index, notification) {
             try {
-                if(notification.ReadStatus==='0'){
-                    //TODO: Move this read function in notifications service
-                    RequestToServer.sendRequest('Read',{"Id":notification.NotificationSerNum, "Field":"Notifications"});
-                    Notifications.readNotification(index,notification);
-                }
+                if (notification.ReadStatus === '0') Notifications.readNotification(index, notification);
+
                 var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
-                if (!post) throw new Error(`No post found for notification with NotificationSerNum = ${notification.NotificationSerNum}`);
+
+                // If the notification target (post) is not available, download it from the listener
+                if (!post) {
+                    $timeout(() => vm.loading = true);
+                    post = await Notifications.downloadNotificationTarget(notification);
+                }
+
                 if(notification.hasOwnProperty('PageUrl'))
                 {
                     NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
@@ -84,9 +93,12 @@
                         homeNavigator.pushPage(result.Url);
                     }
                 }
+
+                $timeout(() => vm.loading = false);
             }
             catch(error) {
                 console.error(error);
+                $timeout(() => vm.loading = false);
                 homeNavigator.pushPage('views/error/error-details.html', { message: "NOTIFICATION_OPEN_ERROR" });
             }
         }

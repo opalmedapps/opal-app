@@ -27,11 +27,11 @@
         .module('MUHCApp')
         .factory('Notifications', Notifications);
 
-    Notifications.$inject = ['$filter','$q','Announcements','Appointments','CheckInService','Documents',
+    Notifications.$inject = ['$filter','$injector','$q','Announcements','Appointments','CheckInService','Documents',
         'EducationalMaterial','Questionnaires','RequestToServer','TxTeamMessages','UserPreferences'];
 
-    function Notifications($filter, $q, Announcements, Appointments, CheckInService, Documents, EducationalMaterial,
-                           Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
+    function Notifications($filter, $injector, $q, Announcements, Appointments, CheckInService, Documents,
+                           EducationalMaterial, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
         /**
          * @ngdoc property
          * @name MUHCApp.service.#Notifications
@@ -228,6 +228,7 @@
             getUnreadNotifications: getUnreadNotifications,
             getNewNotifications: getNewNotifications,
             getNotificationPost: getNotificationPost,
+            downloadNotificationTarget: downloadNotificationTarget,
             goToPost: goToPost,
             setNotificationsLanguage: setNotificationsLanguage,
             clearNotifications: clearNotifications,
@@ -457,6 +458,21 @@
          **/
         function getNotificationPost(notification) {
             return notificationTypes[notification.NotificationType].searchFunction(notification.RefTableRowSerNum);
+        }
+
+        /**
+         * @desc Downloads and returns the target item referenced by a notification (e.g. "You have a new document" -> the document).
+         * @param notification The notification referencing a target item.
+         * @returns {Promise<*>} Resolves with the target item once downloaded.
+         */
+        async function downloadNotificationTarget(notification) {
+            let UpdateUI = $injector.get('UpdateUI');
+            await UpdateUI.getSingleItem(notification.refreshType, notification.RefTableRowSerNum);
+
+            // Look up the item to make sure it was correctly saved in a data service
+            let savedItem = getNotificationPost(notification)
+            if (!savedItem) throw new Error(`Failed to download or save notification target for '${notification.NotificationType}' with SerNum ${notification.RefTableRowSerNum}`);
+            return savedItem;
         }
 
         /**
