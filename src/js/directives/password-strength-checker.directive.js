@@ -8,7 +8,7 @@ import '../../css/directives/password-strength-checker.directive.css';
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("passwordStrengthChecker", passwordStrengthChecker);
 
     passwordStrengthChecker.$inject = ['Params', 'UserAuthorizationInfo'];

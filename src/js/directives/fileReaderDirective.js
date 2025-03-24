@@ -3,7 +3,7 @@
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
-angular.module('MUHCApp').directive("fileread", [function () {
+angular.module('OpalApp').directive("fileread", [function () {
     return {
         scope: {
             fileread: "="

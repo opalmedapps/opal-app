@@ -10,17 +10,14 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:Announcements
  *@requires $filter
- *@requires MUHCApp.service:RequestToServer
- *@requires MUHCApp.service:UserPreferences
  *@description Service that handles the adding and updating of a User's announcements and provides API for controllers to grab the necessary information
  **/
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Announcements', Announcements);
 
     Announcements.$inject = ['RequestToServer','$filter', 'UserPreferences'];
@@ -30,8 +27,6 @@
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#announcements
-         *@propertyOf MUHCApp.service:Announcements
          *@description Initializing array that represents all the information for Announcements, this array is passed to
          *the appropriate controllers.
          **/
@@ -39,8 +34,6 @@
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#lastUpdated
-         *@propertyOf MUHCApp.service:Announcements
          *@description Represents the last time the announcements array was updated
          **/
         var lastUpdated = 0;
@@ -65,8 +58,6 @@
 
         /**
          *@ngdoc function
-         *@name  MUHCApp.service.#addAnnouncements
-         *@methodOf MUHCApp.service:Announcements
          *@description Push new announcements to currently existing announcements array filter out duplicate for multiple patient.
          **/
         function addAnnouncements(newAnnouncements) {
@@ -88,7 +79,6 @@
         /**
          *@ngdoc method
          *@name setAnnouncements
-         *@methodOf MUHCApp.service:Announcements
          *@param {Array} array announcements array that containts the new announcements
          *@description Setter method for announcements
          **/
@@ -101,7 +91,6 @@
         /**
          *@ngdoc method
          *@name getAnnouncementBySerNum
-         *@methodOf MUHCApp.service:Announcements
          *@param {String} serNum AnnouncementSerNum to be looked for
          *@description Iterates through the annoucements array and returns annoucement object matching the serNum
          *@returns {Object} Returns object containing annoucement
@@ -115,7 +104,6 @@
         /**
          *@ngdoc method
          *@name readAnnouncementBySerNum
-         *@methodOf MUHCApp.service:Announcements
          *@param {String} serNum AnnouncementSerNum to be read
          *@description Sets ReadStatus in announcement to 1, sends request to backend
          **/
@@ -132,7 +120,6 @@
         /**
          *@ngdoc method
          *@name readAnnouncement
-         *@methodOf MUHCApp.service:Announcements
          *@param {String} index index in the annoucement array to be read
          *@param {String} serNum AnnouncementSerNum to be read
          *@description Faster method to read an announcement, no iteration required.
@@ -145,9 +132,8 @@
         /**
          *@ngdoc method
          *@name setLanguage
-         *@methodOf MUHCApp.service:Announcements
          *@param {Array} item Array or object with announcements
-         *@description Translates the array parameter containing announcements to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+         *@description Translates the array parameter containing announcements to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
         function setLanguage(item) {
@@ -170,8 +156,7 @@
         /**
          *@ngdoc method
          *@name clearAnnouncements
-         *@methodOf MUHCApp.service:Announcements
-         *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+         *@description Clears the service of any saved state, function used by the {@link OpalApp.controller:LogoutController LogoutController}
          **/
         function clearAnnouncements()
         {

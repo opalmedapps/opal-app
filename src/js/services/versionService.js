@@ -5,17 +5,15 @@
 
 /**
  * @ngdoc service
- * @name MUHCApp.service:Version
  * @requires $filter
  * @requires $q
- * @requires MUHCApp.service:RequestToServer
  * @description API service used for app version information.
  **/
 (function() {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Version', Version);
 
     Version.$inject = ['$filter','$q','RequestToServer', 'Constants', '$http'];
@@ -24,8 +22,6 @@
 
         /**
          * @ngdoc property
-         * @name MUHCApp.service.#Version
-         * @propertyOf MUHCApp.service:Version
          * @description Initializing array that represents all the information for Version.
          *              This array is passed to appropriate controllers.
          */
@@ -43,7 +39,6 @@
         /**
          * @ngdoc method
          * @name getVersionUpdates
-         * @methodOf MUHCApp.service:Version
          * @description get the version update information.
          **/
         async function getVersionUpdates(lastVersion, currentVersion, language) {
@@ -116,7 +111,6 @@
         /**
          * @ngdoc method
          * @name currentVersion
-         * @methodOf MUHCApp.service:Version
          * @description get the current version of the app.
          **/
         function currentVersion() {

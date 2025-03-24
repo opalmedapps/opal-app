@@ -154,5 +154,5 @@ class PatientTestResultsByDatetimeController {
 PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator', 'UserPreferences',
 													'$timeout', '$filter', 'UpdateUI', '$locale'];
 angular
-	.module('MUHCApp')
+	.module('OpalApp')
 	.controller('PatientTestResultsByDatetimeController', PatientTestResultsByDatetimeController);

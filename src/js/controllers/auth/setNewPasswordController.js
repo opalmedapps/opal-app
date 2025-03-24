@@ -8,7 +8,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('SetNewPasswordController', SetNewPasswordController);
 
     SetNewPasswordController.$inject = [

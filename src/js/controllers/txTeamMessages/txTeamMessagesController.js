@@ -8,7 +8,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
     TxTeamMessagesController.$inject = ['$filter', '$timeout', 'Navigator', 'Notifications', 'Params', 'TxTeamMessages'];

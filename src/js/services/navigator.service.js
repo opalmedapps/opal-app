@@ -7,7 +7,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Navigator', Navigator);
 
     Navigator.$inject = ['$timeout', 'ProfileSelector', 'UpdateUI'];

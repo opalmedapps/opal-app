@@ -10,7 +10,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: IndividualAnnouncementController
  *  @description
  *
  *  Manages the individual announcement view. No public functions exist on this controller, it simply activate and renders the necessary announcement object
@@ -19,7 +18,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualAnnouncementController', IndividualAnnouncementController);
 
     IndividualAnnouncementController.$inject = [

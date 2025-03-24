@@ -11,15 +11,10 @@
  *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
  */
 
-var myApp=angular.module('MUHCApp');
+var myApp=angular.module('OpalApp');
 /**
  *@ngdoc service
- *@name MUHCApp.service:EducationalMaterial
  *@requires $q
- *@requires MUHCApp.service:UserPreferences
- *@requires MUHCApp.service:RequestToServer
- *@requires MUHCApp.service:LocalStorage
- *@requires MUHCApp.service:FileManagerService
  *@requires $filter
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
@@ -36,8 +31,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
 
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#educationalMaterialArray
-     *@propertyOf MUHCApp.service:EducationalMaterial
      *@description Initializing array that represents all the information regarding educational material
      *             for the patient, this array is passed to appropriate controllers.
      **/
@@ -45,8 +38,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
 
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#educationalMaterialType
-     *@propertyOf MUHCApp.service:EducationalMaterial
      *@description Object contains the mapping between the type of educational material and the icon and color of the icon for that particular educational material.
      **/
     var educationalMaterialType = Params.educationalMaterial;
@@ -169,7 +160,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
     /**
      * @ngdoc method
      * @name hasReachedBottomOfScreen
-     * @methodOf MUHCApp.service:EducationalMaterial
      * @author Stacey Beard, based on work by Tongyou (Eason) Yang
      * @date 2018-11-29
      * @description Tests whether the user has reached the bottom of the page, either by scrolling down or by
@@ -197,7 +187,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name setEducationalMaterial
-         *@methodOf MUHCApp.service:EducationalMaterial
          *@param {Object} edumaterial Educational Material array from firebase used to set the educational materials for the patient
          *@description Setter method for educational materials, orders the materials chronogically descending, and converts dates to javascript date objects
          **/
@@ -209,7 +198,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name materialExists
-         *@methodOf MUHCApp.service:EducationalMaterial
          *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
          *@description Checks whether educational material exists
          *@return {Boolean} Returns whether the patient has any educational material available.
@@ -222,7 +210,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name updateEducationalMaterial
-         *@methodOf MUHCApp.service:EducationalMaterial
          *@param {Array} edumaterial Array containing latest educational material to add or update existing array of materials.
          *@description Update method for educational material
          **/
@@ -237,7 +224,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name getEducationalMaterial
-         *@methodOf MUHCApp.service:EducationalMaterial
          *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
          *@description Getter for the educational material
          *@returns {Array} Returns array containing educational material
@@ -259,7 +245,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name getEducationaMaterialBySerNum
-         *@methodOf MUHCApp.service:EducationalMaterial
          *@params {String} serNum EducationalMaterialSerNum
          *@returns {Object} Returns educational material object matching that EducationalMaterialSerNum parameter
          **/
@@ -276,7 +261,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name readEducationalMaterial
-         *@methodOf MUHCApp.service:EducationalMaterial
          *@param {String} serNum EducationalMaterialSerNum to be read
          *@description Sets ReadStatus in educational material to 1, sends request to backend, and syncs with device storage
          **/
@@ -293,7 +277,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          * @ngdoc method
          * @name logScrolledToBottomIfApplicable
-         * @methodOf MUHCApp.service:EducationalMaterial
          * @author Stacey Beard, based on work by Tongyou (Eason) Yang
          * @date 2018-11-29
          * @description Tests whether the user has reached the bottom of the page, either by scrolling down or by
@@ -334,8 +317,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name getEducationalMaterialUrl
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@description Returns educational material url to be used by the {@link MUHCApp.service:Notifications Notifications Service}.
+         *@description Returns educational material url to be used by the {@link OpalApp.service:Notifications Notifications Service}.
          *@returns {String} Returns Url for individual educational materials
          **/
         getEducationalMaterialUrl:function()
@@ -349,7 +331,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name openEducationalMaterialDetails
-         *@methodOf MUHCApp.service:EducationalMaterial
          *@param {Object} edumaterial Educational material to be opened
          *@returns {Object} Return -1 if the material is to be opened by a cordova plugin, or the url the opening page if its to be opened and displayed by the app.
          *@description Opens educational material in parameter.
@@ -432,9 +413,8 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name setLanguage
-         *@methodOf MUHCApp.service:EducationalMaterial
          *@param {Array} array Array with educational material
-         *@description Translates the array parameter containing educational material to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+         *@description Translates the array parameter containing educational material to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
         setLanguage:function(array)
@@ -445,8 +425,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name clearEducationalMaterial
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+         *@description Clears the service of any saved state, function used by the {@link OpalApp.controller:LogoutController LogoutController}
          **/
         clearEducationalMaterial:function()
         {
@@ -455,7 +434,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         /**
          *@ngdoc method
          *@name getEducationalMaterialTitle
-         *@methodOf MUHCApp.service:EducationalMaterial
          *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
          *@description Gets title for the education views that corresponds to the educational category param.
          *@returns {String} The translated title for the education views

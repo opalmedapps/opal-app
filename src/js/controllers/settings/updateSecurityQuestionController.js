@@ -5,7 +5,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('UpdateSecurityQuestionController', UpdateSecurityQuestionController);
 
     UpdateSecurityQuestionController.$inject = [

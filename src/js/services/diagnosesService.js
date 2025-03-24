@@ -10,26 +10,20 @@
  
  
  
-var myApp=angular.module('MUHCApp');
+var myApp=angular.module('OpalApp');
 /**
 *@ngdoc service
-*@name MUHCApp.service:Diagnoses
 *@requires $filter
-*@requires MUHCApp.service:Diagnoses
 *@description Service stores and manages patient diagnoses
 **/
 myApp.service('Diagnoses', ['$filter', 'LocalStorage', function($filter, LocalStorage) {
   /**
      *@ngdoc property
-    *@name  MUHCApp.service.#diagnoses
-    *@propertyOf MUHCApp.service:Diagnoses
     *@description Diagnoses main service array
     **/
     var diagnoses=[];
     /**
      *@ngdoc property
-    *@name  MUHCApp.service.#diagnosesToLocalStorage
-    *@propertyOf MUHCApp.service:Diagnoses
     *@description Local storage representation of diagnoses
     **/
     var diagnosesToLocalStorage=[];
@@ -62,7 +56,6 @@ myApp.service('Diagnoses', ['$filter', 'LocalStorage', function($filter, LocalSt
        /**
       *@ngdoc method
       *@name setDiagnoses
-      *@methodOf MUHCApp.service:Diagnoses
       *@param {Array} diag diagnoses array that containts all the patient diagnosis
       *@description Setter method for patient diagoses
       **/
@@ -75,7 +68,6 @@ myApp.service('Diagnoses', ['$filter', 'LocalStorage', function($filter, LocalSt
        /**
       *@ngdoc method
       *@name updateDiagnoses
-      *@methodOf MUHCApp.service:Diagnoses
       *@param {Array} diag Finds diagnosis to update or adds new diagnosis if not found
       *@description Updates the diagnoses array with the new information contained in the diag parameter
       **/
@@ -87,7 +79,6 @@ myApp.service('Diagnoses', ['$filter', 'LocalStorage', function($filter, LocalSt
         /**
       *@ngdoc method
       *@name getDiagnoses
-      *@methodOf MUHCApp.service:Diagnoses
       *@description Getter for the diagnoses array
       *@returns {Array} Returns diagnoses array.
       **/
@@ -98,8 +89,7 @@ myApp.service('Diagnoses', ['$filter', 'LocalStorage', function($filter, LocalSt
       /**
     *@ngdoc method
     *@name clearDiagnoses
-    *@methodOf MUHCApp.service:Diagnoses
-    *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+    *@description Clears the service of any saved state, function used by the {@link OpalApp.controller:LogoutController LogoutController}
     **/
       clearDiagnoses:function()
       {

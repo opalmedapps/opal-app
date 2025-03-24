@@ -10,15 +10,9 @@
 
 
 
-var myApp=angular.module('MUHCApp');
+var myApp=angular.module('OpalApp');
 /**
  *@ngdoc service
- *@name MUHCApp.service:Documents
- *@requires MUHCApp.service:UserPreferences
- *@requires MUHCApp.service:RequestToServer
- *@requires MUHCApp.service:LocalStorage
- *@requires MUHCApp.service:FileManagerService
- *@requires MUHCApp.service:UserAuthorizationInfo
  *@requires $q
  *@requires $filter
  *@description Sets the documents and provides an API to interact with them and the server
@@ -28,16 +22,12 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
     //Array documentsArray contains all the documents for the patient
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#documentsArray
-     *@propertyOf MUHCApp.service:Documents
-     *@description Initializing array that represents all the information for documents, this array is passed to appropiate controllers.
+     *@description Initializing array that represents all the information for documents, this array is passed to appropriate controllers.
      **/
     var documentsArray=[];
 
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#lastUpdated
-     *@propertyOf MUHCApp.service:Documents
      *@description Timestamp to check for updates
      **/
 	var lastUpdated=0;
@@ -130,7 +120,6 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name setDocuments
-         *@methodOf MUHCApp.service:Documents
          *@param {Object} documents Documents to be added to the model for the patient.
          *@description Setter method for documents
          **/
@@ -142,7 +131,6 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name updateDocuments
-         *@methodOf MUHCApp.service:Documents
          *@param {Object} documents Latest documents to be added to the model for the patient.
          *@description Updates the documentsArray with the new information contained in the documents parameter
          **/
@@ -155,7 +143,6 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name getDocuments
-         *@methodOf MUHCApp.service:Documents
          *@description Getter for the documentsArray
          *@returns {Array} documentsArray
          **/
@@ -166,7 +153,6 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name readDocument
-         *@methodOf MUHCApp.service:Documents
          *@param {String} serNum DocumentSerNum to be read
          *@description Sets ReadStatus in documents to 1, sends request to backend, and syncs with device storage
          **/
@@ -184,7 +170,6 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name getDocumentBySerNum
-         *@methodOf MUHCApp.service:Documents
          *@param {String} serNum DocumentSerNum to be looked for
          *@description Iterates through the documents array and returns document object matching the serNum
          *@returns {Object} Returns object containing document
@@ -238,8 +223,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name getDocumentUrl
-         *@methodOf MUHCApp.service:Documents
-         *@description Returns documents url to be used by the {@link MUHCApp.service:Notifications Notifications Service}.
+         *@description Returns documents url to be used by the {@link OpalApp.service:Notifications Notifications Service}.
          *@returns {String} Returns Url for individual documents
          **/
         getDocumentUrl:function(serNum)
@@ -249,7 +233,6 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name downloadDocumentFromServer
-         *@methodOf MUHCApp.service:Documents
          *@param {String} serNum DocumentSerNum
          *@description Downloads the document that matches that DocumentSerNum parameter from the server
          *@returns {Promise} Promise successful upon correct arrival of document, rejected if error in server, or request timeout
@@ -278,9 +261,8 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name setDocumentsLanguage
-         *@methodOf MUHCApp.service:Documents
          *@param {Array} array Array with documents
-         *@description Translates the array parameter containing documents to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+         *@description Translates the array parameter containing documents to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
         setDocumentsLanguage:function(array)
@@ -305,8 +287,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name clearDocuments
-         *@methodOf MUHCApp.service:Documents
-         *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+         *@description Clears the service of any saved state, function used by the {@link OpalApp.controller:LogoutController LogoutController}
          **/
         clearDocuments:function()
         {

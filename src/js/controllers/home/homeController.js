@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
@@ -73,7 +73,6 @@
         /**
          * @ngdoc function
          * @name bindEvents
-         * @methodOf MUHCApp.controllers.homeController
          * @description Sets up event bindings for this controller.
          */
         function bindEvents() {

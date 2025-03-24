@@ -9,7 +9,7 @@
      * Note: Change this will probably break the questionnaire
      */
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .constant('QuestionnaireConstants', {
             QUESTIONNAIRE_DB_TYPE_CONVENTIONS: {
                 'DATE_TYPE_ID': 7,

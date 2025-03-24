@@ -11,7 +11,7 @@
 "use strict";
 describe('CalendarController', function() {
     beforeEach(function() {spyOn(ons, 'isWebView').and.returnValue(true)});
-    beforeEach(module('MUHCApp'));
+    beforeEach(module('OpalApp'));
 
     var $controller;
     var controller;

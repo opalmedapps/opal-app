@@ -10,7 +10,6 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:NetworkStatus
  *@description Service that holds a property that states whether or not the app is online
  **/
 
@@ -18,7 +17,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('NetworkStatus', NetworkStatus);
 
     function NetworkStatus() {

@@ -14,7 +14,7 @@ import '../../../css/views/init-page.view.css';
 	'use strict';
 
 	angular
-		.module('MUHCApp')
+		.module('OpalApp')
 		.controller('InitScreenController', InitScreenController);
 
 	InitScreenController.$inject = [

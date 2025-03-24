@@ -7,7 +7,7 @@
      * @date 2021-12-08
      */
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .constant("RequestConstants", {
             CODE: {
                 /** Response codes **/

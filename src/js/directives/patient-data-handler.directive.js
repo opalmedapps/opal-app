@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("patientDataHandler", patientDataHandler);
 
     patientDataHandler.$inject = ["$filter", "$timeout", "Params", "Toast", "UpdateUI", "Utility"];

@@ -1,4 +1,4 @@
-angular.module("MUHCApp").directive("onsScrollerHeight", onsScrollerHeight);
+angular.module('OpalApp').directive("onsScrollerHeight", onsScrollerHeight);
 
 onsScrollerHeight.$inject = ["$timeout"];
 

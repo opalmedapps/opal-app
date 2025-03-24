@@ -10,7 +10,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: AppointmentController
  *  @description
  *
  *  Manages the individual appointment detail view. It receives parameters via the Navigator service
@@ -20,7 +19,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('AppointmentController', AppointmentController);
 
     AppointmentController.$inject = ['$scope', 'Navigator', 'UserPreferences', '$timeout', 'Browser'];
@@ -89,7 +88,6 @@
         /**
          * @ngdoc method
          * @name aboutAppointment
-         * @methodOf MUHCApp.controllers.AppointmentController
          * @description
          * Takes the user to the About-This-Appointment view of the specified appointment
          */

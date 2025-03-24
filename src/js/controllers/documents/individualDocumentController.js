@@ -13,7 +13,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
     IndividualDocumentController.$inject = ['$rootScope', '$scope', 'Navigator', 'Documents', '$timeout',

@@ -1,6 +1,6 @@
 import { getApps, initializeApp } from 'firebase/app';
 
-angular.module("MUHCApp").config(FirebaseConfiguration);
+angular.module('OpalApp').config(FirebaseConfiguration);
 
 FirebaseConfiguration.$inject = [];
 

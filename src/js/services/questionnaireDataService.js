@@ -11,7 +11,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('QuestionnaireDataService', QuestionnaireDataService);
 
     QuestionnaireDataService.$inject = [

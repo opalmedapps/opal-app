@@ -10,15 +10,13 @@
 
 /**
  * @ngdoc service
- * @name MUHCApp.service:ResetPassword
- * @requires MUHCApp.service:Params
  * @description Service used to verify and confirm password resets.
  **/
 (function() {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('ResetPassword', ResetPassword);
 
     ResetPassword.$inject = ['Firebase','Params'];
@@ -37,7 +35,6 @@
          *@ngdoc method
          *@name verifyLinkCode
          *@param {String} url Url that is provided by the redirect from the reset email.
-         *@methodOf MUHCApp.service:ResetPassword
          *@description verifies the password reset code sent to the user.
          **/
         function verifyLinkCode(url) {
@@ -55,7 +52,6 @@
          *@name completePasswordChange
          *@param {String} oobCode  Code sent to user from the reset password email.
          *@param {String} newPassword  New user password.
-         *@methodOf MUHCApp.service:ResetPassword
          *@description confirms the password reset.
          *@returns {Promise} Returns promise containing void.
          **/
@@ -68,7 +64,6 @@
          *@name getParameter
          *@param {String} param  Parameter to search for in query string.
          *@param {String} url  URL to scan for parameter.
-         *@methodOf MUHCApp.service:ResetPassword
          *@description Scans the URL using regular expressions for parameters.
          *@returns {Object} The parameter and its value.
          **/

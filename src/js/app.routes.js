@@ -7,7 +7,7 @@ import tabsPage from "../views/tabs/tabs.html";
  */
 (()=>{
 	angular
-		.module('MUHCApp')
+		.module('OpalApp')
 		.config(RoutesConfiguration);
 
 	RoutesConfiguration.$inject = ['$stateProvider', '$uiRouterProvider', '$urlServiceProvider'];

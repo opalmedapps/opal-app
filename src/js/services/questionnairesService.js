@@ -9,7 +9,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Questionnaires', Questionnaires);
 
     /*

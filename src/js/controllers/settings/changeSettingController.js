@@ -9,7 +9,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('ChangeSettingController', ChangeSettingController);
 
     ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer', '$timeout', 'Navigator',
