@@ -23,7 +23,6 @@ class PatientTestResultsByTypeController {
 
 	#patientTestResults;
 	#navigator;
-	#labsChartConfigurationFactory;
 	#$timeout;
 	#$filter;
 	#browser;
