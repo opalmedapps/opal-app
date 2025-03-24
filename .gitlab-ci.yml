@@ -245,7 +245,7 @@ include:
   - component: $CI_SERVER_FQDN/opalmedapps/engineering/ci-templates/check-thirdparty-notice@main
     inputs:
       package-file: package.json
-      additional-dependencies: angular-ui-bootstrap "Roboto Font"
+      additional-dependencies: "angular-ui-bootstrap 'Roboto Font'"
       
   # use latest template versions to run security scanning jobs also in merge request pipelines:
   # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
