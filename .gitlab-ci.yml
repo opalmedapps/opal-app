@@ -248,6 +248,9 @@ include:
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
   # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
   - template: Jobs/SAST.latest.gitlab-ci.yml
+  # DAST Scanning: https://docs.gitlab.com/ee/user/application_security/dast/
+  - template: DAST.gitlab-ci.yml
+
 
 
 # Secret Detection Customization: 
@@ -275,3 +278,17 @@ mobsf-ios-sast:
   rules:
     # override rules since at the time the job is created the apk does not exist yet
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+
+# DAST Scanning Customization: 
+# https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/requirements.html
+# https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/enabling_the_analyzer.html
+dast:
+  needs: ["deploy web"]
+  # https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/variables.html
+  variables:
+    DAST_WEBSITE: "https://devregistration.opalmedapps.ca"
+    DAST_BROWSER_SCAN: "true"
+    # enables active scanning
+    # https://docs.gitlab.com/ee/user/application_security/dast/browser/checks/#active-checks
+    DAST_FULL_SCAN_ENABLED: "true"
