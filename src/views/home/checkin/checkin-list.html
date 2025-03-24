@@ -26,9 +26,16 @@
                                 stroke-width="10%"
                                 stroke-miterlimit="10"/>
                     </svg>
-                    <i ng-if="app.CheckInStatus == 'success'" class="fa-solid fa-square-check fa-2x color-success"></i>
-                    <i ng-if="app.CheckInStatus == 'warning'" class="fa-solid fa-triangle-exclamation fa-2x color-warning"></i>
-                    <i ng-if="app.CheckInStatus == 'danger'" class="fa-solid fa-circle-xmark fa-2x color-error"></i>
+                    <!-- Never use a changing ng-if directly on a font-awesome icon to prevent issues caused by DOM-manipulation -->
+                    <div ng-if="app.CheckInStatus == 'success'">
+                        <i class="fa-solid fa-square-check fa-2x color-success"></i>
+                    </div>
+                    <div ng-if="app.CheckInStatus == 'warning'">
+                        <i class="fa-solid fa-triangle-exclamation fa-2x color-warning"></i>
+                    </div>
+                    <div ng-if="app.CheckInStatus == 'danger'">
+                        <i class="fa-solid fa-circle-xmark fa-2x color-error"></i>
+                    </div>
                 </ons-col>
                 <ons-col width="1%" > <div class="{{checkIn.separatorStatus[app.CheckInStatus]}}"></div></ons-col>
                 <ons-col>

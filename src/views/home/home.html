@@ -109,13 +109,18 @@
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <div ng-if="Ctrl.checkinState.canNavigate">
-                            <i ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError" class="fa-regular fa-square fa-2x" style="color:#4CAF50;"></i>
-                            <i ng-if="Ctrl.checkinState.allCheckedIn || Ctrl.checkinState.checkinError" class="fa-regular fa-check-square fa-2x" style="color:#4CAF50;"></i>
-                            <span ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> {{ Ctrl.checkinState.numberOfAppts }}</span>
-                            <span ng-if="Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> ! </span>
+                            <!-- Never use a changing ng-if directly on a font-awesome icon to prevent issues caused by DOM-manipulation -->
+                            <div ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError">
+                                <i class="fa-regular fa-square fa-2x" style="color:#4CAF50"></i>
+                                <span class="notification" style="position: absolute; margin-left: -7px"> {{ Ctrl.checkinState.numberOfAppts }}</span>
+                            </div>
+                            <div ng-if="Ctrl.checkinState.allCheckedIn || Ctrl.checkinState.checkinError">
+                                <i class="fa-regular fa-check-square fa-2x" style="color:#4CAF50"></i>
+                                <span ng-if="Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> ! </span>
+                            </div>
                         </div>
                         <div ng-if="!Ctrl.checkinState.canNavigate">
-                            <i class="fa-regular fa-square fa-2x" style="color:#9E9E9E;"></i>
+                            <i class="fa-regular fa-square fa-2x" style="color:#9E9E9E"></i>
                         </div>
                     </ons-col>
                     <ons-col>
