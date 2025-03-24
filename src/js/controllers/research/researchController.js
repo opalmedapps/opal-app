@@ -80,7 +80,7 @@
         }
 
         function openResearchFeedback() {
-            navigator.pushPage('views/personal/research/research-feedback/research-feedback.html');
+            navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'research'});
         }
 
         function openReferenceMaterial() {

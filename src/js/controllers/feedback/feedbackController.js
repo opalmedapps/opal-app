@@ -10,11 +10,13 @@
         .controller('FeedbackController', FeedbackController);
 
     FeedbackController.$inject = [
-        'RequestToServer', 'NetworkStatus', 'NativeNotification', '$scope', '$filter', '$timeout'
+        '$filter', '$scope', '$timeout', 'NativeNotification', 'NavigatorParameters',
+        'NetworkStatus', 'RequestToServer',
     ];
 
     /* @ngInject */
-    function FeedbackController(RequestToServer, NetworkStatus, NativeNotification, $scope, $filter, $timeout) {
+    function FeedbackController($filter, $scope, $timeout, NativeNotification, NavigatorParameters,
+                                NetworkStatus, RequestToServer) {
         var vm = this;
 
         vm.submitFeedback = submitFeedback;
@@ -25,8 +27,35 @@
         //////////////////////
 
         function activate() {
+            let navigator = NavigatorParameters.getNavigator();
+            let parameters = navigator.getCurrentPage().options;
+
             vm.enableSend = false;
             bindEvents();
+
+            initializeContentBasedOnType(parameters.contentType);
+        }
+
+        /**
+         * @description Sets strings in the view based on the type of feedback.
+         * @param {string} contentType The type of feedback.
+         */
+        function initializeContentBasedOnType(contentType) {
+            vm.feedbackType = contentType;
+            switch (contentType) {
+                case 'general':
+                    vm.title = 'FEEDBACK';
+                    vm.description = 'FEEDBACK_MESSAGE';
+                    vm.placeholder = 'LEAVEMESSAGE';
+                    break;
+                case 'research':
+                    vm.title = 'RESEARCH_FEEDBACK';
+                    vm.description = 'RESEARCH_FEEDBACK_MESSAGE';
+                    vm.placeholder = 'RESEARCH_FEEDBACK_PLACEHOLDER';
+                    break;
+                default:
+                    throw `Invalid contentType = "${contentType}" for feedback form`;
+            }
         }
 
         function bindEvents() {
