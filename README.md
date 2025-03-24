@@ -90,7 +90,8 @@ In Opal we have three main branches: `staging`, `preprod`, and `prod`. In terms 
 
 3. Install version 13 of [Node.js](https://nodejs.org/en/download/releases/) (look for the last iteration of 13.X.X). 
    If you already have Node.js on your machine, or would like more flexibility in installing different versions of Node, 
-   you may want to install the [Node Version Manager](https://github.com/nvm-sh/nvm) instead.
+   you may want to install the [Node Version Manager](https://github.com/nvm-sh/nvm) or 
+   [Node Version Manager for Windows](https://github.com/coreybutler/nvm-windows) instead.
    Verify that Node is installed by running `node -v`.
    A few notes:
    - If you see the current version of the Node runtime installed after running `node -v`, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
