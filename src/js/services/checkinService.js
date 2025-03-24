@@ -284,8 +284,6 @@
             return Appointments.getTodaysAppointments();
         }
 
-        // TODO - test - if the user declines GPS, do they get prompted once per site? (bad)
-
         /**
          * @desc Uses device GPS functionality to determine whether the user is in range to check in.
          *       The user is in range if their device is within a maximum radius of any of the sites linked to
