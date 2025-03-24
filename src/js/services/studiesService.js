@@ -62,17 +62,18 @@
          * @desc Updates the consent status for the study corresponding to the given consent form Id.
          * @param {int} questionnaireId The ID of the consent form (questionnaire Id in QuestionnaireDB).
          * @param {string} status The consent status submitted, either "opalConsented" or "declined".
+         * @param {string} patientUUID The Django uuid of the currently selected patient
          * @return {promise} 
          */
-        async function updateConsentStatus(questionnaireId, status) {
+        async function updateConsentStatus(questionnaireId, status, patientUUID) {
             let params = {
                 questionnaire_id: questionnaireId,
-                status: status
+                status: status,
+                uuid: patientUUID
             };
 
             try {
                 let response = await RequestToServer.sendRequestWithResponse('StudyUpdateStatus', params);
-
                 return { Success: true, Location: 'Server' };
             } catch (error) {
                 throw { Success: false, Location: '', Error: error };

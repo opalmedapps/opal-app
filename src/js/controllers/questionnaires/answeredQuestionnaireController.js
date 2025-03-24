@@ -18,12 +18,13 @@
         'NativeNotification',
         'NavigatorParameters',
         'Params',
+        'ProfileSelector',
         'Questionnaires',
         'Studies'
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $timeout, FirebaseService, NativeNotification, NavigatorParameters, Params, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $timeout, FirebaseService, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -133,12 +134,15 @@
             // mark questionnaire as finished
             verifyPassword(vm.requirePassword, vm.password)
                 .then(function (userCredential) {
+                    // Grab the patient uuid from the ProfileSelector
+                    const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
+
                     // Update consent status to opalConsented or declined
                     if (vm.isConsent && !vm.requirePassword) {
-                        Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined');
+                        Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined', patient_uuid);
                     }
-                    else if (vm.isConsent && vm.requirePassword && userCredential) {
-                        Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented');
+                    else if (vm.isConsent && vm.requirePassword) {  // TODO: Replace userCredential when firebase auth bug fixed: QSCCD-1583
+                        Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented', patient_uuid);
                     }
 
                     // mark questionnaire as finished
@@ -387,7 +391,6 @@
             if (requirePassword) {
                 const user = FirebaseService.getAuthenticationCredentials();
                 const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
-
                 return user.reauthenticateWithCredential(credential);
             }
 
