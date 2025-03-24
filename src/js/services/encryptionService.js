@@ -19,6 +19,11 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
 
     const main_fields = ['UserID', 'Timestamp', 'Code', 'DeviceId'];
 
+    // Constants for key derivation
+    const keySizeBits = 256; // Key size in bits
+    const iterations = 600000;
+    const keySizeByte = 32; // Key size in bytes
+
     function decryptObject(object, secret) {
         if (typeof object === 'string') {
             //grab the nonce
@@ -219,11 +224,8 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          * @returns {string} The key derived from PBKDF2 based on the provided inputs.
          */
         generateSpecificEncryptionKey: function (secret, salt) {
-            var keySizeBits = 256; // Key size in bits for SHA-256
-            var iterations = 600000;
-
             return CryptoJS.PBKDF2(secret, salt, {
-                keySize: keySizeBits / 32,
+                keySize: keySizeBits /keySizeByte,
                 iterations: iterations,
                 hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
@@ -237,13 +239,9 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          *@return {String} Returns hashed password
          **/
          generateEncryptionHash: function () {
-            var keySizeBits = 256; // Key size in bits for SHA-256
-            var iterations = 600000;
             var usernameHash = hash(UserAuthorizationInfo.getUsername());
-
-            alert(usernameHash);
-              encryptionHash = CryptoJS.PBKDF2(usernameHash, securityAnswerHash, {
-                keySize: keySizeBits / 32,
+            encryptionHash = CryptoJS.PBKDF2(usernameHash, securityAnswerHash, {
+                keySize: keySizeBits /keySizeByte,
                 iterations: iterations,
                 hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
