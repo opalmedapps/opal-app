@@ -85,8 +85,6 @@
                 homeNavigator.off('prepush');
             });
 
-            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE').catch(console.error);
-
             // Initialize the page data if online
             if(NetworkStatus.isOnline()){
                 homePageInit();
