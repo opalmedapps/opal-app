@@ -21,10 +21,12 @@
         .module('OpalApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['$scope', 'Appointments', '$location', '$anchorScroll', 'Navigator', 'UserPreferences', 'Params', 'Notifications'];
+    CalendarController.$inject = ['$scope', '$timeout', 'Appointments', '$location', '$anchorScroll', 'Navigator',
+        'UserPreferences', 'Params', 'Notifications'];
 
     /* @ngInject */
-    function CalendarController($scope, Appointments, $location, $anchorScroll, Navigator, UserPreferences, Params, Notifications) {
+    function CalendarController($scope, $timeout, Appointments, $location, $anchorScroll, Navigator,
+                                UserPreferences, Params, Notifications) {
         const vm = this;
 
         let todaysTimeMilliseconds;
@@ -136,6 +138,9 @@
                 vm.todays_date = new Date();
                 vm.todays_date.setHours(0,0,0,0);
             }
+
+            // Scroll after a short delay to make sure the UI is fully loaded
+            $timeout(scrollToAnchor, 500);
         }
 
         /**
@@ -152,7 +157,7 @@
                     return 'anchorAppointments'+ ind;
                 }
             }
-            return 'firstAnchor';
+            return 'lastAnchor';
         }
 
         /**
@@ -355,7 +360,10 @@
 
         function bindEvents() {
             // Remove event listeners
-            $scope.$on('$destroy', () => navigator.off('prepop'));
+            $scope.$on('$destroy', () => {
+                $location.hash('');
+                navigator.off('prepop');
+            });
 
             // Reload user profile if appointments calendar was opened via Home tab,
             // and profile was implicitly changed.
