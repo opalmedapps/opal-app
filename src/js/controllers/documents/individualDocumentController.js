@@ -22,7 +22,7 @@
     /* @ngInject */
     function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout,
                                           FileManagerService, Constants, $q, UserPreferences, Browser, $filter,
-                                          Toast, ProfileSelector) {
+                                          Toast) {
         let vm = this;
         let navigator = null;
         let parameters;
