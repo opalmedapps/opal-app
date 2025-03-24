@@ -1,6 +1,6 @@
 /*
  * Filename     :   dynamicContentService.js
- * Description  :   Service that manages the dynamic data for Opal, hosted on depdocs.com.
+ * Description  :   Service that manages the dynamic data for Opal, hosted on an external server.
  * Created by   :   Robert Maglieri 
  * Date         :   02 Mar 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
@@ -14,7 +14,7 @@
  *@requires $q
  *@requires $http
  *@requires MUHCApp.service:UserPreferences
- *@description Service that manages the dynamic data for Opal, hosted on depdocs.com.
+ *@description Service that manages the dynamic data for Opal, hosted on an external server.
  **/
 (function () {
     'use strict';
@@ -27,10 +27,6 @@
 
     /* @ngInject */
     function DynamicContent($http, $q, UserPreferences) {
-
-        // Locations of the data files on the external server
-        const linksURL = "https://www.depdocs.com/opal/links/links_1.11.5.php";
-        const constantsURL = "https://www.depdocs.com/opal/constants/constants.php";
 
         /**
          * @description Content mapping for links downloaded from the server.
@@ -123,8 +119,8 @@
          * @throws Throws an error if initialization fails.
          */
         async function ensureInitialized() {
-            if (objectIsEmpty(links)) await initialize(links, linksURL);
-            if (objectIsEmpty(constants)) await initialize(constants, constantsURL);
+            if (objectIsEmpty(links)) await initialize(links, OPAL_CONFIG.settings.dynamicContentFileURL);
+            if (objectIsEmpty(constants)) await initialize(constants, OPAL_CONFIG.settings.constantsFileURL);
         }
 
         /**

@@ -3,6 +3,8 @@ const config = {
     name: "Opal Pre Prod",
     env: "preprod",
     settings: {
+        constantsFileURL: "https://www.depdocs.com/opal/constants/constants.php",
+        dynamicContentFileURL: "https://www.depdocs.com/opal/links/links_1.11.5.php",
         kickOutConcurrentUsers: true,
         messageOfTheDayKey: "preprod_service",
         showVersionOnInit: true,

@@ -6,9 +6,14 @@ const config = {
     env: "sample",
     // Environment-specific settings
     settings: {
+        // String: URL to the constants file that is hosted on an external server.
+        constantsFileURL: "https://<YOUR-EXTERNAL-HOST>/<PATH-TO-THE-FILE>",
+        // String: URL to the dynamic content file that is hosted on an external server.
+        dynamicContentFileURL: "https://<YOUR-EXTERNAL-HOST>/<PATH-TO-THE-FILE>",
         // Boolean: whether to kick out a user when another person logs into the same user account on another device.
         kickOutConcurrentUsers: false,
-        // String: the key in the links file on DepDocs which contains a 'message of the day' URL for this environment. Leave empty if no message of the day URL has been set on DepDocs.
+        // String: the key in the links file on the external server which contains a 'message of the day' URL for this environment.
+        // Leave empty if no message of the day URL has been set on the external server.
         messageOfTheDayKey: "",
         // Boolean: whether to show the app's version and build number on the front page.
         showVersionOnInit: true,

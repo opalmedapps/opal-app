@@ -3,6 +3,8 @@ const config = {
     name: "Opal DevOps",
     env: "devops",
     settings: {
+        constantsFileURL: "https://www.depdocs.com/opal/constants/constants.php",
+        dynamicContentFileURL: "https://www.depdocs.com/opal/links/links_1.11.5.php",
         kickOutConcurrentUsers: false,
         messageOfTheDayKey: "devops_service",
         showVersionOnInit: true,
