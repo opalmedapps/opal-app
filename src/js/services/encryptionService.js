@@ -18,7 +18,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
     var securityAnswerHash = '';
     var encryptionHash = '';
 
-    const main_fields = ['UserID', 'Timestamp', 'Code', 'DeviceId'];
+    const main_fields = ['UserID', 'timestamp', 'Timestamp', 'Code', 'DeviceId'];
 
     // Constants for key derivation
     const keySizeBits = 256; // Key size in bits

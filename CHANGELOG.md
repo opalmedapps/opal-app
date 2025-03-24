@@ -1,3 +1,31 @@
+## [1.33.7](https://gitlab.com/opalmedapps/qplus/compare/v1.33.6...v1.33.7) (2024-05-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v10.8.1 ([42a3930](https://gitlab.com/opalmedapps/qplus/commit/42a39309e6d289dbd34f16251ba8ab342dc9f49c))
+
+## [1.33.6](https://gitlab.com/opalmedapps/qplus/compare/v1.33.5...v1.33.6) (2024-05-03)
+
+
+### Bug Fixes
+
+* add delay to message of the day display (QSCCD-2139) ([2164a4b](https://gitlab.com/opalmedapps/qplus/commit/2164a4b7835fe5b07d78d92728c2bbdc8a74ce5a))
+
+## [1.33.5](https://gitlab.com/opalmedapps/qplus/compare/v1.33.4...v1.33.5) (2024-05-03)
+
+
+### Bug Fixes
+
+* add "In Progress By" label to questionnaires ([60260d6](https://gitlab.com/opalmedapps/qplus/commit/60260d60573d270d9b56b4023137a20794b61e30))
+
+## [1.33.4](https://gitlab.com/opalmedapps/qplus/compare/v1.33.3...v1.33.4) (2024-04-30)
+
+
+### Bug Fixes
+
+* fix password reset issue and timestamp decryption issue ([f1f02ef](https://gitlab.com/opalmedapps/qplus/commit/f1f02eff6a6a6bac31ce0ddf8fcd9df243cfcb5f))
+
 ## [1.33.3](https://gitlab.com/opalmedapps/qplus/compare/v1.33.2...v1.33.3) (2024-04-25)
 
 

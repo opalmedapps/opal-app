@@ -28,7 +28,6 @@
 
         vm.alert = {};
         vm.resetSuccess = false;
-        vm.invalidPassword = true;
         vm.newValue = '';
         vm.newValueValidate = '';
 
