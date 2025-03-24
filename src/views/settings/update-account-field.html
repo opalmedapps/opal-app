@@ -7,41 +7,30 @@
 
     <div class="container" ng-show="csc.personal">
 
-        <div ng-show="csc.value=='PASSWORD'||csc.value=='EMAIL'">
-            <div>
-                <p ng-class="fontSizeTitle" translate ="{{csc.instructionOld}}"></p>
-            </div>
-
-            <div class="style-4" style="width: 100%;">
-                <input ng-minlength="1" type="{{csc.type2}}" ng-class="fontSizeDesc" placeholder="{{csc.placeHolder}}" value="{{csc.valueLabel|translate}}" ng-model="csc.oldValue" ng-change="csc.evaluate()">
-            </div>
-
+        <p ng-class="fontSizeTitle" translate ="{{csc.instructionOld}}"></p>
+        <div class="style-4" style="width: 100%;">
+            <password-input>
+                <input ng-minlength="1" type="{{csc.type2}}" ng-class="fontSizeDesc" placeholder="{{csc.placeHolder}}" value="{{csc.valueLabel}}" ng-model="csc.oldValue" ng-change="csc.evaluate()">
+            </password-input>
         </div>
 
         <div style="margin-top: 5vh">
-            <div>
-                <p ng-class="fontSizeTitle" translate ="{{csc.instruction}}"></p>
-                <small style = "color: red; margin-bottom: 30px" ng-show="csc.value=='PASSWORD'" ng-class="fontSizeDesc"> {{"RESETINSTRUCTIONS" | translate}} </small>
+            <p ng-class="fontSizeTitle" translate ="{{csc.instruction}}"></p>
+            <small style="color: red; margin-bottom: 30px" ng-class="fontSizeDesc">{{"RESETINSTRUCTIONS" | translate}}</small>
+            <div class="style-4" style="width: 100%;">
+                <password-input>
+                    <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel}}" value="{{csc.valueLabel}}" ng-model="csc.newValue" ng-change="csc.evaluate()">
+                </password-input>
             </div>
-
-            <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
-                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue" ng-change="csc.evaluate()">
-            </div>
-
             <br>
-
-            <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
-                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{ csc.inputInstruction |translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValueValidate" ng-change="csc.evaluate()">
-            </div>
-
-            <div class="style-4" style="width: 100%;" ng-show="csc.value =='PHONENUMBER'" >
-                <input phone-input type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue" ng-change="csc.evaluate()">
+            <div class="style-4" style="width: 100%;">
+                <password-input>
+                    <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.inputInstruction}}" value="{{csc.valueLabel}}" ng-model="csc.newValueValidate" ng-change="csc.evaluate()">
+                </password-input>
             </div>
         </div>
 
-        <div class="container" style="margin-top:10px">
-            <button class="button button--large" ng-disabled="csc.disableButton" ng-click="csc.updateValue(csc.value)" style="margin: 0 auto;">{{"UPDATEPASSWORDBUTTON"|translate}}</button><br>
-        </div>
+        <button class="button button--large" ng-disabled="csc.disableButton" ng-click="csc.updateValue(csc.value)" style="margin: 10px auto 0;">{{"UPDATEPASSWORDBUTTON"|translate}}</button><br>
     </div>
 
     <div ng-hide="csc.personal">

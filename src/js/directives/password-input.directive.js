@@ -14,20 +14,21 @@
     function PasswordInput() {
         return {
             restrict: 'E',
+            scope: true,
             transclude: true,
             template: `
                 <div class="password-input--wraper style-4">
                     <div class="input-slot" ng-transclude></div>
-                    <ons-icon class="icon" icon={{iconType}} role="button" ng-click="switchInputType()" aria-label="{{'SHOW_PASSWORD' | translate}}"></ons-icon>
+                    <ons-icon class="icon" icon={{iconType}} role="button" ng-click="switchInputType($event)" aria-label="{{'SHOW_PASSWORD' | translate}}"></ons-icon>
                 </div>
             `,
-            link: function (scope, element) {                
+            link: function (scope) {                
                 scope.isVisible = false;
                 scope.iconType = 'ion-eye';
-                scope.switchInputType = () => {
+                scope.switchInputType = (event) => {
                     scope.isVisible = !scope.isVisible
                     scope.iconType = scope.isVisible ? 'ion-eye-disabled' : 'ion-eye';
-                    element[0].querySelector('input').type = scope.isVisible ? 'text' : 'password';
+                    event.target.parentNode.querySelector('input').type = scope.isVisible ? 'text' : 'password';
                 }
             }
         };

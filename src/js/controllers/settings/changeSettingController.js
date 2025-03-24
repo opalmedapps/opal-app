@@ -12,13 +12,12 @@
         .module('MUHCApp')
         .controller('ChangeSettingController', ChangeSettingController);
 
-    ChangeSettingController.$inject = ['$filter', 'FirebaseService', 'UserPreferences', 'Patient', 'RequestToServer',
+    ChangeSettingController.$inject = ['$filter', 'FirebaseService', 'UserPreferences', 'RequestToServer',
         '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params'];
 
     /* @ngInject */
-    function ChangeSettingController($filter, FirebaseService, UserPreferences, Patient, RequestToServer, $timeout,
-                                     UserAuthorizationInfo, NavigatorParameters, $window, Params) {
-
+    function ChangeSettingController($filter, FirebaseService, UserPreferences, RequestToServer, $timeout,
+                                    UserAuthorizationInfo, NavigatorParameters, $window, Params) {
         var vm = this;
         var page;
         var parameters;
@@ -51,26 +50,8 @@
                 vm.valueLabel = parameters;
                 vm.personal = true;
                 vm.type1 = 'text';
-
                 //Sets the instructions depending on the value to update
-                if (parameters === Params.setAliasParam) {
-                    vm.actualValue = Patient.getAlias();
-                    vm.newValue = vm.actualValue;
-                    vm.instruction = "ENTERYOURALIAS";
-                } else if (parameters === Params.setPhoneNumbersParam) {
-                    vm.actualValue = Patient.getTelNum();
-                    vm.newValue = vm.actualValue;
-                    vm.instruction = "ENTERNEWTELEPHONE";
-                } else if (parameters === Params.setEmailParam) {
-                    vm.type1 = Params.setEmailType;
-                    vm.type2 = Params.setPasswordType;
-                    vm.newValue = '';
-                    vm.oldValue = '';
-                    vm.placeHolder = $filter('translate')("ENTERPASSWORD");
-                    vm.instruction = "ENTEREMAILADDRESS";
-                    vm.instructionOld = "ENTERPASSWORD";
-                    vm.inputInstruction = "REENTER_EMAIL";
-                } else if (parameters === Params.setPasswordParam) {
+                if (parameters === Params.setPasswordParam) {
                     vm.type1 = Params.setPasswordType;
                     vm.type2 = Params.setPasswordType;
                     vm.title = "UPDATEPASSWORDTITLE";
@@ -107,15 +88,11 @@
         }
 
         //Sets a watch on the values typed and runs the validation scripts for the respective values
-        function evaluate () {
+        function evaluate() {
             vm.newUpdate = false;
             if (parameters !== Params.setLanguageParam && parameters !== Params.setFontSizeParam) {
-                if (parameters === Params.setEmailParam) {
-                    vm.disableButton = !validateEmail();
-                } else if (parameters === Params.setPasswordParam) {
+                if (parameters === Params.setPasswordParam) {
                     vm.disableButton = !validatePassword();
-                } else if (parameters === Params.setPhoneNumbersParam) {
-                    vm.disableButton = !validateTelNum();
                 } else {
                     vm.disableButton = !validateAlias();
                 }
@@ -123,34 +100,11 @@
         }
 
         //Function to update new value
-        function updateValue (val) {
+        function updateValue(val) {
             var objectToSend = {};
             objectToSend.NewValue = vm.newValue;
-
-            if (val.toUpperCase() === Params.setPasswordParam) {
-                changePassword();
-            } else if (val.toUpperCase() === Params.setEmailParam) {
-                changeEmail();
-            }else{
-                changeField(val, vm.newValue);
-            }
+            val.toUpperCase() === Params.setPasswordParam ? changePassword() : changeField(val, vm.newValue);
             vm.disableButton = true;
-        }
-
-        //Function to change Nickname and phone number
-        function changeField(type, value)
-        {
-            var typeVal = (type.toUpperCase() === Params.setNicknameAlias) ? Params.setAliasLowerCaseParam : Params.setTelephoneNumberParam;
-            var objectToSend = {};
-            objectToSend.NewValue = value;
-            objectToSend.FieldToChange = typeVal;
-            RequestToServer.sendRequest('AccountChange', objectToSend);
-            if (type.toUpperCase() === Params.setNicknameAlias) Patient.setAlias(value);
-            else Patient.setTelNum(value);
-            vm.actualValue = value;
-            vm.newUpdate = true;
-            vm.alertClass = Params.alertClassUpdateMessageSuccess;
-            vm.updateMessage = "FIELD_UPDATED";
         }
 
         //Function to change font size
@@ -210,42 +164,6 @@
                     })
             }
         }
-        //Change email function
-        function changeEmail() {
-
-            var user = FirebaseService.getAuthenticationCredentials();
-            var credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.oldValue);
-
-            user.reauthenticate(credential).then(function () {
-                user.updateEmail(vm.newValue).then(updateOnServer).catch(handleError);
-            }).catch(handleError);
-
-            function updateOnServer(){
-                var objectToSend = {};
-                objectToSend.FieldToChange = Params.setEmailField;
-                objectToSend.NewValue = vm.newValue;
-                Patient.setEmail(vm.newValue);
-                window.localStorage.setItem(Params.setEmailField,vm.newValue);
-                RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
-                    .then(function(){
-                        $timeout(function(){
-                            vm.alertClass = Params.alertClassUpdateMessageSuccess;
-                            vm.updateMessage = "UPDATED_EMAIL";
-                            vm.newUpdate = true;
-                        });
-                    }).catch(handleError);
-            }
-        }
-        //Validating fields functions
-        function validateTelNum() {
-            var regex = /^[0-9]{10}$/;
-            return (vm.actualValue !== vm.newValue && regex.test(vm.newValue));
-        }
-
-        function validateEmail() {
-            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return (vm.newValue !== vm.actualValue && re.test(vm.newValue));
-        }
 
         // Used to enable or disable the UPDATE button
         function validatePassword() {
@@ -268,10 +186,6 @@
             let containsSpecialChar = vm.newValue.search(/\W|_{1}/) > -1;
 
             return containsACapitalLetter && containsANumber && containsSpecialChar;
-        }
-
-        function validateAlias() {
-            return (vm.actualValue !== vm.newValue && vm.newValue.length > 3);
         }
 
         function handleError(error) {
