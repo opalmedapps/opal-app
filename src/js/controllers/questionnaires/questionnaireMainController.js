@@ -195,6 +195,7 @@
                         vm.questionIndex = 0;
                         vm.loadingQuestionnaire = false;
 
+                        // this is to force update the carousel even by swiping it
                         !bySwipe ? next() : vm.carousel.setActiveCarouselItemIndex(vm.startIndex);
                         vm.carousel.refresh();
                     });

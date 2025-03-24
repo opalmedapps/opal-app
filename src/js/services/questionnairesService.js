@@ -372,6 +372,21 @@
                     // TODO: error handling: preferably going back to the questionnaire list and display an error message for the user to try again in some amount of time
                 }
 
+                // Note: the following should be uncommented for when the questionnaire has more than 1 section in OpalAdmin
+                //
+                // currentQuestionnaire.sections[i].section_position = parseInt(currentQuestionnaire.sections[i].section_position);
+                //
+                // // format carousel
+                // let sectionObjectForCarousel = {
+                //     type: 'section',
+                //     position: currentQuestionnaire.sections[i].section_position,
+                //     instruction: currentQuestionnaire.sections[i].section_instruction,
+                //     title: currentQuestionnaire.sections[i].section_title
+                // };
+                //
+                // carouselItems.push(sectionObjectForCarousel);
+
+
                 // loop through questions
                 for (let j = 0; j < currentQuestionnaire.sections[i].questions.length; j++) {
 

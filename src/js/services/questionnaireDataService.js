@@ -104,7 +104,6 @@
 
             // array to prevent the encryption of the answerArray since it is passing by reference
             let answerToSave = [];
-
             if (!Array.isArray(answerArray)) return 'ERROR: error in saving the questionnaire answer, it does not have a valid answerArray';
 
             for (let type in validType){
