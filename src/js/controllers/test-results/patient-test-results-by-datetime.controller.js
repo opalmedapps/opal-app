@@ -85,6 +85,20 @@ class PatientTestResultsByDatetimeController {
 	 * @param {number} testTypeSerNum Returns the testTypeSerNum (ExpressionSerNum) in the view
 	 */
 	goToTestTypeResults(testTypeSerNum) {
+		// Mark cached test results by date as read
+		this.results.forEach(resultByType => {
+			if (resultByType.testExpressionSerNum === testTypeSerNum && resultByType.readStatus === 0)
+				resultByType.readStatus = 1;
+		});
+
+		// Implicitly mark cached test results by type as read
+		const testTypes = this.#patientTestResults.getTestTypes();
+		testTypes.forEach(async resultByType => {
+			if (resultByType.testExpressionSerNum === testTypeSerNum && resultByType.readStatus === false) {
+				resultByType.readStatus = 1;
+			}
+		});
+
 		this.#navigator.pushPage(
 			'./views/personal/test-results/test-results-by-type.html',
 			{testTypeSerNum});

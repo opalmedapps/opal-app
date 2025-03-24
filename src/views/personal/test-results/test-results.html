@@ -51,7 +51,7 @@
                     <ons-list>
                         <div ng-repeat="testDate in tests.testDates">
                             <ons-list-header ng-if="tests.testDates | showHeader : $index"
-                                             ng-class="fontSizeTitle">{{testDate|date:'longDate'}}
+                                             ng-class="fontSizeTitle">{{testDate|date:'fullDate'}}
                             </ons-list-header>
                             <ons-list-item
                                     ng-click="tests.goToTestDateResults(testDate)"
@@ -130,7 +130,10 @@
                         ng-repeat="testResult in tests.testTypes | filter: tests.searchTestTypeText"
                         ng-click="tests.goToTestTypeResults(testResult.testExpressionSerNum)"
                         class="list-item-container">
-                            <ons-row ng-class="fontSizeDesc" vertical-align="center">
+                            <ons-row
+                                ng-class="fontSizeDesc"
+                                vertical-align="center"
+                                ng-style="{'font-weight': (testResult.readStatus===false) ? 'bold' : 'normal'}">
                                 <!-- LAB RESULT - LEFT (NAME) -->
                                 <ons-col width="35%" class="labtest-col" vertical-align="center">
                                     <div align="left" style="margin-left:4px;">

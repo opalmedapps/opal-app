@@ -74,6 +74,23 @@
 		 * @param {number} testTypeSerNum ExpressionSerNum for the given test type
 		 */
 		function goToTestTypeResults(testTypeSerNum) {
+			// Mark cached test results by type as read
+			vm.testTypes.forEach(testResult => {
+				if (testResult.testExpressionSerNum === testTypeSerNum && testResult.readStatus === false)
+					testResult.readStatus = true;
+			});
+
+			// Implicitly mark cached test results by date as read
+			const testDates = PatientTestResults.getTestDates();
+			testDates.forEach(async testDate => {
+				let testByDate = await PatientTestResults.getTestResultsByDate(testDate);
+				testByDate?.results.forEach(resultByType => {
+					if (resultByType.testExpressionSerNum === testTypeSerNum && resultByType.readStatus === 0) {
+						resultByType.readStatus = 1;
+					}
+				});
+			});
+
 			navigator.pushPage(
 				'./views/personal/test-results/test-results-by-type.html',
 				{ testTypeSerNum });
