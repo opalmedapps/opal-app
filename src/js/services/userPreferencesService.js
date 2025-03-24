@@ -61,26 +61,30 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
         languageObserver.notify();
     }
 
+    function setFontSize(size) {
+        let username = UserAuthorizationInfo.getUsername();
+        window.localStorage.setItem(username + 'fontSize', size);
+        fontSize = size;
+        if (size === 'medium') {
+            $rootScope.fontSizeDesc = 'fontDescMedium';
+            $rootScope.fontSizeTitle = 'fontTitleMedium';
+        } else if (size === 'large') {
+            $rootScope.fontSizeDesc = 'fontDescLarge';
+            $rootScope.fontSizeTitle = 'fontTitleLarge';
+        } else if (size === 'xlarge') {
+            $rootScope.fontSizeDesc = 'fontDescXlarge';
+            $rootScope.fontSizeTitle = 'fontTitleXlarge';
+        }
+    }
 
     return {
-
-        setFontSize: function(size) {
-            var username = UserAuthorizationInfo.getUsername();
-            window.localStorage.setItem(username + 'fontSize', size);
-            fontSize = size;
-            if (size === 'medium') {
-                $rootScope.fontSizeDesc = 'fontDescMedium';
-                $rootScope.fontSizeTitle = 'fontTitleMedium';
-            } else if (size === 'large') {
-                $rootScope.fontSizeDesc = 'fontDescLarge';
-                $rootScope.fontSizeTitle = 'fontTitleLarge';
-            } else if (size === 'xlarge') {
-                $rootScope.fontSizeDesc = 'fontDescXlarge';
-                $rootScope.fontSizeTitle = 'fontTitleXlarge';
-            }
-        },
+        setFontSize: setFontSize,
         setLanguage: setLang,
         observeLanguage: fun => languageObserver.attach(fun),
+        initFontSize: function() {
+            let font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
+            setFontSize(font || 'large');
+        },
         /**
          *@ngdoc method
          *@name getFontSize
@@ -88,17 +92,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
          *@returns {String} Returns font-size
          **/
         getFontSize: function() {
-            /*var username=UserAuthorizationInfo.getUsername();
-            var appfontSize='large';
-            $rootScope.fontSizeDesc='fontDescLarge';
-            $rootScope.fontSizeTitle='fontTitleLarge';
-            var fontSize=window.localStorage.getItem(username+'fontSize');
-            if(fontSize&&typeof fontSize!=='undefined'&&fontSize=='medium')
-            {
-                fontSize=appfontSize;
-                $rootScope.fontSizeDesc='fontDescMedium';
-                $rootScope.fontSizeTitle='fontTitleMedium';
-            }*/
             var font = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
             $rootScope.fontSizeDesc = 'fontDesc' + font;
             $rootScope.fontSizeTitle = 'fontTitle' + font;

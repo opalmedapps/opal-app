@@ -25,8 +25,8 @@
             link: function (scope) {
                 scope.$watch(function () {
                     const activeProfile = ProfileSelector.getActiveProfile();
-                    scope.patientInitials = $filter('profileInitials')(activeProfile);
-                    scope.profileColor = {'background-color': activeProfile.color};
+                    scope.patientInitials = activeProfile ? $filter('profileInitials')(activeProfile) : '';
+                    scope.profileColor = {'background-color': activeProfile?.color || 'grey'};
                 });
             }
         };

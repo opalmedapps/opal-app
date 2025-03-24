@@ -113,6 +113,16 @@ build ios:
     paths:
       - opal-$ENV.ipa
 
+build web:
+  extends: .build
+  script:
+    - npm run build:web --env=$ENV
+    - zip -r -X opal-$ENV-www.zip www
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - opal-$ENV-www.zip
+
 # Extended job for deploying the app; deploys to Firebase automatically based on release tags
 #   Note: Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the GitLab project settings
 #   This service account provides permissions for uploading to Firebase App Distribution

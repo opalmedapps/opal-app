@@ -35,15 +35,17 @@
          *@methodOf MUHCApp.service:NativeNotification
          *@param {String} message Alert message to be displayed
          *@param {function} [callback] - Optional. Called when the OK button is pressed.
+         *@param {string} [title] - Optional. Alternate title to show instead of the default one ("Alert").
+         *                          Must already be translated.
          *@description Displays message as a native looking alert
          **/
-        function showNotificationAlert(message, callback) {
+        function showNotificationAlert(message, callback, title) {
             if (currentAlert && message === currentAlert) return;
             currentAlert = message;
             ons.notification.confirm({
                 message: message,
                 modifier: mod,
-                title: $filter('translate')("ALERT"),
+                title: title ? title : $filter('translate')("ALERT"),
                 buttonLabels: [$filter('translate')("OK_BUTTON")],
                 callback: (idx) => {
                     currentAlert = null;

@@ -10,11 +10,11 @@
         .controller('FeedbackController', FeedbackController);
 
     FeedbackController.$inject = [
-        'RequestToServer', 'NetworkStatus', '$scope'
+        'RequestToServer', 'NetworkStatus', 'NativeNotification', '$scope', '$filter', '$timeout'
     ];
 
     /* @ngInject */
-    function FeedbackController(RequestToServer, NetworkStatus, $scope) {
+    function FeedbackController(RequestToServer, NetworkStatus, NativeNotification, $scope, $filter, $timeout) {
         var vm = this;
 
         vm.submitFeedback = submitFeedback;
@@ -41,14 +41,21 @@
 
         function submitFeedback(type) {
             if (vm.enableSend) {
-                RequestToServer.sendRequest('Feedback', {
+                RequestToServer.sendRequestWithResponse('Feedback', {
                     FeedbackContent: $scope.feedbackText,
                     AppRating: 3,
                     Type: type
+                }).then(function(){
+                    $timeout(function(){
+                        $scope.feedbackText = '';
+                        vm.submitted = true;
+                        vm.enableSend = false; 
+                    });
+                }).catch(function(error){
+                    console.error(error);
+                    NativeNotification.showNotificationAlert($filter('translate')("FEEDBACK_ERROR"));
                 });
-                vm.feedbackText = '';
-                vm.submitted = true;
-                vm.enableSend = false;
+                
             }
         }
 
