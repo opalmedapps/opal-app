@@ -71,6 +71,10 @@
         <allow-intent href="market:*"/>
     </platform>
     <platform name="ios">
+        <!-- Required to access location data since iOS 10 -->
+        <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+            <string>Localisation nécessaire pour l'enregistrement aux rendez-vous / Location needed for appointment check-in</string>
+        </config-file>
         <preference name="deployment-target" value="11.0"/>
         <preference name="WKWebViewOnly" value="true"/>
         <splash src="res/screen/ios/Default@2x~universal~anyany.png"/>

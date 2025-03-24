@@ -28,21 +28,27 @@
     /* @ngInject */
     function DynamicContent($http, $q, UserPreferences) {
 
-        // The location of the links file on the external server
+        // Locations of the data files on the external server
         const linksURL = "https://www.depdocs.com/opal/links/links_1.11.5.php";
+        const constantsURL = "https://www.depdocs.com/opal/constants/constants.php";
 
         /**
-         *@ngdoc property
-         *@name MUHCApp.service.#content
-         *@propertyOf MUHCApp.service:DynamicContent
-         *@description Content mapping downloaded from the server.
+         * @description Content mapping for links downloaded from the server.
+         * @type {object}
          **/
-        let content = undefined;
+        let links = {};
+
+        /**
+         * @description Content mapping for constants downloaded from the server.
+         * @type {object}
+         */
+        let constants = {};
 
         const service = {
             ensureInitialized: ensureInitialized,
             getPageContent: getPageContent,
             getURL: getURL,
+            getConstant: getConstant,
             loadFromURL: loadFromURL,
         };
 
@@ -51,19 +57,21 @@
         ////////////////
 
         /**
-         *@ngdoc method
-         *@name initializeLinks
-         *@methodOf MUHCApp.service:DynamicContent
-         *@description Function that gets the available content from the links file on the external server.
-         *@returns {Promise<void>}
+         * @description Function that gets the available content from the specified file on the external server.
+         * @param variable The variable in which to store the content.
+         * @param sourceLink The link on the server from which to fetch the data.
+         * @returns {Promise<void>}
          */
-        async function initializeLinks() {
-            try{
+        async function initialize(variable, sourceLink) {
+            try {
                 const response = await $http({
                     method: 'GET',
-                    url: linksURL
+                    url: sourceLink
                 });
-                content = response.data;
+
+                // Alter the variable to save the new content
+                Object.keys(variable).forEach(key => { delete variable[key] });
+                Object.assign(variable, response.data);
 
                 if (response.status !== 200) throw {...response, code: "INIT_ERROR"};
             }
@@ -71,12 +79,21 @@
         }
 
         /**
-         * @description Checks whether the requested content exists in the content variable.
+         * @description Checks whether the requested content exists in the links variable.
          * @param contentKey The key of the content to check.
          * @returns {boolean} True if a URL in the right language exists for the given contentKey; false otherwise.
          */
-        function contentExists(contentKey) {
-            return content && content[contentKey] && content[contentKey][getURLKey()];
+        function linkContentExists(contentKey) {
+            return links && links[contentKey] && links[contentKey][getURLKey()];
+        }
+
+        /**
+         * @description Checks whether the requested constant exists in the constants variable.
+         * @param constantKey The key of the constant to check.
+         * @returns {boolean} True if the constant exists for the given constantKey; false otherwise.
+         */
+        function constantExists(constantKey) {
+            return constants && typeof constants[constantKey] !== "undefined";
         }
 
         /**
@@ -87,17 +104,27 @@
             return `url_${UserPreferences.getLanguage()}`;
         }
 
+        /**
+         * @description Helper function to check if an object is empty.
+         * @param obj The object to check (must be an object).
+         * @returns {boolean} Whether the object is empty.
+         */
+        function objectIsEmpty(obj) {
+            return Object.keys(obj).length === 0;
+        }
+
         ////////////////
 
         /**
-         * @description Ensures that the links in this service have been initialized.
+         * @description Ensures that the data in this service has been initialized.
          * @author Stacey Beard
          * @date 2021-07-20
          * @returns {Promise<void>}
          * @throws Throws an error if initialization fails.
          */
         async function ensureInitialized() {
-            if (!content) await initializeLinks();
+            if (objectIsEmpty(links)) await initialize(links, linksURL);
+            if (objectIsEmpty(constants)) await initialize(constants, constantsURL);
         }
 
         /**
@@ -113,17 +140,17 @@
             // Check whether the requested content's link exists
             const urlKey = getURLKey();
             const details = {contentType: contentKey, urlKey: urlKey};
-            if (!contentExists(contentKey)) throw {code: "NO_PAGE_CONTENT", ...details};
+            if (!linkContentExists(contentKey)) throw {code: "NO_PAGE_CONTENT", ...details};
 
             try{
                 // Request the content
                 const response = await $http({
                     method: 'GET',
-                    url: content[contentKey][urlKey]
+                    url: links[contentKey][urlKey]
                 });
 
-                // Add the content title if it exists
-                response.title = !content[contentKey].title ? "" : content[contentKey].title;
+                // Add the title if it exists
+                response.title = !links[contentKey].title ? "" : links[contentKey].title;
 
                 // Validate and return the result
                 if (response.status === 200) return response;
@@ -133,7 +160,7 @@
         }
 
         /**
-         * @description Gets a URL from the content variable.
+         * @description Gets a URL from the links variable.
          *              Content must already have been initialized; this is done to allow this function to be non-async.
          * @param contentKey The key for the URL to request.
          * @returns {string} The URL, or an empty string if the URL is not found.
@@ -143,12 +170,22 @@
 
             // Check whether the requested content's URL exists
             const urlKey = getURLKey();
-            if (contentExists(contentKey)) url = content[contentKey][urlKey];
+            if (linkContentExists(contentKey)) url = links[contentKey][urlKey];
 
             return url;
         }
 
-        // Loads data from a specific URL without accessing the content variable
+        /**
+         * @description Gets a constant from the constants variable.
+         *              Content must already have been initialized; this is done to allow this function to be non-async.
+         * @param contentKey The key for the constant to request.
+         * @returns {*|undefined} The constant, or undefined if the constant is not found.
+         */
+        function getConstant(constantKey) {
+            return constantExists(constantKey) ? constants[constantKey] : undefined;
+        }
+
+        // Loads data from a specific URL without accessing the links variable
         function loadFromURL(url) {
             return $http({
                 method: 'GET',
