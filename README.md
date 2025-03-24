@@ -234,10 +234,10 @@ As an alternative to setting up your computer to build the app locally, GitLab c
 providing you with the resulting output files directly in GitLab.
 
 1. After committing your work on a personal branch, push the branch to GitLab.
-   a. If you have an open merge request, you will see a box saying
+   1. If you have an open merge request, you will see a box saying
       `Detached merge request pipeline #___ waiting for manual action`.
       Click on the gear icon on the right to reveal two buttons with which to launch an iOS or Android build.
-   b. If you don't have an open merge request, navigate to
+   2. If you don't have an open merge request, navigate to
       the [Pipelines page](https://gitlab.com/opalmedapps/qplus/-/pipelines).
       There, click to open the blocked pipeline corresponding to your latest commit, and use the play buttons
       to launch a build for iOS or Android.
