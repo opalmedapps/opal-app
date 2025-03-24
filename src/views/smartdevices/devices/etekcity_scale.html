@@ -14,31 +14,31 @@
         </div>
 
         <div ng-if="ctrl.errorMessage" align="center">
-            <p class="error">{{ctrl.errorMessage}}</p>
+            <p class="error">{{ ctrl.errorMessage }}</p>
         </div>
 
         <div ng-if="ctrl.shouldShowInstructions()">
             <div style="text-align: justify;">
-                <p>To synchronize data with the smart scale, begin by stepping on the scale and weighing yourself. Once the weight is measured, scan for devices, press "Sync" for the found scale and confirm whether to send it to the hospital when asked.</p>
+                <p>{{ "SMARTDEVICES_ETEKCITY_INSTRUCTIONS" | translate }}</p>
             </div>
             
             <div align="center">
                 <button class="button--large--cta"
                         ng-click="ctrl.scanAndConnect()">
-                        <span>{{"Read Weight"|translate}}</span>
+                        <span>{{ "SMARTDEVICES_ETEKCITY_READ" | translate }}</span>
                 </button>
             </div>
         </div>
 
         <div ng-if="ctrl.isLoading()">
-            <loading-spinning-circle loading-message="{{'Connecting to device...'|translate}}">
+            <loading-spinning-circle loading-message="{{'SMARTDEVICES_CONNECTING'|translate}}">
             </loading-spinning-circle>
         </div>
 
         <div ng-if="ctrl.weight && !ctrl.dataSubmitted" align="center">
-            <p><strong>Weight</strong></p>
+            <p><strong>{{ "SMARTDEVICES_WEIGHT" | translate }}</strong></p>
             <p class="data">
-                <span>{{ctrl.weight}}</span>kg
+                <span>{{ ctrl.weight }}</span>kg
             </p>
             <!-- 
             Currently hidden but might be helpful to show to users
@@ -47,21 +47,21 @@
             -->
             <button class="button--large--cta"
                     ng-click="ctrl.submitData()">
-                {{"Submit Weight to Hospital"|translate}}
+                {{ "SMARTDEVICES_ETEKCITY_SUBMIT" | translate }}
             </button>
         </div>
 
         <div ng-if="ctrl.dataSubmitted" align="center">
-            <p>Thank you for submitting your weight.</p>
-            <p>If you have any questions or concerns, please let your clinical team know.</p>
+            <p>{{ "SMARTDEVICES_ETEKCITY_SUBMITTED" | translate }}</p>
+            <p>{{ "SMARTDEVICES_INFO_SUBMITTED" | translate }}</p>
             <button class="button--large--cta"
                     ng-click="ctrl.done()">
-                {{"Go back to smart devices"|translate}}
+                {{ "SMARTDEVICES_BACK" | translate }}
             </button>
         </div>
         
         <div ng-if="ctrl.selectedDevice == null && ctrl.devices.length > 1">
-            <p ng-class="fontSizeTitle"><strong>{{ 'Multiple devices detected. Please specify the device to read from:' | translate }}</strong></p>
+            <p ng-class="fontSizeTitle"><strong>{{ "SMARTDEVICES_MULTIPLE" | translate }}</strong></p>
 
             <ons-list>
                 <ons-list-item ng-repeat="device in ctrl.devices" class="item">
@@ -77,7 +77,7 @@
                             </div>
                             <div class="smartdevices-content--right" style="margin-left: 5vh;">
                                 <button class="shadow-2 button--large--cta" ng-click="ctrl.selectDevice(device)">
-                                    <span>{{ 'Select' | translate }}</span>
+                                    <span>{{ "SMARTDEVICES_SELECT" | translate }}</span>
                                 </button>
                             </div>
                         </div>

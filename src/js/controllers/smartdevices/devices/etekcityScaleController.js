@@ -6,11 +6,11 @@
         .controller('EtekcityScaleController', EtekcityScaleController);
 
         EtekcityScaleController.$inject = [
-        '$scope', '$timeout', 'NavigatorParameters', 'RequestToServer', 'Params', 'User'
+        '$scope', '$filter', '$timeout', 'NavigatorParameters', 'RequestToServer', 'Params', 'User'
     ];
 
     /* @ngInject */
-    function EtekcityScaleController($scope, $timeout, NavigatorParameters, RequestToServer, Params, User)
+    function EtekcityScaleController($scope, $filter, $timeout, NavigatorParameters, RequestToServer, Params, User)
     {
         // UUIDs for smart scale
         const SERVICE_UUID = 'FFE0';
@@ -20,9 +20,9 @@
         const NOTIFICATION_CHARACTERISTIC_UUID = 'FFF1';
 
         // Error messages
-        const ERROR_BACKEND = 'Error sending weight to hospital';
-        const ERROR_NO_DEVICE = 'No device found. Please redo the measurement and try again.';
-        const ERROR_NO_DATA = 'No data retrieved from device, please redo the measurement.';
+        const ERROR_BACKEND = $filter('translate')('SMARTDEVICES_ERROR_BACKEND');
+        const ERROR_NO_DEVICE = $filter('translate')('SMARTDEVICES_ERROR_NO_DEVICE');
+        const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
 
         let vm = this;
 
@@ -30,12 +30,11 @@
         vm.weight = null;
         // vm.weight = 13.45;
         vm.dataSubmitted = false;
-        // TODO: switch back to false
         vm.debug = false;
         vm.selectedDevice = null;
         // vm.selectedDevice = {name: 'QN-Scale', id: '1234-5678-aaaa-bbbb', battery: 91};
         vm.errorMessage = null;
-        // vm.errorMessage = `${ERROR_BACKEND}Patient not found`;
+        // vm.errorMessage = `${ERROR_BACKEND}: Patient not found`;
         
         vm.devices = [];
         // vm.devices.push({
