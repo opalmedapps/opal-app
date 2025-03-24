@@ -29,7 +29,7 @@ import { json2xml } from "xml-js";
                         </iframe>
 
                         <!-- video format for 'mp4', 'ogv' and 'webm' -->
-                        <video controls ng-show="videoTag" preload="metadata">
+                        <video controls ng-show="videoTag" autoplay preload="metadata">
                             <source ng-src="{{edumaterialUrl|trustThisUrl}}" type="video/{{fileExt}}">
                         </video>
 
@@ -49,7 +49,7 @@ import { json2xml } from "xml-js";
             scope.iframeTag = false;
             scope.videoTag = false;
             scope.showError = false;
-            
+
             scope.$watch('edumaterialUrl', function () {
                 try {
                     // get the material's file extension
@@ -65,8 +65,9 @@ import { json2xml } from "xml-js";
                         * For iPhones it is set to autoplay so the poster image automatically appears on initial load. 
                         * iPhones will prevent the video from auto playing, but the poster image appears as the result.
                         */
-                        if(ons.platform.isIOS()){
-                            element.children("video").attr('autoplay', 'autoplay');
+                        if(ons.platform.isAndroid()){
+                            //element.children("video").attr('autoplay', 'autoplay');
+                            element.children("video").removeAttr('autoplay');
                         }
                     }
                     else {
