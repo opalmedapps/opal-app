@@ -118,10 +118,10 @@ For more information about versioning, please read [Versioning](https://gitlab.c
 
 3. Install the [Node Version Manager for Mac](https://github.com/nvm-sh/nvm) or
    [Node Version Manager for Windows](https://github.com/coreybutler/nvm-windows) (`nvm`).
-   Then, use `nvm` to install and use version 16.14.0 of Node:
+   Then, use `nvm` to install and use version 20.8.0 of Node:
    - `nvm list`
-   - `nvm install 16.14.0`
-   - `nvm use 16.14.0`
+   - `nvm install v20.8.0`
+   - `nvm use v20.8.0`
    - `nvm list`
    
    Verify that Node was correctly set up by running `node -v`.

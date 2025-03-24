@@ -110,7 +110,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-
             var data = JSON.parse(JSON.stringify(deviceIdentifiers));
             data['Password'] = UserAuthorizationInfo.getPassword();
 

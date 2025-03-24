@@ -1,3 +1,59 @@
+## [1.19.12](https://gitlab.com/opalmedapps/qplus/compare/v1.19.11...v1.19.12) (2023-10-25)
+
+
+### Bug Fixes
+
+* **deps:** use node v20.8.0 ([e0b6e18](https://gitlab.com/opalmedapps/qplus/commit/e0b6e18aee41314bcfdd099e0ddd94cb534b6c99))
+
+## [1.19.11](https://gitlab.com/opalmedapps/qplus/compare/v1.19.10...v1.19.11) (2023-10-24)
+
+
+### Bug Fixes
+
+* **deps:** update xlts angular packages to v1.9.3 (patch) ([9568ce7](https://gitlab.com/opalmedapps/qplus/commit/9568ce7ab0a5d177c80ef5e8fae3037935113a96))
+
+## [1.19.10](https://gitlab.com/opalmedapps/qplus/compare/v1.19.9...v1.19.10) (2023-10-20)
+
+
+### Bug Fixes
+
+* set android:usesCleartextTraffic back to false for security purposes ([8ca9446](https://gitlab.com/opalmedapps/qplus/commit/8ca944664d9c864d9d4b79a387608670fe2fefa0))
+
+## [1.19.9](https://gitlab.com/opalmedapps/qplus/compare/v1.19.8...v1.19.9) (2023-10-13)
+
+
+### Bug Fixes
+
+* fix Firebase unauthentication bug ([8540398](https://gitlab.com/opalmedapps/qplus/commit/8540398e4d70f228c5af06a23c15dfb269878a64))
+
+## [1.19.8](https://gitlab.com/opalmedapps/qplus/compare/v1.19.7...v1.19.8) (2023-10-12)
+
+
+### Bug Fixes
+
+* update dependencies firebase-tools and cordova ([10f77f5](https://gitlab.com/opalmedapps/qplus/commit/10f77f517d35eb5374ecbae0b7e74be518b2291a))
+
+## [1.19.7](https://gitlab.com/opalmedapps/qplus/compare/v1.19.6...v1.19.7) (2023-10-12)
+
+
+### Bug Fixes
+
+* **deps:** update firebase to version 10.4.0 ([f346094](https://gitlab.com/opalmedapps/qplus/commit/f34609404d560e99c5065dca12ffbd824aab232d))
+
+## [1.19.6](https://gitlab.com/opalmedapps/qplus/compare/v1.19.5...v1.19.6) (2023-10-11)
+
+
+### Bug Fixes
+
+* remove the return value from the function verifyPassword ([1d93ad2](https://gitlab.com/opalmedapps/qplus/commit/1d93ad2fd395eecd827c7ecc5fdb477cea6b2dd5))
+
+## [1.19.5](https://gitlab.com/opalmedapps/qplus/compare/v1.19.4...v1.19.5) (2023-10-10)
+
+
+### Bug Fixes
+
+* **deps:** upgrade pdfjs-dist and webpack ([9242021](https://gitlab.com/opalmedapps/qplus/commit/9242021b5fb4dac9a3babd862efcd820830a677e))
+
 ## [1.19.4](https://gitlab.com/opalmedapps/qplus/compare/v1.19.3...v1.19.4) (2023-10-06)
 
 

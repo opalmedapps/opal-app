@@ -1,4 +1,4 @@
-import "./services/firebaseAuthService.js";
+import "./services/firebase.service.js";
 import "./services/utility.service";
 import "./services/appointmentsService.js";
 import "./services/notificationsService.js";
@@ -26,6 +26,7 @@ import "./services/permissionService.js";
 import "./services/dynamicContentService.js";
 import "./services/uuidService.js";
 import "./services/cleanUpService.js";
+import "./services/concurrent-login.service.js";
 import "./services/loggerService.js";
 import "./services/networkStatusService.js";
 import "./services/metadataService.js";

@@ -11,12 +11,12 @@
         .module('MUHCApp')
         .controller('MainController', MainController);
 
-    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
+    MainController.$inject = ["$window", "$state", '$rootScope','Firebase','DeviceIdentifiers',
         '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus',
         'RequestToServer', 'Toast', 'Security', '$filter', 'Params', 'LogOutService', 'AppState'];
 
     /* @ngInject */
-    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
+    function MainController($window, $state, $rootScope, Firebase, DeviceIdentifiers,
                             $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus,
                             RequestToServer, Toast, Security, $filter, Params, LogOutService, AppState) {
 
@@ -27,7 +27,6 @@
         //////////////////////////////////////////
 
         function activate() {
-            $rootScope.firstTime = true;
             $rootScope.online = navigator.onLine;
 
             bindEvents();
@@ -39,15 +38,11 @@
         function bindEvents() {
             $translatePartialLoader.addPart('top-view');
 
-            //Listen to authentication state, if user get's unauthenticated log user out
-            firebase.auth().onAuthStateChanged(function (authData) {
-                var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
+            // Listen to the Firebase authentication state; if the user gets unauthenticated, print a message
+            // Actual handling should be done in the code that unauthenticated the user; this message is just to be aware if the unauthentication happens unexpectedly
+            Firebase.onAuthStateChanged(function (authData) {
                 if (!authData) {
-                    if ($state.current.name === 'Home') {
-                        LogOutService.logOut();
-                    } else if (authInfoLocalStorage) {
-                        LocalStorage.resetUserLocalStorage();
-                    }
+                    console.log('Firebase authentication null state; currently authenticated user:', Firebase.getCurrentUser());
                 }
             });
 
@@ -79,11 +74,6 @@
             addUpdateRequiredDetection();
 
             AppState.addInactiveEvent(clearSensitiveData);
-
-            $rootScope.$on("MonitorLoggedInUsers", function (event, uid) {
-                $rootScope.firstTime = true;
-                if(OPAL_CONFIG.settings.kickOutConcurrentUsers) addUserListener(uid);
-            });
         }
 
         /*****************************************
@@ -110,7 +100,6 @@
             resetTimer();
             if ($state.current.name === 'Home') {
                 LogOutService.logOut();  // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
-                localStorage.setItem('locked', 1);
 
                 // Display a warning message to the users after being disconnected
                 Toast.showToast({
@@ -173,38 +162,6 @@
             // Wipe lab results
             CleanUp.clearSensitive();
         }
-
-        /*****************************************
-         * Manage concurrent users
-         *****************************************/
-        function addUserListener(uid) {
-            //
-            // add a listener to the firebase database that watches for the changing of the token value
-            // (this means that the same user has logged in somewhere else)
-            //
-            let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + uid);
-
-            refCurrentUser.on('value', function () {
-                if (!$rootScope.firstTime && !localStorage.getItem('locked')) {
-                    //
-                    // If it is detected that a user has concurrently logged on with a different device.
-                    // Then force the "first" user to log out and clear the observer
-                    //
-
-                    refCurrentUser.off();
-                    LogOutService.logOut();
-
-                    // Show message "You have logged in on another device."
-                    Toast.showToast({
-                        message: $filter('translate')("KICKEDOUT"),
-                    });
-                }
-                else {
-                    $rootScope.firstTime = false;
-                }
-            });
-        }
-
 
         /**************************************************
          * Detect When Screenshot is taken on iOS device
