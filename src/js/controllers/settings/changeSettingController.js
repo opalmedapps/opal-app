@@ -31,8 +31,8 @@
         vm.changeFont = changeFont;
         vm.changeLanguage = changeLanguage;
         vm.passwordFieldChange = passwordFieldChange;
-        // Used to show an error when a provided password confirmation doesn't match the other value
-        vm.passwordConfirmationInvalid = () => vm.newValueValidate && vm.newValue !== vm.newValueValidate;
+        // Used to show an error when the password confirmation doesn't match the password
+        vm.passwordConfirmationInvalid = () => !vm.newValueValidate || vm.newValue !== vm.newValueValidate;
 
         activate();
 

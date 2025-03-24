@@ -55,7 +55,7 @@
                     ng-model="Ctrl.newValueValidate"
                     ng-change="Ctrl.passwordFieldChange()">
                 </password-input>
-                <p class="change-password--field-error" ng-class="fontSizeDesc" ng-if="Ctrl.passwordConfirmationInvalid()">
+                <p class="change-password--field-error" ng-class="fontSizeDesc" ng-if="Ctrl.newValueValidate && Ctrl.passwordConfirmationInvalid()">
                     {{"PASSWORD_INVALID_MATCH" | translate}}
                 </p>
 
