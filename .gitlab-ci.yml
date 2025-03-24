@@ -45,8 +45,6 @@ workflow:
     - if: $CI_MERGE_REQUEST_IID
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    # TODO Testing
-    - if: $CI_COMMIT_BRANCH
 
 
 # Project variables: the following variables must be configured in the project's CI/CD settings
@@ -145,10 +143,6 @@ increment version:
     # On version tags for the prod environment, release builds can be executed manually as needed
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
       when: manual
-      # Prevent later stages from being blocked: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
-      allow_failure: true
-    # TODO Testing
-    - when: manual
       # Prevent later stages from being blocked: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
       allow_failure: true
 
