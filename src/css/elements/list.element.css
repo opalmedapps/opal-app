@@ -85,11 +85,11 @@
 }
 
 .color-success {
-    color: green;
+    color: var(--success);
 }
 
 .color-error {
-    color: red;
+    color: var(--danger);
 }
 
 .item-btn {
