@@ -15,14 +15,13 @@
 
         var studies = [];
 
-        let service = {
+        return {
             getNumberUnreadStudies: getNumberUnreadStudies,
             getStudies: getStudies,
             getStudiesList: getStudiesList,
             readStudy: readStudy,
             updateConsentStatus: updateConsentStatus
         };
-        return service;
 
 
         /**

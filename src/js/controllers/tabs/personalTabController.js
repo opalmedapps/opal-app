@@ -25,7 +25,7 @@
         vm.allowedModules = {};
         vm.getDisplayData = getDisplayData;
 
-        vm.personalDeviceBackButton = personalDeviceBackButton;
+        vm.personalDeviceBackButton = () => tabbar.setActiveTab(0);
 
         activate();
 
@@ -42,9 +42,7 @@
             vm.language = UserPreferences.getLanguage();
             configureSelectedHospital();
 
-            $timeout(function () {
-                vm.censor = Patient.getAccessLevel() == 3;
-            });
+            $timeout(() => { vm.censor = Patient.getAccessLevel() == 3 });
 
             if (NetworkStatus.isOnline()) getDisplayData();
         }
@@ -85,10 +83,6 @@
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
                 console.error(error);
             }
-        }
-
-        function personalDeviceBackButton() {
-            tabbar.setActiveTab(0);
         }
 
         /**

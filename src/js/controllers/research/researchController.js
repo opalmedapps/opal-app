@@ -41,9 +41,7 @@
         }
 
         function bindEvents() {
-            navigator.on('prepop', function () {
-                setBadges();
-            });
+            navigator.on('prepop', () => setBadges());
         }
 
         function setMetaData() {

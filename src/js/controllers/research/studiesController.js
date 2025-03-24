@@ -25,7 +25,7 @@
 
 
     function StudiesController(NavigatorParameters, Studies, UserPreferences, $filter) {
-        var vm = this;
+        let vm = this;
 
         vm.language = '';
         vm.noStudies = false;
@@ -63,9 +63,7 @@
             vm.language = UserPreferences.getLanguage();
 
             // Get study list in case participation status updated
-            navigator.on('prepop', function () {
-                vm.studies = Studies.getStudiesList();
-            });
+            navigator.on('prepop', () => { vm.studies = Studies.getStudiesList() });
         }
 
         // Determines whether or not to show the date header in the view. Grouped by day.

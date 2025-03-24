@@ -14,7 +14,7 @@
 
     IndividualStudiesController.$inject = ['NavigatorParameters', 'Studies', 'UserPreferences'];
     function IndividualStudiesController(NavigatorParameters, Studies, UserPreferences) {
-        var vm = this;
+        let vm = this;
         vm.study;
         vm.language;
         vm.hasStartDate = false;
@@ -46,7 +46,7 @@
             // consent form opened from the individual studies page
             navigator.on('prepop', function (event) {
                 if (
-                    event.hasOwnProperty('currentPage')
+                    event?.currentPage?.page
                     && event.currentPage.page == 'views/personal/questionnaires/questionnaireCompletedConfirmation.html'
                 ) {
                     Studies.getStudies();
