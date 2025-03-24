@@ -259,6 +259,23 @@ npm run start:app:ios --env=dev
 Calls in sequence `npm run prepare:app && npm run build:web && cordova run ios`, carrying along the `--env=dev` variable as it goes.
 You may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
 
+### External Content
+
+The app includes dynamically loaded pages such as `Terms of Use`, `Service Agreement`, `About`, etc., which are retrieved from an external server. On startup, it
+downloads a configuration file for this external content based on the `externalContentFileURL` setting in `opal.config.js`. A sample configuration file is
+available at `external-content-samples/external-content.config.sample.json`. Sample
+content files are organized in subdirectories within `external-content-samples`,
+each named according to their content type (e.g., `about`, `acknowledgements`, etc.).
+
+The `Message of the Day` is downloaded separately from an external server, with the URL
+specified in the `messageOfTheDayURL` setting in `opal.config.js`. A sample configuration
+file for `Message of the Day` is available at
+`external-content-samples/message-of-the-day.config.sample.json`.
+
+**For testing purposes**, you can include the external configuration and content files in the webpack build, allowing them to be accessed as regular local static files. To enable this, set `externalContentFileURL` to
+`./external-content-samples/external-content.config.json` and `messageOfTheDayURL`
+to `./external-content-samples/message-of-the-day.config.json`.
+
 ## Troubleshooting
 
 ### Installation issues
