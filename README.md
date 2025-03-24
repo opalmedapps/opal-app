@@ -1,5 +1,11 @@
-# MUHC Oncology Patient Application
-Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG, see below) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients. The app has now extended its initiative to provide appointments, lab results, clinical documents, educational material and much more, making it a full-fledged, empowerment tool for those undergoing radiation treatment.
+# Opal Patient Portal Application
+Opal—a patient portal for mobile devices and the web—is an application that has arisen from the winning project of the 2014 MUHC Q+ initiative. 
+The project proposal was submitted by the Health Informatics Group (HIG, see below) and was entitled 
+“Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. 
+It had as its goal the provision of waiting time estimates to radiation oncology patients. 
+The app has now extended its initiative to provide appointments, lab results, clinical documents, educational material and much more, 
+beyond the scope of only radiation oncology, making it a full-fledged, empowerment tool for those undergoing medical treatment.
+
 ## Table of contents
 - [MUHC Oncology Patient Application](#muhc-oncology-patient-application)
   - [Table of contents](#table-of-contents)
@@ -18,6 +24,7 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
   - [Authors](#authors)
   - [License](#license)
   - [Acknowledgments](#acknowledgments)
+
 ## Getting Started
 
 The first section of these instructions will get you a copy of the frontend Opal app up and running on your local machine for development and testing purposes. This front-end is built with [Cordova](https://cordova.apache.org/). Cordova allows a web app to be packaged as a mobile app allowing developers to use web technologies to build the mobile apps. Getting Started with Opal is therefore divided in two sections. [Installing, building and serving the web code](#installation-web-code) and [Installing, building, and serving the mobile app code](#installation-mobile-app-code), the former will allow developers to install, build and serve the web code which may be ran in a browser, this allows for easy development of the web app code without the overhead of building the mobile app. The latter, on the other hand, will allow developers to install, build and serve the app in a device as a mobile app. 
@@ -59,68 +66,91 @@ In Opal we have three main branches: `staging`, `preprod`, and `prod`. In terms 
 
 1. Clone the repository to the desired folder in your computer (create a dedicated folder for this). **(NOTE: If you have a permission error, please ask to be added as a contributor to the Github project before being able to do this)**
     ```
-    git clone https://github.com/Sable/qplus.git
+    git clone https://gitlab.com/opalmedapps/qplus.git
     ```
 
-2. Change to the qplus folder and checkout the staging branch:
+2. Change directory to the qplus folder and make sure the staging branch is checked out. If not, check out this branch.
     ```
     cd qplus
-    git fetch
-    git checkout -b staging origin/staging 
+    git branch
     ```
-    This pulls staging from remote and creates a local staging branch, the staging branch is the development branch in Opal and it will be the branch you will be working with. When you create or develop a new feature, you will create a branch based on staging to make your development. e.g. if I have a new feature I will run the command:
+   
+    If staging is not checked out:
     ```
-    git checkout staging && git checkout -b staging_new_branch_name
+    git checkout -b staging origin/staging
     ```
-    This command will make sure we are in `staging` and it will create a new branch called `staging_new_branch_name` from the original `staging` branch.
+   
+    This pulls staging from remote and creates a local staging branch. The staging branch is the development branch in Opal 
+    and it will be the branch you will be working off of. When you create or develop a new feature, you will create a branch based on staging 
+    to develop on. e.g. If working on a new feature, you will run the commands:
+    ```
+    git checkout staging
+    git checkout -b new_branch_name
+    ```
+    These commands will create a new branch called `new_branch_name` from the original `staging` branch.
 
-3. Install the latest version of [NodeJS](https://nodejs.org/en/download/). Verify that Node is installed by running `node -v`. **(NOTE: You must have version 12+)**. A few notes:
+3. Install version 13 of [Node.js](https://nodejs.org/en/download/releases/) (look for the last iteration of 13.X.X). 
+   If you already have Node.js on your machine, or would like more flexibility in installing different versions of Node, 
+   you may want to install the [Node Version Manager](https://github.com/nvm-sh/nvm) instead.
+   Verify that Node is installed by running `node -v`.
+   A few notes:
    - If you see the current version of the Node runtime installed after running `node -v`, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
-   - This installation also installs the Node.js package manager [npm](https://docs.npmjs.com/getting-started/what-is-npm). This package manager is in charge of installing all the libraries and dependencies. 
+   - This installation also installs the Node.js package manager [npm](https://docs.npmjs.com/getting-started/what-is-npm). 
+     This package manager is in charge of installing all the libraries and dependencies required by the app. 
    - The main/description file for a Node.js application is the [package.json](./package.json) file. This file states all the dependencies for the app and the versions for each of them. _npm_'s job is to manage these dependencies.
 
-4. Install globally `webpack`, `webpack-dev-server`.   **Note:you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access. If this is the case, use `sudo npm` for all the `npm` steps that follow.**
+4. Install `cordova` globally. 
+   **Note: you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access. 
+   If this is the case, use `sudo npm` for all the `npm` steps that follow.**
     ```
-    npm install -g webpack webpack-dev-server cordova
+    npm install -g cordova
     ```
-    - [Webpack](https://webpack.js.org/) is a compiler & task manager that handles bundling of the app and other common webcode development tasks, some of the jobs it has are as follows:
-      1. Control the Opal environments, Opal uses different development environments,
-      _webpack_ allows us to easily specify environment variables for each.
-      1. Emit [uglify](https://webpack.js.org/plugins/terser-webpack-plugin/) version of your code in one file.
-      2. Compile the code to an older version of JavaScript using [babel](https://babeljs.io/), this allows us to use the latest features from 
-      JavaScript without worrying about JavaScript compatibility in patient devices.
-      1. Optimize the code in different ways.
-      For more information on _webpack_ see: https://survivejs.com/webpack/what-is-webpack/
-    - [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) is a web server which is used to serve _webpack_'s bundles.
 
-5. Install the app dependencies
-
+5. Install the app's dependencies
     ```
     npm install
     ```
-6. Test the installation in a localhost.
+   For a list of all the app's dependencies, refer to the [package.json](./package.json) file.
+   - [Webpack](https://webpack.js.org/) is a compiler & task manager that handles bundling of the app and other common webcode development tasks. 
+     Some of the jobs it has are as follows:
+       1. Control the Opal environments: Opal uses different development environments, and
+       _webpack_ allows us to easily specify environment variables for each.
+       2. Emit a [minified](https://webpack.js.org/plugins/terser-webpack-plugin/) version of the code in one file.
+       3. Compile the code to an older version of JavaScript using [babel](https://babeljs.io/), which allows us to use 
+       the latest features from JavaScript without worrying about JavaScript compatibility on patients' devices.
+       4. Optimize the code in different ways.
+       For more information on _webpack_ see: https://survivejs.com/webpack/what-is-webpack/
+   - [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) is a web server which is used to serve _webpack_'s bundles 
+     from localhost while working on development.
+
+6. Test the installation on your localhost.
     ```
-    npm run start:web:staging
+    npm run start
     ```
-   This command should open a browser at the address `http://localhost:9000` and once the app compiles, it will launch the app. A few notes:
-    - Make sure port 9000 isn't used by your machine, if it already in used, or if you'd like to spawn different Opal app applications under different ports use:
-      ```
-      npm run start:web:staging -- --port=<PORT-NUMBER>
-      ```
-      This will initialize the app in another port.
-    - If the app looks normal (though stretched out), with the Opal logo and buttons, your installation was successful.If the app looks jumbled (a green screen, strange labels, no buttons, etc.), the app code is fine, but the package installations failed --> skip ahead to [Troubleshooting](#troubleshooting).
-    - Note that for performance reasons the `webpack-dev-server`, server spawned when using `npm run start:web:staging` compiles and builds the code *in_memory*. This means that the code will not be compiled to the `www` folder which Cordova uses to build the app. If that's the desired outcome, to build and compile the app into the `www` folder use instead:
+   This command will open a browser at the address `http://localhost:9000`, and once the app compiles, it will launch the app. 
+   A few notes:
+    - Make sure port 9000 isn't used by your machine. If it's already in use, or if you'd like to spawn several Opal applications 
+      at the same time (using different ports), edit the `port` variable in `webpack.config.js` or add `--port=9001` (or other port number) 
+      to the right `webpack-dev-server` commands in `package.json`.
+    - If the app looks normal (though stretched out), with the Opal logo and buttons, your installation was successful. 
+      If the app looks jumbled (a green screen, strange labels, no buttons, etc.), the app code is fine, but the package installations 
+      failed --> skip ahead to [Troubleshooting](#troubleshooting).
+    - Note that for performance reasons, the `webpack-dev-server` spawned when using `npm run start` compiles and builds the code *in_memory*. 
+      This means that the code will not be compiled to the `www` folder which Cordova uses to build the app. 
+      If that's the desired outcome, use the following command to build and compile the app into the `www` folder instead:
       ```
       npm run build:web:staging
       ```
-    For more information on the `webpack-dev-server` follow: https://webpack.js.org/guides/development/ under the `webpack-dev-server` section.
-7. Try logging in, navigate to login and enter the following credentials.
+    For more information on `webpack-dev-server`, go to: https://webpack.js.org/guides/development/ under the `webpack-dev-server` section.
+
+7. Try logging in; navigate to the login page and enter the following credentials:
     ```
     email: muhc.app.mobile@gmail.com
     password: 12345opal
+    hospital: McGill University Health Centre (MUHC)
     security answer (depending on the question): red, guitar, superman, dog, bob, cuba
     ```
-   
+
 #### Notes on the development of web code
 - We recommend the use of Chrome or Firefox as they have the best debug console, the Opal web code does not currently support Internet Explorer
 - To debug the code, use the [developer console](https://developer.chrome.com/devtools), switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/). Sometimes the browser caches pages disallowing developers from seeing change to the code.
@@ -179,93 +209,16 @@ A few notes on this:
  In particular, release mode should be used for builds that are sent in for penetration or security testing, to ensure that common security vulnerabilities such as debugging being enabled are not flagged.
 
 ### Opal App Scripts
-We have added commands for developer convenience to the `package.json`. Take some
-time to understand what they do, this will help you manipulate the project better.  
+Commands for developer convenience can be found in the [package.json](./package.json) file (in the `"scripts"` section). 
+Take some time to understand what they do, to help you manipulate the project better.
 
-```json
-    "scripts": {
-      "postinstall": "node -e \"require('./opal_env.setup.js').createWWWFolder()\"",
-      "prepare:version:prod": "node -e \"require('./opal_env.setup.js').updateWebVersion('prod')\"",
-      "prepare:version:preprod": "node -e \"require('./opal_env.setup.js').updateWebVersion('preprod')\"",
-      "prepare:version:staging": "node -e \"require('./opal_env.setup.js').updateWebVersion('staging')\"",
-      "prepare:web": "npm run prepare:web:staging",
-      "prepare:web:prod": "npm run prepare:version:prod && node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('prod')\"",
-      "prepare:web:preprod": "npm run prepare:version:preprod && node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('preprod')\"",
-      "prepare:web:staging": "npm run prepare:version:staging && node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('staging')\"",
-      "prepare:app:prod": "npm run prepare:web:prod && cordova prepare",
-      "prepare:app:preprod": "npm run prepare:web:preprod && cordova prepare",
-      "prepare:app:staging": "npm run prepare:web:staging && cordova prepare",
-      "build:web": "npm run build:web:staging",
-      "build:web:prod": "npm run prepare:web:prod && webpack --env.opal_environment=prod",
-      "build:web:preprod": "npm run prepare:web:preprod && webpack --env.opal_environment=preprod",
-      "build:web:staging": "npm run prepare:web:staging && webpack --env.opal_environment=staging",
-      "build:app": "npm run build:app:staging",
-      "build:app:prod": "npm run prepare:app:prod && npm run build:web:prod && cordova build --release --verbose",
-      "build:app:prod:ios": "npm run prepare:app:prod && npm run build:web:prod && cordova build ios --release --verbose",
-      "build:app:prod:android": "npm run prepare:app:prod && npm run build:web:prod && cordova build android --release --verbose",
-      "build:app:prod:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build --release --device --verbose",
-      "build:app:prod:ios:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build ios --release --device --verbose",
-      "build:app:prod:android:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build android --release --device --verbose",
-      "build:app:preprod": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --verbose",
-      "build:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --verbose",
-      "build:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --verbose",
-      "build:app:preprod:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --device --verbose",
-      "build:app:preprod:ios:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --device --verbose",
-      "build:app:preprod:android:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --device --verbose",
-      "build:app:staging": "npm run prepare:app:staging && npm run build:web:staging && cordova build --verbose",
-      "build:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios --verbose",
-      "build:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --verbose",
-      "build:app:staging:ios:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios  --device --verbose",
-      "build:app:staging:android:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --device --verbose",
-      "build:app:staging:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build --device --verbose",
-      "start": "npm run start:web:staging",
-      "start:web": "npm run start:web:staging",
-      "start:web:prod": "npm run prepare:version:prod && webpack-dev-server --open --env.opal_environment=prod --watch --progress --colors",
-      "start:web:preprod": "npm run prepare:version:preprod && webpack-dev-server --open --env.opal_environment=preprod --watch --progress --colors",
-      "start:web:staging": "npm run prepare:version:staging && webpack-dev-server --open --env.opal_environment=staging --watch --progress --colors",
-      "start:app": "npm run build:app:staging && cordova run",
-      "start:app:prod:ios": "npm run prepare:app:prod && npm run build:web:prod && cordova run ios",
-      "start:app:prod:android": "npm run prepare:app:prod && npm run build:web:prod && cordova run android",
-      "start:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova run ios",
-      "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova run android",
-      "start:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova run ios",
-      "start:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova run android",
-      "test": "echo \"Error: no test specified\" && exit 1"
-  },
-```
-
-Note that the commands are explicitly related in terms of dependent steps, once you understand the structure, you may choose to run them differently. For instance, the command:
+Note that these commands are explicitly related in terms of dependent steps, so once you understand the structure, 
+you may choose to run them differently. For instance, the command:
 ```
   npm run start:app:staging:ios # Build and run in iOS
 ```
-Calls in sequence `npm run build:app:staging:ios && cordova run ios`, you may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
-## Distributing app in staging and preprod manually
-*Requirement*: A macOS machine with access to the RI-MUHC Apple Developer Account.
-This build and deployment section of the Opal app applies only and should be done when a new commit to staging or preprod is performed.
-
-Install globally `firebase-tools` to distribute via Firebase.
-```
-npm install -g firebase-tools
-```
-
-1. Bump up build number for the Opal app: `node -e "require('./opal_env.setup').bumpBuildNumbers('staging')"`
-2. Build the app and obtain packaged application files (.ipa/.apk): `npm run build:app:[staging|preprod]:package`
-3. Sign-in to firebase: `firebase login`
-4. Select Firebase project: `firebase use [preprod|staging]`
-5. Create release notes, they could be as simple as the latest commit: `git log --format=%B -n 1`
-6. Locate .ipa (iOS), .apk files (Android):
-   - iOS Location: ./platforms/ios/build/device/
-   - Android Location: ./platforms/android/app/build/outputs/apk/debug/ 
-7. Obtain the Firebase App Ids for iOS and Android apps using: `firebase open settings`
-8. Distribute apps via Firebase:
-   - iOS: 
-      ```
-      firebase appdistribution:distribute  <path-to-ios-ipa-file> --app <ios-app-id> --release-notes "<release-notes>" --groups ["staging"|"preprod"]
-      ```
-   - Android:
-      ```
-      firebase appdistribution:distribute  <path-to-android-apk-file> --app <android-app-id> --release-notes "<release-notes>" --groups ["staging"|"preprod"]
-      ```
+Calls in sequence `npm run build:app:staging:ios && cordova run ios`. 
+You may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
 
 ## Troubleshooting
 
@@ -276,7 +229,7 @@ If you are getting errors during your installation, here are some things you can
   - You don't have the required permissions to perform the installation. Make sure you are logged in as an administrator on your computer, and try re-installing the packages. If you have a Mac, precede your npm commands with `sudo` to run the command with administrator permissions.
   - You have an extra firewall or security plugin installed, which is preventing the packages from installing. For example, the browser extension Ghostery is known to interfere with installation. Try disabling firewalls and security plugins and re-installing the packages.
   - Your computer security is too strong. For example, newer Mac devices running MacOS High Sierra or newer have been known to prevent some packages from installing. For newer Macs, follow the instructions on [this website](https://www.imore.com/how-turn-system-integrity-protection-macos) to turn off System Integrity Protection. Then, try re-installing the packages using the instructions above. Don't forget to re-enable System Integrity Protection once you're done.
-  - You have a too recent (or old) version of node installed. Try installing version ~12.0.0 of node, and re-install the packages.
+  - You have a too recent (or old) version of node installed. Try installing the version recommended above, and re-install the packages.
 * If you got an error from `npm install` like `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` or you are behind a firewall, you can try the following commands:
   - Run `npm config set strict-ssl false` and `set NODE_TLS_REJECT_UNAUTHORIZED=0` on the terminal. If this solution worked, you have to run these two commands again for the listener's installation. You also need to run `set NODE_TLS_REJECT_UNAUTHORIZED=0` everytime you restart the terminal.
 
@@ -289,8 +242,7 @@ If at this point you have been unable to install everything properly, reach out 
 
 ## Running the tests
 
-Currently, the Opal Development team has been making an effort to write tests for all new features. It's important to try
-to maintain this effort to avoid any code regression.
+Tests should be written for all new features. It's important to maintain this effort to avoid any code regression.
 
 **MORE TO COME...**
 
@@ -323,7 +275,7 @@ to maintain this effort to avoid any code regression.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License.
 
 ## Acknowledgments
 
