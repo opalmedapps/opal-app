@@ -25,7 +25,6 @@
         vm.selectedHospitalToDisplay = "";
         vm.allowedModules = {};
 
-        vm.goToStatus = goToStatus;
         vm.personalDeviceBackButton = personalDeviceBackButton;
         vm.goToCarnetSante = goToCarnetSante;
 
@@ -87,11 +86,6 @@
             vm.txTeamMessagesUnreadNumber = TxTeamMessages.getNumberUnreadTxTeamMessages();
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
-        }
-
-        function goToStatus(){
-            NavigatorParameters.setParameters({'Navigator':'personalNavigator'});
-            personalNavigator.pushPage('views/home/status/status_new.html');
         }
 
         function personalDeviceBackButton(){

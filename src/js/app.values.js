@@ -126,15 +126,6 @@
                     'Scheduling Treatments': 5
                 },
 
-                /** PlanningStep Service **/
-                setSequence: {
-                    'CT for Radiotherapy Planning': [],
-                    'Physician Plan Preparation': [],
-                    'Calculation of Dose': [],
-                    'Physics Quality Control': [],
-                    'Scheduling Treatments': []
-                },
-
                 /** CheckIn Service Constants **/
                 hospitalSite: {
                     hospitalCoordinates: [45.474127399999996, -73.6011402] //Glen Coordinates
