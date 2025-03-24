@@ -230,21 +230,20 @@ A few notes on this:
  In particular, prod settings (`prod/config.xml`) and release mode should be used for builds that are sent in for penetration or security testing, to ensure that common security vulnerabilities such as debugging being enabled are not flagged.
 
 #### Using CI/CD
-As an alternative to setting up your computer to build the app locally, GitLab can be used to build the app for you.
-A pipeline will run to build the app, and will provide you with the resulting output files directly in GitLab.
+As an alternative to setting up your computer to build the app locally, GitLab can be used to build the app for you,
+providing you with the resulting output files directly in GitLab.
 
-1. Identify the commit that you'd like to use for the build.
-2. Using git, add a tag to the commit, using the following naming convention (regex below). If the name does not match
-   this pattern, a build job will not be triggered.
-   - `/^build-(?:dev|local|preprod|prod|staging)-(?:all|android|ios).*$/`
-   - **[Coming soon]** The first part of the tag name must be "build". The second part identifies the environment to use.
-     The third part identifies the build targets (Android, iOS, or all). Anything that comes after is ignored and can
-     be used to ensure that the tag is unique.
-   - Example: `build-dev-all-1`
-3. Push the tag; this will trigger the build pipeline. You can view the pipeline status on 
-   the [Pipelines page](https://gitlab.com/opalmedapps/qplus/-/pipelines).
-4. To download the output files, click on your pipeline, select a job (e.g. `build:android`) and use the buttons on the
-   `Job artifacts` menu on the right.
+1. After committing your work on a personal branch, push the branch to GitLab.
+   a. If you have an open merge request, you will see a box saying
+      `Detached merge request pipeline #___ waiting for manual action`.
+      Click on the gear icon on the right to reveal two buttons with which to launch an iOS or Android build.
+   b. If you don't have an open merge request, navigate to
+      the [Pipelines page](https://gitlab.com/opalmedapps/qplus/-/pipelines).
+      There, click to open the blocked pipeline corresponding to your latest commit, and use the play buttons
+      to launch a build for iOS or Android.
+2. Once a build job has completed, click on it to open the job's page. On the right side panel, use the 'Job artifacts'
+   section to download the output file for the build (.ipa or .apk). These files can be used to install the app directly
+   on your device, or can be sent to yourself via Firebase App Distribution in your personal Firebase project.
 
 ### Opal App Scripts
 Commands for developer convenience can be found in the [package.json](./package.json) file (in the `"scripts"` section). 

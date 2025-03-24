@@ -77,7 +77,6 @@ deploy android to firebase:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
   script:
-    # Uses the app ID $FIREBASE_APP_DEV_ANDROID defined in the GitLab project settings
     - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build android
@@ -88,7 +87,6 @@ deploy ios to firebase:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
   script:
-    # Uses the app ID $FIREBASE_APP_DEV_IOS defined in the GitLab project settings
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build ios
