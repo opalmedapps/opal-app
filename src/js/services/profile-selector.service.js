@@ -24,6 +24,7 @@ import {Observer} from "../models/utility/observer";
             getActiveProfile: () => currentSelectedProfile,
             observeProfile: fun => profileObserver.attach(fun),
             getConfirmedProfiles: getConfirmedProfiles,
+            clearProfile: clearProfile,
         }
 
         /**
@@ -114,6 +115,16 @@ import {Observer} from "../models/utility/observer";
                 profiles[index].color = (index >= colorList.length) ? `#${Math.floor(Math.random()*16777215).toString(16)}` : colorList[index];
             });
             return profiles;
+        }
+
+        /**
+         * Clear the profile for the logout user.
+         * @param {void}.
+         * @returns {void}.
+         */
+        function clearProfile() {
+            patientList = [];
+            currentSelectedProfile = null;
         }
     }
 })();
