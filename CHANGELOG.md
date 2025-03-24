@@ -1,3 +1,10 @@
+## [1.20.12](https://gitlab.com/opalmedapps/qplus/compare/v1.20.11...v1.20.12) (2023-12-18)
+
+
+### Bug Fixes
+
+* add a polyfill to patch Array.prototype.at on emulators ([4d18015](https://gitlab.com/opalmedapps/qplus/commit/4d18015e880d1836e7c9a90f952740b3d24be83b)), closes [/github.com/wojtekmaj/react-pdf/issues/1465#issuecomment-1537669572](https://gitlab.com//github.com/wojtekmaj/react-pdf/issues/1465/issues/issuecomment-1537669572)
+
 ## [1.20.11](https://gitlab.com/opalmedapps/qplus/compare/v1.20.10...v1.20.11) (2023-12-07)
 
 
