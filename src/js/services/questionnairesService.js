@@ -899,7 +899,7 @@
                     getQuestionnaireMap(questionnaire.status)[questionnaire.qp_ser_num] = questionnaire;
                 }
                 catch (err) {
-                    console.error('Questionnaire stub failed validation; not using it.', err, questionnaire);
+                    console.error('Questionnaire stub failed validation; not including it.', err, questionnaire);
                 }
             });
         }

@@ -113,6 +113,10 @@
 
         ////////////////
 
+        /**
+         * @desc Initializes the data necessary for login, and sets observers to watch for changes.
+         * @returns {Promise} Resolves when initial data is done downloading.
+         */
         function init() {
             // When the language changes, force questionnaires to be cleared (since they're saved only for one language)
             UserPreferences.observeLanguage(() => {
