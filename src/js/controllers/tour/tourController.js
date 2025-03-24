@@ -34,6 +34,12 @@ import "../../../css/views/tour.view.css";
             },
             {
                 iconType: "icon",
+                icon: "fa-info-circle",
+                title: "INFO",
+                description: "TOUR_INFO",
+            },
+            {
+                iconType: "icon",
                 icon: "fa-home",
                 title: "HOME",
                 description: "TOUR_HOME",
@@ -61,12 +67,6 @@ import "../../../css/views/tour.view.css";
                 icon: "fa-cog",
                 title: "ACCOUNT",
                 description: "TOUR_ACCOUNT",
-            },
-            {
-                iconType: "icon",
-                icon: "fa-info-circle",
-                title: "INFO",
-                description: "TOUR_INFO",
             },
             {
                 iconType: "icon",
