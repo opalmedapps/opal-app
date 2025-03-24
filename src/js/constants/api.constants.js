@@ -16,11 +16,11 @@
                 'Content-Type': 'application/json',
                 'Accept-Language': 'fr',
             },
-            /** Django backend available routes. */
+            /** Django backend available routes. Note: Trailing slashes are required */
             ROUTES: {
                 HOME: {
                     method: 'get',
-                    url: '/api/app/home',
+                    url: '/api/app/home/',
                 },
                 CHART: {
                     method: 'get',
