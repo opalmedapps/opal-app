@@ -28,13 +28,13 @@
     <patient-data-handler categories="Appointments"
                           display-function="calendar.setAppointmentsView"
                           refresh="calendar.executeRefresh"
-                          hide-content="calendar.hideContent"
-    ></patient-data-handler>
+                          hide-content="calendar.hideContent">
+    </patient-data-handler>
 
     <!--
     CALENDAR DIRECTIVE
     =============================-->
-    <div ng-hide="calendar.hideContent" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
+    <div ng-if="!calendar.hideContent" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
         <div class="calendar-list">
             <uib-datepicker id="scrollTo"
                             ng-change="calendar.onDateChange()"
