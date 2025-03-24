@@ -1,4 +1,4 @@
-import Plotly from 'plotly.js-dist';
+import Plotly from 'plotly.js-dist-min';
 import frLocale from 'plotly.js-locales/fr';
 
 const fontSizesMap = {
