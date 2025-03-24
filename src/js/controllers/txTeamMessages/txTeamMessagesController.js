@@ -28,7 +28,7 @@
         function activate(){
             let navigator = NavigatorParameters.getNavigator();
 
-            navigator.on('prepop', () => NavigatorParameters.prepopHandler('TxTeamMessages'));
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         /**

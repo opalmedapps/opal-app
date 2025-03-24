@@ -89,9 +89,11 @@
                     params['currentProfile'] = ProfileSelector.getActiveProfile().patient_legacy_id;
                     ProfileSelector.loadPatientProfile(notification.PatientSerNum);
 
-                    // Reload the target item referenced by a notification for the patient in care
-                    // in case the item's data were already loaded
-                    UpdateUI.updateTimestamps(notification.refreshType, 0);
+                    // Special case for the lab results notifications: reload labs in case they were already loaded.
+                    // It's necessary because the notification redirects to the "Lab Results" page that lists all labs,
+                    // and it's possible that they were already loaded and cached.
+                    if (notification.NotificationType === "NewLabResult")
+                        UpdateUI.updateTimestamps(notification.refreshType, 0);
                 }
 
                 if (!notification.hasOwnProperty('PageUrl')) throw new Error("Notification does not have property 'PageUrl'; unable to open");

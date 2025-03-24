@@ -45,7 +45,7 @@
 
         /////////////////////////////
 
-        function activate() {
+        async function activate() {
             parameters = NavigatorParameters.getParameters();
             navigator = NavigatorParameters.getNavigator();
 
@@ -69,7 +69,7 @@
             }
             $rootScope.DocAlreadyInitialized = false;
 
-            navigator.on('prepop', () => NavigatorParameters.prepopHandler('Documents'));
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         /**

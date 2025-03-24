@@ -74,7 +74,7 @@
                 });
             }
 
-            navigator.on('prepop', () => NavigatorParameters.prepopHandler('QuestionnaireList'));
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         /**

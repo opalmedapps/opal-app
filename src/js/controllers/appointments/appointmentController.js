@@ -81,7 +81,7 @@
                 vm.app = parameters.Post;
             });
 
-            navigator.on('prepop', () => NavigatorParameters.prepopHandler('Appointments'));
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         /**

@@ -84,12 +84,15 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
         },
         /**
          *@ngdoc method
-         *@name prepopHandler
+         *@name reloadPreviousProfilePrepopHandler
+         *@desc Reload patient profile using profileID that was used on the previous page.
+         *      The handler is invoked in case the profile was implicitly changed.
+         *      E.g., opening up a caregiver's notification and going back to the Notifications page.
          *@methodOf MUHCApp.service:NavigatorParameters
-         *@param {string| Array<string>} categories - The category or categories to update.
+         *@param {string|Array<string>} [categories=[]] The category or categories to update.
          *@return {Object} Returns a handler function for the prepop event.
          **/
-         prepopHandler:function(categories)
+         reloadPreviousProfilePrepopHandler:function(categories = [])
          {
             // Patient profile that was active/set on the previous page
             let prevPageProfileID = this.getParameters()?.currentProfile;
@@ -103,8 +106,12 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
             ) {
                 ProfileSelector.loadPatientProfile(prevPageProfileID);
 
-                // Reload given categories for the current user
-                UpdateUI.updateTimestamps(categories, 0);
+                // Special case for the 'NewLabResult' and 'Appointments' categories:
+                // reload these categories in case they were already loaded.
+                // Reload lab results in case user decides to open them through Notifications page.
+                // Reload appointments in case user decides to open them through Home page (e.g., Upcoming appointment)
+                if (categories === "Appointments" || categories.toString() === ['PatientTestDates', 'PatientTestTypes'].toString())
+                    UpdateUI.updateTimestamps(categories, 0);
             }
          },
     };

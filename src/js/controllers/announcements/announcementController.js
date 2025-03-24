@@ -44,7 +44,7 @@
             vm.announcement = Announcements.setLanguage(parameters.Post);
 
             let navigator = NavigatorParameters.getNavigator();
-            navigator.on('prepop', () => NavigatorParameters.prepopHandler('Announcements'));
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
     }
 })();

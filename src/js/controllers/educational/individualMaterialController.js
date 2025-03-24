@@ -125,7 +125,7 @@
             }
 
             let navigator = NavigatorParameters.getNavigator();
-            navigator.on('prepop', () => NavigatorParameters.prepopHandler('EducationalMaterial'));
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         function bindEvents() {
