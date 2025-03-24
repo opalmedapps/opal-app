@@ -45,7 +45,6 @@
         function activate() {
             vm.noContacts = Doctors.isEmpty();
             vm.doctors = setDoctorsView(Doctors.getDoctors());
-            console.log(vm.doctors);
         }
 
         function setDoctorsView(doctors)
