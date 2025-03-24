@@ -83,7 +83,8 @@ increment version:
     # Run automatically on every commit to the default branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
-    - apk add --no-cache git
+    # TODO part of temporarily disabling shared runners
+    # - apk add --no-cache git
     - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
   script:
     - npx semantic-release
@@ -164,14 +165,13 @@ build web:
 #   See: https://firebase.google.com/docs/app-distribution/authenticate-service-account.md?platform=android
 .deploy app to firebase:
   stage: deploy
-  # require web app to be deployed (which uses the environment)
-  needs:
-    - deploy web
+  environment: $ENV
   rules:
     # Only release the app from release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
   before_script:
-    - apk add --no-cache git
+    # TODO part of temporarily disabling shared runners
+    # - apk add --no-cache git
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
     # Convert the service account variable to a file. This is required because variables defined in .gitlab-ci.yml (when triggering a downstream pipeline) cannot be files.
@@ -195,7 +195,9 @@ deploy ios to firebase:
   needs:
     - job: build ios
 
-deploy web:
+
+# TODO part of temporarily disabling shared runners; can't use apk to install lftp
+.deploy web:
   stage: deploy
   environment: $ENV
   needs:
@@ -270,7 +272,8 @@ mobsf-ios-sast:
 # DAST Scanning Customization:
 # https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/requirements.html
 # https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/enabling_the_analyzer.html
-dast:
+# TODO part of temporarily disabling shared runners; can't run 'deploy web'
+.dast:
   needs: ["deploy web"]
   # https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/variables.html
   variables:
