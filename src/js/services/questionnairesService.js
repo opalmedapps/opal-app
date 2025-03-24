@@ -1018,7 +1018,7 @@
                     getQuestionnaireMap(questionnaire.status)[questionnaire.qp_ser_num] = questionnaire;
 
                     // If the current questionnaire has been updated, clear it to force the contents to be re-downloaded from the server
-                    if (currentQuestionnaire.qp_ser_num === questionnaire.qp_ser_num) currentQuestionnaire = {};
+                    if (currentQuestionnaire.qp_ser_num === questionnaire.qp_ser_num) clearCurrentQuestionnaire();
                 }
                 catch (err) {
                     console.error('Questionnaire stub failed validation; not including it.', err, questionnaire);
