@@ -108,11 +108,12 @@ class OpalEnv {
 	 * @author Stacey Beard
 	 * @date 2022-03-23
 	 * @param {string} settingName - The name of the setting to read from the file.
+	 * @param {string|null} [env] - The name of the environment to use.
 	 * @returns {*} The setting provided in the file.
 	 */
-	static getEnvSetting(settingName) {
-		const settings = this.getEnvSettings();
-		if (!settings || typeof settings[settingName] === "undefined") throw new Error(`opal.config.js is missing the setting: "${settingName}". See env/opal.config.sample.js for details.`);
+	static getEnvSetting(settingName, env = null) {
+		const settings = this.getEnvSettings(env);
+		if (!settings || typeof settings[settingName] === "undefined") throw new Error(`opal.config.js for environment "${env}" is missing the setting: "${settingName}". See env/opal.config.sample.js for details.`);
 		return settings[settingName];
 	}
 
@@ -120,11 +121,12 @@ class OpalEnv {
 	 * @description Reads and returns the environment settings from opal.config.js.
 	 * @author Stacey Beard
 	 * @date 2022-03-23
+	 * @param {string|null} [env] - The name of the environment to use.
 	 * @returns {object} The settings object provided in the file.
 	 */
-	static getEnvSettings() {
-		const config = this.getOpalConfigJSON();
-		if (!config || !config.settings) throw new Error('opal.config.js is not correctly formatted with a "settings" property.');
+	static getEnvSettings(env = null) {
+		const config = this.getOpalConfigJSON(env);
+		if (!config || !config.settings) throw new Error(`opal.config.js for environment "${env}" is not correctly formatted with a "settings" property.`);
 		return config.settings;
 	}
 
@@ -269,14 +271,16 @@ class OpalEnv {
 	}
 
 	/**
-	 * @description Reads and returns the contents of opal.config.js from the current directory (a JSON object).
+	 * @description Reads and returns the contents of opal.config.js (a JSON object) from the directory for
+	 *              the given environment.
 	 * @author Stacey Beard
 	 * @date 2022-03-23
+	 * @param {string|null} [env] - The name of the environment to use. If none is provided, the root folder is used.
 	 * @returns {object} The JSON object provided in the file.
 	 */
-	static getOpalConfigJSON() {
-		const path = "./opal.config.js";
-		if (!fs.existsSync(path)) throw new Error("opal.config.js file not found");
+	static getOpalConfigJSON(env = null) {
+		const path = env ? `./env/${env}/opal.config.js` : './opal.config.js';
+		if (!fs.existsSync(path)) throw new Error(`File not found: ${path}`);
 		return require(path);
 	}
 

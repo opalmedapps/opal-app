@@ -170,7 +170,7 @@ For more information about versioning, please read [Versioning](https://gitlab.c
 
 7. (Optional) If setting up a local development environment of Opal with your own backend system, you'll want
    to redirect Opal to connect to this backend instead of `staging`. In this case, follow the instructions at
-   [env/local/README.md](./env/local/README.md) to set up your installation to use the `local` environment
+   [env/README.md](./env/README.md) to set up your installation to use the `local` environment
     (e.g. `npm run start --env=local`).
 
 #### Notes on the development of web code

@@ -5,7 +5,7 @@ components. A typical local development environment of the Opal app includes at 
 a Firebase project, and the Opal databases. Make sure you have access to a local installation of each of these components
 before proceeding.
 
-To connect the app to your local environment, create the following file in this folder:
+To connect the app to your local environment, create the following file in `env/local`:
 
 ```
 opal.config.js
@@ -30,3 +30,9 @@ To access your local environment, append all `start` or `build` npm commands wit
 ```
 npm run start --env=local
 ```
+
+# Additional Environments
+
+Any number of additional environments can be set up by first creating a new folder in the `env` directory,
+then following the same instructions as the 'local' environment described above.
+The name of this folder determines the name of a new environment.
