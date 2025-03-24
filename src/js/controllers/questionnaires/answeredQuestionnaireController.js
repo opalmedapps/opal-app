@@ -293,7 +293,8 @@
                             // this loop will be only once except for checkbox
                             // this is to verify the properties in answer
                             for (let k = 0; k < vm.questionnaire.sections[i].questions[j].patient_answer.answer.length; k++){
-                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_value')){
+                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_value')
+                                    && vm.questionnaire.sections[i].questions[j].optional === "0"){
 
                                     vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].answer_value = NON_EXISTING_ANSWER;
                                     vm.submitAllowed = false;
@@ -301,7 +302,9 @@
                                 }
 
                                 // this check is separated because slider and textbox do not need this property and will not have it if the user has just filled the question out
-                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_option_text')){
+                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_option_text')
+                                    && vm.questionnaire.sections[i].questions[j].optional === "0"){
+
                                     vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].answer_option_text = NON_EXISTING_ANSWER;
                                     vm.submitAllowed = false;
                                     handleLoadQuestionnaireErr();
