@@ -116,6 +116,8 @@ build ios:
     expire_in: 1 day
     paths:
       - opal-$ENV.ipa
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 build web:
   extends: .build
