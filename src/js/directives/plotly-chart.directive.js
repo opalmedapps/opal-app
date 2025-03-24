@@ -85,7 +85,7 @@ const fontSizesMap = {
                     xaxis: {
                         autorange: true,
                         tickangle: 60,
-                        zeroline: true,
+                        zeroline: false,
                         fixedrange: true,
                         rangeselector: selectorOptions,
                         rangeslider: {},
@@ -93,8 +93,8 @@ const fontSizesMap = {
                         tickformat: '%e %b %y'  // date format
                     },
                     yaxis: {
-                        showline: false,
-                        fixedrange: true
+                        fixedrange: true,
+                        zeroline: false
                     },
                     margin: {
                         b: 10,
