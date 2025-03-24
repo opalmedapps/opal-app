@@ -46,6 +46,12 @@
         vm.alert = {};
         vm.HasNonCheckinableAppt = false;
 
+        vm.statusColor = []
+        vm.statusColor[Params.alertTypeSuccess] = 'green';
+        vm.statusColor[Params.alertTypeInfo] = 'rgba(38,100,171,0.81)';
+        vm.statusColor[Params.alertTypeDanger] = 'red';
+
+
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
 
@@ -116,15 +122,23 @@
         async function CheckInAppointments(patientName) {
 
             //TODO check-in apps for the target patient
-            const res = await CheckInService.CheckInPatientApps(patientName);
-
-            let patientApps = {
-                key: patientName,
-                apps: res.apps,
-            };
-
-            NavigatorParameters.setParameters({'Navigator': 'homeNavigator', 'apps': patientApps});
-            homeNavigator.pushPage('./views/home/checkin/checked-in-list.html');
+            const response = await CheckInService.attemptCheckin();
+            if(response === "NOT_ALLOWED"){
+                Toast.showToast({
+                    message: $filter('translate')("NOT_ALLOWED"),
+                });
+                vm.alert.type = Params.alertTypeWarning;
+                vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+            } else if (response === "SUCCESS") {
+                vm.alert.type = Params.alertTypeSuccess;
+                vm.checkInMessage = "CHECKED_IN";
+                vm.displayApps = CheckInService.getCheckInApps();
+            } else {
+                vm.alert.type = Params.alertTypeDanger;
+                vm.checkInMessage = "CHECKIN_ERROR";
+                vm.displayApps = CheckInService.getCheckInApps();
+                vm.error = "ERROR";
+            }
         }
     }
 })();
