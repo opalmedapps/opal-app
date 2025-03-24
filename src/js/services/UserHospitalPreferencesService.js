@@ -100,7 +100,7 @@
         function getHospitalListForDisplay() {
             let useRealName = OPAL_CONFIG.settings.useRealInstitutionNames;
             return hospitalList.map(entry => {
-                // Special case: if no real name or acronym is provided, then a hospital isn't included in the list of real hospitals
+                // Special case: ignore generic-only hospitals (those without a real name) if real hospitals are used
                 if (useRealName && (!entry.acronymReal || !entry.fullNameReal)) return undefined;
                 return {
                     uniqueHospitalCode: entry.uniqueHospitalCode,
