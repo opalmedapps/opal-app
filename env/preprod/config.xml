@@ -62,6 +62,7 @@
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:requestLegacyExternalStorage="true"/>
         </edit-config>
+        <!-- Security setting: Ensure that activities, services, providers and receivers are not exported. This avoids them being exposed to other apps. -->
         <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity" mode="merge">
             <activity android:exported="false"/>
         </edit-config>  
