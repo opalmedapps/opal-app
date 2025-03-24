@@ -2,7 +2,7 @@
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 var myApp=angular.module('MUHCApp');
-//This service will have the user preferences for language and sent sms feature. To be used in account settings.
+//This service will have the user preferences for language. To be used in account settings.
 /**
  *@ngdoc service
  *@name MUHCApp.service:UserPreferences
