@@ -68,6 +68,9 @@ check dependencies:
   script:
     - npm -v
     - npm ci --cache .npm --prefer-offline
+    - echo $CI_COMMIT_AUTHOR
+    - echo $GITLAB_USER_NAME
+    - echo $GITLAB_USER_EMAIL
 
 # Sets a new version number for the app when committing to the default branch
 increment version:
