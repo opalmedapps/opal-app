@@ -315,6 +315,7 @@ class OpalEnv {
 	 */
 	static getOpalConfigJSON(env = null) {
 		const path = env ? `./env/${env}/opal.config.js` : './opal.config.js';
+		// nosemgrep: detect-non-literal-fs-filename (only used by webpack)
 		if (!fs.existsSync(path)) throw new Error(`File not found: ${path}`);
 		return require(path);
 	}
@@ -334,6 +335,7 @@ class OpalEnv {
 	 * @returns {string[]}
 	 */
 	static getDirectories(source) {
+		// nosemgrep: detect-non-literal-fs-filename (only used by webpack)
 		return fs.readdirSync(source, {withFileTypes: true})
 			.filter(directory => directory.isDirectory())
 			.map(directory => directory.name);
