@@ -18,10 +18,10 @@
     function FeedbackController($filter, $scope, $timeout, NativeNotification, NavigatorParameters,
                                 NetworkStatus, RequestToServer) {
         var vm = this;
+        vm.isSubmitting = false;
 
         vm.submitFeedback = submitFeedback;
         vm.reset = reset;
-        vm.isSubmitting = false;
 
         activate();
 
