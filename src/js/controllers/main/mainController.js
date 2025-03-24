@@ -8,7 +8,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('MainController', MainController);
 
     MainController.$inject = ["$window", "$state", '$rootScope','Firebase','DeviceIdentifiers',
@@ -190,7 +190,7 @@
             window.addEventListener('screenshotDidTake', onScreenshotDidTake, false);
 
             function onScreenshotDidTake() {
-                if (!OPAL_CONFIG.settings.screenshotsAllowed) {
+                if (!CONFIG.settings.screenshotsAllowed) {
                     screenshotTakenModal.show();
                 }
             }
@@ -203,7 +203,7 @@
          *****************************************/
         function preventAndroidScreenshot() {
             if (Constants.app && ons.platform.isAndroid()) {
-                if (OPAL_CONFIG.settings.screenshotsAllowed) {
+                if (CONFIG.settings.screenshotsAllowed) {
                     window.plugins.preventscreenshot.enable(
                         () => console.log('Android screenshot successfully enabled'),
                         (err) => console.log('Android screenshot cannot be enabled:', err)

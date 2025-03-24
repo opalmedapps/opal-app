@@ -74,8 +74,8 @@
                         ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}
             </ons-button>
         </div>
-        <div style="text-align: center;" class="item-desc" ng-if="init.OPAL_CONFIG.settings.showVersionOnInit">
-           {{init.OPAL_CONFIG.name}}-v{{init.APP_VERSION}}-{{init.APP_BUILD_NUMBER}}
+        <div style="text-align: center;" class="item-desc" ng-if="init.CONFIG.settings.showVersionOnInit">
+           {{init.CONFIG.name}}-v{{init.APP_VERSION}}-{{init.APP_BUILD_NUMBER}}
         </div>
 
         <!-- Show Service Status (a.k.a. Message Of The Day (MOTD)), if there is any. -->

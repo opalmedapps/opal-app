@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .filter('profileInitials', ProfileInitials);
     /**
      * @description Filter that gets the first letters of the first and last name for icon display.

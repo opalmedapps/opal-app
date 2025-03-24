@@ -7,7 +7,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('NotificationsController', NotificationsController);
 
     NotificationsController.$inject = ['$filter','$scope','$timeout','NativeNotification','Navigator',

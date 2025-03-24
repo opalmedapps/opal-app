@@ -10,17 +10,15 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:DynamicContent
  *@requires $q
  *@requires $http
- *@requires MUHCApp.service:UserPreferences
  *@description Service that manages the dynamic data for Opal, hosted on an external server.
  **/
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('DynamicContent', DynamicContent);
 
     DynamicContent.$inject = ['$http','$q','UserPreferences'];
@@ -123,13 +121,12 @@
          */
         async function ensureInitialized() {
             if (objectIsEmpty(constants) || objectIsEmpty(links))
-                await initialize(OPAL_CONFIG.settings.externalContentFileURL);
+                await initialize(CONFIG.settings.externalContentFileURL);
         }
 
         /**
          *@ngdoc method
          *@name getPageContent
-         *@methodOf MUHCApp.service:DynamicContent
          *@description Requests a page from the content provided by the server.
          *             Content must already have been initialized.
          *@param {String} contentKey The key for the page to request from the external server.

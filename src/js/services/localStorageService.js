@@ -1,12 +1,9 @@
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
-var myApp=angular.module('MUHCApp');
+var myApp=angular.module('OpalApp');
 /**
  *@ngdoc service
- *@name MUHCApp.service:LocalStorage
- *@requires MUHCApp.service:UserAuthorizationInfo
- *@requires MUHCApp.service:EncryptionService
  *@description API to interact with the saved data storage for the patient.
  **/
 myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',function(UserAuthorizationInfo,EncryptionService){
@@ -37,7 +34,6 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
         /**
          *@ngdoc method
          *@name WriteToLocalStorage
-         *@methodOf MUHCApp.service:LocalStorage
          *@param {String} section Patient section to write to
          *@param {Object} data Object to write to that particular patient section. i.e. 'Documents', 'Announcements'
          *@description Writes the data parameter to that section in the patient storage encrypting all the data saved in the process.
@@ -85,7 +81,6 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
         /**
          *@ngdoc method
          *@name isUserDataDefined
-         *@methodOf MUHCApp.service:LocalStorage
          *@returns {Boolean} Returns value depending on whether the storage for the user exists.
          **/
         isUserDataDefined:function()
@@ -113,7 +108,6 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
         /**
          *@ngdoc method
          *@name ReadLocalStorage
-         *@methodOf MUHCApp.service:LocalStorage
          *@param {String} section Section for patient data in localStorage
          *@description Reads section from localStorage, decrypts and returns decrypted object by using the hashed of password.
          *@returns {Object} Returns decrypted object representing that section in localStorage
@@ -125,7 +119,6 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
         /**
          *@ngdoc method
          *@name updateLocalStorageAfterPasswordChange
-         *@methodOf MUHCApp.service:LocalStorage
          *@description Updates the whole storage by encrypting all information with the new password.
          **/
         updateLocalStorageAfterPasswordChange:function(oldPassword, newPassword)
@@ -142,7 +135,6 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
         /**
          *@ngdoc method
          *@name resetUserLocalStorage
-         *@methodOf MUHCApp.service:LocalStorage
          *@description Deletes all the user fields in local storage
          **/
         resetUserLocalStorage:function()

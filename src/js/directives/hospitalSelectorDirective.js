@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .directive('hospitalSelector', hospitalSelector);
 
     hospitalSelector.$inject = ['UserHospitalPreferences'];
@@ -31,7 +31,6 @@
                 /**
                  * @ngdoc method
                  * @name goToHospitalSelection
-                 * @methodOf MUHCApp.directives.hospitalSelector
                  * @description Navigates to the hospital selection screen.
                  */
                 function goToHospitalSelection() {
@@ -42,7 +41,6 @@
                 /**
                  * @ngdoc method
                  * @name hospitalIsSelected
-                 * @methodOf MUHCApp.directives.hospitalSelector
                  * @description Returns whether the user has already selected a hospital.
                  * @returns {boolean} True if there is a hospital selected; false otherwise.
                  */
@@ -53,7 +51,6 @@
                 /**
                  * @ngdoc method
                  * @name getSelectedHospitalAcronym
-                 * @methodOf MUHCApp.directives.hospitalSelector
                  * @description Returns a translatable string for display on the hospital selection button
                  *              (either the selected hospital's acronym, or a placeholder).
                  * @returns {string} A translatable string: the selected hospital's acronym, or "Tap to select"

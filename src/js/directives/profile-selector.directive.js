@@ -4,7 +4,7 @@ import "../../css/directives/profile-selector.directive.css"
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("profileSelector", ProfileSelector);
 
     ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'UpdateUI', 'Params'];

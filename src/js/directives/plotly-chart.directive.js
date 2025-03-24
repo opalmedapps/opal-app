@@ -14,7 +14,7 @@ Plotly.register([frLocale]);
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .directive('plotlyChart', plotlyChart);
 
     plotlyChart.$inject = ['$window', '$filter', 'UserPreferences'];

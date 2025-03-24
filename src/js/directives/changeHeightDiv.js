@@ -3,7 +3,7 @@
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
-angular.module('MUHCApp').directive('heightChange', function() {
+angular.module('OpalApp').directive('heightChange', function() {
   return function(scope, element, attrs) {
     scope.$watch(attrs.heightChange, function(newValue, oldValue) {
     	var change=newValue;

@@ -7,7 +7,7 @@
      * This file is injected into the Params (src/js/app.values.js) and the constants are accessed from there.
      */
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .constant('NotificationConstants', {
             NOTIFICATION_TYPES: {
                 'Document': 'Document',

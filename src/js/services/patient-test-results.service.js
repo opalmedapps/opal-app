@@ -9,7 +9,7 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 	'use strict';
 
 	angular
-		.module('MUHCApp')
+		.module('OpalApp')
 		.factory('PatientTestResults', PatientTestResults);
 
 	PatientTestResults.$inject = ["RequestToServer"];

@@ -11,7 +11,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: AboutController
  *  @description
  *
  *  Manages the about view.
@@ -20,7 +19,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('AboutController', AboutController);
 
     AboutController.$inject = ['UserPreferences', 'Navigator', 'Params', 'UserHospitalPreferences',

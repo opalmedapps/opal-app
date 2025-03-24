@@ -6,7 +6,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('Appointments', Appointments);
 
     Appointments.$inject = ['$filter', 'RequestToServer'];

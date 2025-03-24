@@ -7,7 +7,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Utility', Utility);
 
     Utility.$inject = ["$timeout"];

@@ -6,7 +6,6 @@
 
 /**
  * @ngdoc controller
- * @name MUHCApp.controller:ParkingController
  * @requires Browser
  * @requires $filter
  * @requires Hospital
@@ -21,7 +20,7 @@
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .controller("ParkingController", ParkingController);
 
     ParkingController.$inject = [

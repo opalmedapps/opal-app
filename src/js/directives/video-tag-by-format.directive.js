@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("videoTagByFormat", VideoTagByFormat);
 
     VideoTagByFormat.$inject = ['FileManagerService', 'Params'];

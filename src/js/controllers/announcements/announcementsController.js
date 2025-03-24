@@ -10,7 +10,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: AnnouncementsController
  *  @description
  *
  *  Manages the announcements list view. It simply guides the user to the correct individual announcement for a more detailed view of the announcement
@@ -19,7 +18,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('AnnouncementsController', AnnouncementsController);
 
     AnnouncementsController.$inject = [
@@ -62,7 +61,6 @@
         /**
          * @ngdoc method
          * @name goToAnnouncement
-         * @methodOf MUHCApp.controllers.AnnouncementsController
          * @param announcement Announcement Object
          * @description
          * Takes the user to the specified announcement to be viewed in more detail

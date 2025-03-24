@@ -5,7 +5,7 @@
  */
 import moment from "moment";
 
-var myApp=angular.module('MUHCApp');
+var myApp=angular.module('OpalApp');
 
 myApp.filter('removeTitleEducationalMaterial',function()
 {

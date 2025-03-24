@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('SetHospitalController', SetHospitalController);
 
     SetHospitalController.$inject = ['$filter', 'NativeNotification','UserHospitalPreferences'];
@@ -34,7 +34,6 @@
         /**
          * @ngdoc method
          * @name saveSelectedHospital
-         * @methodOf MUHCApp.controllers.SetHospitalController
          * @description Add the selected hospital to local storage and update firebase branch
          */
         function saveSelectedHospital() {

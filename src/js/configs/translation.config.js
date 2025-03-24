@@ -1,5 +1,5 @@
 
-angular.module("MUHCApp").config(TranslationConfiguration);
+angular.module('OpalApp').config(TranslationConfiguration);
 
 TranslationConfiguration.$inject = ['tmhDynamicLocaleProvider', '$translateProvider', 'Constants'];
 

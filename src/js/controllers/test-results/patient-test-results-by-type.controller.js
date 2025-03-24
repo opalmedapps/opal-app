@@ -184,7 +184,7 @@ class PatientTestResultsByTypeController {
 }
 
 angular
-	.module('MUHCApp')
+	.module('OpalApp')
 	.controller('PatientTestResultsByTypeController', PatientTestResultsByTypeController);
 
 PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences',

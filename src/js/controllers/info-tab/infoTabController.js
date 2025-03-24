@@ -12,7 +12,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('InfoTabController', InfoTabController);
 
     InfoTabController.$inject = ['$filter', '$scope', 'Navigator'];

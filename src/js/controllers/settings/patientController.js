@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('PatientsController', PatientsController);
 
         PatientsController.$inject = ['$timeout', 'Navigator', 'ProfileSelector'];

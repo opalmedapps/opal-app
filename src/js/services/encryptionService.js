@@ -5,12 +5,9 @@ import nacl from "tweetnacl";
 import util from "tweetnacl-util";
 
 nacl.util = util;
-var myApp = angular.module('MUHCApp');
+var myApp = angular.module('OpalApp');
 /**
  *@ngdoc service
- *@name MUHCApp.service:EncryptionService
- *@requires MUHCApp.service:UserAuthorizationInfo
- *@requires MUHCApp.service:UserHospitalPreferences
  *@description Provides an API to encrypt and decrypt objects, arrays, or strings.
  **/
 myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPreferences', function (UserAuthorizationInfo, UserHospitalPreferences) {
@@ -123,7 +120,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
     /**
      *@ngdoc method
      *@name hash
-     *@methodOf MUHCApp.service:EncryptionService
      *@description Hashes a given string using SHA512
      *@return {String} Returns hashed string
      **/
@@ -134,7 +130,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
     /**
      * @ngdoc method
      * @name getStorageKey
-     * @methodOf MUHCApp.service:EncryptionService
      * @description Generates a storage key that includes the hospital code.
      * This key is used for storing and retrieving the encrypted security answer specific to a user and hospital.
      * @return {String} The storage key.
@@ -149,9 +144,8 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         /**
          *@ngdoc method
          *@name decryptData
-         *@methodOf MUHCApp.service:EncryptionService
          *@params {Object} object Object to be decrypted
-         *@description Uses the hashed of the password from the {@link MUHCApp.service:UserAuthorizationInfo  UserAuthorizationInfo} service as key to decrypt object parameter
+         *@description Uses the hashed of the password from the {@link OpalApp.service:UserAuthorizationInfo  UserAuthorizationInfo} service as key to decrypt object parameter
          *@return {Object} Returns decrypted object
          **/
         decryptData: function (object) {
@@ -162,7 +156,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         /**
          *@ngdoc method
          *@name decryptDataWithKey
-         *@methodOf MUHCApp.service:EncryptionService
          *@params {Object} object Object to be decrypted, {String} key fo
          *@description Uses the given key as the decryption hash
          *@return {Object} Returns decrypted object
@@ -174,9 +167,8 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         /**
          *@ngdoc method
          *@name encryptData
-         *@methodOf MUHCApp.service:EncryptionService
          *@params {Object} object Object to be encrypted
-         *@description Uses the hashed of the password from the {@link MUHCApp.service:UserAuthorizationInfo  UserAuthorizationInfo} service as key to encrypt object parameter
+         *@description Uses the hashed of the password from the {@link OpalApp.service:UserAuthorizationInfo  UserAuthorizationInfo} service as key to encrypt object parameter
          *@return {Object} Returns encrypted object
          **/
         encryptData: function (object) {
@@ -187,7 +179,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         /**
          *@ngdoc method
          *@name encryptWithKey
-         *@methodOf MUHCApp.service:EncryptionService
          *@params {Object} object Object to be encrypted
          *@params {String} secret Key for encrypting
          *@description Uses the secret parameter as key to encrypt object parameter
@@ -201,7 +192,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         /**
          *@ngdoc method
          *@name setSecurityAns
-         *@methodOf MUHCApp.service:EncryptionService
          *@params {String} answer Security answer
          *@description Sets the security answer to be used as the encryption key for all future communication.
          **/
@@ -212,7 +202,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         /**
          *@ngdoc method
          *@name getSecurityAns
-         *@methodOf MUHCApp.service:EncryptionService
          *@description Uses the secret parameter as key to encrypt object parameter
          *@return {String} Returns hashed security answer
          **/
@@ -223,7 +212,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         /**
          *@ngdoc method
          *@name hash
-         *@methodOf MUHCApp.service:EncryptionService
          *@description Forwarded to private function.
          **/
         hash: function (incoming) {
@@ -249,7 +237,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         /**
          *@ngdoc method
          *@name generateEncryptionHash
-         *@methodOf MUHCApp.service:EncryptionService
          *@description Encrypts a given password using SHA-256
          *@return {String} Returns hashed password
          **/

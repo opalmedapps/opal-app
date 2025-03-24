@@ -4,7 +4,7 @@ import {Observer} from "../models/utility/observer";
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('ProfileSelector', ProfileSelector);
 
     ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'User', 'UserPreferences'];

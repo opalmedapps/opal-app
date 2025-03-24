@@ -18,7 +18,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('CalendarController', CalendarController);
 
     CalendarController.$inject = ['$scope', 'Appointments', '$location', '$anchorScroll', 'Navigator', 'UserPreferences', 'Params', 'Notifications'];

@@ -5,7 +5,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('PatientTestResultsDelayInfoController', PatientTestResultsDelayInfoController);
 
     PatientTestResultsDelayInfoController.$inject = ['$timeout', 'Hospital', 'Params'];

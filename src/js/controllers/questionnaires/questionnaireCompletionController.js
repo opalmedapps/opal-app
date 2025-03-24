@@ -8,7 +8,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('QuestionnaireCompletionController', QuestionnaireCompletionController);
 
     QuestionnaireCompletionController.$inject = ['$filter', '$scope', 'Navigator', 'Questionnaires'];

@@ -3,7 +3,7 @@
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
-angular.module('MUHCApp').directive( 'height-element', function() {
+angular.module('OpalApp').directive( 'height-element', function() {
 
     return {
         link: function( scope, elem, attrs ) {

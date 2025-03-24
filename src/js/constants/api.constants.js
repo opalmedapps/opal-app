@@ -7,7 +7,7 @@
      * @date 2022-06-10
      */
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .constant("ApiConstants", {
             /** Response codes **/
             SUCCESS: '200',

@@ -11,8 +11,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:CheckinService
- *@requires MUHCApp.service:RequestToServer
  *@description Service that deals with the checkin functionality for the app
  **/
 
@@ -20,7 +18,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('CheckInService', CheckInService);
 
     CheckInService.$inject = ['$filter', 'Hospital', 'Location', 'Params', 'RequestToServer'];
@@ -47,8 +45,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#state
-         *@propertyOf MUHCApp.service:CheckinService
          *@description Determines the current state of check-in for a given patient
          */
         let state = initialState;
@@ -190,7 +186,6 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
         /**
          *@ngdoc method
          *@name checkInToAllAppointments
-         *@methodOf MUHCApp.service:CheckinService
          *@description Checks in a patient for all their appointments today.
          *@returns {Promise} Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.
          **/

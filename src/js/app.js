@@ -10,11 +10,10 @@
 
 /**
  * @ngdoc overview
- * @name MUHCApp
  * @description <img src="img/Opal_Name_Logo.png" alt="Opal logo" /><br>
  A multiplatform application built using {@link https://cordova.apache.org Apache Cordova}. The main frameworks for the project are {@link https://angularjs.org/ AngularJS} framework, {@link https://onsen.io/ OnsenUI} Framework, and {@link https://cordova.apache.org Apache Cordova}
  This guide is the first version of the documentation for the Opal mobile app
- Main module for the project: {@link MUHCApp}.3
+ Main module for the project: {@link OpalApp}.3
  The external dependecies for the project: {@link ProjectDependencies}.
  **/
 
@@ -109,7 +108,7 @@ import '@fortawesome/fontawesome-free/js/brands';
 
 //Routes for angular views
 angular
-    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate',
+    .module('OpalApp', ['tmh.dynamicLocale','pascalprecht.translate',
         'ngSanitize','ui.router','onsen','ngTouch','ui.bootstrap'])
     .run(initialization);
 
@@ -117,7 +116,6 @@ initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$transl
 
 /**
  *@ngdoc service
- *@name MUHCApp.run
  *@description Service is in charge of checking that the user is authorized at every state change by checking the parameters stored
  in the Firebase localstorage,  Check run service on angular {{link}}
  **/

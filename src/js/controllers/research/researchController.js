@@ -10,7 +10,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('ResearchController', ResearchController);
 
     ResearchController.$inject = ['$scope', '$timeout', 'Navigator', 'Params', 'ProfileSelector',

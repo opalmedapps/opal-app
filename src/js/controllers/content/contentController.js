@@ -12,7 +12,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('ContentController', ContentController);
 
     ContentController.$inject = ['DynamicContent', 'Navigator', 'Logger', 'Params', '$timeout'];

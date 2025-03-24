@@ -24,7 +24,7 @@ import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, s
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Firebase', Firebase);
 
     Firebase.$inject = ['Params'];
