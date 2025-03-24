@@ -37,7 +37,7 @@
     // Group plotly updates
     {
         "matchPackagePatterns": ["plotly"],
-        "groupName": "plotly packages"
+        "groupName": "plotly packages",
     },
     // Group @zxcvbn-ts updates
     {
