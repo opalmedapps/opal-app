@@ -46,7 +46,7 @@
          * @methodOf MUHCApp.service:Version
          * @description get the version update information.
          **/
-        async function getVersionUpdates(lastVersion, language) {
+        async function getVersionUpdates(lastVersion, currentVersion, language) {
             var r = $q.defer();
 
             await $http.get(version_url).then(function successCallback(response) {
@@ -55,7 +55,10 @@
                     versions.sort(function(v1, v2){return versionCompare(v2.VERSION, v1.VERSION)});
                     let updates = [];
                     versions.forEach(function(value) {
-                        if (versionCompare(value.VERSION, lastVersion) === 1 && value.DESCRIPTION_EN) {
+                        if (versionCompare(value.VERSION, lastVersion) === 1 &&
+                            versionCompare(value.VERSION, currentVersion) !== 1 &&
+                            value.DESCRIPTION_EN)
+                        {
                             let infoData = {};
                             let description = language == 'EN' ? value.DESCRIPTION_EN : value.DESCRIPTION_FR;
                             infoData.title = value.VERSION;

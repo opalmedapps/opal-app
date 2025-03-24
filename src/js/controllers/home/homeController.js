@@ -152,7 +152,7 @@
             }
 
             if (currentVersion !== lastVersion) {
-                Version.getVersionUpdates(lastVersion, vm.language).then(function(data) {
+                Version.getVersionUpdates(lastVersion, currentVersion, vm.language).then(function(data) {
                     if (data && data.length > 0) {
                         $scope.infoModalVersion = Version.currentVersion();
                         $scope.infoModalData = data;
