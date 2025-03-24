@@ -80,6 +80,7 @@
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
                     vm.questionnairesUnreadNumber = result.data.unread_questionnaire_count;
                     vm.educationalMaterialsNumber = result.data.unread_educationalmaterial_count;
+                    // TODO: fetch badges for the research menu items
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
