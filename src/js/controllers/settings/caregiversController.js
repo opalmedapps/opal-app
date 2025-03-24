@@ -29,11 +29,11 @@
                 }
 
                 const requestParams = Params.API.ROUTES.CAREGIVERS;
-                const formatedParams = {
+                const formattedParams = {
                     ...requestParams,
                     url: requestParams.url.replace('<PATIENT_ID>', selfPatientSerNum),
                 }
-                const result = await RequestToServer.apiRequest(formatedParams);
+                const result = await RequestToServer.apiRequest(formattedParams);
                 vm.apiData = result.data;
             } catch (error) {
                 vm.error = true;

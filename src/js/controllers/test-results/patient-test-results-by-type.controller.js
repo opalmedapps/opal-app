@@ -80,6 +80,10 @@ class PatientTestResultsByTypeController {
 		disclaimerModal.show();
 	}
 
+	showLabDelayInfo() {
+		this.#navigator.pushPage('./views/personal/test-results/test-results-info-labdelay.html');
+	}
+
 	/**
 	 * Routing to EducationalMaterialURL for the test type
 	 */
