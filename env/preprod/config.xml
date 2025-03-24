@@ -13,10 +13,21 @@
         Opal Med Apps Inc.
     </author>
     <content src="index.html"/>
-    <!-- Cordova Allow List -->
+    <!-- 
+        Cordova Allow List
+
+        See: https://cordova.apache.org/docs/en/dev/guide/appdev/allowlist/#network-request-allow-list
+        See: https://cordova.apache.org/docs/en/latest/guide/appdev/allowlist/#other-notes
+    -->
+    <!-- 
+        Don't allow arbitrary loads.
+        Add additional domain names specifically if necessary.
+        
+        See: https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/
+    -->
+    <!-- <access origin="*"/> -->
     <access origin="https://www.depdocs.com"/>
     <allow-navigation href="https://www.youtube.com/*"/>
-    <allow-intent href="http://*/*"/>
     <allow-intent href="https://*/*"/>
     <allow-intent href="tel:*"/>
     <allow-intent href="sms:*"/>
