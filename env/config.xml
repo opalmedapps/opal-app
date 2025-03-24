@@ -83,6 +83,12 @@
         <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/receiver" mode="merge">
             <receiver android:exported="false"/>
         </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity[@android:name='com.adobe.phonegap.push.PushHandlerActivity']" mode="merge">
+            <activity android:exported="false"/>
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity[@android:name='com.adobe.phonegap.push.BackgroundHandlerActivity']" mode="merge">
+            <activity android:exported="false"/>
+        </edit-config>
         <resource-file src="google-services.json" target="/app/google-services.json"/>
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/Opal-splash-android-inverse-1400x1400.png"/>
         <access origin="cdvfile://*"/>
