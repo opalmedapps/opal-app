@@ -180,7 +180,7 @@
                 Language: UserPreferences.getLanguage(),
             };
 
-            let response = await RequestToServer.cueRequests('Refresh', refreshParams);
+            let response = await cueRequests('Refresh', refreshParams);
             validateResponse(response);
             await setServices(response.Data, parameters);
             updateTimestamps(parameters, response.Timestamp);
