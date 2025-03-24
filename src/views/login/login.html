@@ -35,13 +35,15 @@
                     <br>
 
                     <!-- LOGIN BUTTON -->
-                    <button class="shadow-2 button button--large " style="max-width:400px;background-color: #4CAF50; font-weight: bolder;margin: auto"
-                            ng-click="login.submit()" ng-disabled="!login.isThereSelectedHospital() || login.loading" >
-                        <span ng-if = "!login.loading" > {{"LOGIN"|translate}} </span>
-                        <span ng-if = "login.loading" > {{"LOGGINGIN"|translate}} <ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
+                    <button class="shadow-2 button button--large" style="max-width:400px; background-color:#4CAF50; font-weight:bolder; margin:auto"
+                            ng-click="login.submit()" ng-disabled="!login.isThereSelectedHospital() || login.loading">
+                        <span ng-if="!login.loading">{{"LOGIN"|translate}}</span>
+                        <span ng-if="login.loading">{{"LOGGINGIN"|translate}}<ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
                     </button>
                     <br>
                 </form>
+
+                <!-- FORGOT PASSWORD -->
                 <button class="button button--large--quiet" ng-click="initNavigator.pushPage('./views/login/forgot-password.html',{})">
                     {{"FORGOTPASSWORD"|translate}}
                 </button>
