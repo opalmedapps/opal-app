@@ -298,21 +298,21 @@
          *
          */
         async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus) {
-            try {
                 let userProfile = User.getLoggedinUserProfile();
 
                 let response = await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userProfile);
 
                 let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus, userProfile);
 
+                if (!isFailure) {
+                    throw new Error("Error updating status internal to app");
+                }
+
                 if (newStatus === 1) {
                     numberOfUnreadQuestionnaires[currentPurpose] -= 1;
                 }
 
                 return { Success: true, Location: 'Server' };
-            } catch (error) {
-                console.error("Error updating status internal to app", err);
-            }
         }
 
         /**
@@ -840,14 +840,15 @@
          * @param {int} answerQuestionnaireId ID of particular questionnaire received by patient
          * @param {int} newStatus the new status to be updated in
          * @param {int} oldStatus the old status of the questionnaire. If this parameter is non-existent then the function has to check if the questionnaire exist in every object.
-         * @return {error} throws error if failure
+         * @return {boolean} true if success, false if failure
          */
         function updateAppQuestionnaireStatus (answerQuestionnaireId, newStatus, oldStatus, userProfile){
             let questionnaire_to_be_updated;
 
             // verify status
             if (!verifyStatus(newStatus)){
-                throw new Error("ERROR: error in updating the questionnaire status, the status is not valid");
+                console.error("ERROR: error in updating the questionnaire status, the status is not valid");
+                return false;
             }
 
             if (!verifyStatus(oldStatus)){
@@ -865,7 +866,8 @@
                     delete completeQuestionnaires[answerQuestionnaireId];
 
                 }else{
-                    throw new Error("ERROR: error in updating the questionnaire status, it does not exist in the existing questionnaires arrays");
+                    console.error("ERROR: error in updating the questionnaire status, it does not exist in the existing questionnaires arrays");
+                    return false;
                 }
             }else{
                 // we know the old status -> clean up old status
@@ -886,7 +888,8 @@
                         break;
 
                     default:
-                        throw new Error("ERROR: error in updating the questionnaire status, it does not have a valid new status");
+                        console.error("ERROR: error in updating the questionnaire status, it does not have a valid new status");
+                        return false;
                 }
             }
 
