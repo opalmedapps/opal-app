@@ -2,35 +2,35 @@
  * @file Controller for the delay info page
  */
 (function () {
-	'use strict';
+    'use strict';
 
-	angular
-		.module('MUHCApp')
-		.controller('PatientTestResultsDelayInfoController', PatientTestResultsDelayInfoController);
+    angular
+        .module('MUHCApp')
+        .controller('PatientTestResultsDelayInfoController', PatientTestResultsDelayInfoController);
 
-		PatientTestResultsDelayInfoController.$inject = ['Hospital', 'Params', '$timeout'];
+    PatientTestResultsDelayInfoController.$inject = ['Hospital', 'Params', '$timeout'];
 
-	function PatientTestResultsDelayInfoController(Hospital, Params, $timeout) {
+    function PatientTestResultsDelayInfoController(Hospital, Params, $timeout) {
 
-		const vm = this;
-		vm.loading = true;
-		vm.alert = undefined;
+        const vm = this;
+        vm.loading = true;
+        vm.alert = undefined;
 
-		activate();
+        activate();
 
-		//////////////////////////////////////////
+        //////////////////////////////////////////
 
-		async function activate() {
-			try {
-				let institution = await Hospital.requestInstitutionInfo();
-				console.log(institution);
+        async function activate() {
+            try {
+                let institution = await Hospital.requestInstitutionInfo();
+                console.log(institution);
 
-				$timeout(() => {
-					vm.default_interpretable = institution.interpretable_lab_result_delay;
-					vm.default_non_interpretable = institution.non_interpretable_lab_result_delay;
+                $timeout(() => {
+                    vm.default_interpretable = institution.interpretable_lab_result_delay;
+                    vm.default_non_interpretable = institution.non_interpretable_lab_result_delay;
                     vm.loading = false;
-				});
-			} catch (error) {
+                });
+            } catch (error) {
                 $timeout(() => {
                     // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
                     console.error(error);
@@ -42,7 +42,7 @@
                         content: "PAGE_ACCESS_ERROR"
                     };
                 })
-			}
-		}
-	}
+            }
+        }
+    }
 })();
