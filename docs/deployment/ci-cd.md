@@ -67,7 +67,7 @@ Any commits to the default branch are handled as follows:
       (`apk` and `ipa`) are automatically deployed to the team via Firebase App Distribution for Opal Dev,
       which notifies them by email that a new version is available.
       Permission to execute this job is restricted via the use of protected environments (more details below).
-    - `deploy web app`: The web app as well as the landing page are uploaded to the FTP server corresponding to the environment.
+    - `deploy web`: The web app as well as its landing page are uploaded to the FTP server corresponding to the environment.
   - Stage 4: `post`
     - `build and deploy QA`: Optional manual trigger job that can be used to launch a [downstream child pipeline](https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html#parent-child-pipelines)
       to deploy the app to the QA environment. If launched, the same jobs in this current "second pipeline" run again,
