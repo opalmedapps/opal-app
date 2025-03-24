@@ -34,7 +34,7 @@
         //////////////////////////
 
         function activate() {
-            //Its possible for a notification to have been read such as a document since this controller has already been instantiated
+            //It is possible for a notification to have been read such as a document since this controller has already been instantiated
             // we will have to check to sync that number on the badges for the tabs on the personal page.
             NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator' });
             NavigatorParameters.setNavigator(personalNavigator);

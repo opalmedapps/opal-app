@@ -34,7 +34,7 @@
                 let response = await RequestToServer.sendRequestWithResponse('Studies');
 
                 // check if response contains studies
-                if (!response?.Data?.studies) return;
+                if (!response?.Data?.studies) return [];
 
                 studies = response.Data.studies;
 
@@ -50,7 +50,7 @@
 
                 return studies;
             } catch (error) {
-                console.log('Error in getStudies: ', error);
+                console.error('Error in getStudies: ', error);
                 return [];
             }
 
