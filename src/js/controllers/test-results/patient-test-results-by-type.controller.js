@@ -1,16 +1,3 @@
-import Highcharts from 'highcharts/highstock';
-import addMore from "highcharts/highcharts-more";
-import addDrilldown from "highcharts/modules/drilldown";
-import addNoData from "highcharts/modules/no-data-to-display";
-import addOfflineExporting from "highcharts/modules/offline-exporting";
-import addExporting from "highcharts/modules/exporting";
-
-addMore(Highcharts);
-addDrilldown(Highcharts);
-addNoData(Highcharts);
-addOfflineExporting(Highcharts);
-addExporting(Highcharts);
-
 class PatientTestResultsByTypeController {
 	/**
 	 * @type {string}
@@ -30,11 +17,6 @@ class PatientTestResultsByTypeController {
 	 */
 	loading = true;
 	/**
-	 * HcChart configuration object
-	 * @type {*}
-	 */
-	chartOptions = {};
-	/**
 	 * Variable to control whether to show the table view or the chart view
 	 */
 	showChart = true;
@@ -53,7 +35,6 @@ class PatientTestResultsByTypeController {
 	 * Class constructor for controller
 	 * @param {PatientTestResults} patientTestResults
 	 * @param {UserPreferences} userPreferences
-	 * @param {HcChartLabsConfiguration} hcChartLabsConfiguration
 	 * @param {Navigator} navigator
 	 * @param {$filter} $filter Angular filter
 	 * @param {$timeout} $timeout Angular module
@@ -61,15 +42,14 @@ class PatientTestResultsByTypeController {
 	 * @param {ProfileSelector} profileSelector profile selector service
 	 * @param {UpdateUI} updateUI update UI service
 	 */
-	constructor(patientTestResults, userPreferences, hcChartLabsConfiguration,
-		navigator, $filter, $timeout, browser, profileSelector, updateUI) {
+	constructor(patientTestResults, userPreferences, navigator, $filter,
+		$timeout, browser, profileSelector, updateUI) {
 		this.#patientTestResults = patientTestResults;
 		this.#language = userPreferences.getLanguage();
 		this.#fontSize = userPreferences.getFontSize();
 		this.#navigator = navigator.getNavigator();
 		this.#$timeout = $timeout;
 		this.#$filter = $filter;
-		this.#labsChartConfigurationFactory = hcChartLabsConfiguration;
 		this.#browser = browser;
 		this.#profileSelector = profileSelector;
 		this.#updateUI = updateUI;
@@ -129,17 +109,6 @@ class PatientTestResultsByTypeController {
 			test.results.map((testResult) => [testResult.collectedDateTime,
 			testResult.testValue]) : [];
 		const yAxisLabel = test.hasNumericValues ? test.unitWithBrackets : "";
-
-		Highcharts.setOptions(this.#labsChartConfigurationFactory.getChartLanguageOptions(this.#language,
-			test.hasNumericValues));
-		Highcharts.dateFormat(this.#labsChartConfigurationFactory.getDateFormat(this.#language));
-		this.chartOptions = this.#labsChartConfigurationFactory.getChartConfiguration(data,
-			test.hasNumericValues,
-			this.#$filter("translate")("RESULT"),
-			yAxisLabel,
-			test.normalRangeMin,
-			test.normalRangeMax,
-			this.#getAppFontSizeInPixels());
 	};
 
 	/**
@@ -205,5 +174,5 @@ angular
 	.module('MUHCApp')
 	.controller('PatientTestResultsByTypeController', PatientTestResultsByTypeController);
 
-PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences', 'HcChartLabsConfiguration',
+PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences',
 	'Navigator', '$filter', '$timeout', 'Browser', 'ProfileSelector', 'UpdateUI'];
