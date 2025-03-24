@@ -37,6 +37,7 @@
   "ERROR_INIT_LINKS": "Error loading links in the app. Some links may not open.",
   "ERROROBTAININGDOCUMENT": "Error obtaining document from server",
   "ERROR_NETWORK": "Could not connect to the internet",
+  "ERROR_NO_CONFIRMED_PROFILES": "Access to your account has not yet been approved by Medical Records, or has been revoked. If you've recently requested access, please wait for it to be granted. Otherwise, please contact Opal support for assistance.",
   "ERROR_PAGE": "Error loading this page",
   "FEEDBACK": "Feedback",
   "FEEDBACK_MESSAGE": "Your feedback is invaluable to us. Please take a moment to let us know what you think about Opal.",

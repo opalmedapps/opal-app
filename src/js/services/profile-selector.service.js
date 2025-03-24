@@ -71,6 +71,9 @@ import {Observer} from "../models/utility/observer";
             currentSelectedProfile = getConfirmedProfiles().find((item) => item.patient_legacy_id == requestedPatientSerNum)
                 || getConfirmedProfiles()[0];
 
+            // If no profile can be loaded (e.g. because all profiles are pending), proceed without loading one.
+            if (!currentSelectedProfile) return;
+
             $window.localStorage.setItem('profileId', currentSelectedProfile.patient_legacy_id);
             $timeout(() => {
                 profileObserver.notify();
