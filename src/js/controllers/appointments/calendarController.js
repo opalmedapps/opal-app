@@ -117,7 +117,7 @@
          * @description Updates and displays the visible list of appointments and calendar.
          */
         function setAppointmentsView() {
-            vm.appointments=Appointments.getUserAppointments();
+            vm.appointments = Appointments.getAppointments();
             vm.noAppointments = (vm.appointments.length === 0);
             if(vm.appointments.length>0) {
 
@@ -214,8 +214,8 @@
          * @returns {string}
          */
         function showDotColor(date) {
-            if(vm.appointments.length === 0){
-                vm.appointments=Appointments.getUserAppointments();
+            if (vm.appointments.length === 0) {
+                vm.appointments = Appointments.getAppointments();
             }
 
             // TODO: this is a huge bottleneck for the situation where a user has a bunch of appointments!!

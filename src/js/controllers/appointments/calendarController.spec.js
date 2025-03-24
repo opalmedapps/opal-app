@@ -44,7 +44,7 @@ describe('CalendarController', function() {
         if(!empty_appointments){
             if(!varied_date){
                 Appointments = {
-                    getUserAppointments: function(){
+                    getAppointments: function() {
                         return MockData.test_appointments;
                     },
                     readAppointmentBySerNum: function(stuff){
@@ -53,7 +53,7 @@ describe('CalendarController', function() {
                 };
             } else {
                 Appointments = {
-                    getUserAppointments: function(){
+                    getAppointments: function() {
                         return MockData.test_appointments_varied_date;
                     },
                     readAppointmentBySerNum: function(stuff){
@@ -63,7 +63,7 @@ describe('CalendarController', function() {
             }
         } else {
             Appointments = {
-                getUserAppointments: function(){
+                getAppointments: function() {
                     return [];
                 }
             };
