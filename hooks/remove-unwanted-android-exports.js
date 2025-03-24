@@ -8,6 +8,7 @@ let path = require('path');
 let rootdir = '';
 let manifestFile = path.join(rootdir, 'platforms/android/app/src/main/AndroidManifest.xml');
 
+// nosemgrep: detect-non-literal-fs-filename (only used when building the app)
 fs.readFile(manifestFile, 'utf8', function(err, data) {
     if (err) return console.log(err);
 
@@ -19,6 +20,7 @@ fs.readFile(manifestFile, 'utf8', function(err, data) {
         );
     }
 
+    // nosemgrep: detect-non-literal-fs-filename (only used when building the app)
     fs.writeFile(manifestFile, result, 'utf8', function(err) {
         if (err) return console.log(err);
     });

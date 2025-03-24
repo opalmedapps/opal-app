@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="1.27.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="1.28.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>${APP_NAME}</name>
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web -
@@ -102,6 +102,10 @@
     <platform name="ios">
         <!-- Required to access location data since iOS 10 -->
         <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+            <string>Localisation nécessaire pour l'enregistrement aux rendez-vous / Location needed for appointment check-in</string>
+        </config-file>
+        <!-- Required by App Store -->
+        <config-file target="*-Info.plist" parent="NSLocationAlwaysAndWhenInUseUsageDescription">
             <string>Localisation nécessaire pour l'enregistrement aux rendez-vous / Location needed for appointment check-in</string>
         </config-file>
         <preference name="deployment-target" value="11.0"/>

@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
-    TxTeamMessagesController.$inject = ['TxTeamMessages','NavigatorParameters', '$timeout', '$filter'];
+    TxTeamMessagesController.$inject = ['$scope', 'TxTeamMessages','NavigatorParameters', '$timeout', '$filter'];
 
     /* @ngInject */
-    function TxTeamMessagesController(TxTeamMessages, NavigatorParameters, $timeout, $filter) {
+    function TxTeamMessagesController($scope, TxTeamMessages, NavigatorParameters, $timeout, $filter) {
         var vm = this;
         vm.goToTeamMessage = goToTeamMessage;
 
@@ -26,7 +26,7 @@
         //////////////////////////////
 
         function activate(){
-
+            bindEvents();
         }
 
         /**
@@ -50,6 +50,17 @@
             }
             NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':message});
             personalNavigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html');
+        }
+
+        function bindEvents() {
+            let navigator = NavigatorParameters.getNavigator();
+
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if announcement was opened via Notifications tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
     }
 })();

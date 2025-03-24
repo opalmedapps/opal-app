@@ -24,7 +24,6 @@
 
         var vm = this;
         var navigatorName;
-        vm.passFill = '********';
         vm.accountDeviceBackButton = () => tabbar.setActiveTab(0);
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToUpdateAccountField = (param, animation) => settingsNavigator.pushPage('views/settings/update-account-field.html', {param:param},{ animation : animation });

@@ -1,3 +1,17 @@
+# [1.28.0](https://gitlab.com/opalmedapps/qplus/compare/v1.27.4...v1.28.0) (2024-02-20)
+
+
+### Features
+
+* enable care receivers' in app notifications ([49e5344](https://gitlab.com/opalmedapps/qplus/commit/49e534464148eb8ea02404076332a2436905fe22))
+
+## [1.27.4](https://gitlab.com/opalmedapps/qplus/compare/v1.27.3...v1.27.4) (2024-02-20)
+
+
+### Bug Fixes
+
+* **deps:** bring back insights ([d027122](https://gitlab.com/opalmedapps/qplus/commit/d027122dc10f554e9178c170807af65b3c0a102c))
+
 ## [1.27.3](https://gitlab.com/opalmedapps/qplus/compare/v1.27.2...v1.27.3) (2024-02-19)
 
 

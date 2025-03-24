@@ -121,6 +121,7 @@ class OpalEnv {
      * @returns {string[]} The list of directories at that path.
      */
     static getDirectories(source) {
+        // nosemgrep: detect-non-literal-fs-filename (only used by webpack)
         return fs.readdirSync(source, {withFileTypes: true})
             .filter(directory => directory.isDirectory())
             .map(directory => directory.name);
@@ -216,7 +217,9 @@ class OpalEnv {
     static getOpalConfigJs(env, parseAsJs) {
         this.verifyOpalEnvironmentExists(env);
         const path = `./env/${env}/opal.config.js`;
+        // nosemgrep: detect-non-literal-fs-filename (only used by webpack)
         if (!fs.existsSync(path)) throw new Error(`File not found: ${path}`);
+        // nosemgrep: detect-non-literal-require, detect-non-literal-fs-filename (internal functionality; no user-supplied data used, only used by webpack)
         return parseAsJs ? require(path) : fs.readFileSync(path).toString();
     }
 
@@ -230,7 +233,9 @@ class OpalEnv {
      */
     static getConfigXML(basePath, parseAsJs) {
         let filePath = path.join(basePath, 'config.xml');
+        // nosemgrep: detect-non-literal-fs-filename (only used by webpack)
         if (!fs.existsSync(filePath)) throw new Error(`File not found: ${filePath}`);
+        // nosemgrep: detect-non-literal-fs-filename (only used by webpack)
         let fileContentString = fs.readFileSync(filePath).toString();
         return parseAsJs ? xmlJs.xml2js(fileContentString) : fileContentString;
     }

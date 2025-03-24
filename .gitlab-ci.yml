@@ -16,6 +16,7 @@ default:
     paths:
       - .npm/
 
+
 variables:
   ENV: "dev"  # The environment used in the app build command
   GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEV  # The service account providing permissions to upload to Firebase App Distribution
@@ -55,6 +56,7 @@ stages:
   # Required for security scanning jobs
   - test
   - deploy
+  - dast
   - post
 
 
@@ -238,10 +240,55 @@ build and deploy QA:
       - local: .gitlab-ci.yml
 
 include:
+  # use latest template versions to run security scanning jobs also in merge request pipelines:
+  # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
   # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
   # See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   # Dependency Scanning: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
   # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Dependency-Scanning.latest.gitlab-ci.yml
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
-  
+  # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
+  - template: Jobs/SAST.latest.gitlab-ci.yml
+  # DAST Scanning: https://docs.gitlab.com/ee/user/application_security/dast/
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Security/DAST.latest.gitlab-ci.yml
+  - template: DAST.latest.gitlab-ci.yml
+
+# SAST Scanning Customization:
+# ensure that mobsf jobs depend on builds
+# https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
+# https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
+mobsf-android-sast:
+  needs:
+    - build android
+  rules:
+    # override rules since at the time the job is created the apk does not exist yet
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+mobsf-ios-sast:
+  needs:
+    - build ios
+  rules:
+    # override rules since at the time the job is created the apk does not exist yet
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Automatically built for release tags only (see .build)
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+
+# DAST Scanning Customization: 
+# https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/requirements.html
+# https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/enabling_the_analyzer.html
+dast:
+  needs: ["deploy web"]
+  # https://docs.gitlab.com/ee/user/application_security/dast/browser/configuration/variables.html
+  variables:
+    DAST_WEBSITE: "https://dev.app.opalmedapps.ca"
+    DAST_BROWSER_SCAN: "true"
+    # enables active scanning
+    # https://docs.gitlab.com/ee/user/application_security/dast/browser/checks/#active-checks
+    # DAST_FULL_SCAN_ENABLED: "true"
+  # can only run in the same pipeline as the dependent job (deploy web)
+  rules:
+    # Only release the web version from release tags
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
