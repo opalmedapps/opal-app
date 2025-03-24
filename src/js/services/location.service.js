@@ -39,15 +39,7 @@
          *                             less than or equal to the maximum allowed distance.
          */
         async function isInRange(targetLatitude, targetLongitude, maxDistanceMeters) {
-            let current;
-            try {
-                current = (await getCurrentPosition(geolocationOptions)).coords;
-            }
-            catch (error) {
-                console.error(error);
-                throw new Error("Failed to get the device's current position via geolocation");
-            }
-
+            let current = (await getCurrentPosition(geolocationOptions)).coords;
             let distanceMeters = 1000 * getDistanceFromLatLonInKm(current.latitude, current.longitude, targetLatitude, targetLongitude);
             return distanceMeters <= maxDistanceMeters;
         }
