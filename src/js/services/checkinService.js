@@ -383,7 +383,8 @@
 
                     r.resolve(false);
                 }
-            }, function(){
+            }, function(err) {
+                console.error("Error getting current position via geolocation: ", err);
                 r.reject(false);
             }, {
                 maximumAge: 10000,

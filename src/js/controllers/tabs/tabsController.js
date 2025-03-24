@@ -10,37 +10,22 @@
         .module('MUHCApp')
         .controller('TabsController', TabsController);
 
-    TabsController.$inject = ['$timeout', '$translatePartialLoader', '$scope'];
+    TabsController.$inject = ['$timeout', '$translatePartialLoader'];
 
-    function TabsController($timeout, $translatePartialLoader, $scope) {
-
-        var vm = this;
-
-        vm.analyze = analyze;
+    function TabsController($timeout, $translatePartialLoader) {
 
         activate();
 
         /////////////////////////
 
-        function activate(){
-            $scope.tour = './views/home/tour/tour.html';
-
-            if (!localStorage.getItem('firstInstall')){
+        function activate() {
+            if (!localStorage.getItem('firstInstall')) {
                 localStorage.setItem('firstInstall', '1');
                 $timeout(function () {
-                    tourModal.show();
+                    firstLoginTourModal.show();
                 },500);
             }
             $translatePartialLoader.addPart('all-views');
-        }
-
-        function analyze(event){
-            if(event.index === tabbar.getActiveTabIndex()){
-                event.cancel()
-            }
-            else{
-                tabbar.setActiveTab(e.index);
-            }
         }
     }
 })();

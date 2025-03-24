@@ -13,15 +13,15 @@ class HcChartLabsConfiguration{
 		this.#appParams = params;
 
 	}
-	getChartConfiguration(data, chartTitle, yAxisLabel, minNorm, maxNorm, fontsize){
-		return this.#getChartConfiguration(data, chartTitle, yAxisLabel, fontsize, minNorm, maxNorm);
+	getChartConfiguration(data, hasNumericValues, chartTitle, yAxisLabel, minNorm, maxNorm, fontsize){
+		return this.#getChartConfiguration(data, hasNumericValues, chartTitle, yAxisLabel, fontsize, minNorm, maxNorm);
 	}
 	getDateFormat(language){
 		return (language === "EN") ? '%a%e' : '%e%a';
 	}
-	getChartLanguageOptions(language){
+	getChartLanguageOptions(language, hasNumericValues){
 		return {
-			lang: this.#setChartLanguagePreferences(language),
+			lang: this.#setChartLanguagePreferences(language, hasNumericValues),
 			xAxis: {
 				events: {
 					afterSetExtremes: this.#afterSetExtremes
@@ -32,7 +32,6 @@ class HcChartLabsConfiguration{
 				 * the button in the buttons array to work properly.
 				 * -SB */
 				buttons: this.#getCharTimeButtonConfiguration(language)
-
 			}
 		};
 	}
@@ -58,18 +57,19 @@ class HcChartLabsConfiguration{
 				console.log("Error: range selector button with text '" + button.text
 					+ "' was not given an id attribute and will not be saved in memory.");
 				console.log("Setting range selector to default.");
-				this.#$rootScope.chartSelectedDateRange = HcChartConfiguration.CHART_DATE_SELECTED_DEFAULT;
+				this.#$rootScope.chartSelectedDateRange = HcChartLabsConfiguration.CHART_DATE_SELECTED_DEFAULT;
 			} else {
 				this.#$rootScope.chartSelectedDateRange = button.id;
 			}
 		}
 	};
 	/**
-	 *
+	 * setChartLanguagePreferences
 	 * @param {string} language
+	 * @param {boolean} hasNumericValues Whether this chart has numeric values (if not, it will be blank)
 	 * @returns {{}}
 	 */
-	#setChartLanguagePreferences = (language) => {
+	#setChartLanguagePreferences = (language, hasNumericValues) => {
 		const lang = this.#$filter("capitalize")(language.toLowerCase());
 		return {
 			months: this.#appParams.monthsArray[`monthsArray${lang}`],
@@ -89,7 +89,8 @@ class HcChartLabsConfiguration{
 			rangeSelectorFrom: this.#appParams.rangeSelector[`rangeSelectorFrom${lang}`],
 			rangeSelectorTo: this.#appParams.rangeSelector[`rangeSelectorTo${lang}`],
 			rangeSelectorZoom: '',
-			noData: this.#appParams.noDataAvailable[`noDataAvailable${lang}`],
+			noData: !hasNumericValues ? this.#appParams.noPlotNonNumeric[`noPlotNonNumeric${lang}`]
+				: this.#appParams.noPlotGeneric[`noPlotGeneric${lang}`],
 		};
 	};
 	#getCharTimeButtonConfiguration = (language) => {
@@ -125,13 +126,37 @@ class HcChartLabsConfiguration{
 		}, [data[0][1], data[0][1]]);
 	};
 
-	#getChartConfiguration=(data, chartTitle, yAxisLabel, fontSize, normalRangeMin, normalRangeMax) =>{
-		const [ minValue, maxValue ] = (data.length>0)?this.#getDataLimits(data): [0,0];
-		const minChart = Math.min(minValue, normalRangeMin)*0.95;
-		const maxChart = Math.max(maxValue, normalRangeMax)*1.05;
+	/**
+	 * @name configureYAxisBound
+	 * @author Stacey Beard
+	 * @date 2021-05-14
+	 * @desc Returns a minimum or maximum value used to configure the chart's y-axis bounds.
+	 * @param {number} dataValue Min or max y-value from the chart's data points
+	 * @param {number} rangeValue Min or max y-value from the lab test's normal range
+	 * @param {function} comparisonFunction Math.min or Math.max, used to pick between dataValue or rangeValue
+	 * @param {number} scalingFactor A factor by which to scale the result (so that the y-axis leaves some space
+	 *                               above and below the largest and smallest data points)
+	 * @returns {number} The computed min or max y-axis bound
+	 */
+	#configureYAxisBound = (dataValue, rangeValue, comparisonFunction, scalingFactor) => {
+		let bound;
+		if (isNaN(dataValue) && isNaN(rangeValue)) bound = NaN;
+		else if (isNaN(dataValue)) bound = rangeValue;
+		else if (isNaN(rangeValue)) bound = dataValue;
+		else bound = comparisonFunction(dataValue, rangeValue);
+		bound *= scalingFactor;
+		return bound;
+	};
+
+	#getChartConfiguration=(data, hasNumericValues, chartTitle, yAxisLabel, fontSize, normalRangeMin, normalRangeMax) =>{
+		const [ minValue, maxValue ] = (data.length > 0) ? this.#getDataLimits(data) : [NaN, NaN];
+		const minChart = this.#configureYAxisBound(minValue, normalRangeMin, Math.min, 0.95);
+		const maxChart = this.#configureYAxisBound(maxValue, normalRangeMax, Math.max, 1.05);
+		const smallFontSize = fontSize.replace('px', '') - 5 + "px";
 		return {
 			exporting: false,
 			rangeSelector: {
+				enabled: hasNumericValues,
 				selected: this.#$rootScope.chartSelectedDateRange,
 				buttonTheme: {
 					width: 'auto',
@@ -144,13 +169,9 @@ class HcChartLabsConfiguration{
 					fontSize: fontSize
 				},
 				buttonPosition: {
-					// align: "right", // This feature will be available after updating Highcharts.
-					/* Computing the position of the range buttons depending on the text size.
-					 * The best result was produced by 70 px for all font sizes. The if statements were left for
-					 * future customization.
-					 */
-					x: 70,
-					y: 10
+					align: "right",
+					x: -3,
+					y: 0
 				},
 				// Disable the date box input (from <date> to <date>) which causes display problems.
 				inputEnabled: false
@@ -159,9 +180,9 @@ class HcChartLabsConfiguration{
 				margin: 5,
 			},
 			chart: {
-				// Explicitly tell the width and height of a chart
-				width: $(window).width()-10,
-				height: null
+				width: $(window).innerWidth(),
+				marginRight: 15,
+				height: null,
 			},
 			xAxis: {
 				type: 'datetime',
@@ -172,12 +193,6 @@ class HcChartLabsConfiguration{
 				minTickInterval: 3600 * 24 * 30 * 1000,//time in milliseconds
 				minRange: 3600 * 24 * 30 * 1000,
 				ordinal: false, //this sets the fixed time formats
-				// title: {
-				//     text: 'Date',
-				//     style: {
-				//         fontSize: fontSize
-				//     }
-				// },
 				labels: {
 					y: 20,
 					rotation: -35,
@@ -189,30 +204,20 @@ class HcChartLabsConfiguration{
 				}
 			},
 			yAxis: {
-				max: maxChart*1.05,
-				min: minChart*0.95,
+				max: hasNumericValues ? maxChart : null,
+				min: hasNumericValues ? minChart : null,
 				title: {
 					align: 'high',
 					text: yAxisLabel,
 					style: {
+						fontSize: smallFontSize,
 						'text-anchor': 'start'
 					},
 					rotation: 0,
-					y: -10,
+					y: -20,
 					reserveSpace: false
 				},
 				opposite: false,
-				// plotLines: [{
-				//     color: 'rgba(246, 54, 92, 0.53)',
-				//     value: normalRangeMax,
-				//     dashStyle: 'Solid',
-				//     width: 2
-				// },{
-				//     color: 'rgba(246, 54, 92, 0.53)',
-				//     value: normalRangeMin,
-				//     dashStyle: 'Solid',
-				//     width: 2
-				// }],
 				labels: {
 					style: {
 						fontSize: fontSize,
@@ -235,10 +240,20 @@ class HcChartLabsConfiguration{
 				type: 'area',
 				color: 'rgba(21, 148, 187, 0.65)',
 				pointWidth: 100,
-				tooltip: {
-					valueDecimals: 2
+				dataGrouping: {
+					enabled: false, // Prevents clusters of results from being averaged when they are close together
+				},
+			}],
+			noData: {
+				style: {
+					fontSize: fontSize,
+					// Set the width of the "noData" message to prevent overflow off the edges of the screen
+					width: '200%',
 				}
-			}]
+			},
+			time: {
+				useUTC: false, // Ensures that the dates on the chart correspond to the dates in the table view
+			},
 		};
 	};
 }

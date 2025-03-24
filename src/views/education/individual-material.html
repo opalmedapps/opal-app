@@ -2,19 +2,12 @@
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
         <div class="center">{{edu.edumaterial.Type}}</div>
-        <div class="right" ng-show="edu.edumaterial.ShareURL_EN && edu.edumaterial.ShareURL_EN!==''"><ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial"><ons-icon icon="fa-share"></ons-icon></ons-toolbar-button></div>
-
+        <div class="right" ng-if="edu.edumaterial.ShareURL_EN && edu.edumaterial.ShareURL_EN!==''">
+            <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial">
+                <ons-icon icon="fa-share"></ons-icon>
+            </ons-toolbar-button>
+        </div>
     </ons-toolbar>
-
-    <!--<style>-->
-    <!--#scroll_content {-->
-    <!--height: 100%;-->
-    <!--width: auto;-->
-    <!--overflow: auto;-->
-    <!--border-style: solid;-->
-    <!--}-->
-
-    <!--</style>-->
 
     <div id="{{edu.recursive_step}}" ng-init="edu.scrollDown()" style="height: 100%; width: auto; overflow: auto;">
 
@@ -38,7 +31,7 @@
             <ons-list-item class="item" ng-click="edu.goToEducationalMaterial()" style="background-color: #F9F9F9; border: none !important;">
                 <div align="center">
                     <div>
-                        <img class="animated swing" style="height:175px; margin-top: 25%;" ng-src="./img/pdf.jpeg">
+                        <img class="animated swing" style="height:175px; margin-top: 25%;" src="./img/pdf.jpeg">
                         <h4 style="margin-top: 2%">{{"CLICKTOOPEN" | translate}}</h4>
                     </div>
                     <h3 ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</h3>

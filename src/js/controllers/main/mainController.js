@@ -246,7 +246,7 @@
          * work with the cordova-plugin-prevent-screenshot plugin
          *****************************************/
         function preventAndroidScreenshot() {
-            if (Constants.app) {
+            if (Constants.app && ons.platform.isAndroid()) {
                 window.plugins.preventscreenshot.disable(
                     (status) => console.log('Android screenshot successfully disabled:', !status), // true - enabled, false - disabled
                     (err) => console.log('Android screenshot cannot be disabled:', err)
