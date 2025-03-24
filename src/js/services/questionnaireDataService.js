@@ -115,7 +115,7 @@
          * @param {int} isSkipped is this question skipped or not
          * @returns {Promise}
          */
-        function saveQuestionnaireAnswer(answerQuestionnaireId, sectionId, questionId, questionSectionId, answerArray, questionTypeId, isSkipped, isOptional){
+        function saveQuestionnaireAnswer(answerQuestionnaireId, sectionId, questionId, questionSectionId, answerArray, questionTypeId, isSkipped){
 
             return new Promise (function(resolve, reject){
                 // flag for property check
@@ -137,12 +137,6 @@
                 }
                 if (!isTypeCorrect){
                     reject("ERROR: error in saving the questionnaire answer, it does not have a valid typeID");
-                }
-
-                if(validType.TEXTBOX_TYPE_ID === questionTypeId && isOptional === '0'){
-                    if(answerArray[0].answer_value === ""){
-                        reject("ERROR: error in saving the questionnaire answer, it does not have a valid answer because it is required question");
-                    }
                 }
 
                 // this is to prevent the encryption of the answerArray since it is passing by reference

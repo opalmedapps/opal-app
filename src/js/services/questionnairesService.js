@@ -253,7 +253,6 @@
                 let answerArray = question.patient_answer.answer;
                 let questionTypeId = question.type_id;
                 let isSuccess = true;
-                let isOptional = question.optional;
 
                 // the app knows that the answer is invalid, but still would like to save tha answer (that the user has answered but not chosen an answer).
                 // The app should not submit the questionnaire no matter if the DB has received it or not.
@@ -269,7 +268,7 @@
                 // tell the summary page that the answer is waiting to be saved
                 waitingForSavingAnswer = true;
 
-                QuestionnaireDataService.saveQuestionnaireAnswer(answerQuestionnaireId, sectionId, questionId, questionSectionId, answerArray, questionTypeId, isSkipped, isOptional)
+                QuestionnaireDataService.saveQuestionnaireAnswer(answerQuestionnaireId, sectionId, questionId, questionSectionId, answerArray, questionTypeId, isSkipped)
                     .then(function (response) {
                         // stop the execution of setTimeout() if we got a response
                         clearTimeout(timeOut);
