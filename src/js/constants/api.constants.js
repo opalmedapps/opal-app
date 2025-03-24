@@ -53,6 +53,10 @@
                     method: 'get',
                     url: '/api/patients/legacy/<PATIENT_ID>/caregivers/' 
                 },
+                RELATIONSHIP_TYPES: {
+                    method: 'get',
+                    url: '/api/patients/relationship-types/'
+                },
                 QUANTITY_SAMPLES: {
                     method: 'post',
                     url: '/api/patients/<PATIENT_UUID>/health-data/quantity-samples/'

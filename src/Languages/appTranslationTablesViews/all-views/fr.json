@@ -262,6 +262,8 @@
     "RELATIONSHIPS_PATIENTS": "Mes patients",
     "RELATIONSHIPS_PATIENTS_NONE": "Aucun patient n'est relié à ce compte.",
     "RELATIONSHIPS_PATIENTS_DESCRIPTION": "Liste des patients auxquels vous avez accès dans l'application Opal.",
+    "RELATIONSHIP_TYPES_ERROR": "An error occurred while retrieving relationship types.",
+    "RELATIONSHIP_TYPES_NONE": "No relationship types exist.",
     "RELATIONSHIPS_ERROR": "Une erreur s'est produite lors du chargement des données.",
     "SAVING_QUESTIONNAIRE_ANSWER": "Enregistrement de vos réponses...",
     "SCREENSHOTTAKEN": "Capture d'écran en cours. Si vous n'avez pas effectué la capture d'écran, veuillez quitter l'application.",

@@ -17,4 +17,28 @@
             {{info.view.description|translate}}
         </div>
   </div>
+
+  <div ng-if="info.view.name == 'RELATIONSHIPS_CAREGIVERS' || info.view.name == 'RELATIONSHIPS_PATIENTS'">
+        <!-- Error message -->    
+        <div ng-if="info.message" ng-class="container: text-center">
+            <p style="margin-top:25vh">{{info.message|translate}}</p>
+        </div>
+
+        <!-- List of Caregivers/Patients -->
+        <div style="background-color: white; margin: 0 auto; max-width: 75%; margin-top: 10vh;" class="container: text-center">
+            <ons-list ng-if="!info.message" ng-class="fontSizeDesc">
+                <div class="container">
+                    <!-- Role and Description -->
+                    <ons-list-item ng-repeat="relationshipType in info.relationshipTypes" class="item">
+                        <ons-row> 
+                            <ons-col>
+                                <p><strong>{{relationshipType.name}}</strong>: {{relationshipType.description|translate}}</p>
+                            </ons-col>
+                        </ons-row>
+                    </ons-list-item>
+                </div>
+            </ons-list>
+        </div>
+
+  </div>
 </ons-page>

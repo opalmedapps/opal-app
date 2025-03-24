@@ -15,11 +15,16 @@
         .module('MUHCApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['$filter', '$scope', 'NavigatorParameters'];
+    InfoTabController.$inject = ['$filter', '$scope', '$timeout', 'NavigatorParameters', 'RequestToServer', 'Params'];
 
     /* @ngInject */
-    function InfoTabController($filter, $scope, NavigatorParameters) {
+    function InfoTabController($filter, $scope, $timeout, NavigatorParameters, RequestToServer, Params) {
         let vm = this;
+        vm.error = null;
+        vm.message = null;
+        vm.apiData;
+        vm.relationshipTypes;
+
         vm.view = {};
 
         const views = {
@@ -73,6 +78,28 @@
         function activate() {
             let params = NavigatorParameters.getNavigator().getCurrentPage().options;
             vm.view = views[params.id];
+        }
+
+        getRelationshipTypesList();
+
+        async function getRelationshipTypesList() {
+            try {
+                const requestParams = Params.API.ROUTES.RELATIONSHIP_TYPES;
+                const result = await RequestToServer.apiRequest(requestParams);
+                vm.apiData = result.data;
+            } catch (error) {
+                vm.error = true;
+                console.error("Error fetching relationship types:", error);
+            }
+            handleDisplay();
+        }
+
+        function handleDisplay() {
+            $timeout(() => {
+                if (vm.error) return vm.message = 'RELATIONSHIP_TYPES_ERROR';
+                if (vm.apiData.length === 0) return vm.message = 'RELATIONSHIP_TYPES_NONE';
+                vm.relationshipTypes = vm.apiData;
+            });
         }
 
         /**
