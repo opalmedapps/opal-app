@@ -94,13 +94,8 @@
             setPatientInfo();
             //display next appointment
             setNextAppointment();
-
-            // display new notifications, if any
-            checkForNewNotifications();
-
             // display version updates info, if any
             checkForVersionUpdates();
-
             // Display current check in status
             evaluateCheckIn();
         }
