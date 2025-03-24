@@ -21,7 +21,7 @@
   "CHECKED_IN": "You are checked in.",
   "CHECKIN": "Check-in",
   "CHECKINALLTODAY": "Check in for today's appointments",
-  "CHECKIN_ERROR": "Unable to check-in for these appointments. Please go to the reception.",
+  "CHECKIN_ERROR": "Unable to check-in for this appointment. Please go to the reception.",
   "CHECKIN_IN_HOSPITAL_ONLY": "Check-in will be available on arrival at the hospital.",
   "CHECKIN_MESSAGE_AFTER": "You are checked in for your appointment.",
   "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in for your appointments.",
