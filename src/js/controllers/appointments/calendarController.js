@@ -115,12 +115,18 @@
 
             let navigator = NavigatorParameters.getNavigator();
 
-            // Reload
+            // Patient profile that was active/set on the previous page
+            let prevPageProfileID = NavigatorParameters.getParameters()?.currentProfile;
+            let previousProfile = ProfileSelector.getPatientList().find(
+                (item) => item.patient_legacy_id == prevPageProfileID
+            )
             navigator.on('prepop', () => {
-                if (NavigatorParameters.getParameters()?.isCareReceiver) {
-                    ProfileSelector.loadPatientProfile(
-                        User.getLoggedinUserProfile().patient_legacy_id
-                    );
+                // Reload profile that was active/set on the previous page
+                if (
+                    NavigatorParameters.getParameters()?.isCareReceiver
+                    && previousProfile
+                ) {
+                    ProfileSelector.loadPatientProfile(prevPageProfileID);
                     
                     // Reload 'Appointments' for the current user
                     UpdateUI.updateTimestamps('Appointments', 0);
