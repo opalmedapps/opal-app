@@ -134,10 +134,10 @@
             // mark questionnaire as finished
             verifyPassword(vm.requirePassword, vm.password)
                 .then(function () {
-                    // reauthenticateWithCredential will return undefined if it succeed, otherwise will
+                    // reauthenticateWithCredential will return undefined if it succeeds, otherwise will
                     // throw exception, so we do not need return value from it.
                     // see https://firebase.google.com/docs/auth/web/manage-users#re_authenticate_a_user
-                    
+
                     // Grab the patient uuid from the ProfileSelector
                     const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
 
