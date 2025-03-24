@@ -76,25 +76,25 @@ angular
          * @descrition - Execute multiple requests to get an announcement per patient then merge the data together.
          * @param {string} typeOfRequest - Type of request send to the listener
          * @param {object} parameters - Extra parameters to identify data to be query
-         * @param {categorieRequested} - The data category requested
+         * @param {string} categoryRequested - The data category requested
          * @returns Response with merge data
          */
-        async function handleMultiplePatientsRequests(typeOfRequest, parameters, categorieRequested) {
+        async function handleMultiplePatientsRequests(typeOfRequest, parameters, categoryRequested) {
             const ProfileSelectorService = $injector.get('ProfileSelector');
             const patientList = ProfileSelectorService.getConfirmedProfiles();
             let combinedArrays = [];
-            let results = [];
-            await Promise.all(patientList.map(async (patient) => {
-                if (!patient.patient_legacy_id) return;
-                let response = await sendRequestWithResponse(typeOfRequest, parameters, null, null, null, patient.patient_legacy_id);
-                results.push(response);
+            let results = await Promise.all(patientList.map(patient => {
+                if (!patient.patient_legacy_id) return Promise.resolve();
+                return sendRequestWithResponse(typeOfRequest, parameters, null, null, null, patient.patient_legacy_id);
             }));
-            results.forEach((result) => {
-                if (result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data.Announcements]
+
+            results.forEach(result => {
+                if (result && result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data.Announcements]
             });
+
             return {
                 ...results[0],
-                Data: {[categorieRequested]: combinedArrays}
+                Data: {[categoryRequested]: combinedArrays}
             }
         }
 

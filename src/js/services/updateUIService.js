@@ -24,6 +24,7 @@
          *       - set: Saves the data into the service by first clearing away all existing data.
          *       - update: Saves the data by overwriting duplicate data (according to SerNum) and leaving the rest alone.
          *       - lastUpdated: Timestamp at which data was last requested from the listener.
+         *       - multiProfileEnabled: Enable getting data for multiple patient for a single category (Only supports one request type in Fields).
          * @type {{'Category': {set: function, lastUpdated: number, update: function}}}
          */
         let sectionServiceMappings = {

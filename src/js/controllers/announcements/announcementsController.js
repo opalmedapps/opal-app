@@ -40,6 +40,7 @@
         vm.noAnnouncements = true;
         vm.announcements = [];
         vm.goToAnnouncement = goToAnnouncement;
+        // Used by patient-data-handler
         vm.setAnnouncementsView = setAnnouncementsView;
 
         /**

@@ -70,19 +70,16 @@
          *@methodOf MUHCApp.service:Announcements
          *@description Push new announcements to currently existing announcements array filter out duplicate for multiple patient.
          **/
-        function addAnnouncements(newAnnoucements) {
-            if(!newAnnoucements || newAnnoucements[0] === "undefined") return;
+        function addAnnouncements(newAnnouncements) {
+            if(!newAnnouncements || newAnnouncements[0] === "undefined") return;
 
-            newAnnoucements.forEach(annoucementToInsert => {
-                let exist = announcements.find(item => {
+            newAnnouncements.forEach(annoucementToInsert => {
+                let existingElementIndex = announcements.findIndex(item => {
                     return item.PostControlSerNum === annoucementToInsert.PostControlSerNum
                         && new Date(item.DateAdded).toISOString().split('T')[0] === new Date(annoucementToInsert.DateAdded).toISOString().split('T')[0]
                 });
-                
-                if (!exist) {
-                    annoucementToInsert.DateAdded=$filter('formatDate')(annoucementToInsert.DateAdded);
-                    announcements.push(annoucementToInsert);
-                }
+                annoucementToInsert.DateAdded=$filter('formatDate')(annoucementToInsert.DateAdded);
+                existingElementIndex === -1 ? announcements.push(annoucementToInsert) : announcements[existingElementIndex] = annoucementToInsert;
             });
         }
 
