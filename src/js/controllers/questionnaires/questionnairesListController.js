@@ -19,11 +19,12 @@
         'NativeNotification',
         'NavigatorParameters',
         'Params',
-        'Questionnaires'
+        'Questionnaires',
+        'UpdateUI'
     ];
 
     /* @ngInject */
-    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires) {
+    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires, UpdateUI) {
         let vm = this;
 
         // constants
@@ -142,8 +143,10 @@
          * @desc get the questionnaire list from the service
          */
         function loadQuestionnaireList() {
-
             $timeout(function () {
+                // TODO: reload data from the service if the requesting purpose is the same as the current one
+                UpdateUI.updateTimestamps('QuestionnaireList', 0);
+
                 vm.newQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.NEW_QUESTIONNAIRE_STATUS);
                 vm.inProgressQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
                 vm.completedQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS);

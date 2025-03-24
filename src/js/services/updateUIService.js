@@ -85,6 +85,7 @@
             getData: getData,
             getSingleItem: getSingleItem,
             clearUpdateUI: () => updateTimestamps(Object.keys(sectionServiceMappings), 0),
+            updateTimestamps: updateTimestamps
         };
 
         return service;
