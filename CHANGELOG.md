@@ -1,3 +1,17 @@
+# [1.25.0](https://gitlab.com/opalmedapps/qplus/compare/v1.24.3...v1.25.0) (2024-01-22)
+
+
+### Features
+
+* add lab delay information to lab result detail view and info screen ([1371574](https://gitlab.com/opalmedapps/qplus/commit/1371574c59e92c728c1c63b49122e004143cdbee))
+
+## [1.24.3](https://gitlab.com/opalmedapps/qplus/compare/v1.24.2...v1.24.3) (2024-01-18)
+
+
+### Bug Fixes
+
+* **ci:** fix web build rules ([1ac3387](https://gitlab.com/opalmedapps/qplus/commit/1ac33879cf50c0ebe745bcc4286d571cbebcdd53))
+
 ## [1.24.2](https://gitlab.com/opalmedapps/qplus/compare/v1.24.1...v1.24.2) (2024-01-16)
 
 
