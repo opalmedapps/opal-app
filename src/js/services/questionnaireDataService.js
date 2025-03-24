@@ -17,10 +17,11 @@
     QuestionnaireDataService.$inject = [
         'RequestToServer',
         'Params',
+        'UserPreferences',
     ];
 
     /* @ngInject */
-    function QuestionnaireDataService(RequestToServer, Params) {
+    function QuestionnaireDataService(RequestToServer, Params, UserPreferences) {
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const validType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
         const api = Params.QUESTIONNAIRE_API;
@@ -117,16 +118,17 @@
                 answerToSave.push(Object.assign({}, ans));
             });
 
-            // sends to listener
-            let params = {
-                'answerQuestionnaire_id': answerQuestionnaireId,
-                'section_id': sectionId,
-                'question_id': questionId,
-                'questionSection_id': questionSectionId,
-                'answer': answerToSave,
-                'question_type_id': questionTypeId,
-                'is_skipped': isSkipped
-            };
+                // sends to listener
+                let params = {
+                    'answerQuestionnaire_id': answerQuestionnaireId,
+                    'section_id': sectionId,
+                    'question_id': questionId,
+                    'questionSection_id': questionSectionId,
+                    'answer': answerToSave,
+                    'question_type_id': questionTypeId,
+                    'is_skipped': isSkipped,
+                    'language': UserPreferences.getLanguage(),
+                };
 
             try {
                 await RequestToServer.sendRequestWithResponse(api.SAVE_ANSWER, params);
@@ -145,6 +147,7 @@
         async function requestQuestionnaire(answerQuestionnaireID){
             let params = {
                 'qp_ser_num': answerQuestionnaireID,
+                'language': UserPreferences.getLanguage(),
             };
 
             let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
@@ -152,4 +155,3 @@
         }
     }
 })();
-

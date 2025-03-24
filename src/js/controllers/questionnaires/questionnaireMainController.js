@@ -175,33 +175,43 @@
          * @desc This function is used to update the questionnaire status when beginning a questionnaire and, in case that the user uses the button "begin" instead of swiping, move the carousel
          */
         async function beginQuestionnaire(bySwipe){
+            let inProgress = vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS;
+            let oldStatus = vm.questionnaire.status;
+
             // if the questionnaire was not started yet, start it
             if (vm.questionnaireStart) {
-                // we are no longer at the home page
-                vm.questionnaireStart = false;
-
-                // update status for the questionnaire of controller
-                let oldStatus = vm.questionnaire.status;
-                vm.questionnaire.status = vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS;
-
                 vm.loadingQuestionnaire = true;
 
                 try {
-                    await Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, vm.questionnaire.status, oldStatus);
+                    // update status for the questionnaire of service and listener / database
+                    // send the request before setting the status locally, because the request can fail if the questionnaire was locked by another user
+                    await Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, inProgress, oldStatus);
+
                     $timeout(() => {
+                        vm.questionnaire.status = inProgress;
+
+                        // we are no longer at the home page
+                        vm.questionnaireStart = false;
+
                         // set the indices (mere formality)
                         vm.startIndex = 1;  // skip questionnaire home page
                         vm.sectionIndex = 0;
                         vm.questionIndex = 0;
+
                         vm.loadingQuestionnaire = false;
 
                         // this is to force update the carousel even by swiping it
-                        !bySwipe ? next() : vm.carousel.setActiveCarouselItemIndex(vm.startIndex);
+                        bySwipe ? vm.carousel.setActiveCarouselItemIndex(vm.startIndex) : next();
+
                         vm.carousel.refresh();
                     });
-                } catch (error) {
-                    vm.loadingQuestionnaire = false;
-                    handleLoadQuestionnaireErr();
+                }
+                catch(error) {
+                    $timeout(() => {
+                        console.error(error);
+                        vm.loadingQuestionnaire = false;
+                        handleLoadQuestionnaireErr(error);
+                    });
                 }
             }
         }
@@ -287,12 +297,11 @@
                             summaryPage();
                         });
 
-                    }).catch(function(err){
-
-                        $timeout(function(){
-                            console.error(err);
+                    }).catch(error => {
+                        $timeout(() => {
+                            console.error(error);
                             loadingSaveAnswerModal.hide();
-                            handleSaveAnswerErr();
+                            handleSaveAnswerErr(error);
                         });
                 });
             }
@@ -716,10 +725,11 @@
                         loadingSaveAnswerModal.hide();
                     });
                 })
-                .catch(function(){
-                    $timeout(function(){
+                .catch(error => {
+                    $timeout(() => {
+                        console.error(error);
                         loadingSaveAnswerModal.hide();
-                        handleSaveAnswerErr();
+                        handleSaveAnswerErr(error);
                     });
                 })
         }
@@ -852,25 +862,33 @@
          * @name handleSaveAnswerErr
          * @desc shows a notification to the user in case a request to server fails to save the answer
          *      and move the user back to the previous page
+         * @param {Object} error The original error object being handled.
          */
-        function handleSaveAnswerErr (){
+        function handleSaveAnswerErr(error) {
             NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"));
+            if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                NativeNotification.showNotificationAlert($filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"));
+            }
+            else NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"));
         }
 
         /**
          * @name handleLoadQuestionnaireErr
          * @desc shows a notification to the user in case a request to server fails to load the questionnaire
          *      and move the user back to the previous page
+         * @param {Object} error The original error object being handled.
          */
-        function handleLoadQuestionnaireErr (){
+        function handleLoadQuestionnaireErr(error) {
             // go to the questionnaire list page if there is an error
             NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+            if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                NativeNotification.showNotificationAlert($filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"));
+            }
+            else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
 
         /**
