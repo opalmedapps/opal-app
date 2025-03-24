@@ -30,7 +30,7 @@
             if (messages.length > 0) vm.noMessages = false;
 
             $timeout(function(){
-                vm.txTeamMessages = messages
+                vm.txTeamMessages = messages.reverse();
             });
 
         }
@@ -46,9 +46,10 @@
         }
 
         function showHeader(index){
-            if (index === vm.txTeamMessages.length -1) return true;
+            if (index === vm.txTeamMessages.length -1 || index === 0) return true;
             var current = (new Date(vm.txTeamMessages[index].DateAdded)).setHours(0,0,0,0);
-            var previous = (new Date(vm.txTeamMessages[index+1].DateAdded)).setHours(0,0,0,0);
+            var previous = (new Date(vm.txTeamMessages[index-1].DateAdded)).setHours(0,0,0,0);
+
             return current !== previous;
         }
     }
