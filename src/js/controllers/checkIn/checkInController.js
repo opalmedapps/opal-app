@@ -80,6 +80,9 @@
                 });
         }
 
+        /**
+         * @desc Displays an error state in the view, when check-in fails.
+         */
         function displayError() {
             $timeout(() => {
                 vm.alert.type = Params.alertTypeDanger;
