@@ -19,3 +19,8 @@
 .textarea-feedback {
     margin-top: 4px;
 }
+
+.feedback--element-spacing {
+    width: 90%;
+    margin: 10px 5%;
+}

@@ -21,11 +21,13 @@
         'Params',
         'ProfileSelector',
         'Questionnaires',
-        'Studies'
+        'Studies',
+        'User',
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, Navigator, Params, ProfileSelector, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, Navigator, Params,
+                                             ProfileSelector, Questionnaires, Studies, User) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -45,6 +47,7 @@
         // variables that can be seen from view, sorted alphabetically
         vm.consentStatus = null;
         vm.hasDescription = false;
+        vm.isAnsweringAsSelf = false;  // Used to alter the display of the submission instructions
         vm.isConsent = false;
         vm.loadingQuestionnaire = true;     // the loading circle for one questionnaire
         vm.loadingSubmitQuestionnaire = false;  // the loading circle for saving questionnaire
@@ -54,6 +57,7 @@
         vm.submitAllowed = false;   // if all questions are completed, then the user is allowed to submit.
         vm.submitButtonText = '';
         vm.submitInstructions = '';
+        vm.submittedByNames = {};  // Names used to show who's submitting the answers, and for which patient
 
         // functions that can be seen from view, sorted alphabetically
         vm.editQuestion = editQuestion;
@@ -78,6 +82,15 @@
 
                 handleLoadQuestionnaireErr();
             }
+
+            // Get the user and patient names to display on the submission page
+            vm.isAnsweringAsSelf = ProfileSelector.currentProfileIsSelf();
+            let user = User.getUserInfo();
+            let patient = ProfileSelector.getActiveProfile();
+            vm.submittedByNames = {
+                userName: `${user.first_name} ${user.last_name}`,
+                patientName: `${patient.first_name} ${patient.last_name}`,
+            };
 
             Questionnaires.requestQuestionnaire(params.answerQuestionnaireId)
                 .then(function(){

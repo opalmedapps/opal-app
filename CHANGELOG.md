@@ -1,3 +1,10 @@
+## [1.36.1](https://gitlab.com/opalmedapps/qplus/compare/v1.36.0...v1.36.1) (2024-07-29)
+
+
+### Bug Fixes
+
+* display the user's name when submitting forms ([9664e88](https://gitlab.com/opalmedapps/qplus/commit/9664e8814824fc6e9a2da8240cb41764b89312bc))
+
 # [1.36.0](https://gitlab.com/opalmedapps/qplus/compare/v1.35.6...v1.36.0) (2024-07-22)
 
 

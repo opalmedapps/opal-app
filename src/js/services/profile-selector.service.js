@@ -27,6 +27,7 @@ import {Observer} from "../models/utility/observer";
             clearProfile: clearProfile,
 
             // Functions to get info from the current profile
+            currentProfileIsSelf: () => currentSelectedProfile.relationship_type.role_type === 'SELF',
             getFirstName: () => currentSelectedProfile?.first_name,
             getPatientSerNum: () => currentSelectedProfile?.patient_legacy_id,
             getAccessLevel: () => currentSelectedProfile?.data_access,

@@ -40,7 +40,7 @@
             <!-- Download image and button -->
             <div ng-show="!edu.loadingContents" ng-click="edu.openPDF()" align="center">
                 <div>
-                    <img class="animated swing" style="height:175px; margin-top: 25%;" src="./img/pdf.jpeg">
+                    <img class="animate__animated animate__swing" style="height:175px; margin-top: 25%;" src="./img/pdf.jpeg">
                     <h4 style="margin-top: 2%">{{"CLICKTOOPEN" | translate}}</h4>
                 </div>
                 <h3 ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</h3>
@@ -50,7 +50,7 @@
         <!-- Click to open link -->
         <div ng-if="edu.displayType === 'link'" style="background-color: #F9F9F9">
             <div class="item" ng-click="edu.goToEducationalMaterial()" align="center">
-                <ons-icon class="animated swing" icon="ion-android-open" size="100px" style="color:#4282CC; margin-top:25%;"></ons-icon>
+                <ons-icon class="animate__animated animate__swing" icon="ion-android-open" size="100px" style="color:#4282CC; margin-top:25%;"></ons-icon>
                 <br><ons-button ng-class="fontSizeDesc" style="margin-top:20px">{{"OPEN_LINK" | translate}}</ons-button>
             </div>
         </div>
