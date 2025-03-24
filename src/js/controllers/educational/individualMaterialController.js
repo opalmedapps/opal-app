@@ -123,12 +123,11 @@
                     vm.loadingContents = false;
                 }
             }
-
-            let navigator = NavigatorParameters.getNavigator();
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         function bindEvents() {
+            let navigator = NavigatorParameters.getNavigator();
+
             //Instantiating popover controller
             $timeout(() => {
                 ons.createPopover('./views/personal/education/share-popover.html', { parentScope: $scope }).then(function (popover) {
@@ -138,8 +137,11 @@
 
             //On destroy clean up
             $scope.$on('$destroy', function () {
+                navigator.off('prepop');
                 $scope.popoverSharing.destroy();
             });
+
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         function goToEducationalMaterial(index) {

@@ -76,12 +76,12 @@
             let parameters = NavigatorParameters.getParameters();
             let language = UserPreferences.getLanguage().toUpperCase();
 
+            bindEvents();
+
             $timeout(function(){
                 vm.language = language;
                 vm.app = parameters.Post;
             });
-
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         /**
@@ -120,6 +120,15 @@
         function openMap(){
             let url = vm.app["MapUrl_"+ vm.language];
             Browser.openInternal(url, true);
+        }
+
+        function bindEvents() {
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if appointment was opened via Notifications tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
     }
 })();

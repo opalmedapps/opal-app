@@ -41,6 +41,8 @@
             navigatorName = NavigatorParameters.getNavigatorName();
             let params = NavigatorParameters.getParameters();
 
+            bindEvents();
+
             if (!params.hasOwnProperty('Post') || isNaN(parseInt(params.Post))) {
                 vm.loadingQuestionnaire = false;
                 handleLoadQuestionnaireErr();
@@ -73,8 +75,6 @@
                     handleLoadQuestionnaireErr();
                 });
             }
-
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
 
         /**
@@ -145,6 +145,15 @@
             navigator.popPage();
 
             NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+        }
+
+        function bindEvents() {
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if questionnaire was opened via Notifications tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
     }
 })();

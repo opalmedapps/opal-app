@@ -95,6 +95,7 @@
          *************************/
 
         function activate() {
+            bindEvents();
 
             // Get the user's language
             vm.language = UserPreferences.getLanguage();
@@ -112,10 +113,6 @@
 
             // Get the name of the current navigator
             navigatorName = NavigatorParameters.getParameters().Navigator;
-
-            let navigator = NavigatorParameters.getNavigator();
-
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler('Appointments'));
         }
 
         /**
@@ -360,6 +357,16 @@
             return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
         }
 
+        function bindEvents() {
+            let navigator = NavigatorParameters.getNavigator();
+
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if appointments calendar was opened via Home tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler('Appointments'));
+        }
     }
 })();
 

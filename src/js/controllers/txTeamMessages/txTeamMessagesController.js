@@ -26,9 +26,7 @@
         //////////////////////////////
 
         function activate(){
-            let navigator = NavigatorParameters.getNavigator();
-
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
+            bindEvents();
         }
 
         /**
@@ -52,6 +50,17 @@
             }
             NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':message});
             personalNavigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html');
+        }
+
+        function bindEvents() {
+            let navigator = NavigatorParameters.getNavigator();
+
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if announcement was opened via Notifications tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
     }
 })();
