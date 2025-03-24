@@ -54,8 +54,9 @@
         vm.scanAndConnect = scanAndConnect;
         vm.selectDevice = selectDevice;
         vm.submitData = submitData;
-        vm.showInstructions = !vm.scanning && vm.selectedDevice == null && vm.devices.length == 0;
-        vm.isLoading = vm.scanning && vm.selectedDevice == null;
+        vm.showInstructions = () => !vm.scanning && vm.selectedDevice == null && vm.devices.length == 0 && !vm.weight;
+        // show loading spinner while scanning and while reading data from device
+        vm.isLoading = () => (vm.scanning && vm.selectedDevice == null) || (vm.selectedDevice?.connecting && !vm.weight);
         vm.done = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
 
         async function submitData() {
@@ -81,7 +82,6 @@
                 addMessage('Weight successfully sent to backend');
                 
                 vm.dataSubmitted = true;
-
             } catch (error) {
                 vm.errorMessage = `${ERROR_BACKEND}: ${error}`;
             }
@@ -144,10 +144,26 @@
             })
 
             $timeout(async () => {
-                device.connecting = false;
-
-                await ble.withPromises.disconnect(device.id);
+                disconnect(device);
             }, 10000);
+        }
+
+        async function unsubscribe(device_id) {
+            addDebugMessage('Unsubscribing from notifications');
+            await ble.withPromises.stopNotification(device_id, SCALE_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID);
+        }
+
+        async function disconnect(device) {
+            addMessage('Disconnecting from device');
+
+            $timeout(() => {
+                device.connecting = false;
+                // need to reset some variables to show the instructions
+                vm.selectedDevice = null;
+                vm.devices = [];
+            });
+            
+            await ble.withPromises.disconnect(device.id);
         }
 
         async function onConnected(device, result) {
@@ -159,7 +175,7 @@
             addMessage(`Battery level: ${bytes}%`);   
             
             addDebugMessage('Subscribing to receive notifications');
-            await ble.withPromises.startNotification(result.id, NOTIFICATION_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID, (data) => {
+            await ble.withPromises.startNotification(result.id, SCALE_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID, (data) => {
                 onSubscribeSuccess(result.id, data);
             }, onSubscribeError);
 
@@ -167,16 +183,13 @@
                 if (!vm.weight) {
                     addMessage('No data retrieved from device, please redo the measurement.')
                     vm.errorMessage = ERROR_NO_DATA;
+                    // need to reset some variables to show the instructions
+                    vm.selectedDevice = null;
+                    vm.devices = []
                 }
 
-                addDebugMessage('Unsubscribing from notifications');
-                await ble.withPromises.stopNotification(result.id, NOTIFICATION_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID);
-                addMessage('Disconnecting from device');
-                await ble.withPromises.disconnect(result.id);
-
-                $timeout(() => {
-                    device.connecting = false;
-                });
+                unsubscribe(result.id);
+                disconnect(device);
             }, 5000);
         }
 
@@ -236,6 +249,9 @@
 
                     await ble.withPromises.write(device_id, SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
                     addDebugMessage('Told the device to stop spamming me');
+
+                    unsubscribe(device.id);
+                    disconnect(device);
                 }
             }
         }
