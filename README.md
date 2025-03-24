@@ -213,7 +213,8 @@ If you want an alternative to using webpack-dev-server for serving the Opal web 
     npm run build:app:android --env=staging
     ```
 
-4. Finally, to run the app in an emulator run:
+4. Finally, to run the app in an emulator, execute the following command. _Note_: on Mac, you may need to install
+   cordova globally first (`npm install -g cordova`).
     ```
       cordova run [android|ios]
     ```
@@ -221,6 +222,7 @@ If you want an alternative to using webpack-dev-server for serving the Opal web 
 A few notes on this:
  - If building for iOS you may need a developer profile in Apple depending on what you want to do. Running in an emulator does not require development profiles.
  - Once the build commands have been run, the project becomes a valid Cordova project, which means you may use any of the [Cordova related cli commands](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/).
+   As mentioned above, on Mac, you may need to install cordova globally to access the CLI commands.
  - The build commands for staging and preprod build development apps, while the ones for production build release apps. 
  The development apps allow debugging, among other security risks such as self-signed certificates. 
  To disable them, use the release mode: `cordova build --release --verbose`. 
