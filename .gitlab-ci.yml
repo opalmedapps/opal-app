@@ -83,7 +83,7 @@ increment version:
     - apk add --no-cache curl jq
     # use pipe operator to be able to use a colon in the command
     - | 
-      RESPONSE=$(curl -s -X GET -H "PRIVATE-TOKEN: ${GITLAB_TOKEN_TEST}" "${CI_API_V4_URL}/user")
+      RESPONSE=$(curl -s -X GET -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" "${CI_API_V4_URL}/user")
     - export GIT_AUTHOR_EMAIL=$(echo $RESPONSE | jq ".email")
     - export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
     - echo "semantic-release-bot email is ${GIT_AUTHOR_EMAIL}"
