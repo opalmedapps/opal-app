@@ -56,7 +56,7 @@
 			language = UserPreferences.getLanguage();
 			navigator = NavigatorParameters.getNavigator();
 
-			navigator.on('prepop', () => NavigatorParameters.prepopHandler('PatientTestDates'));
+			navigator.on('prepop', () => NavigatorParameters.prepopHandler(['PatientTestDates', 'PatientTestTypes']));
 		}
 
 		/**

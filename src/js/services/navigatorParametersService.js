@@ -86,10 +86,10 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
          *@ngdoc method
          *@name prepopHandler
          *@methodOf MUHCApp.service:NavigatorParameters
-         *@param {Object} item The name of the item that has to be reloaded
+         *@param {string| Array<string>} categories - The category or categories to update.
          *@return {Object} Returns a handler function for the prepop event.
          **/
-         prepopHandler:function(item)
+         prepopHandler:function(categories)
          {
             // Patient profile that was active/set on the previous page
             let prevPageProfileID = this.getParameters()?.currentProfile;
@@ -103,8 +103,8 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
             ) {
                 ProfileSelector.loadPatientProfile(prevPageProfileID);
 
-                // Reload 'Documents' for the current user
-                UpdateUI.updateTimestamps(item, 0);
+                // Reload given categories for the current user
+                UpdateUI.updateTimestamps(categories, 0);
             }
          },
     };
