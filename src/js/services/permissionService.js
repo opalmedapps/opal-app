@@ -10,7 +10,6 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:Permissions
  *@requires $q
  *@requires Constants
  *@description Service that requests and manages the lab results (blood tests) from the server.
@@ -36,7 +35,6 @@
         /**
          *@ngdoc method
          *@name enablePermission
-         *@methodOf MUHCApp.service:Permissions
          *@description Checks if the device has the required permissions enabled. If not, it asks the user permission.
          *@param {String} permission_type Android permission that is requested.
          *@returns {Promise} Returns a promise containing permission type, success and message.

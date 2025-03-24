@@ -10,7 +10,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: AppointmentController
  *  @description
  *
  *  Manages the individual appointment detail view. It receives parameters via the Navigator service
@@ -89,7 +88,6 @@
         /**
          * @ngdoc method
          * @name aboutAppointment
-         * @methodOf MUHCApp.controllers.AppointmentController
          * @description
          * Takes the user to the About-This-Appointment view of the specified appointment
          */

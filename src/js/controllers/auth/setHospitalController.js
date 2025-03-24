@@ -34,7 +34,6 @@
         /**
          * @ngdoc method
          * @name saveSelectedHospital
-         * @methodOf MUHCApp.controllers.SetHospitalController
          * @description Add the selected hospital to local storage and update firebase branch
          */
         function saveSelectedHospital() {

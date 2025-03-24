@@ -10,7 +10,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: SecurityQuestionController
  *  @requires '$scope', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService', 'UUID', 'UserAuthorizationInfo',
  *  '$state', 'Constants', 'DeviceIdentifiers', 'Navigator'
  *  @description
@@ -152,7 +151,6 @@
         /**
          * @ngdoc function
          * @name initializeData
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description Fetches and sets the data for this controller. This function is called again after the postpop
          *              event (to attempt to load data after the user has chosen a hospital to target).
          */
@@ -200,7 +198,6 @@
         /**
          * @ngdoc function
          * @name bindEvents
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description Sets up event bindings for this controller.
          */
         function bindEvents() {
@@ -237,7 +234,6 @@
         /**
          * @ngdoc function
          * @name handleSuccess
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @param {string} securityAnswerHash Hash of the user's security answer
          * @description
          * Handles verified security question answer that returns in success. Brings user to the loading page.
@@ -264,7 +260,6 @@
         /**
          * @ngdoc function
          * @name handleError
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @param error error object
          * @description
          * Handles errors in order to display the proper message to the user.
@@ -314,7 +309,6 @@
         /**
          * @ngdoc function
          * @name removeUserData
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Removes user data from local storage
          */
@@ -330,7 +324,6 @@
         /**
          * @ngdoc method
          * @name clearErrors
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Clears errors
          */
@@ -346,7 +339,6 @@
         /**
          * @ngdoc method
          * @name submitAnswer
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @param answer user inputted answer string
          * @description
          * Sends request object containing user-inputted answer to our servers to be validated
@@ -408,7 +400,6 @@
         /**
          * @ngdoc method
          * @name lockout
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * lock the screen for too many failed security answer attempts
          */
@@ -425,7 +416,6 @@
         /**
          * @ngdoc method
          * @name goToInit
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Brings user to init screen
          */
@@ -436,7 +426,6 @@
         /**
          * @ngdoc method
          * @name goToReset
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Brings user to password reset screen
          */
@@ -447,7 +436,6 @@
         /**
          * @ngdoc method
          * @name isThereSelectedHospital
-         * @methodOf MUHCApp.controllers.LoginController
          * @description Returns whether the user has already selected a hospital.
          * @returns {boolean} True if there is a hospital selected; false otherwise.
          */

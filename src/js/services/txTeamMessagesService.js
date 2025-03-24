@@ -4,27 +4,19 @@
 var myApp=angular.module('OpalApp');
 /**
  *@ngdoc service
- *@name MUHCApp.service:TxTeamMessages
  *@requires $filter
- *@requires MUHCApp.service:RequestToServer
- *@requires MUHCApp.service:UserPreferences
- *@requires MUHCApp.service:LocalStorage
  *@description Service that deals with the treatment team message information
  **/
 myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'UserPreferences', function($filter,RequestToServer, LocalStorage,UserPreferences){
     //Initializing array that represents all the informations for TxTeamMessages
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#txTeamMessagesArray
-     *@propertyOf MUHCApp.service:TxTeamMessages
      *@description Initializing array that represents all the information for TxTeamMessages, this array is passed to appropiate controllers.
      **/
     var txTeamMessagesArray=[];
 
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#lastUpdated
-     *@propertyOf MUHCApp.service:TxTeamMessages
      *@description Timestamp to check for updates
      **/
     var lastUpdated=0;
@@ -59,7 +51,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name setTxTeamMessages
-         *@methodOf MUHCApp.service:TxTeamMessages
          *@param {Object} messages messages array that containts the new messages
          *@description Setter method for TxTeamMessages
          **/
@@ -73,7 +64,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name updateTxTeamMessages
-         *@methodOf MUHCApp.service:TxTeamMessages
          *@param {Object} messages Finds messages to update or adds new messages if not found
          *@description Updates the txTeamMessagesArray with the new information contained in the messages parameter
          **/
@@ -89,7 +79,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name getTxTeamMessages
-         *@methodOf MUHCApp.service:TxTeamMessages
          *@description Getter for the txTeamMessagesArray
          *@returns {Array} txTeamMessagesArray
          **/
@@ -102,7 +91,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name getTxTeamMessageBySerNum
-         *@methodOf MUHCApp.service:TxTeamMessages
          *@param {String} serNum TxTeamMessageSerNum to be looked for
          *@description Iterates through the TxTeamMessages array and returns TxTeamMessage object matching the serNum
          *@returns {Object} Returns object containing TxTeamMessage
@@ -122,7 +110,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name readTxTeamMessageBySerNum
-         *@methodOf MUHCApp.service:TxTeamMessages
          *@param {String} serNum TxTeamMessageSerNum to be read
          *@description Sets ReadStatus in TxTeamMessage to 1, sends request to backend, and syncs with device storage
          **/
@@ -139,7 +126,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name readTxTeamMessage
-         *@methodOf MUHCApp.service:TxTeamMessages
          *@param {String} index index in the TxTeamMessages array to be read
          *@param {String} serNum TxTeamMessageSerNum to be read
          *@description Faster method to read an TxTeamMessages, no iteration required.
@@ -160,8 +146,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name getTxTeamMessageUrl
-         *@methodOf MUHCApp.service:TxTeamMessages
-         *@description Returns TxTeamMessage url to be used by the {@link MUHCApp.service:Notifications Notifications Service}.
+         *@description Returns TxTeamMessage url to be used by the {@link OpalApp.service:Notifications Notifications Service}.
          *@returns {String} Returns Url for individual TxTeamMessages
          **/
         getTxTeamMessageUrl:function(serNum)
@@ -171,9 +156,8 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name setLanguageTxTeamMessages
-         *@methodOf MUHCApp.service:TxTeamMessages
          *@param {Array} array Array with TxTeamMessages
-         *@description Translates the array parameter containing announcements to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+         *@description Translates the array parameter containing announcements to appropiate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
         setLanguageTxTeamMessages :function(array)
@@ -196,8 +180,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name clearTxTeamMessages
-         *@methodOf MUHCApp.service:TxTeamMessages
-         *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+         *@description Clears the service of any saved state, function used by the {@link OpalApp.controller:LogoutController LogoutController}
          **/
         clearTxTeamMessages:function()
         {

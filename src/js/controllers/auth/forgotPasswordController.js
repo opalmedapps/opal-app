@@ -10,7 +10,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: ForgotPasswordController
  *  @description
  *
  * Takes user inputted email and uses FireBases's API to send password reset email
@@ -59,7 +58,6 @@
         /**
          * @ngdoc method
          * @name clearErrors
-         * @methodOf MUHCApp.controllers.ForgotPasswordController
          * @description
          * Clears errors
          */
@@ -76,7 +74,6 @@
         /**
          * @ngdoc method
          * @name submitPasswordReset
-         * @methodOf MUHCApp.controllers.ForgotPasswordController
          * @description
          * Submits the user-inputted email address to FireBase API. Either displays success or error message based on FireBase response.
          */

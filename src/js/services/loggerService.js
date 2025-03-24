@@ -13,8 +13,6 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:Logger
- *@requires MUHCApp.service:RequestToServer
  *@description Service that logs user activity on the Opal server
  **/
 
@@ -52,7 +50,6 @@
         /**
          *@ngdoc method
          *@name sendLog
-         *@methodOf MUHCApp.service:Logger
          *@param {String} activity the user activity type to be logged
          *@param {String} activityDetails the activity serial number to be logged
          *@description Sends a log of the current user activity to the server.
@@ -72,7 +69,6 @@
         /**
          *@ngdoc method
          *@name enableLogging
-         *@methodOf MUHCApp.service:Logger
          *@param {Boolean} bool Boolean value that sets the logging
          *@description Enables or disables logging of usage
          **/
@@ -83,7 +79,6 @@
         /**
          * @ngdoc method
          * @name sendLogPatientActionRequest
-         * @methodOf MUHCApp.service:Logger
          * @author Stacey Beard
          * @date 2018-11-30
          * @description Sends a request of type 'LogPatientAction' to the server.

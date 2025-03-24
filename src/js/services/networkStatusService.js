@@ -10,7 +10,6 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:NetworkStatus
  *@description Service that holds a property that states whether or not the app is online
  **/
 

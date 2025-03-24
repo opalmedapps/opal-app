@@ -10,7 +10,6 @@
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: IndividualAnnouncementController
  *  @description
  *
  *  Manages the individual announcement view. No public functions exist on this controller, it simply activate and renders the necessary announcement object

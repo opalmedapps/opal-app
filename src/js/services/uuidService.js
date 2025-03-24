@@ -12,7 +12,6 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:UUID
  *@description Service used to generate UUIDs for browsers.
  **/
 
@@ -30,8 +29,6 @@
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#uuid
-         *@propertyOf MUHCApp.service:UUID
          *@description UUID for the browser
          **/
         var uuid = '';
@@ -48,7 +45,6 @@
         /**
          * @ngdoc method
          * @name generate
-         * @methodOf MUHCApp.service:UUID
          * @description Generates a random UUID for a browser
          * @returns {String} The UUID.
          **/
@@ -75,7 +71,6 @@
         /**
          * @ngdoc method
          * @name setUUID
-         * @methodOf MUHCApp.service:UUID
          * @param {String} UUID The UUID to set.
          * @description Sets the previously generated UUID in the service.
          **/
@@ -86,7 +81,6 @@
         /**
          * @ngdoc method
          * @name getUUID
-         * @methodOf MUHCApp.service:UUID
          * @description Gets the previously generated UUID.
          **/
         function getUUID(){
