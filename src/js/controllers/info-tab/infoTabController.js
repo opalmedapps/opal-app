@@ -48,6 +48,12 @@
                 name: "RELATIONSHIPS_PATIENTS",
                 description: "RELATIONSHIPS_PATIENTS_DESCRIPTION"
             },
+            education: {
+                icon:'fa-book',
+                color:'Chocolate',
+                name:"EDUCATION",
+                description:"EDUCATION_DESCRIPTION"
+            },
             research: {
                 icon: './img/microscope.png',
                 name: "RESEARCH",
