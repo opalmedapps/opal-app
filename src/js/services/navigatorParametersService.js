@@ -92,15 +92,15 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
          *@param {string|Array<string>} [categories=[]] The category or categories to update (force to refresh).
          *@return {Object} Returns a handler function for the prepop event.
          **/
-         reloadPreviousProfilePrepopHandler:function(categories = [])
-         {
+        reloadPreviousProfilePrepopHandler:function(categories = [])
+        {
             // Patient profile that was active/set on the previous page
             let prevPageProfileID = this.getParameters()?.currentProfile;
             let previousProfile = ProfileSelector.getPatientList().find(
                 (item) => item.patient_legacy_id == prevPageProfileID
             )
-             // Reload profile that was active/set on the previous page
-             if (
+            // Reload profile that was active/set on the previous page
+            if (
                 this.getParameters()?.isCareReceiver
                 && previousProfile
             ) {
@@ -114,7 +114,7 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
                 let categoriesToRefresh = categories.filter(category => forceRefreshCategories.includes(category));
                 UpdateUI.updateTimestamps(categoriesToRefresh, 0);
             }
-         },
+        },
     };
 
 
