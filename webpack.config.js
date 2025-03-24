@@ -97,16 +97,7 @@ const config = env => {
 				},
 				{
 					test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-					// type: 'asset/resource'
-					use: [
-						{
-							loader: 'file-loader',
-							options: {
-								name: '[name].[ext]',
-								outputPath: 'fonts/'
-							},
-						}
-					]
+					type: 'asset/resource'
 				},
 				{
 					// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, Modernizr has a weird passing of document, window properties
@@ -139,14 +130,7 @@ const config = env => {
 				},
 				{
 					test: /\.png$/,
-					use: [
-						{
-							loader: 'file-loader',
-							options: {
-								mimetype: 'image/png'
-							}
-						}
-					]
+					type: 'asset/resource'
 				}
 			]
 		},
