@@ -37,13 +37,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
      *@description Language property
      **/
     var language = '';
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#enableSMS
-     *@propertyOf MUHCApp.service:UserPreferences
-     *@description Enable SMS property
-     **/
-    var enableSMS = '';
 
     /**
      *@ngdoc method
@@ -160,22 +153,9 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
                 }
             });
         },
-        /**
-         *@ngdoc method
-         *@name setEnableSMS
-         *@methodOf MUHCApp.service:UserPreferences
-         *@param {String} option Boolean value for option
-         *@description Setter method for enable sms notifications option
-         **/
-        setEnableSMS: function() {
-            return enableSMS;
-        },
         getLanguage: function() {
             return language;
 
-        },
-        getEnableSMS: function() {
-            return enableSMS;
         },
         /**
          *@ngdoc method
@@ -184,11 +164,10 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
          *@param {Object} preferences Object containing the user preferences
 
          *@description Setter method for patient preferences, format
-         *<pre>preferences = {Language:'EN',EnableSMS:'1'}</pre>
+         *<pre>preferences = {Language:'EN'}</pre>
          **/
         setUserPreferences: function(preferences) {
             language = preferences.Language;
-            enableSMS = preferences.EnableSMS;
         },
         /**
          *@ngdoc method
@@ -199,7 +178,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
         clearUserPreferences: function() {
             fontSize = '';
             calendarOption = '';
-            enableSMS = '';
         }
 
     };
