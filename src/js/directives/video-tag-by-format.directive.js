@@ -48,6 +48,7 @@
             scope.iframeTag = false;
             scope.videoTag = false;
             scope.showError = false;
+            scope.errorAlertType = Params.alertTypeDanger;
 
             // a new url is just for iphone device to get the poster when time is loading at 0.05s
             scope.formatedUrl = scope.edumaterialUrl;
@@ -73,7 +74,6 @@
                     }
                     else {
                         scope.showError = true;
-                        scope.errorAlertType = Params.alertTypeWarning;
                     }
                 }
                 catch (error) {
