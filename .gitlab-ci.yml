@@ -174,8 +174,8 @@ deploy web app to development:
         set cmd:fail-exit yes; 
         open $FTP_HOST; 
         user $FTP_USER $FTP_PASSWORD; 
-        mirror --exclude='app' --reverse --delete --parallel=20 --verbose ./static/landingpage/ ./app/${CI_ENVIRONMENT_NAME}/;
-        mirror --reverse --delete --parallel=20 --verbose ./www/ ./app/${CI_ENVIRONMENT_NAME}/app/;
+        mirror --exclude='app' --reverse --delete --verbose ./static/landingpage/ ./app/${CI_ENVIRONMENT_NAME}/;
+        mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${CI_ENVIRONMENT_NAME}/app/;
         ls -la app/${CI_ENVIRONMENT_NAME}; 
         bye
       "
