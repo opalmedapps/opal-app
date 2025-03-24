@@ -101,16 +101,20 @@ const config = env => {
 				{
 					// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, Modernizr has a weird passing of document, window properties
 					// to make it work I looked at this issue: basically it re-attaches this to window.
+					// This solution was found online, see: https://github.com/webpack/webpack/issues/512#issuecomment-288143187
+					// Original code: loader: 'imports-loader?this=>window!exports-loader?window.Modernizr'
+					// It has since been rewritten to a new syntax due to Webpack / imports-loader / exports-loader updates
 					test: /onsenui.js/,
 					use: [
+						// Adds the following to the output bundle: (function () { ... }).call(window);
 						{
-							loader: 'imports-loader?this=>window'
+							loader: 'imports-loader?type=commonjs&wrapper=window',
 						},
+						// Adds the following to the output bundle: module.exports = window.Modernizr;
 						{
-							loader: 'exports-loader?window.Modernizr'
-						}
+							loader: 'exports-loader?type=commonjs&exports=single|window.Modernizr',
+						},
 					],
-
 				},
 				// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, When compiling with Webpack, the Fastclick library
 				// in onsenui (get rid of the 300ms delay) has a set of if statements to determine the sort of
@@ -120,8 +124,11 @@ const config = env => {
 					test: /onsenui.js/,
 					use: [
 						{
-							loader: 'imports-loader?define=>false,module.exports=>false'
-						}
+							loader: 'imports-loader',
+							options: {
+								additionalCode: 'var define = false; module.exports = false;',
+							},
+						},
 					],
 				},
 				{
