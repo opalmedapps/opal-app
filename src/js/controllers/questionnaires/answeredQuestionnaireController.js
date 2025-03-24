@@ -132,7 +132,7 @@
                 .then(function () {
                     // Update consent status to opalConsented or declined
                     if (vm.isConsent && !vm.requirePassword) Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined');
-                    else Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented')
+                    else Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented');
 
                     // mark questionnaire as finished
                     return Questionnaires.updateQuestionnaireStatus(
