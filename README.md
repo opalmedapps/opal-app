@@ -169,10 +169,10 @@ For more information about versioning, please read [Versioning](https://gitlab.c
 
 6. Try logging in; navigate to the login page and enter the following credentials:
 
-    - email: marge@opalmedapps.ca
-    - password: 12345Opal!!
-    - hospital: McGill University Health Centre (MUHC)
-    - security answer (depending on the question): red, superman, meg
+        email: marge@opalmedapps.ca
+        password: 12345Opal!!
+        hospital: McGill University Health Centre (MUHC)
+        security answer (depending on the question): red, superman, meg
 
 7. (Optional) If setting up a local development environment of Opal with your own backend system, you'll want
    to redirect Opal to connect to this backend instead of `dev`. In this case, follow the instructions at
