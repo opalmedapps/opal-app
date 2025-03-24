@@ -77,7 +77,7 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 			return newDates.map(item => (
 				{
 					...item,
-					collectedDateTime: new Date(item.collectedDateTime.replace(/-/g, "/"))
+					collectedDateTime: new Date(item.collectedDateTime)
 				})
 			);
 		}

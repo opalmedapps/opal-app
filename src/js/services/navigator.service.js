@@ -20,6 +20,7 @@
             getNavigatorName: () => navigator ? navigator._attrs.var : '',
             getPageName: getPageName,
             getParameters: () => navigator.getCurrentPage().options,
+            getPreviousPageName: getPreviousPageName,
             reloadPreviousProfilePrepopHandler: reloadPreviousProfilePrepopHandler,
             setNavigator: nav => navigator = nav,
         }
@@ -30,6 +31,20 @@
          */
         function getPageName() {
             let filePath = navigator.getCurrentPage().page;
+            // Return only the last piece of the path, which is the file name
+            return filePath.split('/').pop();
+        }
+
+        /**
+         * @description Gets the file name of the previous page in the navigator (e.g. notifications.html).
+         * @returns {string} The name of the previous page.
+         */
+        function getPreviousPageName() {
+            // Read the second-to-last element of the pages array
+            let pageCount = navigator.pages.length;
+            if (pageCount < 2) return undefined;
+            let filePath = navigator.pages[pageCount - 2].page;
+
             // Return only the last piece of the path, which is the file name
             return filePath.split('/').pop();
         }

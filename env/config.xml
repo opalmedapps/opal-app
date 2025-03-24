@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="1.36.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="1.36.11" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>${APP_NAME}</name>
     <description>
-        Opal - the MUHC Oncology Patient Application for mobile phones and the web -
-        is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative.
-        The project proposal was submitted by the Health Informatics Group (HIG)
-        and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients -
-        addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to
-        radiation oncology patients.
+        Opal is a patient portal designed to empower patients with their medical information.
     </description>
-    <author email="muhc.app.mobile@gmail.com" href="https://opalmedapps.com">
+    <author email="opal@muhc.mcgill.ca" href="https://www.opalmedapps.com/">
         Opal Med Apps Inc.
     </author>
     <content src="index.html"/>

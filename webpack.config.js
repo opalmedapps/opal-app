@@ -22,7 +22,7 @@ let entry = [
 const config = env => {
 	console.log("Webpack variables:", env);
 
-	// Parse the Opal environment to use, specified for example via webpack as `--env opal_environment=%npm_config_env%` and npm as `--env=dev`
+	// Parse the Opal environment to use, specified for example via webpack as `--env opal_environment=%npm_config_env%` and npm as `--env=local`
 	const OPAL_ENV = env?.opal_environment;
 
 	// Throws error if the defined folder for environment does not exist.
@@ -153,7 +153,6 @@ const config = env => {
 				jQuery: "jquery",
 				firebase: "firebase",
 				CryptoJS: "crypto-js",
-				Highcharts: "highcharts",
 			}),
 			new HtmlWebpackPlugin({
 				template: './src/index.html',
