@@ -65,16 +65,6 @@ check dependencies:
   stage: check
   rules:
     - when: always
-  before_script:
-    - apk add --no-cache curl jq
-    # use pipe operator to be able to use a colon in the command
-    - | 
-      RESPONSE=$(curl -s -X GET -H "PRIVATE-TOKEN: ${GITLAB_TOKEN_TEST}" "${CI_API_V4_URL}/user")
-    - echo $RESPONSE
-    - export GIT_AUTHOR_EMAIL=$(echo $RESPONSE | jq ".email")
-    - export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
-    - echo $GIT_AUTHOR_EMAIL
-    - echo $GIT_COMMITTER_EMAIL
   script:
     - npm -v
     - npm ci --cache .npm --prefer-offline
@@ -85,14 +75,24 @@ increment version:
   variables:
     # Prevent reading deleted version tags: https://stackoverflow.com/questions/66047044/deleted-tags-are-present-in-gitlab-ci
     GIT_STRATEGY: clone
-  rules:
+  # rules:
     # Run automatically on every commit to the default branch
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    # - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
+    # Set semantic-release author to our own bot user for correct attribution
+    - apk add --no-cache curl jq
+    # use pipe operator to be able to use a colon in the command
+    - | 
+      RESPONSE=$(curl -s -X GET -H "PRIVATE-TOKEN: ${GITLAB_TOKEN_TEST}" "${CI_API_V4_URL}/user")
+    - export GIT_AUTHOR_EMAIL=$(echo $RESPONSE | jq ".email")
+    - export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
+    - echo "semantic-release-bot email is ${GIT_AUTHOR_EMAIL}"
+    # Install dependencies for semantic-release
     - apk add --no-cache git
-    - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
+    # TODO: update versions and add Renovate datasource comment
+    # - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
   script:
-    - npx semantic-release
+    - npx semantic-release --help
 
 # Extended job for building the app
 # Builds automatically for release tags, or manually on other branches as needed
