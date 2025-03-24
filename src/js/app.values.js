@@ -185,6 +185,7 @@
                     "HOS": 0,
                     "SMD": 0,
                     "CTB": 1,
+                    "RFE": 0,
                 },
                 localStorageHospitalKey: 'hospital',
                 hospitalList: {
@@ -220,6 +221,7 @@
                             "HOS": 1,
                             "SMD": 1,
                             "CTB": 1,
+                            "RFE": 1,
                         },
                     },
                     'RI-MUHC': {
