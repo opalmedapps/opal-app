@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
-    TxTeamMessagesController.$inject = ['TxTeamMessages','NavigatorParameters', '$timeout'];
+    TxTeamMessagesController.$inject = ['TxTeamMessages','NavigatorParameters', '$timeout', '$filter'];
 
     /* @ngInject */
-    function TxTeamMessagesController(TxTeamMessages, NavigatorParameters, $timeout) {
+    function TxTeamMessagesController(TxTeamMessages, NavigatorParameters, $timeout, $filter) {
         var vm = this;
 
         vm.goToTeamMessage = goToTeamMessage;
@@ -30,7 +30,7 @@
             if (messages.length > 0) vm.noMessages = false;
 
             $timeout(function(){
-                vm.txTeamMessages = messages.reverse();
+                vm.txTeamMessages = $filter('orderBy')(messages, '-DateAdded');
             });
 
         }
@@ -46,7 +46,7 @@
         }
 
         function showHeader(index){
-            if (index === vm.txTeamMessages.length -1 || index === 0) return true;
+            if (index === 0) return true;
             var current = (new Date(vm.txTeamMessages[index].DateAdded)).setHours(0,0,0,0);
             var previous = (new Date(vm.txTeamMessages[index-1].DateAdded)).setHours(0,0,0,0);
 
