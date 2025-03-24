@@ -174,7 +174,7 @@
          * @desc Open info page (currently only on education tab)
          */
          function openInfoPage() {
-            navigator.pushPage('views/tabs/info-page-tabs.html');
+            navigator.pushPage('views/tabs/info-page-tabs.html', {id: 'education'});
         }
     }
 })();
