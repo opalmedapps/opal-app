@@ -38,7 +38,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
      *@description Flag to check whether the device identifiers have been sent
      **/
     var haveBeenSet = false;
-    var haveBeenSend = false;
+    var haveBeenSent = false;
 
     return{
         /**
@@ -52,7 +52,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             
             deviceIdentifiers.deviceUUID = Constants.app ? device.uuid : browserUUID;
             deviceIdentifiers.deviceType = Constants.app ? device.platform : 'browser';
-            haveBeenSend = false;
+            haveBeenSent = false;
             haveBeenSet = true;
         },
         /**
@@ -64,16 +64,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         updateRegistrationId:function(id)
         {
             deviceIdentifiers.registrationId = id;
-        },
-        /**
-         *@ngdoc method
-         *@name setSendStatus
-         *@methodOf MUHCApp.service:DeviceIdentifiers
-         *@description Sets the haveBeenSent flag
-         **/
-        setSendStatus:function()
-        {
-            haveBeenSend = true;
         },
         /**
          *@ngdoc method
@@ -103,21 +93,14 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description If the device identifiers are set and have not been sent, it sends the device identifiers.
          **/
-        sendIdentifiersToServer:function()
+        sendIdentifiersToServer: async function()
         {
-
-            //TODO: THIS DOES NOT HANDLE ERRORS AT ALL
-
-            var defer = $q.defer();
-            if(haveBeenSet && !haveBeenSend)
+            if (haveBeenSet && !haveBeenSent)
             {
                 var data = JSON.parse(JSON.stringify(deviceIdentifiers));
-                haveBeenSend = true;
-                RequestToServer.sendRequestWithResponse('DeviceIdentifier', data);
+                await RequestToServer.sendRequestWithResponse('DeviceIdentifier', data);
+                haveBeenSent = true;
             }
-
-            defer.resolve();
-            return defer.promise;
         },
         /**
          *@ngdoc method
