@@ -12,11 +12,11 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
+    PersonalTabController.$inject = ['Appointments','TxTeamMessages', 'EducationalMaterial', 'Documents','NavigatorParameters', 'Notifications',
         'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params',
         'UserHospitalPreferences', 'Browser', 'DynamicContent'];
 
-    function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
+    function PersonalTabController( Appointments, TxTeamMessages, EducationalMaterial, Documents, NavigatorParameters, Notifications, Questionnaires,
                                     Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params,
                                     UserHospitalPreferences, Browser, DynamicContent) {
         var vm = this;
@@ -87,6 +87,7 @@
             vm.txTeamMessagesUnreadNumber = TxTeamMessages.getNumberUnreadTxTeamMessages();
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
+            vm.educationalMaterialsNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterials();
         }
 
         function goToStatus(){

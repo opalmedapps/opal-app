@@ -112,6 +112,22 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+            <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/education/education.html')">
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <i class="fa fa-solid fa-book fa-2x" style="color: #9575CD"></i>
+                            <span class="notification" ng-show="tab.educationalMaterialsNumber > 0">{{tab.educationalMaterialsNumber}}</span>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"EDUCATION_MATERIAL"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
             <ons-list-item class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']"
                            ng-click="tab.goToCarnetSante()">
@@ -145,21 +161,6 @@
                     <ons-col>
                         <header>
                             <span class="item-title" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</span>
-                        </header>
-                        <p class="item-desc" ng-class="fontSizeDesc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/education/education.html')">
-                <ons-row align="center" >
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <ons-icon icon="fa-book" size="2x" style="color: #607d8b;"></ons-icon>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>

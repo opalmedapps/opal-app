@@ -278,6 +278,17 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             }
             return array;
         },
+
+        /**
+         *@ngdoc method
+         *@name getNumberOfUnreadEducationalMaterials
+         *@methodOf MUHCApp.service:EducationalMaterial
+         *@returns {Object} Returns the number of unread educational material
+         **/
+        getNumberOfUnreadEducationalMaterials:function() 
+        {
+            return this.getUnreadEducationalMaterials().length;
+        },
         /**
          *@ngdoc method
          *@name getEducationaMaterialBySerNum
@@ -287,8 +298,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
          **/
         getEducationaMaterialBySerNum:function(serNum)
         {
-
-
             for (var i = 0; i < educationalMaterialArray.length; i++) {
                 if(educationalMaterialArray[i].EducationalMaterialSerNum==serNum)
                 {
