@@ -120,7 +120,7 @@ build ios:
     # Only release the app from release tags
     - *has_version_tag
   before_script:
-    - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=short -n 1)"
+    - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
     - echo "$RELEASE_NOTES"
 
 # Deploys the Android app to Firebase
