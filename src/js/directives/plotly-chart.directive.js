@@ -128,12 +128,15 @@ Plotly.register([frLocale]);
                         rangeselector: selectorOptions,
                         rangeslider: {},
                         type: 'date',
+                        mirror: 'ticks',
+                        gridcolor: '#eeeeee',
                         tickformat: '%e %b %y'  // date format
                     },
                     yaxis: {
                         fixedrange: true,
-                        zerolinecolor: '#969696',
+                        zerolinecolor: '#eeeeee',
                         range: [minChart, maxChart],
+                        mirror: 'ticks'
                     },
                     margin: {
                         b: 10,
