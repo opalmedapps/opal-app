@@ -1,3 +1,10 @@
+## [1.35.4](https://gitlab.com/opalmedapps/qplus/compare/v1.35.3...v1.35.4) (2024-07-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-inappbrowser to v6 ([d60d618](https://gitlab.com/opalmedapps/qplus/commit/d60d618a84fe4fd3a57b1d11ff976dcdf21e1a14))
+
 ## [1.35.3](https://gitlab.com/opalmedapps/qplus/compare/v1.35.2...v1.35.3) (2024-07-12)
 
 
