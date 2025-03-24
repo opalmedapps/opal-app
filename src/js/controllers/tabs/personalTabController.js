@@ -82,14 +82,17 @@
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
                     vm.questionnairesUnreadNumber = result.data.unread_questionnaire_count;
                     vm.educationalMaterialsNumber = result.data.unread_educationalmaterial_count;
+                    vm.researchUnreadNumber = parseInt(result.data.unread_research_questionnaire_count);
+                    vm.consentQuestionnairesUnreadNumber = parseInt(result.data.unread_consent_questionnaire_count);
                     Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
                         'research',
-                        result.data.unread_research_questionnaire_count,
+                        vm.researchUnreadNumber,
                     );
                     Questionnaires.setNumberOfUnreadQuestionnairesByPurpose(
                         'consent',
-                        result.data.unread_consent_questionnaire_count,
+                        vm.consentQuestionnairesUnreadNumber,
                     );
+                    vm.researchUnreadNumber += parseInt(vm.consentQuestionnairesUnreadNumber);
                     // TODO: fetch badges for the research menu items
 
                     // Refresh the visible menu items based on access level when changing profiles
