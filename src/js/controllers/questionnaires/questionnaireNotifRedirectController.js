@@ -16,14 +16,15 @@
         '$timeout',
         'NativeNotification',
         'Navigator',
+        'Params',
         'Questionnaires',
         'Utility',
         'ProfileSelector'
     ];
 
     /* @ngInject */
-    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, NavigatorParameters,
-                                                  Questionnaires, Utility, ProfileSelector) {
+    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, Navigator, Params,
+                                                  Questionnaires, Utility) {
         let vm = this;
 
         // variables global to this controller
@@ -81,19 +82,25 @@
          * @param {int} answerQuestionnaireId
          */
         async function goToQuestionnaire(answerQuestionnaireId) {
-            // If the relationship type is not 'SELF' and can_answer_questionnaire is False, the questionnaire cannot be opened
-            let relationshipType = ProfileSelector.getActiveProfile().relationship_type.role_type;
-            let answerable = ProfileSelector.getActiveProfile().relationship_type.can_answer_questionnaire;
-            // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
-            if(vm.refreshQuestionnaires) await vm.refreshQuestionnaires();
-            // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
-            if ((!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) || (relationshipType !== 'SELF' && !answerable)) {
-                navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
-                NativeNotification.showNotificationAlert(
-                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
-                    $filter('translate')("TITLE"),
-                );
-                return;
+            // check if the questionnaire is locked or the user has the permission to answer it.
+            try {
+                await Questionnaires.requestQuestionnaire(selectedQuestionnaire.qp_ser_num, selectedQuestionnaire.status);
+            } catch (error) {
+                vm.loadingQuestionnaire = false;
+                //handle the errors message
+                if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                    NativeNotification.showNotificationAlert(
+                        $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                        $filter('translate')("TITLE"),
+                    );
+                }
+                else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                    NativeNotification.showNotificationAlert(
+                        $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
+                        $filter('translate')("TITLE"),
+                    );
+                }
+                else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
             }
             // putting editQuestion false to claim that we are not coming from a summary page
             // Get questionnaire purpose to display correct page contents

@@ -154,20 +154,14 @@
          * @param {int} answerQuestionnaireID ID of that particular questionnaire
          * @returns {Promise} resolves to the questionnaire's data if success
          */
-        async function requestQuestionnaire(answerQuestionnaireID){
+        async function requestQuestionnaire(answerQuestionnaireID, status){
             let params = {
                 'qp_ser_num': answerQuestionnaireID,
                 'language': UserPreferences.getLanguage(),
+                'status': status,
             };
-            try {
-                let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
-
-                // this is in case firebase deletes the property when it is empty
-                return response?.Data ? response.Data : {};
-            } catch (error) {
-                console.error('Error in requestQuestionnaire', error);
-                return {};
-            }
+            let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
+            return response?.Data ? response.Data : {};
         }
 
         /**

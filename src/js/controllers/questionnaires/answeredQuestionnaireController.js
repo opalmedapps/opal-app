@@ -384,7 +384,19 @@
             // go to the questionnaire list page if there is an error
             navigator.popPage();
 
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+            if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
 
         /**

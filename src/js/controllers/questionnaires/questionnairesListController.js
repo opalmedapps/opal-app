@@ -25,7 +25,7 @@
     ];
 
     /* @ngInject */
-    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires, UpdateUI, ProfileSelector) {
+    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires, UpdateUI) {
 
         let vm = this;
 
@@ -87,37 +87,35 @@
          * @desc This function request the questionnaire selected from back-end and push it to the carousel
          * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
-        async function goToQuestionnaire(selectedQuestionnaire) {
-            // If the relationship type is not 'SELF' and can_answer_questionnaire is False, the questionnaire cannot be opened
-            let relationshipType = ProfileSelector.getActiveProfile().relationship_type.role_type;
-            let answerable = ProfileSelector.getActiveProfile().relationship_type.can_answer_questionnaire;
-            if (relationshipType !== 'SELF' && !answerable && selectedQuestionnaire.status != allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS) {
-                NativeNotification.showNotificationAlert(
-                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
-                    $filter('translate')("TITLE"),
-                );
-                return;
-            }
-
-            // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
-            if (vm.refreshQuestionnaires) {
-                await vm.refreshQuestionnaires();
-                // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
-                if (!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) {
-                    NativeNotification.showNotificationAlert(
-                        $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
-                        $filter('translate')("TITLE"),
-                    );
-                    return;
-                }
-            }
-
-            // putting editQuestion false to claim that we are not coming from a summary page
-            navigator.pushPage('views/personal/questionnaires/questionnaires.html', {
-                answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
-                editQuestion: false,
-                questionnairePurpose: purpose
-            });
+        function goToQuestionnaire(selectedQuestionnaire) {
+            Questionnaires.requestQuestionnaire(selectedQuestionnaire.qp_ser_num, selectedQuestionnaire.status)
+                .then(function(){
+                // putting editQuestion false to claim that we are not coming from a summary page
+                    navigator.pushPage('views/personal/questionnaires/questionnaires.html', {
+                        answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
+                        editQuestion: false,
+                        questionnairePurpose: purpose
+                    });
+                })
+                .catch(error => {
+                    $timeout(() => {
+                        vm.loadingQuestionnaire = false;
+                        //handle the errors message
+                        if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                            NativeNotification.showNotificationAlert(
+                                $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                                $filter('translate')("TITLE"),
+                            );
+                        }
+                        else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                            NativeNotification.showNotificationAlert(
+                                $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
+                                $filter('translate')("TITLE"),
+                            );
+                        }
+                        else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+                    });
+                })
         }
 
         /**
