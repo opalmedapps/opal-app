@@ -33,16 +33,18 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
          * @param {string} [referenceField] Optional different Firebase path on which to post the request.
          * @param {string|number} [patientID] Optional legacy PatientSerNum to use as the TargetPatientID, when making a request for a patient
          *                                    other than the one from the currently selected profile.
-         * @returns {string} The Firebase reference key where the request was pushed.
+         * @returns {Promise<string>} Resolves to the Firebase reference key where the request was pushed, or rejects
+         *                            with an error (for example, permission denied if the Firebase rules were violated).
          */
-        function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID) {
+        async function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID) {
             // Clone the parameters object to avoid encrypting the original
             if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
             let encryptedRequestType = encryptionKey ? typeOfRequest : EncryptionService.encryptData(typeOfRequest);
             let encryptedParameters = encryptionKey ? EncryptionService.encryptWithKey(parameters, encryptionKey) : EncryptionService.encryptData(parameters);
             let requestObject = getRequestObject(typeOfRequest, encryptedRequestType, encryptedParameters, patientID);
-            let reference = getReferenceField(typeOfRequest, referenceField)
-            let pushID =  Firebase.push(Firebase.getDBRef(reference), requestObject);
+            let reference = getReferenceField(typeOfRequest, referenceField);
+            // Using 'await' here allows this function to wait long enough to find out if there's a permission denied from writing to Firebase
+            let pushID = await Firebase.push(Firebase.getDBRef(reference), requestObject);
 
             return pushID.key;
         }
@@ -56,7 +58,7 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
         function apiRequest(parameters, data = null) {
             return new Promise(async (resolve, reject) => {
                 let formattedParams = formatParams(parameters, data);
-                let requestKey = sendRequest('api', formattedParams);
+                let requestKey = await sendRequest('api', formattedParams);
                 let dbReference = Firebase.getDBRef(`users/${UserAuthorizationInfo.getUsername()}/${requestKey}`);
 
                 Firebase.onValue(dbReference, snapshot => {
@@ -156,43 +158,50 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
                 returnObject.cancel = () => reject(new CancelledPromiseError());
             });
 
-            returnObject.promise = new Promise((resolve, reject) => {
-                //Sends request and gets random key for request
-                let key = sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID);
-                //Sets the reference to fetch data for that request
-                const username = UserAuthorizationInfo.getUsername();
-                let refRequestResponse = referenceField
-                    ? Firebase.getDBRef(`${responseField}/${key}`)
-                    : Firebase.getDBRef(`users/${username}/${key}`);
-                //Waits to obtain the request data.
-                Firebase.onValue(refRequestResponse, snapshot => {
-                    if (snapshot.exists()) {
-                        let data = snapshot.val();
+            returnObject.promise = new Promise(async (resolve, reject) => {
+                let key;
+                try {
+                    key = await sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID);
+
+                    // Sets the reference to fetch a response
+                    const username = UserAuthorizationInfo.getUsername();
+                    let refRequestResponse = referenceField
+                        ? Firebase.getDBRef(`${responseField}/${key}`)
+                        : Firebase.getDBRef(`users/${username}/${key}`);
+                    // Waits to obtain the response data
+                    Firebase.onValue(refRequestResponse, snapshot => {
+                        if (snapshot.exists()) {
+                            let data = snapshot.val();
+                            Firebase.set(refRequestResponse, null);
+                            Firebase.off(refRequestResponse);
+                            data = ResponseValidator.validate(data, encryptionKey, timeOut);
+                            data.success ? resolve(data.success) : reject(data.error)
+                        }
+                    }, error => {
                         Firebase.set(refRequestResponse, null);
                         Firebase.off(refRequestResponse);
-                        data = ResponseValidator.validate(data, encryptionKey, timeOut);
-                        data.success ? resolve(data.success) : reject(data.error)
-                    }
-                }, error => {
-                    Firebase.set(refRequestResponse, null);
-                    Firebase.off(refRequestResponse);
+                        reject(error);
+                    });
+
+                    // If request takes longer than 1.5 minutes to come back with timeout request, delete the listener
+                    const timeOut = setTimeout(function() {
+                        Firebase.off(refRequestResponse);
+                        reject({Response:'timeout'});
+                    }, Params.requestTimeout);
+
+                    // Cancellation code: if the cancel function is called before the request finishes, we reject the request Promise.
+                    cancellationTrigger.catch(cancelMessage => {
+                        reject(cancelMessage);
+
+                        // Clean up
+                        Firebase.off(refRequestResponse);
+                        clearTimeout(timeOut);
+                    });
+                }
+                catch (error) {
+                    // Catch and reject any permission denied errors, or other unexpected errors. This is necessary since we're handling a Promise object manually.
                     reject(error);
-                });
-
-                // If request takes longer than 1.5 minutes to come back with timeout request, delete the listener
-                const timeOut = setTimeout(function() {
-                    Firebase.off(refRequestResponse);
-                    reject({Response:'timeout'});
-                }, Params.requestTimeout);
-
-                // Cancellation code: if the cancel function is called before the request finishes, we reject the request Promise.
-                cancellationTrigger.catch(cancelMessage => {
-                    reject(cancelMessage);
-
-                    // Clean up
-                    Firebase.off(refRequestResponse);
-                    clearTimeout(timeOut);
-                });
+                }
             });
 
             return returnObject;
