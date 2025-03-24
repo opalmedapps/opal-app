@@ -5,7 +5,7 @@
         .module('MUHCApp')
         .controller('XiaomiScaleController', XiaomiScaleController);
 
-        XiaomiScaleController.$inject = [
+    XiaomiScaleController.$inject = [
         '$scope', '$filter', '$timeout', 'Navigator', 'RequestToServer', 'Params', 'ProfileSelector'
     ];
 
