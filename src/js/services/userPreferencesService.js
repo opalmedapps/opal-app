@@ -27,13 +27,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
     var fontSize = '';
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#calendarOption
-     *@propertyOf MUHCApp.service:UserPreferences
-     *@description Calendar option preperty
-     **/
-    var calendarOption = '';
-    /**
-     *@ngdoc property
      *@name  MUHCApp.service.#language
      *@propertyOf MUHCApp.service:UserPreferences
      *@description Language property
@@ -113,27 +106,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
         },
         /**
          *@ngdoc method
-         *@name setNativeCalendarOption
-         *@methodOf MUHCApp.service:UserPreferences
-         *@param {String} option Boolean value for option
-         *@description Setter method for patient calendar option
-         **/
-        setNativeCalendarOption: function(option) {
-            if (option) {
-                calendarOption = option;
-            }
-        },
-        /**
-         *@ngdoc method
-         *@name getNativeCalendarOption
-         *@methodOf MUHCApp.service:UserPreferences
-         *@returns {String} Returns calendarOption
-         **/
-        getNativeCalendarOption: function() {
-            return calendarOption;
-        },
-        /**
-         *@ngdoc method
          *@name initializeLanguage
          *@methodOf MUHCApp.service:UserPreferences
          *@description The method accesses the globalization plugin of the device to find the actual language of device and sets default to that language.
@@ -175,7 +147,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
          **/
         clearUserPreferences: function() {
             fontSize = '';
-            calendarOption = '';
         }
 
     };

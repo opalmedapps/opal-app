@@ -161,6 +161,7 @@
                     "TTM": 0,
                     "QUE": 0,
                     "CSQ": 0,
+                    "RES": 0,
                     "CHK": 0,
                     "LAO": 1,
                     "NTF": 0,
@@ -173,6 +174,7 @@
                     "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
+                    "SMD": 0,
                 },
                 localStorageHospitalKey: 'hospital',
                 hospitalList: {
@@ -189,6 +191,7 @@
                             "TTM": 1,
                             "QUE": 1,
                             "CSQ": 1,
+                            "RES": 1,
                             "CHK": 1,
                             "LAO": 1,
                             "NTF": 1,
@@ -201,6 +204,7 @@
                             "SUP": 1,
                             "CED": 1,
                             "HOS": 1,
+                            "SMD": 1,
                         },
                     },
                     'RI-MUHC': {
@@ -216,6 +220,7 @@
                             "TTM": 1,
                             "QUE": 1,
                             "CSQ": 1,
+                            "RES": 1,
                             "CHK": 0,
                             "LAO": 1,
                             "NTF": 1,
@@ -228,6 +233,7 @@
                             "SUP": 1,
                             "CED": 0,
                             "HOS": 0,
+                            "SMD": 0,
                         },
                     },
                     'CHU_SJ': {
@@ -243,6 +249,7 @@
                             "TTM": 1,
                             "QUE": 1,
                             "CSQ": 1,
+                            "RES": 1,
                             "CHK": 1,
                             "LAO": 1,
                             "NTF": 1,
@@ -255,6 +262,7 @@
                             "SUP": 1,
                             "CED": 0,
                             "HOS": 0,
+                            "SMD": 0,
                         },
                     }
                 },

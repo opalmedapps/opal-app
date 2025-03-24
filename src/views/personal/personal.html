@@ -1,10 +1,10 @@
 <ons-page ng-controller="PersonalTabController as tab" ng-device-backbutton="tab.personalDeviceBackButton()">
     <profile-selector refresh-function="tab.getDisplayData">
-        <right-content>   
+        <right-content>
             <ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html', {id:'chart'})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
-        </right-content> 
+        </right-content>
     </profile-selector>
 
     <!-- HOSPITAL NAME BAR -->
@@ -14,13 +14,12 @@
     <div>
         <ons-list style="margin: 0px 0">
             <ons-list-item modifier="chevron"
-                           ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DIA') && tab.allowedModules['DIA']"
-                           class="item"
-                           ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
+                ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DIA') && tab.allowedModules['DIA']" class="item"
+                ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-heartbeat" size="2x" style="color:#f44336"></ons-icon>
+                            <ons-icon icon="fa-stethoscope" size="2x" style="color:#6a2722"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -32,12 +31,13 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('APT') && tab.allowedModules['APT']"
-                           ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
+                ng-if="tab.allowedModules.hasOwnProperty('APT') && tab.allowedModules['APT']"
+                ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <ons-icon style="color: #FFC107" size="2x" icon="fa-calendar"></ons-icon>
-                        <span class="notification" ng-show="tab.appointmentsUnreadNumber > 0">{{tab.appointmentsUnreadNumber}}</span>
+                        <span class="notification"
+                            ng-show="tab.appointmentsUnreadNumber > 0">{{tab.appointmentsUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
@@ -47,9 +47,9 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.censor && tab.allowedModules.hasOwnProperty('LAB') && tab.allowedModules['LAB']"
-                           ng-click="personalNavigator.pushPage('views/personal/test-results/test-results.html')" >
-                <ons-row align="center" >
+                ng-if="tab.censor && tab.allowedModules.hasOwnProperty('LAB') && tab.allowedModules['LAB']"
+                ng-click="personalNavigator.pushPage('views/personal/test-results/test-results.html')">
+                <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
                             <ons-icon icon="ion-erlenmeyer-flask" size="2x" style="color:#8BC34A"></ons-icon>
@@ -64,12 +64,13 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DOC') && tab.allowedModules['DOC']"
-                           ng-click="personalNavigator.pushPage('views/personal/documents/documents.html')">
-                <ons-row align="center" >
+                ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DOC') && tab.allowedModules['DOC']"
+                ng-click="personalNavigator.pushPage('views/personal/documents/documents.html')">
+                <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <ons-icon icon="fa-folder" size="2x" style="color:#ffdf80"></ons-icon>
-                        <span class="notification" ng-show="tab.documentsUnreadNumber > 0">{{tab.documentsUnreadNumber}}</span>
+                        <span class="notification"
+                            ng-show="tab.documentsUnreadNumber > 0">{{tab.documentsUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
@@ -80,28 +81,31 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('TTM') && tab.allowedModules['TTM']"
-                           ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
-                <ons-row align="center" >
+                ng-if="tab.allowedModules.hasOwnProperty('TTM') && tab.allowedModules['TTM']"
+                ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
+                <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon>
-                        <span class="notification" ng-show="tab.txTeamMessagesUnreadNumber > 0">{{tab.txTeamMessagesUnreadNumber}}</span>
+                        <span class="notification"
+                            ng-show="tab.txTeamMessagesUnreadNumber > 0">{{tab.txTeamMessagesUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"TREATINGTEAMNOTIFICATIONS"|translate}}</span>
+                            <span class="item-title"
+                                ng-class="fontSizeTitle">{{"TREATINGTEAMNOTIFICATIONS"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" 
-                ng-if="tab.allowedModules.hasOwnProperty('EDU') && tab.allowedModules['EDU']"    
+            <ons-list-item modifier="chevron" class="item"
+                ng-if="tab.allowedModules.hasOwnProperty('EDU') && tab.allowedModules['EDU']"
                 ng-click="personalNavigator.pushPage('views/personal/education/education.html')">
-                <ons-row align="center" >
+                <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <i class="fa fa-solid fa-book fa-2x" style="color: #9575CD"></i>
-                        <span class="notification" ng-show="tab.educationalMaterialsNumber > 0">{{tab.educationalMaterialsNumber}}</span>
+                        <span class="notification"
+                            ng-show="tab.educationalMaterialsNumber > 0">{{tab.educationalMaterialsNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
@@ -112,17 +116,55 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('QUE') && tab.allowedModules['QUE']"
-                           ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
+                ng-if="tab.allowedModules.hasOwnProperty('QUE') && tab.allowedModules['QUE']"
+                ng-click="tab.goToClinicalQuestionnaire()">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="ion-clipboard" size="2x" style="color: #607d8b;"></ons-icon><span class="notification" ng-show="tab.questionnairesUnreadNumber>0">{{tab.questionnairesUnreadNumber}}</span>
+                            <ons-icon icon="ion-clipboard" size="2x" style="color: #607d8b;"></ons-icon><span
+                                class="notification"
+                                ng-show="tab.questionnairesUnreadNumber>0">{{tab.questionnairesUnreadNumber}}</span>
                         </div>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</span>
+                            <span class="item-title"
+                                ng-class="fontSizeTitle">{{"CLINICAL_QUESTIONNAIRES"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                ng-if="tab.allowedModules.hasOwnProperty('RES') && tab.allowedModules['RES']"
+                ng-click="personalNavigator.pushPage('views/personal/research/research.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <img style="width: 35px;" src="./img/microscope.png"><span class="notification"
+                                ng-show="tab.researchUnreadNumber>0">{{tab.researchUnreadNumber}}</span>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                ng-if="tab.allowedModules.hasOwnProperty('SMD') && tab.allowedModules['SMD']"
+                ng-click="personalNavigator.pushPage('views/smartdevices/smartdevices.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-heartbeat" size="2x" style="color:#f44336"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"SMARTDEVICES"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>
