@@ -12,7 +12,7 @@
     </div>
 
     <ons-list ng-if="!Ctrl.message">
-        <ons-list-item ng-repeat="caregivers in Ctrl.caregivers" class="item">
+        <ons-list-item ng-repeat="caregivers in Ctrl.caregivers | orderBy: 'lastName'" class="item">
             <ons-row align="center" >
                 <ons-col width="60px" align="center">
                     <div style="margin-left:10px">

@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['$timeout','$filter','$sce', 'NavigatorParameters'];
+    InfoTabController.$inject = ['NavigatorParameters'];
 
   /* @ngInject */
-    function InfoTabController($timeout, $filter, $sce, NavigatorParameters) {
+    function InfoTabController(NavigatorParameters) {
         var vm = this;
         vm.view = {};
 
