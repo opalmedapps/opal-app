@@ -131,11 +131,6 @@
     "webpack-merge": "^4.2.2",
     "xml-js": "^1.6.11"
   },
-  "overrides": {
-    "webpack": {
-      "glob-parent": "5.1.2"
-    }
-  },
   "cordova": {
     "plugins": {
       "@havesource/cordova-plugin-push": {
