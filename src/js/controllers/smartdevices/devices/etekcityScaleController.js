@@ -40,24 +40,19 @@
         vm.errorMessage = null;
         // vm.errorMessage = `${ERROR_BACKEND}: Patient not found`;
         
-        vm.devices = [];
-        // vm.devices.push({
-        //     name: 'QN-Scale',
-        //     id: 'XXXX-YYY-ZZZZ-AAAA',
-        // })
-        // vm.devices.push({
-        //     name: 'QN-Scale',
-        //     id: 'YYYY-ZZZZ-AAAA-BBBB',
-        // })
+        let devices = new Map();
         vm.messages = [];
 
         vm.scanAndConnect = scanAndConnect;
-        vm.selectDevice = selectDevice;
+        // for some reason using the same function name does not work
+        vm.doSelectDevice = (device) => selectDevice(device);
         vm.submitData = submitData;
-        vm.showInstructions = () => !vm.scanning && vm.selectedDevice == null && vm.devices.length == 0 && !vm.weight;
+        vm.showInstructions = () => !vm.scanning && vm.selectedDevice == null && devices.size == 0 && !vm.weight;
         // show loading spinner while scanning and while reading data from device
         vm.isLoading = () => (vm.scanning && vm.selectedDevice == null) || (vm.selectedDevice?.connecting && !vm.weight);
         vm.done = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
+        // ng-repeat does not support iterating through maps
+        vm.getDeviceList = () => Array.from(devices.values());
 
         async function submitData() {
             addDebugMessage('Sending weight to backend');
@@ -93,7 +88,7 @@
                 
             vm.selectDevice = null;
             vm.messages = [];
-            vm.devices = [];
+            devices.clear();
 
             await ble.withPromises.startScan([SERVICE_UUID], onDiscovered, onScanFailed);
 
@@ -104,9 +99,9 @@
 
                 // not sure why but without this the error message does not show
                 $timeout(async () => {
-                    if (vm.devices.length == 1) {
-                        selectDevice(vm.devices.at(0));
-                    } else if (vm.devices.length == 0) {
+                    if (devices.size == 1) {
+                        selectDevice(devices.values().next().value);
+                    } else if (devices.size == 0) {
                         vm.errorMessage = ERROR_NO_DEVICE;
                     }
                 });
@@ -121,9 +116,8 @@
 
         function onDiscovered(peripheralData) {
             $timeout(() => {
-                // sometimes, not always, the device shows up twice, prevent this from happening
-                if (vm.devices.indexOf(peripheralData) === -1) {
-                    vm.devices.push(peripheralData);
+                if (!devices.has(peripheralData.id)) {
+                    devices.set(peripheralData.id, peripheralData);
                 }
             });
         }
@@ -160,7 +154,7 @@
                 device.connecting = false;
                 // need to reset some variables to show the instructions
                 vm.selectedDevice = null;
-                vm.devices = [];
+                devices.clear();
             });
             
             await ble.withPromises.disconnect(device.id);
@@ -185,7 +179,7 @@
                     vm.errorMessage = ERROR_NO_DATA;
                     // need to reset some variables to show the instructions
                     vm.selectedDevice = null;
-                    vm.devices = []
+                    devices.clear()
                 }
 
                 unsubscribe(result.id);
