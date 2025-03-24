@@ -23,10 +23,10 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
         .module('MUHCApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$filter', 'Hospital', 'Location', 'Params', 'RequestToServer', 'UserPreferences'];
+    CheckInService.$inject = ['$filter', 'Hospital', 'Location', 'Params', 'RequestToServer'];
 
     /* @ngInject */
-    function CheckInService($filter, Hospital, Location, Params, RequestToServer, UserPreferences) {
+    function CheckInService($filter, Hospital, Location, Params, RequestToServer) {
 
         /**
          * @description Array of today's appointments for check-in.
@@ -221,7 +221,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
             // Format appointments from the backend format to the app's format
             appointmentsForCheckIn = [];
             appointments.forEach(appointment => {
-                const formattedAppointment = new AppointmentFromBackend(appointment, UserPreferences.getLanguage());
+                const formattedAppointment = new AppointmentFromBackend(appointment);
                 appointmentsForCheckIn.push(formattedAppointment);
             });
 

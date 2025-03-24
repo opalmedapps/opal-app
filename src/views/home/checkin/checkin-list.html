@@ -35,7 +35,7 @@
                     <div class="appointment-content">
                         <span ng-class="fontSizeTitle">{{app['AppointmentType_' + checkIn.language]}}</span>
 
-                        <p ng-show="app.RoomLocation_EN" class="item-desc" ng-class="fontSizeDesc" >
+                        <p ng-if="app['RoomLocation_'+checkIn.language]" class="item-desc" ng-class="fontSizeDesc" >
                             {{app["RoomLocation_" + checkIn.language]}}
                         </p>
 

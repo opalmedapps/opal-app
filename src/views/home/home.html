@@ -123,7 +123,7 @@
                             <span class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
                         </header>
                         <div ng-if="Ctrl.checkinState.canNavigate">
-                            <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message | translate}} {{Ctrl.RoomLocation}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message | translate}}</p>
                             <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.calledApp["AppointmentType_"+Ctrl.language]}}</p>
                         </div>
                         <div ng-if="!Ctrl.checkinState.canNavigate">

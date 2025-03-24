@@ -22,7 +22,6 @@ export class AppointmentFromBackend {
             scheduledstarttime,
             state,
         },
-        language,
     ) {
         this.AppointmentSerNum = appointmentsernum;
         this.AppointmentDescription_EN = alias?.alias_description_en;
@@ -41,7 +40,8 @@ export class AppointmentFromBackend {
         this.MapUrl_EN = hospitalmap?.mapurl_en;
         this.MapUrl_FR = hospitalmap?.mapurl_fr;
         this.PatientSerNum = patient?.patientsernum;
-        this.ResourceDescription = language === 'EN' ? alias?.aliasname_en : alias?.aliasname_fr;
+        this.ResourceDescription_EN = alias?.aliasname_en;
+        this.ResourceDescription_FR = alias?.aliasname_fr;
         this.RoomLocation_EN = roomlocation_en;
         this.RoomLocation_FR = roomlocation_fr;
         this.ScheduledStartTime = Date.parse(scheduledstarttime);

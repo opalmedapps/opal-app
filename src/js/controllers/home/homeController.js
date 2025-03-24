@@ -20,7 +20,6 @@
 
         vm.language = 'EN';
         vm.calledApp = null;
-        vm.RoomLocation = '';
         $scope.infoModalData = [];
 
         vm.checkinState = {
