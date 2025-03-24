@@ -46,7 +46,6 @@ Plotly.register([frLocale]);
                 }
 
                 // Check if data is empty
-                scope.isChartEmpty = false;
                 if (
                     !scope.data ||
                     !scope.data.x ||
@@ -102,14 +101,15 @@ Plotly.register([frLocale]);
                         yanchor: 'top'
                     },
                     font: {
-                        size: fontSizesMap[UserPreferences.getFontSize()]
+                        size: fontSizesMap[UserPreferences.getFontSize()],
+                        color: '#000000', // High-contrast text color
                     },
                     dragmode: false,
                     showlegend: false,
                     autosize: true,
                     xaxis: {
                         autorange: true,
-                        tickangle: 60,
+                        tickangle: -45,
                         zeroline: false,
                         fixedrange: true,
                         rangeselector: selectorOptions,
@@ -123,8 +123,8 @@ Plotly.register([frLocale]);
                     },
                     margin: {
                         b: 10,
-                        l: 30,
-                        r: 30,
+                        l: 45,
+                        r: 10,
                         t: 30
                     }
                 };
