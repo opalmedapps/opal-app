@@ -16,7 +16,7 @@
  * TODO: implement background refresh feature
  **/
 
- (function () {
+(function () {
     'use strict';
 
     angular
@@ -25,7 +25,7 @@
 
     MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial'];
 
-   function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial) {
+    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial) {
 
         //you only need to use this service the first time entering a tab
         var firstTimeHome = true;
