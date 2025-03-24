@@ -399,8 +399,7 @@
         function hasAttemptedCheckin() {
             var r = $q.defer();
 
-            //Request is sent with the AppointmentSerNum
-            RequestToServer.sendRequestWithResponse('CheckCheckin', {PatientSerNum: Patient.getUserSerNum()})
+            RequestToServer.sendRequestWithResponse('CheckCheckin', {PatientSerNum: Patient.getPatientSerNum()})
                 .then(function(response) {
                     r.resolve(response.Data.AttemptedCheckin);
                 })
@@ -423,7 +422,7 @@
             var r = $q.defer();
 
             var objectToSend = {};
-            objectToSend.PatientSerNum = Patient.getUserSerNum();
+            objectToSend.PatientSerNum = Patient.getPatientSerNum();
 
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
                 .then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})

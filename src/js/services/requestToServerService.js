@@ -8,9 +8,9 @@
 var myApp = angular.module('MUHCApp');
 
 
-myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
+myApp.service('RequestToServer',['Patient', 'UserAuthorizationInfo', 'EncryptionService',
     'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params',
-    function( UserAuthorizationInfo, EncryptionService, FirebaseService,
+    function(Patient, UserAuthorizationInfo, EncryptionService, FirebaseService,
               Constants, UUID, ResponseValidator, Params){
 
         let firebase_url = FirebaseService.getDBRef();
@@ -44,6 +44,10 @@ myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
                 'AppVersion': Constants.version(),
                 'Timestamp':firebase.database.ServerValue.TIMESTAMP
             };
+            // Add a target patient if the request type is for patient data
+            // TODO Fetch from a dedicated service once the profile selector is added
+            if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) request_object.TargetPatientID = Patient.getPatientSerNum();
+
             let reference = referenceField || 'requests';
             let pushID =  firebase_url.child(reference).push(request_object);
             return pushID.key;

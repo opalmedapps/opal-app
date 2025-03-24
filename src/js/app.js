@@ -158,7 +158,7 @@ function initialization($state, $stateParams, $q, $rootScope, $translate, Patien
 
     $rootScope.$on('$stateChangeStart',function(event,toState,toParams)
     {
-        let serialNum = Patient.getUserSerNum();
+        let serialNum = Patient.getPatientSerNum();
         if((typeof serialNum === 'undefined'|| serialNum === '')&&toState.name === 'Home')
         {
             $location.path('/init');

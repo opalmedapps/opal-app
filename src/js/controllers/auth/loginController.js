@@ -110,7 +110,7 @@
             savedEmail = $window.localStorage.getItem('Email');
             if(savedEmail) vm.email = savedEmail;
 
-            patientSerNum = Patient.getUserSerNum();
+            patientSerNum = Patient.getPatientSerNum();
 
             //Locked out alert
             if (patientSerNum) Toast.showToast({
@@ -224,7 +224,7 @@
                 $state.go('loading');
             })
             .catch(function (error) {
-                if (error.Code === Params.REQUEST.ENCRYPTION_ERROR || error.code === "PERMISSION_DENIED" ) {
+                if (error.Code === Params.REQUEST.CODE.ENCRYPTION_ERROR || error.code === "PERMISSION_DENIED" ) {
                     warnTrustedError(error);
                     loginAsUntrustedUser(deviceID);
                 }
@@ -310,7 +310,7 @@
                         vm.alert.message = "ERROR_NETWORK";
                     });
                     break;
-                case Params.REQUEST.ENCRYPTION_ERROR:
+                case Params.REQUEST.CODE.ENCRYPTION_ERROR:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "PASSWORD_SERVER_ERROR";

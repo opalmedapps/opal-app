@@ -42,7 +42,7 @@ angular.module('MUHCApp')
 	};
 	scope.submit = function()
 	{
-        var patientSerNum = Patient.getUserSerNum();
+        var patientSerNum = Patient.getPatientSerNum();
         var edumaterialControlSerNum = scope.eduMaterialControlSerNum;
         RequestToServer.sendRequest('EducationalMaterialRating',{'PatientSerNum':patientSerNum,'EducationalMaterialControlSerNum':edumaterialControlSerNum,'RatingValue':scope.ratingValue});
         scope.submitted = true;
