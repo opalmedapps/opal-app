@@ -108,18 +108,20 @@ For more information about versioning, please read [Versioning](https://gitlab.c
     ```
     These commands will create a new branch called `new_branch_name` from the original `staging` branch.
 
-3. Install version 16 of [Node.js](https://nodejs.org/en/download/releases/) (look for the last iteration of 16.X.X).
-   If unsure which file to download, check the file name and extension of the recommended download on their home page
-   (e.g. `.msi` for Windows).
-   If you already have Node.js on your machine, or would like more flexibility in installing different versions of Node,
-   you may want to install the [Node Version Manager](https://github.com/nvm-sh/nvm) or
-   [Node Version Manager for Windows](https://github.com/coreybutler/nvm-windows) instead.
-   Verify that Node is installed by running `node -v`.
+3. Install the [Node Version Manager for Mac](https://github.com/nvm-sh/nvm) or
+   [Node Version Manager for Windows](https://github.com/coreybutler/nvm-windows) (`nvm`).
+   Then, use `nvm` to install and use version 16.14.0 of Node:
+   - `nvm list`
+   - `nvm install 16.14.0`
+   - `nvm use 16.14.0`
+   - `nvm list`
+   
+   Verify that Node was correctly set up by running `node -v`.
    A few notes:
-   - If you see the current version of the Node runtime installed after running `node -v`, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
+   - If you see the current version of the Node runtime installed after running `node -v`, then all is good! Otherwise please consult nvm/Node's troubleshooting manual or Google the error that occurs.
    - This installation also installs the Node.js package manager [npm](https://docs.npmjs.com/getting-started/what-is-npm). 
      This package manager is in charge of installing all the libraries and dependencies required by the app. 
-   - The main/description file for a Node.js application is the [package.json](./package.json) file. This file states all the dependencies for the app and the versions for each of them. _npm_'s job is to manage these dependencies.
+   - The main description file for a Node.js application is the [package.json](./package.json) file. This file states all the dependencies for the app and the versions for each of them. _npm_'s job is to manage these dependencies.
 
 4. Install `cordova` globally. 
    **Note: you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access. 
