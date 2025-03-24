@@ -299,6 +299,7 @@
         }
 
         function goToCheckinAppointments(todaysAppointments) {
+            if (vm.allCheckedIn || vm.no_appointments) return;
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }

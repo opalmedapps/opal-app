@@ -261,6 +261,12 @@
             switch (error.code) {
                 case "auth/invalid-email":
                 case "auth/wrong-password":
+                    $timeout(function(){
+                        vm.alert.type='danger';
+                        vm.alert.message="INVALID_PASSWORD";
+                        vm.loading = false;
+                    });
+                    break;
                 case "auth/user-not-found":
                     $timeout(function(){
                         vm.alert.type='danger';

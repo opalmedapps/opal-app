@@ -18,7 +18,7 @@
                 </div>
             </ons-list-item>
         </ons-list>
-        <ons-list class="settings-list" ng-hide="edu.tableOfContents||edu.edumaterial.Type === 'Video'||edu.isIndividualHtmlPage">
+        <ons-list class="settings-list" ng-hide="edu.tableOfContents||edu.edumaterial.Type === 'Video'||edu.edumaterial.Type === 'Vidéo'||edu.isIndividualHtmlPage">
             <ons-list-item class="item" ng-click="edu.goToEducationalMaterial()" style="background-color: #F9F9F9; border: none !important;">
                 <div align="center">
                     <div>
@@ -46,7 +46,7 @@
                 </ons-row>
             </ons-list-item >
         </ons-list>
-        <ons-list class="settings-list" ng-if="edu.edumaterial.Type == 'Video'">
+        <ons-list class="settings-list" ng-if="edu.edumaterial.Type === 'Video' || edu.edumaterial.Type === 'Vidéo'">
             <ons-list-item class="item">
                 <div align="center" class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item" ng-src="{{edu.edumaterial.Url|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
