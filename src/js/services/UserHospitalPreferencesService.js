@@ -19,7 +19,7 @@
             getHospitalAcronym: getHospitalAcronym,
             getHospitalAllowedModules: () => selectedHospital ? selectedHospital.modules : Params.allowedModulesBeforeLogin,
             getHospitalByCode: getHospitalByCode,
-            getHospitalCode: () => selectedHospital,
+            getHospitalCode: () => selectedHospital?.uniqueHospitalCode,
             getHospitalFullName: getHospitalFullName,
             getHospitalListForDisplay: getHospitalListForDisplay,
             initializeHospital: initializeHospital,

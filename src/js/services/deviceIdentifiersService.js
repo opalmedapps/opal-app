@@ -107,7 +107,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             };
 
             localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
-            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+            localStorage.removeItem(EncryptionService.getStorageKey());
         }
     };
 }]);
