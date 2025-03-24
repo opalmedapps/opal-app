@@ -84,7 +84,7 @@
         function openTeam() {
             navigator.pushPage(
                 './views/templates/content.html',
-                {contentType: 'about', title: 'TITLE_ABOUT'},
+                {contentType: 'about', title: 'ABOUT_APP'},
             );
         }
     }
