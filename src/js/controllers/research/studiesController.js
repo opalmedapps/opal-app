@@ -47,17 +47,7 @@
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();
 
-            Studies.getStudies()
-                .then(function (studies) {
-                    vm.loading = false;
-                    vm.studies = studies;
-                    vm.noStudies = vm.studies.length === 0
-                })
-                .catch(function () {
-                    vm.loading = false;
-                    vm.studies = [];
-                    vm.noStudies = true;
-                });
+            loadStudies();
 
             //grab the language
             vm.language = UserPreferences.getLanguage();
@@ -85,6 +75,19 @@
         function openInfoPage() {
             NavigatorParameters.setParameters({ Navigator: navigatorName, subView: 'studies' });
             navigator.pushPage('views/tabs/info-page-tabs.html');
+        }
+
+        async function loadStudies() {
+            try {
+                let studies = await Studies.getStudies();
+                vm.loading = false;
+                vm.studies = studies;
+                vm.noStudies = vm.studies.length === 0;
+            } catch {
+                vm.loading = false;
+                vm.studies = [];
+                vm.noStudies = true;
+            }
         }
 
         function openStudy(study) {
