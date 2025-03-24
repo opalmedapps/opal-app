@@ -141,7 +141,7 @@ For more information about versioning, please read [Versioning](https://gitlab.c
        3. Compile the code to an older version of JavaScript using [babel](https://babeljs.io/), which allows us to use
        the latest features from JavaScript without worrying about JavaScript compatibility on patients' devices.
        4. Optimize the code in different ways.
-       For more information on _webpack_ see: https://survivejs.com/webpack/what-is-webpack/
+       For more information on _webpack_ see: <https://survivejs.com/webpack/what-is-webpack/>
    - [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) is a web server which is used to serve _webpack_'s bundles
      from localhost while working on development.
 
@@ -167,14 +167,14 @@ For more information about versioning, please read [Versioning](https://gitlab.c
       npm run build:web --env=dev
       ```
 
-    For more information on `webpack-dev-server`, go to: https://webpack.js.org/guides/development/ under the `webpack-dev-server` section.
+    For more information on `webpack-dev-server`, go to: <https://webpack.js.org/guides/development/> under the `webpack-dev-server` section.
 
 6. Try logging in; navigate to the login page and enter the following credentials:
 
     ```plain
     email: marge@opalmedapps.ca
     password: 12345Opal!!
-    hospital: McGill University Health Centre (MUHC)
+    hospital: Établissement médical Opal (ÉMO)
     security answer (depending on the question): red, superman, meg
     ```
 
@@ -220,8 +220,8 @@ If you want an alternative to using webpack-dev-server for serving the Opal web 
 1. Make sure you have followed the steps on [Installing, building, and serving the mobile web code](#installing-building-and-serving-the-web-code).
 
 2. Install and set up Cordova for the desired target platforms by following the steps in the Android and iOS cordova environments: **Note: iOS may only be built by a machine with macOS as the operating system**
-    - **Android**: https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html
-    - **iOS**: https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html
+    - **Android**: <https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html>
+    - **iOS**: <https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html>
 
     Create an empty `www` folder in your project. Otherwise, you may get the following error from Cordova: `Current working directory is not a Cordova-based project.` This folder may be deleted and re-created if needed.
 
