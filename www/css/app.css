@@ -19,7 +19,7 @@
  */
 @font-face {
     font-family: font;
-    src: url("../fonts/SanFranciscoFont-master/SanFranciscoText-Regular.otf");
+    src: url("../fonts/SanFranciscoFont-master/SanFranciscoDisplay-Regular.otf");
 
 }
 
@@ -1765,10 +1765,10 @@ Button appointments
 .fontTitleLarge{
   font-size: 21px;
 }
-.fontDescXLarge{
+.fontDescXlarge{
     font-size: 23px;
 }
-.fontTitleXLarge{
+.fontTitleXlarge{
     font-size: 24px;
 }
 /*

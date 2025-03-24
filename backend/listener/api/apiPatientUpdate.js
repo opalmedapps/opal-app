@@ -4,8 +4,9 @@ var sqlInterface = require('./sqlInterface.js');
 var utility = require('./../utility/utility.js');
 var validate = require('./../utility/validate.js');
 var queries = require('./../sql/queries.js');
-var logger = require('./../logs/logger.js')
-
+var logger = require('./../logs/logger.js');
+const fs = require('fs');
+const config = require('../config.json');
 /**
  *@name login
  *@requires sqlInterface
@@ -131,4 +132,13 @@ exports.logActivity = function (requestObject) {
 
 exports.getQuestionnaires = function (requestObject) {
     return sqlInterface.getQuestionnaires(requestObject);
+};
+
+exports.getPatientsForPatientsMembers = function ()
+{
+  return new Promise((resolve, reject)=>{
+      sqlInterface.runSqlQuery(queries.getPatientForPatientMembers(),[]).then((members)=>{
+         resolve({Data:members});
+      }).catch((err) => reject({Response:error, Reason:err}));
+  });
 };
