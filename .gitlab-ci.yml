@@ -66,11 +66,12 @@ check dependencies:
   rules:
     - when: always
   script:
-    - npm -v
-    - npm ci --cache .npm --prefer-offline
+    - curl -s -X GET -H "PRIVATE-TOKEN:$GITLAB_TOKEN" "${CI_API_V4_URL}/user" 
     - echo $CI_COMMIT_AUTHOR
     - echo $GITLAB_USER_NAME
     - echo $GITLAB_USER_EMAIL
+    - npm -v
+    - npm ci --cache .npm --prefer-offline
 
 # Sets a new version number for the app when committing to the default branch
 increment version:
