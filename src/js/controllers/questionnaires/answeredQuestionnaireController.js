@@ -57,7 +57,7 @@
         vm.submitAllowed = false;   // if all questions are completed, then the user is allowed to submit.
         vm.submitButtonText = '';
         vm.submitInstructions = '';
-        vm.submittedByNames = {};  // Names interpolated into a translated string to confirm who's submitting the answers
+        vm.submittedByNames = {};  // Names used to show who's submitting the answers, and for which patient
 
         // functions that can be seen from view, sorted alphabetically
         vm.editQuestion = editQuestion;

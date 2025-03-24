@@ -69,7 +69,7 @@
         </div>
 
         <!-- Submit button -->
-        <div align="center" style="margin-top:15px;margin-bottom:10px">
+        <div align="center" style="margin-top:15px; margin-bottom:10px">
             <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()"
                 ng-class="fontSizeDesc"
                 ng-disabled="!vm.submitAllowed || (vm.password == '' && vm.requirePassword) || (vm.isConsent && vm.consentStatus == null)">
@@ -77,7 +77,7 @@
             </button>
         </div>
         <!-- User's name, and patient's name (if different), to make it clear who's submitting the questionnaire -->
-        <div class="light-grey-comment" style="padding-left: 10px; padding-right: 10px;">
+        <div class="light-grey-comment" style="padding: 0 10px">
             {{ (vm.isAnsweringAsSelf ? 'QUESTIONNAIRE_SUBMIT_AS_SELF' : 'QUESTIONNAIRE_SUBMIT_AS_OTHER') | translate:vm.submittedByNames }}
         </div>
         <br>
