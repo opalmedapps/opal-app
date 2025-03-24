@@ -15,16 +15,11 @@
         .module('MUHCApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['NavigatorParameters'];
+    InfoTabController.$inject = ['$filter', '$scope', 'NavigatorParameters'];
 
     /* @ngInject */
-    function InfoTabController(NavigatorParameters) {
+    function InfoTabController($filter, $scope, NavigatorParameters) {
         let vm = this;
-        vm.error = null;
-        vm.message = null;
-        vm.apiData;
-        vm.relationshipTypes;
-
         vm.view = {};
 
         const views = {
