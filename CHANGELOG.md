@@ -1,3 +1,24 @@
+## [1.24.2](https://gitlab.com/opalmedapps/qplus/compare/v1.24.1...v1.24.2) (2024-01-16)
+
+
+### Bug Fixes
+
+* **deps:** upgrade crypto-js to 4.2.0 and update the parameters of the pbkdf2 function ([59e6fdb](https://gitlab.com/opalmedapps/qplus/commit/59e6fdb89010bf6c3ffe238bf21ec84fad44d881))
+
+## [1.24.1](https://gitlab.com/opalmedapps/qplus/compare/v1.24.0...v1.24.1) (2024-01-12)
+
+
+### Bug Fixes
+
+* remove unwanted android exports added by plugins ([a04b7ca](https://gitlab.com/opalmedapps/qplus/commit/a04b7ca7ff264d58804251ff6bd0e66cfdc5c6f1))
+
+# [1.24.0](https://gitlab.com/opalmedapps/qplus/compare/v1.23.1...v1.24.0) (2024-01-12)
+
+
+### Features
+
+* adjust databank consent creation logic with new questions ([5c7e83a](https://gitlab.com/opalmedapps/qplus/commit/5c7e83a42a8b3677b056c571659cdf5aa23af21c))
+
 ## [1.23.1](https://gitlab.com/opalmedapps/qplus/compare/v1.23.0...v1.23.1) (2024-01-10)
 
 

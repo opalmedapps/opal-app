@@ -46,8 +46,14 @@
                         <button class="button button--large shadow-2 button--large-green security-question--button"
                                 ng-disabled="security.submitting || security.tooManyAttempts"
                                 ng-click="security.submitAnswer(security.answer)">
-                            {{"CONTINUE"|translate}}
+                            <span ng-if="!security.submitting">
+                                {{"CONTINUE"|translate}}
+                            </span>
+                            <span ng-if="security.submitting">
+                                <ons-icon icon="ion-load-d" spin="true"></ons-icon>
+                            </span>
                         </button>
+
                         <uib-alert class="security-question--alert" ng-show="security.alert.type && security.alertShow"
                                    type="{{security.alert.type}}">
                             {{security.alert.content|translate}}

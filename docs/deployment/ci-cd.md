@@ -36,9 +36,9 @@ Any commits to the default branch are handled as follows:
 
 - The first pipeline runs on the pushed commit
   - Stage 1: `check`
-      - `check dependencies`: The npm dependencies are installed, as a smoke test.
-        The build will not proceed if dependencies cannot be installed, and a clear failing test alerts developers
-        to this issue.
+    - `check dependencies`: The npm dependencies are installed, as a smoke test.
+      The build will not proceed if dependencies cannot be installed, and a clear failing test alerts developers
+      to this issue.
   - Stage 2: `prepare`
     - `increment version`: To prepare to build and deploy a new release of the app,
       [semantic-release](https://github.com/semantic-release/semantic-release) runs to increment the build number.
@@ -67,6 +67,7 @@ Any commits to the default branch are handled as follows:
       (`apk` and `ipa`) are automatically deployed to the team via Firebase App Distribution for Opal Dev,
       which notifies them by email that a new version is available.
       Permission to execute this job is restricted via the use of protected environments (more details below).
+    - `deploy web`: The web app as well as its landing page are uploaded to the FTP server corresponding to the environment.
   - Stage 4: `post`
     - `build and deploy QA`: Optional manual trigger job that can be used to launch a [downstream child pipeline](https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html#parent-child-pipelines)
       to deploy the app to the QA environment. If launched, the same jobs in this current "second pipeline" run again,
@@ -83,9 +84,9 @@ Environment protection is applied to the deployment jobs using the value of the 
 
 The environment protection settings are configured as follows:
 
-  - The `semantic-release` user is authorized to deploy to the `dev` environment, since this user is the one that triggers
+- The `semantic-release` user is authorized to deploy to the `dev` environment, since this user is the one that triggers
 the automatic deployment pipeline (the "second pipeline" in workflow #2 above).
-  - The `qa` environment is restricted to users who are authorized to promote a version and deploy it to QA.
+- The `qa` environment is restricted to users who are authorized to promote a version and deploy it to QA.
 
 Note that the `environment` keyword cannot be used directly in conjunction with the `trigger` keyword, which is why the
 `build and deploy QA` job is not protected directly. [Reference](https://stackoverflow.com/questions/70768874/gitlab-ci-using-environment-key-with-trigger-in-job)
