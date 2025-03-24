@@ -19,7 +19,6 @@ describe('CalendarController', function() {
     var UserPreferences;
     var $scope;
     var $timeout;
-    var $window;
     var Appointments;
     var $location;
     var $anchorScroll;
@@ -33,13 +32,6 @@ describe('CalendarController', function() {
         Navigator = _Navigator_;
         UserPreferences = _UserPreferences_;
         $timeout = _$timeout_;
-        $window = {
-            navigator: {
-                pushPage: function() {
-                    return true;
-                }
-            }
-        };
 
         $location = {
             hash: function(stuff) {
@@ -84,7 +76,7 @@ describe('CalendarController', function() {
 
         $controller = _$controller_;
         controller = $controller('CalendarController', { Navigator: Navigator, $scope: $scope,
-            UserPreferences: _UserPreferences_, $window: $window, Appointments: Appointments, $location: $location, $anchorScroll: $anchorScroll});
+            UserPreferences: _UserPreferences_, Appointments: Appointments, $location: $location, $anchorScroll: $anchorScroll});
 
     }));
 
@@ -141,25 +133,12 @@ describe('CalendarController', function() {
 
     it('should go to appointment', function(){
         var spy = spyOn(Appointments, 'readAppointmentBySerNum');
-        var spy2 = spyOn($window.navigator, 'pushPage');
         $timeout.flush();
 
         controller.goToAppointment(controller.appointments[0]);
         expect(spy).toHaveBeenCalledTimes(0);
-        expect(spy2).toHaveBeenCalled();
 
         controller.goToAppointment(controller.appointments[1]);
         expect(spy).toHaveBeenCalled();
-        expect(spy2).toHaveBeenCalled();
     });
-
-    it('should go to calendar options', function(){
-        var spy = spyOn($window.navigator, 'pushPage');
-        $timeout.flush();
-
-        controller.goToCalendarOptions();
-        expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledWith('./views/personal/appointments/calendar-options.html')
-    });
-
 });

@@ -12,14 +12,12 @@
         .module('MUHCApp')
         .controller('ChangeSettingController', ChangeSettingController);
 
-    ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'Navigator', '$window', 'Params',
-        'EncryptionService'];
+    ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer', '$timeout', 'Navigator',
+        'Params', 'EncryptionService'];
 
     /* @ngInject */
-    function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout,
-                                    UserAuthorizationInfo, Navigator, $window, Params,
-                                    EncryptionService) {
+    function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout, Navigator,
+                                     Params, EncryptionService) {
         let vm = this;
 
         // Values set by the password strength checker directive
