@@ -8,8 +8,8 @@
                     <header>
                         <span class="item-title" ng-class="fontSizeTitle">{{vm.app["AppointmentType_"+vm.language]}}</span>
                     </header>
-                    <p class="item-desc" ng-class="fontSizeDesc" ng-if="vm.app['Status'] = 'Deleted'" style="color:rgb(243, 33, 33)"> 
-                        {{"APPOINTMENT_DELETED"|translate}}
+                    <p class="item-desc" ng-class="fontSizeDesc" ng-if="vm.app['Status'] = 'Deleted' || vm.app['Status'] = 'Cancelled'" style="color:rgb(243, 33, 33)"> 
+                        {{"APPOINTMENT_CANCELLED"|translate}}
                     </p>
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ResourceDescription}}</p>
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ScheduledStartTime|date:'mediumNoSeconds'}}</p>

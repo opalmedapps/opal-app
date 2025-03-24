@@ -7,7 +7,7 @@
   "APPOINTMENT": "Appointment",
   "APPOINTMENTS": "Appointments",
   "APPOINTMENT_ABOUT": "About this appointment",
-  "APPOINTMENT_DELETED": "This appointment has been deleted",
+  "APPOINTMENT_CANCELLED": "This appointment has been cancelled",
   "APPOINTMENT_OPEN_ERROR": "An error occurred while opening this appointment.",
   "APPOINTMENT_ROOM": "Appointment Room",
   "APPVERSION": "App Version",
