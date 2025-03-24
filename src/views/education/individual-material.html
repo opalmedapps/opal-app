@@ -2,15 +2,10 @@
 <ons-page ng-controller="IndividualMaterialController as edu">
     <generic-toolbar title="{{edu.edumaterial.Type}}" style-class="fontSizeTitle">
         <left-content>
-            <div class="left">
-                <ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button>
-            </div>
+            <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
         </left-content>
         <right-content>
-            <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial"
-                ng-if="edu.isShareable()">
-                <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
-            </ons-toolbar-button>
+            <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial" ng-if="edu.isShareable()">
         </right-content>
     </generic-toolbar>
     <div id="{{edu.recursive_step}}" ng-init="edu.scrollDown()" style="height: 100%; width: auto; overflow: auto;">

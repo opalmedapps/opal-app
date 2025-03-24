@@ -1,4 +1,3 @@
-import { json2xml } from "xml-js";
 
 (function () {
     'use strict';
@@ -29,8 +28,8 @@ import { json2xml } from "xml-js";
                         </iframe>
 
                         <!-- video format for 'mp4', 'ogv' and 'webm' -->
-                        <video controls ng-show="videoTag" autoplay preload="metadata">
-                            <source ng-src="{{edumaterialUrl|trustThisUrl}}" type="video/{{fileExt}}">
+                        <video controls ng-show="videoTag" preload="metadata">
+                            <source ng-src="{{formatedUrl|trustThisUrl}}" type="video/{{fileExt}}">
                         </video>
 
                         <!-- ERROR MESSAGE -->
@@ -50,6 +49,9 @@ import { json2xml } from "xml-js";
             scope.videoTag = false;
             scope.showError = false;
 
+            // a new url is just for iphone device to get the poster when time is loading at 0.05s
+            scope.formatedUrl = scope.edumaterialUrl;
+
             scope.$watch('edumaterialUrl', function () {
                 try {
                     // get the material's file extension
@@ -58,16 +60,15 @@ import { json2xml } from "xml-js";
                     if ((scope.edumaterialUrl.indexOf('youtube') !== -1) || (scope.edumaterialUrl.indexOf('vimeo') !== -1)) {
                         scope.iframeTag = true;
                     }
-                    else if (['mp4', 'ogv', 'webm'].indexOf(scope.fileExt) !== -1) {
+                    else if (['mp4', 'ogv', 'webm'].indexOf(scope.fileExt.toLowerCase()) !== -1) {
                         scope.videoTag = true;
                         /**
                         * Video tag with or without autoplay depending on the device.
                         * For iPhones it is set to autoplay so the poster image automatically appears on initial load. 
                         * iPhones will prevent the video from auto playing, but the poster image appears as the result.
                         */
-                        if(ons.platform.isAndroid()){
-                            //element.children("video").attr('autoplay', 'autoplay');
-                            element.children("video").removeAttr('autoplay');
+                        if(ons.platform.isIOS()){
+                            scope.formatedUrl = scope.formatedUrl + "#t=0.05";
                         }
                     }
                     else {
