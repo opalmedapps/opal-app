@@ -107,7 +107,6 @@
 
             if (!params.hasOwnProperty('answerQuestionnaireId')){
                 vm.loadingQuestionnaire = false;
-
                 handleLoadQuestionnaireErr();
             }
 
@@ -175,10 +174,9 @@
          * @param {boolean} bySwipe if it is activated by swiping to the right then True
          * @desc This function is used to update the questionnaire status when beginning a questionnaire and, in case that the user uses the button "begin" instead of swiping, move the carousel
          */
-        function beginQuestionnaire(bySwipe){
-
+        async function beginQuestionnaire(bySwipe){
             // if the questionnaire was not started yet, start it
-            if (vm.questionnaireStart){
+            if (vm.questionnaireStart) {
                 // we are no longer at the home page
                 vm.questionnaireStart = false;
 
@@ -188,32 +186,22 @@
 
                 vm.loadingQuestionnaire = true;
 
-                // update status for the questionnaire of service and listener / database
-                Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, vm.questionnaire.status, oldStatus)
-                    .then(function(){
-                        $timeout(function(){
-                            // set the indices (mere formality)
-                            vm.startIndex = 1;  // skip questionnaire home page
-                            vm.sectionIndex = 0;
-                            vm.questionIndex = 0;
-
-                            vm.loadingQuestionnaire = false;
-
-                            if (!bySwipe){
-                                next();
-                            } else {
-                                // this is to force update the carousel even by swiping it
-                                vm.carousel.setActiveCarouselItemIndex(vm.startIndex);
-                            }
-
-                            vm.carousel.refresh();
-                        });
-                    })
-                    .catch(function(){
+                try {
+                    await Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, vm.questionnaire.status, oldStatus);
+                    $timeout(() => {
+                        // set the indices (mere formality)
+                        vm.startIndex = 1;  // skip questionnaire home page
+                        vm.sectionIndex = 0;
+                        vm.questionIndex = 0;
                         vm.loadingQuestionnaire = false;
 
-                        handleLoadQuestionnaireErr();
+                        !bySwipe ? next() : vm.carousel.setActiveCarouselItemIndex(vm.startIndex);
+                        vm.carousel.refresh();
                     });
+                } catch (error) {
+                    vm.loadingQuestionnaire = false;
+                    handleLoadQuestionnaireErr();
+                }
             }
         }
 

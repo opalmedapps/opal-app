@@ -46,11 +46,11 @@
         let waitingForSavingAnswer = false;
 
         // this is redundant but written for clarity, ordered alphabetically
-        let service = {
+        return {
             clearAllQuestionnaire: clearAllQuestionnaire,
             findInProgressQuestionIndex: findInProgressQuestionIndex,
             getCarouselItems: () => carouselItems,
-            getCurrentQuestionnaire: getCurrentQuestionnaire,
+            getCurrentQuestionnaire: () => currentQuestionnaire,
             getNumberOfUnreadQuestionnaires: getNumberOfUnreadQuestionnaires,
             getQuestionnaireCount: getQuestionnaireCount,
             getQuestionnaireList: getQuestionnaireList,
@@ -63,13 +63,6 @@
             setQuestionnaireList: setQuestionnaireList,
             updateQuestionnaireList: updateQuestionnaireList,
         };
-
-        return service;
-
-        // //////////////
-        /*
-            Public functions
-         */
 
         /**
          * @name findInProgressQuestionIndex
@@ -155,35 +148,17 @@
          * @param {int} answerQuestionnaireId this is the qp_ser_num or the answerQuestionnaireId for the DB (unique identifier for a questionnaire sent to a user)
          * @returns {Promise}
          */
-        function requestQuestionnaire(answerQuestionnaireId){
-            let currentQuestionnaireInService = getCurrentQuestionnaire();
+        async function requestQuestionnaire(answerQuestionnaireId){
 
             // if the current questionnaire is requested, return it.
-            if (currentQuestionnaireInService.qp_ser_num === answerQuestionnaireId){
-                return Promise.resolve({Success: true, Location: 'App'});
-            }
+            if (currentQuestionnaire.qp_ser_num === answerQuestionnaireId) return {Success: true, Location: 'App'};
 
             // re-initiate the current questionnaire related variables
             clearCurrentQuestionnaire();
-
-            return QuestionnaireDataService.requestQuestionnaire(answerQuestionnaireId)
-                .then(function(responseQuestionnaire){
-
-                    setQuestionnaire(responseQuestionnaire);
-
-                    return {Success: true, Location: 'Server'};
-                });
+            const responseQuestionnaire = await QuestionnaireDataService.requestQuestionnaire(answerQuestionnaireId);
+            setQuestionnaire(responseQuestionnaire);
+            return {Success: true, Location: 'Server'};
         }
-
-        /**
-         * @name getCurrentQuestionnaire
-         * @desc this is a getter for the current questionnaire
-         * @returns {object} the current questionnaire
-         */
-        function getCurrentQuestionnaire(){
-            return currentQuestionnaire;
-        }
-
         /**
          * @name updateQuestionnaireStatus
          * @desc this function updates the status of a given questionnaire in the app and also in the database.
@@ -194,18 +169,11 @@
          * @return {Promise}
          *
          */
-        function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus){
-
-            return QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus)
-                .then(function (response) {
-                    let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus);
-
-                    if (!isFailure){
-                        throw new Error("Error updating status internal to app");
-                    }
-
-                    return {Success: true, Location: 'Server'};
-                });
+        async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus){
+            await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus);
+            let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus);
+            if (!isFailure) throw new Error("Error updating status internal to app");
+            return {Success: true, Location: 'Server'};
         }
 
         /**
@@ -372,17 +340,6 @@
         }
 
         /**
-         * @name getQuestionnaireName
-         * @desc This function is used for the notifications and only have one purpose: return a fixed string.
-         *      The current implementation have modified the notificationsService to not need this. But just in case, left it here.
-         *      To use this, add the following to the service variable: getQuestionnaireName: getQuestionnaireName
-         * @returns {string} the questionnaire name hardcoded.
-         */
-        function getQuestionnaireName(){
-            return notifConstants.QUESTIONNAIRE_NAME;
-        }
-
-        /**
          * @name clearAllQuestionnaire
          * @desc this function re-initiate all the questionnaires related variables. Also used in cleanUpService.js
          */
@@ -394,17 +351,6 @@
             clearCurrentQuestionnaire();
         }
 
-        /*
-            Private functions
-         */
-
-        /**
-         * @name clearCarouselItems
-         * @desc this private function resets the carouselItems array
-         */
-        function clearCarouselItems(){
-            carouselItems = [];
-        }
 
         /**
          * @name setCarouselItems
@@ -412,7 +358,7 @@
          *      Note: this assumes that the questionnaire is ordered when sent by the listener
          */
         function setCarouselItems(){
-            clearCarouselItems();
+            carouselItems = [];
 
             // the top level properties are already checked by setQuestionnaire (when we first get the questionnaire)
 
@@ -425,20 +371,6 @@
                     break;
                     // TODO: error handling: preferably going back to the questionnaire list and display an error message for the user to try again in some amount of time
                 }
-
-                // Note: the following should be uncommented for when the questionnaire has more than 1 section in OpalAdmin
-                //
-                // currentQuestionnaire.sections[i].section_position = parseInt(currentQuestionnaire.sections[i].section_position);
-                //
-                // // format carousel
-                // let sectionObjectForCarousel = {
-                //     type: 'section',
-                //     position: currentQuestionnaire.sections[i].section_position,
-                //     instruction: currentQuestionnaire.sections[i].section_instruction,
-                //     title: currentQuestionnaire.sections[i].section_title
-                // };
-                //
-                // carouselItems.push(sectionObjectForCarousel);
 
                 // loop through questions
                 for (let j = 0; j < currentQuestionnaire.sections[i].questions.length; j++) {
@@ -538,14 +470,7 @@
 
             // set the questionnaire status to an integer for easier comparison
             questionnaire.status = parseInt(questionnaire.status);
-
-            if (isNaN(questionnaire.status)){
-                return false;
-            }
-
-            if (!Array.isArray(questionnaire.sections)){
-                return false;
-            }
+            if (isNaN(questionnaire.status) || !Array.isArray(questionnaire.sections)) return false;
 
             return true;
         }
@@ -566,10 +491,7 @@
                 return false;
             }
 
-            if (!Array.isArray(section.questions)){
-                return false;
-            }
-
+            if (!Array.isArray(section.questions)) return false;
             return true;
         }
 
