@@ -14,7 +14,7 @@
     </author>
     <content src="index.html"/>
     <!-- Cordova Allow List -->
-    <access origin="*"/>
+    <access origin="https://www.depdocs.com"/>
     <allow-navigation href="https://www.youtube.com/*"/>
     <allow-intent href="http://*/*"/>
     <allow-intent href="https://*/*"/>
