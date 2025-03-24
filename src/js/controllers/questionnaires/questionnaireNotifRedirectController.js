@@ -12,6 +12,7 @@
         .controller('QuestionnaireNotifRedirectController', QuestionnaireNotifRedirectController);
 
     QuestionnaireNotifRedirectController.$inject = [
+        '$scope',
         '$filter',
         '$timeout',
         'NativeNotification',
@@ -21,7 +22,7 @@
     ];
 
     /* @ngInject */
-    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, NavigatorParameters,
+    function QuestionnaireNotifRedirectController($scope, $filter, $timeout, NativeNotification, NavigatorParameters,
                                                   Questionnaires, Utility) {
         let vm = this;
 

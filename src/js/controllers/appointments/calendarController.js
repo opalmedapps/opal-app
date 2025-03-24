@@ -21,10 +21,10 @@
         .module('MUHCApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params'];
+    CalendarController.$inject = ['$scope', 'Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params'];
 
     /* @ngInject */
-    function CalendarController(Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params) {
+    function CalendarController($scope, Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params) {
         const vm = this;
 
         let todaysTimeMilliseconds;

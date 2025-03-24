@@ -23,12 +23,14 @@
         .controller('IndividualAnnouncementController', IndividualAnnouncementController);
 
     IndividualAnnouncementController.$inject = [
+        '$scope',
         'NavigatorParameters',
         'Announcements'
     ];
 
     /* @ngInject */
     function IndividualAnnouncementController(
+        $scope,
         NavigatorParameters,
         Announcements
     ) {

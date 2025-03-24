@@ -8,9 +8,9 @@
 		.module('MUHCApp')
 		.controller('PatientTestResultsController', PatientTestResultsController);
 
-	PatientTestResultsController.$inject = ['$filter','NavigatorParameters','PatientTestResults','UserPreferences'];
+	PatientTestResultsController.$inject = ['$scope', '$filter','NavigatorParameters','PatientTestResults','UserPreferences'];
 
-	function PatientTestResultsController($filter, NavigatorParameters, PatientTestResults, UserPreferences) {
+	function PatientTestResultsController($scope, $filter, NavigatorParameters, PatientTestResults, UserPreferences) {
 
 		const vm = this;
 

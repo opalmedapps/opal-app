@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
-    TxTeamMessagesController.$inject = ['TxTeamMessages','NavigatorParameters', '$timeout', '$filter'];
+    TxTeamMessagesController.$inject = ['$scope', 'TxTeamMessages','NavigatorParameters', '$timeout', '$filter'];
 
     /* @ngInject */
-    function TxTeamMessagesController(TxTeamMessages, NavigatorParameters, $timeout, $filter) {
+    function TxTeamMessagesController($scope, TxTeamMessages, NavigatorParameters, $timeout, $filter) {
         var vm = this;
         vm.goToTeamMessage = goToTeamMessage;
 
