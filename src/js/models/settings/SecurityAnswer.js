@@ -5,6 +5,7 @@ import {SecurityQuestion} from "./SecurityQuestion";
  */
 export class SecurityAnswer {
     constructor({id, question}) {
+        // The questions are not translated and being assigned to both English and French question texts
         let title_en = question;
         let title_fr = question;
         this.securityAnswerSerNum = Number(id);

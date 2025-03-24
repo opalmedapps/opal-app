@@ -264,7 +264,6 @@
   "SECURITYQUESTION": "Security Question",
   "SECURITY_QUESTIONS": "Security Questions",
   "SECURITY_QUESTION_ANSWER_UPDATE_SUCCESS": "Security questions and answers updated. Signing out...",
-  "SECURITY_QUESTION_EXPIRED": "Question expired. You must select a new question.",
   "SECURITY_QUESTION_LENGTH_REQUIREMENT_1": "Your security answer should be at least",
   "SECURITY_QUESTION_LENGTH_REQUIREMENT_2": "characters long",
   "SECURITY_QUESTION_LOGOUT_WARNING": "If you make any changes, you will be logged out of Opal and you will need to log in again.",
