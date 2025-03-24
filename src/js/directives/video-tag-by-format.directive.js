@@ -5,7 +5,7 @@
         .module("MUHCApp")
         .directive("videoTagByFormat", VideoTagByFormat);
 
-    VideoTagByFormat.$inject = ['FileManagerService'];
+    VideoTagByFormat.$inject = ['FileManagerService', 'Params'];
 
     /**
      * @name VideoTagByFormat
@@ -14,7 +14,7 @@
      * @desc This directive use <iframe> or <video> tag depends on the different video format.
      * @example <video-tag-by-format></video-tag-by-format>
      */
-    function VideoTagByFormat(FileManagerService) {
+    function VideoTagByFormat(FileManagerService, Params) {
         var directive = {
             restrict: 'E',
             scope: {
@@ -29,7 +29,7 @@
                         </iframe>
 
                         <!-- video format for 'mp4', 'ogv' and 'webm' -->
-                        <video controls ng-show="videoTag" autoplay preload="metadata">
+                        <video controls ng-show="videoTag" preload="metadata">
                             <source ng-src="{{edumaterialUrl|trustThisUrl}}" type="video/{{fileExt}}">
                         </video>
 
@@ -50,24 +50,21 @@
             scope.iframeTag = false;
             scope.videoTag = false;
             scope.showError = false;
-            console.log('----1-----'+scope.edumaterialUrl);
+
             scope.$watch('edumaterialUrl', function () {
                 try {
                     // get the material's file extension
                     scope.fileExt = FileManagerService.getFileExtension(scope.edumaterialUrl);
 
-                    console.log('----2-----'+scope.fileExt);
-
                     if ((scope.edumaterialUrl.indexOf('youtube') !== -1) || (scope.edumaterialUrl.indexOf('vimeo') !== -1)) {
                         scope.iframeTag = true;
-                        console.log('----3-----'+scope.iframeTag);
                     }
                     else if (['mp4', 'ogv', 'webm'].indexOf(scope.fileExt) !== -1) {
                         scope.videoTag = true;
-                        console.log('----4-----'+scope.videoTag);
                     }
                     else {
                         scope.showError = true;
+                        scope.errorAlertType = Params.alertTypeWarning;
                     }
                 }
                 catch (error) {
