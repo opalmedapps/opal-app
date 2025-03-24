@@ -74,7 +74,6 @@
 import "jquery";
 import angular from "angular";
 import "angular-animate";
-import "angular-ui-bootstrap";
 import "../lib/ui-bootstrap-tpls-2.5.6-opal.js";
 import "angular-translate";
 import "angular-dynamic-locale";
