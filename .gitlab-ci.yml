@@ -42,7 +42,7 @@ workflow:
     # Source: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Workflows/MergeRequest-Pipelines.gitlab-ci.yml
     - if: $CI_MERGE_REQUEST_IID
     - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 
 # Project variables: the following variables must be configured in the project's CI/CD settings
