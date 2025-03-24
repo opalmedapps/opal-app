@@ -47,6 +47,7 @@
 
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
+        vm.checkInAppointments = checkInAppointments;
 
         activate();
 
@@ -105,24 +106,31 @@
          * @return void
          * @description Check-in all the appointments and update appointment array
          */
-        async function CheckInAppointments() {
-            const response = await CheckInService.attemptCheckin();
-            if(response === "NOT_ALLOWED"){
-                Toast.showToast({
-                    message: $filter('translate')("NOT_ALLOWED"),
-                });
-                vm.alert.type = Params.alertTypeWarning;
-                vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-            } else if (response === "SUCCESS") {
-                vm.alert.type = Params.alertTypeSuccess;
-                vm.checkInMessage = "CHECKED_IN";
-                vm.apps = CheckInService.getCheckInApps();
-            } else {
-                vm.alert.type = Params.alertTypeDanger;
-                vm.checkInMessage = "CHECKIN_ERROR";
-                vm.apps = CheckInService.getCheckInApps();
-                vm.error = "ERROR";
+        async function checkInAppointments() {
+            try {
+                const response = await CheckInService.attemptCheckin();
+                if(response === "NOT_ALLOWED"){
+                    Toast.showToast({
+                        message: $filter('translate')("NOT_ALLOWED"),
+                    });
+                    vm.alert.type = Params.alertTypeWarning;
+                    vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+                } else if (response === "SUCCESS") {
+                    vm.alert.type = Params.alertTypeSuccess;
+                    vm.checkInMessage = "CHECKED_IN";
+                    vm.apps = CheckInService.getCheckInApps();
+                } else {
+                    vm.alert.type = Params.alertTypeDanger;
+                    vm.checkInMessage = "CHECKIN_ERROR";
+                    vm.apps = CheckInService.getCheckInApps();
+                    vm.error = "ERROR";
+                    displayError();
+                }
+            } catch (error) {
+                console.log(error);
+                displayError();
             }
+
         }
     }
 })();
