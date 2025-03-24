@@ -1,77 +1,102 @@
 import Plotly from 'plotly.js-dist';
+import locale from 'plotly.js-locales/fr'
+
+const fontSizesMap = {
+  medium: 12,
+  large: 14,
+  xlarge: 18
+}
 
 angular.module('MUHCApp')
-  .directive('plotlyChart', ['$window', function($window) {
+  .directive('plotlyChart', ['$window', '$filter', 'UserPreferences', function($window, $filter, UserPreferences) {
     return {
       restrict: 'E',
       template: '<div></div>',
       scope: {
-        options: '='
+        data: '=',
+        yAxisLabel: '='
       },
       link: function (scope, element) {
-        var data = [{
-          x: ['2013-10-04 22:23:00', '2013-11-04 22:23:00', '2013-12-04 22:23:00', '2014-01-04 10:23:00'],
-          y: [10, 15, 13, 17],
-          type: 'scatter'
+        const data = [{
+          ...scope.data,
+          mode: 'scatter'
         }];
 
-        var selectorOptions = {
+        const selectorOptions = {
             buttons: [{
                 step: 'month',
                 stepmode: 'backward',
                 count: 1,
-                label: '1m'
+                label: $filter('translate')('CHART_ONE_MONTH_SELECTOR')
+            }, {
+                step: 'month',
+                stepmode: 'backward',
+                count: 3,
+                label: $filter('translate')('CHART_THREE_MONTHS_SELECTOR')
             }, {
                 step: 'month',
                 stepmode: 'backward',
                 count: 6,
-                label: '6m'
-            }, {
-                step: 'year',
-                stepmode: 'todate',
-                count: 1,
-                label: 'YTD'
+                label: $filter('translate')('CHART_SIX_MONTHS_SELECTOR')
             }, {
                 step: 'year',
                 stepmode: 'backward',
                 count: 1,
-                label: '1y'
+                label: $filter('translate')('CHART_YEAR_SELECTOR')
             }, {
                 step: 'all',
-            }]
+                label: $filter('translate')('CHART_ALL_RANGE_SELECTOR')
+            }],
+            x: 1,  // Position horizontally
+            xanchor: 'right'  // Align the buttons to the right side
         };        
 
-        var layout = {
+        const layout = {
+            title: {
+              text: scope.yAxisLabel,
+              x: 0,     // x position with respect to `xref` in normalized coordinates from "0" (left) to "1" (right).
+              y: 0.96,  // y position with respect to `yref` in normalized coordinates from "0" (bottom) to "1" (top).
+              xanchor: 'left',
+              yanchor: 'top',
+            },
+            font: {
+              size: fontSizesMap[UserPreferences.getFontSize()]
+            },
+            dragmode: false,
             showlegend: false,
             autosize: true,
             xaxis: {
+              autorange: true,
               showgrid: false,
-              zeroline: false,
+              zeroline: true,
               fixedrange: true,
               rangeselector: selectorOptions,
-              rangeslider: {}
+              rangeslider: {},
+              type: 'date',
+              tickformat: '%e %b %y'  // date format
             },
             yaxis: {
               showline: false,
               fixedrange: true
             },
             margin: {
-              b: 30,
+              b: 10,
               l: 30,
-              r: 30,
-              t: 30
+              r: 10,
+              t: 30,
             },
             width: $(window).innerWidth()
           };
 
-        var config = {
+        const config = {
           displayModeBar: false,
-          responsive: false,
-          displaylogo: false,
-          responsive: true
+          responsive: true,
+          scrollZoom: true,
+          locale: UserPreferences.getLanguage().toLowerCase()
         };
 
-        Plotly.newPlot(element[0], data, layout, config);
+        Plotly.register(locale);
+        Plotly.newPlot(element[0].firstChild, data, layout, config);
 
         // Add a listener to resize the chart when the screen is rotated
         // NOTE: orientationchange event is deprecated, however it might be still used by browsers with older versions.
@@ -93,7 +118,7 @@ angular.module('MUHCApp')
          */
         function resizeChart() {
           // Update the chart with its new size
-          Plotly.relayout(element[0], {width: $window.innerWidth});
+          Plotly.relayout(element[0].firstChild, {width: $window.innerWidth});
         }
       }
     }

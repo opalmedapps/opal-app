@@ -17,6 +17,11 @@ class PatientTestResultsByTypeController {
 	 */
 	loading = true;
 	/**
+	 * Settings for the lab results chart
+	 * @type {*}
+	 */
+	chartSettings = {};
+	/**
 	 * Variable to control whether to show the table view or the chart view
 	 */
 	showChart = true;
@@ -104,10 +109,22 @@ class PatientTestResultsByTypeController {
 	 */
 	#configureChart = (test) => {
 		// Non-numeric tests are not plotted (no data or axis label)
-		const data = (test.hasNumericValues) ?
-			test.results.map((testResult) => [testResult.collectedDateTime,
-			testResult.testValue]) : [];
+		// const data = (test.hasNumericValues) ?
+		// 	{
+		// 		x: test.results.map((testResult) => testResult.collectedDateTime),
+		// 		y: test.results.map((testResult) => testResult.testValue),
+		// 	} : [];
+		const data = {
+			x: [
+			  '2013-10-04 22:23:00',
+			  '2013-11-04 22:23:00',
+			  '2013-12-04 22:23:00',
+			  '2014-02-04 10:23:00'
+			],
+			y: [10, 15, 13, 17]
+		};
 		const yAxisLabel = test.hasNumericValues ? test.unitWithBrackets : "";
+		this.chartSettings = {data: data, yAxisLabel: yAxisLabel};
 	};
 
 	/**

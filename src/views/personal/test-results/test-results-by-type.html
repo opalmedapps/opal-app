@@ -75,14 +75,23 @@
                 </ons-list>
             </ons-scroller>
         </div>
-        <div ng-show="testTypeCtrl.showChart">
+        <div ng-if="testTypeCtrl.showChart
+            && testTypeCtrl.chartSettings.data.x.length > 0
+            && testTypeCtrl.chartSettings.data.y.length > 0">
 
             <!-- DISCLAIMER -->
             <labs-disclaimer></labs-disclaimer>
 
-            <plotly-chart></plotly-chart>
-
+            <plotly-chart
+                data="testTypeCtrl.chartSettings.data"
+                y-axis-label="testTypeCtrl.chartSettings.yAxisLabel">
+            </plotly-chart>
         </div>
+
+        <div ng-if="testTypeCtrl.chartSettings.data.x.length === 0 || testTypeCtrl.chartSettings.data.y.length === 0">
+            <center style="margin: 100px 5px">{{"CHART_NO_PLOT_AVAILABLE"|translate}}</center>
+        </div>
+
         <ons-list>
             <!-- SECTION HEADER -->
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list-header>
