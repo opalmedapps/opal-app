@@ -16,7 +16,6 @@ beyond the scope of only radiation oncology, making it a full-fledged, empowerme
       - [Optional dev server](#optional-dev-server)
     - [Installing, building, and serving the mobile app code](#installing-building-and-serving-the-mobile-app-code)
     - [Opal App Scripts](#opal-app-scripts)
-  - [Distributing app in staging and preprod manually](#distributing-app-in-staging-and-preprod-manually)
   - [Troubleshooting](#troubleshooting)
   - [Running the tests](#running-the-tests)
   - [Best Practices](#best-practices)
