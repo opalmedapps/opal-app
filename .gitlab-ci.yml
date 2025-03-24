@@ -22,8 +22,7 @@ variables:
   GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_DEV  # The service account providing permissions to upload to Firebase App Distribution
   FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
   FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
-  # TODO temp for testing
-  FIREBASE_GROUP: "test-ci"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
+  FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
   VERSION_TAG_REGEX: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/  # The tag semver regex recognized as a release, see: https://ihateregex.io/expr/semver/
 
 
@@ -39,8 +38,7 @@ workflow:
     # Source: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Workflows/MergeRequest-Pipelines.gitlab-ci.yml
     - if: $CI_MERGE_REQUEST_IID
     - if: $CI_COMMIT_TAG
-    # TODO testing
-    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 
 # Project variables: the following variables must be configured in the project's CI/CD settings
@@ -62,8 +60,7 @@ stages:
 
 
 # Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
-# TODO testing
-.check dependencies:
+check dependencies:
   stage: check
   rules:
     - when: always
@@ -97,12 +94,10 @@ increment version:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: never
     # In all other cases, builds can be executed manually as needed
-    # TODO testing
-    - when: always
+    - when: manual
       # prevent later stages to be blocked
       # see: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
-      # TODO testing
-      # allow_failure: true
+      allow_failure: true
   before_script:
     - npm -v
     - npm ci --cache .npm --prefer-offline
@@ -170,8 +165,6 @@ build web:
   rules:
     # Only release the app from release tags
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
-    # TODO testing
-    - when: always
   before_script:
     - apk add --no-cache git
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENV' on $(git log --format=medium -n 1)"
@@ -197,8 +190,7 @@ deploy ios to firebase:
   needs:
     - job: build ios
 
-# TODO testing
-.deploy web:
+deploy web:
   stage: deploy
   environment: $ENV
   needs:
@@ -226,35 +218,32 @@ deploy ios to firebase:
       "
 
 # Test stage
-# TODO testing
-#include:
-#  # use latest template versions to run security scanning jobs also in merge request pipelines:
-#  # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
-#  # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
-#  # See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Secret-Detection.latest.gitlab-ci.yml
-#  - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
-#  # Dependency Scanning: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
-#  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Dependency-Scanning.latest.gitlab-ci.yml
-#  - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
-#  # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
-#  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
-#  - template: Jobs/SAST.latest.gitlab-ci.yml
+include:
+  # use latest template versions to run security scanning jobs also in merge request pipelines:
+  # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
+  # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
+  # See: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Secret-Detection.latest.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
+  # Dependency Scanning: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Dependency-Scanning.latest.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
+  # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
+  # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
+  - template: Jobs/SAST.latest.gitlab-ci.yml
 
 # SAST Scanning Customization:
 # ensure that mobsf jobs depend on builds
 # https://docs.gitlab.com/ee/user/application_security/sast/#pre-compilation
 # https://docs.gitlab.com/ee/user/application_security/sast/#overriding-sast-jobs
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.latest.gitlab-ci.yml
-# TODO testing
-.mobsf-android-sast:
+mobsf-android-sast:
   needs:
     - build android
   rules:
     # override rules since at the time the job is created the apk does not exist yet
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-# TODO testing
-.mobsf-ios-sast:
+mobsf-ios-sast:
   needs:
     - build ios
   rules:
@@ -266,8 +255,7 @@ deploy ios to firebase:
 # Extended job for launching a downstream pipeline in another environment
 # See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
 .build and deploy downstream:
-  # TODO Testing
-  stage: prepare
+  stage: post
   rules:
     # Avoid infinite recursion
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -275,8 +263,6 @@ deploy ios to firebase:
     # Only offer build and deployment in other environments after automatic build and deployment for Dev
     - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
       when: manual
-    # TODO TEMP TESTING
-    - when: manual
   trigger:
     include:
       - local: .gitlab-ci.yml
