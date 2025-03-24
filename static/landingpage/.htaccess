@@ -7,7 +7,7 @@ Header set Strict-Transport-Security max-age=63072000
 Header set X-XSS-Protection "1; mode=block"
 
 # Set headers only for specific JSON configuration files in the external-content-samples directory
-<Files "external-content-samples/content.config.json">
+<Files "content/content.config.json">
   Header set Access-Control-Allow-Origin "*"
 </Files>
 
