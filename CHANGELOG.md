@@ -1,3 +1,24 @@
+## [1.19.6](https://gitlab.com/opalmedapps/qplus/compare/v1.19.5...v1.19.6) (2023-10-11)
+
+
+### Bug Fixes
+
+* remove the return value from the function verifyPassword ([1d93ad2](https://gitlab.com/opalmedapps/qplus/commit/1d93ad2fd395eecd827c7ecc5fdb477cea6b2dd5))
+
+## [1.19.5](https://gitlab.com/opalmedapps/qplus/compare/v1.19.4...v1.19.5) (2023-10-10)
+
+
+### Bug Fixes
+
+* **deps:** upgrade pdfjs-dist and webpack ([9242021](https://gitlab.com/opalmedapps/qplus/commit/9242021b5fb4dac9a3babd862efcd820830a677e))
+
+## [1.19.4](https://gitlab.com/opalmedapps/qplus/compare/v1.19.3...v1.19.4) (2023-10-06)
+
+
+### Bug Fixes
+
+* remove institution__code from api call ([e2b36b8](https://gitlab.com/opalmedapps/qplus/commit/e2b36b8c4c2d9aeb44d984c80490c38a4b77aea7))
+
 ## [1.19.3](https://gitlab.com/opalmedapps/qplus/compare/v1.19.2...v1.19.3) (2023-10-03)
 
 

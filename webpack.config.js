@@ -3,6 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OpalEnv = require("./opal_env.setup");
 
@@ -96,21 +97,20 @@ const config = env => {
 				},
 				{
 					test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-					use: [
-						{
-							loader: 'file-loader',
-							options: {
-								name: '[name].[ext]',
-								outputPath: 'fonts/'
-							},
-						}
-					]
+					type: 'asset/resource'
 				},
 				{
 					// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, Modernizr has a weird passing of document, window properties
 					// to make it work I looked at this issue: basically it re-attaches this to window.
 					test: /onsenui.js/,
-					loader: 'imports-loader?this=>window!exports-loader?window.Modernizr'
+					use: [
+						{
+							loader: 'imports-loader?this=>window'
+						},
+						{
+							loader: 'exports-loader?window.Modernizr'
+						}
+					],
 
 				},
 				// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, When compiling with Webpack, the Fastclick library
@@ -119,18 +119,15 @@ const config = env => {
 				// and node modules and makes Fastclick implement the Web interface.
 				{
 					test: /onsenui.js/,
-					loader: 'imports-loader?define=>false,module.exports=>false'
+					use: [
+						{
+							loader: 'imports-loader?define=>false,module.exports=>false'
+						}
+					],
 				},
 				{
 					test: /\.png$/,
-					use: [
-						{
-							loader: 'file-loader',
-							options: {
-								mimetype: 'image/png'
-							}
-						}
-					]
+					type: 'asset/resource'
 				}
 			]
 		},
@@ -179,7 +176,8 @@ const config = env => {
 					"mobile-web-app-capable": "yes"
 				}
 			}),
-			new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fr/)
+			new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fr/),
+			new NodePolyfillPlugin()
 		],
 		optimization: {
 			minimize: minimize,
