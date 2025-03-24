@@ -67,14 +67,10 @@ import '../../../css/views/init-page.view.css';
 		////////////////
 
 		function activate() {
-			// document.addEventListener('deviceready', function () {
-			// 	navigator.splashscreen.hide();
-			// 	console.log("DEVICE IS READY");
-			// });
 
 			DynamicContent.ensureInitialized().then(() => {
 				// Read the Message Of The Day from [dev|qa|staging|preprod|prod|etc.]_serviceStatus_[EN|FR].php on depDocs
-				return Promise.resolve({data: {'Attention' : 'Opal is currently experiencing difficulties accessing clinical notes.'}});
+				return DynamicContent.getPageContent(OPAL_CONFIG.settings.messageOfTheDayKey);
 
 			}).then(response => {
 				// Save the Message Of The Day
