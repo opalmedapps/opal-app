@@ -97,6 +97,8 @@
             if (hospitalList[window.localStorage.getItem(localStorageHospitalKey)]){
                 return hospitalList[window.localStorage.getItem(localStorageHospitalKey)].uniqueHospitalCode;
             }
+            // If trusted=False when a user logs out hospitalList could be empty when we try to clear the sec ans localStorage
+            // In that case, return an empty string to avoid crashing
             return '';
             
         }
