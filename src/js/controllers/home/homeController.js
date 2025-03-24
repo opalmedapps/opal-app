@@ -6,12 +6,43 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
-        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version', 'User', 'ProfileSelector','$interval'];
+        'Appointments',
+        'CheckInService',
+        'NavigatorParameters',
+        'NetworkStatus',
+        'Params',
+        'ProfileSelector',
+        'RequestToServer',
+        'User',
+        'UpdateUI',
+        'UserHospitalPreferences',
+        'UserPreferences',
+        'Version',
+        '$filter',
+        '$interval',
+        '$scope',
+        '$timeout',
+    ];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
-        UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version, User, ProfileSelector, $interval)
+    function HomeController(
+        Appointments,
+        CheckInService,
+        NavigatorParameters,
+        NetworkStatus,
+        Params,
+        ProfileSelector,
+        RequestToServer,
+        User,
+        UpdateUI,
+        UserHospitalPreferences,
+        UserPreferences,
+        Version,
+        $filter,
+        $interval,
+        $scope, 
+        $timeout, 
+    )
     {
         var vm = this;
 
@@ -230,7 +261,17 @@
          * Takes the user to the selected appointment to view more details about it
          */
         function goToAppointments(){
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            let params = {'Navigator':'homeNavigator'};
+            // When the nearest appointment is for a patient in care,
+            // by clicking on the widget should open the calendar for that patient (e.g., care receiver's calendar)
+            if (ProfileSelector.getActiveProfile().patient_legacy_id !== vm?.closestAppointment?.patientsernum) {
+                ProfileSelector.loadPatientProfile(vm.closestAppointment.patientsernum);
+                params['isCareReceiver'] = true;
+
+                // Reload 'Appointments' in case they were pre-loaded
+                UpdateUI.updateTimestamps('Appointments', 0);
+            }
+            NavigatorParameters.setParameters(params);
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
 

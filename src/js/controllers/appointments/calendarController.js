@@ -21,10 +21,34 @@
         .module('MUHCApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params'];
+    CalendarController.$inject = [
+        'Appointments',
+        'NavigatorParameters',
+        'Params',
+        'ProfileSelector',
+        'UpdateUI',
+        'User',
+        'UserPreferences',
+        '$anchorScroll',
+        '$location',
+        '$timeout',
+        '$window',
+    ];
 
     /* @ngInject */
-    function CalendarController(Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params) {
+    function CalendarController(
+        Appointments,
+        NavigatorParameters,
+        Params,
+        ProfileSelector,
+        UpdateUI,
+        User,
+        UserPreferences,
+        $anchorScroll,
+        $location,
+        $timeout,
+        $window,
+    ) {
         const vm = this;
 
         let todaysTimeMilliseconds;
@@ -112,6 +136,20 @@
 
             // Get the name of the current navigator
             navigatorName = NavigatorParameters.getParameters().Navigator;
+
+            let navigator = NavigatorParameters.getNavigator();
+
+            // Reload
+            navigator.on('prepop', () => {
+                if (NavigatorParameters.getParameters()?.isCareReceiver) {
+                    ProfileSelector.loadPatientProfile(
+                        User.getLoggedinUserProfile().patient_legacy_id
+                    );
+                    
+                    // Reload 'Appointments' for the current user
+                    UpdateUI.updateTimestamps('Appointments', 0);
+                }
+            });
         }
 
         /**
