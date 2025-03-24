@@ -24,7 +24,7 @@
   "CHART_NON_NUMERIC_VALUES": "These results can't be charted because at least one of them isn't a number",
   "CHECKIN": "Check-in",
   "CHECKIN_ALL_TODAY": "Check in",
-  "CHECKIN_ERROR_GEOLOCATION": "Unable to detect location; check your permission settings.",
+  "CHECKIN_ERROR_GEOLOCATION": "Unable to detect location; check your app or device permission settings.",
   "CHECKIN_ERROR_ONE": "Unable to check in for this appointment. Please try again, or go to the reception.",
   "CHECKIN_ERROR_MULTIPLE": "Unable to check in for one or more appointments. Please try again, or go to the reception.",
   "CHECKIN_MESSAGE_AFTER": "You are checked in for your appointment.",

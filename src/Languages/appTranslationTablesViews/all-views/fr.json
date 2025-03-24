@@ -25,7 +25,7 @@
     "CHART_NON_NUMERIC_VALUES": "Ces résultats ne peuvent pas être représentés car au moins l'un d'entre eux n'est pas un nombre",
     "CHECKIN": "Enregistrement",
     "CHECKIN_ALL_TODAY": "Enregistrer",
-    "CHECKIN_ERROR_GEOLOCATION": "Erreur de géolocalisation; vérifiez vos paramètres de permission.",
+    "CHECKIN_ERROR_GEOLOCATION": "Erreur de géolocalisation; vérifiez les paramètres d'autorisation de l'appli ou de l'appareil.",
     "CHECKIN_ERROR_ONE": "Impossible de s'enregistrer pour ce rendez-vous. Veuillez réessayer ou vous présenter à la réception.",
     "CHECKIN_ERROR_MULTIPLE": "Impossible de s'enregistrer pour votre/vos rendez-vous. Veuillez réessayer ou vous présenter à la réception.",
     "CHECKIN_MESSAGE_AFTER": "Vous êtes enregistré(e) pour votre rendez-vous.",
