@@ -149,7 +149,8 @@
             getQuestionnaireThankByPurpose: (questionnairePurpose = 'default') => PURPOSE_THANKS_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire thank you message. It assumes that the purpose has been validated.
             isWaitingForSavingAnswer: () => waitingForSavingAnswer,
             updateQuestionnaireStatus: updateQuestionnaireStatus,
-            requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
+            requestQuestionnaireStubFromSerNum: requestQuestionnaireStubFromSerNum,
+            formatQuestionnaireStub: formatQuestionnaireStub,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnairePurpose: (qp_ser_num) => QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num), // gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
             requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
@@ -248,15 +249,19 @@
         }
 
         /**
-         * @name requestOpalQuestionnaireFromSerNum
-         * @desc this function gets the basic information concerning a questionnaire stored in the OpalDB from its SerNum
-         *       In particular, it gets the answerQuestionnaireId of that questionnaire,
-         *       which allows the questionnaire to be found in the questionnaireDB
-         * @param {string|int} questionnaireSerNum
-         * @returns {Promise}
+         * @name requestQuestionnaireStubFromSerNum
+         * @description Gets the basic information concerning a questionnaire stored in the OpalDB from its SerNum
+         *              In particular, gets the qp_ser_num (answerQuestionnaireId) of that questionnaire,
+         *              which allows the questionnaire to be found in the questionnaireDB.
+         *              This information is also saved to the appropriate list in this service.
+         * @param {string|int} questionnaireSerNum The SerNum of the questionnaire to look up.
+         * @returns {Promise<Object>} Resolves to the basic information (questionnaire stub) for the given questionnaire.
          */
-        function requestOpalQuestionnaireFromSerNum(questionnaireSerNum) {
-            return QuestionnaireDataService.requestOpalQuestionnaireFromSerNum(questionnaireSerNum);
+        async function requestQuestionnaireStubFromSerNum(questionnaireSerNum) {
+            let questionnaireStub = await QuestionnaireDataService.requestQuestionnaireStubFromSerNum(questionnaireSerNum);
+            // Add the questionnaire stub to this service
+            setQuestionnaireList([questionnaireStub], false);
+            return questionnaireStub;
         }
 
         /**
@@ -292,8 +297,7 @@
 
                 return { Success: true, Location: 'Server' };
             } catch (error) {
-                console.log('Error in requestQuestionnaireUnreadNumber: ', error);
-
+                console.error('Error in requestQuestionnaireUnreadNumber', error);
                 return { Success: false, Location: 'Server' };
             }
         }
@@ -1002,7 +1006,8 @@
         /**
          * @name setQuestionnaireList
          * @desc Processes an array of questionnaires from the listener and saves it in this service.
-         *       By default, any previously added questionnaires are overwritten.
+         *       By default, any previously added questionnaires are overwritten, but this can be disabled to
+         *       just add new questionnaires to the existing list.
          * @param {Object[]} questionnaireList - An array of questionnaires, as provided by the listener.
          * @param {boolean} [clearExisting] - Optional, defaults to true; indicates whether to clear away all previously
          *                                    added questionnaires.

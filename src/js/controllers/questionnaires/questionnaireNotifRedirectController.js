@@ -16,12 +16,13 @@
         '$timeout',
         'NativeNotification',
         'NavigatorParameters',
-        'Questionnaires'
+        'Questionnaires',
+        'Utility',
     ];
 
     /* @ngInject */
-    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, NavigatorParameters, Questionnaires) {
-
+    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, NavigatorParameters,
+                                                  Questionnaires, Utility) {
         let vm = this;
 
         // variables global to this controller
@@ -35,42 +36,43 @@
 
         ////////////////
 
-        function activate() {
+        async function activate() {
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();
             let params = NavigatorParameters.getParameters();
 
             if (!params.hasOwnProperty('Post') || isNaN(parseInt(params.Post))) {
-
                 vm.loadingQuestionnaire = false;
                 handleLoadQuestionnaireErr();
             }
 
             let questionnaireSerNum = params.Post;
 
-            Questionnaires.requestOpalQuestionnaireFromSerNum(questionnaireSerNum)
-                .then(function(questionnaireInfo) {
-                    // Continue displaying the loading page even if the loading itself has finished.
-                    // This timeout is needed because the onsen navigator does not immediately update after after pushing
-                    $timeout(function() {
+            try {
+                // Continue displaying the loading page even if the loading itself has finished.
+                // This timeout is needed because the onsen navigator does not immediately update after pushing.
+                let questionnaireInfo = await Utility.promiseMinDelay(
+                    Questionnaires.requestQuestionnaireStubFromSerNum(questionnaireSerNum),
+                    2000,
+                );
 
-                        vm.loadingQuestionnaire = false;
+                // Validate that all required parameters are there; an error will be thrown if not
+                Questionnaires.formatQuestionnaireStub(questionnaireInfo);
 
-                        if (!validateQuestionnaireInfo(questionnaireInfo)) {
-                            handleLoadQuestionnaireErr();
-
-                        } else if (isQuestionnaireCompleted(questionnaireInfo)) {
-                            goToQuestionnaireSummary(getAnswerQuestionnaireId(questionnaireInfo));
-
-                        } else {
-                            goToQuestionnaire(getAnswerQuestionnaireId(questionnaireInfo));
-                        }
-                    }, 2000);
-                })
-                .catch(function(err) {
+                $timeout(function () {
+                    let answerQuestionnaireId = getAnswerQuestionnaireId(questionnaireInfo);
+                    if (isQuestionnaireCompleted(questionnaireInfo)) goToQuestionnaireSummary(answerQuestionnaireId);
+                    else goToQuestionnaire(answerQuestionnaireId);
+                    vm.loadingQuestionnaire = false;
+                });
+            }
+            catch(error) {
+                console.error(error);
+                $timeout(function () {
                     vm.loadingQuestionnaire = false;
                     handleLoadQuestionnaireErr();
                 });
+            }
         }
 
         /**
@@ -112,12 +114,12 @@
 
         /**
          * @name getAnswerQuestionnaireId
-         * @desc return the answerQuestionnaireId of the questionnaire object
-         * @param {object} questionnaireInfo
-         * @returns {number} answerQuestionnaireId
+         * @description Parses and returns the answerQuestionnaireId (qp_ser_num) value of a questionnaire stub.
+         * @param {object} questionnaireInfo The info (questionnaire stub) returned by the listener.
+         * @returns {number} The qp_ser_num value of the questionnaire stub.
          */
         function getAnswerQuestionnaireId(questionnaireInfo) {
-            return parseInt(questionnaireInfo.answerQuestionnaireId);
+            return parseInt(questionnaireInfo.qp_ser_num);
         }
 
         /**
@@ -128,18 +130,6 @@
          */
         function isQuestionnaireCompleted(questionnaireInfo) {
             return questionnaireInfo.completedFlag === "1";
-        }
-
-        /**
-         * @name validateQuestionnaireInfo
-         * @desc check whether the object has the appropriate properties to be used in this controller
-         * @param {object} questionnaireInfo
-         * @returns {boolean} true if the object has the correct properties, false otherwise
-         */
-        function validateQuestionnaireInfo(questionnaireInfo) {
-            return (questionnaireInfo.hasOwnProperty('answerQuestionnaireId') && !isNaN(questionnaireInfo.answerQuestionnaireId) &&
-                parseInt(questionnaireInfo.answerQuestionnaireId) > 0 && questionnaireInfo.hasOwnProperty('completedFlag') &&
-                !isNaN(questionnaireInfo.completedFlag));
         }
 
         /**
@@ -155,5 +145,4 @@
             NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
     }
-
 })();

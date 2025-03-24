@@ -29,7 +29,6 @@
                 'UPDATE_STATUS': 'QuestionnaireUpdateStatus',
                 'SAVE_ANSWER': 'QuestionnaireSaveAnswer',
                 'GET_QUESTIONNAIRE': 'Questionnaire',
-                'GET_OPAL_QUESTIONNAIRE_FROM_SERNUM': 'QuestionnaireInOpalDBFromSerNum',
                 'GET_NUMBER_UNREAD': 'QuestionnaireNumberUnread',
                 'GET_PURPOSE': 'QuestionnairePurpose'
             },
