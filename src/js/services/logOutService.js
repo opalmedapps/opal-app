@@ -24,11 +24,16 @@
          * @desc Logs users out on firebase and our servers and navigate the user to the init page,
          *       also clears out the security answers and set the device as untrusted if safeDevice is false
          * @param {boolean} safeDevice if false, clears out the security answers and set the device as untrusted
+         * @param {boolean} kickedOut If true, the current user is being kicked out; the logged_in_users entry for the
+         *                            user won't be removed, because another user is currently logged in.
          */
-        function logOut(safeDevice = true) {
-            // remove the logged in user reference from DB
-            let refCurrentUser = Firebase.getDBRef(`logged_in_users/${UserAuthorizationInfo.getUsername()}`);
-            Firebase.remove(refCurrentUser);
+        function logOut(safeDevice = true, kickedOut = false) {
+            // If the current user is logging out normally, remove their "logged_in_users" entry from Firebase.
+            // If they are being kicked out, leave it there to reflect that another user is still logged in.
+            if (!kickedOut) {
+                let refCurrentUser = Firebase.getDBRef(`logged_in_users/${UserAuthorizationInfo.getUsername()}`);
+                Firebase.remove(refCurrentUser);
+            }
 
             ProfileSelector.clearProfile();
 

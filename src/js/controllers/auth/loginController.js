@@ -21,12 +21,12 @@
         .module('MUHCApp')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
+    LoginController.$inject = ['$timeout', '$state', 'ConcurrentLogin', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
         'UserPreferences', 'Toast', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'Firebase',
         '$rootScope', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers,
+    function LoginController($timeout, $state, ConcurrentLogin, UserAuthorizationInfo, $filter, DeviceIdentifiers,
                              UserPreferences, Toast, UUID, Constants, EncryptionService, CleanUp, $window, Firebase,
                              $rootScope, Params, UserHospitalPreferences) {
 
@@ -124,25 +124,9 @@
             CleanUp.clear();
 
             let firebaseUser = firebaseUserCredential.user;
-            let sessionToken = await firebaseUser.getIdToken();
-
-            /******************************************************************************************************
-             * LOCKING OUT OF CONCURRENT USERS
-             ******************************************************************************************************/
-            // Save the current session token to the users "logged in users" node.
-            // This is used to make sure that the user is only logged in for one session at a time.
-            let refCurrentUser = Firebase.getDBRef(`logged_in_users/${firebaseUser.uid}`);
-
-            Firebase.set(refCurrentUser, { 'Token' : sessionToken });
-
-            // Evoke an observer function in mainController
-            $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
-            /**************************************************************************************************** */
-
 
             //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
             UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, vm.email, vm.trusted);
-
 
             //This is for the user case where a user gets logged out automatically by the app after 5 minutes of inactivity.
             //Ideally the Patient info should stay dormant on the phone for a pre-determined period of time, not indefinitely.

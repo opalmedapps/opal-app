@@ -27,7 +27,6 @@
         //////////////////////////////////////////
 
         function activate() {
-            $rootScope.firstTime = true;
             $rootScope.online = navigator.onLine;
 
             bindEvents();
@@ -81,11 +80,6 @@
             addUpdateRequiredDetection();
 
             AppState.addInactiveEvent(clearSensitiveData);
-
-            $rootScope.$on("MonitorLoggedInUsers", function (event, uid) {
-                $rootScope.firstTime = true;
-                if(OPAL_CONFIG.settings.kickOutConcurrentUsers) addUserListener(uid);
-            });
         }
 
         /*****************************************
@@ -112,7 +106,6 @@
             resetTimer();
             if ($state.current.name === 'Home') {
                 LogOutService.logOut();  // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
-                localStorage.setItem('locked', 1);
 
                 // Display a warning message to the users after being disconnected
                 Toast.showToast({
@@ -175,38 +168,6 @@
             // Wipe lab results
             CleanUp.clearSensitive();
         }
-
-        /*****************************************
-         * Manage concurrent users
-         *****************************************/
-        function addUserListener(uid) {
-            //
-            // add a listener to the firebase database that watches for the changing of the token value
-            // (this means that the same user has logged in somewhere else)
-            //
-            let refCurrentUser = Firebase.getDBRef(`logged_in_users/${uid}`);
-
-            refCurrentUser.on('value', function () {
-                if (!$rootScope.firstTime && !localStorage.getItem('locked')) {
-                    //
-                    // If it is detected that a user has concurrently logged on with a different device.
-                    // Then force the "first" user to log out and clear the observer
-                    //
-
-                    refCurrentUser.off();
-                    LogOutService.logOut();
-
-                    // Show message "You have logged in on another device."
-                    Toast.showToast({
-                        message: $filter('translate')("KICKEDOUT"),
-                    });
-                }
-                else {
-                    $rootScope.firstTime = false;
-                }
-            });
-        }
-
 
         /**************************************************
          * Detect When Screenshot is taken on iOS device

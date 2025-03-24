@@ -17,6 +17,7 @@
         let userInfo;
 
         return {
+            clearUserData: clearUserData,
             getUserInfo: () => userInfo,
             initUser: initUser,
             getSelfPatientSerNum: getSelfPatientSerNum,
@@ -62,6 +63,13 @@
             let selfProfile = getSelfProfile();
             if (selfProfile) userInfo.color = selfProfile.color;
             else userInfo.color = '#41A4AF';
+        }
+
+        /**
+         * @description Clears data from this service.
+         */
+        function clearUserData() {
+            userInfo = undefined;
         }
     }
 })();
