@@ -48,7 +48,7 @@
         <preference name="GradlePluginKotlinVersion" value="1.7.10"/>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <!-- Security setting; should be false for pen tests and prod builds -->
-            <application android:debuggable="true"/>
+            <application android:debuggable="false"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
             <!-- Security setting; do not set to true -->
