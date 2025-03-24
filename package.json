@@ -164,7 +164,7 @@
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "Cette application doit accéder à la bibliothèque de photos pour partager des documents / This app requires photo library access to share documents"
       },
       "cordova-plugin-ble-central": {
-        "BLUETOOTH_USAGE_DESCRIPTION": "Bluetooth nécessaire pour se connecter aux appareils intelligents / Bluetooth needed to connect to smart devices",
+        "BLUETOOTH_USAGE_DESCRIPTION": "Bluetooth est nécessaire pour se connecter aux appareils intelligents / Bluetooth is needed to connect to smart devices",
         "IOS_INIT_ON_LOAD": "false"
       }
     },
