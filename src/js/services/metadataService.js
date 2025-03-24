@@ -66,12 +66,12 @@
             fetchHomeMeta: fetchHomeMeta,
             fetchGeneralMeta: fetchGeneralMeta,
             fetchEducationalMeta: fetchEducationalMeta,
-            fetchResearchMeta: fetchResearchMeta,
+            fetchResearchMeta: () => researchTabData,
             isFirstTimePersonal: isFirstTimePersonal,
             isFirstTimeHome: isFirstTimeHome,
             isFirstTimeGeneral: isFirstTimeGeneral,
             isFirstTimeEducational: isFirstTimeEducational,
-            isFirstTimeResearch: isFirstTimeResearch,
+            isFirstTimeResearch: () => firstTimeResearch,
             setFetchedPersonal: setFetchedPersonal,
             setFetchedHome: setFetchedHome,
             setFetchedGeneral: setFetchedGeneral,
@@ -182,14 +182,6 @@
 
         function noEduMaterial() {
             return noMaterials;
-        }
-
-        function fetchResearchMeta() {
-            return researchTabData;
-        }
-
-        function isFirstTimeResearch() {
-            return firstTimeResearch;
         }
 
         function setFetchedResearch() {

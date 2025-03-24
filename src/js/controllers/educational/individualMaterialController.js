@@ -127,7 +127,7 @@
 
         function bindEvents() {
             //Instantiating popover controller
-            $timeout(function () {
+            $timeout(() => {
                 ons.createPopover('./views/personal/education/share-popover.html', { parentScope: $scope }).then(function (popover) {
                     $scope.popoverSharing = popover;
                 });

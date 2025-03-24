@@ -28,8 +28,8 @@
     /* @ngInject */
     function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial,
                                            Logger, UserHospitalPreferences, $filter) {
-        var vm = this;
-        var backButtonPressed = 0;
+        let vm = this;
+        let backButtonPressed = 0;
         let navigator;
         let params;
 
@@ -80,12 +80,7 @@
         }
 
         function educationDeviceBackButton(){
-            if (vm.eduCategory === 'clinical'){
-                tabbar.setActiveTab(0);
-            } else {
-                // Regular back button navigation
-                navigator.popPage();
-            }
+            vm.eduCategory === 'clinical' ? tabbar.setActiveTab(0) : navigator.popPage();
         }
 
         /**
@@ -96,11 +91,7 @@
             params = NavigatorParameters.getParameters();
 
             // Set category if specified in NavigatorParameters, otherwise defaults to clinical
-            if(params.hasOwnProperty('category')){
-                vm.eduCategory = params.category;
-            }else{
-                vm.eduCategory = 'clinical';
-            }
+            vm.eduCategory  = params?.category ? params.category : 'clinical';
 
             // Set corresponding page title and no material message
             vm.pageTitle = EducationalMaterial.getEducationalMaterialTitle(vm.eduCategory);
