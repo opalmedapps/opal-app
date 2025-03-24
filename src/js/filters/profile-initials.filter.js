@@ -11,7 +11,7 @@
      */
     function ProfileInitials() {
         return (profile) => {
-            return `${profile.first_name.substr(0, 1)}${profile.last_name.substr(0, 1)}`
+            return `${profile?.first_name?.substr(0, 1)}${profile?.last_name?.substr(0, 1)}`
         };
     }
 })();
