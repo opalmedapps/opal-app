@@ -4,6 +4,7 @@
  *Email:davidfherrerar@gmail.com
  */
 import moment from "moment";
+import "moment-timezone";
 
 var myApp=angular.module('MUHCApp');
 
@@ -244,5 +245,13 @@ myApp.filter('capitalize', function () {
      */
     return function (value) {
         return value.charAt(0).toUpperCase()+ value.slice(1);
+    };
+});
+
+myApp.filter('convertToEt', function () {
+    return function (inputDate, format, timezone) {
+        if (!inputDate) return '';
+        let selectedFormat = format;
+        return moment(inputDate).tz(timezone).format(selectedFormat);
     };
 });

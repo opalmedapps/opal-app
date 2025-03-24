@@ -1,5 +1,5 @@
 <ons-page ng-controller="PatientTestResultsByDatetimeController as testsByDate">
-    <generic-toolbar title="{{testsByDate.testDate|date:'medium'}}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{testsByDate.testDate|convertToEt:'MMM d, y h:mm a':'America/Montreal'}}" style-class="fontSizeTitle">
         <right-content>
             <labs-info-button></labs-info-button>
         </right-content>

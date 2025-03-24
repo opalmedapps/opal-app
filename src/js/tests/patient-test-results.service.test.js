@@ -1,7 +1,5 @@
 // import PatientTestResults from '../services/patient-test-results.service.js';
 const { expect } = require('chai');
-const sinon = require('sinon');
-const moment = require('moment-timezone');
 
 beforeEach(function() {
     PatientTestResults.clear();
@@ -146,35 +144,6 @@ describe('PatientTestResults service', function() {
             let type2IsCached = PatientTestResults.testResultByTypeIsCached(typeSerNum2.testExpressionSerNum);
 
             expect(type2IsCached).to.be.false;
-        });
-    });
-
-    describe('convertUtcToEst function', function() {
-        let clock;
-
-        afterEach(function() {
-            if (clock) {
-                clock.restore();
-            }
-        });
-
-        it('should show the same test date regardless of the local timezone', function() {
-            let utcTestDate = new Date('2023-04-10T12:00:00Z');
-            let timezones = ['America/Los_Angeles', 'Europe/London', 'Asia/Tokyo', 'UTC'];
-            let expectedEstTime = moment.tz(utcTestDate, 'America/Montreal').format();
-            
-            timezones.forEach(tz => {
-                clock = sinon.useFakeTimers({now: utcTestDate, toFake: ['Date']});
-                process.env.TZ = tz;
-                moment.tz.setDefault(tz);
-
-                let estTime = PatientTestResults.convertUtcToEst(utcTestDate).format();
-                expect(estTime).to.equal(expectedEstTime);
-
-                clock.restore();
-            });
-
-            moment.tz.setDefault();
         });
     });
 });

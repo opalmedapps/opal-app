@@ -41,12 +41,6 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 		 */
 		let testResultsByType = {};
 
-		/**
-		 * @description A utility library for handling dates and times in different time zones using moment-timezone.
-		 * @type {Object}
-		 */
-		let moment = require('moment-timezone');
-
 		let service = {
 			setTestDates: setTestDates,
 			setTestTypes: setTestTypes,
@@ -117,22 +111,11 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 			let processedNewTestDates = processDates(newTestDates);
 
 			// Dates are simple objects with only one relevant value; simply add the new ones that are missing from the array
-			let testDatesAsTime = testDates.map(testDate => convertUtcToEst(testDate.getTime()));
+			let testDatesAsTime = testDates.map(testDate => testDate.getTime());
 			processedNewTestDates.forEach(newDate => { if (!testDatesAsTime.includes(newDate.getTime())) testDates.push(newDate) });
 
 			// Delete cached data by date for all the updated items
 			processedNewTestDates.forEach(e => testResultByDateDeleteCached(e));
-		}
-
-		
-		/**
-		 * @description Converts a UTC date and time to Eastern Standard Time (EST) in the Montreal time zone.
-		 * @param {Date} utcDateTime - The UTC date and time to be converted.
-		 * @returns {Date} The equivalent dat and time in EST (Montreal time zone)
-		 */ 
-		function convertUtcToEst(utcDateTime) {
-			let estDateTime = moment(utcDateTime).tx('America/Montreal');
-			return estDateTime;
 		}
 
 		/**
