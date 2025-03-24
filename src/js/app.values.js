@@ -276,11 +276,9 @@
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
-                            "TRP": 1,
                             "APT": 1,
                             "LAB": 1,
-                            "DOC": 1,
-                            "TRT": 1,
+                            "DOC": 0,
                             "TTM": 1,
                             "QUE": 1,
                             "CSQ": 1,
@@ -295,7 +293,7 @@
                             "MAS": 1,
                             "EDU": 1,
                             "SUP": 1,
-                            "CED": 1,
+                            "CED": 0,
                             "HOS": 1,
                         },
                     }
