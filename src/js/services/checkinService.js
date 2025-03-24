@@ -297,8 +297,14 @@
             let objectToSend = {};
             objectToSend.PatientSerNum = patientSerNum;
 
-            RequestToServer.sendRequestWithResponse('Checkin',objectToSend)
-                .then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
+            RequestToServer.sendRequestWithResponse(
+                'Checkin',
+                null,
+                null,
+                null,
+                null,
+                patientSerNum
+            ).then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
                 .catch(function () { r.reject({status: 'ERROR', appts: null}); });
 
             return r.promise;
