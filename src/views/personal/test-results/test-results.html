@@ -51,7 +51,7 @@
                     <ons-list>
                         <div ng-repeat="testDate in tests.testDates">
                             <ons-list-header ng-if="tests.testDates | showHeader : $index"
-                                             ng-class="fontSizeTitle">{{testDate|convertTimezone:'MMMM d, y':'America/Montreal'}}
+                                             ng-class="fontSizeTitle">{{testDate|convertTimezone:'MMMM d, y':'America/Toronto'}}
                             </ons-list-header>
                             <ons-list-item
                                     ng-click="tests.goToTestDateResults(testDate)"
@@ -66,7 +66,7 @@
                                         <div style="line-height:1;">
                                             <p class="item-desc" ng-class="fontSizeDesc">
                                                 {{"ADDED"|translate}}
-                                                {{testDate|convertTimezone:'h:mm a':'America/Montreal'}}
+                                                {{testDate|convertTimezone:'h:mm a':'America/Toronto'}}
                                             </p>
                                         </div>
                                     </ons-col>
