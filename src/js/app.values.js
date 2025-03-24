@@ -193,8 +193,8 @@
                         uniqueHospitalCode: 'A0',
                         acronymReal: 'MUHC',
                         fullNameReal: 'MUHC_FULL',
-                        acronymDevelopment: 'OMI',
-                        fullNameDevelopment: 'OMI_FULL',
+                        acronymGeneric: 'OMI',
+                        fullNameGeneric: 'OMI_FULL',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -230,8 +230,8 @@
                         uniqueHospitalCode: 'A6',
                         acronymReal: 'RI_MUHC_ACRONYM',
                         fullNameReal: 'RI_MUHC_FULL',
-                        acronymDevelopment: 'ORI',
-                        fullNameDevelopment: 'ORI_FULL',
+                        acronymGeneric: 'ORI',
+                        fullNameGeneric: 'ORI_FULL',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -267,8 +267,8 @@
                         uniqueHospitalCode: 'A4',
                         acronymReal: 'CHU_SJ_ACRONYM',
                         fullNameReal: 'CHU_SJ_FULL',
-                        acronymDevelopment: 'OHIGPH',
-                        fullNameDevelopment: 'OHIGPH_FULL',
+                        acronymGeneric: 'OHIGPH',
+                        fullNameGeneric: 'OHIGPH_FULL',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,

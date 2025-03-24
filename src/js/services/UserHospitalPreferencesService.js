@@ -47,7 +47,7 @@
          */
         function getHospitalFullName() {
             if (!selectedHospital) return '';
-            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.fullNameReal : selectedHospital.fullNameDevelopment;
+            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.fullNameReal : selectedHospital.fullNameGeneric;
         }
 
         /**
@@ -57,7 +57,7 @@
          */
         function getHospitalAcronym() {
             if (!selectedHospital) return '';
-            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.acronymReal : selectedHospital.acronymDevelopment;
+            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.acronymReal : selectedHospital.acronymGeneric;
         }
 
         /**
@@ -100,8 +100,8 @@
             return hospitalList.map(entry => {
                 return {
                     uniqueHospitalCode: entry.uniqueHospitalCode,
-                    acronym: useRealName ? entry.acronymReal : entry.acronymDevelopment,
-                    fullName: useRealName ? entry.fullNameReal : entry.fullNameDevelopment,
+                    acronym: useRealName ? entry.acronymReal : entry.acronymGeneric,
+                    fullName: useRealName ? entry.fullNameReal : entry.fullNameGeneric,
                 }
             });
         }
