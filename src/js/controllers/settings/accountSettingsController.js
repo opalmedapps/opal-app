@@ -25,11 +25,10 @@
         var vm = this;
         var navigatorName;
         vm.passFill = '********';
-        vm.passwordLength = 6;
-        vm.accountDeviceBackButton = () => tabbar.setActiveTab(0);;
+        vm.accountDeviceBackButton = () => tabbar.setActiveTab(0);
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToUpdateAccountField = (param, animation) => settingsNavigator.pushPage('views/settings/update-account-field.html', {param:param},{ animation : animation });
-        vm.logOut = () => LogOutService.logOut();;
+        vm.logOut = () => LogOutService.logOut();
 
         activate();
 

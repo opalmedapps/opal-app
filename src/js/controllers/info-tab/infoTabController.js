@@ -25,25 +25,21 @@
         const views= {
             home: {
                 icon:'fa-home',
-                color:'SteelBlue',
                 name:"HOME",
                 description:"HOME_DESCRIPTION"
             },
             chart: {
                 icon:'fa-user',
-                color:'maroon',
                 name:"MYCHART" ,
                 description:"MYCHART_DESCRIPTION"
             },
             general: {
                 icon:'fa-th',
-                color:'darkblue',
                 name: "GENERAL",
                 description:"GENERAL_DESCRIPTION"
             },
             caregivers: {
                 icon:'fa-user',
-                color:'darkblue',
                 name: "RELATIONSHIPS_CAREGIVERS",
                 description:"RELATIONSHIPS_CAREGIVERS_DESCRIPTION"
             }
