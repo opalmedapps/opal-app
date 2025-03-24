@@ -41,8 +41,8 @@
         vm.dateOptions = {
             formatYear: 'yyyy',
             startingDay: 0,
-            formatDay:'d',
-            showWeeks:false
+            formatDay: 'd',
+            showWeeks: false,
         };
 
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
