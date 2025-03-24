@@ -40,14 +40,14 @@
         vm.allowedModules = {};
 
         // For displaying the closest upcoming endpoint
-        vm.closestAppointmentDate = null;
-        vm.closestAppointmentPatientName = null;
+        vm.closestAppointment = null;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.goToAppointments = goToAppointments;
         vm.goToCheckinAppointments = goToCheckinAppointments;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
         vm.goToAcknowledgements = goToAcknowledgements;
+        vm.getPatientFirstName = getPatientFirstName;
 
         activate();
 
@@ -128,18 +128,7 @@
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result?.data?.unread_notification_count;
                     vm.checkinState = checkinState;
-                    vm.closestAppointmentDate = result?.data?.closest_appointment?.date_time;
-                    let patient_owner_legacy_id = result?.data?.closest_appointment?.patient_owner_legacy_id;
-                    if (User.getLoggedinUserProfile().patient_legacy_id === patient_owner_legacy_id) {
-                        vm.closestAppointmentPatientName = $filter('translate')("YOU");
-                    }
-                    else {
-                        let confirmedProfiles = ProfileSelector.getConfirmedProfiles();
-                        let patient = confirmedProfiles.find(
-                            patient_profile => patient_profile.patient_legacy_id === patient_owner_legacy_id
-                        );
-                        vm.closestAppointmentPatientName = patient ? patient.first_name : "";
-                    }
+                    vm.closestAppointment = result?.data?.closest_appointment;
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
@@ -283,6 +272,22 @@
          */
         function cancelInterval(){
             $interval.cancel(vm.reloadInterval);
+        }
+
+        /**
+         * @description get patient's first name for the appointment widget
+         */
+        function getPatientFirstName(){
+            if (User.getLoggedinUserProfile().patient_legacy_id === vm?.closestAppointment?.patientsernum) {
+                return $filter('translate')("YOU");
+            }
+            else {
+                let confirmedProfiles = ProfileSelector.getConfirmedProfiles();
+                let patient = confirmedProfiles.find(
+                    patient_profile => patient_profile.patient_legacy_id === vm?.closestAppointment?.patientsernum
+                );
+                return patient ? patient.first_name : "";
+            }
         }
     }
 })();
