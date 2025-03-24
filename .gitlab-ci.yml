@@ -217,7 +217,7 @@ build and deploy QA:
 
 include:
   # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.latest.yml
 
 # Secret Detection Customization: 
 # https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
