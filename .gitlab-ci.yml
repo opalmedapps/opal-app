@@ -218,7 +218,6 @@ deploy web:
         bye
       "
 
-# Test stage
 include:
   # use latest template versions to run security scanning jobs also in merge request pipelines:
   # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
