@@ -6,7 +6,7 @@
             loading-message="{{'LOADING'|translate}}">
     </loading-spinning-circle>
 
-    <div ng-hide="ctrl.loading" class="container text-left" style="margin-top: 4px;" ng-class="fontSizeDesc">
+    <div ng-hide="ctrl.loading || ctrl.alert" class="container text-left" style="margin-top: 4px;" ng-class="fontSizeDesc">
 
         <!-- part of phase 1b (see QSCCD-1555)
         <p style="font-weight: bold">{{ "LAB_DELAY_INFO_HEADER" | translate }}</p>
