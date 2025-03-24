@@ -12,13 +12,13 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params',
-        'UserHospitalPreferences', 'Browser', 'DynamicContent'];
+    PersonalTabController.$inject = ['Appointments','TxTeamMessages', 'EducationalMaterial', 'Documents','NavigatorParameters', 'Notifications',
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences',
+        'UserHospitalPreferences'];
 
-    function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
-                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params,
-                                    UserHospitalPreferences, Browser, DynamicContent) {
+    function PersonalTabController( Appointments, TxTeamMessages, EducationalMaterial, Documents, NavigatorParameters, Notifications, Questionnaires,
+                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences,
+                                    UserHospitalPreferences) {
         var vm = this;
 
         // variable to let the user know which hospital they are logged in
@@ -26,7 +26,6 @@
         vm.allowedModules = {};
 
         vm.personalDeviceBackButton = personalDeviceBackButton;
-        vm.goToCarnetSante = goToCarnetSante;
 
         activate();
 
@@ -86,15 +85,11 @@
             vm.txTeamMessagesUnreadNumber = TxTeamMessages.getNumberUnreadTxTeamMessages();
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
+            vm.educationalMaterialsNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterials();
         }
 
         function personalDeviceBackButton(){
             tabbar.setActiveTab(0);
-        }
-
-        function goToCarnetSante() {
-            const url = DynamicContent.getURL("carnet_sante");
-            Browser.openInternal(url);
         }
 
         /**

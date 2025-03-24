@@ -32,6 +32,20 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('TRP') && tab.allowedModules['TRP']"
+                           ng-click="tab.goToStatus()">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon style="color: #9575CD" size="2x" icon="fa-tasks" aria-hidden="true" ></ons-icon>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"TREATMENTPLANNING"|translate}}</span>
+                        </header>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('APT') && tab.allowedModules['APT']"
                            ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
                 <ons-row align="center">
@@ -42,7 +56,6 @@
                         <header>
                             <span class="item-title" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</span>
                         </header>
-                        <!--<p class="item-desc" ng-class="fontSizeDesc" ng-show="appointmentTitle!=='undefined'"><span translate= "{{appointmentTitle}}"></span> {{appointment.ScheduledStartTime|formatDateAppointmentTask}}</p>-->
                     </ons-col>
                 </ons-row>
             </ons-list-item>
@@ -97,24 +110,19 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']"
-                           ng-click="tab.goToCarnetSante()">
-                <ons-row align="center">
+            <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/education/education.html')">
+                <ons-row align="center" >
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <img style="width: 35px;" src="./img/quebec.png">
+                            <i class="fa fa-solid fa-book fa-2x" style="color: #9575CD"></i>
+                            <span class="notification" ng-show="tab.educationalMaterialsNumber > 0">{{tab.educationalMaterialsNumber}}</span>
                         </div>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title"
-                                  ng-class="fontSizeTitle">{{"CARNET_SANTE"|translate}}</span>
-                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
-                                      size="1.2em">
-                            </ons-icon>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"EDUCATION_MATERIAL"|translate}}</span>
                         </header>
-                        <p class="item-desc"></p>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>

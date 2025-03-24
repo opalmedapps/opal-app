@@ -280,6 +280,11 @@
                     answerInvalid(question);
                 }
 
+                // verify if the required textbox questions are answered correctly
+                if (!verifyRequiredTextboxAnswer(question)){
+                    answerInvalid(question);
+                }
+
                 // save answer
                 saveAnswer(question)
                     .then(function(){
@@ -710,6 +715,11 @@
                 answerInvalid(question);
             }
 
+            // verify if the required textbox questions are answered correctly
+            if (!verifyRequiredTextboxAnswer(question)){
+                answerInvalid(question);
+            }
+
             // save answer
             saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])
                 .then(function(){
@@ -779,6 +789,24 @@
             if (question.type_id === vm.allowedType.CHECKBOX_TYPE_ID){
                 // verify if the checkbox questions are answered correctly
                 if ((vm.checkedNumber > parseInt(question.options[0].maxAnswer) || vm.checkedNumber < parseInt(question.options[0].minAnswer))) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /**
+         * @name verifyRequiredTextboxAnswer
+         * @desc this function performs a check for a user that have completed a textbox type of question having a required field
+         * @param {object} question
+         * @returns {boolean} true if the required textbox is answered, false otherwise
+         */
+        function verifyRequiredTextboxAnswer(question){
+            // only deal with textbox type of question
+            if(question.type_id === vm.allowedType.TEXTBOX_TYPE_ID){
+                // verify if the required textbox questions are answered correctly
+                if(question.optional === '0' && question.patient_answer.answer[0].answer_value === ""){
                     return false;
                 }
             }

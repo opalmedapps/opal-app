@@ -26,6 +26,7 @@
                                            Patient, Logger, UserHospitalPreferences, $filter) {
         var vm = this;
         var backButtonPressed = 0;
+        let navigator;
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
@@ -46,8 +47,7 @@
         ///////////////////////////////////
 
         function activate(){
-            NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
-            NavigatorParameters.setNavigator(educationNavigator);
+            navigator = NavigatorParameters.getNavigator();
 
             bindEvents();
             configureState();
@@ -83,14 +83,14 @@
         }
 
         function bindEvents() {
-            educationNavigator.on('prepop',function()
+            navigator.on('prepop',function()
             {
                 backButtonPressed = 0;
                 configureState();
             });
 
-            educationNavigator.on('prepush', function(event) {
-                if (educationNavigator._doorLock.isLocked()) {
+            navigator.on('prepush', function(event) {
+                if (navigator._doorLock.isLocked()) {
                     event.cancel();
                 }
             });
@@ -98,7 +98,7 @@
             //Cleaning up
             $scope.$on('$destroy',function()
             {
-                educationNavigator.off('prepop');
+                navigator.off('prepop');
             });
         }
         
@@ -119,8 +119,8 @@
             }
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
-            NavigatorParameters.setParameters({ 'Navigator': 'educationNavigator', 'Post': edumaterial, 'RStep':1 });
-            educationNavigator.pushPage('./views/education/individual-material.html');
+            NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator', 'Post': edumaterial, 'RStep':1 });
+            navigator.pushPage('./views/personal/education/individual-material.html');
         }
 
         // Function used to filter the materials shown based on the search string.
