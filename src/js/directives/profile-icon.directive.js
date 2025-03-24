@@ -23,18 +23,9 @@
                 <span class="tab-icon profile-icon" ng-style="profileColor">{{patientInitials}}</span>
             `,
             link: function (scope) {
-                /**
-                 * @description Observe profile selection and trigger UI update.
-                 */
-                ProfileSelector.observeProfile(() => setIcon(ProfileSelector.getActiveProfile()));
-                /**
-                 * @description Set icon color and active profile initials.
-                 * @param {object} activeProfile Currently selected profile.
-                 */
-                function setIcon(activeProfile) {
-                    scope.patientInitials = $filter('profileInitials')(activeProfile);
-                    scope.profileColor = {'background-color': activeProfile.color};
-                }
+                const activeProfile = ProfileSelector.getActiveProfile();
+                scope.patientInitials = $filter('profileInitials')(activeProfile);
+                scope.profileColor = {'background-color': activeProfile.color};
             }
         };
     }

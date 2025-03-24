@@ -130,8 +130,6 @@
          */
         function setPatientInfo(){
             vm.user = User.getLoggedinUserProfile();
-            // The observable is needed to fix a race condition on login.
-            if(!vm.user) ProfileSelector.observeProfile(() => vm.user = User.getLoggedinUserProfile());
             vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments = false;
         }
