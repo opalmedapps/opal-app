@@ -37,9 +37,11 @@ import {Observer} from "../models/utility/observer";
          */
         async function init() {
             patientList = await requestPatientList();
-            await User.initUser();
-            const patientSerNum = getLocalStoragePatientSerNum();
-            loadPatientProfile(patientSerNum);
+            if (patientList){
+                await User.initUser();
+                const patientSerNum = getLocalStoragePatientSerNum();
+                loadPatientProfile(patientSerNum);
+            }
         }
 
         /**
@@ -89,6 +91,10 @@ import {Observer} from "../models/utility/observer";
             try {
                 const requestParams = Params.API.ROUTES.PATIENTS;
                 const result = await RequestToServer.apiRequest(requestParams);
+                // Backend can return no data if user has no relationships whatsoever
+                if (!result.data) {
+                    return [];
+                }
                 const formatedResult = assignColor(result.data) ? result.data : [];
                 return formatedResult
             } catch (error) {
