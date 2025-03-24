@@ -16,14 +16,12 @@ import {Observer} from "../models/utility/observer";
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
-        let loggedInUserPatientId;
 
         return {
             init: init,
             getPatientList: () => patientList,
             loadPatientProfile: loadPatientProfile,
             getActiveProfile: () => currentSelectedProfile,
-            getLoggedInUserPatientId: () => loggedInUserPatientId,
             observeProfile: fun => profileObserver.attach(fun),
         }
 
