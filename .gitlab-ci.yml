@@ -69,6 +69,7 @@ check dependencies:
     - apk add --no-cache curl jq
     - | 
       RESPONSE=$(curl -s -X GET-H "PRIVATE-TOKEN: ${GITLAB_TOKEN_TEST}" "${CI_API_V4_URL}/user")
+    - echo $RESPONSE
     - echo $RESPONSE | jq ".email"
     - echo $CI_COMMIT_AUTHOR
     - echo $GITLAB_USER_NAME
