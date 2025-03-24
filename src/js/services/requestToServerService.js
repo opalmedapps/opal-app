@@ -13,7 +13,8 @@ angular
         return {
             sendRequestWithResponse: sendRequestWithResponse,
             sendRequest: sendRequest,
-            apiRequest: apiRequest
+            apiRequest: apiRequest,
+            handleMultiplePatientsRequests: handleMultiplePatientsRequests
         };
 
         /**
@@ -24,13 +25,13 @@ angular
          * @param {string} referenceField Option refenrece field for the listener's legacy section
          * @returns Firebase unique reference key where the data is uploaded
          */
-        function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField) {
+        function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID) {
             firebase_url = FirebaseService.getDBRef();
             response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
             if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
             let requestType = encryptionKey ? typeOfRequest : EncryptionService.encryptData(typeOfRequest);
             let requestParameters = encryptionKey ? EncryptionService.encryptWithKey(parameters, encryptionKey) : EncryptionService.encryptData(parameters);
-            let request_object = getRequestObject(requestType, requestParameters, typeOfRequest);
+            let request_object = getRequestObject(requestType, requestParameters, typeOfRequest, patientID);
             let reference = getReferenceField(typeOfRequest, referenceField)
             let pushID =  firebase_url.child(reference).push(request_object);
 
@@ -71,10 +72,37 @@ angular
             }
         }
 
-        function sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField) {
+        /**
+         * @descrition - Execute multiple requests to get an announcement per patient then merge the data together.
+         * @param {string} typeOfRequest - Type of request send to the listener
+         * @param {object} parameters - Extra parameters to identify data to be query
+         * @param {string} categoryRequested - The data category requested
+         * @returns Response with merge data
+         */
+        async function handleMultiplePatientsRequests(typeOfRequest, parameters, categoryRequested) {
+            const ProfileSelectorService = $injector.get('ProfileSelector');
+            const patientList = ProfileSelectorService.getConfirmedProfiles();
+            let combinedArrays = [];
+            let results = await Promise.all(patientList.map(patient => {
+                if (!patient.patient_legacy_id) return Promise.resolve();
+                return sendRequestWithResponse(typeOfRequest, parameters, null, null, null, patient.patient_legacy_id);
+            }));
+
+            results.forEach(result => {
+                if (result && result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data.Announcements]
+            });
+
+            return {
+                ...results[0],
+                Data: {[categoryRequested]: combinedArrays}
+            }
+        }
+
+
+        function sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField, patientID) {
             return new Promise((resolve, reject) => {
                 //Sends request and gets random key for request
-                let key = sendRequest(typeOfRequest, parameters, encryptionKey, referenceField);
+                let key = sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID);
                 //Sets the reference to fetch data for that request
                 let refRequestResponse = (!referenceField) ? response_url.child(UserAuthorizationInfo.getUsername() + '/' + key) : firebase_url.child(responseField).child(key);
                 //Waits to obtain the request data.
@@ -121,7 +149,7 @@ angular
          * @param {object} requestParameters Params for the request
          * @returns {object} Formated request parameters
          */
-        function getRequestObject(requestType, requestParameters, typeOfRequest) {
+        function getRequestObject(requestType, requestParameters, typeOfRequest, patientID) {
             let params = {
                 Request : requestType,
                 DeviceId: UUID.getUUID(),
@@ -133,12 +161,13 @@ angular
                 Timestamp: firebase.database.ServerValue.TIMESTAMP
             };
             // Add a target patient if the request type is for patient data
-            if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) params.TargetPatientID = getPatientId();
+            if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) params.TargetPatientID = patientID || getPatientId();
             return params;
         }
 
         /**
-         * @description Get the patientSerNum from the currently selected profile or fallback to the old patient/user service patientSernum
+         * @description Get the patientSerNum from the currently selected profile, curently selected profile for multiple patient data loading
+         *  or fallback to the old patient/user service patientSernum
          * @returns {number} The patientSerNum id required to make the request
          */
         function getPatientId() {
