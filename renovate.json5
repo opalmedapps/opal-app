@@ -1,29 +1,31 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     // https://docs.renovatebot.com/presets-default/#pinallexceptpeerdependencies
     ":pinAllExceptPeerDependencies",
     // https://docs.renovatebot.com/presets-default/#separatemultiplemajorreleases
     ":separateMultipleMajorReleases",
     // https://docs.renovatebot.com/presets-default/#separatepatchreleases
     ":separatePatchReleases",
+    // get updates for alpine version of node images
+    "gitlab>opalmedapps/renovate-bot//presets/docker-alpine.json5",
+    // set timezone to local one to ensure schedules are run
+    // https://docs.renovatebot.com/configuration-options/#timezone
+    ":timezone(America/Toronto)",
+    // get weekly updates to lighten load
+    // https://docs.renovatebot.com/presets-schedule/#scheduleweekly
+    "schedule:weekly",
   ],
-  "assignees": ["staceybeard", "anton.gladyr"],
+  // Extra rules for node images. See: https://github.com/renovatebot/renovate/discussions/29501
+  // Ensure that node docker versioning doesn't interfer with the custom managers.
+  "ignorePresets": ["workarounds:nodeDockerVersioning"],
+  "assignees": ["staceybeard"],
   "labels": ["dependencies"],
-  "separateMinorPatch": true,
-  "ignoreDeps": [
-    "bootstrap",
-    "highcharts",
-    "ionicons",
-    "moment",
-    "onsenui",
-  ],
   "packageRules": [
-    // TODO: add the missing dependencies and group them if possible
     // Group auxiliary angular-related updates
     {
-      "matchPackagePatterns": ["^angular"],
+      "matchDepPatterns": ["^angular"],
       "excludePackagePatterns": ["^@xlts.dev/"],
       "groupName": "auxiliary angular packages"
     },
@@ -32,10 +34,25 @@
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
       "groupName": "xlts angular packages"
     },
-    // Group babel updates
+    // Group @zxcvbn-ts updates
     {
-      "matchPackagePatterns": ["babel"],
-      "groupName": "babel packages"
+      "matchPackagePatterns": ["^@zxcvbn-ts/"],
+      "groupName": "@zxcvbn-ts packages"
+    },
+    // Group webpack updates
+    {
+      "matchPackagePatterns": ["webpack"],
+      "groupName": "webpack packages",
+    },
+    // Group webpack loader updates
+    {
+      "matchPackagePatterns": ["-loader$"],
+      "groupName": "webpack loader packages",
+    },
+    // Group angular-translate updates
+    {
+      "matchPackagePatterns": ["^angular-translate"],
+      "groupName": "angular-translate packages"
     },
   ],
 }

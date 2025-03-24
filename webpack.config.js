@@ -153,7 +153,6 @@ const config = env => {
 				jQuery: "jquery",
 				firebase: "firebase",
 				CryptoJS: "crypto-js",
-				Highcharts: "highcharts",
 			}),
 			new HtmlWebpackPlugin({
 				template: './src/index.html',

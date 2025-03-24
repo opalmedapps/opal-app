@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .controller('QuestionnaireCompletionController', QuestionnaireCompletionController);
 
-    QuestionnaireCompletionController.$inject = ['$filter', 'Navigator', 'Questionnaires'];
+    QuestionnaireCompletionController.$inject = ['$filter', '$scope', 'Navigator', 'Questionnaires'];
 
     /* @ngInject */
-    function QuestionnaireCompletionController($filter, Navigator, Questionnaires) {
+    function QuestionnaireCompletionController($filter, $scope, Navigator, Questionnaires) {
         var vm = this;
 
         // variables for controller
@@ -50,11 +50,15 @@
         }
 
         /**
-         * goBackToList
-         * @desc this function allows the user to go back to the questionnaire list, it has the same use as back button
+         * @description Sends the user to the questionnaire list, either by popping the current page off the stack (same as the back button),
+         *              or by replacing the page (necessary if the user came from notifications).
          */
         function goBackToList() {
-            navigator.popPage();
+            let previousPage = Navigator.getPreviousPageName();
+            if (previousPage === 'questionnairesList.html') navigator.popPage();
+            else navigator.replacePage('views/personal/questionnaires/questionnairesList.html', {
+                questionnairePurpose: purpose,
+            });
         }
 
         /**

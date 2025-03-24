@@ -2,7 +2,7 @@
 
 This guide will walk you through connecting this project (the frontend Opal app) to a backend environment,
 hosted either on a server or on your local machine for development.
-A connection to a running backend environment is required to log into the app and receive data.  
+A connection to a running backend environment is required to log into the app and receive data.
 
 If you haven't already configured a backend environment, refer to the following
 [set up guide](https://opalmedapps.gitlab.io/docs/development/setup/)
@@ -11,9 +11,11 @@ for instructions on how to get started.
 ## Setup
 
 The following instructions assume an environment name of `local`.
-You can replace this with any name you prefer, without any spaces or special characters.
+You can replace this with any name you prefer, without any spaces or special characters (except `-` or `_`).
 
-First create a folder called `local` inside `env`, and copy the sample config file to `env/local`:
+First, create a folder called `local` inside `env`.
+
+Copy the sample config file to `env/local`:
 
 ```shell
 cp env/opal.config.sample.js env/local/opal.config.js

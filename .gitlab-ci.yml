@@ -4,7 +4,7 @@
 default:
   # run jobs on GitLab shared runners by default
   # only run those jobs that need our own build machine (macOS) specifically
-  image: node:20.13.1-alpine3.19
+  image: node:20.17.0-alpine3.19
   # Cache modules in between pipelines
   # See: https://javascript.plainenglish.io/improving-ci-performance-aka-how-to-save-your-money-31ff691360e4
   cache:
@@ -88,8 +88,17 @@ increment version:
     # Run automatically on every commit to the default branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
+    # Set semantic-release author to our own bot user for correct attribution
+    - apk add --no-cache curl jq
+    # use pipe operator to be able to use a colon in the command
+    - | 
+      RESPONSE=$(curl -s -X GET -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" "${CI_API_V4_URL}/user")
+    - export GIT_AUTHOR_EMAIL=$(echo $RESPONSE | jq ".email")
+    - export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
+    - echo "semantic-release-bot email is ${GIT_AUTHOR_EMAIL}"
+    # Install dependencies for semantic-release
     - apk add --no-cache git
-    - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
+    - npm ci --include dev --cache .npm --prefer-offline
   script:
     - npx semantic-release
 
@@ -233,6 +242,9 @@ deploy web:
       "
 
 include:
+  - component: $CI_SERVER_FQDN/opalmedapps/engineering/ci-templates/check-thirdparty-notice@main
+    inputs:
+      package-file: package.json
   # use latest template versions to run security scanning jobs also in merge request pipelines:
   # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
   # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
@@ -344,6 +356,18 @@ build and deploy preprod:
     FIREBASE_APP_ANDROID: $FIREBASE_APP_PREPROD_ANDROID
     FIREBASE_APP_IOS: $FIREBASE_APP_PREPROD_IOS
     GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_PREPROD
+
+# Launches a downstream pipeline to build for the prod environment
+build and deploy prod:
+  extends: .build and deploy downstream
+  variables:
+    # Override pipeline variables to run for the prod environment
+    ENV: "prod"
+    ENV_CONFIG_JS: $ENV_CONFIG_JS_PROD
+    ENV_GOOGLE_SERVICES: $ENV_GOOGLE_SERVICES_PROD
+    FIREBASE_APP_ANDROID: $FIREBASE_APP_PROD_ANDROID
+    FIREBASE_APP_IOS: $FIREBASE_APP_PROD_IOS
+    GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS_PROD
 
 # Launches a downstream pipeline to build for the QA environment
 build and deploy qa:

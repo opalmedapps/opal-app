@@ -1,3 +1,52 @@
+## [1.36.11](https://gitlab.com/opalmedapps/qplus/compare/v1.36.10...v1.36.11) (2024-09-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v10.12.5 ([f33fb03](https://gitlab.com/opalmedapps/qplus/commit/f33fb03a0089fde9cb521ef49b4b4b10c7ba5b83))
+
+## [1.36.10](https://gitlab.com/opalmedapps/qplus/compare/v1.36.9...v1.36.10) (2024-09-13)
+
+
+### Bug Fixes
+
+* fix regexes for databank consent endpoint logic ([4d7e628](https://gitlab.com/opalmedapps/qplus/commit/4d7e6287794795dec9958d1e30d93a01f36d8fe8))
+
+## [1.36.9](https://gitlab.com/opalmedapps/qplus/compare/v1.36.8...v1.36.9) (2024-09-12)
+
+
+### Bug Fixes
+
+* remove committed `env` files from the repository ([5001ac6](https://gitlab.com/opalmedapps/qplus/commit/5001ac6c5767b0d6e3d2a71f5b05a037803c54a5))
+
+## [1.36.9](https://gitlab.com/opalmedapps/qplus/compare/v1.36.8...v1.36.9) (2024-09-12)
+
+
+### Bug Fixes
+
+* remove committed `env` files from the repository ([5001ac6](https://gitlab.com/opalmedapps/qplus/commit/5001ac6c5767b0d6e3d2a71f5b05a037803c54a5))
+
+## [1.36.8](https://gitlab.com/opalmedapps/qplus/compare/v1.36.7...v1.36.8) (2024-09-06)
+
+
+### Bug Fixes
+
+* minor UI fixes ([d99075c](https://gitlab.com/opalmedapps/qplus/commit/d99075c3be0bde6515fd87215f7700d5fa46c688))
+
+## [1.36.7](https://gitlab.com/opalmedapps/qplus/compare/v1.36.6...v1.36.7) (2024-09-06)
+
+
+### Bug Fixes
+
+* keep date format as ISO to correctly convert to Date instance on iOS ([2693ac1](https://gitlab.com/opalmedapps/qplus/commit/2693ac14919b458117a5f4037dad171771cc9a3d))
+
+## [1.36.6](https://gitlab.com/opalmedapps/qplus/compare/v1.36.5...v1.36.6) (2024-09-05)
+
+
+### Bug Fixes
+
+* **deps:** use legacy pdf.js build ([631bde6](https://gitlab.com/opalmedapps/qplus/commit/631bde61f4405e5725dae0319b3989243896ad2a))
+
 ## [1.36.5](https://gitlab.com/opalmedapps/qplus/compare/v1.36.4...v1.36.5) (2024-08-21)
 
 
