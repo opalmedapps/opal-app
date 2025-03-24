@@ -238,3 +238,5 @@ include:
 secret_detection:
   variables:
     SECRET_DETECTION_HISTORIC_SCAN: "true"
+  rules:
+    - when: always
