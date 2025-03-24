@@ -4,6 +4,8 @@
  *         Refactored by James Brace, Sept 2017 (individualDocumentController.js).
  *         Refactored as a directive by Stacey Beard, Aug 2021 (pdf-viewer.directive.js).
  */
+import * as pdfjsLib from "pdfjs-dist/webpack";
+
 (function () {
     'use strict';
 
@@ -86,7 +88,7 @@
 
                     uint8pf = FileManagerService.convertToUint8Array(scope.pdfContent);
 
-                    PDFJS.getDocument(uint8pf).then(function (_pdfDoc) {
+                    pdfjsLib.getDocument(uint8pf).promise.then(function (_pdfDoc) {
                         uint8pf = null;
 
                         let promises = [];

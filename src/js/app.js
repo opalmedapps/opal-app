@@ -94,9 +94,6 @@ import firebase from "firebase";
 import "angular-sanitize";
 import "onsenui/js/onsenui";
 import "moment";
-import "pdfjs-dist/build/pdf";
-import "pdfjs-dist/build/pdf.worker";
-import "pdfjs-dist/web/pdf_viewer";
 import "crypto-js";
 import "tweetnacl";
 import "tweetnacl-util";
@@ -106,6 +103,7 @@ import "angular/angular-csp.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "animate.css";
 import "font-awesome/css/font-awesome.css";
+import 'pdfjs-dist';
 import "../css/app.css";
 import "../css/elements/custom-toast.element.css";
 import "../Languages/angular-locales/angular-locale_en.js"
