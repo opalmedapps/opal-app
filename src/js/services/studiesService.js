@@ -74,7 +74,7 @@
                 "middle_name": "",
                 "city_of_birth": ""
             };
-            // Extract the middle name and cob question responses for the GUID generation in Django
+            // Extract the middle name and city of birth question responses for the GUID generation in Django
             consent_questionnaire_response.sections.forEach(section => {
                 section.questions.forEach(question => {
                     if (/middle\s*name/i.test(question.question_display)) {
