@@ -54,7 +54,7 @@ The following is the top level anatomy of the folders and their description. As 
 ├── CHANGES # Description of changes per version
 ├── README.md
 ├── .gitlab # Contains templates used in GitLab
-├── deploy.sh # CI set of instructions for given a commit
+├── .gitlab-ci.yml # GitLab CI/CD pipeline description file
 ├── env # Folder where the environment specific files live
     ├── preprod
     ├── prod
@@ -197,6 +197,7 @@ If you want an alternative to using webpack-dev-server for serving the Opal web 
    http-server would then pickup upon refreshing the page.
 
 ### Installing, building, and serving the mobile app code
+#### Locally
 1. Make sure you have followed the steps on [Installing, building, and serving the mobile web code](#installing-building-and-serving-the-web-code).
 
 2. Install and set up Cordova for the desired target platforms by following the steps in the Android and iOS cordova environments: **Note: iOS may only be built by a machine with macOS as the operating system**
@@ -227,6 +228,22 @@ A few notes on this:
  The development apps allow debugging, among other security risks such as self-signed certificates. 
  To disable them, use the release mode: `cordova build --release --verbose`. 
  In particular, prod settings (`prod/config.xml`) and release mode should be used for builds that are sent in for penetration or security testing, to ensure that common security vulnerabilities such as debugging being enabled are not flagged.
+
+#### Using CI/CD
+As an alternative to setting up your computer to build the app locally, GitLab can be used to build the app for you,
+providing you with the resulting output files directly in GitLab.
+
+1. After committing your work on a personal branch, push the branch to GitLab.
+   1. If you have an open merge request, you will see a box saying
+      `Detached merge request pipeline #___ waiting for manual action`.
+      Click on the gear icon on the right to reveal two buttons with which to launch an iOS or Android build.
+   2. If you don't have an open merge request, navigate to
+      the [Pipelines page](https://gitlab.com/opalmedapps/qplus/-/pipelines).
+      There, click to open the blocked pipeline corresponding to your latest commit, and use the play buttons
+      to launch a build for iOS or Android.
+2. Once a build job has completed, click on it to open the job's page. On the right side panel, use the 'Job artifacts'
+   section to download the output file for the build (.ipa or .apk). These files can be used to install the app directly
+   on your device, or can be sent to yourself via Firebase App Distribution in your personal Firebase project.
 
 ### Opal App Scripts
 Commands for developer convenience can be found in the [package.json](./package.json) file (in the `"scripts"` section). 
