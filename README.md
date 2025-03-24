@@ -60,7 +60,7 @@ The following is the top level anatomy of the folders and their description. As 
 ├── opal_env.setup.js # File to manage the Opal environments and versions
 ├── package-lock.json
 ├── package.json # Contains scripts for development
-├── redirect # Contains code for the password-reset site (Password reset functionality in Opal)
+├── static # Contains static pages such as the landing page and password-reset site (Password reset functionality in Opal)
 ├── res # Contains app splash and icon images
 ├── src # This is where your source code lives
 ├── www  # The build/distribution folder, source code gets compiled into this directory
