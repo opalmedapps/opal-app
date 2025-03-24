@@ -1,3 +1,17 @@
+## [1.30.2](https://gitlab.com/opalmedapps/qplus/compare/v1.30.1...v1.30.2) (2024-03-21)
+
+
+### Bug Fixes
+
+* display informative error if no relationships exist for user ([a788181](https://gitlab.com/opalmedapps/qplus/commit/a7881813c888879fe844fd30220a3f253c885c2c))
+
+## [1.30.1](https://gitlab.com/opalmedapps/qplus/compare/v1.30.0...v1.30.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* pass array instead of string to reloadPreviousProfilePrepopHandler ([9b78387](https://gitlab.com/opalmedapps/qplus/commit/9b78387ceda589517daa4e5cc2ff74b8b8e22cea))
+
 # [1.30.0](https://gitlab.com/opalmedapps/qplus/compare/v1.29.4...v1.30.0) (2024-02-29)
 
 

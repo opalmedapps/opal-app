@@ -89,7 +89,7 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
          *      The handler is invoked in case the profile was implicitly changed.
          *      E.g., opening up a caregiver's notification and going back to the Notifications page.
          *@methodOf MUHCApp.service:NavigatorParameters
-         *@param {string|Array<string>} [categories=[]] The category or categories to update (force to refresh).
+         *@param {Array<string>} [categories=[]] The categories to update (force to refresh).
          *@return {Object} Returns a handler function for the prepop event.
          **/
         reloadPreviousProfilePrepopHandler:function(categories = [])

@@ -153,6 +153,8 @@ const config = env => {
 			new HtmlWebpackPlugin({
 				template: './src/index.html',
 				inject: 'head',
+				// v5 changed script loading to be deferred, revert to previous default
+				scriptLoading: 'blocking',
 				title: 'Opal',
 				filename: 'index.html',
 				meta: {
