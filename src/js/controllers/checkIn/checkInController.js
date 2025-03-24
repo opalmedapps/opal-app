@@ -130,7 +130,7 @@
          * @description Checks if in the list of Appointments,for the target patient
          */
         async function CheckInAppointments(PatientSerNum) {
-            vm.displayApps[PatientSerNum].forEach(app => {
+            vm.displayApps[PatientSerNum].apps.forEach(app => {
                 if (app.CheckInStatus != 'success') {
                     app.loading = true;
                 }
