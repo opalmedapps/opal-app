@@ -67,7 +67,7 @@
 
             if (!isStatusCorrect){
                 let error = "ERROR: error in updating the questionnaire status, it does not have a valid new status";
-                return reject({Success: false, Location: '', Error: error});
+                throw {Success: false, Location: '', Error: error};
             }
 
             
@@ -82,7 +82,7 @@
                 await RequestToServer.sendRequestWithResponse(api.UPDATE_STATUS, params);
                 return {Success: true, Location: 'Server'}
             } catch (error) {
-                return {Success: false, Location: '', Error: error}
+                throw {Success: false, Location: '', Error: error}
             }
         }
 
@@ -134,7 +134,7 @@
                 await RequestToServer.sendRequestWithResponse(api.SAVE_ANSWER, params);
                 return {Success: true, Location: 'Server'};
             } catch (error) {
-                return {Success: false, Location: '', Error: error};
+                throw {Success: false, Location: '', Error: error};
             }
         }
 
