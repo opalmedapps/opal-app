@@ -289,6 +289,8 @@
   "SMARTDEVICES_BLUETOOTH_PROMPT": "Please enable it and then press the refresh button below.",
   "SMARTDEVICES_BLUETOOTH_REFRESH": "Refresh",
   "SMARTDEVICES_BLUETOOTH_UNAVAILABLE": "Bluetooth is only supported on a mobile device",
+  "SMARTDEVICES_VITALTRACER": "VitalTracer Watch",
+  "SMARTDEVICES_IMD": "iMD Research Bracelet",
   "STAGE": "Step",
   "STAGEOF": "Step {{index}} of {{total}}",
   "STUDIES": "Studies",

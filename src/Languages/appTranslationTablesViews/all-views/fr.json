@@ -289,6 +289,8 @@
     "SMARTDEVICES_BLUETOOTH_PROMPT": "Veuillez activer votre appareil et appuyer sur le bouton d'actualisation.",
     "SMARTDEVICES_BLUETOOTH_REFRESH": "Actualiser",
     "SMARTDEVICES_BLUETOOTH_UNAVAILABLE": "Translation missing",
+    "SMARTDEVICES_VITALTRACER": "Montre VitalTracer",
+    "SMARTDEVICES_IMD": "Bracelet iMD Research",
     "STAGE": "Étape",
     "STAGEOF": "Étape {{index}} sur {{total}}",
     "STUDIES": "Études",
