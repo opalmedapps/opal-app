@@ -51,7 +51,7 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
          *@propertyOf MUHCApp.service:CheckinService
          *@description Determines the current state of check-in for a given patient
          */
-        var state = initialState;
+        let state = initialState;
 
         ///////////////////////////////////////////
 
