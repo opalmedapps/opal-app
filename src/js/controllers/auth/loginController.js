@@ -345,37 +345,8 @@
 
             } else {
                 vm.loading = true;
-
-                //the user is still logged in if this is present
-                var authDetails = $window.sessionStorage.getItem('UserAuthorizationInfo');
-
                 if(savedEmail === vm.email) sameUser = true;
-
-                var stillActive = false;
-
-                //if the user is still logged in and was active in the last 10 minutes, then we can skip the loading process and take the user straight to their information
-                if (authDetails) {
-                    var now = new Date();
-                    now = now.getTime();
-                    var tenMinutesAgo = now - Params.tenMinutesMilliSeconds;
-                    authDetails = JSON.parse(authDetails);
-                    stillActive = (authDetails.LastActive > tenMinutesAgo);
-                }
-
-                // Get the authentication state
-                var myAuth = firebase.auth().currentUser;
-
-                //If the user information is still on the phone, they are logged in, and were active in the past 10 minutes.. then skip the logging in and loading process entirely.
-                if (myAuth && stillActive && authDetails.Email === vm.email && vm.trusted) {
-                    firebase.auth().signInWithEmailAndPassword(vm.email, vm.password)
-                        .then(function () {
-                            localStorage.removeItem('locked');
-                            $state.go('Home');
-                        }).catch(handleError);
-                } else{
-                    //Otherwise follow the normal logging in use case
-                    firebase.auth().signInWithEmailAndPassword(vm.email, vm.password).then(authHandler).catch(handleError);
-                }
+                firebase.auth().signInWithEmailAndPassword(vm.email, vm.password).then(authHandler).catch(handleError);
             }
         }
 
