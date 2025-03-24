@@ -11,7 +11,6 @@
     function CaregiversController($timeout, RequestToServer, Params, User) {
         var vm = this;
         vm.error = null;
-        vm.notFound = null;
         vm.message = null;
         vm.apiData;
         vm.caregivers;
@@ -26,6 +25,7 @@
                 // Special case: if the user doesn't have a self relationship, then this user has no caregivers
                 if (!selfPatientSerNum) {
                     vm.apiData = [];
+                    handleDisplay();
                     return;
                 }
 
@@ -35,7 +35,7 @@
                     url: requestParams.url.replace('<PATIENT_ID>', selfPatientSerNum),
                 }
                 const result = await RequestToServer.apiRequest(formatedParams);
-                (result.data?.length <= 0) ? vm.notFound = true : vm.apiData = result.data;
+                vm.apiData = result.data;
             } catch (error) {
                 vm.error = true;
                 console.error(error);
@@ -46,7 +46,8 @@
         function handleDisplay() {
             $timeout(() => {
                 if (vm.error) return vm.message = 'RELATIONSHIPS_CAREGIVERS_ERROR';
-                if (vm.notFound) return vm.message = 'RELATIONSHIPS_CAREGIVERS_NOT_FOUND';
+                console.log(vm.apiData.length, vm.apiData);
+                if (vm.apiData.length === 0) return vm.message = 'RELATIONSHIPS_CAREGIVERS_NONE';
                 vm.caregivers = vm.apiData;
             });
         }

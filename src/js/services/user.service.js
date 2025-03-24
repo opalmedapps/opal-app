@@ -10,9 +10,9 @@
         .module('MUHCApp')
         .factory('User', User);
 
-    User.$inject = ['$injector','Params','RequestToServer','UserAuthorizationInfo'];
+    User.$inject = ['$injector','Params','RequestToServer'];
 
-    function User($injector, Params, RequestToServer, UserAuthorizationInfo) {
+    function User($injector, Params, RequestToServer) {
 
         let userInfo;
 
@@ -24,22 +24,21 @@
 
         async function initUser() {
             const requestParams = Params.API.ROUTES.USER;
-            const formattedParams = {
-                ...requestParams,
-                url: requestParams.url.replace('<USERNAME>', UserAuthorizationInfo.getUsername()),
-            }
-            const result = await RequestToServer.apiRequest(formattedParams);
+            const result = await RequestToServer.apiRequest(requestParams);
             userInfo = result?.data;
             assignColor();
         }
 
         /**
-         * @desc Finds and returns the user's own "self" profile, if they have one.
-         * @returns {object} The user's "self" profile, or undefined if they don't have one.
+         * @desc Finds and returns the user's own "self" profile, if they have one and if its status is confirmed.
+         * @returns {object} The user's "self" profile, or undefined if they don't have one or if it isn't confirmed.
          */
         function getSelfProfile() {
             const ProfileSelector = $injector.get('ProfileSelector');
-            return ProfileSelector.getPatientList().find(profile => profile?.relationship_type?.role_type === "SELF");
+            return ProfileSelector.getPatientList().find(profile => {
+                return profile?.relationship_type?.role_type === "SELF"
+                    && profile?.status === Params.relationshipStatus.confirmed;
+            });
         }
 
         /**
