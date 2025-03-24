@@ -50,7 +50,6 @@
             },
             education: {
                 icon:'fa-book',
-                color:'Chocolate',
                 name:"EDUCATION",
                 description:"EDUCATION_DESCRIPTION"
             },
