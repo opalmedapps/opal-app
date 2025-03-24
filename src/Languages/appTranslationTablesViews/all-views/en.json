@@ -217,7 +217,7 @@
   "QUESTIONNAIRE_INSTRUCTIONS": "Answer the questions in red. Questions in green can be edited. Once all questions are answered, you can submit.",
   "QUESTIONNAIRE_INSTRUCTIONS4": "Go to Question",
   "QUESTIONNAIRE_IN_PROGRESS": "In Progress",
-  "QUESTIONNAIRE_LOCKING_ERROR": "This questionnaire can't be answered because you are not allowed to answer questionnaires for current patient or another user with access to this patient's file has already started it. If another user is completing the questionnaire, once this user has completed, you'll be able to view the answers on the Completed tab.",
+  "QUESTIONNAIRE_LOCKING_ERROR": "This questionnaire can't be answered because another user with access to this patient's file has already started it. Once this user has completed the questionnaire, you'll be able to view the answers on the Completed tab.",
   "QUESTIONNAIRE_NEW": "New",
   "QUESTIONNAIRE_NONE_COMPLETED": "No completed questionnaires.",
   "QUESTIONNAIRE_NONE_NEW": "No new questionnaires.",

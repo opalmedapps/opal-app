@@ -217,7 +217,7 @@
     "QUESTIONNAIRE_INSTRUCTIONS": "Répondez aux questions en rouge. Les questions en vert peuvent être modifiées. Une fois toutes les questions répondues, vous pouvez soumettre vos réponses.",
     "QUESTIONNAIRE_INSTRUCTIONS4": "Aller à la question",
     "QUESTIONNAIRE_IN_PROGRESS": "En cours",
-    "QUESTIONNAIRE_LOCKING_ERROR": "Ce questionnaire ne peut être complété car vous n'êtes pas autorisé à répondre aux questionnaires du patient actuel ou un autre utilisateur ayant access au dossier de ce patient l'a déjà commencé. S'il y a un autre utilisateur qui remplissait, une fois le questionnaire complété, vous pourrez consulter les réponses sur l'onglet « Complétés ».",
+    "QUESTIONNAIRE_LOCKING_ERROR": "Ce questionnaire ne peut être complété car un autre utilisateur ayant access au dossier de ce patient l'a déjà commencé. Une fois le questionnaire complété, vous pourrez consulter les réponses sur l'onglet « Complétés ».",
     "QUESTIONNAIRE_NEW": "Nouveaux",
     "QUESTIONNAIRE_NONE_COMPLETED": "Pas de questionnaire rempli.",
     "QUESTIONNAIRE_NONE_NEW": "Pas de nouveau questionnaire.",
