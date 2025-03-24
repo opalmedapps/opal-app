@@ -57,7 +57,7 @@
          *@name showConfirmation
          *@methodOf MUHCApp.service:NativeNotification
          *@param {String} message Confirmation message to be displayed
-         *@param {function} [callback] - Called when the OK button is pressed.
+         *@param {function} callback Called when the OK button is pressed.
          *@description Displays message as a native looking confirmation dialog with an OK and Cancel button
          **/
         function showConfirmation(message, callback) {
@@ -70,7 +70,7 @@
                 buttonLabels: [$filter('translate')("CANCEL"), $filter('translate')("OK_BUTTON")],
                 callback: (idx) => {
                     currentAlert = null;
-                    if (callback && idx === 0) callback();
+                    if (callback && idx === 1) callback();
                 }
             });
         }
