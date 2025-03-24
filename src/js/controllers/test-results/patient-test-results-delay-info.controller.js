@@ -8,9 +8,9 @@
         .module('MUHCApp')
         .controller('PatientTestResultsDelayInfoController', PatientTestResultsDelayInfoController);
 
-    PatientTestResultsDelayInfoController.$inject = ['Hospital', 'Params', '$timeout'];
+    PatientTestResultsDelayInfoController.$inject = ['$timeout', 'Hospital', 'Params'];
 
-    function PatientTestResultsDelayInfoController(Hospital, Params, $timeout) {
+    function PatientTestResultsDelayInfoController($timeout, Hospital, Params) {
 
         const vm = this;
         vm.loading = true;
@@ -23,7 +23,6 @@
         async function activate() {
             try {
                 let institution = await Hospital.requestInstitutionInfo();
-                console.log(institution);
 
                 $timeout(() => {
                     vm.default_interpretable = institution.interpretable_lab_result_delay;

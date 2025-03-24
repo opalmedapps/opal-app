@@ -118,7 +118,7 @@
     "LAB_DELAY_INFO_HEADER": "Modification des paramètres de délai des résultats de laboratoire",
     "LAB_DELAY_INFO_TEXT": "Les paramètres de délai des résultats de laboratoire peuvent être modifiés sur demande. Vous pouvez trouver un formulaire imprimable d'Accès aux résultats de laboratoire dans le menu Bibliothèque d'Opal ou en faisant la demande à l'hôpital.",
     "LAB_DELAY_DEFAULTS_HEADER": "Les délais par défaut fixés par l'établissement sont :",
-    "LAB_DELAY_DEFAULTS_INTERPRETABLE": "Résultat interprétable ({ yesno, select, yes{oui} no{non} other{invalid} }) :",
+    "LAB_DELAY_DEFAULTS_INTERPRETABLE": "Résultat interprétable ({ yesno, select, yes{oui} no{non} other{?} }) :",
     "LAB_DELAY_INTERPRETABLE": "Après avoir reçu l'enseignement de la part de votre équipe soignante vous serez en mesure d'interpréter ces résultats par vous-même.",
     "LAB_DELAY_NONINTERPRETABLE": "Non-interprétable : Ces résultats nécessitent généralement l'interprétation d'un professionnel de la santé et ne peuvent donc pas être interprétés par vous-même.",
     "LAB_DISCLAIMER": "Pas pour usage clinique",
