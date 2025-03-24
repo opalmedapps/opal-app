@@ -266,9 +266,9 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
             const selfPatientSerNum = User.getSelfPatientSerNum();
             if (!appointments) return;
             appointments.forEach(appointment => {
-                let patientName = `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`;
+                let patientName = `${appointment.patient.first_name} ${appointment.patient.last_name}'s appointments`;
                 if ((UserPreferences.getLanguage()=='FR')) {
-                    patientName = `Rendez-vous pour ${appointment.patient.firstname} ${appointment.patient.lastname}`;
+                    patientName = `Rendez-vous pour ${appointment.patient.first_name} ${appointment.patient.last_name}`;
                 }
                 if (selfPatientSerNum && appointment.patient.patientsernum === selfPatientSerNum) {
                     patientName = (UserPreferences.getLanguage()=='EN') ? 'Your appointments' : 'Vos rendez-vous';
