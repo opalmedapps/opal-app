@@ -115,6 +115,8 @@ build android:
     - gradle -v
     - npm run build:app:android:device --env=$ENV
     - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-$ENV.apk"
+    - ls -la "./platforms/android/app/build/outputs"
+    - ls -la "./platforms/android/app/build/"
   artifacts:
     expire_in: 1 day
     paths:
@@ -132,6 +134,8 @@ build ios:
     - gem install --user-install ffi -- --enable-libffi-alloc
     - npm run build:app:ios:device:ci --env=$ENV --devteam=$IOS_DEVELOPMENT_TEAM
     - mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-$ENV.ipa"
+    - ls -la ./platforms/ios/build/
+    - ls -la ./platforms/ios/build/Debug-iphoneos/
   artifacts:
     expire_in: 1 day
     paths:
