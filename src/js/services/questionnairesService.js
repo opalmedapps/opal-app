@@ -587,7 +587,7 @@
             });
 
             // Format and validate the questionnaire's integer properties
-            let intProperties = ['status', 'respondent_id'];
+            const intProperties = ['status', 'respondent_id'];
             intProperties.forEach(prop => {
                 const intProp = parseInt(questionnaireStub[prop]);
                 if (isNaN(intProp)) throw new Error(`Questionnaire stub's '${prop}' cannot be parsed as an int: ${questionnaireStub[prop]}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
@@ -595,10 +595,10 @@
             });
 
             // Format and validate the questionnaire's date properties
-            let dateProperties = ['completed_date', 'created', 'last_updated'];
+            const dateProperties = ['completed_date', 'created', 'last_updated'];
             dateProperties.forEach(prop => {
                 // Only format date properties that were provided and that haven't been formatted already (must still be strings)
-                if (typeof questionnaireStub[prop] == 'string') {
+                if (typeof questionnaireStub[prop] === 'string') {
                     const dateProp = Date.parse(questionnaireStub[prop]);
                     if (isNaN(dateProp)) throw new Error(`Questionnaire stub's '${prop}' cannot be parsed as a date: ${questionnaireStub[prop]}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
                     questionnaireStub[prop] = dateProp;
