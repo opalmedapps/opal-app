@@ -317,7 +317,7 @@
                         vm.alert.message = "ERROR_NETWORK";
                     });
                     break;
-                case 1: // Encryption error
+                case Params.REQUEST.ENCRYPTION_ERROR:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "PASSWORD_SERVER_ERROR";
