@@ -250,7 +250,7 @@
     "RELATIONSHIPS_PATIENTS_STATUS_DEN": "Refusé",
     "RELATIONSHIPS_PATIENTS_STATUS_EXP": "Expiré",
     "RELATIONSHIPS_PATIENTS_STATUS_REV": "Revoqué",
-    "RELATIONSHIPS_PATIENTS_AVAILABLE": "Profil(s) disponible(s)",
+    "RELATIONSHIPS_PATIENTS_AVAILABLE": "Dossiers de patient(es) disponibles",
     "RELATIONSHIPS_PATIENTS_NOT_AVAILABLE": "Aucun profil disponible",
     "RELATIONSHIPS_PATIENTS": "Mes patients",
     "RELATIONSHIPS_PATIENTS_NONE": "Aucun patient n'est relié à ce compte.",
