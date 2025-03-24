@@ -20,7 +20,6 @@
         vm.ProfileImage = null;
         vm.language = 'EN';
         vm.appointmentShown = null;
-        vm.todaysAppointments = [];
         vm.calledApp = null;
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
@@ -125,7 +124,6 @@
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
                 const checkinState = await CheckInService.evaluateCheckinState(result.data.daily_appointments);
-                vm.todaysAppointments = result.data.daily_appointments;
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
                     vm.checkinState = checkinState;

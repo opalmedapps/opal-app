@@ -99,9 +99,6 @@
         ////////////////////////////////////////////
 
         async function attemptCheckin(patientSerNum){
-            if (attemptedCheckin && allCheckedIn) return 'SUCCESS';
-            if (attemptedCheckin && errorsExist) return 'ERROR';
-
             const isAllowed = await isWithinCheckinRange();
             if (!isAllowed) return 'NOT_ALLOWED';
 
