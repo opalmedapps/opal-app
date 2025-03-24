@@ -97,4 +97,34 @@
         display: none;
     }
 }
+.info-modal {
+    border-radius: 25px;
+    background: rgba(0,0,0,0.6);
+    padding: 10px;
+    width: 90%;
+    height: 60%;
+    margin: auto;
+    position: relative;
+    overflow: scroll !important;
+}
+.info-modal-text {
+    background: rgba(0,0,0,0.0);
+    padding: 0px;
+    width: 100%;
+    height: 85%;
+    overflow: scroll !important;
+}
+.info-modal-title {
+    margin: 5%;
+    text-align: center;
+}
+.info-modal-text-title {
+    margin: 5%;
+    text-align: left;
+}
+.info-modal-text-description {
+    margin-left: 10%;
+    text-align: left;
+    white-space: pre-line;
+}
 

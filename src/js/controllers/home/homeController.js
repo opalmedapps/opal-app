@@ -141,22 +141,25 @@
          * @desc get latest version info according to the current version
          */
         function checkForVersionUpdates() {
+            const currentVersion = Version.currentVersion();
             let lastVersion = localStorage.getItem('lastVersion');
             if (!lastVersion) {
-                lastVersion = '1.0.0';
+                const lastPoint = currentVersion.lastIndexOf('.');
+                lastVersion = currentVersion.substr(0, lastPoint) + '.0';
                 localStorage.setItem('lastVersion', lastVersion);
             }
-            const currentVersion = Version.currentVersion();
-
-            if (currentVersion != lastVersion) {
-
-                const updates = Version.getVersionUpdates(lastVersion, vm.language);
-                $scope.infoModalVersion = Version.currentVersion();
-                $scope.infoModalData = updates;
-                $timeout(function () {
-                    infoModal.show();
-                },200);
-                localStorage.setItem('lastVersion', currentVersion);
+            
+            if (currentVersion !== lastVersion) {
+                Version.getVersionUpdates(lastVersion, vm.language).then(function(data) {
+                    if (data && data.length > 0) {
+                        $scope.infoModalVersion = Version.currentVersion();
+                        $scope.infoModalData = data;
+                        $timeout(function () {
+                            infoModal.show();
+                        },200);
+                        localStorage.setItem('lastVersion', currentVersion);
+                    }
+                });
             }
         }
 
@@ -241,10 +244,6 @@
          */
         function goToAcknowledgements() {
             homeNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
-        }
-
-        function test() {
-            console.log('test');
         }
     }
 })();

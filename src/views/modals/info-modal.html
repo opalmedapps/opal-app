@@ -1,6 +1,7 @@
 <ons-modal var="infoModal">
     <div class="info-modal">
         <div class="info-modal-text">
+            <div><H3 class="info-modal-title">{{"WHATSNEW"|translate}}</H3></div>
             <div><H4 class="info-modal-text-title">{{"CURRENT_VERSION"|translate}}{{infoModalVersion}}</H4></div>
             <div ng-repeat="data in infoModalData">
                 <H4 class="info-modal-text-title">Version: {{data.title}}</H4>
@@ -10,31 +11,3 @@
         <ons-button style="margin-top: 5%;" ng-click="infoModal.hide()">{{"CLOSE"|translate}}</ons-button>
     </div>
 </ons-modal>
-<style>
-    .info-modal {
-        border-radius: 25px;
-        background: rgba(0,0,0,0.6);
-        padding: 10px;
-        width: 90%;
-        height: 60%;
-        margin: auto;
-        position: relative;
-        overflow: scroll !important;
-    }
-    .info-modal-text {
-        background: rgba(0,0,0,0.0);
-        padding: 0px;
-        width: 100%;
-        height: 85%;
-        overflow: scroll !important;
-    }
-    .info-modal-text-title {
-        margin: 5%;
-        text-align: left;
-    }
-    .info-modal-text-description {
-        margin-left: 10%;
-        text-align: left;
-        white-space: pre-line;
-    }
-</style>

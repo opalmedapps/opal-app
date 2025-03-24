@@ -1,6 +1,6 @@
 /*
  * Author Limin 2022-07-05
- * Refactored by Stacey Beard on 2022-07-07
+ * Refactored by Limin on 2022-07-07
  */
 
 /**
@@ -18,9 +18,9 @@
         .module('MUHCApp')
         .factory('Version', Version);
 
-    Version.$inject = ['$filter','$q','RequestToServer', 'Constants', '$timeout'];
+    Version.$inject = ['$filter','$q','RequestToServer', 'Constants'];
 
-    function Version($filter, $q, RequestToServer, Constants, $timeout) {
+    function Version($filter, $q, RequestToServer, Constants) {
 
         /**
          * @ngdoc property
@@ -71,12 +71,11 @@
          * @methodOf MUHCApp.service:Version
          * @description get the version update information.
          **/
-        function getVersionUpdates(lastVersion, language) {
+        async function getVersionUpdates(lastVersion, language) {
+            var r = $q.defer();
             const https = require('https');
-            let updates = [];
-
-            // https.get is sync
-            https.get(version_url,(res) => {
+            // https.get is async
+            await https.get(version_url,(res) => {
                 let body = "";
 
                 res.on("data", (chunk) => {
@@ -86,10 +85,10 @@
                 res.on("end", () => {
                     try {
                         let versions = JSON.parse(body);
-                        const last_version_num = dot2num(lastVersion);
+                        versions = versionSort(versions);
+                        let updates = [];
                         versions.forEach(function(value) {
-                            const loop_version_num = dot2num(value.VERSION);
-                            if (loop_version_num > last_version_num && value.DESCRIPTION_EN) {
+                            if (versionCompare(value.VERSION, lastVersion) === 1 && value.DESCRIPTION_EN) {
                                 let infoData = {};
                                 let description = language == 'EN' ? value.DESCRIPTION_EN : value.DESCRIPTION_FR;
                                 description = formatVersionDescription(description);
@@ -98,15 +97,18 @@
                                 updates.push(infoData);
                             }
                         });
+                        r.resolve(updates);
                     } catch (error) {
                         console.error(error.message);
+                        r.reject(error.message);
                     };
                 });
             }).on("error", (error) => {
                 console.error(error.message);
+                r.reject(error.message);
             });
 
-            return updates;
+            return r.promise;
         }
 
         /**
@@ -124,13 +126,55 @@
         }
 
         /**
-         * @name dot2num
-         * @desc convert version value to number
+         * @name versionSort
+         * @desc sort the array by version asc
          */
-        function dot2num(dot)
+        function versionSort(versions) {
+            const length = versions.length;
+            for (let i = 1; i < length; i++) {
+                for (let j = length - 1; j >= i; j--) {
+                    if (versionCompare(versions[j - 1].VERSION, versions[j].VERSION) === 1) {
+                        const temp = versions[j];
+                        versions[j] = versions[j - 1];
+                        versions[j - 1] = temp;
+                    }
+                }
+            }
+            return versions;
+        }
+
+        /**
+         * @name versionCompare
+         * @desc compare version1 and version2
+         *       return 1 if v1 is greater than v2
+         *       return 0 if v1 = v2
+         *       return -1 if v1 < v2
+         */
+        function versionCompare(v1, v2)
         {
-            const d = dot.split('.');
-            return ((((+d[0])*256)+(+d[1]))*256)+d[2];
+            var a = v1.split('.');
+            var b = v2.split('.');
+
+            for (var i = 0; i < a.length; ++i) {
+                a[i] = Number(a[i]);
+            }
+            for (var i = 0; i < b.length; ++i) {
+                b[i] = Number(b[i]);
+            }
+            if (a.length == 2) {
+                a[2] = 0;
+            }
+
+            if (a[0] > b[0]) return 1;
+            if (a[0] < b[0]) return -1;
+
+            if (a[1] > b[1]) return 1;
+            if (a[1] < b[1]) return -1;
+
+            if (a[2] > b[2]) return 1;
+            if (a[2] < b[2]) return -1;
+
+            return 0;
         }
 
         /**
