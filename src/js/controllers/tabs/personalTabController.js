@@ -104,12 +104,12 @@
          */
         function calculateResearchBadge(unreadCounts) {
             let total = 0;
-            let enabledREF = vm.allowedModules.hasOwnProperty('REF') && vm.allowedModules['REF'];
-            let enabledRQU = vm.allowedModules.hasOwnProperty('RQU') && vm.allowedModules['RQU'];
-            let enabledCON = vm.allowedModules.hasOwnProperty('CON') && vm.allowedModules['CON'];
-            if (enabledREF) total += parseInt(unreadCounts.unread_research_reference_count);
-            if (enabledRQU) total += parseInt(unreadCounts.unread_research_questionnaire_count);
-            if (enabledCON) total += parseInt(unreadCounts.unread_consent_questionnaire_count);
+            let researchReferenceEnabled = vm.allowedModules.hasOwnProperty('REF') && vm.allowedModules['REF'];
+            let researchQuestionnairesEnabled = vm.allowedModules.hasOwnProperty('RQU') && vm.allowedModules['RQU'];
+            let researchConsentEnabled = vm.allowedModules.hasOwnProperty('CON') && vm.allowedModules['CON'];
+            if (researchReferenceEnabled) total += parseInt(unreadCounts.unread_research_reference_count);
+            if (researchQuestionnairesEnabled) total += parseInt(unreadCounts.unread_research_questionnaire_count);
+            if (researchConsentEnabled) total += parseInt(unreadCounts.unread_consent_questionnaire_count);
             return total;
         }
 
