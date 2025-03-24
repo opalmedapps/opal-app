@@ -38,8 +38,7 @@
         */
         function handleDisplay() {
             $timeout(() => {
-                if (vm.error) return vm.message = 'RELATIONSHIP_TYPES_ERROR';
-                if (vm.apiData.length === 0) return vm.message = 'RELATIONSHIP_TYPES_NONE';
+                if (vm.error || vm.apiData.length === 0) return vm.message = 'RELATIONSHIP_TYPES_ERROR';
                 vm.relationshipTypes = vm.apiData;
             });
         }
