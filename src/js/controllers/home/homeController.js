@@ -82,8 +82,11 @@
             homeNavigator.on('prepop', function (event) {
                 const prepopPages = ['./views/home/checkin/checkin-list.html', 'views/personal/notifications/notifications.html'];
                 if (prepopPages.includes(event.currentPage.name) && NetworkStatus.isOnline()) getDisplayData();
+
                 //restart the reload interval when going back to the home page
-                setInterval();
+                $timeout(() => {
+                    if (Navigator.getPageName() === 'home.html') setInterval();
+                })
             });
 
             //This avoids constant repushing which causes bugs

@@ -18,13 +18,14 @@
         return {
             getNavigator: () => navigator,
             getNavigatorName: () => navigator ? navigator._attrs.var : '',
+            getPageName: getPageName,
             getParameters: () => navigator.getCurrentPage().options,
             reloadPreviousProfilePrepopHandler: reloadPreviousProfilePrepopHandler,
             setNavigator: nav => navigator = nav,
         }
 
         /**
-         * @description Gets the file name of the current page in the navigator.
+         * @description Gets the file name of the current page in the navigator (e.g. notifications.html).
          * @returns {string} The name of the current page.
          */
         function getPageName() {
