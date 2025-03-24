@@ -90,6 +90,7 @@ increment version:
     # Install dependencies for semantic-release
     - apk add --no-cache git
     # TODO: update versions and add Renovate datasource comment
+    - npm ci --include dev --cache .npm --prefer-offline
     # - npm install semantic-release@19.0.5 @semantic-release/changelog@6.0.3 @semantic-release/exec@6.0.3 @semantic-release/git@10.0.1
   script:
     - npx semantic-release --help
