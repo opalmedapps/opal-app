@@ -1,3 +1,10 @@
+## [1.30.2](https://gitlab.com/opalmedapps/qplus/compare/v1.30.1...v1.30.2) (2024-03-21)
+
+
+### Bug Fixes
+
+* display informative error if no relationships exist for user ([a788181](https://gitlab.com/opalmedapps/qplus/commit/a7881813c888879fe844fd30220a3f253c885c2c))
+
 ## [1.30.1](https://gitlab.com/opalmedapps/qplus/compare/v1.30.0...v1.30.1) (2024-03-19)
 
 
