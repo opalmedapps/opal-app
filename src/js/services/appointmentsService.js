@@ -15,14 +15,13 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@requires MUHCApp.service:RequestToServer
  *@requires MUHCApp.service:LocalStorage
- *@requires MUHCApp.service:UserAuthorizationInfo
+ *@requires MUHCApp.service:User
  *@requires MUHCApp.service:UserPreferences
- *@requires MUHCApp.service:ProfileSelector
  *@description Sets the appointments and provides an API to access them
  **/
 
-myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserPreferences', 'UserAuthorizationInfo', 'ProfileSelector',
-    function ($filter, LocalStorage, RequestToServer, UserPreferences, UserAuthorizationInfo, ProfileSelector) {
+myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserPreferences', 'User',
+    function ($filter, LocalStorage, RequestToServer, UserPreferences, User) {
 
     /**
      *@ngdoc property
@@ -264,13 +263,14 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         setCheckinAppointments: function (appointments) {
             //Initializing Variables
             userAppointmentsArray = [];
+            const selfPatientSerNum = User.getSelfPatientSerNum();
             if (!appointments) return;
             appointments.forEach(appointment => {
                 let patientName = `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`;
                 if ((UserPreferences.getLanguage()=='FR')) {
                     patientName = `Rendez-vous pour ${appointment.patient.firstname} ${appointment.patient.lastname}`;
                 }
-                if (appointment.patient.patientsernum == ProfileSelector.getActiveProfile().patient_legacy_id) {
+                if (selfPatientSerNum && appointment.patient.patientsernum === selfPatientSerNum) {
                     patientName = (UserPreferences.getLanguage()=='EN') ? 'Your appointments' : 'Vos rendez-vous';
                 }
 

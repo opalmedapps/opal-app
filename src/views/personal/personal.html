@@ -14,7 +14,7 @@
     <div>
         <ons-list style="margin: 0px 0">
             <ons-list-item modifier="chevron"
-                ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DIA') && tab.allowedModules['DIA']" class="item"
+                ng-if="tab.accessLevelAll && tab.allowedModules.hasOwnProperty('DIA') && tab.allowedModules['DIA']" class="item"
                 ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
@@ -47,7 +47,7 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                ng-if="tab.censor && tab.allowedModules.hasOwnProperty('LAB') && tab.allowedModules['LAB']"
+                ng-if="tab.accessLevelAll && tab.allowedModules.hasOwnProperty('LAB') && tab.allowedModules['LAB']"
                 ng-click="personalNavigator.pushPage('views/personal/test-results/test-results.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
@@ -64,7 +64,7 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DOC') && tab.allowedModules['DOC']"
+                ng-if="tab.accessLevelAll && tab.allowedModules.hasOwnProperty('DOC') && tab.allowedModules['DOC']"
                 ng-click="personalNavigator.pushPage('views/personal/documents/documents.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">

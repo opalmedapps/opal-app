@@ -2,7 +2,6 @@ import "./services/firebaseAuthService.js";
 import "./services/utility.service";
 import "./services/appointmentsService.js";
 import "./services/notificationsService.js";
-import "./services/patientService.js";
 import "./services/userPreferencesService.js";
 import "./services/userAuthorizationInfoService.js";
 import "./services/updateUIService.js";
