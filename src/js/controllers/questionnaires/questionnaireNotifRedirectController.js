@@ -12,7 +12,6 @@
         .controller('QuestionnaireNotifRedirectController', QuestionnaireNotifRedirectController);
 
     QuestionnaireNotifRedirectController.$inject = [
-        '$scope',
         '$filter',
         '$timeout',
         'NativeNotification',
@@ -22,13 +21,14 @@
     ];
 
     /* @ngInject */
-    function QuestionnaireNotifRedirectController($scope, $filter, $timeout, NativeNotification, NavigatorParameters,
+    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, NavigatorParameters,
                                                   Questionnaires, Utility) {
         let vm = this;
 
         // variables global to this controller
         let navigator = null;
         let navigatorName = '';
+        let navigatorParams = null;
 
         // variables that can be seen from view, sorted alphabetically
         vm.loadingQuestionnaire = true;
@@ -40,16 +40,14 @@
         async function activate() {
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();
-            let params = NavigatorParameters.getParameters();
+            navigatorParams = NavigatorParameters.getParameters();
 
-            bindEvents();
-
-            if (!params.hasOwnProperty('Post') || isNaN(parseInt(params.Post))) {
+            if (!navigatorParams.hasOwnProperty('Post') || isNaN(parseInt(navigatorParams.Post))) {
                 vm.loadingQuestionnaire = false;
                 handleLoadQuestionnaireErr();
             }
 
-            let questionnaireSerNum = params.Post;
+            let questionnaireSerNum = navigatorParams.Post;
 
             try {
                 // Continue displaying the loading page even if the loading itself has finished.
@@ -95,7 +93,9 @@
                 Navigator: navigatorName,
                 answerQuestionnaireId: answerQuestionnaireId,
                 editQuestion: false,
-                questionnairePurpose: purpose.toLowerCase()
+                questionnairePurpose: purpose.toLowerCase(),
+                isCareReceiver: navigatorParams['isCareReceiver'],
+                currentProfile: navigatorParams['currentProfile'],
             });
 
             navigator.replacePage('views/personal/questionnaires/questionnaires.html', { animation: 'fade' });
@@ -109,7 +109,9 @@
         function goToQuestionnaireSummary(answerQuestionnaireId){
             NavigatorParameters.setParameters({
                 Navigator: navigatorName,
-                answerQuestionnaireId: answerQuestionnaireId
+                answerQuestionnaireId: answerQuestionnaireId,
+                isCareReceiver: navigatorParams['isCareReceiver'],
+                currentProfile: navigatorParams['currentProfile'],
             });
 
             navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {animation: 'fade'});
@@ -142,19 +144,14 @@
          */
         function handleLoadQuestionnaireErr() {
             // go to the questionnaire list page if there is an error
-            NavigatorParameters.setParameters({Navigator: navigatorName});
+            NavigatorParameters.setParameters({
+                Navigator: navigatorName,
+                isCareReceiver: navigatorParams['isCareReceiver'],
+                currentProfile: navigatorParams['currentProfile'],
+            });
             navigator.popPage();
 
             NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
-        }
-
-        function bindEvents() {
-            // Remove event listeners
-            $scope.$on('$destroy', () => navigator.off('prepop'));
-
-            // Reload user profile if questionnaire was opened via Notifications tab,
-            // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
         }
     }
 })();

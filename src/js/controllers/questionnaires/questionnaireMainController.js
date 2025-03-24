@@ -155,6 +155,9 @@
                         // listen to the event of destroy the controller in order to do clean up
                         $scope.$on('$destroy', function() {
                             removeListener();
+                            // Reload user profile if questionnaire was opened via Notifications tab,
+                            // and profile was implicitly changed.
+                            NavigatorParameters.reloadPreviousProfilePrepopHandler();
                         });
 
                         // no longer loading
