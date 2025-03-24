@@ -120,6 +120,7 @@ const fontSizesMap = {
                     $window.removeEventListener("orientationchange", resizeChart);
                     $window.removeEventListener("change", resizeChart);
                     $window.removeEventListener("resize", resizeChart);
+                    Plotly.purge(element[0].firstChild);
                 });
 
                 /**
