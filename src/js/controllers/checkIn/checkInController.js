@@ -96,7 +96,22 @@
 
         // View appointment details
         function goToAppointment(appointment){
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
+            if(appointment.ReadStatus === '0') {
+                Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+                // Mark corresponding notification as read
+                Notifications.implicitlyMarkNotificationAsRead(
+                    appointment.AppointmentSerNum,
+                    [
+                        "RoomAssignment",
+                        "NextAppointment",
+                        "AppointmentTimeChange",
+                        "CheckInNotification",
+                        "AppointmentNew",
+                        "AppointmentCancelled",
+                    ], //TODO: constants for the notification types
+                );
+            }
+            NavigatorParameters.setParameters({'Navigator': 'homeNavigator', 'Post': appointment});
             homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
         }
 

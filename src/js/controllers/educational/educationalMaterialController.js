@@ -23,11 +23,11 @@
         .controller('EducationalMaterialController', EducationalMaterialController);
 
     EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial',
-        'Logger', '$filter'];
+        'Logger', '$filter', 'Notifications'];
 
     /* @ngInject */
     function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial,
-                                           Logger, $filter) {
+                                           Logger, $filter, Notifications) {
         let vm = this;
         let backButtonPressed = 0;
         let navigator;
@@ -147,9 +147,17 @@
             Logger.logClickedEduMaterial(edumaterial.EducationalMaterialControlSerNum);
 
             // If the material was unread, set it to read.
-            if(edumaterial.ReadStatus == 0){
-                edumaterial.ReadStatus = 1;
-                EducationalMaterial.readMaterial(edumaterial.EducationalMaterialSerNum);
+            if (edumaterial.ReadStatus == '0')
+            {
+                EducationalMaterial.readEducationalMaterial(
+                    edumaterial.EducationalMaterialSerNum
+                );
+
+                // Mark corresponding notifications as read
+                Notifications.implicitlyMarkNotificationAsRead(
+                    edumaterial.EducationalMaterialSerNum,
+                    ["EducationalMaterial"], //TODO: constant for EducationalMaterial
+                );
             }
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).

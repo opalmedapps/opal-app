@@ -202,6 +202,7 @@
             setNotificationsLanguage: setNotificationsLanguage,
             clearNotifications: clearNotifications,
             markAllRead: markAllRead,
+            implicitlyMarkNotificationAsRead: implicitlyMarkNotificationAsRead,
         };
 
         return service;
@@ -302,9 +303,10 @@
          * @methodOf MUHCApp.service:Notifications
          * @param {Number} index Index in the Notification array which belongs to the notification to be read.
          * @param {String} notification Notification to be read
+         * @param {boolean} [isImplicit=false] A flag that indicates if notification is being read implicitly
          * @description Sets ReadStatus in the notification to 1, sends request to backend, and syncs with device storage
          **/
-        function readNotification(index, notification) {
+        function readNotification(index, notification, isImplicit = false) {
             //If index is defined it the notification at that index matches the NotificationSerNum, then we can save
             //an array iteration look up.
             //Notification SerNum
@@ -317,7 +319,9 @@
             //If the index is not defined and the notificationSerNum matches then read that notification and sync the state of all services
             if (typeof Notifications[index] !== 'undefined' && Notifications[index].NotificationSerNum === serNum) {
                 Notifications[index].ReadStatus = '1';
-                notificationTypes[type].readFunction(refSerNum);
+                // Do not invoke readFunction if notification is implicitly read
+                // since it's already invoked in the corresponding category item.
+                if (!isImplicit) notificationTypes[type].readFunction(refSerNum);
                 RequestToServer.sendRequest('Read', {'Id': serNum, 'Field': 'Notifications'});
             } else {
                 //If it doesn't match, iterate, find notification and update read status in all the states, i.e. localStorage, server, model.
@@ -326,7 +330,7 @@
 
                     if (Notifications[i].NotificationSerNum === serNum) {
                         Notifications[i].ReadStatus = '1';
-                        notificationTypes[type].readFunction(refSerNum);
+                        if (!isImplicit) notificationTypes[type].readFunction(refSerNum);
                         RequestToServer.sendRequest('Read', {'Id': serNum, 'Field': 'Notifications'});
                         break;
                     }
@@ -418,6 +422,30 @@
          **/
         function clearNotifications() {
             Notifications = [];
+        }
+
+        /**
+         * @ngdoc method 
+         * @name implicitlyMarkNotificationAsRead
+         * @methodOf MUHCApp.service:Notifications
+         * @desc Implicitly mark category item's notifications as read.
+         *       E.g., new/update/cancel notifications linked to an appointment.
+         * @param {string} serNum Serial number of a category item for which a corresponding notifications is being updated.
+         * @param {Array} notificationTypes Notification types that are associated with the category item.
+         *        E.g., Document record is associated with "Document" and "UpdDocument" notification types.
+         */
+        function implicitlyMarkNotificationAsRead(serNum, notificationTypes) {
+            if (Array.isArray(Notifications) && Notifications.length)
+            {
+                Notifications.forEach(
+                    (notif, index) => {
+                        if (
+                            notif.RefTableRowSerNum === serNum
+                            && notificationTypes.includes(notif.NotificationType)
+                        )
+                            readNotification(index, notif, true);
+                    });
+            }
         }
     }
 })();

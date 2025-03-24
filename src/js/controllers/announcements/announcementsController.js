@@ -26,7 +26,8 @@
         'Announcements',
         'NavigatorParameters',
         '$scope',
-        '$filter'
+        '$filter',
+        'Notifications'
     ];
 
     /* @ngInject */
@@ -34,7 +35,8 @@
         Announcements,
         NavigatorParameters,
         $scope,
-        $filter
+        $filter,
+        Notifications
     ) {
         var vm = this;
         vm.noAnnouncements = true;
@@ -66,8 +68,12 @@
         function goToAnnouncement(announcement) {
             if(announcement.ReadStatus === '0')
             {
-                announcement.ReadStatus = '1';
                 Announcements.readAnnouncementBySerNum(announcement.AnnouncementSerNum);
+                // Mark corresponding notifications as read
+                Notifications.implicitlyMarkNotificationAsRead(
+                    announcement.AnnouncementSerNum,
+                    ["Announcement"], //TODO: constant for Announcement
+                );
             }
             NavigatorParameters.setParameters({Navigator:'generalNavigator', Post: announcement});
             $scope.generalNavigator.pushPage('./views/general/announcements/individual-announcement.html');

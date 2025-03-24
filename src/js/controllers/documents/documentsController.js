@@ -51,36 +51,15 @@
 
             if(doc.ReadStatus == '0')
             {
-                doc.ReadStatus ='1';
                 Documents.readDocument(doc.DocumentSerNum);
-                // Mark corresponding notification as read
-                markNotificationAsRead(doc.DocumentSerNum, ["Document", "UpdDocument"]);  //TODO: constants for UpdDocument, Document, and NewLabResult
+                // Mark corresponding notifications as read
+                Notifications.implicitlyMarkNotificationAsRead(
+                    doc.DocumentSerNum,
+                    ["Document", "UpdDocument"], //TODO: constants for UpdDocument, Document, and NewLabResult
+                );
             }
             NavigatorParameters.setParameters({'navigatorName':'personalNavigator', 'Post':doc});
             personalNavigator.pushPage('./views/personal/documents/individual-document.html');
-        }
-
-        /*********************************/
-        /******* PRIVATE FUNCTIONS *******/
-        /*********************************/
-
-        /**
-         * @name markNotificationAsRead
-         * @desc Mark corresponding "Document" or "UpdDocument" notifications as read
-         */
-        function markNotificationAsRead(serNum, notificationTypes) {
-            const notifications = Notifications.getUserNotifications();
-                if (Array.isArray(notifications) && notifications.length)
-                {
-                    notifications.forEach(
-                        (notif, index) => {
-                            if (
-                                notif.RefTableRowSerNum === serNum
-                                && notificationTypes.includes(notif.NotificationType)
-                            )
-                                Notifications.readNotification(index, notif);
-                        });
-                }
         }
     }
 })();
