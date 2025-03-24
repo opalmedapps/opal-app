@@ -9,22 +9,7 @@ educational material and much more to patients, making it a full-fledged empower
 
 ## Table of contents
 
-- [Getting Started](#getting-started)
-  - [The Opal front-end codebase](#the-opal-front-end-codebase)
-  - [Installing, building and serving the web code](#installing-building-and-serving-the-web-code)
-    - [Notes on the development of web code](#notes-on-the-development-of-web-code)
-    - [Optional dev server](#optional-dev-server)
-  - [Installing, building, and serving the mobile app code](#installing-building-and-serving-the-mobile-app-code)
-  - [Opal App Scripts](#opal-app-scripts)
-- [Troubleshooting](#troubleshooting)
-  - [Installation issues](#installation-issues)
-  - [Build issues](#build-issues)
-- [Running the tests](#running-the-tests)
-- [Best Practices](#best-practices)
-- [Frameworks used](#frameworks-used)
-- [Authors](#authors)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
+[[_TOC_]]
 
 ## Getting Started
 
@@ -184,10 +169,10 @@ For more information about versioning, please read [Versioning](https://gitlab.c
 
 6. Try logging in; navigate to the login page and enter the following credentials:
 
-    > email: marge@opalmedapps.ca
-    > password: 12345Opal!!
-    > hospital: McGill University Health Centre (MUHC)
-    > security answer (depending on the question): red, superman, meg
+    - email: marge@opalmedapps.ca
+    - password: 12345Opal!!
+    - hospital: McGill University Health Centre (MUHC)
+    - security answer (depending on the question): red, superman, meg
 
 7. (Optional) If setting up a local development environment of Opal with your own backend system, you'll want
    to redirect Opal to connect to this backend instead of `dev`. In this case, follow the instructions at
