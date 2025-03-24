@@ -46,7 +46,7 @@
          * @param appointments The new appointment data to update in the patient's array.
          */
         function updateAppointments(appointments) {
-            searchAppointmentsAndDelete(appointments);
+            deleteAppointments(appointments);
             addAppointmentsToService(appointments);
         }
 
@@ -92,9 +92,13 @@
          *              Matches are found based on AppointmentSerNum.
          * @param appointmentsToDelete The list of appointments to delete.
          */
-        function searchAppointmentsAndDelete(appointmentsToDelete) {
+        function deleteAppointments(appointmentsToDelete) {
             let serNumsToDelete = appointmentsToDelete.map(apt => apt.AppointmentSerNum);
-            patientAppointments = patientAppointments.filter(apt => !serNumsToDelete.includes(apt.AppointmentSerNum));
+
+            // Delete appointments in place instead of filtering, to avoid leaving them behind in other references to the array
+            for (let i = patientAppointments.length - 1 ; i >= 0; i--) {
+                if (serNumsToDelete.includes(patientAppointments[i].AppointmentSerNum)) patientAppointments.splice(i, 1);
+            }
         }
     }
 })();
