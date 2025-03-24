@@ -37,16 +37,11 @@
                 /**
                  * @description Gets and returns the state of the ons-pull-hook that is a direct parent of
                  *              this directive, if it exists.
-                 * @returns {string} The state of the ons-pull-hook (e.g. initial, preaction, action), or undefined if
-                 *                   a parent ons-pull-hook is not found.
+                 * @returns {string} The state of the ons-pull-hook (e.g. initial, preaction, action),
+                 *                   or null if a parent ons-pull-hook is not found.
                  */
                 function loaderState() {
-                    try {
-                        return element[0].parentElement.getAttribute("state");
-                    }
-                    catch (error) {
-                        return undefined;
-                    }
+                    return element[0].parentElement.getAttribute("state");
                 }
             },
         };
