@@ -15,7 +15,7 @@
         '$filter',
         '$timeout',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Questionnaires',
         'Utility',
         'ProfileSelector'
@@ -28,7 +28,6 @@
 
         // variables global to this controller
         let navigator = null;
-        let navigatorName = '';
         let navigatorParams = null;
 
         // variables that can be seen from view, sorted alphabetically
@@ -39,9 +38,8 @@
         ////////////////
 
         async function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
-            navigatorParams = NavigatorParameters.getParameters();
+            navigator = Navigator.getNavigator();
+            navigatorParams = Navigator.getParameters();
 
             if (!navigatorParams.hasOwnProperty('Post') || isNaN(parseInt(navigatorParams.Post))) {
                 vm.loadingQuestionnaire = false;
@@ -104,16 +102,12 @@
             let purpose = purposeData.purpose;
 
             // putting editQuestion false to claim that we are not coming from a summary page
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.replacePage('views/personal/questionnaires/questionnaires.html', {
+                animation: 'fade', // OnsenUI
                 answerQuestionnaireId: answerQuestionnaireId,
                 editQuestion: false,
                 questionnairePurpose: purpose.toLowerCase(),
-                isCareReceiver: navigatorParams['isCareReceiver'],
-                currentProfile: navigatorParams['currentProfile'],
             });
-
-            navigator.replacePage('views/personal/questionnaires/questionnaires.html', { animation: 'fade' });
         }
 
         /**
@@ -122,14 +116,10 @@
          * @param {int} answerQuestionnaireId
          */
         function goToQuestionnaireSummary(answerQuestionnaireId){
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
+                animation: 'fade', // OnsenUI
                 answerQuestionnaireId: answerQuestionnaireId,
-                isCareReceiver: navigatorParams['isCareReceiver'],
-                currentProfile: navigatorParams['currentProfile'],
             });
-
-            navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {animation: 'fade'});
         }
 
         /**
@@ -159,13 +149,7 @@
          */
         function handleLoadQuestionnaireErr() {
             // go to the questionnaire list page if there is an error
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
-                isCareReceiver: navigatorParams['isCareReceiver'],
-                currentProfile: navigatorParams['currentProfile'],
-            });
             navigator.popPage();
-
             NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
     }

@@ -580,27 +580,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         isThereNextTreatment:function(){
             return !angular.equals({}, treatmentSessionsObject.CurrentAppointment.Appointment);
         },
-        //Get number of unread news
-        /**
-         *@ngdoc method
-         *@name getNumberUnreadAppointments
-         *@methodOf MUHCApp.service:Appointments
-         *@param {Object} serNum AppointmentSerNum
-         *@returns {String} Returns the number of unseen appointments
-         **/
-        getNumberUnreadAppointments:function()
-        {
-            var array = [];
-            var number = 0;
-            for (var i = 0; i < userAppointmentsArray.length; i++) {
-                if(userAppointmentsArray[i].ReadStatus == '0')
-                {
-                    number++;
-                }
-            }
-            return number;
-        },
-        
+
         /**
          *@ngdoc method
          *@name clearAppointments

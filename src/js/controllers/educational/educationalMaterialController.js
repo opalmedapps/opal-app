@@ -22,16 +22,14 @@
         .module('MUHCApp')
         .controller('EducationalMaterialController', EducationalMaterialController);
 
-    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial',
+    EducationalMaterialController.$inject = ['Navigator', '$scope', 'EducationalMaterial',
         'Logger', '$filter', 'Notifications', 'Params'];
 
     /* @ngInject */
-    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial,
+    function EducationalMaterialController(Navigator, $scope, EducationalMaterial,
                                            Logger, $filter, Notifications, Params) {
         let vm = this;
-        let backButtonPressed = 0;
         let navigator;
-        let navigatorParams;
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
@@ -45,11 +43,8 @@
         // Variables to store the current category of material (clinical or research) and corresponding page title
         vm.eduCategory = '';
         vm.pageTitle = '';
-        vm.noMaterialMessage = '';
 
         vm.goToEducationalMaterial = goToEducationalMaterial;
-        vm.educationDeviceBackButton = educationDeviceBackButton;
-
         vm.openInfoPage = openInfoPage;
 
         // Used by patient-data-handler
@@ -59,10 +54,8 @@
         ///////////////////////////////////
 
         function activate(){
+            navigator = Navigator.getNavigator();
             setEduCategory();
-            configureNavigator();
-
-            bindEvents();
         }
 
         function initData() {
@@ -75,37 +68,18 @@
             vm.filteredEduMaterials = $filter('orderBy')(vm.edumaterials, '-DateAdded');
         }
 
-        function educationDeviceBackButton(){
-            vm.eduCategory === 'clinical' ? tabbar.setActiveTab(0) : navigator.popPage();
-        }
-
         /**
          * @name setEduCategory
          * @desc Sets the education material category based on navigator parameters (defaults to clinical)
          */
          function setEduCategory(){
-            navigatorParams = NavigatorParameters.getParameters();
+            let navigatorParams = Navigator.getParameters();
 
-            // Set category if specified in NavigatorParameters, otherwise defaults to clinical
-            vm.eduCategory  = navigatorParams?.category ? navigatorParams.category : 'clinical';
+            // Set category if specified in Navigator, otherwise defaults to clinical
+            vm.eduCategory  = navigatorParams.category || 'clinical';
 
             // Set corresponding page title and no material message
             vm.pageTitle = EducationalMaterial.getEducationalMaterialTitle(vm.eduCategory);
-            vm.noMaterialMessage = EducationalMaterial.getEducationalMaterialEmptyMessage(vm.eduCategory);
-        }
-
-        /**
-         * @name configureNavigator
-         * @desc Sets navigator to educationNavigator if type clinical, otherwise gets current navigator.
-         *       Needed since navigator does not automatically update when switching to education tab.
-         */
-        function configureNavigator(){
-            // Set navigator to educationNavigator when in clinical educational material
-            if(vm.eduCategory === 'clinical'){
-                NavigatorParameters.setParameters({'Navigator':'educationNavigator', 'category': 'clinical'});
-            }
-
-            navigator = NavigatorParameters.getNavigator();
         }
 
         function configureState() {
@@ -114,26 +88,6 @@
             } else {
                 vm.noMaterials = true;
             }
-        }
-
-        function bindEvents() {
-            navigator.on('prepop', function () {
-                backButtonPressed = 0;
-                configureState();
-            });
-
-            navigator.on('prepush', function (event) {
-                if (navigator._doorLock.isLocked()) {
-                    event.cancel();
-                }
-            });
-
-            //Cleaning up
-            $scope.$on('$destroy', function () {
-                navigator.off('prepop');
-                // Clear navigator parameters
-                NavigatorParameters.setParameters({});
-            });
         }
 
         /**
@@ -161,8 +115,10 @@
             }
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
-            NavigatorParameters.setParameters({ 'Navigator': navigator, 'Post': edumaterial, 'RStep':1 });
-            navigator.pushPage('./views/personal/education/individual-material.html');
+            navigator.pushPage('./views/personal/education/individual-material.html', {
+                'Post': edumaterial,
+                'RStep': 1,
+            });
         }
 
         /**

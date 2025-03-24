@@ -4,7 +4,7 @@
 default:
   # run jobs on GitLab shared runners by default
   # only run those jobs that need our own build machine (macOS) specifically
-  image: node:20.11.1-alpine3.19
+  image: node:20.13.1-alpine3.19
   # Cache modules in between pipelines
   # See: https://javascript.plainenglish.io/improving-ci-performance-aka-how-to-save-your-money-31ff691360e4
   cache:
@@ -233,6 +233,12 @@ include:
   # DAST Scanning: https://docs.gitlab.com/ee/user/application_security/dast/
   # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Security/DAST.latest.gitlab-ci.yml
   - template: DAST.latest.gitlab-ci.yml
+
+# Secret Detection Customization:
+# https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/index.html#overriding-the-analyzer-jobs
+secret_detection:
+  # Prevent default access to artifacts from previous stages, to avoid scanning for secrets in the npm cache (.npm)
+  needs: []
 
 # SAST Scanning Customization:
 # ensure that mobsf jobs depend on builds

@@ -9,11 +9,11 @@
         .controller('LoadingController', LoadingController);
 
     LoadingController.$inject = ['$state', '$filter', 'ConcurrentLogin', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences',
-        'RequestToServer', 'MetaData', 'LogOutService', 'NativeNotification', 'ProfileSelector'];
+        'RequestToServer', 'LogOutService', 'NativeNotification', 'ProfileSelector'];
 
     /* @ngInject */
     function LoadingController($state, $filter, ConcurrentLogin, UpdateUI, UserAuthorizationInfo, UserPreferences,
-                               RequestToServer, MetaData, LogOutService, NativeNotification, ProfileSelector) {
+                               RequestToServer, LogOutService, NativeNotification, ProfileSelector) {
 
         activate();
 
@@ -29,7 +29,6 @@
                 RequestToServer.sendRequest('Login'); // For analytics only; don't wait for a response
                 await UserPreferences.initFontSize();
                 await UpdateUI.init();
-                await MetaData.init();
                 await ProfileSelector.init();
                 
                 // TODO: Currently, the app isn't able to handle a state in which there are no confirmed profiles. In this case, cancel login.

@@ -1,13 +1,12 @@
 # Setting Up a Local Environment
 
 A local environment can be set up to facilitate development on a single machine without having to rely on external
-components. A typical local development environment of the Opal app includes at a minimum: the app, the listener,
-a Firebase project, and the Opal databases. Make sure you have access to a local installation of each of these components
-before proceeding.
+components.
+See the [set up guide](https://opalmedapps.gitlab.io/) for instructions on how to set everything up.
 
 To connect the app to your local environment, create the following file in `env/local`:
 
-```
+```shell
 opal.config.js
 ```
 
@@ -18,21 +17,22 @@ Each of the environment variables in the `settings` portion can be changed accor
 and the config `env` to "local".
 
 If you wish to also **build** your local app for an emulator or mobile, follow these steps:
-  1. Create a `config.xml` file in this folder (similar to the existing ones, but with an appropriate app ID and name).
-  2. Set up an Android app (required) and an iOS app (optional) in your Firebase project.
-  3. Via the Android app you set up in Firebase, download the provided `google-services.json` file, and add it to this folder.
 
-The above files will allow your app to connect to your local environment, as it would for any of the offical environments
+1. Fill out the `configXml` section of your `env/local/opal.config.js` file with appropriate values.
+2. Set up an Android app (required) and an iOS app (optional) in your Firebase project.
+3. Via the Android app you set up in Firebase, download the provided `google-services.json` file, and add it to this folder.
+
+The above files will allow your app to connect to your local environment, as it would for any of the official environments
 provided in this repo.
 
 To access your local environment, append all `start` or `build` npm commands with `--env=local`, for example:
 
-```
+```shell
 npm run start --env=local
 ```
 
-# Additional Environments
+## Additional Environments
 
 Any number of additional environments can be set up by first creating a new folder in the `env` directory,
-then following the same instructions as the 'local' environment described above.
+then following the same instructions as the `local` environment described above.
 The name of this folder determines the name of a new environment.

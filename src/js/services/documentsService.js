@@ -162,36 +162,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         getDocuments:function(){
             return documentsArray;
         },
-        getUnreadDocuments:function()
-        {
-            var array=[];
-            for (var i = 0; i < documentsArray.length; i++) {
-                if(documentsArray[i].ReadStatus=='0'){
-                    array.push(documentsArray[i]);
-                }
-            }
-            array=$filter('orderBy')(array,'DateAdded');
-            return array;
-        },
-        //Get number of unread news
-        /**
-         *@ngdoc method
-         *@name getNumberUnreadDocuments
-         *@methodOf MUHCApp.service:Documents
-         *@description Gets unread documents
-         *@returns {Array} Returns all the unread documents
-         **/
-        getNumberUnreadDocuments:function()
-        {
-            var number = 0;
-            for (var i = 0; i < documentsArray.length; i++) {
-                if(documentsArray[i].ReadStatus == '0')
-                {
-                    number++;
-                }
-            }
-            return number;
-        },
+
         /**
          *@ngdoc method
          *@name readDocument

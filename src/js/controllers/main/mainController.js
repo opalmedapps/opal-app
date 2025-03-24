@@ -12,12 +12,12 @@
         .controller('MainController', MainController);
 
     MainController.$inject = ["$window", "$state", '$rootScope','Firebase','DeviceIdentifiers',
-        '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus',
+        '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'Navigator', 'NetworkStatus',
         'RequestToServer', 'Toast', 'Security', '$filter', 'Params', 'LogOutService', 'AppState'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, Firebase, DeviceIdentifiers,
-                            $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus,
+                            $translatePartialLoader, LocalStorage, Constants, CleanUp, Navigator, NetworkStatus,
                             RequestToServer, Toast, Security, $filter, Params, LogOutService, AppState) {
 
         var timeoutLockout;
@@ -172,10 +172,10 @@
          * Clear sensitive data
          *****************************************/
         function clearSensitiveData() {
-            var currentPage = NavigatorParameters.getNavigator().getCurrentPage().name;
+            var currentPage = Navigator.getNavigator().getCurrentPage().name;
             // Check that the current location is either documents or lab
             if (currentPage.indexOf('my-chart') !== -1 || currentPage.indexOf('lab') !== -1) {
-                NavigatorParameters.getNavigator().resetToPage('./views/personal/personal.html');
+                Navigator.getNavigator().resetToPage('./views/personal/personal.html');
             }
 
             // Wipe lab results

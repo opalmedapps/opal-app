@@ -100,16 +100,16 @@
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                 ng-if="tab.allowedModules.hasOwnProperty('EDU') && tab.allowedModules['EDU']"
-                ng-click="personalNavigator.pushPage('views/personal/education/education.html')">
+                ng-click="tab.goToClinicalReference()">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <i class="fa fa-solid fa-book fa-2x" style="color: #9575CD"></i>
                         <span class="notification"
-                            ng-show="tab.educationalMaterialsNumber > 0">{{tab.educationalMaterialsNumber}}</span>
+                            ng-show="tab.educationalMaterialsUnreadNumber > 0">{{tab.educationalMaterialsUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"EDUCATION_MATERIAL"|translate}}</span>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>

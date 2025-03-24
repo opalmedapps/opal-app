@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('ContentController', ContentController);
 
-    ContentController.$inject = ['DynamicContent', 'NavigatorParameters', 'Logger', 'Params', '$timeout'];
+    ContentController.$inject = ['DynamicContent', 'Navigator', 'Logger', 'Params', '$timeout'];
 
     /* @ngInject */
-    function ContentController(DynamicContent, NavigatorParameters, Logger, Params, $timeout) {
+    function ContentController(DynamicContent, Navigator, Logger, Params, $timeout) {
         var vm = this;
         vm.pageContent = {};
         vm.loading = true;
@@ -30,11 +30,10 @@
 
         // Uses the content pushed from a pushPage. See details in Opal wiki for use.
         function activate() {
+            let parameters = Navigator.getParameters();
 
-            var nav = NavigatorParameters.getNavigator();
-
-            let link = nav.getCurrentPage().options.contentLink;
-            let contentType = nav.getCurrentPage().options.contentType;
+            let link = parameters.contentLink;
+            let contentType = parameters.contentType;
 
             vm.pageContent.title = "";
 

@@ -13,11 +13,11 @@
         .module('MUHCApp')
         .controller('ResearchController', ResearchController);
 
-    ResearchController.$inject = ['EducationalMaterial', 'MetaData', 'NavigatorParameters', 'Questionnaires', 'Studies',
-        'UserHospitalPreferences'];
+    ResearchController.$inject = ['$scope', '$timeout', 'Navigator', 'Params', 'ProfileSelector',
+        'Questionnaires', 'RequestToServer', 'Studies', 'UserHospitalPreferences'];
 
-    function ResearchController(EducationalMaterial, MetaData, NavigatorParameters, Questionnaires, Studies,
-                                UserHospitalPreferences) {
+    function ResearchController($scope, $timeout, Navigator, Params, ProfileSelector,
+                                Questionnaires, RequestToServer, Studies, UserHospitalPreferences) {
         let vm = this;
 
         vm.allowedModules = {};
@@ -30,24 +30,22 @@
         vm.openInfoPage = openInfoPage;
 
         let navigator = null;
-        let navigatorName = '';
 
         activate();
 
         ////////////////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
 
             bindEvents();
             configureSelectedHospital();
-            setMetaData();
             setBadges();
         }
 
         function bindEvents() {
             navigator.on('prepop', () => setBadges());
+            $scope.$on('$destroy', () => navigator.off('prepop'));
         }
 
         /**
@@ -58,21 +56,22 @@
             vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
         }
 
-        function setMetaData() {
-            if (MetaData.isFirstTimeResearch()) {
-                var meta = MetaData.fetchResearchMeta();
-                vm.studiesUnreadNumber = meta.studiesUnreadNumber;
-                vm.researchQuestionnairesUnreadNumber = meta.researchQuestionnairesUnreadNumber;
-                vm.consentQuestionnairesUnreadNumber = meta.consentQuestionnairesUnreadNumber;
-                MetaData.setFetchedResearch();
+        async function setBadges() {
+            try {
+                const patientSerNum = ProfileSelector.getPatientSerNum();
+                const requestConfig = Params.API.ROUTES.CHART
+                const result = await RequestToServer.apiRequest({
+                    ...requestConfig,
+                    url: `${requestConfig.url}${patientSerNum}/`
+                });
+                await $timeout(() => {
+                    vm.researchReferenceUnreadNumber = parseInt(result.data.unread_research_reference_count);
+                    vm.researchQuestionnairesUnreadNumber = parseInt(result.data.unread_research_questionnaire_count);
+                    vm.consentQuestionnairesUnreadNumber = parseInt(result.data.unread_consent_questionnaire_count);
+                });
+            } catch (error) {
+                console.error(error);
             }
-        }
-
-        function setBadges() {
-            vm.studiesUnreadNumber = Studies.getNumberUnreadStudies();
-            vm.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('research');
-            vm.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('consent');
-            vm.eduMaterialUnreadNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research');
         }
 
         function openResearchStudies() {
@@ -84,18 +83,15 @@
         }
 
         function openReferenceMaterial() {
-            NavigatorParameters.setParameters({ Navigator: navigatorName, category: 'research' });
-            navigator.pushPage('views/personal/education/education.html');
+            navigator.pushPage('views/personal/education/education.html', {category: 'research'});
         }
 
         function openResearchQuestionnaires() {
-            NavigatorParameters.setParameters({ questionnairePurpose: 'research' });
-            navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
+            navigator.pushPage('views/personal/questionnaires/questionnairesList.html', {questionnairePurpose: 'research'});
         }
 
         function openConsentForms() {
-            NavigatorParameters.setParameters({ questionnairePurpose: 'consent' });
-            navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
+            navigator.pushPage('views/personal/questionnaires/questionnairesList.html', {questionnairePurpose: 'consent'});
         }
 
         function openInfoPage() {

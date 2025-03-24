@@ -21,10 +21,10 @@
         .module('MUHCApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['$scope', 'Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params', 'Notifications'];
+    CalendarController.$inject = ['$scope', 'Appointments', '$location', '$anchorScroll', 'Navigator', 'UserPreferences', 'Params', 'Notifications'];
 
     /* @ngInject */
-    function CalendarController($scope, Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params, Notifications) {
+    function CalendarController($scope, Appointments, $location, $anchorScroll, Navigator, UserPreferences, Params, Notifications) {
         const vm = this;
 
         let todaysTimeMilliseconds;
@@ -32,7 +32,7 @@
         let today;
         let dateLast;
         let dateFirst;
-        let navigatorName;
+        let navigator;
 
         /**
          * The date options that are fed into the appointment calendar
@@ -95,6 +95,8 @@
          *************************/
 
         function activate() {
+            navigator = Navigator.getNavigator();
+
             bindEvents();
 
             // Get the user's language
@@ -110,9 +112,6 @@
 
             // Initialize calendar styling
             initializeCalendarStyle();
-
-            // Get the name of the current navigator
-            navigatorName = NavigatorParameters.getParameters().Navigator;
         }
 
         /**
@@ -313,15 +312,14 @@
                     ],
                 );
             }
-            NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':appointment});
-            $window[navigatorName].pushPage('./views/personal/appointments/individual-appointment.html');
+            navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
         }
 
         /**
          * Opens the calendar legend
          */
         function goToCalendarOptions() {
-            $window[navigatorName].pushPage('./views/personal/appointments/calendar-options.html');
+            navigator.pushPage('./views/personal/appointments/calendar-options.html');
         }
 
         /**
@@ -372,17 +370,12 @@
         }
 
         function bindEvents() {
-            let navigator = NavigatorParameters.getNavigator();
-
             // Remove event listeners
             $scope.$on('$destroy', () => navigator.off('prepop'));
 
             // Reload user profile if appointments calendar was opened via Home tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler(['Appointments']));
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('home.html', ['Appointments']));
         }
     }
 })();
-
-
-

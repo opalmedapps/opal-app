@@ -10,14 +10,15 @@
         .controller('FeedbackController', FeedbackController);
 
     FeedbackController.$inject = [
-        '$filter', '$scope', '$timeout', 'NativeNotification', 'NavigatorParameters',
+        '$filter', '$scope', '$timeout', 'NativeNotification', 'Navigator',
         'NetworkStatus', 'RequestToServer',
     ];
 
     /* @ngInject */
-    function FeedbackController($filter, $scope, $timeout, NativeNotification, NavigatorParameters,
+    function FeedbackController($filter, $scope, $timeout, NativeNotification, Navigator,
                                 NetworkStatus, RequestToServer) {
         var vm = this;
+        vm.isSubmitting = false;
 
         vm.submitFeedback = submitFeedback;
         vm.reset = reset;
@@ -27,7 +28,7 @@
         //////////////////////
 
         function activate() {
-            let navigator = NavigatorParameters.getNavigator();
+            let navigator = Navigator.getNavigator();
             let parameters = navigator.getCurrentPage().options;
 
             vm.enableSend = false;
@@ -69,7 +70,8 @@
         }
 
         function submitFeedback(type) {
-            if (vm.enableSend) {
+            if (vm.enableSend && !vm.isSubmitting) {
+                vm.isSubmitting = true;
                 RequestToServer.sendRequestWithResponse('Feedback', {
                     FeedbackContent: $scope.feedbackText,
                     AppRating: 3,
@@ -79,10 +81,14 @@
                         $scope.feedbackText = '';
                         vm.submitted = true;
                         vm.enableSend = false; 
+                        vm.isSubmitting = false;
                     });
                 }).catch(function(error){
                     console.error(error);
-                    NativeNotification.showNotificationAlert($filter('translate')("FEEDBACK_ERROR"));
+                    $timeout(function() {
+                        NativeNotification.showNotificationAlert($filter('translate')("FEEDBACK_ERROR"));
+                        vm.isSubmitting = false;
+                    });
                 });
                 
             }
@@ -91,6 +97,7 @@
         function reset() {
             vm.submitted = false;
             $scope.feedbackText = '';
+            vm.isSubmitting = false;
         }
     }
 })();

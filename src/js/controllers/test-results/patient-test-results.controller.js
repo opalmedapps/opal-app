@@ -8,9 +8,9 @@
 		.module('MUHCApp')
 		.controller('PatientTestResultsController', PatientTestResultsController);
 
-	PatientTestResultsController.$inject = ['$scope', '$filter','NavigatorParameters','PatientTestResults','UserPreferences'];
+	PatientTestResultsController.$inject = ['$scope', '$filter','Navigator','PatientTestResults','UserPreferences'];
 
-	function PatientTestResultsController($scope, $filter, NavigatorParameters, PatientTestResults, UserPreferences) {
+	function PatientTestResultsController($scope, $filter, Navigator, PatientTestResults, UserPreferences) {
 
 		const vm = this;
 
@@ -54,7 +54,7 @@
 
 		function activate() {
 			language = UserPreferences.getLanguage();
-			navigator = NavigatorParameters.getNavigator();
+			navigator = Navigator.getNavigator();
 
 			bindEvents();
 		}
@@ -102,7 +102,8 @@
 
 			// Reload user profile if lab results were opened via Notifications tab,
 			// and profile was implicitly changed.
-			navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler(
+			navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler(
+				'notifications.html',
 				['PatientTestDates', 'PatientTestTypes'],
 			));
 		}

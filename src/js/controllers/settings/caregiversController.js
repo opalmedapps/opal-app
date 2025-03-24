@@ -5,19 +5,29 @@
         .module('MUHCApp')
         .controller('CaregiversController', CaregiversController);
 
-    CaregiversController.$inject = ['$timeout', 'RequestToServer', 'Params', 'User'];
+    CaregiversController.$inject = ['$timeout', 'Navigator', 'Params', 'RequestToServer', 'User'];
 
     /* @ngInject */
-    function CaregiversController($timeout, RequestToServer, Params, User) {
-        var vm = this;
+    function CaregiversController($timeout, Navigator, Params, RequestToServer, User) {
+        let vm = this;
+        let navigator;
+
         vm.error = null;
         vm.message = null;
         vm.apiData;
         vm.caregivers;
         vm.loadingList = true;  // This is for loading the list of caregivers
         vm.getRelationshipStatusText = (status) => `RELATIONSHIPS_PATIENTS_STATUS_${status}`;
+        vm.goToCaregiversInfo = () => navigator.pushPage('views/settings/info-page-relationship-type.html', {id: 'caregivers'});
 
-        getCaregiversList();
+        activate();
+
+        ////////////////
+
+        async function activate() {
+            navigator = Navigator.getNavigator();
+            await getCaregiversList();
+        }
 
         async function getCaregiversList() {
             try {
@@ -26,6 +36,7 @@
                 if (!selfPatientSerNum) {
                     vm.apiData = [];
                     handleDisplay();
+                    vm.loadingList = false;
                     return;
                 }
 

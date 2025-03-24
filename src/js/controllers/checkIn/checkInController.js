@@ -18,7 +18,7 @@
     CheckInController.$inject = [
         '$timeout',
         'CheckInService',
-        'NavigatorParameters',
+        'Navigator',
         'UserPreferences',
         'Toast',
         '$filter',
@@ -29,14 +29,15 @@
     function CheckInController(
         $timeout,
         CheckInService,
-        NavigatorParameters,
+        Navigator,
         UserPreferences,
         Toast,
         $filter,
         Params
     ) {
+        let vm = this;
+        let navigator;
 
-        var vm = this;
         vm.apps = [];
         vm.displayApps = {};
         vm.emptyApps = true;
@@ -53,7 +54,6 @@
         vm.separatorStatus[Params.alertTypeWarning] = 'separator-warning';
         vm.separatorStatus[Params.alertTypeDanger] = 'separator-error';
 
-
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
         vm.CheckInAppointments = CheckInAppointments;
@@ -63,6 +63,7 @@
         ////////////////
 
         function activate() {
+            navigator = Navigator.getNavigator();
             vm.apps = CheckInService.getCheckInApps();
             vm.apps.forEach(app => {
                 if (!vm.displayApps[app.PatientSerNum]) {
@@ -111,8 +112,7 @@
                     ],
                 );
             }
-            NavigatorParameters.setParameters({'Navigator': 'homeNavigator', 'Post': appointment});
-            homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
+            navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
         }
 
         /**

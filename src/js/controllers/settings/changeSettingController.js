@@ -12,18 +12,13 @@
         .module('MUHCApp')
         .controller('ChangeSettingController', ChangeSettingController);
 
-    ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params',
-        'EncryptionService'];
+    ChangeSettingController.$inject = ['Firebase', 'UserPreferences', 'RequestToServer', '$timeout', 'Navigator',
+        'Params', 'EncryptionService'];
 
     /* @ngInject */
-    function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout,
-                                    UserAuthorizationInfo, NavigatorParameters, $window, Params,
-                                    EncryptionService) {
-        var vm = this;
-        var page;
-        var parameters;
-        var navigatorName;
+    function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout, Navigator,
+                                     Params, EncryptionService) {
+        let vm = this;
 
         // Values set by the password strength checker directive
         vm.passwordIsValid = false;
@@ -42,12 +37,9 @@
 
         //Sets all the account settings depending on the field that needs to be changed
         function activate() {
-            //Mappings between parameters and translation
-            //Navigator parameter
-            navigatorName = NavigatorParameters.getParameters().Navigator;
-            page = $window[navigatorName].getCurrentPage();
-            parameters = page.options.param;
+            let parameters = Navigator.getParameters().param;
 
+            // Mapping between parameters and their translations
             $timeout(function () {
                 //Instantiates values and parameters
                 vm.disableButton = true;
@@ -95,7 +87,7 @@
             // Use $timeout to compute the changes after vm.passwordIsValid is set
             $timeout(() => {
                 vm.newUpdate = false;
-                vm.disableButton = !vm.passwordIsValid || vm.passwordConfirmationInvalid();
+                vm.disableButton = !vm.oldValue || !vm.passwordIsValid || vm.passwordConfirmationInvalid();
             });
         }
 

@@ -192,13 +192,12 @@
         };
 
         let service =  {
-            initNotifications: initNotifications,
             updateUserNotifications: updateUserNotifications,
             getUserNotifications: getUserNotifications,
             readNotification: readNotification,
-            getNumberUnreadNotifications: getNumberUnreadNotifications,
             getNotificationPost: getNotificationPost,
             downloadNotificationTarget: downloadNotificationTarget,
+            setNotifications: setNotifications,
             setNotificationsLanguage: setNotificationsLanguage,
             clearNotifications: clearNotifications,
             markAllRead: markAllRead,
@@ -250,12 +249,12 @@
 
         /**
          * @ngdoc method
-         * @name setUserNotifications
+         * @name setNotifications
          * @methodOf MUHCApp.service:Notifications
          * @param {Object} notifications Notifications array that contains the new notifications
          * @description Setter method for Notifications
          **/
-        function setUserNotifications(notifications) {
+        function setNotifications(notifications) {
             Notifications = [];
             addUserNotifications(notifications);
         }
@@ -263,16 +262,6 @@
         /******************************
          *  PUBLIC FUNCTIONS
          ******************************/
-
-        function initNotifications(notifications) {
-            setUserNotifications(notifications);
-
-            /* SetNotificationsLanguage removes all broken notifications from the list.
-             * Calling it here ensures that the unread notifications badge is initialized to the right value before
-             * showing the Home tab.
-             * -SB */
-            setNotificationsLanguage(Notifications);
-        }
 
         /**
          *@ngdoc method
@@ -346,21 +335,6 @@
 
         /**
          * @ngdoc method
-         * @name getNumberUnreadNotifications
-         * @methodOf MUHCApp.service:Notifications
-         * @description Iterates through the Notifications array and returns the number of unread notifications.
-         * @returns {Number} Returns number of unread notifications
-         **/
-        function getNumberUnreadNotifications() {
-            let number = 0;
-            for (let i = 0; i < Notifications.length; i++) {
-                if (Notifications[i].ReadStatus === '0') number++;
-            }
-            return number;
-        }
-
-        /**
-         * @ngdoc method
          * @name getNotificationPost
          * @methodOf MUHCApp.service:Notifications
          * @param {Object} notification Notification that belongs to the post
@@ -405,6 +379,7 @@
                     notifications[i].Title = notifications[i][`Name_${language}`];
                     notifications[i].RefTableRowTitle = notifications[i][`RefTableRowTitle_${language}`];
                 } catch (e) {
+                    console.error('Incorrectly formatted notification, not shown', notifications[i]);
                     notifications.splice(i, 1);
                 }
             }

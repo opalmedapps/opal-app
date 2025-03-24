@@ -25,13 +25,13 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
 
     LoginController.$inject = ['$filter', '$rootScope', '$scope', '$state', '$timeout', '$window', 'CleanUp',
         'ConcurrentLogin', 'Constants', 'DeviceIdentifiers', 'EncryptionService', 'Firebase',
-        'NavigatorParameters', 'Params', 'Toast', 'UserAuthorizationInfo', 'UserHospitalPreferences',
+        'Navigator', 'Params', 'Toast', 'UserAuthorizationInfo', 'UserHospitalPreferences',
         'UserPreferences', 'UUID'];
 
     /* @ngInject */
     function LoginController($filter, $rootScope, $scope, $state, $timeout, $window, CleanUp,
                              ConcurrentLogin, Constants, DeviceIdentifiers, EncryptionService, Firebase,
-                             NavigatorParameters, Params, Toast, UserAuthorizationInfo, UserHospitalPreferences,
+                             Navigator, Params, Toast, UserAuthorizationInfo, UserHospitalPreferences,
                              UserPreferences, UUID) {
 
         var vm = this;
@@ -133,7 +133,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
         }
 
         function bindEvents() {
-            let navigator = NavigatorParameters.getNavigator();
+            let navigator = Navigator.getNavigator();
 
             // On destroy, cancel any unfinished in-progress login attempt
             $scope.$on('$destroy', () => {

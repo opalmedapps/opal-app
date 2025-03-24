@@ -121,12 +121,6 @@
 
         // Variables for questionnaire notifications
         let currentPurpose = 'default';
-        let numberOfUnreadQuestionnaires = {
-            clinical: 0,
-            research: 0,
-            consent: 0,
-            default: 0,
-        }
 
         // this is redundant but written for clarity, ordered alphabetically
         return {
@@ -135,7 +129,6 @@
             getQuestionnaireBySerNum: getQuestionnaireBySerNum,
             getCarouselItems: () => carouselItems,
             getCurrentQuestionnaire: () => currentQuestionnaire, // getter for the current questionnaire
-            getNumberOfUnreadQuestionnairesByPurpose: (questionnairePurpose = 'default') => numberOfUnreadQuestionnaires[questionnairePurpose], // is used for showing the badge by the personalTabController.js and researchController.js for the appropriate purpose
             getQuestionnaireBackToListByPurpose: (questionnairePurpose = 'default') => PURPOSE_LIST_MAP[questionnairePurpose], //  gets the correct translation key for the questionnaire back to list message. It assumes that the purpose has been validated.
             getQuestionnaireBeginByPurpose: (questionnairePurpose = 'default') => PURPOSE_BEGIN_MAP[questionnairePurpose], // gets the correct translation key for the begin questionnaire instruction. It assumes that the purpose has been validated.
             getQuestionnaireCount: getQuestionnaireCount,
@@ -153,23 +146,12 @@
             formatQuestionnaireStub: formatQuestionnaireStub,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnairePurpose: (qp_ser_num) => QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num), // gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
-            requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer,
             validateQuestionnairePurpose: (questionnairePurpose) => allowedPurpose.includes(questionnairePurpose.toLowerCase()), // check whether the questionnaire purpose is valid (true if it is valid, false otherwise)
             setQuestionnaireList: setQuestionnaireList,
             updateQuestionnaireList: updateQuestionnaireList,
-            setNumberOfUnreadQuestionnairesByPurpose: setNumberOfUnreadQuestionnairesByPurpose,
-        };
 
-        /**
-         * @desc Set the unreadNum for related purpose questionnaire.
-         * @param purpose The purpose of the questionnaire to find.
-         * @param unreadNum The unreadNum of the purpose questionnaire.
-         * @returns void.
-         */
-        function setNumberOfUnreadQuestionnairesByPurpose(purpose, unreadNum) {
-            numberOfUnreadQuestionnaires[purpose] = unreadNum;
-        }
+        };
 
         /**
          * @name findInProgressQuestionIndex
@@ -283,26 +265,6 @@
         }
 
         /**
-         * @name requestQuestionnaireUnreadNumber
-         * @desc this function is requesting the number of unread (e.g. 'New') questionnaires from questionnaireDataService and
-         *       processes this response to set the number of unread questionnaires variable for notifications 
-         * @param {string} questionnairePurpose the purpose of questionnaires requested
-         * @returns {Promise}
-         */
-        async function requestQuestionnaireUnreadNumber(questionnairePurpose) {
-            try {
-                let responseUnreadNumber = await QuestionnaireDataService.requestQuestionnaireUnreadNumber(questionnairePurpose);
-
-                numberOfUnreadQuestionnaires[questionnairePurpose] = parseInt(responseUnreadNumber.numberUnread);
-
-                return { Success: true, Location: 'Server' };
-            } catch (error) {
-                console.error('Error in requestQuestionnaireUnreadNumber', error);
-                return { Success: false, Location: 'Server' };
-            }
-        }
-
-        /**
          * @name updateQuestionnaireStatus
          * @desc this function updates the status of a given questionnaire in the app and also in the database.
          *       Note that this function does not do any input check. It is relayed to the helper functions
@@ -321,10 +283,6 @@
 
                 if (!isFailure) {
                     throw new Error("Error updating status internal to app");
-                }
-
-                if (newStatus === 1) {
-                    numberOfUnreadQuestionnaires[currentPurpose] -= 1;
                 }
 
                 return { Success: true, Location: 'Server', QuestionnaireSerNum: response?.QuestionnaireSerNum};

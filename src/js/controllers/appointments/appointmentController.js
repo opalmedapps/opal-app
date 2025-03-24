@@ -13,8 +13,8 @@
  *  @name MUHCApp.controllers: AppointmentController
  *  @description
  *
- *  Manages the individual appointment detail view. It receives parameters via NavigatorParameters and then displays the appointment
- *  details to the User
+ *  Manages the individual appointment detail view. It receives parameters via the Navigator service
+ *  and then displays the appointment details to the user.
  */
 (function () {
     'use strict';
@@ -23,15 +23,14 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['$scope', 'NavigatorParameters', 'UserPreferences', '$timeout', 'Browser'];
+    AppointmentController.$inject = ['$scope', 'Navigator', 'UserPreferences', '$timeout', 'Browser'];
 
     /* @ngInject */
-    function AppointmentController($scope, NavigatorParameters, UserPreferences, $timeout, Browser) {
+    function AppointmentController($scope, Navigator, UserPreferences, $timeout, Browser) {
 
         let vm = this;
 
         let navigator = null;
-        let navigatorName = '';
 
         /**
          * @ngdoc property
@@ -60,7 +59,6 @@
          */
         vm.corrupted_appointment = false;
 
-        vm.goToMap = goToMap;
         vm.aboutAppointment = aboutAppointment;
         vm.moreEducationalMaterial = moreEducationalMaterial;
         vm.openMap = openMap;
@@ -70,10 +68,9 @@
         //////////////////////////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
 
-            let parameters = NavigatorParameters.getParameters();
+            let parameters = Navigator.getParameters();
             let language = UserPreferences.getLanguage().toUpperCase();
 
             bindEvents();
@@ -84,22 +81,9 @@
             });
         }
 
-        /**
-         * @ngdoc method
-         * @name goToMap
-         * @methodOf MUHCApp.controllers.AppointmentController
-         * @description
-         * Takes the user to the map of the specified appointment
-         */
-        function goToMap()
-        {
-            NavigatorParameters.setParameters(vm.app);
-            navigator.pushPage('./views/general/maps/individual-map.html');
-        }
-
         function aboutAppointment()
         {
-            navigator.pushPage('./views/personal/appointments/about-appointment.html');
+            navigator.pushPage('./views/personal/appointments/about-appointment.html', {'Post': vm.app});
         }
 
         /**
@@ -128,7 +112,7 @@
 
             // Reload user profile if appointment was opened via Notifications tab,
             // and profile was implicitly changed.
-            navigator.on('prepop', () => NavigatorParameters.reloadPreviousProfilePrepopHandler());
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
     }
 })();

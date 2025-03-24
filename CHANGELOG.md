@@ -1,3 +1,102 @@
+## [1.33.18](https://gitlab.com/opalmedapps/qplus/compare/v1.33.17...v1.33.18) (2024-06-12)
+
+
+### Bug Fixes
+
+* fix the bug showing loading wheel when there are no caregivers. ([a1dc814](https://gitlab.com/opalmedapps/qplus/commit/a1dc814f32f91914c7d5c889b798ee346a5cc557))
+
+## [1.33.17](https://gitlab.com/opalmedapps/qplus/compare/v1.33.16...v1.33.17) (2024-06-11)
+
+
+### Bug Fixes
+
+* add loading wheel to the feedback page ([aefdaad](https://gitlab.com/opalmedapps/qplus/commit/aefdaada759ea26410d6535be48ed49195330c6d))
+
+## [1.33.16](https://gitlab.com/opalmedapps/qplus/compare/v1.33.15...v1.33.16) (2024-06-07)
+
+
+### Bug Fixes
+
+* fix bug resetting profiles too early while viewing notifications ([102d935](https://gitlab.com/opalmedapps/qplus/commit/102d9356738ed3be796fed25c04317159ee1cd8e))
+
+## [1.33.15](https://gitlab.com/opalmedapps/qplus/compare/v1.33.14...v1.33.15) (2024-06-04)
+
+
+### Bug Fixes
+
+* Don't throw errors if optional questions are missing answer in completed questionnaire summary ([487d747](https://gitlab.com/opalmedapps/qplus/commit/487d7479e15bab755be8a0d68bd09fef6785dacb))
+
+## [1.33.14](https://gitlab.com/opalmedapps/qplus/compare/v1.33.13...v1.33.14) (2024-05-30)
+
+
+### Bug Fixes
+
+* grey out the Chart toolbar icon when unselected ([5e53d7c](https://gitlab.com/opalmedapps/qplus/commit/5e53d7c9d995d0317839cafccc85606f4f22bc45))
+
+## [1.33.13](https://gitlab.com/opalmedapps/qplus/compare/v1.33.12...v1.33.13) (2024-05-30)
+
+
+### Bug Fixes
+
+* refactor research menu badges and delete dead badge code ([b1beb8c](https://gitlab.com/opalmedapps/qplus/commit/b1beb8c2d0e6b4e7ad9f4dc903be062fc1d2766b))
+
+## [1.33.12](https://gitlab.com/opalmedapps/qplus/compare/v1.33.11...v1.33.12) (2024-05-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v10.12.1 ([3fb17a4](https://gitlab.com/opalmedapps/qplus/commit/3fb17a4cf194c98a9c44cf2ea3abbaa09bf691cf))
+
+## [1.33.11](https://gitlab.com/opalmedapps/qplus/compare/v1.33.10...v1.33.11) (2024-05-22)
+
+
+### Bug Fixes
+
+* adjust the space allocation in the upper toolbar ([9eb1ef2](https://gitlab.com/opalmedapps/qplus/commit/9eb1ef2e7a23b13d1f9a0561cdb2ff574d90922d))
+
+## [1.33.10](https://gitlab.com/opalmedapps/qplus/compare/v1.33.9...v1.33.10) (2024-05-21)
+
+
+### Bug Fixes
+
+* rename Educational Material to Reference Material ([d8db979](https://gitlab.com/opalmedapps/qplus/commit/d8db979b355d2069a1f9cabed16537fb291d8c0e))
+
+## [1.33.9](https://gitlab.com/opalmedapps/qplus/compare/v1.33.8...v1.33.9) (2024-05-14)
+
+
+### Bug Fixes
+
+* prevent password change submission if no old value is provided ([946bd46](https://gitlab.com/opalmedapps/qplus/commit/946bd46496287be20d8c220d5fd113a40a513583))
+
+## [1.33.8](https://gitlab.com/opalmedapps/qplus/compare/v1.33.7...v1.33.8) (2024-05-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency moment-timezone to v0.5.45 ([093d81f](https://gitlab.com/opalmedapps/qplus/commit/093d81f78f0864d73dbfac542243d154a1549a60))
+* move the "Information" page earlier in the Opal tour ([bc131de](https://gitlab.com/opalmedapps/qplus/commit/bc131dec8ac1dccb012d59933aeb8942dca7d70b))
+
+## [1.33.7](https://gitlab.com/opalmedapps/qplus/compare/v1.33.6...v1.33.7) (2024-05-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v10.8.1 ([42a3930](https://gitlab.com/opalmedapps/qplus/commit/42a39309e6d289dbd34f16251ba8ab342dc9f49c))
+
+## [1.33.6](https://gitlab.com/opalmedapps/qplus/compare/v1.33.5...v1.33.6) (2024-05-03)
+
+
+### Bug Fixes
+
+* add delay to message of the day display (QSCCD-2139) ([2164a4b](https://gitlab.com/opalmedapps/qplus/commit/2164a4b7835fe5b07d78d92728c2bbdc8a74ce5a))
+
+## [1.33.5](https://gitlab.com/opalmedapps/qplus/compare/v1.33.4...v1.33.5) (2024-05-03)
+
+
+### Bug Fixes
+
+* add "In Progress By" label to questionnaires ([60260d6](https://gitlab.com/opalmedapps/qplus/commit/60260d60573d270d9b56b4023137a20794b61e30))
+
 ## [1.33.4](https://gitlab.com/opalmedapps/qplus/compare/v1.33.3...v1.33.4) (2024-04-30)
 
 

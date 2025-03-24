@@ -17,7 +17,7 @@
         '$timeout',
         'Firebase',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Params',
         'ProfileSelector',
         'Questionnaires',
@@ -25,7 +25,7 @@
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, NavigatorParameters, Params, ProfileSelector, Questionnaires, Studies) {
+    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, Navigator, Params, ProfileSelector, Questionnaires, Studies) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -36,7 +36,6 @@
         // variables for controller
         let purpose = 'default';
         let navigator = null;
-        let navigatorName = '';
 
         // constants for the view and controller
         vm.allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
@@ -70,10 +69,9 @@
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
 
-            let params = NavigatorParameters.getParameters();
+            let params = Navigator.getParameters();
 
             if (!params.hasOwnProperty('answerQuestionnaireId')){
                 vm.loadingQuestionnaire = false;
@@ -97,7 +95,7 @@
                         $scope.$on('$destroy', () => {
                             // Reload user profile if questionnaire was opened via Notifications tab,
                             // and profile was implicitly changed.
-                            NavigatorParameters.reloadPreviousProfilePrepopHandler();
+                            Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
                         });
 
                         vm.loadingQuestionnaire = false;
@@ -119,16 +117,14 @@
          * @param {int} qIndex the index of the question to be edited
          */
         function editQuestion(sIndex, qIndex) {
-
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.replacePage('views/personal/questionnaires/questionnaires.html', {
+                animation: 'slide', // OnsenUI
                 sectionIndex: sIndex,
                 questionIndex: qIndex,
                 editQuestion: true,
                 answerQuestionnaireId: vm.questionnaire.qp_ser_num,
                 questionnairePurpose: purpose
             });
-            navigator.replacePage('views/personal/questionnaires/questionnaires.html', {animation: 'slide'});
         }
 
         /**
@@ -173,8 +169,10 @@
 
                     vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
 
-                    NavigatorParameters.setParameters({Navigator: navigatorName, questionnairePurpose: purpose});
-                    navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {animation: 'slide'});
+                    navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {
+                        animation: 'slide', // OnsenUI
+                        questionnairePurpose: purpose
+                    });
                 })
                 .catch(handleSubmitErr)
         }
@@ -293,7 +291,8 @@
                             // this loop will be only once except for checkbox
                             // this is to verify the properties in answer
                             for (let k = 0; k < vm.questionnaire.sections[i].questions[j].patient_answer.answer.length; k++){
-                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_value')){
+                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_value')
+                                    && vm.questionnaire.sections[i].questions[j].optional === "0"){
 
                                     vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].answer_value = NON_EXISTING_ANSWER;
                                     vm.submitAllowed = false;
@@ -301,7 +300,9 @@
                                 }
 
                                 // this check is separated because slider and textbox do not need this property and will not have it if the user has just filled the question out
-                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_option_text')){
+                                if (!vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].hasOwnProperty('answer_option_text')
+                                    && vm.questionnaire.sections[i].questions[j].optional === "0"){
+
                                     vm.questionnaire.sections[i].questions[j].patient_answer.answer[k].answer_option_text = NON_EXISTING_ANSWER;
                                     vm.submitAllowed = false;
                                     handleLoadQuestionnaireErr();
@@ -381,7 +382,6 @@
          */
         function handleLoadQuestionnaireErr() {
             // go to the questionnaire list page if there is an error
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
             NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
@@ -424,7 +424,6 @@
                 vm.loadingSubmitQuestionnaire = false;
 
                 // go to the questionnaire list page if there is an error
-                NavigatorParameters.setParameters({ Navigator: navigatorName });
                 navigator.popPage();
 
                 NativeNotification.showNotificationAlert($filter('translate')("TOO_MANY_REQUESTS_CONSENT"));
@@ -432,7 +431,6 @@
                 vm.loadingSubmitQuestionnaire = false;
 
                 // go to the questionnaire list page if there is an error
-                NavigatorParameters.setParameters({ Navigator: navigatorName });
                 navigator.popPage();
 
                 NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_QUESTIONNAIRE"));

@@ -97,44 +97,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         {
             return txTeamMessagesArray;
         },
-        //Gets unread messages for notifications and badges
-        /**
-         *@ngdoc method
-         *@name getUnreadTxTeamMessages
-         *@methodOf MUHCApp.service:TxTeamMessages
-         *@description Gets unread tx team messages
-         *@returns {Array} Returns all the unread messages
-         **/
-        getUnreadTxTeamMessages:function()
-        {
-            var array=[];
-            for (var i = 0; i < txTeamMessagesArray.length; i++) {
-                if(txTeamMessagesArray[i].ReadStatus =='0')
-                {
-                    array.push(txTeamMessagesArray[i]);
-                }
-            }
-            return array;
-        },
-        //Get number of unread news
-        /**
-         *@ngdoc method
-         *@name getNumberUnreadTxTeamMessages
-         *@methodOf MUHCApp.service:TxTeamMessages
-         *@description Iterates through array object and returns the number of unread messages
-         *@returns {Number} Returns number of unread news
-         **/
-        getNumberUnreadTxTeamMessages:function()
-        {
-            var number = 0;
-            for (var i = 0; i < txTeamMessagesArray.length; i++) {
-                if(txTeamMessagesArray[i].ReadStatus == '0')
-                {
-                    number++;
-                }
-            }
-            return number;
-        },
+
         //Obtain a team message by ser num
         /**
          *@ngdoc method
