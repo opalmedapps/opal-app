@@ -118,7 +118,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
      *@ngdoc method
      *@name hash
      *@methodOf MUHCApp.service:EncryptionService
-     *@description Encrypts a given password using SHA512
+     *@description Encrypts a given password using SHA256
      *@return {String} Returns hashed password
      **/
     function hash(incoming) {
@@ -219,9 +219,13 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          * @returns {string} The key derived from PBKDF2 based on the provided inputs.
          */
         generateSpecificEncryptionKey: function (secret, salt) {
+            var keySizeBits = 256; // Key size in bits for SHA-256
+            var iterations = 600000;
+
             return CryptoJS.PBKDF2(secret, salt, {
-                keySize: 512 / 32,
-                iterations: 1000
+                keySize: keySizeBits / 32,
+                iterations: iterations,
+                hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
         },
 
@@ -229,13 +233,19 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          *@ngdoc method
          *@name generateEncryptionHash
          *@methodOf MUHCApp.service:EncryptionService
-         *@description Encrypts a given password using SHA512
+         *@description Encrypts a given password using SHA-256
          *@return {String} Returns hashed password
          **/
-        generateEncryptionHash: function () {
-            encryptionHash = CryptoJS.PBKDF2(hash(UserAuthorizationInfo.getUsername()), securityAnswerHash, {
-                keySize: 512 / 32,
-                iterations: 1000
+         generateEncryptionHash: function () {
+            var keySizeBits = 256; // Key size in bits for SHA-256
+            var iterations = 600000;
+            var usernameHash = hash(UserAuthorizationInfo.getUsername());
+
+            alert(usernameHash);
+              encryptionHash = CryptoJS.PBKDF2(usernameHash, securityAnswerHash, {
+                keySize: keySizeBits / 32,
+                iterations: iterations,
+                hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
         },
 
