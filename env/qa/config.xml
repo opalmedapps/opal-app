@@ -95,7 +95,7 @@
         -->
         <hook src="plugins/cordova-plugin-ble-central/stripDuplicatePermissions.js" type="after_prepare"/>
         <!-- Remove unwanted permissions added by plugins -->
-        <hook type="after_prepare" src="remove-unwanted-permissions.js"/>
+        <hook type="after_prepare" src="hooks/remove-unwanted-permissions.js"/>
     </platform>
     <platform name="ios">
         <!-- Required to access location data since iOS 10 -->
