@@ -150,7 +150,7 @@
                         // Trigger databank consent creation with additional check
                         const pattern = /.*databank\s*consent\s*questionnaire.*/i;
                         if (vm.questionnaire.nickname && pattern.test(vm.questionnaire.nickname.toLowerCase())){
-                            Studies.createDatabankConsent(patient_uuid);
+                            Studies.createDatabankConsent(patient_uuid, vm.questionnaire);
                         }
                     }
 

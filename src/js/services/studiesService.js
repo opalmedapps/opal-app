@@ -62,15 +62,28 @@
          * @desc Trigger creation of a new databank consent in Django.
          *       Default for all modules is true during databank phase 1.
          * @param {string} patientUUID The Django uuid of the currently selected patient
+         * @param {JSON} consent_questionnaire_response Patient completed response to the consent form
          */
-        async function createDatabankConsent(patient_uuid) {
+        async function createDatabankConsent(patient_uuid, consent_questionnaire_response) {
             let data = {
                 "has_appointments": true,
                 "has_questionnaires": true,
                 "has_labs": true,
                 "has_diagnoses": true,
                 "has_demographics": true,
+                "middle_name": "",
+                "city_of_birth": ""
             };
+            // Extract the middle name and cob question responses for the GUID generation in Django
+            consent_questionnaire_response.sections.forEach(section => {
+                section.questions.forEach(question => {
+                    if (/middle\s*name/i.test(question.question_display)) {
+                    data.middle_name = question.patient_answer.answer[0].answer_value;
+                  } else if (/city\s*of\s*birth/i.test(question.question_display)) {
+                    data.city_of_birth = question.patient_answer.answer[0].answer_value;
+                  }
+                });
+              });
 
             const requestParams = Params.API.ROUTES.DATABANK_CONSENT;
             const formattedParams = {
