@@ -10,7 +10,7 @@
 
     <div ng-if="!ctrl.bluetoothEnabled" class="container" align="center">
         <ons-icon icon="fa-bluetooth" class="smartdevices-fa-logo" style="color: #0082fc;"></ons-icon>
-        <div ng-if="ctrl.ble_available">
+        <div ng-if="ctrl.bluetoothAvailable">
             <h3>{{"SMARTDEVICES_BLUETOOTH_DISABLED"|translate}}</h3>
             <p style="color:grey">{{"SMARTDEVICES_BLUETOOTH_PROMPT"|translate}}</p>
             <button class="button--large--cta"
@@ -18,7 +18,7 @@
                 <span>{{"SMARTDEVICES_BLUETOOTH_REFRESH"|translate}}</span>
             </button>
         </div>
-        <div ng-if="!ctrl.ble_available">
+        <div ng-if="!ctrl.bluetoothAvailable">
             <h3>{{"SMARTDEVICES_BLUETOOTH_UNAVAILABLE"|translate}}</h3>
         </div>
     </div>
