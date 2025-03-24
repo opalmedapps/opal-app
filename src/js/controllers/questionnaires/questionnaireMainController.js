@@ -163,10 +163,10 @@
                         delayLoading();
                     })
                 })
-                .catch(function(){
+                .catch(function(error){
                     $timeout(function(){
                         vm.loadingQuestionnaire = false;
-                        handleLoadQuestionnaireErr();
+                        handleLoadQuestionnaireErr(error);
                     });
                 });
         }
@@ -926,13 +926,13 @@
             // go to the questionnaire list page if there is an error
             navigator.popPage();
 
-            if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+            if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
                 NativeNotification.showNotificationAlert(
                     $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
                     $filter('translate')("TITLE"),
                 );
             }
-            else if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+            else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
                 NativeNotification.showNotificationAlert(
                     $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
                     $filter('translate')("TITLE"),

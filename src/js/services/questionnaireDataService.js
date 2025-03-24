@@ -154,11 +154,10 @@
          * @param {int} answerQuestionnaireID ID of that particular questionnaire
          * @returns {Promise} resolves to the questionnaire's data if success
          */
-        async function requestQuestionnaire(answerQuestionnaireID, status){
+        async function requestQuestionnaire(answerQuestionnaireID){
             let params = {
                 'qp_ser_num': answerQuestionnaireID,
                 'language': UserPreferences.getLanguage(),
-                'status': status,
             };
             let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
             return response?.Data ? response.Data : {};

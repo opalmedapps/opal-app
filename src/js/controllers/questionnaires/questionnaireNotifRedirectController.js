@@ -16,14 +16,12 @@
         '$timeout',
         'NativeNotification',
         'Navigator',
-        'Params',
         'Questionnaires',
-        'Utility',
-        'ProfileSelector'
+        'Utility'
     ];
 
     /* @ngInject */
-    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, Navigator, Params,
+    function QuestionnaireNotifRedirectController($filter, $timeout, NativeNotification, Navigator,
                                                   Questionnaires, Utility) {
         let vm = this;
 
@@ -82,26 +80,6 @@
          * @param {int} answerQuestionnaireId
          */
         async function goToQuestionnaire(answerQuestionnaireId) {
-            // check if the questionnaire is locked or the user has the permission to answer it.
-            try {
-                await Questionnaires.requestQuestionnaire(selectedQuestionnaire.qp_ser_num, selectedQuestionnaire.status);
-            } catch (error) {
-                vm.loadingQuestionnaire = false;
-                //handle the errors message
-                if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
-                    NativeNotification.showNotificationAlert(
-                        $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
-                        $filter('translate')("TITLE"),
-                    );
-                }
-                else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
-                    NativeNotification.showNotificationAlert(
-                        $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
-                        $filter('translate')("TITLE"),
-                    );
-                }
-                else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
-            }
             // putting editQuestion false to claim that we are not coming from a summary page
             // Get questionnaire purpose to display correct page contents
             let purposeData = await Questionnaires.requestQuestionnairePurpose(answerQuestionnaireId);

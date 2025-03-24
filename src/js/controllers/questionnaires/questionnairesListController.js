@@ -20,8 +20,7 @@
         'Navigator',
         'Params',
         'Questionnaires',
-        'UpdateUI',
-        'ProfileSelector'
+        'UpdateUI'
     ];
 
     /* @ngInject */
@@ -88,34 +87,12 @@
          * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
         function goToQuestionnaire(selectedQuestionnaire) {
-            Questionnaires.requestQuestionnaire(selectedQuestionnaire.qp_ser_num, selectedQuestionnaire.status)
-                .then(function(){
-                // putting editQuestion false to claim that we are not coming from a summary page
-                    navigator.pushPage('views/personal/questionnaires/questionnaires.html', {
-                        answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
-                        editQuestion: false,
-                        questionnairePurpose: purpose
-                    });
-                })
-                .catch(error => {
-                    $timeout(() => {
-                        vm.loadingQuestionnaire = false;
-                        //handle the errors message
-                        if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
-                            NativeNotification.showNotificationAlert(
-                                $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
-                                $filter('translate')("TITLE"),
-                            );
-                        }
-                        else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
-                            NativeNotification.showNotificationAlert(
-                                $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
-                                $filter('translate')("TITLE"),
-                            );
-                        }
-                        else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
-                    });
-                })
+            // putting editQuestion false to claim that we are not coming from a summary page
+            navigator.pushPage('views/personal/questionnaires/questionnaires.html', {
+                answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
+                editQuestion: false,
+                questionnairePurpose: purpose
+            });
         }
 
         /**

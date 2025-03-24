@@ -252,14 +252,14 @@
          * @param {int} answerQuestionnaireId this is the qp_ser_num or the answerQuestionnaireId for the DB (unique identifier for a questionnaire sent to a user)
          * @returns {Promise}
          */
-        async function requestQuestionnaire(answerQuestionnaireId, status=Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS.NEW_QUESTIONNAIRE_STATUS){
+        async function requestQuestionnaire(answerQuestionnaireId){
 
             // if the current questionnaire is requested, return it.
             if (currentQuestionnaire.qp_ser_num === answerQuestionnaireId) return {Success: true, Location: 'App'};
 
             // re-initiate the current questionnaire related variables
             clearCurrentQuestionnaire();
-            const responseQuestionnaire = await QuestionnaireDataService.requestQuestionnaire(answerQuestionnaireId, status);
+            const responseQuestionnaire = await QuestionnaireDataService.requestQuestionnaire(answerQuestionnaireId);
             setQuestionnaire(responseQuestionnaire);
             return {Success: true, Location: 'Server'};
         }

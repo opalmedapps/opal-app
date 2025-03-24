@@ -380,7 +380,7 @@
          * @desc shows a notification to the user in case a request to server fails to load the questionnaire
          *      and move the user back to the previous page
          */
-        function handleLoadQuestionnaireErr() {
+        function handleLoadQuestionnaireErr(error) {
             // go to the questionnaire list page if there is an error
             navigator.popPage();
 
