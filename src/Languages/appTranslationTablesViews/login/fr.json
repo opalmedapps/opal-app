@@ -141,6 +141,8 @@
   "TOUR_NAME": "Guide d'Opal",
   "TOUR_WELCOME": "Bienvenue à Opal!",
   "TOUR_WELCOME_DESC": "Opal est un portail patient conçu pour vous fournir quelques unes de vos informations médicales à portée de main. Pour commencer, appuyez sur la flèche ou faites glisser l'écran pour changer de page.",
+  "TOUR_SECURITY_TITLE": "Sécurité",
+  "TOUR_SECURITY_DESCRIPTION": "N'oubliez pas de protéger votre appareil avec un mot de passe.",
   "TRUST_DEVICE": "Faire confiance à cet appareil?",
   "UNATTENDED": "Ne laissez pas votre appareil sans surveillance.",
   "USER_DISABLED": "Le compte d'utilisateur a été désactivé",

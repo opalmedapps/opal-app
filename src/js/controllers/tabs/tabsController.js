@@ -22,7 +22,7 @@
             if (!localStorage.getItem('firstInstall')) {
                 localStorage.setItem('firstInstall', '1');
                 $timeout(function () {
-                    firstLoginTourModal.show();
+                    securityModal.show();
                 },500);
             }
             $translatePartialLoader.addPart('all-views');

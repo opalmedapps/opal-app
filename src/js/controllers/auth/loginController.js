@@ -99,13 +99,6 @@
 
             clearErrors();
 
-            if(!localStorage.getItem('locked')){
-                $timeout(function () {
-                    securityModal.show();
-                },200);
-            }
-
-
             //Obtain email from localStorage and show that email
             savedEmail = $window.localStorage.getItem('Email');
             if(savedEmail) vm.email = savedEmail;
