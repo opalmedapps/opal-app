@@ -19,7 +19,7 @@
 env/dev/config.xml
 env/dev/google-services.json
 
-# 2- local: completely untracked (user-specific)
+# 2- local: user-specific
 env/local/config.xml
 env/local/google-services.json
 env/local/opal.config.js
