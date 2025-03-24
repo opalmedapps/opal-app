@@ -51,7 +51,7 @@ import '../../../css/views/init-page.view.css';
 		vm.globalMessage = '';
 		vm.globalMessageDescription = '';
 		vm.hasShownMessageOfTheDay = false;
-		vm.OPAL_CONFIG = OPAL_CONFIG;
+		vm.CONFIG = CONFIG;
 		vm.APP_VERSION = Constants.version();
 		vm.APP_BUILD_NUMBER = Constants.build();
 
@@ -73,7 +73,7 @@ import '../../../css/views/init-page.view.css';
 			try {
 				await DynamicContent.ensureInitialized();
 				// Read the Service Status Message from the serviceStatusURL hosted on the external server.
-				const response = await DynamicContent.loadFromURL(OPAL_CONFIG.settings.serviceStatusURL);
+				const response = await DynamicContent.loadFromURL(CONFIG.settings.serviceStatusURL);
 
 				// Save the Service Status
 				const lang = UserPreferences.getLanguage().toLowerCase();

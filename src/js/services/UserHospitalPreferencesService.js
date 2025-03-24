@@ -47,7 +47,7 @@
          */
         function getHospitalFullName() {
             if (!selectedHospital) return '';
-            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.fullNameReal : selectedHospital.fullNameGeneric;
+            return CONFIG.settings.useRealInstitutionNames ? selectedHospital.fullNameReal : selectedHospital.fullNameGeneric;
         }
 
         /**
@@ -57,7 +57,7 @@
          */
         function getHospitalAcronym() {
             if (!selectedHospital) return '';
-            return OPAL_CONFIG.settings.useRealInstitutionNames ? selectedHospital.acronymReal : selectedHospital.acronymGeneric;
+            return CONFIG.settings.useRealInstitutionNames ? selectedHospital.acronymReal : selectedHospital.acronymGeneric;
         }
 
         /**
@@ -98,7 +98,7 @@
          * @returns {{uniqueHospitalCode: string, acronym: string, fullName: string}[]} The list of hospitals for display.
          */
         function getHospitalListForDisplay() {
-            let useRealName = OPAL_CONFIG.settings.useRealInstitutionNames;
+            let useRealName = CONFIG.settings.useRealInstitutionNames;
             return hospitalList.map(entry => {
                 // Special case: ignore generic-only hospitals (those without a real name) if real hospitals are used
                 if (useRealName && (!entry.acronymReal || !entry.fullNameReal)) return undefined;

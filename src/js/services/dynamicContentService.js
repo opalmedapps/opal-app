@@ -123,7 +123,7 @@
          */
         async function ensureInitialized() {
             if (objectIsEmpty(constants) || objectIsEmpty(links))
-                await initialize(OPAL_CONFIG.settings.externalContentFileURL);
+                await initialize(CONFIG.settings.externalContentFileURL);
         }
 
         /**
