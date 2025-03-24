@@ -38,16 +38,11 @@
         function bindEvents() {
             $translatePartialLoader.addPart('top-view');
 
-            // Listen to the Firebase authentication state; if the user gets unauthenticated, log out
+            // Listen to the Firebase authentication state; if the user gets unauthenticated, print a message
+            // Actual handling should be done in the code that unauthenticated the user; this message is just to be aware if the unauthentication happens unexpectedly
             Firebase.onAuthStateChanged(function (authData) {
-                var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
                 if (!authData) {
-                    if ($state.current.name === 'Home') {
-                        console.warn('Firebase authentication has detected a state change: no user is logged in; redirecting to the init page');
-                        LogOutService.logOut();
-                    } else if (authInfoLocalStorage) {
-                        LocalStorage.resetUserLocalStorage();
-                    }
+                    console.log('Firebase authentication null state; currently authenticated user:', Firebase.getCurrentUser());
                 }
             });
 
