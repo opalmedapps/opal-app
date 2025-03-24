@@ -3,9 +3,10 @@
  * User: James Brace
  * Date: 2017-09-20
  * Time: 12:00 PM
+ * 
  */
 
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -15,8 +16,8 @@
     PersonalTabController.$inject = ['NavigatorParameters', 'Patient', 'NetworkStatus', '$timeout', 'UserPreferences',
         'UserHospitalPreferences', 'RequestToServer', 'Params'];
 
-    function PersonalTabController( NavigatorParameters, Patient, NetworkStatus, $timeout, UserPreferences,
-                                    UserHospitalPreferences, RequestToServer, Params) {
+    function PersonalTabController(NavigatorParameters, Patient, NetworkStatus, $timeout, UserPreferences,
+        UserHospitalPreferences, RequestToServer, Params) {
         var vm = this;
 
         // variable to let the user know which hospital they are logged in
@@ -30,10 +31,10 @@
 
         //////////////////////////
 
-        function activate(){
+        function activate() {
             //Its possible for a notification to have been read such as a document since this controller has already been instantiated
             // we will have to check to sync that number on the badges for the tabs on the personal page.
-            NavigatorParameters.setParameters({'Navigator':'personalNavigator'});
+            NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator' });
             NavigatorParameters.setNavigator(personalNavigator);
 
             bindEvents();
@@ -41,20 +42,20 @@
             vm.language = UserPreferences.getLanguage();
             configureSelectedHospital();
 
-            $timeout(function(){
+            $timeout(function () {
                 vm.censor = Patient.getAccessLevel() == 3;
             });
 
-            if(NetworkStatus.isOnline()) getDisplayData();
+            if (NetworkStatus.isOnline()) getDisplayData();
         }
 
-        function bindEvents(){
+        function bindEvents() {
             // Refresh the page on coming back from other pages
-            personalNavigator.on('prepop',function(){
-                if(NetworkStatus.isOnline()) getDisplayData();
+            personalNavigator.on('prepop', function () {
+                if (NetworkStatus.isOnline()) getDisplayData();
             });
             //This avoids constant repushing which causes bugs
-            personalNavigator.on('prepush', function(event) {
+            personalNavigator.on('prepush', function (event) {
                 if (personalNavigator._doorLock.isLocked()) {
                     event.cancel();
                 }
@@ -86,7 +87,7 @@
             }
         }
 
-        function personalDeviceBackButton(){
+        function personalDeviceBackButton() {
             tabbar.setActiveTab(0);
         }
 
@@ -97,6 +98,15 @@
         function configureSelectedHospital() {
             vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
             vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
+        }
+
+        /**
+         * @name goToClinicalQuestionnaire
+         * @desc Get clinical questionnaires
+         */
+        function goToClinicalQuestionnaire() {
+            NavigatorParameters.setParameters({ questionnairePurpose: 'clinical' });
+            personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html');
         }
     }
 })();
