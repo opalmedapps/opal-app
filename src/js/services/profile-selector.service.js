@@ -37,11 +37,9 @@ import {Observer} from "../models/utility/observer";
          */
         async function init() {
             patientList = await requestPatientList();
-            if (patientList){
-                await User.initUser();
-                const patientSerNum = getLocalStoragePatientSerNum();
-                loadPatientProfile(patientSerNum);
-            }
+            await User.initUser();
+            const patientSerNum = getLocalStoragePatientSerNum();
+            loadPatientProfile(patientSerNum);
         }
 
         /**
