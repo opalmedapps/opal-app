@@ -29,7 +29,7 @@
                 </ons-col>
                 <ons-col style="word-wrap: break-word;">
                     <div ng-class="fontSizeTitle">{{caregivers.first_name}} {{caregivers.last_name}}</div>
-                    <div class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate }} {{Ctrl.getRelationshipStatusText(caregivers.status) | translate | lowercase}} ({{caregivers.relationship_type | translate}})</div>
+                    <div class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate }} {{Ctrl.getRelationshipStatusText(caregivers.status) | translate | lowercase}} ({{caregivers.relationship_type}})</div>
                 </ons-col>
             </ons-row>
         </ons-list-item>
