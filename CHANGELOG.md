@@ -1,3 +1,10 @@
+## [1.30.1](https://gitlab.com/opalmedapps/qplus/compare/v1.30.0...v1.30.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* pass array instead of string to reloadPreviousProfilePrepopHandler ([9b78387](https://gitlab.com/opalmedapps/qplus/commit/9b78387ceda589517daa4e5cc2ff74b8b8e22cea))
+
 # [1.30.0](https://gitlab.com/opalmedapps/qplus/compare/v1.29.4...v1.30.0) (2024-02-29)
 
 
