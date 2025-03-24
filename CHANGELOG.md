@@ -1,3 +1,34 @@
+## [1.20.11](https://gitlab.com/opalmedapps/qplus/compare/v1.20.10...v1.20.11) (2023-12-07)
+
+
+### Bug Fixes
+
+* rename available profiles (QSCCD-1772) ([5cdcd17](https://gitlab.com/opalmedapps/qplus/commit/5cdcd1708761b6ebf541341d35a570edc2c83988))
+
+## [1.20.10](https://gitlab.com/opalmedapps/qplus/compare/v1.20.9...v1.20.10) (2023-12-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-android to v12.0.1 ([ae59240](https://gitlab.com/opalmedapps/qplus/commit/ae59240cc744a84355983a261df70a58b55ca75f))
+* **deps:** update dependency cordova-plugin-ble-central to v1.7.2 ([22b1ebe](https://gitlab.com/opalmedapps/qplus/commit/22b1ebe99af3729037b51ca45bbc1b0bd20dea3a))
+* **deps:** update dependency cordova-plugin-splashscreen to v6.0.2 ([cb6c928](https://gitlab.com/opalmedapps/qplus/commit/cb6c928f23d0823fa1d284cd7b621da54423d16a))
+* **deps:** update dependency firebase to v10.7.1 ([4625a8c](https://gitlab.com/opalmedapps/qplus/commit/4625a8c40d1be1c1866cf57f4d65fb10e3ca74be))
+
+## [1.20.9](https://gitlab.com/opalmedapps/qplus/compare/v1.20.8...v1.20.9) (2023-12-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-android-permissions to v1.1.5 ([bdd6d9a](https://gitlab.com/opalmedapps/qplus/commit/bdd6d9a10ae370e72416138e78c0e56e3b13756a))
+
+## [1.20.8](https://gitlab.com/opalmedapps/qplus/compare/v1.20.7...v1.20.8) (2023-12-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @havesource/cordova-plugin-push to v4.0.0 ([c0d54c5](https://gitlab.com/opalmedapps/qplus/commit/c0d54c50bfbe5db6a0674c34267e56d385f74cf2))
+
 ## [1.20.7](https://gitlab.com/opalmedapps/qplus/compare/v1.20.6...v1.20.7) (2023-12-01)
 
 
