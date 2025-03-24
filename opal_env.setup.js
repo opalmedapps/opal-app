@@ -6,7 +6,7 @@ const xmlJs = require("xml-js");
 class OpalEnv {
 	/**
 	 * Function verifies the Opal environment directory exists, throws error if it does not find it.
-	 * @param {string} env string value for the environment, normally one of ['local', 'dev', 'staging', 'preprod', 'prod'].
+	 * @param {string} env string value for the environment, normally one of ['local', 'dev', 'qa', 'staging', 'preprod', 'prod'].
 	 */
 	static verifyOpalEnvironmentExists(env = null) {
 		if (env) {
@@ -25,7 +25,7 @@ class OpalEnv {
 	 * Function takes the environment string and copies the files over to the root directory.
 	 * If no environment is set, the default is to do nothing.
 	 * This assumes the files in the root directory are present already.
-	 * @param {string} env string value for the environment, normally one of ['local', 'dev', 'staging', 'preprod', 'prod'].
+	 * @param {string} env string value for the environment, normally one of ['local', 'dev', 'qa', 'staging', 'preprod', 'prod'].
 	 */
 	static copyEnvironmentFiles(env = null) {
 		if (env) {
@@ -44,7 +44,7 @@ class OpalEnv {
 	 *              and WEB_VERSION.build via webpack's ProvidePlugin.
 	 *              If the config.xml file is not found, generic default version numbers are used.
 	 *              Note: since the build number in config.xml is repeated twice, the Android one is used here.
-	 * @param {string} env Environment from which to get the version, normally one of ['local', 'dev', 'staging', 'preprod', 'prod'].
+	 * @param {string} env Environment from which to get the version, normally one of ['local', 'dev', 'qa', 'staging', 'preprod', 'prod'].
 	 */
 	static updateWebVersion(env) {
 

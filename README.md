@@ -57,8 +57,11 @@ The following is the top level anatomy of the folders and their description. As 
 ├── .gitlab-ci.yml # GitLab CI/CD pipeline description file
 ├── docs # Project-specific documentation
 ├── env # Folder where the environment specific files live
+    ├── dev
+    ├── local
     ├── preprod
     ├── prod
+    ├── qa
     └── staging
 ├── firebase.json # Configuration of redirect site
 ├── hooks # Cordova hooks for the application
@@ -76,10 +79,14 @@ The following is the top level anatomy of the folders and their description. As 
 └── webpack.config.js # Webpack configuration file
 ```
 
-In Opal, we have three main environments: `staging`, `preprod`, and `prod`. In terms of development, our main development branch is `staging`. 
-This branch serves as a base for developers to write new code. Once a set of features has been merged and tested in `staging`, 
-the `staging` code is merged into `preprod`. The `preprod` version of the app is then tested as well.
-Once that version is ready, a new release of the app is made by merging into the `master` branch. 
+In Opal, we have several environments which represent different stages along the release pipeline.
+These environments, in order from closest to the developers to closest to its users, are
+`local`, `dev`, `qa`, `staging`, `preprod` and `prod`.
+
+The default project branch is used as the base for developers to write new code (which can be run in their `local` environment).
+All new code is submitted for review via merge requests, and is then squashed-and-merged to the default branch.
+From this branch, code can be released to each of the above environments (`dev` and above), in order, as part of the app release workflow.
+
 For more information about versioning, please read [Versioning](https://gitlab.com/opalmedapps/qplus/-/wikis/Versioning).
 
 ### Installing, building and serving the web code
@@ -225,7 +232,9 @@ A few notes on this:
  - If building for iOS you may need a developer profile in Apple depending on what you want to do. Running in an emulator does not require development profiles.
  - Once the build commands have been run, the project becomes a valid Cordova project, which means you may use any of the [Cordova related cli commands](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/).
    As mentioned above, on Mac, you may need to install cordova globally to access the CLI commands.
- - The build commands for staging and preprod build development apps, while the ones for production build release apps. 
+ - Only the build commands containing the word `release` (typically used with the `prod` environment setting)
+   are used to create production-ready application builds. All other commands produce builds suited for development.
+
  The development apps allow debugging, among other security risks such as self-signed certificates. 
  To disable them, use the release mode: `cordova build --release --verbose`. 
  In particular, prod settings (`prod/config.xml`) and release mode should be used for builds that are sent in for penetration or security testing, to ensure that common security vulnerabilities such as debugging being enabled are not flagged.
