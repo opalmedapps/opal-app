@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "opal-registration-beta",
+    "default": "opal-dev",
     "demo": "opal-3a1a23",
-    "dev": "opal-registration-beta",
+    "dev": "opal-dev",
     "devops": "opal-4b64ac",
     "preprod": "opal-prod",
     "prod": "firebase-brilliant-inferno-767",
     "qa": "opal-1f8d2c",
-    "staging": "opal-dev"
+    "staging": "opal-5c4f26"
   }
 }

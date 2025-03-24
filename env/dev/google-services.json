@@ -1,37 +1,27 @@
 {
   "project_info": {
-    "project_number": "452605759067",
-    "firebase_url": "https://opal-registration-beta.firebaseio.com",
-    "project_id": "opal-registration-beta",
-    "storage_bucket": "opal-registration-beta.appspot.com"
+    "project_number": "652464215237",
+    "firebase_url": "https://opal-dev.firebaseio.com",
+    "project_id": "opal-dev",
+    "storage_bucket": "opal-dev.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:452605759067:android:e0eee47a4e1df68ae7797e",
+        "mobilesdk_app_id": "1:652464215237:android:0d33f8440e1bbb0df94cac",
         "android_client_info": {
           "package_name": "com.hig.opaldev2"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "452605759067-242kq2n2bfr6eju44pdhkk1r4n693488.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBhn4IhcKaHfZnMRJgiwMb3QdjuPsCu8Wk"
+          "current_key": "AIzaSyABwfzI-vyQdBZl0PCfkr4MAUg9OvfqaIg"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "452605759067-242kq2n2bfr6eju44pdhkk1r4n693488.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
