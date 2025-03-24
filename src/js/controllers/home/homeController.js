@@ -141,45 +141,23 @@
          * @desc get latest version info according to the current version
          */
         function checkForVersionUpdates() {
-            $scope.infoModalTitle = 'Current Version: ' + Version.currentVersion();
-            Version.requestVersionUpdates()
-                .then(function(response){
-                    vm.loading = false;
-                    response.forEach(function(value, index) {
-                        let infoData = {};
-                        let description = vm.language == 'EN' ? value.description_en : value.description_fr;
-                        description = formatVersionDescription(description);
-                        infoData.title = value.version;
-                        infoData.content = description;
-                        $scope.infoModalData.push(infoData);
-                    });
-                    $timeout(function () {
-                        infoModal.show();
-                    },200);
-                })
-                .catch(function(error){
-                    vm.loading = false;
-
-                    // TODO: Notify user about error
-                    console.log(error);
-
-                    // Display notifications badge (unread number)
-                });
-        }
-
-        /**
-         * @name formatVersionDescription
-         * @desc parse the description from string to array
-         */
-        function formatVersionDescription(description) {
-            let descriptions = '';
-            if (typeof description == 'string' && description.length > 0) {
-                const descriptionArray = JSON.parse(description);
-                descriptionArray.forEach(function(value, index) {
-                    descriptions += '\u2022 ' + value + '\n\n';
-                });
+            let lastVersion = localStorage.getItem('lastVersion');
+            if (!lastVersion) {
+                lastVersion = '1.0.0';
+                localStorage.setItem('lastVersion', lastVersion);
             }
-            return descriptions;
+            const currentVersion = Version.currentVersion();
+
+            if (currentVersion != lastVersion) {
+
+                const updates = Version.getVersionUpdates(lastVersion, vm.language);
+                $scope.infoModalVersion = Version.currentVersion();
+                $scope.infoModalData = updates;
+                $timeout(function () {
+                    infoModal.show();
+                },200);
+                localStorage.setItem('lastVersion', currentVersion);
+            }
         }
 
         /**

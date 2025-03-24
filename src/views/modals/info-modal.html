@@ -1,7 +1,7 @@
 <ons-modal var="infoModal">
     <div class="info-modal">
         <div class="info-modal-text">
-            <div><H4 class="info-modal-text-title">{{infoModalTitle}}</H4></div>
+            <div><H4 class="info-modal-text-title">{{"CURRENT_VERSION"|translate}}{{infoModalVersion}}</H4></div>
             <div ng-repeat="data in infoModalData">
                 <H4 class="info-modal-text-title">Version: {{data.title}}</H4>
                 <p class="info-modal-text-description">{{data.content}}</p>
