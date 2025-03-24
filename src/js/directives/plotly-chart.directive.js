@@ -1,5 +1,6 @@
 import Plotly from 'plotly.js-dist';
-import locale from 'plotly.js-locales/fr'
+import frLocale from 'plotly.js-locales/fr';
+import enLocale from 'plotly.js-locales/en';
 
 const fontSizesMap = {
     medium: 12,
@@ -7,6 +8,8 @@ const fontSizesMap = {
     xlarge: 18
 };
 
+// Register the locales
+Plotly.register([frLocale, enLocale]);
 
 (function () {
     'use strict';
@@ -34,6 +37,29 @@ const fontSizesMap = {
                 hasNonNumericValues: '='
             },
             link: function (scope, element) {
+                scope.isChartEmpty = false;
+
+                // Check if data has non numeric values
+                if (scope.hasNonNumericValues) {
+                    scope.isChartEmpty = true;
+                    scope.noChartMessage = $filter('translate')('CHART_NON_NUMERIC_VALUES');
+                    return;
+                }
+
+                // Check if data is empty
+                scope.isChartEmpty = false;
+                if (
+                    !scope.data ||
+                    !scope.data.x ||
+                    scope.data.x.length === 0 ||
+                    !scope.data.y ||
+                    scope.data.y.length === 0
+                ) {
+                    scope.isChartEmpty = true;
+                    scope.noChartMessage = $filter('translate')('CHART_NO_PLOT_AVAILABLE');
+                    return;
+                }
+
                 const data = [{
                     ...scope.data,
                     mode: 'scatter'
@@ -101,43 +127,26 @@ const fontSizesMap = {
                         l: 30,
                         r: 30,
                         t: 30
-                    },
-                    width: $(window).innerWidth()
+                    }
                 };
+
+                const userLanguage = UserPreferences.getLanguage().toLowerCase();
+                const supportedLocales = ['en', 'fr'];
+                const locale = supportedLocales.includes(userLanguage) ? userLanguage : 'en';
 
                 const config = {
                     displayModeBar: false,
                     responsive: true,
                     scrollZoom: true,
-                    locale: UserPreferences.getLanguage().toLowerCase()
-                };
+                    locale: locale
+                };                
 
-                // Check if data has non numeric values
-                if (scope.hasNonNumericValues) {
-                    scope.isChartEmpty = true;
-                    scope.noChartMessage = $filter('translate')('CHART_NON_NUMERIC_VALUES');
-                    return;
-                }
+                const chartElement = element[0].querySelector('.chart');
+                Plotly.newPlot(chartElement, data, layout, config);
 
-                // Check if data is empty
-                scope.isChartEmpty = false;
-                if (
-                    !scope.data
-                    || !scope.data.x || scope.data.x.length === 0
-                    || !scope.data.y || scope.data.y.length === 0
-                ) {
-                    scope.isChartEmpty = true;
-                    scope.noChartMessage = $filter('translate')('CHART_NO_PLOT_AVAILABLE');
-                    return;
-                }
-
-                Plotly.register(locale);
-                scope.chart = element[0].querySelector('.chart');
-                Plotly.newPlot(scope.chart, data, layout, config);
-
-                // Remove listeners on destroy
+                // Clean up on destroy
                 scope.$on('$destroy', function () {
-                    Plotly.purge(scope.chart);
+                    Plotly.purge(chartElement);
                 });
             }
         }
