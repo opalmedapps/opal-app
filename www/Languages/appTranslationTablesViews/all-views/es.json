@@ -59,7 +59,7 @@
 	"HEADER_MESSAGE_LOGIN":"Login",
 	"FORGOTPASSWORD":"Forgot Password",
 	"INVALID_USER":"User does not exist!",
-	"INVALID_PASSWORD":"Invalid Password!",
+	"INVALID_PASSWORD":"Invalid password.",
 	"INVALID_EMAIL":"Invalid e-mail",
 	"INTERNETERROR":"Sever error, please check your internet connection",
 	"EMAILPASSWORDSENT":"Password has been reset sucessfully, check your email for your temporary password!",

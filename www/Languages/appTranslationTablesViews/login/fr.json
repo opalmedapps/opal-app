@@ -34,7 +34,7 @@
   "INTERNETERROR": "Erreur de serveur, vérifiez votre connexion Internet.",
   "INVALID_EMAIL": "Email invalide!",
   "INVALID_EMAIL_OR_PWD": "Addresse courriel ou mot de passe invalide",
-  "INVALID_PASSWORD": "Mot de passe incorrect!",
+  "INVALID_PASSWORD": "Mot de passe incorrect.",
   "INVALID_USER": "L'utilisateur n'existe pas!",
   "LANGUAGE": "Langue",
   "LEAVEMESSAGE": "Laissez-nous un message!",
