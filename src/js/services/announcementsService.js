@@ -75,8 +75,7 @@
 
             newAnnouncements.forEach(annoucementToInsert => {
                 let existingElementIndex = announcements.findIndex(item => {
-                    return item.PostControlSerNum === annoucementToInsert.PostControlSerNum
-                        && new Date(item.DateAdded).toISOString().split('T')[0] === new Date(annoucementToInsert.DateAdded).toISOString().split('T')[0]
+                    return item.AnnouncementSerNum === annoucementToInsert.AnnouncementSerNum
                 });
                 annoucementToInsert.DateAdded=$filter('formatDate')(annoucementToInsert.DateAdded);
                 existingElementIndex === -1 ? announcements.push(annoucementToInsert) : announcements[existingElementIndex] = annoucementToInsert;
