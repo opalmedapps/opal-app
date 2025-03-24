@@ -67,7 +67,8 @@ This section covers installation steps to build the app's web code on your local
 
     Follow the instructions in [the env folder's README](./env/README.md) to configure your connection to a local or server-hosted backend.
 
-4.  Run the app in a browser (the following command assumes you've configured an environment called `local`).
+4.  Run the app in a browser (the following command assumes you've configured an environment called `local`;
+    if not, replace this with the name you've chosen). 
 
     ```shell
     npm run start --env=local
