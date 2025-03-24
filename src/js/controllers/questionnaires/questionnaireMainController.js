@@ -924,12 +924,7 @@
          */
         function handleLoadQuestionnaireErr(error) {
             // go to the questionnaire list page if there is an error
-            console.log(navigator);
             navigator.popPage();
-            // if there is no page after pop, redirect to questionnaire summary page.
-            if (navigator.pages.length == 0){
-                navigator.pushPage('views/personal/questionnaires/questionnairesList.html', {questionnairePurpose: 'consent'});
-            }
 
             if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR 
                 || error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
