@@ -190,7 +190,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 console.error(error);
                 if(error.Code !== '3')
                 {
-                    showContactHospitalError(true);
+                    const LogOutService = $injector.get('LogOutService');
+                    NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), LogOutService.logOut);
                 }
                 r.reject(false);
             });
@@ -230,8 +231,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     }
                 }).catch(function(error)
             {
-                if(typeof error =='object' && (error.Response === 'timeout' || error.Code !== '3')) {
-                    showContactHospitalError();
+                if (typeof error =='object' && (error.Response === 'timeout' || error.Code !== '3')) {
+                    NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"));
                 }
                 r.reject(error);
             });
@@ -276,7 +277,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     }
                 }).catch(function(error)
             {
-                if(error.Code !== '3' || error.Response === 'timeout') showContactHospitalError();
+                if (error.Code !== '3' || error.Response === 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"));
                 r.reject(error);
             });
             return r.promise;
@@ -302,16 +303,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             }else{
                 return lastUpdateTimestamp[content];
             }
-        }
-
-        /**
-         * @description Shows an error popup that takes the user back to the init screen.
-         */
-        function showContactHospitalError(logout=false) {
-            const LogOutService = $injector.get('LogOutService');
-            let callback = undefined;
-            if (logout) callback = LogOutService.logOut;
-            NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), callback);
         }
 
         return {
