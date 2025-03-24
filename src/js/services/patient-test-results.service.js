@@ -223,8 +223,7 @@ import { PatientTestResultDetailed } from "../models/personal/test-results/Patie
 			else if (test.latestAbnormalFlag) flag = test.latestAbnormalFlag;
 			else return "";
 			flag = flag.toLowerCase();
-			return (flag === "h" || flag === "l") ? "lab-results-test-in5" :
-				(flag === "c") ? "lab-results-test-out5" : "";
+			return (flag === "h" || flag === "l" || flag === "c") ? "lab-results-test" : "";
 		}
 
 		/**

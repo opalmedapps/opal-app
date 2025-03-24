@@ -23,9 +23,6 @@
 .lab-results-new-result {
 	display: inline;
 }
-.lab-results-test-out5 {
-	color: #F44336;
-}
-.lab-results-test-in5 {
-	color: #673AB7;
+.lab-results-test {
+	color: black;
 }
