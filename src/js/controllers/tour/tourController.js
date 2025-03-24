@@ -70,6 +70,12 @@ import "../../../css/views/tour.view.css";
             },
             {
                 iconType: "icon",
+                icon: "ion-locked",
+                title: "TOUR_SECURITY_TITLE",
+                description: "TOUR_SECURITY_DESCRIPTION",
+            },
+            {
+                iconType: "icon",
                 icon: "fa-check-circle",
                 title: "TOUR_END_TITLE",
                 description: "TOUR_END_DESC",
