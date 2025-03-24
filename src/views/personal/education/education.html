@@ -1,19 +1,16 @@
 <ons-page ng-controller="EducationalMaterialController as edu" ng-device-backbutton="edu.educationDeviceBackButton()">
 
     <!-- TOOLBAR -->
-    <ons-toolbar fixed-style>
-        <div class="left">
+    <generic-toolbar title="{{edu.pageTitle}}" style-class="fontSizeTitle">
+        <left-content>
             <ons-back-button ng-if="edu.eduCategory==='research'">{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">
-            <p class="overflow-text-ellipsis">{{edu.pageTitle}}</p>
-        </div>
-        <div class="right">
+        </left-content>
+        <right-content>
             <ons-toolbar-button ng-click="edu.openInfoPage()" ng-if="edu.eduCategory==='clinical'">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
-        </div>
-    </ons-toolbar>
+        </right-content>
+    </generic-toolbar>
 
     <!-- HOSPITAL NAME BAR -->
     <top-page-banner ng-if="edu.eduCategory==='clinical'" title="edu.selectedHospitalToDisplay"></top-page-banner>
