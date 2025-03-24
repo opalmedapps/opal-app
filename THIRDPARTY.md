@@ -212,7 +212,7 @@ to represent the company, product, or service to which they refer.**
 
 ### Notes
 
-We make use of the Web Font + CSS version.
+We make use of the SVG+JS method.
 
 ## @havesource/cordova-plugin-push
 
