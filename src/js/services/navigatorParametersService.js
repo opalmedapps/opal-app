@@ -110,8 +110,9 @@ myApp.service('NavigatorParameters', ['ProfileSelector', 'UpdateUI', function(Pr
                 // reload these categories in case they were already loaded.
                 // Reload lab results in case user decides to open them through Notifications page.
                 // Reload appointments in case user decides to open them through Home page (e.g., Upcoming appointment)
-                if (categories === "Appointments" || categories.toString() === ['PatientTestDates', 'PatientTestTypes'].toString())
-                    UpdateUI.updateTimestamps(categories, 0);
+                let forceRefreshCategories = ['Appointments', 'PatientTestDates', 'PatientTestTypes'];
+                let categoriesToRefresh = categories.filter(category => forceRefreshCategories.includes(category));
+                UpdateUI.updateTimestamps(categoriesToRefresh, 0);
             }
          },
     };
