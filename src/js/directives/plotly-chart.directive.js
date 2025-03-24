@@ -20,10 +20,18 @@ const fontSizesMap = {
     function plotlyChart($window, $filter, UserPreferences) {
         return {
             restrict: 'E',
-            template: '<div></div>',
+            template: `
+                <div>
+                    <div class="chart"></div>
+                    <div ng-if="isChartEmpty">
+                        <center style="margin: 100px 5px">{{noChartMessage}}</center>
+                    </div>
+                </div>
+            `,
             scope: {
                 data: '=',
-                yAxisLabel: '='
+                yAxisLabel: '=',
+                hasNonNumericValues: '='
             },
             link: function (scope, element) {
                 const data = [{
@@ -104,12 +112,32 @@ const fontSizesMap = {
                     locale: UserPreferences.getLanguage().toLowerCase()
                 };
 
+                // Check if data has non numeric values
+                if (scope.hasNonNumericValues) {
+                    scope.isChartEmpty = true;
+                    scope.noChartMessage = $filter('translate')('CHART_NON_NUMERIC_VALUES');
+                    return;
+                }
+
+                // Check if data is empty
+                scope.isChartEmpty = false;
+                if (
+                    !scope.data
+                    || !scope.data.x || scope.data.x.length === 0
+                    || !scope.data.y || scope.data.y.length === 0
+                ) {
+                    scope.isChartEmpty = true;
+                    scope.noChartMessage = $filter('translate')('CHART_NO_PLOT_AVAILABLE');
+                    return;
+                }
+
                 Plotly.register(locale);
-                Plotly.newPlot(element[0].firstChild, data, layout, config);
+                scope.chart = element[0].querySelector('.chart');
+                Plotly.newPlot(scope.chart, data, layout, config);
 
                 // Remove listeners on destroy
                 scope.$on('$destroy', function () {
-                    Plotly.purge(element[0].firstChild);
+                    Plotly.purge(scope.chart);
                 });
             }
         }

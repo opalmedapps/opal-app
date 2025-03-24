@@ -23,6 +23,7 @@
   "CHART_YEAR_SELECTOR": "1y",
   "CHART_ALL_RANGE_SELECTOR": "All",
   "CHART_NO_PLOT_AVAILABLE": "No plot available",
+  "CHART_NON_NUMERIC_VALUES": "These results can't be charted because at least one of them isn't a number",
   "CHECKIN": "Check-in",
   "CHECKIN_ALL_TODAY": "Check in",
   "CHECKIN_ERROR": "Unable to check in for this appointment. Please go to the reception.",

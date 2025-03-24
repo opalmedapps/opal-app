@@ -24,7 +24,7 @@ class PatientTestResultsByTypeController {
 	/**
 	 * Variable to control whether to show the table view or the chart view
 	 */
-	showChart = true;
+	showChartTab = true;
 
 	#patientTestResults;
 	#navigator;
@@ -122,9 +122,15 @@ class PatientTestResultsByTypeController {
 			  '2014-02-04 10:23:00'
 			],
 			y: [10, 15, 13, 17]
+			// x: [],
+			// y: [],
 		};
 		const yAxisLabel = test.hasNumericValues ? test.unitWithBrackets : "";
-		this.chartSettings = {data: data, yAxisLabel: yAxisLabel};
+		this.chartSettings = {
+			data: data,
+			yAxisLabel: yAxisLabel,
+			hasNonNumericValues: test.results && test.results.length > 0 && !test.hasNumericValues
+		};
 	};
 
 	/**
@@ -156,7 +162,7 @@ class PatientTestResultsByTypeController {
 				
 				this.labDelay = this.test.interpretationRecommended ? nonInterpretableDelay : interpretableDelay;
 				
-				this.showChart = results.hasNumericValues;
+				this.showChartTab = results.hasNumericValues;
 				this.#configureChart(this.test);
 			}
 		});

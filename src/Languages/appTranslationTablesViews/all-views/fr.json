@@ -23,6 +23,7 @@
     "CHART_YEAR_SELECTOR": "1a",
     "CHART_ALL_RANGE_SELECTOR": "Tout",
     "CHART_NO_PLOT_AVAILABLE": "Aucun graphique disponible",
+    "CHART_NON_NUMERIC_VALUES": "Ces résultats ne peuvent pas être représentés car au moins l'un d'entre eux n'est pas un nombre",
     "CHECKIN": "Enregistrement",
     "CHECKIN_ALL_TODAY": "Enregistrer",
     "CHECKIN_ERROR": "Impossible de s'enregistrer pour ce rendez-vous. Veuillez vous rendre à la réception.",
