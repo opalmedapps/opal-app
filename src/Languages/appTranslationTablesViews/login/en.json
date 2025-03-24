@@ -94,6 +94,7 @@
   "PASSWORD_SERVER_ERROR": "An issue occurred with your password, possibly due to a password reset error. Please use the button below to reset it again.",
   "PASSWORDUPDATED": "Password Updated",
   "PASSWORD_MISMATCH_ERROR": "Passwords do not match!",
+  "SHOW_PASSWORD": "Show password",
   "PP": "Privacy Policy",
   "RATETHISAPP": "Rate This App",
   "RECONNECTING": "Reconnecting...",
