@@ -73,6 +73,7 @@
             <application android:requestLegacyExternalStorage="true"/>
         </edit-config>
         <!-- Security setting: Ensure that services, providers and receivers are not exported. This avoids them being exposed to other apps. -->
+        <!-- Note that MainActivity must be left with android:exported="true" to be able to launch the app on all devices. -->
         <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/service" mode="merge">
             <service android:exported="false"/>
         </edit-config>
