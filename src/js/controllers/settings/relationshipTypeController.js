@@ -12,6 +12,7 @@
         let vm = this;
         vm.error = null;
         vm.message = null;
+        vm.errorAlertType = Params.alertTypeDanger;
         vm.apiData;
         vm.relationshipTypes;
 
