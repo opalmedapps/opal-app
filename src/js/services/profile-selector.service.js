@@ -22,7 +22,6 @@ import {Observer} from "../models/utility/observer";
             getPatientList: () => patientList,
             loadPatientProfile: loadPatientProfile,
             getActiveProfile: () => currentSelectedProfile,
-            observeProfile: fun => profileObserver.attach(fun),
             getConfirmedProfiles: getConfirmedProfiles,
             clearProfile: clearProfile,
         }
