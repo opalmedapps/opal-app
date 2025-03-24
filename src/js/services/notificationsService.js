@@ -381,7 +381,7 @@
             await UpdateUI.getSingleItem(notification.refreshType, notification.RefTableRowSerNum);
 
             // Look up the item to make sure it was correctly saved in a data service
-            let savedItem = getNotificationPost(notification)
+            let savedItem = getNotificationPost(notification);
             if (!savedItem) throw new Error(`Failed to download or save notification target for '${notification.NotificationType}' with SerNum ${notification.RefTableRowSerNum}`);
             return savedItem;
         }
