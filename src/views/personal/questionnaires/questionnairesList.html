@@ -11,7 +11,8 @@
     <patient-data-handler categories="QuestionnaireList"
                           display-function="questionnaireListVm.loadQuestionnaireList"
                           refresh="questionnaireListVm.pullHookRefresh"
-                          hide-content="questionnaireListVm.hideContent">
+                          hide-content="questionnaireListVm.hideContent"
+                          use-parameters="{{questionnaireListVm.dataHandlerParameters}}">
     </patient-data-handler>
 
     <div ng-hide="questionnaireListVm.hideContent">

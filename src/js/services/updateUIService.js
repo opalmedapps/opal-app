@@ -143,11 +143,13 @@
          * @description Queries the backend for newly updated data in the given categories, receiving only data that has
          *              been changed since the last update. Updates the corresponding services with this new data.
          * @param {Array<string>} parameters - The categories of data to update.
+         * @param {Object} auxiliaryParams - Optional auxiliary parameters that are used to update a category of data.
          * @returns {Promise<void>} Resolves if all data was successfully updated, or rejects with an error.
          */
-        async function updateSection(parameters) {
+        async function updateSection(parameters, auxiliaryParams = null) {
             let refreshParams = {
                 Fields: parameters,
+                purpose: auxiliaryParams?.purpose,
                 Timestamp: findSmallestTimestamp(parameters),
             };
 
@@ -161,10 +163,16 @@
          * @description Queries the backend for all data in each of the given categories. Initializes the corresponding
          *              services with this data (clearing any existing data).
          * @param {Array<string>} parameters - The categories of data to initialize.
+         * @param {Object} auxiliaryParams - Optional auxiliary parameters that are used to initialize a category of data.
          * @returns {Promise<void>} Resolves if all data was successfully initialized, or rejects with an error.
          */
-        async function setSection(parameters) {
-            let response = await RequestToServer.sendRequestWithResponse('Refresh', {Fields: parameters});
+        async function setSection(parameters, auxiliaryParams = null) {
+            let params = {
+                Fields: parameters,
+                purpose: auxiliaryParams?.purpose
+            };
+
+            let response = await RequestToServer.sendRequestWithResponse('Refresh', params);
             validateResponse(response);
             await setServices(response.Data, parameters);
             updateTimestamps(parameters, response.Timestamp);
@@ -232,12 +240,14 @@
          *              requested yet, or an error has prevented it from being requested successfully, it will
          *              be initialized; otherwise, it will be updated.
          * @param {string | Array<string>} categories - The categories of data to initialize or update.
+         * @param {Object} parameters - Optional parameters that are used to initialize or update data.
          * @returns {Promise<void>} Resolves if all data was successfully initialized / updated, or rejects with an error.
          */
-        async function getData(categories) {
+        async function getData(categories, parameters = null) {
             // Validate input
             validateCategories(categories);
-            if (typeof categories === "string") return getData([categories]);
+            if (typeof categories === "string" || typeof parameters === "string")
+                return getData([categories], JSON.parse(parameters));
 
             // Iterate through all categories to initialize or update them
             let toSet = [], toUpdate = [];
@@ -248,8 +258,8 @@
             }
 
             // Execute all initializations or updates simultaneously
-            let setPromise = toSet.length === 0 ? undefined : setSection(toSet);
-            let updatePromise = toUpdate.length === 0 ? undefined : updateSection(toUpdate);
+            let setPromise = toSet.length === 0 ? undefined : setSection(toSet, parameters);
+            let updatePromise = toUpdate.length === 0 ? undefined : updateSection(toUpdate, parameters);
             await Promise.all([setPromise, updatePromise]);
         }
 

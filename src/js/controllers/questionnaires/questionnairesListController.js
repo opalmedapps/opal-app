@@ -30,9 +30,9 @@
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
 
         // variables for controller
-        let purpose = 'default';
         let navigator = null;
         let navigatorName = '';
+        let purpose = 'default';
 
         // variables seen from view
         vm.newQuestionnaireList = [];
@@ -43,6 +43,7 @@
         vm.noCompletedQuestionnaireText = '';   // the description varies according to the questionnaire purpose
         vm.pageTitle = '';                      // the page title varies according to the questionnaire purpose
         vm.tab = 'new';
+        vm.dataHandlerParameters = {};
 
         // functions that can be used from view, sorted alphabetically
         vm.completedQuestionnaireExist = completedQuestionnaireExist;
@@ -63,15 +64,8 @@
             navigatorName = NavigatorParameters.getNavigatorName();
             let params = NavigatorParameters.getParameters();
 
-            if (!params?.questionnairePurpose
-                || !Questionnaires.validateQuestionnairePurpose(params.questionnairePurpose)
-            ) {
-                setPageText();
-                vm.loading = false;
-                handleRequestError();
-            }
-
             purpose = params.questionnairePurpose.toLowerCase();
+            vm.dataHandlerParameters.purpose = purpose;
             setPageText(purpose);
 
             // this is for when the back button is pressed for a questionnaire, reload the questionnaire list to keep the list up to date
