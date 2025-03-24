@@ -484,16 +484,18 @@
          */
         function formatQuestionnaireStub(questionnaireStub){
             // Check for the required properties
-            let properties = ['created', 'last_updated', 'nickname', 'qp_ser_num', 'questionnaire_id', 'status'];
+            let properties = ['created', 'last_updated', 'nickname', 'qp_ser_num', 'questionnaire_id', 'status', 'respondent_id'];
             properties.forEach(prop => {
                 if (!questionnaireStub.hasOwnProperty(prop)) throw new Error(`Questionnaire stub is missing a required property: ${prop}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
             });
 
-            // Format and validate the questionnaire's input type
-            const intStatus = parseInt(questionnaireStub.status);
-
-            if (isNaN(intStatus)) throw new Error(`Questionnaire stub's status cannot be parsed as an int: ${questionnaireStub.status}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
-            else questionnaireStub.status = intStatus;
+            // Format and validate the questionnaire's integer properties
+            let intProperties = ['status', 'respondent_id'];
+            intProperties.forEach(prop => {
+                const intProp = parseInt(questionnaireStub[prop]);
+                if (isNaN(intProp)) throw new Error(`Questionnaire stub's '${prop}' cannot be parsed as an int: ${questionnaireStub[prop]}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
+                questionnaireStub[prop] = intProp;
+            });
         }
 
         /**
