@@ -63,7 +63,7 @@
          */
         let notificationTypes = {
             [Params.NOTIFICATION_TYPES.Document]: {
-                icon: 'ion-android-document',
+                icon: 'fa-solid fa-file-circle-plus',
                 color: '#90CAF9',
                 readFunction: Documents.readDocument,
                 searchFunction: Documents.getDocumentBySerNum,
@@ -71,7 +71,7 @@
                 refreshType: 'Documents',
             },
             [Params.NOTIFICATION_TYPES.UpdDocument]: {
-                icon: 'ion-android-document',
+                icon: 'fa-solid fa-file-circle-check',
                 color: '#BA68C8',
                 readFunction: Documents.readDocument,
                 searchFunction: Documents.getDocumentBySerNum,
@@ -79,7 +79,7 @@
                 refreshType: 'Documents',
             },
             [Params.NOTIFICATION_TYPES.RoomAssignment]: {
-                icon: 'fa fa-calendar-o',
+                icon: 'fa-regular fa-calendar-days',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -87,7 +87,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.TxTeamMessage]: {
-                icon: 'fa fa-user-md ',
+                icon: 'fa fa-user-md',
                 color: '#2196F3',
                 readFunction: TxTeamMessages.readTxTeamMessage,
                 searchFunction: TxTeamMessages.getTxTeamMessageBySerNum,
@@ -111,7 +111,7 @@
                 refreshType: 'EducationalMaterial',
             },
             [Params.NOTIFICATION_TYPES.NextAppointment]: {
-                icon: 'fa fa-calendar',
+                icon: 'fa-regular fa-calendar-days',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -119,7 +119,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.AppointmentTimeChange]: {
-                icon: 'fa fa-calendar',
+                icon: 'fa-regular fa-calendar-days',
                 color: '#ffc107',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -127,7 +127,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.CheckInNotification]: {
-                icon: 'fa fa-check-square-o',
+                icon: 'fa-solid fa-square-check',
                 color: '#4CAF50',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -135,7 +135,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.CheckInError]: {
-                icon: 'fa fa-check-square-o',
+                icon: 'fa-solid fa-circle-xmark',
                 color: '#F44336',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -163,7 +163,7 @@
                 },
             },
             [Params.NOTIFICATION_TYPES.AppointmentNew]: {
-                icon: 'fa fa-calendar-plus-o',
+                icon: 'fa-regular fa-calendar-plus',
                 color: '#5FAB61',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -171,7 +171,7 @@
                 refreshType: 'Appointments',
             },
             [Params.NOTIFICATION_TYPES.AppointmentCancelled]: {
-                icon: 'fa fa-calendar-times-o',
+                icon: 'fa-regular fa-calendar-times',
                 color: '#ff0787',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
@@ -180,7 +180,7 @@
             },
             // Special case: opens the general lab results page, not a specific lab
             [Params.NOTIFICATION_TYPES.NewLabResult]: {
-                icon: 'fa fa-flask ',
+                icon: 'ion-erlenmeyer-flask',
                 color: '#8BC34A',
                 PageUrl: PatientTestResults.getTestResultsUrl,
                 refreshType: ['PatientTestDates', 'PatientTestTypes'],

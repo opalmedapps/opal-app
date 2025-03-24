@@ -1,3 +1,4 @@
+/* See: https://docs.angularjs.org/api/ng/directive/ngCloak */
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
@@ -79,10 +80,10 @@ p {
 }
 
 @import url('./animations.css');
-@import url('./bootstrap.css');
+@import url('./dependencies/bootstrap.dependency.css');
+@import url('./dependencies/fontawesome.dependency.css');
+@import url('./dependencies/onsenui.dependency.css');
 @import url('./elements/menu.element.css');
-@import url('./elements/ons-alert-dialog.element.css');
-@import url('./elements/ons-list-item.element.css');
 @import url('./elements/event.element.css');
 @import url('./elements/contact.element.css');
 @import url('./elements/checkout.element.css');
@@ -119,4 +120,5 @@ p {
 @import url('./views/new-password.view.css');
 @import url('./views/home.view.css');
 @import url('./views/individual-appointment.view.css');
+@import url('./views/info-page-tabs.view.css');
 @import url('./utilities.css');

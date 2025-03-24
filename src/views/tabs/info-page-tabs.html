@@ -5,16 +5,15 @@
         </left-content>
     </generic-toolbar>
 
-  <div style="margin-top:10vh;padding: 0 20px 0 20px" class="text-center">
-        <div ng-if="info.isIcon()">
-            <ons-icon icon="{{info.view.icon}}" size="80px" style="color: #2196F3"></ons-icon>
-        </div>
-        <div ng-if="!info.isIcon()">
-            <img style="width: 80px;" ng-src="{{info.view.icon}}">
-        </div>
+    <div style="margin-top: 10vh; padding: 0 20px 0 20px" class="text-center">
+        <!-- ICON -->
+        <i ng-if="info.view.iconType === 'icon'" ng-class="info.view.icon" class="info-page-icon"></i>
+        <general-icon ng-if="info.view.iconType === 'general-icon'" icon-class="info-page-icon"></general-icon>
+
+        <!-- TEXT -->
         <p class="item-title" ng-class="fontSizeTitle" style="font-weight:bold; margin:5px 0 10px" translate="{{info.view.name}}"></p>
-        <div class="container" style="text-align:center;" ng-class="fontSizeDesc">
+        <div class="container" style="text-align: center" ng-class="fontSizeDesc">
             {{info.view.description|translate}}
         </div>
-  </div>
+      </div>
 </ons-page>

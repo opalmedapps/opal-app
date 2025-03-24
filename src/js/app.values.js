@@ -44,65 +44,6 @@
                 emailInUse: 'auth/email-already-in-use',
                 weakPassword: 'auth/weak-password',
 
-                monthsArray: {
-                    monthsArrayEn: ["January", "February", "March", "April", "May",
-                        "June", "July", "August", "September", "October", "November", "December"],
-                    monthsShortEn: ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                    monthsArrayFr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-                        'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-                    monthsShortFr: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
-                        'août', 'sept.', 'oct.', 'nov.', 'déc.'],
-                },
-                daysArray: {
-                    daysArrayFr: ['dimanche', 'lundi', 'mardi', 'mercredi',
-                        'jeudi', 'vendredi', 'samedi'],
-                    daysArrayEn: ["Sunday", "Monday", "Tuesday", "Wednesday",
-                        "Thursday", "Friday", "Saturday"]
-                },
-                download: {
-                    imageDownloadPngFr: 'Télécharger en image PNG',
-                    imageDownloadPngEn: 'Download PNG image',
-                    imageDownloadJpegFr: 'Télécharger en image JPEG',
-                    imageDownloadJpegEn: 'Download JPEG image',
-                    downloadPdfFr: 'Télécharger en document PDF',
-                    downloadPdfEn: 'Download PDF document',
-                    downloadSvgFr: 'Télécharger en document Vectoriel',
-                    downloadSvgEn: 'Download SVG vector image'
-                },
-                exportButtonTitle: {
-                    exportButtonTitleFr: 'Export du graphique',
-                    exportButtonTitleEn: 'Graphics export'
-                },
-                loadingMessage: {
-                    loadingMessageFr: 'Chargement en cours...',
-                    loadingMessageEn: 'Loading...'
-                },
-                noPlotGeneric: {
-                    noPlotGenericEn: "No plot available",
-                    noPlotGenericFr: "Aucun graphique disponible",
-                },
-                noPlotNonNumeric: {
-                    noPlotNonNumericEn: "These results can't be charted because at least one of them isn't a number",
-                    noPlotNonNumericFr: "Ces résultats ne peuvent pas être représentés car au moins l'un d'entre eux n'est pas un nombre",
-                },
-                printChart: {
-                    printChartFr: 'Imprimer le graphique',
-                    printChartEn: 'Print chart'
-                },
-                resetZoom: {
-                    resetZoomMessageFr: 'Réinitialiser le zoom',
-                    resetZoomMessageTitleFr: 'Réinitialiser le zoom au niveau 1:1',
-                    resetZoomMessageEn: 'Reset zoom',
-                    resetZoomMessageTitleEn: 'Reset zoom level 1:1'
-                },
-                rangeSelector: {
-                    rangeSelectorFromFr: 'Du',
-                    rangeSelectorToFr: 'au',
-                    rangeSelectorFromEn: 'From',
-                    rangeSelectorToEr: 'to'
-                },
-
                 /** ChangeSettingsController Constants **/
                 setPasswordField: 'Password',
                 setPasswordParam: 'PASSWORD',
@@ -131,11 +72,11 @@
                         color: '#ef5350'
                     },
                     'Factsheet': {
-                        icon: 'fa fa-list',
+                        icon: 'fa-solid fa-file-lines',
                         color: '#1E88E5'
                     },
                     'Booklet': {
-                        icon: 'fa fa-leanpub',
+                        icon: 'fa-solid fa-book-open',
                         color: '#66BB6A'
                     },
                     'Treatment Guidelines': {
@@ -147,8 +88,8 @@
                         color: '#8A5B45'
                     },
                     'Other': {
-                        icon: 'fa fa-book',
-                        color: '#FF7043'
+                        icon: 'fa-solid fa-file',
+                        color: '#FFDF80'
                     },
                 },
 

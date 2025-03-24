@@ -1,3 +1,39 @@
+## [1.37.4](https://gitlab.com/opalmedapps/qplus/compare/v1.37.3...v1.37.4) (2024-10-08)
+
+
+### Bug Fixes
+
+* update icons through fontawesome ([557190e](https://gitlab.com/opalmedapps/qplus/commit/557190eef3dff2bea2f9435a44d959aac2a75528))
+
+## [1.37.3](https://gitlab.com/opalmedapps/qplus/compare/v1.37.2...v1.37.3) (2024-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pdfjs-dist to v4.6.82 ([90c74d9](https://gitlab.com/opalmedapps/qplus/commit/90c74d94d9b67dedc654fabccdb4e6692b3303ce))
+* **deps:** update node.js to v20.17.0-alpine3.20 ([3f789c6](https://gitlab.com/opalmedapps/qplus/commit/3f789c6e6133a5080063c2b4e8368076d678bf5a))
+
+## [1.37.2](https://gitlab.com/opalmedapps/qplus/compare/v1.37.1...v1.37.2) (2024-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency core-js to v3.38.1 ([592d268](https://gitlab.com/opalmedapps/qplus/commit/592d268d33722c5d7340ec0ce2acd2ec5e91200d))
+
+## [1.37.1](https://gitlab.com/opalmedapps/qplus/compare/v1.37.0...v1.37.1) (2024-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency moment to v2.30.1 ([8c802e2](https://gitlab.com/opalmedapps/qplus/commit/8c802e2459989e2407fdbb3f5cebd65bd6b343c3))
+
+# [1.37.0](https://gitlab.com/opalmedapps/qplus/compare/v1.36.11...v1.37.0) (2024-10-03)
+
+
+### Features
+
+* replace highcharts with plotly ([2c0df27](https://gitlab.com/opalmedapps/qplus/commit/2c0df276c7a689e115b28531f69ad3d1bcac5e68))
+
 ## [1.36.11](https://gitlab.com/opalmedapps/qplus/compare/v1.36.10...v1.36.11) (2024-09-23)
 
 

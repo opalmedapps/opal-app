@@ -17,12 +17,18 @@
             </ons-list-item>
 
             <!-- ABOUT THIS APPOINTMENT BUTTON -->
-            <ons-list-item id="about-appointment" class="about-link dark-chevron" modifier="chevron tappable" ng-class="fontSizeDesc"
-                           ng-click="vm.aboutAppointment()" >
-                <label class="item-desc" ng-class="fontSizeDesc">
-                    <ons-icon icon="fas fa-info-circle"></ons-icon>
-                    {{"APPOINTMENT_ABOUT" | translate}}
-                </label>
+            <ons-list-item id="about-appointment" class="item about-link dark-chevron" modifier="chevron tappable" ng-class="fontSizeDesc"
+                           ng-click="vm.aboutAppointment()">
+                <ons-row align="center">
+                    <ons-col width="60px" class="ons-col-icon">
+                        <i class="fas fa-info-circle fa12x" style="color: #777777; margin-left: 6px"></i>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT" | translate}}</span>
+                        </header>
+                    </ons-col>
+                </ons-row>
             </ons-list-item>
 
             <!-- MAP DESCRIPTION -->

@@ -109,13 +109,13 @@
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <div ng-if="Ctrl.checkinState.canNavigate">
-                            <i ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError" class="fa fa-square-o fa-2x" style="color:#4CAF50;"></i>
-                            <i ng-if="Ctrl.checkinState.allCheckedIn || Ctrl.checkinState.checkinError" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
+                            <i ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError" class="fa-regular fa-square fa-2x" style="color:#4CAF50;"></i>
+                            <i ng-if="Ctrl.checkinState.allCheckedIn || Ctrl.checkinState.checkinError" class="fa-regular fa-check-square fa-2x" style="color:#4CAF50;"></i>
                             <span ng-if="!Ctrl.checkinState.allCheckedIn && !Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> {{ Ctrl.checkinState.numberOfAppts }}</span>
                             <span ng-if="Ctrl.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> ! </span>
                         </div>
                         <div ng-if="!Ctrl.checkinState.canNavigate">
-                            <i class="fa fa-square-o fa-2x" style="color:#9E9E9E;"></i>
+                            <i class="fa-regular fa-square fa-2x" style="color:#9E9E9E;"></i>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -141,7 +141,7 @@
             <ons-list-item modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('APT') && Ctrl.allowedModules['APT']" ng-click="Ctrl.goToAppointments()">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
-                        <i class="fa fa-calendar fa-2x" style="color: #ffc107"></i>
+                        <i class="fa-regular fa-calendar-days fa-2x" style="color: #ffc107"></i>
                     </ons-col>
                     <ons-col>
                         <header>

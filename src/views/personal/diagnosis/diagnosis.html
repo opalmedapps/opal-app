@@ -19,8 +19,8 @@
             <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="{{diag.diagnoses | showHeader : $index : 'CreationDate' }}">{{diagnosis.CreationDate|date:'fullDate'}}</ons-list-header>
             <ons-list-item class="item">
                 <ons-row style="padding:5px;">
-                    <ons-col width="50px" align="center">
-                        <ons-icon icon="fa-heartbeat iconHomeView" style="color:#f44336"></ons-icon>
+                    <ons-col width="50px" class="ons-col-icon">
+                        <i class="fa-solid fa-stethoscope fa14x" style="color: #994741"></i>
                     </ons-col>
                     <ons-col align="center">
                         <span class="item-title" ng-class="fontSizeTitle"> {{"DIAGNOSIS"|translate}}</span>

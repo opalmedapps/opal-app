@@ -17,9 +17,14 @@ class PatientTestResultsByTypeController {
 	 */
 	loading = true;
 	/**
+	 * Settings for the lab results chart
+	 * @type {*}
+	 */
+	chartSettings = {};
+	/**
 	 * Variable to control whether to show the table view or the chart view
 	 */
-	showChart = true;
+	showChartTab = true;
 
 	#patientTestResults;
 	#navigator;
@@ -105,9 +110,18 @@ class PatientTestResultsByTypeController {
 	#configureChart = (test) => {
 		// Non-numeric tests are not plotted (no data or axis label)
 		const data = (test.hasNumericValues) ?
-			test.results.map((testResult) => [testResult.collectedDateTime,
-			testResult.testValue]) : [];
+			{
+				x: test.results.map((testResult) => testResult.collectedDateTime),
+				y: test.results.map((testResult) => testResult.testValue),
+			} : [];
 		const yAxisLabel = test.hasNumericValues ? test.unitWithBrackets : "";
+		this.chartSettings = {
+			data: data,
+			yAxisLabel: yAxisLabel,
+			hasNonNumericValues: test.results && test.results.length > 0 && !test.hasNumericValues,
+			normalRangeMax: test.results.normalRangeMin,
+			normalRangeMin: test.results.normalRangeMax
+		};
 	};
 
 	/**
@@ -136,10 +150,10 @@ class PatientTestResultsByTypeController {
 
 				let nonInterpretableDelay = this.#profileSelector.getActiveProfile().non_interpretable_lab_result_delay;
 				let interpretableDelay = this.#profileSelector.getActiveProfile().interpretable_lab_result_delay;
-				
+
 				this.labDelay = this.test.interpretationRecommended ? nonInterpretableDelay : interpretableDelay;
-				
-				this.showChart = results.hasNumericValues;
+
+				this.showChartTab = results.hasNumericValues;
 				this.#configureChart(this.test);
 			}
 		});

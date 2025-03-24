@@ -17,7 +17,7 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-bullhorn" size="2x" style="color:#FFC107"></ons-icon>
+                            <i class="fa-solid fa-bullhorn fa18x" style="color:#FFC107"></i>
                             <span class="notification" ng-show="tab.announcementsUnreadNumber>0">{{tab.announcementsUnreadNumber}}</span>
                         </div>
                     </ons-col>
@@ -36,7 +36,7 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-car" size="2x" style="color:#f44336"></ons-icon>
+                            <i class="fa-solid fa-car fa18x" style="color:#f44336"></i>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -53,7 +53,7 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-thumbs-up" size="2x" style="color:#4CAF50"></ons-icon>
+                            <ons-icon icon="fa-thumbs-up fa18x" style="color: #4CAF50"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -70,7 +70,9 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <img style="width: 35px;" src="./img/stethoscope.png">
+                            <div class="fa-layers fa-2x" style="background-color: #0575B7; border-radius: 6px">
+                                <i class="fa-solid fa-stethoscope" style="color: white" data-fa-transform="shrink-5 left-1"></i>
+                            </div>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -90,7 +92,10 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <img style="width: 35px;" src="./img/calendar.png">
+                            <span class="fa-layers fa-2x">
+                                <i class="fa-solid fa-calendar" style="color:#3F5CA7"></i>
+                                <i class="fa-solid fa-clock fa-inverse" data-fa-transform="shrink-8.5 down-3"></i>
+                            </span>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -111,7 +116,8 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <img style="width: 35px;" src="./img/quebec.png">
+                            <!-- https://commons.wikimedia.org/wiki/File:New_Quebec_flag.svg -->
+                            <img style="width: 34px; border-radius: 6px" src="./img/quebec.png">
                         </div>
                     </ons-col>
                     <ons-col>

@@ -1,4 +1,0 @@
-/* Darken the chevron (the ::before element) slightly to be visible against shaded backgrounds */
-.dark-chevron::before {
-    color: #A6A6A6;
-}
