@@ -1,3 +1,10 @@
+## [1.19.5](https://gitlab.com/opalmedapps/qplus/compare/v1.19.4...v1.19.5) (2023-10-10)
+
+
+### Bug Fixes
+
+* **deps:** upgrade pdfjs-dist and webpack ([9242021](https://gitlab.com/opalmedapps/qplus/commit/9242021b5fb4dac9a3babd862efcd820830a677e))
+
 ## [1.19.4](https://gitlab.com/opalmedapps/qplus/compare/v1.19.3...v1.19.4) (2023-10-06)
 
 
