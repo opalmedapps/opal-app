@@ -42,9 +42,7 @@
         // TODO: As of now we NEED to have a `patient_legacy_id` to be able to get any data since data calls still go through the old listener. 
         // Once end point to get patient data are done, we will need to adjust this code in concequences.
         function changePatientProfile(requestedPatientSernum) {
-            let result = patientList.find((item) => {
-                return item.patient_legacy_id == requestedPatientSernum
-            });
+            let result = patientList.find((item) => item.patient_legacy_id == requestedPatientSernum);
             if (result) {
                 currentSelectedProfile = result;
                 Patient.setSelectedProfile(currentSelectedProfile);
