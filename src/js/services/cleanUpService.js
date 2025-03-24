@@ -16,12 +16,12 @@
         .factory('CleanUp', CleanUp);
 
     CleanUp.$inject = ['UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
-        'Appointments', 'Patient', 'Doctors', 'TxTeamMessages', 'Questionnaires',
+        'Appointments', 'Patient', 'TxTeamMessages', 'Questionnaires',
         'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
         'UpdateUI', 'Tasks', 'PlanningSteps', 'PatientTestResults', 'CheckInService'];
 
     function CleanUp(UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
-                     Appointments, Patient, Doctors, TxTeamMessages, Questionnaires,
+                     Appointments, Patient, TxTeamMessages, Questionnaires,
                      Announcements, EducationalMaterial, Notifications, UserPreferences,
                      UpdateUI, Tasks, PlanningSteps, PatientTestResults, CheckInService) {
         let service = {
@@ -42,7 +42,6 @@
             Diagnoses.clearDiagnoses();
             Appointments.clearAppointments();
             Patient.clearPatient();
-            Doctors.clearDoctors();
             TxTeamMessages.clearTxTeamMessages();
             Questionnaires.clearAllQuestionnaire();
             Announcements.clearAnnouncements();
