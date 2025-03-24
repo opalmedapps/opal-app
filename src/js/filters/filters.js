@@ -248,10 +248,15 @@ myApp.filter('capitalize', function () {
     };
 });
 
-myApp.filter('convertToEt', function () {
-    return function (inputDate, format, timezone) {
+myApp.filter('convertTimezone', function () {
+    /**
+     * Converts a given date from one timezone to another.
+     * @param {string} inputDate - The input date to convert.
+     * @param {string} selectedFormat - Desired format for the output date. 
+     * @param {string} timezone - The target time zone (e.g. 'America/New_York').
+     */
+    return function (inputDate, selectedFormat, timezone) {
         if (!inputDate) return '';
-        let selectedFormat = format;
         return moment(inputDate).tz(timezone).format(selectedFormat);
     };
 });
