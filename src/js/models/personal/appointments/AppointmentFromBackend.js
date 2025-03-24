@@ -22,10 +22,6 @@ export class AppointmentFromBackend {
         },
         language,
     ) {
-        // TODO -- figure out what this is for and update it to be clearer
-        let checkinStatus = checkin == 1 ? 'success' : 'info';
-        checkinStatus = checkinpossible == 0 && checkinStatus ? 'warning' : checkinStatus;
-
         this.AppointmentSerNum = appointmentsernum;
         this.AppointmentType_EN = alias?.aliasname_en;
         this.AppointmentType_FR = alias?.aliasname_fr;
@@ -33,7 +29,6 @@ export class AppointmentFromBackend {
         this.CheckinInstruction_EN = checkininstruction_en;
         this.CheckinInstruction_FR = checkininstruction_fr;
         this.CheckinPossible = checkinpossible;
-        this.CheckInStatus = checkinStatus;
         this.LastUpdated = Date.parse(lastupdated);
         this.MapDescription_EN = hospitalmap?.mapdescription_en;
         this.MapDescription_FR = hospitalmap?.mapdescription_fr;

@@ -85,11 +85,9 @@ import { AppointmentFromBackend } from '../models/personal/appointments/Appointm
                     const canCheckin = await isWithinCheckinRange();
                     if (canCheckin) {
                         const unCheckedInAppts = getUncheckedInApps();
-                        let checkinStatus = "CHECKIN_MESSAGE_BEFORE" + getPlural(unCheckedInAppts);
-                        if (unCheckedInAppts.length === 0) {
-                            checkinStatus = "CHECKIN_MESSAGE_AFTER";
-                        }
-                        setCheckinState(checkinStatus, unCheckedInAppts.length);
+                        let status = "CHECKIN_MESSAGE_BEFORE" + getPlural(unCheckedInAppts);
+                        if (unCheckedInAppts.length === 0) status = "CHECKIN_MESSAGE_AFTER";
+                        setCheckinState(status, unCheckedInAppts.length);
                     } else {
                         setCheckinState("CHECKIN_NOT_ALLOWED", appointmentsForCheckIn.length);
                     }

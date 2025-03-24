@@ -53,6 +53,9 @@
             vm.language = UserPreferences.getLanguage();
             const selfPatientSerNum = User.getSelfPatientSerNum();
 
+            // Set the CheckInStatus used in this controller
+            vm.apps.forEach(apt => setAppointmentCheckInStatus(apt));
+
             // Get the list of unique patientSerNums for check-in
             let patientSerNums = new Set(vm.apps.map(apt => apt.PatientSerNum));
 
@@ -76,6 +79,17 @@
             });
 
             vm.noAppointments = vm.apps.length === 0;
+        }
+
+        /**
+         * @description Sets the CheckInStatus used only by this controller and view to control the display of each appointment.
+         * @param appointment The appointment to update.
+         */
+        function setAppointmentCheckInStatus(appointment) {
+            if (appointment.CheckinPossible == 0) appointment.CheckInStatus = 'warning';
+            else if (appointment.Checkin == 1) appointment.CheckInStatus = 'success';
+            else if (appointment.Checkin == -1) appointment.CheckInStatus = 'danger';
+            else appointment.CheckInStatus = 'info';
         }
 
         /**
@@ -109,7 +123,9 @@
          * @returns {Promise<void>}
          */
         async function checkIntoAppointments(patientSerNum) {
-            vm.displayApps[patientSerNum].apps.forEach(apt => apt.loading = apt.CheckInStatus !== 'success');
+            const patient = vm.displayApps[patientSerNum];
+            let patientAppointments = patient.apps;
+            patientAppointments.forEach(apt => apt.loading = apt.CheckInStatus !== 'success');
 
             try {
                 const response = await CheckInService.attemptCheckin(patientSerNum);
@@ -123,20 +139,13 @@
                 displayError('CHECKIN_ERROR_MULTIPLE');
             }
 
-            // TODO -- figure out what's being done and update it to be clearer
+            // Update the display
             $timeout(() => {
-                let allCheckedIn = true;
-                vm.displayApps[patientSerNum].apps.forEach(app => {
-                    const appt = vm.apps.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
-                    if (appt) {
-                        app.Checkin = appt.Checkin;
-                        app.loading = false;
-                        app.CheckInStatus = appt.Checkin == '1' ? 'success' : 'danger';
-                        app.CheckInStatus = appt.checkinpossible == 0 ? 'warning' : app.CheckInStatus;
-                        allCheckedIn =  allCheckedIn && ['warning', 'success'].indexOf(app.CheckInStatus) > -1;
-                    }
-                })
-                vm.displayApps[patientSerNum].allCheckedIn = allCheckedIn;
+                patientAppointments.forEach(apt => {
+                    apt.loading = false;
+                    setAppointmentCheckInStatus(apt);
+                });
+                patient.allCheckedIn = patientAppointments.every(apt => ['warning', 'success'].includes(apt.CheckInStatus));
             });
         }
     }
