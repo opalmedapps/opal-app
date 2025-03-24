@@ -13,11 +13,11 @@
         .module('MUHCApp')
         .controller('ResearchController', ResearchController);
 
-    ResearchController.$inject = ['$scope', '$timeout', 'NavigatorParameters',
-        'Params', 'ProfileSelector', 'Questionnaires', 'RequestToServer', 'Studies', 'UserHospitalPreferences'];
+    ResearchController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'Params', 'ProfileSelector',
+        'Questionnaires', 'RequestToServer', 'Studies', 'UserHospitalPreferences'];
 
-    function ResearchController($scope, $timeout, NavigatorParameters,
-                                Params, ProfileSelector, Questionnaires, RequestToServer, Studies, UserHospitalPreferences) {
+    function ResearchController($scope, $timeout, NavigatorParameters, Params, ProfileSelector,
+                                Questionnaires, RequestToServer, Studies, UserHospitalPreferences) {
         let vm = this;
 
         vm.allowedModules = {};
