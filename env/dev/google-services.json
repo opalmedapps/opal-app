@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:452605759067:android:44df885b822de78ae7797e",
+        "mobilesdk_app_id": "1:452605759067:android:e0eee47a4e1df68ae7797e",
         "android_client_info": {
-          "package_name": "com.hig.opaldev"
+          "package_name": "com.hig.opaldev2"
         }
       },
       "oauth_client": [
