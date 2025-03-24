@@ -68,9 +68,12 @@
                     vm.displayApps[app.PatientSerNum] = {};
                     vm.displayApps[app.PatientSerNum].apps = [];
                     vm.displayApps[app.PatientSerNum].patientName = app.patientName;
+                    vm.displayApps[app.PatientSerNum].allCheckedIn = true;
                 }
                 vm.displayApps[app.PatientSerNum].apps.push(app);
                 vm.displayApps[app.PatientSerNum].patientName = app.patientName;
+                const allCheckedIn = vm.displayApps[app.PatientSerNum].allCheckedIn;
+                vm.displayApps[app.PatientSerNum].allCheckedIn = allCheckedIn && app.CheckInStatus == 'success';
             });
             vm.language = UserPreferences.getLanguage();
 
