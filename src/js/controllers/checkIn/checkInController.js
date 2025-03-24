@@ -88,12 +88,9 @@
         /**
          * @desc Displays an error state in the view, when check-in fails.
          */
-        function displayError() {
-            $timeout(() => {
-                vm.alert.type = Params.alertTypeDanger;
-                vm.checkInMessage = "CHECKIN_ERROR";
-                vm.apps = CheckInService.getCheckInApps();
-                if (vm.apps.length === 0) vm.error = "ERROR";
+        function displayError(message) {
+            Toast.showToast({
+                message: $filter('translate')(message),
             });
         }
 
@@ -141,27 +138,18 @@
 
             try {
                 const response = await CheckInService.attemptCheckin(PatientSerNum);
-                if(response === "NOT_ALLOWED"){
-                    Toast.showToast({
-                        message: $filter('translate')("NOT_ALLOWED"),
-                    });
-                    vm.alert.type = Params.alertTypeWarning;
-                    vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-                } else if (response === "SUCCESS") {
-                    vm.alert.type = Params.alertTypeSuccess;
-                    vm.checkInMessage = "CHECKED_IN";
+                if(response === 'NOT_ALLOWED'){
+                    displayError('NOT_ALLOWED');
+                } else if (response === 'SUCCESS') {
                     vm.apps = CheckInService.getCheckInApps();
                 } else {
-                    vm.alert.type = Params.alertTypeDanger;
-                    vm.checkInMessage = "CHECKIN_ERROR";
-                    vm.apps = CheckInService.getCheckInApps();
-                    vm.error = "ERROR";
-                    displayError();
+                    displayError('CHECKIN_ERROR');
                 }
             } catch (error) {
                 console.log(error);
-                displayError();
+                displayError('CHECKIN_ERROR');
             }
+
 
             $timeout(() => {
                 let allCheckedIn = true;
