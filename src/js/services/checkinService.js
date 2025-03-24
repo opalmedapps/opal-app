@@ -383,7 +383,8 @@
 
                     r.resolve(false);
                 }
-            }, function(){
+            }, function(err) {
+                console.error("Error getting current position via geolocation: ", err);
                 r.reject(false);
             }, {
                 maximumAge: 10000,
@@ -430,7 +431,6 @@
             var r = $q.defer();
 
             var objectToSend = {};
-            objectToSend.PatientId = Patient.getPatientId();
             objectToSend.PatientSerNum = Patient.getUserSerNum();
 
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)

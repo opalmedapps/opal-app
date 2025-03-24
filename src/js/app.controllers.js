@@ -30,7 +30,6 @@ import "./controllers/main/mainController.js";
 import "./controllers/maps/mapsController.js";
 import "./controllers/notifications/notificationsController.js";
 import "./controllers/parking/parkingController.js";
-import "./controllers/parking/individualParkingController.js";
 import "./controllers/pfp/pfpController.js";
 import "./controllers/pfp/pfpContactsController.js";
 import "./controllers/pfp/individualPfpContactController.js";
@@ -54,3 +53,4 @@ import "./controllers/test-results/patient-test-results-by-datetime.controller.j
 import "./controllers/txTeamMessages/txTeamMessagesController.js";
 import "./controllers/txTeamMessages/individualMessageController.js";
 import "./controllers/auth/setHospitalController.js";
+import "./controllers/tour/tourController.js";

@@ -31,7 +31,7 @@ The following is the top level anatomy of the folders and their description. As 
 .
 ├── CHANGES # Description of changes per version
 ├── README.md
-├── .github # Contains templates for Github issues
+├── .gitlab # Contains templates used in GitLab
 ├── deploy.sh # CI set of instructions for given a commit
 ├── env # Folder where the environment specific files live
     ├── preprod

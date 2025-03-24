@@ -1,6 +1,6 @@
 /*
  * Filename     :   aboutController.js
- * Description  :   Manages the about view. Only controls the link to the Cedar's donation page.
+ * Description  :   Manages the about view.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   18 Apr 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
@@ -23,19 +23,22 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences', 'Browser'];
+    AboutController.$inject = ['UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences',
+        'Browser', 'DynamicContent'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser) {
+    function AboutController(UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser,
+                             DynamicContent) {
         const vm = this;
+        var navigator = null;
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
+        vm.openTour = openTour;
         vm.openCedars = openCedars;
         vm.allowedModules = {};
 
         let parameters;
-        let navigatorName;
         let isBeforeLogin = true;
 
         activate();
@@ -45,7 +48,7 @@
         function activate() {
 
             parameters = NavigatorParameters.getParameters();
-            navigatorName = parameters.Navigator;
+            navigator = NavigatorParameters.getNavigator();
 
             /**
              * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
@@ -67,30 +70,8 @@
             vm.language = UserPreferences.getLanguage();
         }
 
-        function openUrl(openWhat, openInExternalBrowser = false) {
-            let url = '';
-            switch (openWhat.toLowerCase()) {
-                case Params.aboutMuhcCase:
-                    url = (vm.language === "EN") ? Params.aboutMuhcUrl.aboutMuhcUrlEn : Params.aboutMuhcUrl.aboutMuhcUrlFr;
-                    break;
-                case Params.cedarsCancerCenterCase:
-                    url = (vm.language === "EN") ? Params.cedarsCancerCenterUrl.cedarsCancerCenterUrlEn : Params.cedarsCancerCenterUrl.cedarsCancerCenterUrlFr;
-                    break;
-                case Params.cedarsCancerFoundationCase:
-                    url = (vm.language === "EN") ? Params.cedarsCancerFoundationUrl.cedarsCancerFoundationUrlEn : Params.cedarsCancerFoundationUrl.cedarsCancerFoundationUrlFr;
-                    break;
-                case Params.cedarsCancerSupportCase:
-                    url = (vm.language === "EN") ? Params.cedarsCanSupportUrl.cedarsCanSupportUrlEn : Params.cedarsCanSupportUrl.cedarsCanSupportUrlFr;
-                    break;
-                case Params.donationCase:
-                    url = (vm.language === "EN") ? Params.donationUrl.donationUrlEn : Params.donationUrl.donationUrlFr;
-                    break;
-                case Params.opalWebsiteCase:
-                    url = (vm.language === "EN") ? Params.opalWebsiteUrl.opalWebsiteUrlEn : Params.opalWebsiteUrl.opalWebsiteUrlFr;
-                    break;
-                default:
-                    break;
-            }
+        function openUrl(contentKey, openInExternalBrowser = false) {
+            const url = DynamicContent.getURL(contentKey);
             openInExternalBrowser ? Browser.openExternal(url) : Browser.openInternal(url);
         }
 
@@ -101,12 +82,16 @@
          *
          * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
          */
+        function openTour() {
+            navigator.pushPage('views/home/tour/tour.html');
+        }
+
         function openTeam() {
-            window[navigatorName].pushPage('views/templates/content.html', {contentType: 'hig'});
+            navigator.pushPage('views/templates/content.html', {contentType: 'hig'});
         }
 
         function openCedars() {
-            window[navigatorName].pushPage('views/home/about/cedars.html');
+            navigator.pushPage('views/home/about/cedars.html');
         }
     }
 })();
