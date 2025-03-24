@@ -22,7 +22,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
     // Constants for key derivation
     const keySizeBits = 256; // Key size in bits
     const iterations = 600000;
-    const keySizeByte = 32; // Key size in bytes
+    const bitsPerWord = 32; // Used to convert keySizeBits, since crypto-js expects key sizes in 32-bit words
 
     function decryptObject(object, secret) {
         if (typeof object === 'string') {
@@ -225,7 +225,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          */
         generateSpecificEncryptionKey: function (secret, salt) {
             return CryptoJS.PBKDF2(secret, salt, {
-                keySize: keySizeBits /keySizeByte,
+                keySize: keySizeBits /bitsPerWord,
                 iterations: iterations,
                 hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
@@ -241,7 +241,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
          generateEncryptionHash: function () {
             var usernameHash = hash(UserAuthorizationInfo.getUsername());
             encryptionHash = CryptoJS.PBKDF2(usernameHash, securityAnswerHash, {
-                keySize: keySizeBits /keySizeByte,
+                keySize: keySizeBits /bitsPerWord,
                 iterations: iterations,
                 hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
