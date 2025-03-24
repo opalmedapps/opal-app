@@ -19,7 +19,7 @@
 
     /* @ngInject */
     function InfoTabController($filter, $scope, NavigatorParameters) {
-        var vm = this;
+        let vm = this;
         vm.view = {};
 
         const views = {
@@ -66,21 +66,7 @@
 
         function activate() {
             let params = NavigatorParameters.getNavigator().getCurrentPage().options;
-            let navigatorName = NavigatorParameters.getNavigatorName();
-
-            // Check if requesting info on subView of tab or tab itself
-            if (params.hasOwnProperty('subView') && subViews.hasOwnProperty(params.subView)) {
-                vm.view = subViews[params.subView];
-            } else {
-                vm.view = views[params.id];
-            }
-
-            vm.view.description = $filter('translate')(vm.view.description);
-
-            // Remove subView
-            $scope.$on('$destroy', function () {
-                NavigatorParameters.setParameters({ Navigator: navigatorName });
-            });
+            vm.view = views[params.id];
         }
 
         /**
