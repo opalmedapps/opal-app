@@ -18,11 +18,15 @@
         const BATTERY_CHARACTERISTIC_UUID = '2A19';
         const NOTIFICATION_SERVICE_UUID = 'FFF0';
         const NOTIFICATION_CHARACTERISTIC_UUID = 'FFF1';
+        const WRITE_CHARACTERISTIC_UUID = 'FFF2';
 
         // Error messages
         const ERROR_BACKEND = $filter('translate')('SMARTDEVICES_ERROR_BACKEND');
         const ERROR_NO_DEVICE = $filter('translate')('SMARTDEVICES_ERROR_NO_DEVICE');
         const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
+
+        const SAMPLE_TYPE_WEIGHT = 'BM';
+        const UNIT_KG = 1;
 
         let vm = this;
 
@@ -59,17 +63,17 @@
 
             let data = {
                 value: vm.weight,
-                type: 'BM',
+                type: SAMPLE_TYPE_WEIGHT,
                 start_date: new Date().toISOString(),
-                source: 'QN-Scale',
-            }
+                source: vm.selectedDevice.name,
+            };
 
             const patient_id = User.getLoggedinUserProfile().patient_id;
             const requestParams = Params.API.ROUTES.QUANTITY_SAMPLES;
             const formattedParams = {
                 ...requestParams,
                 url: requestParams.url.replace('<PATIENT_ID>', patient_id),
-            }
+            };
 
             try {
                 let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
@@ -105,7 +109,7 @@
                     } else if (vm.devices.length == 0) {
                         vm.errorMessage = ERROR_NO_DEVICE;
                     }
-                })
+                });
             }, 3000);
         }
 
@@ -121,7 +125,7 @@
                 if (vm.devices.indexOf(peripheralData) === -1) {
                     vm.devices.push(peripheralData);
                 }
-            })
+            });
         }
 
         async function selectDevice(device) {
@@ -180,18 +184,15 @@
             let value = new Uint8Array(result);
 
             let packetType = value[0];
-            const service_uuid = 'FFF0';
-            const characteristic_uuid = 'FFF2'
             addDebugMessage(`Received raw message: ${toHexString(value)}`);
 
             if (packetType === 0x12) {
                 addDebugMessage('Device says hello');
                 // send configure response with unit = kg
-                let unit = 1;
-                let response = new Uint8Array([0x13, 9, 21, unit, 16, 170, 22, 0, 2]);
+                let response = new Uint8Array([0x13, 9, 21, UNIT_KG, 16, 170, 22, 0, 2]);
                 addDebugMessage(`Sending response: ${toHexString(response)}`);
 
-                await ble.withPromises.write(device_id, service_uuid, characteristic_uuid, response.buffer);
+                await ble.withPromises.write(device_id, SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
             } else if (packetType === 0x14) {
                 addDebugMessage('Device responded with unknown packet type')
                 // send response with timestamp with current time instead of hard-coded timestamp
@@ -205,7 +206,7 @@
                 let response = new Uint8Array([0x20, 8, 0x15, 65, 239, 255, 42, 150]);
                 addDebugMessage(`Sending response: ${toHexString(response)}`);
 
-                await ble.withPromises.write(device_id, service_uuid, characteristic_uuid, response.buffer);
+                await ble.withPromises.write(device_id, SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
             } else if (packetType == 0x21) {
                 // no response necessary it seems, the device sends the next package (measurement) anyway
                 addDebugMessage('Device responded with second unknown packet type');
@@ -233,7 +234,7 @@
 
                     let response = new Uint8Array([0x1f, 0x5, 0x15, 0x10, 0x49]);
 
-                    await ble.withPromises.write(device_id, service_uuid, characteristic_uuid, response.buffer);
+                    await ble.withPromises.write(device_id, SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
                     addDebugMessage('Told the device to stop spamming me');
                 }
             }
@@ -263,7 +264,7 @@
                 let elementHex = element.toString(16);
                 elementHex = (elementHex.length == 2) ? elementHex : `0${elementHex}`;
                 hexString += ` 0x${elementHex}`;
-            })
+            });
 
             return hexString;
         }
