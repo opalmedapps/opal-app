@@ -1,18 +1,18 @@
 // Downloaded by installing https://www.npmjs.com/package/angular-ui-bootstrap and copying "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"
 /*
-* This library has been edited.
-* It contains a custom version of the uibDatepicker with colored dots, used as the Opal appointment calendar.
-* To view the changes added to this file, run a diff against `ui-bootstrap-tpls-2.5.6-original.js`,
-* which is included in this project for comparison and reference purposes.
-*
-* Any changes made to this file must be summarized in the THIRDPARTY.md file included in this repository (under "angular-ui-bootstrap"), to comply with the terms of this library's license.
-*
-* angular-ui-bootstrap
-* https://angular-ui.github.io/bootstrap/
+ * This library has been edited.
+ * It contains a custom version of the uibDatepicker with colored dots, used as the Opal appointment calendar.
+ * To view the changes added to this file, run a diff against `ui-bootstrap-tpls-2.5.6-original.js`,
+ * which is included in this project for comparison and reference purposes.
+ *
+ * Any changes made to this file must be summarized in the THIRDPARTY.md file included in this repository (under "angular-ui-bootstrap"), to comply with the terms of this library's license.
+ *
+ * angular-ui-bootstrap
+ * https://angular-ui.github.io/bootstrap/
 
-* Version: 2.5.6 - 2017-10-14
-* License: MIT
-*/
+ * Version: 2.5.6 - 2017-10-14
+ * License: MIT
+ */
 angular.module("ui.bootstrap", ["ui.bootstrap.tpls", "ui.bootstrap.collapse","ui.bootstrap.tabindex","ui.bootstrap.accordion","ui.bootstrap.alert","ui.bootstrap.buttons","ui.bootstrap.carousel","ui.bootstrap.dateparser","ui.bootstrap.isClass","ui.bootstrap.datepicker","ui.bootstrap.position","ui.bootstrap.datepickerPopup","ui.bootstrap.debounce","ui.bootstrap.multiMap","ui.bootstrap.dropdown","ui.bootstrap.stackedMap","ui.bootstrap.modal","ui.bootstrap.paging","ui.bootstrap.pager","ui.bootstrap.pagination","ui.bootstrap.tooltip","ui.bootstrap.popover","ui.bootstrap.progressbar","ui.bootstrap.rating","ui.bootstrap.tabs","ui.bootstrap.timepicker","ui.bootstrap.typeahead"]);
 angular.module("ui.bootstrap.tpls", ["uib/template/accordion/accordion-group.html","uib/template/accordion/accordion.html","uib/template/alert/alert.html","uib/template/carousel/carousel.html","uib/template/carousel/slide.html","uib/template/datepicker/datepicker.html","uib/template/datepicker/day.html","uib/template/datepicker/month.html","uib/template/datepicker/year.html","uib/template/datepickerPopup/popup.html","uib/template/modal/window.html","uib/template/pager/pager.html","uib/template/pagination/pagination.html","uib/template/tooltip/tooltip-html-popup.html","uib/template/tooltip/tooltip-popup.html","uib/template/tooltip/tooltip-template-popup.html","uib/template/popover/popover-html.html","uib/template/popover/popover-template.html","uib/template/popover/popover.html","uib/template/progressbar/bar.html","uib/template/progressbar/progress.html","uib/template/progressbar/progressbar.html","uib/template/rating/rating.html","uib/template/tabs/tab.html","uib/template/tabs/tabset.html","uib/template/timepicker/timepicker.html","uib/template/typeahead/typeahead-match.html","uib/template/typeahead/typeahead-popup.html"]);
 angular.module('ui.bootstrap.collapse', [])
