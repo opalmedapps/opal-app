@@ -195,7 +195,6 @@ deploy ios to firebase:
   needs:
     - job: build ios
 
-
 # TODO part of temporarily disabling shared runners; can't use apk to install lftp
 .deploy web:
   stage: deploy
