@@ -31,8 +31,7 @@
                 await UpdateUI.init();
                 await RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
                 await MetaData.init();
-                await ProfileSelector.init();
-                      
+                await ProfileSelector.init();     
                 // TODO: Currently, the app isn't able to handle a state in which there are no confirmed profiles. In this case, cancel login.
                 if (ProfileSelector.getConfirmedProfiles().length === 0) {
                     console.error('Cannot log in when there are no confirmed profiles.');
