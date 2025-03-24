@@ -65,15 +65,17 @@ check dependencies:
   stage: check
   rules:
     - when: always
-  script:
+  before_script:
     - apk add --no-cache curl jq
+    # use pipe operator to be able to use a colon in the command
     - | 
       RESPONSE=$(curl -s -X GET -H "PRIVATE-TOKEN: ${GITLAB_TOKEN_TEST}" "${CI_API_V4_URL}/user")
     - echo $RESPONSE
-    - echo $RESPONSE | jq ".email"
-    - echo $CI_COMMIT_AUTHOR
-    - echo $GITLAB_USER_NAME
-    - echo $GITLAB_USER_EMAIL
+    - export GIT_AUTHOR_EMAIL=$(echo $RESPONSE | jq ".email")
+    - export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
+    - echo $GIT_AUTHOR_EMAIL
+    - echo $GIT_COMMITTER_EMAIL
+  script:
     - npm -v
     - npm ci --cache .npm --prefer-offline
 
