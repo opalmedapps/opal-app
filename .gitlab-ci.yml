@@ -25,6 +25,10 @@ variables:
   FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
   VERSION_TAG_REGEX: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/  # The tag semver regex recognized as a release, see: https://ihateregex.io/expr/semver/
 
+  # Override for SAST: https://docs.gitlab.com/ee/user/application_security/sast/#vulnerability-filters
+  # Avoid scanning the ui-bootstrap library twice; only scan the Opal version
+  SAST_EXCLUDED_PATHS: "spec, test, tests, tmp, src/lib/*-original.js"
+
 
 workflow:
   rules:
