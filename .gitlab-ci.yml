@@ -13,9 +13,16 @@ workflow:
 
 variables:
   ENV: "dev"  # The environment used in the app build command
-  FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded (from project settings)
-  FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded (from project settings)
+  FIREBASE_APP_ANDROID: $FIREBASE_APP_DEV_ANDROID  # The Android App ID of the firebase project to which the app is uploaded
+  FIREBASE_APP_IOS: $FIREBASE_APP_DEV_IOS  # The iOS App ID of the firebase project to which the app is uploaded
   FIREBASE_GROUP: "general"  # The name of the group to which the app is automatically deployed (via Firebase App Distribution)
+
+# Project variables: the following variables must be configured in the project's CI/CD settings
+#
+# FIREBASE_APP_DEV_ANDROID (variable): The Android App ID of the dev firebase project.
+# FIREBASE_APP_DEV_IOS (variable): The iOS App ID of the dev firebase project.
+# GOOGLE_APPLICATION_CREDENTIALS (file): Google service account key that provides write permissions for Firebase App Distribution (see more details below).
+# IOS_DEVELOPMENT_TEAM (variable): The development team used by cordova to sign the build created via `cordova build ios --developmentTeam=___`.
 
 stages:
   - build
@@ -55,7 +62,7 @@ build ios:
     # See: https://stackoverflow.com/a/70581304
     - gem install --user-install ffi -- --enable-libffi-alloc
     - echo "$ENV"
-    - npm run build:app:ios:device --env=dev
+    - npm run build:app:ios:device:ci --env=dev --devteam=$IOS_DEVELOPMENT_TEAM
     - mv ./platforms/ios/build/device/*.ipa "opal-$ENV.ipa"
   artifacts:
     expire_in: 1 day
