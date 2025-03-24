@@ -20,10 +20,7 @@
     function ChangeSettingController(Firebase, UserPreferences, RequestToServer, $timeout,
                                     UserAuthorizationInfo, Navigator, $window, Params,
                                     EncryptionService) {
-        var vm = this;
-        var page;
-        var parameters;
-        var navigator;
+        let vm = this;
 
         // Values set by the password strength checker directive
         vm.passwordIsValid = false;
@@ -42,9 +39,7 @@
 
         //Sets all the account settings depending on the field that needs to be changed
         function activate() {
-            navigator = Navigator.getNavigator();
-            page = navigator.getCurrentPage();
-            parameters = page.options.param;
+            let parameters = Navigator.getParameters().param;
 
             // Mapping between parameters and their translations
             $timeout(function () {

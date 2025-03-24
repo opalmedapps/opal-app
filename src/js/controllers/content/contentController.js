@@ -30,11 +30,10 @@
 
         // Uses the content pushed from a pushPage. See details in Opal wiki for use.
         function activate() {
+            let parameters = Navigator.getParameters();
 
-            var nav = Navigator.getNavigator();
-
-            let link = nav.getCurrentPage().options.contentLink;
-            let contentType = nav.getCurrentPage().options.contentType;
+            let link = parameters.contentLink;
+            let contentType = parameters.contentType;
 
             vm.pageContent.title = "";
 

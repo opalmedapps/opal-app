@@ -150,7 +150,7 @@
             $rootScope.DocAlreadyInitialized = true;
 
             if (vm.DocumentDescription !== '') {
-                navigator.pushPage('./views/personal/documents/about-document.html');
+                navigator.pushPage('./views/personal/documents/about-document.html', {'Post': docParams});
             } else {
                 // Check if there is any about link
                 var link = null;
