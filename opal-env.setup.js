@@ -117,7 +117,7 @@ class OpalEnv {
 
     /**
      * @description Helper function which gets the list of directories at a given path.
-     * @param source The path at which to read the directories.
+     * @param {string} source The path at which to read the directories.
      * @returns {string[]} The list of directories at that path.
      */
     static getDirectories(source) {
@@ -164,11 +164,11 @@ class OpalEnv {
      */
     static setVersion(newVersion = null) {
         const currentVersion = this.getVersion();
-        newVersion = newVersion ? newVersion : semver.inc(currentVersion, "patch");
+        newVersion = newVersion ? newVersion : semver.inc(currentVersion, 'patch');
         console.log(`Version update: ${currentVersion} => ${newVersion}`);
         this.writeToConfigXML(
             './env',
-            this.setXMLWidgetAttributeText(this.getConfigXML('./env', true), "version", newVersion),
+            this.setXMLWidgetAttributeText(this.getConfigXML('./env', true), 'version', newVersion),
         );
     }
 
@@ -256,16 +256,16 @@ class OpalEnv {
      * @description Modifies a specific attribute's value in an XML object.
      * @throws error Throws an error if no child elements are found that match the given childName.
      * @param {Element} xmlObject JavaScript object whose interface is the specified interface in the xml-js package.
-     * @param attributeName Attribute name to modify in the xml.
-     * @param newAttributeText New value for the attribute.
+     * @param {string} attributeName Attribute name to modify in the xml.
+     * @param {*} newValue New value for the attribute.
      * @example let xmlObject = xmlJs.xml2js('<widget version="1.8.10"></widget>');
      *          xmlObject = setXMLWidgetChildText(xmlObject, 'version', '1.8.11');
      *          xmlJs.js2xml(xmlObject); // returns '<widget version="1.8.11"></widget>'
      * @returns {Element} Returns the modified XML Element object.
      */
-    static setXMLWidgetAttributeText(xmlObject, attributeName, newAttributeText) {
-        if (xmlObject && attributeName && newAttributeText) {
-            xmlObject.elements[0].attributes[String(attributeName)] = String(newAttributeText);
+    static setXMLWidgetAttributeText(xmlObject, attributeName, newValue) {
+        if (xmlObject && attributeName && newValue) {
+            xmlObject.elements[0].attributes[String(attributeName)] = String(newValue);
         }
         return xmlObject;
     }
