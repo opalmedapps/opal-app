@@ -1,65 +1,65 @@
     <ons-page id="popoverLanguage" ng-controller="InitScreenController as init">
-         <div>
-            <div style="position:absolute;z-index:2;width:100%" align="center">
+         <div style="position: relative; height: 40%">
+            <div style="z-index:2;width:100%" align="center">
                 <network-banner></network-banner>
-                <div style="margin-top:6vw" align="center">
+                <div style="position: absolute; top: 50%;transform: translateY(-50%);" align="center">
                     <img src="img/Opal_Name_Logo_Transparent.png" style="width:75%;height:auto">
                 </div>
             </div>
-            <div>
-                <img id="init-background" src="img/opal-init-photo.jpg" style="width:100%;height:auto">
+            <div style="height: 100%">
+                <img id="init-background" src="img/opal-init-photo.jpg" style="width: 100%; height: 100%; object-fit: cover">
             </div>
         </div>
 
-        <div id="listInitApp" class="animated fadeIn ng-cloak" style="display:none;height:50%">
-            <div style="text-align: center; width: 90%; margin: 5% auto auto auto">
+        <div id="listInitApp" class="animated fadeIn ng-cloak" style="display:none;height:56%">
+            <div style="text-align: center; width: 90%; margin: 5% auto auto auto; height: 15%">
                 <ons-button class="shadow-2" modifier="large"
-                            style="height: 2.5em; font-size: x-large; background-color: #F5F5F5"
+                            style="height: 100%; font-size: x-large; background-color: #F5F5F5; position: relative;"
                             ng-click="init.goToParking()" var="initButton">
                     <i class="fa fa-car fa-lg pull-left"
-                              style="color:#F44336; margin-top: 3%; display: inline-block"></i>
+                              style="color:#F44336; display: inline-block"></i>
                     <div style="display: inline-block; margin-left: -10%; color: #757575" align="center">
                         {{"PARKING"|translate}}
                     </div>
                 </ons-button>
             </div>
-            <div style="text-align: center; width: 90%; margin: 3% auto">
+            <div style="text-align: center; width: 90%; margin: 3% auto; height: 15%">
                 <ons-button class="shadow-2" modifier="large"
-                            style="height: 2.5em; font-size: x-large; background-color: #F5F5F5"
+                            style="height: 100%; font-size: x-large; background-color: #F5F5F5; position: relative;"
                             ng-click="init.goToPatientCharter()" var="initButton">
                     <ons-icon icon="fa-list-alt fa-lg pull-left"
-                              style="color:#2196F3; margin-top: 3%; display: inline-block"></ons-icon>
+                              style="color:#2196F3; display: inline-block"></ons-icon>
                     <div style="display: inline-block; margin-left: -10%; color: #757575" align="center">
                         {{"PATIENTCHARTER"|translate}}
                     </div>
                 </ons-button>
             </div>
-            <div style="text-align: center; width: 90%; margin: 3% auto">
+            <div style="text-align: center; width: 90%; margin: 3% auto; height: 15%">
                 <ons-button class="shadow-2" modifier="large"
-                            style="height: 2.5em; font-size: x-large; background-color: #F5F5F5"
+                            style="height: 100%; font-size: x-large; background-color: #F5F5F5; position: relative;"
                             ng-click="init.reportBugs()" var="initButton">
                     <i class="fa fa-exclamation-triangle fa-lg pull-left"
-                              style="color:#FFC107; margin-top: 3%; display: inline-block"></i>
+                              style="color:#FFC107; display: inline-block"></i>
                     <div style="display: inline-block; margin-left: -10%; color: #757575" align="center">
                         {{"REPORTBUGS"|translate}}
                     </div>
                 </ons-button>
             </div>
-            <div style="text-align: center; width: 90%; margin: 3% auto">
+            <div style="text-align: center; width: 90%; margin: 3% auto; height: 15%">
                 <ons-button class="shadow-2" modifier="large"
-                            style="height:2.5em; font-size: x-large; background-color: #F5F5F5"
+                            style="height:100%; font-size: x-large; background-color: #F5F5F5; position: relative;"
                             ng-click="init.goToGeneralSettings()" var="initButton">
                     <i class="fa fa-info-circle fa-lg pull-left"
-                              style="color:grey; margin-top: 3%; display: inline-block"></i>
+                              style="color:grey; display: inline-block"></i>
                     <div style="display: inline-block; margin-left: -10%; color: #757575" align="center">
                         {{"ABOUT"|translate}}
                     </div>
                 </ons-button>
             </div>
 
-            <div style="text-align: center; width: 90%; margin: 5% auto">
+            <div style="text-align: center; width: 90%; height: 15%; margin: auto; margin-top: 5%;">
                 <ons-button class="animated pulse ng-cloak shadow-2" modifier="large"
-                            style="height: 50px; font-size: xx-large; font-weight: bolder; background-color: #4CAF50"
+                            style="height: 100%; font-size: xx-large; font-weight: bolder; background-color: #4CAF50"
                             ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}
                 </ons-button>
             </div>

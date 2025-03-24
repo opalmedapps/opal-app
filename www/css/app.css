@@ -60,6 +60,13 @@ body {
     width:100%;
 }
 
+#listInitApp div ons-button span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    width: 100%;
+}
+
 /* Portrait layout (default) */
 .app {
     background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
@@ -2676,10 +2683,6 @@ and (max-device-width : 321px)
 {
     .secure-message, .unattended-message{
         font-size: 14px;
-    }
-
-    #init-background{
-        height: 180px !important;
     }
 
     #lock-logo {
