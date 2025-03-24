@@ -64,7 +64,8 @@
          */
         function validateApiResponse(response) {
             let decryptedresponse = (typeof response.status_code === 'number') ? response : EncryptionService.decryptData(response);
-            if (response.status_code !== Params.API.SUCCESS) {
+            // TODO: Create a list of all valid status codes and check that
+            if (response.status_code !== Params.API.SUCCESS && response.status_code !== Params.API.CREATED) {
                 return new Error(`API ERROR: ${response.status_code}: ${response.data.errorMessage}`);
             }
             return decryptedresponse;
