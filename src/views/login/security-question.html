@@ -4,7 +4,10 @@
             <ons-back-button ng-if="!security.passwordReset">{{"BACK"|translate}}</ons-back-button>
             <ons-back-button ng-if="security.passwordReset" ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"SECURITYQUESTION"|translate}}</div>
+        <div class="center">
+            <div ng-if="!security.passwordReset">{{"SECURITYQUESTION"|translate}}</div>
+            <div ng-if="security.passwordReset">{{"FORGOTPASSWORD_NOQUESTION"|translate}}</div>
+        </div>
     </ons-toolbar>
     <network-banner></network-banner>
 
