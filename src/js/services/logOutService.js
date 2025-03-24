@@ -29,7 +29,7 @@
          */
         function logOut(safeDevice = true, kickedOut = false) {
             // If the current user is logging out normally, remove their "logged_in_users" entry from Firebase.
-            // If they are being kicked out, leave it there to reflect that another user is still logged in.
+            // If they are being kicked out, leave it there to reflect that someone is still logged into that same account on another device.
             if (!kickedOut) {
                 let refCurrentUser = Firebase.getDBRef(`logged_in_users/${UserAuthorizationInfo.getUsername()}`);
                 Firebase.remove(refCurrentUser);

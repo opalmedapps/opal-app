@@ -30,10 +30,11 @@ import { child, getDatabase, off, onValue, push, ref, remove, serverTimestamp, s
     Firebase.$inject = ['Params'];
 
     function Firebase(Params) {
+        const app = getApp();
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
         let firebaseUrl = Params.firebaseBaseUrl;
-        let app = getApp();
-        let auth = getAuth(app);
-        let database = getDatabase(app);
         let firebaseDBRef = ref(database, firebaseUrl);
 
         return {
