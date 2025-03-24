@@ -250,7 +250,7 @@ include:
   # SAST Scanning: https://docs.gitlab.com/ee/user/application_security/sast/
   - template: Jobs/SAST.latest.gitlab-ci.yml
   # DAST Scanning: https://docs.gitlab.com/ee/user/application_security/dast/
-  - template: DAST.gitlab-ci.yml
+  - template: DAST.latest.gitlab-ci.yml
 
 
 
