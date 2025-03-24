@@ -216,7 +216,7 @@
     "RESUME": "Continuer",
     "RELATIONSHIPS": "Mes Relations",
     "RELATIONSHIPS_CAREGIVERS": "Mes proches aidants",
-    "RELATIONSHIPS_CAREGIVERS_NOT_FOUND": "Aucun proche aidant n'est relié à ce patient.",
+    "RELATIONSHIPS_CAREGIVERS_NOT_FOUND": "Aucun proche aidant n'est relié à ce compte.",
     "RELATIONSHIPS_CAREGIVERS_ERROR": "Une erreur s'est produite lors du chargement des données.",
     "RELATIONSHIPS_CAREGIVERS_DESCRIPTION": "Liste des proches aidants qui ont accès à vos données dans l'application Opal.",
     "RELATIONSHIPS_PATIENTS_ACCESS": "Accès",
