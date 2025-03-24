@@ -114,11 +114,21 @@
 	     */
 	    vm.alertShow = true;
 
+        /**
+         * @ngdoc property
+         * @name countdownSeconds
+         * @propertyOf SecurityQuestionController
+         * @returns int
+         * @description countdown seconds for lockout
+         */
+        vm.countdownSeconds = 10;
+
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
         vm.isThereSelectedHospital = isThereSelectedHospital;
+        vm.lockout = lockout;
 
         activate();
 
@@ -281,6 +291,7 @@
                     case 4:
                         vm.alert.content = "OUTOFTRIES";
                         vm.tooManyAttempts = true;
+                        vm.lockout();
                         break;
                     case "corrupted-data":
                         vm.alert.content = "CONTACTHOSPITAL";
@@ -390,6 +401,35 @@
 
                 });
             }
+        }
+
+        /**
+         * @ngdoc method
+         * @name lockout
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description
+         * lock the screen for too many failed security answer attempts
+         */
+        function lockout(){
+            $timeout(() => {
+
+                let countDown = vm.countdownSeconds;
+                let time = setInterval(function () {
+                    if (document.getElementById('btn_submit_answer')) {
+                        countDown--;
+                        if (countDown < 0) {
+                            clearInterval(time);
+                            vm.tooManyAttempts = false;
+                            $timeout(() => {
+                                vm.tooManyAttempts = false;
+                                vm.alertShow = false;
+                                vm.answer = '';
+                            });
+                            document.getElementById('btn_submit_answer').removeAttribute('disabled');
+                        }
+                    }
+                }, 1000);
+            });
         }
 
         /**

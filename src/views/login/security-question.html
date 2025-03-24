@@ -1,11 +1,11 @@
 <ons-page ng-controller="SecurityQuestionController as security" style="background-color:white">
     <ons-toolbar fixed-style>
         <div class="left">
-            <ons-back-button ng-if="!security.passwordReset">{{"BACK"|translate}}</ons-back-button>
+            <ons-back-button ng-show="!security.passwordReset && !security.tooManyAttempts" id="btn_answer_back">{{"BACK"|translate}}</ons-back-button>
             <ons-back-button ng-if="security.passwordReset" ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
         </div>
         <div class="center">
-            <div ng-if="!security.passwordReset">{{"SECURITYQUESTION"|translate}}</div>
+            <div ng-if="!security.passwordReset" ng-disabled="security.tooManyAttempts">{{"SECURITYQUESTION"|translate}}</div>
             <div ng-if="security.passwordReset">{{"FORGOTPASSWORD_NOQUESTION"|translate}}</div>
         </div>
     </ons-toolbar>
@@ -44,6 +44,7 @@
                             </password-input>
                         </div>
                         <button class="button button--large shadow-2 button--large-green security-question--button"
+                                id="btn_submit_answer"
                                 ng-disabled="security.submitting || security.tooManyAttempts"
                                 ng-click="security.submitAnswer(security.answer)">
                             {{"CONTINUE"|translate}}
