@@ -53,7 +53,6 @@
   "HOSPITAL": "Hospital",
   "INACTIVE": "For security purposes, you have been disconnected after 5 minutes of inactivity. Please log in again.",
   "INFO": "Information",
-  "INTERNETERROR": "Server error, please check your internet connection",
   "INVALID_EMAIL": "Invalid e-mail",
   "INVALID_EMAIL_OR_PWD": "Email or password is incorrect.",
   "INVALID_PASSWORD": "Invalid password.",
