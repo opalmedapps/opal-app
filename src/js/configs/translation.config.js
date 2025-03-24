@@ -12,7 +12,7 @@ function TranslationConfiguration(tmhDynamicLocaleProvider, $translateProvider, 
     // support pluralization
     // see: https://angular-translate.github.io/docs/#/guide/14_pluralization
     $translateProvider.useMessageFormatInterpolation();
-    $translateProvider.preferredLanguage('fr');
+    // $translateProvider.preferredLanguage('fr');
     tmhDynamicLocaleProvider.localeLocationPattern('./Languages/angular-locales/angular-locale_{{locale}}.js');
     $translateProvider.useMissingTranslationHandlerLog();
 }
