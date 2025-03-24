@@ -30,7 +30,7 @@ import "../../css/directives/profile-selector.directive.css"
                 <ons-toolbar fixed-style>
                     <div class="left" ng-style="iosStyleFix"></div>
                     <div class="center" ng-style="iosStyleFix">
-                        <div class="profile-selector--title" ng-click="showList()">
+                        <div class="profile-selector--title" ng-click="toggleList()">
                             <div>{{title}}</div>
                             <div ng-show="profileList.length > 1"><ons-icon class="profile-selector--title--icon" icon="fa-solid fa-caret-down"></ons-icon></div>
                         </div>
@@ -53,31 +53,30 @@ import "../../css/directives/profile-selector.directive.css"
             `,
             link: function (scope) {
                 
+                scope.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
+                scope.profileList = ProfileSelector.getPatientList();
+                scope.listVisible = false;
+
                 const updateDisplayInfo = () => {
                     scope.currentProfile = Patient.getSelectedProfile();
-                    scope.pendingMsg = `${$filter('translate')("RELATIONSHIPS_PATIENTS_ACCESS")} ${$filter('translate')("RELATIONSHIPS_PATIENTS_STATUS_PEN")}`;
+                    scope.pendingMsg = $filter('translate')("RELATIONSHIPS_PATIENTS_STATUS_PEN");
                     scope.title = scope.profileList.length > 1 ? `${scope.currentProfile.first_name} ${scope.currentProfile.last_name}` : $filter('translate')('MYCHART');
                 }
 
-                scope.showList = () => {
+                scope.toggleList = () => {
                     if (scope.profileList.length <= 1) return;
                     scope.listVisible = !scope.listVisible;
                 }
 
-                scope.selectProfile = (profileId, relStatus) => {
-                    if (relStatus === 'PEN') return;
-                    ProfileSelector.loadPatientProfile(profileId);
+                scope.selectProfile = (lecagyId, relStatus) => {
+                    if (relStatus !== 'CON') return;
+                    ProfileSelector.loadPatientProfile(lecagyId);
                     updateDisplayInfo();
-                    scope.refreshFunction();
+                    if (scope.refreshFunction) scope.refreshFunction();
                     scope.listVisible = false;
                 };
 
-                scope.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
-
-                scope.profileList = ProfileSelector.getPatientList();
                 updateDisplayInfo();
-                scope.listVisible = false;
-                
             }
         };
     }

@@ -16,13 +16,13 @@
 
         return {
             init: init,
-            getPatientList: getPatientList,
+            getPatientList: () => patientList,
             loadPatientProfile: loadPatientProfile,
         }
 
-        function getPatientList() {
-            return patientList
-        }
+        // function getPatientList() {
+        //     return patientList
+        // }
 
         /**
          * @description Initialize the service once the user data is loaded.
