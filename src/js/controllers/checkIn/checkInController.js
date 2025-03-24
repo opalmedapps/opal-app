@@ -65,11 +65,11 @@
                 const patientAppointments = vm.apps.filter(apt => apt.PatientSerNum === patientSerNum);
 
                 // Set the header based on whether the patient is the user or a care-receiver
-                let patientHeader;
                 const patientIsSelf = patientSerNum === selfPatientSerNum;
-                const fullName = `${patient.first_name} ${patient.last_name}`;
-                if (patientIsSelf) patientHeader = vm.language === 'EN' ? 'Your appointments' : 'Vos rendez-vous';
-                else patientHeader = vm.language === 'EN' ? `${fullName}'s appointments` : `Rendez-vous de ${fullName}`;
+                let patientHeader = $filter('translate')(
+                    patientIsSelf ? 'CHECKIN_PATIENT_HEADER_SELF' : 'CHECKIN_PATIENT_HEADER_NON_SELF',
+                    { name: `${patient.first_name} ${patient.last_name}` }
+                )
 
                 vm.displayApps[patientSerNum] = {
                     apps: patientAppointments,
