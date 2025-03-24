@@ -117,6 +117,22 @@
 
         function activate()
         {
+            var fontSize = UserPreferences.getFontSize();
+            fontSize = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
+            var elem = document.querySelector('.fontDesc' + fontSize);
+            var style = getComputedStyle(elem);
+            fontSize = style.fontSize;
+            function createClass(name,rules){
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                document.getElementsByTagName('head')[0].appendChild(style);
+                if(!(style.sheet||{}).insertRule)
+                    (style.styleSheet || style.sheet).addRule(name, rules);
+                else
+                    style.sheet.insertRule(name+"{"+rules+"}",0);
+            }
+            createClass('.uib-datepicker table thead tr th button div',"font-size: " +  fontSize + "!important;");
+
             navigatorName = NavigatorParameters.getParameters().Navigator;
 
             /**
@@ -165,6 +181,7 @@
                         var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
                         if(divTreatment)divTreatment.style.height=heightTreatment+'px';
                         setTimeout(scrollToAnchor, 50);
+
                     })
                 })
         }
