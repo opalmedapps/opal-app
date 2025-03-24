@@ -72,10 +72,19 @@
                 "has_demographics": true,
                 "middle_name": "",
                 "city_of_birth": "",
-                "health_data_authorization": "",
-                "contact_authorization": ""
+                "health_data_authorization": false,
+                "contact_authorization": false
             };
-            // Extract the responses for the consent validation and GUID generation in Django
+
+            // String to bool mappings for *_authorization question responses
+            const authorization_mapping = {
+                "Consent": true,
+                "Accepter": true,
+                "Decline": false,
+                "Refuser": false
+            };
+
+            // Regex to extract specific question responses for the consent validation and GUID generation in Django
             const middle_name_regex = /middle\s*name|deuxième\s*prénom/i;
             const city_of_birth_regex = /city\s*of\s*birth|ville\s*de\s*naissance/i;
             const health_data_authorization_regex = /authorization\s*for\s*health\s*information|autorisation\s*de\s*collecte\s*d'informations\s*sur\s*la\s*santé/i;
@@ -88,9 +97,13 @@
                     } else if (city_of_birth_regex.test(question.question_display)) {
                         data.city_of_birth = question.patient_answer.answer[0].answer_value;
                     } else if (health_data_authorization_regex.test(question.question_display)) {
-                        data.health_data_authorization = question.patient_answer.answer[0].answer_option_text;
+                        let answer_text = question.patient_answer.answer[0].answer_option_text;
+                        // Map the answer to a boolean value
+                        data.health_data_authorization = authorization_mapping[answer_text] ?? false;
                     } else if (contact_authorization_regex.test(question.question_display)) {
-                        data.contact_authorization = question.patient_answer.answer[0].answer_option_text;
+                        let answer_text = question.patient_answer.answer[0].answer_option_text;
+                        // Map the answer to a boolean value
+                        data.contact_authorization = authorization_mapping[answer_text] ?? false;
                     }
                 });
             });
