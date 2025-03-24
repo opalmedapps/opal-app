@@ -75,7 +75,7 @@
     "angularfire": "^2.1.0",
     "angularjs-scroll-glue": "^2.2.0",
     "animate.css": "^3.7.2",
-    "bootstrap": "^3.3.6",
+    "bootstrap": "^3.4.1",
     "com.cordova.plugins.cookiemaster": "^1.0.1",
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
