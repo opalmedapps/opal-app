@@ -248,10 +248,6 @@
          */
         async function goToCheckinAppointments() {
             if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
-            let ids = [];
-            vm.todaysAppointments.forEach(app => {
-                ids.push(app.appointmentsernum);
-            });
             const url = {
                 method: 'get',
                 url: '/api/app/appointments/',

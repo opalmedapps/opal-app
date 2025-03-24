@@ -148,7 +148,7 @@
         function updateCheckinState(checkedInAppts){
 
             if(checkedInAppts && checkedInAppts.length > 0) Appointments.updateCheckedInAppointments(checkedInAppts);
-            var appts = Appointments.getTodaysAppointments();
+            let appts = Appointments.getTodaysAppointments();
 
             //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
             if(alreadyCheckedIn(appts)){

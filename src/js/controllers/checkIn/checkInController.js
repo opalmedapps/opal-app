@@ -134,7 +134,7 @@
                 if (app.CheckInStatus != 'success') {
                     app.loading = true;
                 }
-            })
+            });
 
             try {
                 const response = await CheckInService.attemptCheckin(PatientSerNum);
@@ -163,10 +163,11 @@
             $timeout(() => {
                 let allCheckedIn = true;
                 vm.displayApps[PatientSerNum].apps.forEach(app => {
-                    const appt = response.appts.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
+                    const appt = vm.apps.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
                     if (appt) {
                         app.Checkin = appt.Checkin;
                         app.loading = false;
+                        app.CheckInStatus = appt.Checkin == '1' ? 'success' : 'danger';
                         allCheckedIn =  allCheckedIn && app.CheckInStatus == 'success';
                     }
                 })

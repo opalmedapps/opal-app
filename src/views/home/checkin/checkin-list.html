@@ -68,7 +68,7 @@
                         </div>
 
                         <!-- An Error Occurred - Unsuccessful Checkin -->
-                        <div ng-show="checkIn.alert.type" ng-if="app.Checkin == 0 && app.CheckinPossible == 1">
+                        <div ng-show="app.CheckInStatus == 'danger'" ng-if="app.Checkin == 0 && app.CheckinPossible == 1">
                             <span class="item-desc color-error" ng-class="fontSizeDesc">
                                 {{"CHECKIN_ERROR"|translate}}
                             </span>
