@@ -13,10 +13,14 @@
         .module('MUHCApp')
         .controller('ResearchController', ResearchController);
 
-    ResearchController.$inject = ['EducationalMaterial', 'MetaData', 'NavigatorParameters', 'Questionnaires', 'Studies'];
+    ResearchController.$inject = ['EducationalMaterial', 'MetaData', 'NavigatorParameters', 'Questionnaires', 'Studies',
+        'UserHospitalPreferences'];
 
-    function ResearchController(EducationalMaterial, MetaData, NavigatorParameters, Questionnaires, Studies) {
+    function ResearchController(EducationalMaterial, MetaData, NavigatorParameters, Questionnaires, Studies,
+                                UserHospitalPreferences) {
         let vm = this;
+
+        vm.allowedModules = {};
 
         vm.openResearchStudies = openResearchStudies;
         vm.openReferenceMaterial = openReferenceMaterial;
@@ -36,12 +40,21 @@
             navigatorName = NavigatorParameters.getNavigatorName();
 
             bindEvents();
+            configureSelectedHospital();
             setMetaData();
             setBadges();
         }
 
         function bindEvents() {
             navigator.on('prepop', () => setBadges());
+        }
+
+        /**
+         * @name configureSelectedHospital
+         * @desc Set the hospital name to display
+         */
+        function configureSelectedHospital() {
+            vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
         }
 
         function setMetaData() {
