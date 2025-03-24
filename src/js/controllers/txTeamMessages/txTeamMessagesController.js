@@ -12,11 +12,11 @@
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
     TxTeamMessagesController.$inject = [
-        '$scope', 'TxTeamMessages','NavigatorParameters', '$timeout', '$filter','Notifications'
+        '$scope', 'TxTeamMessages','NavigatorParameters', '$timeout', '$filter','Notifications', 'Params'
     ];
 
     /* @ngInject */
-    function TxTeamMessagesController($scope, TxTeamMessages, NavigatorParameters, $timeout, $filter, Notifications) {
+    function TxTeamMessagesController($scope, TxTeamMessages, NavigatorParameters, $timeout, $filter, Notifications, Params) {
         var vm = this;
         vm.goToTeamMessage = goToTeamMessage;
 
@@ -51,7 +51,7 @@
                 // Mark corresponding notifications as read
                 Notifications.implicitlyMarkNotificationAsRead(
                     message.TxTeamMessageSerNum,
-                    ["TxTeamMessage"], //TODO: constant for TxTeamMessage notification type
+                    Params.NOTIFICATION_TYPES.TxTeamMessage,
                 );
             }
             NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':message});

@@ -23,15 +23,15 @@
         .controller('EducationalMaterialController', EducationalMaterialController);
 
     EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial',
-        'Logger', '$filter', 'Notifications'];
+        'Logger', '$filter', 'Notifications', 'Params'];
 
     /* @ngInject */
     function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial,
-                                           Logger, $filter, Notifications) {
+                                           Logger, $filter, Notifications, Params) {
         let vm = this;
         let backButtonPressed = 0;
         let navigator;
-        let params;
+        let navigatorParams;
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
@@ -84,10 +84,10 @@
          * @desc Sets the education material category based on navigator parameters (defaults to clinical)
          */
          function setEduCategory(){
-            params = NavigatorParameters.getParameters();
+            navigatorParams = NavigatorParameters.getParameters();
 
             // Set category if specified in NavigatorParameters, otherwise defaults to clinical
-            vm.eduCategory  = params?.category ? params.category : 'clinical';
+            vm.eduCategory  = navigatorParams?.category ? navigatorParams.category : 'clinical';
 
             // Set corresponding page title and no material message
             vm.pageTitle = EducationalMaterial.getEducationalMaterialTitle(vm.eduCategory);
@@ -156,7 +156,7 @@
                 // Mark corresponding notifications as read
                 Notifications.implicitlyMarkNotificationAsRead(
                     edumaterial.EducationalMaterialSerNum,
-                    ["EducationalMaterial"], //TODO: constant for EducationalMaterial
+                    Params.NOTIFICATION_TYPES.EducationalMaterial,
                 );
             }
 

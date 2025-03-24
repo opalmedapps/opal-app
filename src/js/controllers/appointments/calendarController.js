@@ -304,13 +304,13 @@
                 Notifications.implicitlyMarkNotificationAsRead(
                     appointment.AppointmentSerNum,
                     [
-                        "RoomAssignment",
-                        "NextAppointment",
-                        "AppointmentTimeChange",
-                        "CheckInNotification",
-                        "AppointmentNew",
-                        "AppointmentCancelled",
-                    ], //TODO: constants for the notification types
+                        Params.NOTIFICATION_TYPES.RoomAssignment,
+                        Params.NOTIFICATION_TYPES.NextAppointment,
+                        Params.NOTIFICATION_TYPES.AppointmentTimeChange,
+                        Params.NOTIFICATION_TYPES.CheckInNotification,
+                        Params.NOTIFICATION_TYPES.AppointmentNew,
+                        Params.NOTIFICATION_TYPES.AppointmentCancelled,
+                    ],
                 );
             }
             NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':appointment});

@@ -27,7 +27,8 @@
         'NavigatorParameters',
         '$scope',
         '$filter',
-        'Notifications'
+        'Notifications',
+        'Params'
     ];
 
     /* @ngInject */
@@ -36,7 +37,8 @@
         NavigatorParameters,
         $scope,
         $filter,
-        Notifications
+        Notifications,
+        Params
     ) {
         var vm = this;
         vm.noAnnouncements = true;
@@ -72,7 +74,7 @@
                 // Mark corresponding notifications as read
                 Notifications.implicitlyMarkNotificationAsRead(
                     announcement.AnnouncementSerNum,
-                    ["Announcement"], //TODO: constant for Announcement
+                    [Params.NOTIFICATION_TYPES.Announcement],
                 );
             }
             NavigatorParameters.setParameters({Navigator:'generalNavigator', Post: announcement});

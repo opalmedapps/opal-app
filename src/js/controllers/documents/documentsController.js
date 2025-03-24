@@ -10,11 +10,11 @@
         .controller('DocumentsController', DocumentsController);
 
     DocumentsController.$inject = [
-        'Documents', '$filter', 'NavigatorParameters', 'Permissions', 'Logger', '$timeout', 'Notifications',
+        'Documents', '$filter', 'NavigatorParameters', 'Permissions', 'Logger', '$timeout', 'Notifications', 'Params'
     ];
 
     /* @ngInject */
-    function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger, $timeout, Notifications) {
+    function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger, $timeout, Notifications, Params) {
         var vm = this;
         vm.noDocuments = true;
         vm.documents = [];
@@ -55,7 +55,7 @@
                 // Mark corresponding notifications as read
                 Notifications.implicitlyMarkNotificationAsRead(
                     doc.DocumentSerNum,
-                    ["Document", "UpdDocument"], //TODO: constants for UpdDocument, Document, and NewLabResult
+                    [Params.NOTIFICATION_TYPES.Document, Params.NOTIFICATION_TYPES.UpdDocument],
                 );
             }
             NavigatorParameters.setParameters({'navigatorName':'personalNavigator', 'Post':doc});
