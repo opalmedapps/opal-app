@@ -25,7 +25,8 @@
     
     <div ng-if="ctrl.bluetoothEnabled">
         <ons-list>
-            <ons-list-item modifier="chevron" class="item">
+            <ons-list-item modifier="chevron" class="item"
+                ng-click="ctrl.goToDevice('vitaltracer_watch.html')">
                 <ons-row align="center">
                     <div class="smartdevices-content">
                         <div class="smartdevices-content--icon">
