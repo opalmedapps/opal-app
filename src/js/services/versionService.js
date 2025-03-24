@@ -60,7 +60,7 @@
                 res.on("end", () => {
                     try {
                         let versions = JSON.parse(body);
-                        versions = versionSort(versions);
+                        versions.sort(function(v1, v2){return versionCompare(v2.VERSION, v1.VERSION)});
                         let updates = [];
                         versions.forEach(function(value) {
                             if (versionCompare(value.VERSION, lastVersion) === 1 && value.DESCRIPTION_EN) {
@@ -98,24 +98,6 @@
                 });
             }
             return descriptions;
-        }
-
-        /**
-         * @name versionSort
-         * @desc sort the array by version asc
-         */
-        function versionSort(versions) {
-            const length = versions.length;
-            for (let i = 1; i < length; i++) {
-                for (let j = length - 1; j >= i; j--) {
-                    if (versionCompare(versions[j - 1].VERSION, versions[j].VERSION) === 1) {
-                        const temp = versions[j];
-                        versions[j] = versions[j - 1];
-                        versions[j - 1] = temp;
-                    }
-                }
-            }
-            return versions;
         }
 
         /**

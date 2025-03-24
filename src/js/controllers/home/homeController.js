@@ -145,10 +145,10 @@
             let lastVersion = localStorage.getItem('lastVersion');
             if (!lastVersion) {
                 const lastPoint = currentVersion.lastIndexOf('.');
-                lastVersion = currentVersion.substr(0, lastPoint) + '.0';
+                lastVersion = currentVersion.substr(0, lastPoint) + '.-1';
                 localStorage.setItem('lastVersion', lastVersion);
             }
-            
+
             if (currentVersion !== lastVersion) {
                 Version.getVersionUpdates(lastVersion, vm.language).then(function(data) {
                     if (data && data.length > 0) {
@@ -159,7 +159,7 @@
                         },200);
                         localStorage.setItem('lastVersion', currentVersion);
                     }
-                });
+                }).catch(console.error);
             }
         }
 
