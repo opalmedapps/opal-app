@@ -7,6 +7,7 @@ const config = {
         messageOfTheDayKey: "",
         showVersionOnInit: true,
         useSourceMap: true,
+        screenshotsAllowed: true,
         webpackMode: 'development',
     },
     firebase: {

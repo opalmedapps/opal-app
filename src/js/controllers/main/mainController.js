@@ -214,7 +214,9 @@
             window.addEventListener('screenshotDidTake', onScreenshotDidTake, false);
 
             function onScreenshotDidTake() {
-                screenshotTakenModal.show();
+                if (!OPAL_CONFIG.settings.screenshotsAllowed) {
+                    screenshotTakenModal.show();
+                }
             }
 
         }
@@ -225,10 +227,17 @@
          *****************************************/
         function preventAndroidScreenshot() {
             if (Constants.app && ons.platform.isAndroid()) {
-                window.plugins.preventscreenshot.disable(
-                    (status) => console.log('Android screenshot successfully disabled:', !status), // true - enabled, false - disabled
-                    (err) => console.log('Android screenshot cannot be disabled:', err)
-                );
+                if (OPAL_CONFIG.settings.screenshotsAllowed) {
+                    window.plugins.preventscreenshot.enable(
+                        (status) => console.log('Android screenshot successfully enabled:', !status),
+                        (err) => console.log('Android screenshot cannot be enabled:', err)
+                    );
+                } else {
+                    window.plugins.preventscreenshot.disable(
+                        (status) => console.log('Android screenshot successfully disabled:', !status), // true - enabled, false - disabled
+                        (err) => console.log('Android screenshot cannot be disabled:', err)
+                    );
+                }
             }
         }
 

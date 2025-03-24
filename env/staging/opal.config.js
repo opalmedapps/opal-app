@@ -7,6 +7,7 @@ const config = {
         messageOfTheDayKey: "staging_service",
         showVersionOnInit: true,
         useSourceMap: true,
+        screenshotsAllowed: false,
         webpackMode: 'development',
     },
     firebase: {
