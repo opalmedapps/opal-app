@@ -150,14 +150,11 @@
             var lastActive = new Date();
             lastActive = lastActive.getTime();
 
-            var authenticationToLocalStorage={
-                UserName:firebaseUser.uid,
+            let authenticationToLocalStorage = {
+                UserName: firebaseUser.uid,
                 Email: vm.email,
-            //    Password: vm.password,
-                Token:sessionToken,
-                LastActive: lastActive
+                LastActive: lastActive,
             };
-
 
             $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
             $window.localStorage.setItem('Email', vm.email);
