@@ -23,25 +23,28 @@
          */
         async function init() {
             patientList = await requestPatientList();
-            getSavedPatient(Patient.getPatientSerNum());
+            const patientSernum = getLocalStoragePatientSernum(Patient.getPatientSerNum());
+            loadPatientProfile(patientSernum);
         }
 
         /**
-         * @description Get the last patient data loaded from the localstorage
+         * @description Check if a patient Sernum is saved in localstorage, compare it to the current user.
          * @param {number} currentPatientSerNum Current UserPatient sernum
+         * @returns {number} The patient sernum that needs to be used for initialization.
          */
-        function getSavedPatient(currentPatientSerNum) {
+        function getLocalStoragePatientSernum(currentPatientSerNum) {
             let savedPatientSernum = $window.localStorage.getItem('profileId') || null;
-            if (savedPatientSernum && (currentPatientSerNum !== savedPatientSernum)) changePatientProfile(savedPatientSernum);
+            return (savedPatientSernum && (currentPatientSerNum !== savedPatientSernum)) ? savedPatientSernum : currentPatientSerNum;
         }
 
         /**
-         * @description Change the current profile for a selected patient or previously loaded.
-         * @param {number} requestedPatientSernum Patient sernum to be loaded
+         * @description Find in the list and load a profile as the current selected profile.
+         *              Set the patient sernum in local storage.
+         * @param {number} requestedPatientSernum Patient sernum to be set as selected.
          */
         // TODO: As of now we NEED to have a `patient_legacy_id` to be able to get any data since data calls still go through the old listener. 
-        // Once end point to get patient data are done, we will need to adjust this code in concequences.
-        function changePatientProfile(requestedPatientSernum) {
+        // Once endpoints to get patient's data are done, we will need to adjust this code in consequences.
+        function loadPatientProfile(requestedPatientSernum) {
             let result = patientList.find((item) => item.patient_legacy_id == requestedPatientSernum);
             if (result) {
                 currentSelectedProfile = result;
