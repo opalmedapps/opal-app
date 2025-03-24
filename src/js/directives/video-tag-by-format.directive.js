@@ -1,3 +1,5 @@
+import { json2xml } from "xml-js";
+
 (function () {
     'use strict';
 
@@ -22,8 +24,6 @@
                 "errorMessage": "@",
             },
             template: `
-                    <div align="center" class="embed-responsive embed-responsive-16by9">
-
                         <!-- video url for 'youtube' and 'vimeo' -->
                         <iframe class="embed-responsive-item" ng-show="iframeTag" ng-src="{{edumaterialUrl|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
                         </iframe>
@@ -37,7 +37,6 @@
                         <div ng-show="showError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
                             <uib-alert type="{{errorAlertType}}">{{errorMessage}}</uib-alert>
                         </div>
-                    </div>
             `,
             link: checkVideoFormat,
         };
@@ -50,7 +49,7 @@
             scope.iframeTag = false;
             scope.videoTag = false;
             scope.showError = false;
-
+            
             scope.$watch('edumaterialUrl', function () {
                 try {
                     // get the material's file extension
@@ -61,6 +60,14 @@
                     }
                     else if (['mp4', 'ogv', 'webm'].indexOf(scope.fileExt) !== -1) {
                         scope.videoTag = true;
+                        /**
+                        * Video tag with or without autoplay depending on the device.
+                        * For iPhones it is set to autoplay so the poster image automatically appears on initial load. 
+                        * iPhones will prevent the video from auto playing, but the poster image appears as the result.
+                        */
+                        if(ons.platform.isIOS()){
+                            element.children("video").attr('autoplay', 'autoplay');
+                        }
                     }
                     else {
                         scope.showError = true;
