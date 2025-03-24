@@ -132,26 +132,26 @@
             findInProgressQuestionIndex: findInProgressQuestionIndex,
             getCarouselItems: () => carouselItems,
             getCurrentQuestionnaire: getCurrentQuestionnaire,
-            getNumberOfUnreadQuestionnairesByPurpose: getNumberOfUnreadQuestionnairesByPurpose,
-            getQuestionnaireBackToListByPurpose: getQuestionnaireBackToListByPurpose,
-            getQuestionnaireBeginByPurpose: getQuestionnaireBeginByPurpose,
+            getNumberOfUnreadQuestionnairesByPurpose: (questionnairePurpose = 'default') => PURPOSE_THANKS_MAP[questionnairePurpose], // is used for showing the badge by the personalTabController.js and researchController.js for the appropriate purpose
+            getQuestionnaireBackToListByPurpose: (questionnairePurpose = 'default') => PURPOSE_LIST_MAP[questionnairePurpose], //  gets the correct translation key for the questionnaire back to list message. It assumes that the purpose has been validated.
+            getQuestionnaireBeginByPurpose: (questionnairePurpose = 'default') => PURPOSE_BEGIN_MAP[questionnairePurpose], // gets the correct translation key for the begin questionnaire instruction. It assumes that the purpose has been validated.
             getQuestionnaireCount: getQuestionnaireCount,
             getQuestionnaireList: getQuestionnaireList,
             getQuestionnaireNoListMessageByPurpose: getQuestionnaireNoListMessageByPurpose,
-            getQuestionnaireResumeByPurpose: getQuestionnaireResumeByPurpose,
+            getQuestionnaireResumeByPurpose: (questionnairePurpose = 'default') => PURPOSE_RESUME_MAP[questionnairePurpose], // gets the correct translation key for the resume questionnaire instruction. It assumes that the purpose has been validated.
             getQuestionnaireStartUrl: () => notifConstants.QUESTIONNAIRE_URL, // Used by notifications to direct the user to questionnaires
-            getQuestionnaireSubmitButtonByPurpose: getQuestionnaireSubmitButtonByPurpose,
-            getQuestionnaireSubmitInstructionByPurpose: getQuestionnaireSubmitInstructionByPurpose,
-            getQuestionnaireTitleByPurpose: getQuestionnaireTitleByPurpose,
-            getQuestionnaireThankByPurpose: getQuestionnaireThankByPurpose,
+            getQuestionnaireSubmitButtonByPurpose: (questionnairePurpose = 'default') => PURPOSE_SUBMIT_BUTTON_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire submit button. It assumes that the purpose has been validated.
+            getQuestionnaireSubmitInstructionByPurpose: (questionnairePurpose = 'default') => PURPOSE_SUBMIT_INSTRUCTION_MAP[questionnairePurpose], // gets the correct translation key for the submit questionnaire instruction. It assumes that the purpose has been validated.
+            getQuestionnaireTitleByPurpose: (questionnairePurpose = 'default') => PURPOSE_TITLE_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire title. It assumes that the purpose has been validated.
+            getQuestionnaireThankByPurpose: (questionnairePurpose = 'default') => PURPOSE_THANKS_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire thank you message. It assumes that the purpose has been validated.
             isWaitingForSavingAnswer: () => waitingForSavingAnswer,
             updateQuestionnaireStatus: updateQuestionnaireStatus,
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
-            requestQuestionnairePurpose: requestQuestionnairePurpose,
+            requestQuestionnairePurpose: (qp_ser_num) => QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num), // gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
             requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer,
-            validateQuestionnairePurpose: validateQuestionnairePurpose,
+            validateQuestionnairePurpose: (questionnairePurpose) => allowedPurpose.includes(questionnairePurpose.toLowerCase()), // check whether the questionnaire purpose is valid (true if it is valid, false otherwise)
             setQuestionnaireList: setQuestionnaireList,
             updateQuestionnaireList: updateQuestionnaireList,
         };
@@ -265,16 +265,6 @@
 
                     return {Success: true, Location: 'Server'};
                 });
-        }
-
-        /**
-         * @name requestQuestionnairePurpose
-         * @desc this function gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
-         * @param {string|int} qp_ser_num the qp_ser_num or answerQuestionnaireId of the questionnaire
-         * @returns {Promise}
-         */
-         function requestQuestionnairePurpose(qp_ser_num) {
-            return QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num);
         }
 
         /**
@@ -438,47 +428,6 @@
         }
 
         /**
-         * @name validateQuestionnairePurpose
-         * @desc check whether the questionnaire purpose is valid
-         * @param {string} questionnairePurpose
-         * @returns {boolean} true if it is valid, false otherwise
-         */
-         function validateQuestionnairePurpose(questionnairePurpose) {
-            return allowedPurpose.includes(questionnairePurpose.toLowerCase());
-        }
-
-        /**
-         * @name getQuestionnaireTitleByPurpose
-         * @desc gets the correct translation key for the questionnaire title. It assumes that the purpose has been validated.
-         * @param {string} questionnairePurpose
-         * @returns {string} the translation key in en.json or fr.json
-         */
-        function getQuestionnaireTitleByPurpose(questionnairePurpose = 'default') {
-            return PURPOSE_TITLE_MAP[questionnairePurpose];
-        }
-
-        /**
-         * @name getQuestionnaireThankByPurpose
-         * @desc gets the correct translation key for the questionnaire thank you message. It assumes that the purpose has been validated.
-         * @param {string} questionnairePurpose
-         * @returns {string} the translation key in en.json or fr.json
-         */
-        function getQuestionnaireThankByPurpose(questionnairePurpose = 'default') {
-            return PURPOSE_THANKS_MAP[questionnairePurpose];
-        }
-
-        /**
-         * @name getQuestionnaireBackToListByPurpose
-         * @desc gets the correct translation key for the questionnaire back to list message.
-         *       It assumes that the purpose has been validated.
-         * @param {string} questionnairePurpose
-         * @returns {string} the translation key in en.json or fr.json
-         */
-        function getQuestionnaireBackToListByPurpose(questionnairePurpose = 'default') {
-            return PURPOSE_LIST_MAP[questionnairePurpose];
-        }
-
-        /**
          * @name getQuestionnaireNoListMessageByPurpose
          * @desc gets the correct translation key for the message when there is no questionnaires in the list.
          *       It assumes that the purpose has been validated.
@@ -500,46 +449,6 @@
                 default:
                     return PURPOSE_EMPTY_LIST_MAP.new['default'];
             }
-        }
-
-        /**
-         * @name getQuestionnaireBeginByPurpose
-         * @desc gets the correct translation key for the begin questionnaire instruction. It assumes that the purpose has been validated.
-         * @param {string} questionnairePurpose
-         * @returns {string} the translation key in en.json or fr.json
-         */
-        function getQuestionnaireBeginByPurpose(questionnairePurpose = 'default') {
-            return PURPOSE_BEGIN_MAP[questionnairePurpose];
-        }
-
-        /**
-         * @name getQuestionnaireResumeByPurpose
-         * @desc gets the correct translation key for the resume questionnaire instruction. It assumes that the purpose has been validated.
-         * @param {string} questionnairePurpose
-         * @returns {string} the translation key in en.json or fr.json
-         */
-        function getQuestionnaireResumeByPurpose(questionnairePurpose = 'default') {
-            return PURPOSE_RESUME_MAP[questionnairePurpose];
-        }
-
-        /**
-         * @name getQuestionnaireSubmitButtonByPurpose
-         * @desc gets the correct translation key for the questionnaire submit button. It assumes that the purpose has been validated.
-         * @param {string} questionnairePurpose
-         * @returns {string} the translation key in en.json or fr.json
-         */
-        function getQuestionnaireSubmitButtonByPurpose(questionnairePurpose = 'default') {
-            return PURPOSE_SUBMIT_BUTTON_MAP[questionnairePurpose];
-        }
-        
-        /**
-         * @name getQuestionnaireSubmitInstructionByPurpose
-         * @desc gets the correct translation key for the submit questionnaire instruction. It assumes that the purpose has been validated.
-         * @param {string} questionnairePurpose
-         * @returns {string} the translation key in en.json or fr.json
-         */
-        function getQuestionnaireSubmitInstructionByPurpose(questionnairePurpose = 'default') {
-            return PURPOSE_SUBMIT_INSTRUCTION_MAP[questionnairePurpose];
         }
 
         /**
@@ -588,25 +497,6 @@
                 console.error(err);
                 return 0;
             }
-        }
-
-        /**
-         * @name getNumberOfUnreadQuestionnaires
-         * @desc This function is used for getting the number of unread questionnaires (e.g. 'New') in the current purpose
-         * @returns {Number} returns the number of new and in progress questionnaires of the current purpose
-         */
-        function getNumberOfUnreadQuestionnaires(){
-            return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS);
-        }
-
-        /**
-         * @name getNumberOfUnreadQuestionnairesByPurpose
-         * @desc This public function is used for showing the badge by the personalTabController.js and researchController.js for the appropriate purpose
-         * @param {string} questionnairePurpose the purpose of questionnaires requested
-         * @returns {Number} returns the number of new questionnaires of the given questionnairePurpose
-         */
-         function getNumberOfUnreadQuestionnairesByPurpose(questionnairePurpose = 'default'){
-            return numberOfUnreadQuestionnaires[questionnairePurpose];
         }
 
         /**
