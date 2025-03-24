@@ -1,3 +1,17 @@
+## [1.14.3](https://gitlab.com/opalmedapps/qplus/compare/v1.14.2...v1.14.3) (2023-04-26)
+
+
+### Bug Fixes
+
+* fix patient name for patient service (QSCCD-1104) ([dd01858](https://gitlab.com/opalmedapps/qplus/commit/dd01858e50bd68e067ab1646ac646ea77d51efba))
+
+## [1.14.2](https://gitlab.com/opalmedapps/qplus/compare/v1.14.1...v1.14.2) (2023-04-21)
+
+
+### Bug Fixes
+
+* fix appointment's calendar dot display ([50134c6](https://gitlab.com/opalmedapps/qplus/commit/50134c63c7cf133b21c1e2f99d4f0a2faaf07b09))
+
 ## [1.14.1](https://gitlab.com/opalmedapps/qplus/compare/v1.14.0...v1.14.1) (2023-04-20)
 
 

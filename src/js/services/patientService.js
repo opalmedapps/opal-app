@@ -23,8 +23,8 @@ angular
         return {
             setSelectedProfile: profile => SelectedProfile = profile,
             initPatient: initPatient,
-            getFirstName: () => FirstName,
-            getLastName: () => LastName,
+            getFirstName: () => SelectedProfile?.first_name || FirstName,
+            getLastName: () => SelectedProfile?.last_name ||LastName,
             getEmail: () => Email,
             getPatientSerNum: () => SelectedProfile?.patient_legacy_id || PatientSerNum,
             getProfileImage: () => ProfileImage,
