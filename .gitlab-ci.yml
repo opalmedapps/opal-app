@@ -292,4 +292,4 @@ dast:
     DAST_BROWSER_SCAN: "true"
     # enables active scanning
     # https://docs.gitlab.com/ee/user/application_security/dast/browser/checks/#active-checks
-    DAST_FULL_SCAN_ENABLED: "true"
+    # DAST_FULL_SCAN_ENABLED: "true"
