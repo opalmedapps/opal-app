@@ -214,9 +214,9 @@ deploy web:
         ls -la app/${CI_ENVIRONMENT_NAME}; 
         bye
       "
-  # rules:
+  rules:
     # Only release the web version from release tags
-    # - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
 
 # Launches a downstream pipeline to build for the QA environment
 # See: https://docs.gitlab.com/ee/ci/pipelines/downstream_pipelines.html
