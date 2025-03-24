@@ -21,10 +21,10 @@
         .controller('StudiesController', StudiesController);
 
     /* @ngInject */
-    StudiesController.$inject = ['NavigatorParameters', 'Studies', 'UserPreferences', '$filter'];
+    StudiesController.$inject = ['NavigatorParameters', 'Studies', 'UserPreferences', '$filter', '$timeout'];
 
 
-    function StudiesController(NavigatorParameters, Studies, UserPreferences, $filter) {
+    function StudiesController(NavigatorParameters, Studies, UserPreferences, $filter, $timeout) {
         let vm = this;
 
         vm.language = '';
@@ -80,13 +80,18 @@
         async function loadStudies() {
             try {
                 let studies = await Studies.getStudies();
-                vm.loading = false;
-                vm.studies = studies;
-                vm.noStudies = vm.studies.length === 0;
+
+                $timeout(() => {
+                    vm.loading = false;
+                    vm.studies = studies;
+                    vm.noStudies = vm.studies.length === 0;
+                });
             } catch {
-                vm.loading = false;
-                vm.studies = [];
-                vm.noStudies = true;
+                $timeout(() => {
+                    vm.loading = false;
+                    vm.studies = [];
+                    vm.noStudies = true;
+                });
             }
         }
 

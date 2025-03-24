@@ -47,6 +47,8 @@
                         study.endDate = $filter('formatDate')(study.endDate)
                     }
                 });
+
+                return studies;
             } catch (error) {
                 console.log('Error in getStudies: ', error);
                 return [];
