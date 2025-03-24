@@ -31,6 +31,7 @@
                 'PatientTestTypeResults',
                 'PatientTestTypes',
                 'Questionnaire',
+                'QuestionnairePurpose',
                 'QuestionnaireSaveAnswer',
                 'QuestionnaireUpdateStatus',
                 'Refresh',

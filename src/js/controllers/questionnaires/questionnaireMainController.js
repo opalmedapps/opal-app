@@ -165,10 +165,10 @@
                         delayLoading();
                     })
                 })
-                .catch(function(){
+                .catch(function(error){
                     $timeout(function(){
                         vm.loadingQuestionnaire = false;
-                        handleLoadQuestionnaireErr();
+                        handleLoadQuestionnaireErr(error);
                     });
                 });
         }
@@ -940,7 +940,10 @@
                     $filter('translate')("TITLE"),
                 );
             }
-            else if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+            else if (
+                error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER
+                || error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER
+            ) {
                 NativeNotification.showNotificationAlert(
                     $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
                     $filter('translate')("TITLE"),

@@ -160,15 +160,10 @@
                 'qp_ser_num': answerQuestionnaireID,
                 'language': UserPreferences.getLanguage(),
             };
-            try {
-                let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
 
-                // this is in case firebase deletes the property when it is empty
-                return response?.Data ? response.Data : {};
-            } catch (error) {
-                console.error('Error in requestQuestionnaire', error);
-                return {};
-            }
+            let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
+            // this is in case firebase deletes the property when it is empty
+            return response?.Data ? response.Data : {};
         }
 
         /**
@@ -182,19 +177,14 @@
                 qp_ser_num: qp_ser_num
             };
 
-            try {
-                let response = await RequestToServer.sendRequestWithResponse(api.GET_PURPOSE, params);
+            let response = await RequestToServer.sendRequestWithResponse(api.GET_PURPOSE, params);
 
-                // this is in case firebase deletes the property when it is empty
-                if (response?.Data) {
-                    return response.Data;
-                }
-
-                return {};
-            } catch (error) {
-                console.error('Error in requestQuestionnairePurpose', error);
-                return {};
+            // this is in case firebase deletes the property when it is empty
+            if (response?.Data) {
+                return response.Data;
             }
+
+            return {};
         }
 
         /**
