@@ -19,94 +19,10 @@
 /*
 *Utility classes
 */
-.marginTop10 {
-	margin-top: 10px;
-}
-.marginLeft10 {
-	margin-left:10px;
-}
-.marginBottom10 {
-	margin-bottom: 10px;
-}
-.marginRight10 {
-	margin-right:10px;
-}
-.padding10 {
-	padding:10px;
-}
 .gpu_efficiency{
 	-ms-transform: translate(0px,0px);
 	transform: translateZ(0);
 	-webkit-transform: translateZ(0);
-}
-.dividing-horizontal-line {
-	height: 2px;
-	background-color: lightgrey;
-	position: relative;
-	z-index: 1;
-	margin-top: 20px;
-	margin-bottom: 10px;
-}
-.dividing-vertical-line {
-	height: 70px;
-	width: 2px;
-	background-color: lightgrey;
-	position: relative;
-	z-index: 1;
-	float: left;
-	margin-left: 10px;
-	margin-right: 10px;
-}
-#starting-dot {
-	margin-top: -8px;
-	background-color: #59D45D;
-	height: 20px;
-	width: 20px;
-	border-radius: 10px;
-	border: white 1px solid;
-	position: absolute;
-	z-index: 2;
-}
-#past-line {
-	position: absolute;
-	background-color: #59D45D;
-	width: 0%;
-	float: left;
-	height: 5px;
-}
-#current-time-indicator {
-	position: relative;
-	z-index: 3;
-	color: #59D45D;
-	animation: pulsate 1s 2s alternate infinite;
-	text-align: left;
-	float: left;
-	margin-top: -11px;
-	padding-left: 5px;
-	padding-right: 5px;
-	border-radius: 30px;
-	border: 2px solid;
-	background-color: white;
-}
-.sthethoscope {
-	margin-top: -13px;
-	color: black;
-	background-color: white;
-	padding-top: 2px;
-	padding-bottom: 2px;
-	padding-left: 7px;
-	padding-right: 7px;
-	border-radius: 30px;
-	border: 2px solid;
-	position: absolute;
-	right: 0;
-}
-#time-outline {
-	position: absolute;
-	width: 100%;
-	text-align: center;
-	top: 237px;
-	font-size: small;
 }
 .notification {
 	position: absolute;
@@ -122,13 +38,6 @@
 .break-words {
 	word-break: break-all;
 }
-#holder{
-	margin-top: 5px;
-	position: relative;
-	overflow: scroll !important;
-	touch-action: manipulation !important;
-	-webkit-user-drag: element !important;
-}
 .shadow-2 {
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
@@ -140,13 +49,6 @@
 	width: 90%;
 	margin: auto;
 	position: relative;
-}
-.blink {
-	animation:fade 3000ms infinite;
-	-webkit-animation:fade 3000ms infinite;
-}
-.forgotPassword:hover {
-	text-decoration: underline;
 }
 .glyphicon-refresh-animate {
 	-animation: spin .7s infinite linear;
@@ -160,43 +62,10 @@
 	font-size: 15px;
 	margin-bottom: 6px;
 }
-.location {
-	font-size: 14px;
-	opacity: 0.4;
-	margin-bottom: 6px;
-}
-.desc {
-	line-height: 1.2;
-	font-size: 13px;
-}
-a.opalapp-home-account:link, a.opalapp-home-account:hover{
-	text-decoration: none;
-}
-.info-col {
-	height: 60px;
-	line-height: 1;
-	padding: 12px 0 12px 4px;
-}
-.info-num {
-	font-size: 16px;
-	font-weight: 500;
-	opacity: 0.8;
-}
-.info-unit {
-	margin-top: 6px;
-	font-size: 14px;
-	opacity: 0.4;
-}
-.desc {
-	line-height: 20px;
-}
 .iconHomeView {
 	margin-left: 10px;
 	font-size:28px;
 	font-weight: 300;
 	color: #2B6197;
 	text-align: center;
-}
-.themeCardTitle {
-	line-height: 1.2;
 }
