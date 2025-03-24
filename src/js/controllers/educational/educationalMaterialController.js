@@ -154,7 +154,7 @@
                 );
 
                 // Mark corresponding notifications as read
-                Notifications.implicitlyMarkNotificationAsRead(
+                Notifications.implicitlyMarkCachedNotificationAsRead(
                     edumaterial.EducationalMaterialSerNum,
                     Params.NOTIFICATION_TYPES.EducationalMaterial,
                 );

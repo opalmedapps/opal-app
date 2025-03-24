@@ -72,7 +72,7 @@
             {
                 Announcements.readAnnouncementBySerNum(announcement.AnnouncementSerNum);
                 // Mark corresponding notifications as read
-                Notifications.implicitlyMarkNotificationAsRead(
+                Notifications.implicitlyMarkCachedNotificationAsRead(
                     announcement.AnnouncementSerNum,
                     [Params.NOTIFICATION_TYPES.Announcement],
                 );
