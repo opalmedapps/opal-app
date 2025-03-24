@@ -23,7 +23,8 @@
          * Expose API to consumers
          */
         return {
-            validate: validate
+            validate: validate,
+            validateApiResponse: validateApiResponse
         };
 
         //////////////////////////////////
@@ -48,13 +49,28 @@
 
                 if (!encryptionKey) response = EncryptionService.decryptData(response);
 
-                if (response.Code === Params.REQUEST.SUCCESS || response.status_code === Params.API.SUCCESS) {
+                if (response.Code === Params.REQUEST.SUCCESS) {
                     return {success: response};
                 } else {
                     return handleResponseError(response)
                 }
             }
         }
+
+        /**
+         * @description Validate response incoming from the new listener's section
+         * @param {object} response Object fetch from firebase 
+         * @returns {object} A decrypted response object on success, an error data object on error
+         */
+        function validateApiResponse(response) {
+            let decryptedresponse = EncryptionService.decryptData(response);
+            // TODO: Error handling need to be done here but before we need to establish error handling in the listener.
+            // Jira ticket for reference: https://o-hig.atlassian.net/browse/QSCCD-233
+            if (response.status_code !== Params.API.SUCCESS) return new Error({errorCode: response.status_code, message: 'TODO error message'});
+            return decryptedresponse;
+        }
+
+
 
         /**
          * Handles responses that have an error code

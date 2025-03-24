@@ -2,15 +2,7 @@
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 
-const { val } = require("angular-ui-router");
-
-
-// TODO: I REALLY THINK SOMEONE SHOULD REFACTOR THIS FILE! IT WORKS FINE BUT I FIND IT'S RATHER DIFFICULT TO UNDERSTAND
-
-var myApp = angular.module('MUHCApp');
-
-
-myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
+angular.module('MUHCApp').service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
     'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params',
     function( UserAuthorizationInfo, EncryptionService, FirebaseService,
               Constants, UUID, ResponseValidator, Params){
@@ -18,19 +10,49 @@ myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
         let firebase_url;
         let response_url;
         
+        /**
+         * @description Encrypt and send data to firebase
+         * @param {string} typeOfRequest Type of request being process 
+         * @param {object} parameters Data being use to make the request 
+         * @param {string} encryptionKey Optional encrytion key
+         * @param {string} referenceField Option refenrece field for the listener's legacy section
+         * @returns Firebase unique reference key where the data is uploaded
+         */
         function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField) {
-            // update the firebase_url in case that the firebase url got changed
             firebase_url = FirebaseService.getDBRef();
             response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
-            // TODO: this makes a copy of the parameters to avoid encrypting the originals. Do this in the encryption function instead.
             if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
             let requestType = encryptionKey ? typeOfRequest : EncryptionService.encryptData(typeOfRequest);
             let requestParameters = encryptionKey ? EncryptionService.encryptWithKey(parameters, encryptionKey) : EncryptionService.encryptData(parameters);
             let request_object = getRequestObject(requestType, requestParameters);
             let reference = getReferenceField(typeOfRequest, referenceField)
             let pushID =  firebase_url.child(reference).push(request_object);
+
             return pushID.key;
         }
+
+        /**
+         * @description Call the new listener structure that relays the request to Django backend
+         * @param {object} parameters Required fields to process request
+         * @returns Promise that contains the response data
+         */
+        function apiRequest(parameters) {
+            return new Promise((resolve, reject) => {
+                let requestKey = sendRequest('api', parameters);
+                let firebasePath = `${UserAuthorizationInfo.getUsername()}/${requestKey}`;
+                let dbReference = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
+    
+                dbReference.child(firebasePath).on('value', snapshot => {
+                    if (snapshot.exists())  {
+                        const apiData = ResponseValidator.validateApiResponse(snapshot.val());
+                        dbReference.child(firebasePath).set(null);
+                        dbReference.child(firebasePath).off();
+                        apiData instanceof Error ? reject(apiData) : resolve(apiData);
+                    }
+                });
+            });
+        }
+
 
         function sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField) {
             return new Promise((resolve, reject) => {
@@ -76,6 +98,12 @@ myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
         }
         
 
+        /**
+         * @description Fill up request params to be send to the listener
+         * @param {string} requestType Type of request, mainly use for the legacu listener section
+         * @param {object} requestParameters Params for the request
+         * @returns {object} Formated request parameters
+         */
         function getRequestObject(requestType, requestParameters) {
             return {
                 Request : requestType,
@@ -91,6 +119,7 @@ myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
 
         return {
             sendRequestWithResponse: sendRequestWithResponse,
-            sendRequest: sendRequest
+            sendRequest: sendRequest,
+            apiRequest: apiRequest
         };
 }]);

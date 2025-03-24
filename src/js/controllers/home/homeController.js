@@ -6,12 +6,12 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'Notifications', 'NavigatorParameters',
-        'Permissions', 'UserPreferences', 'NetworkStatus', 'MetaData', 'UserHospitalPreferences', 'RequestToServer', 'Params'];
+        '$timeout', 'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'Notifications', 'NavigatorParameters',
+        'UserPreferences', 'NetworkStatus', 'MetaData', 'UserHospitalPreferences', 'RequestToServer', 'Params'];
 
     /* @ngInject */
-    function HomeController(Appointments, CheckInService, Patient, $scope, $filter, Notifications, NavigatorParameters,
-                            Permissions, UserPreferences, NetworkStatus, MetaData, UserHospitalPreferences, RequestToServer, Params)
+    function HomeController($timeout, Appointments, CheckInService, Patient, $scope, $filter, Notifications, NavigatorParameters,
+                            UserPreferences, NetworkStatus, MetaData, UserHospitalPreferences, RequestToServer, Params)
     {
         var vm = this;
 
@@ -42,7 +42,6 @@
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.goToAppointments = goToAppointments;
-        vm.goToSettings = goToSettings;
         vm.goToCheckinAppointments = goToCheckinAppointments;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
         vm.goToAcknowledgements = goToAcknowledgements;
@@ -60,95 +59,63 @@
             // Initialize the navigator for push and pop of pages.
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             NavigatorParameters.setNavigator(homeNavigator);
-
             // Store the login time
-            if(localStorage.getItem('locked')){
-                localStorage.removeItem('locked');
-            }
-
+            if (localStorage.getItem('locked')) localStorage.removeItem('locked');
             // Refresh the page on coming back from other pages
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name === "./views/home/checkin/checkin-list.html" && NetworkStatus.isOnline()) evaluateCheckIn();
                 if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) setBadges();
             });
-
             //This avoids constant repushing which causes bugs
-            homeNavigator.on('prepush', function(event) {
+            homeNavigator.on('prepush', (event) => {
                 if (homeNavigator._doorLock.isLocked()) event.cancel();
             });
-
             //release the watchers
-            $scope.$on('$destroy',function() {
+            $scope.$on('$destroy',() => {
                 homeNavigator.off('prepop');
                 homeNavigator.off('prepush');
             });
-
             // Initialize the page data if online
-            if (NetworkStatus.isOnline()) {
-                homePageInit();
-            } else {
-                //Basic patient information that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
-                setPatientInfo();
-            }
-
+            NetworkStatus.isOnline() ? homePageInit() : setPatientInfo();
             // set the hospital banner and available modules
             configureSelectedHospital();
         }
 
         /**
-         * Initializes the home page view by calling a bunch of helper functiosn
+         * Initializes the home page view by calling a bunch of helper function
          */
         function homePageInit() {
             // Get Data from the new backend api
             getDisplayData();
-
             //Initialize modal size based on font size
             initModalSize();
-
             //Set patient info
             setPatientInfo();
-
             //display next appointment
             setNextAppointment();
-
-            // display new notifications, if any
-            checkForNewNotifications();
-
             // Display current check in status
             evaluateCheckIn();
-
-            setMetaData();
-
-            // Display notifications badge (unread number)
-            setBadges();
-            
         }
 
+        /**
+         * @description Function to get view specific data from Django API
+         */
         async function getDisplayData() {
             let requestParameters = {
                 method: 'get',
                 url: '/api/app/home',
                 headers: Params.API.REQUEST_HEADERS,
             }
-            const result = await RequestToServer.sendRequestWithResponse('api', requestParameters);
-            const homePageData = result.data;
-            vm.notificationsUnreadNumber = homePageData.unread_notification_count;
-            console.log('==>', homePageData)
-        }
-
-
-        function setMetaData() {
-            if(MetaData.isFirstTimeHome()){
-                var meta = MetaData.fetchHomeMeta();
-                vm.notificationsUnreadNumber = meta.notificationsUnreadNumber;
-                MetaData.setFetchedHome();
-            }
+            const result = await RequestToServer.apiRequest(requestParameters);
+            $timeout(() => {
+                setBadges(result.data.unread_notification_count);
+            });
         }
 
         //Setting up numbers on the
-        function setBadges()
+        function setBadges(value = undefined)
         {
-            vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
+            vm.notificationsUnreadNumber = value || Notifications.getNumberUnreadNotifications();
         }
 
         /**
@@ -157,17 +124,14 @@
          */
         function setNextAppointment() {
             //Next appointment information
-            if(Appointments.appointmentsExist() && Appointments.nextAppointmentExists()) {
-                vm.appointmentShown=Appointments.getUpcomingAppointment();
-            }
+            if(Appointments.appointmentsExist() && Appointments.nextAppointmentExists()) vm.appointmentShown=Appointments.getUpcomingAppointment();
         }
 
         /**
          * @name setPatientInfo
-         * @desc sets the basic patient information in the view header
+         * @desc Sets the basic patient information in the view header that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
          */
         function setPatientInfo(){
-            //Basic patient information
             vm.FirstName = Patient.getFirstName();
             vm.LastName = Patient.getLastName();
             vm.ProfileImage=Patient.getProfileImage();
@@ -175,34 +139,12 @@
             vm.noUpcomingAppointments=false;
         }
 
-        function checkForNewNotifications(){
-            Notifications.requestNewNotifications()
-                .then(function(){
-                    vm.loading = false;
-
-                    // Display notifications badge (unread number)
-                    setBadges();
-                })
-                .catch(function(error){
-                    vm.loading = false;
-
-                    // TODO: Notify user about error
-                    console.log(error);
-
-                    // Display notifications badge (unread number)
-                    setBadges();
-                });
-        }
-
         /**
          * @name evaluateCheckIn
          * @desc checks with listener to see if the current user has checked in or not
          */
         function evaluateCheckIn(){
-            CheckInService.evaluateCheckinState()
-                .then(function(state){
-                    vm.checkinState = state;
-                });
+            CheckInService.evaluateCheckinState().then(state => vm.checkinState = state);
         }
 
         /**
@@ -242,14 +184,8 @@
             ons.notification.confirm({
                 message: $filter('translate')('EXIT_APP'),
                 modifier: 'android',
-                callback: function(idx) {
-                    switch (idx) {
-                        case 0:
-                            break;
-                        case 1:
-                            navigator.app.exitApp();
-                            break;
-                    }
+                callback: (index) => {
+                    if (index === 1) navigator.app.exitApp();
                 }
             });
         }
@@ -268,13 +204,6 @@
         function goToAppointments(){
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
-        }
-
-        /**
-         * Takes the user to the setting pages
-         */
-        function goToSettings() {
-            tabbar.setActiveTab(4);
         }
 
         /**
