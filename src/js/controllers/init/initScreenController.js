@@ -127,7 +127,7 @@ import '../../../css/views/init-page.view.css';
 						vm.hasShownMessageOfTheDay = true;
 					}
 				}
-			}, 5000); // Add a delay equivalent to SplashScreenDelay to ensure message is not hidden by splash screen
+			}, Constants.app ? 5000 : 0); // Add a delay on mobile equivalent to length of SplashScreenDelay to ensure message is not hidden by splash screen
 		}
 
 		/**
