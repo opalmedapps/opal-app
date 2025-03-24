@@ -3,9 +3,9 @@
  */
 export class SecurityQuestion {
     constructor({id, question}) {
+        // The 3 security questions we have in the backend are all active. Leave `active` as true until we set this attribute in the backend when we have more questions in the future.
         this.active = true;
-        this.questionText_EN = question;
-        this.questionText_FR = question;
+        this.question = question;
         this.securityQuestionSerNum = Number(id);
     }
 }

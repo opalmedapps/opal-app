@@ -37,7 +37,7 @@
         </div>
         <div class="dropdown">
             <button class="btn btn-default dropdown-toggle overflow-text-ellipsis" type="button" id="dropdownMenu1"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-class="fontSizeDesc"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-class="fontSizeDesc" minlength="1"
                     style="width: 100%; text-align: left">
                 <span class="caret"></span>
                 {{"SELECT_DROPDOWN_QUESTION"|translate}}
@@ -56,7 +56,7 @@
         <div class="style-4" style="width: 100%;">
             <input type="text" ng-class="fontSizeDesc" ng-disabled="!sqc.securityQuestionWithAnsList[0].question.active"
                    placeholder="{{sqc.securityQuestionWithAnsList[0].oldAnswerPlaceholder}}"
-                   ng-model="sqc.securityQuestionWithAnsList[0].answer" style="margin-top: 2%" minlength="1"
+                   ng-model="sqc.securityQuestionWithAnsList[0].answer" style="margin-top: 2%"
                    ng-change="sqc.securityQuestionAnswerChanged(sqc.securityQuestionWithAnsList[0]);">
         </div>
         <div ng-show="!sqc.securityQuestionWithAnsList[0].question.active" style="color: crimson">

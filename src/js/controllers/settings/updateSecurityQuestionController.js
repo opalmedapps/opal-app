@@ -68,17 +68,13 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
             RequestToServer.sendRequestWithResponse(GET_SECURITY_QUESTION_AND_ANSWER_LIST_API)
                 .then(function(response){
-                    console.log(response);
                     $timeout(function(){
-                        let activeSecurityQuestionList = response.data.activeSecurityQuestionList || [];
-                        let securityQuestionWithAnsList = response.data.securityQuestionWithAnswerList || [];
+                        let securityQuestionList = response.data.securityQuestionList || [];
                         
                         vm.activeSecurityQuestionList =
-                            activeSecurityQuestionList.map((securityQuestion) => new SecurityQuestion(securityQuestion));
-                        console.log(vm.activeSecurityQuestionList);
+                            securityQuestionList.map((securityQuestion) => new SecurityQuestion(securityQuestion));
                         vm.securityQuestionWithAnsList =
-                            securityQuestionWithAnsList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer));
-
+                            securityQuestionList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer));
                         vm.loadingList = false;
                     })
                 })
@@ -134,7 +130,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @returns {string} the text of that question in the language of the app
          */
         function displayQuestionName(question){
-            return question[`questionText_${lang}`];
+            return question[`question`];
         }
 
         /**
@@ -291,8 +287,8 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
                 // answer is hashed in the objects of this array
                 arrToBeSent.push({
-                    securityAnswerSerNum: answerQuestionObj.securityAnswerSerNum,
-                    questionSerNum: answerQuestionObj.question.securityQuestionSerNum,
+                    question: answerQuestionObj.question.question,
+                    questionId: answerQuestionObj.question.securityQuestionSerNum,
                     answer: EncryptionService.hash(answerQuestionObj.answer.toUpperCase()),
                 });
 

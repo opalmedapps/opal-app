@@ -4,9 +4,9 @@ import {SecurityQuestion} from "./SecurityQuestion";
  * SecurityAnswer class to model the security answer from the back-end
  */
 export class SecurityAnswer {
-    constructor({SecurityAnswerSerNum, Active, QuestionText_EN, QuestionText_FR, SecurityQuestionSerNum}) {
-        this.securityAnswerSerNum = Number(SecurityAnswerSerNum);
-        this.question = new SecurityQuestion({Active, QuestionText_EN, QuestionText_FR, SecurityQuestionSerNum});
+    constructor({id, question}) {
+        this.securityAnswerSerNum = Number(id);
+        this.question = new SecurityQuestion({id, question});
         this.answer = "";
         this.answerHasChanged = false;
         this.questionHasChanged = false;
