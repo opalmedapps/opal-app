@@ -7,7 +7,7 @@ import "../../css/directives/profile-selector.directive.css"
         .module("MUHCApp")
         .directive("profileSelector", ProfileSelector);
 
-    ProfileSelector.$inject = ['$window', '$timeout', 'ProfileSelector', 'Patient'];
+    ProfileSelector.$inject = ['$window', '$timeout', 'ProfileSelector', 'Patient', 'UpdateUI'];
 
     /**
      * @name ProfileSelector
@@ -15,7 +15,7 @@ import "../../css/directives/profile-selector.directive.css"
      * @date 2022-08-18
      * @desc Directive to display the profile selector and scope it's business logic.
      */
-    function ProfileSelector($window, $timeout, ProfileSelector, Patient)
+    function ProfileSelector($window, $timeout, ProfileSelector, Patient, UpdateUI)
     {
         return {
             restrict: 'E',
@@ -87,6 +87,7 @@ import "../../css/directives/profile-selector.directive.css"
                     updateDisplayInfo();
                     if (scope.refreshFunction) scope.refreshFunction();
                     scope.listVisible = false;
+                    UpdateUI.clearUpdateUI();
                 };
 
                 scope.canDisplayProfile = (profile) => {

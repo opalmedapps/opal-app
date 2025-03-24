@@ -108,11 +108,23 @@
          *       using the 'set' functions in sectionServiceMappings.
          * @param responseData A response from the listener containing data in one or many categories.
          */
-        function setServices(responseData) {
-            if (responseData === 'empty') return;
+         function setServices(responseData, requestedCategories) {
+            if (responseData === 'empty') responseData = handleEmptyResponse(requestedCategories);
             Object.entries(responseData).forEach(([category, data]) => {
                 if(sectionServiceMappings.hasOwnProperty(category)) sectionServiceMappings[category].set(data);
             })
+        }
+
+        /**
+         * @desc Patch function to hanldle empty categories when switching profile with the profile selector.
+         *       This should not be required when switching to data loading from new backend.
+         * @param {object} categories Requested data categories.
+         * @returns array of requested categories with empty arrays as value.
+         */
+         function handleEmptyResponse(categories) {
+            let result = {};
+            categories.forEach(item => result[item] = []);
+            return result;
         }
 
         /**
@@ -154,7 +166,7 @@
         async function setSection(parameters) {
             let response = await RequestToServer.sendRequestWithResponse('Refresh', {Fields: parameters});
             validateResponse(response);
-            await setServices(response.Data);
+            await setServices(response.Data, parameters);
             updateTimestamps(parameters, response.Timestamp);
         }
 
