@@ -16,11 +16,11 @@
             <ons-row align="center">
                 <div class="patient-content">
                     <div class="patient-content--icon" ng-style="{'background-color': patient.color}">
-                        <span class="profile-icon">{{Ctrl.getInitials(patient.first_name, patient.last_name)}}</span>
+                        <span class="profile-icon">{{patient | profileInitials}}</span>
                     </div>
                     <div class="patient-content--text">
                         <p ng-class="fontSizeTitle">{{patient.first_name}} {{patient.last_name}}</p>
-                        <p class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate }} {{Ctrl.getRelationshipStatusText(patient.status) | translate | lowercase}}</p>
+                        <p class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate}} {{Ctrl.getRelationshipStatusText(patient.status) | translate | lowercase}}</p>
                     </div>
                 </div>
             </ons-row>

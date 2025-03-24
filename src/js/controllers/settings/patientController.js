@@ -15,7 +15,6 @@
         vm.message = null;
         vm.apiData;
         vm.patients;
-        vm.getInitials = getInitials;
         vm.getRelationshipStatusText = (status) => `RELATIONSHIPS_PATIENTS_STATUS_${status}`;
 
         activate();
@@ -43,15 +42,6 @@
                 if (vm.notFound) return vm.message = 'RELATIONSHIPS_PATIENTS_NOT_FOUND';
                 vm.patients = vm.apiData;
             });
-        }
-
-        /**
-         * @param {string} firstName User's first name. 
-         * @param {string} lastName User's last name
-         * @returns The patient initals to be displayed in the colored circle.
-         */
-        function getInitials(firstName, lastName) {
-            return `${firstName.substr(0, 1)}${lastName.substr(0, 1)}`
         }
     }
 })();
