@@ -1,3 +1,17 @@
+## [1.35.6](https://gitlab.com/opalmedapps/qplus/compare/v1.35.5...v1.35.6) (2024-07-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-ble-central to v1.7.4 ([e08ce49](https://gitlab.com/opalmedapps/qplus/commit/e08ce4948a90e371167b0f585aa1c6d18bbaa99d))
+
+## [1.35.5](https://gitlab.com/opalmedapps/qplus/compare/v1.35.4...v1.35.5) (2024-07-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-geolocation to v5 ([0c23e37](https://gitlab.com/opalmedapps/qplus/commit/0c23e376d2bf3a0702c6e8f5fb63c12de727150a))
+
 ## [1.35.4](https://gitlab.com/opalmedapps/qplus/compare/v1.35.3...v1.35.4) (2024-07-17)
 
 
