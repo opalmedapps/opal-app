@@ -45,7 +45,7 @@
 
         /////////////////////////////
 
-        async function activate() {
+        function activate() {
             parameters = NavigatorParameters.getParameters();
             navigator = NavigatorParameters.getNavigator();
 
