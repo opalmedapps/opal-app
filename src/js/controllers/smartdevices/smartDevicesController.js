@@ -10,18 +10,22 @@
     ];
 
     /* @ngInject */
-    function SmartDevicesController($scope, $timeout,NavigatorParameters)
+    function SmartDevicesController($scope, $timeout, NavigatorParameters)
     {
         let vm = this;
         
         vm.showInfo = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices-info.html');
+        vm.ble_available = window.hasOwnProperty('ble');
         vm.bluetoothEnabled = false;
         vm.refresh = isBluetoothEnabled;
 
-        initializeBluetooth();
-        // if it is checked right away it might report that bluetooth is disabled even though it is enabled
-        // delay it a little bit
-        $timeout(() => isBluetoothEnabled(), 50);
+        // ble is only available on a native device currently
+        if (vm.ble_available) {
+            initializeBluetooth();
+            // if it is checked right away it might report that bluetooth is disabled even though it is enabled
+            // delay it a little bit
+            $timeout(() => isBluetoothEnabled(), 50);
+        }
 
         async function initializeBluetooth() {
             // initialize Bluetooth stack by calling a function once
