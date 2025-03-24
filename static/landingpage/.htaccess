@@ -11,7 +11,7 @@ Header set X-XSS-Protection "1; mode=block"
   Header set Access-Control-Allow-Origin "*"
 </Files>
 
-<Files "external-content-samples/message-of-the-day.config.json">
+<Files "content/service-status.json">
   Header set Access-Control-Allow-Origin "*"
 </Files>
 
