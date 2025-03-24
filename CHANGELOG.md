@@ -1,3 +1,10 @@
+## [1.37.11](https://gitlab.com/opalmedapps/qplus/compare/v1.37.10...v1.37.11) (2024-11-20)
+
+
+### Bug Fixes
+
+* add progressive web app configurations ([a445b06](https://gitlab.com/opalmedapps/qplus/commit/a445b06116ad4f77330a2077e51c522a811e60df))
+
 ## [1.37.10](https://gitlab.com/opalmedapps/qplus/compare/v1.37.9...v1.37.10) (2024-10-29)
 
 
