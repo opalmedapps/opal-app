@@ -6,44 +6,16 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        'Appointments',
-        'CheckInService',
-        'NavigatorParameters',
-        'NetworkStatus',
-        'Params',
-        'ProfileSelector',
-        'RequestToServer',
-        'User',
-        'UpdateUI',
-        'UserHospitalPreferences',
-        'UserPreferences',
-        'Version',
-        '$filter',
-        '$interval',
-        '$scope',
-        '$timeout',
+        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
+        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
+        'Version', 'User', 'ProfileSelector','$interval', 'UpdateUI',
     ];
 
     /* @ngInject */
-    function HomeController(
-        Appointments,
-        CheckInService,
-        NavigatorParameters,
-        NetworkStatus,
-        Params,
-        ProfileSelector,
-        RequestToServer,
-        User,
-        UpdateUI,
-        UserHospitalPreferences,
-        UserPreferences,
-        Version,
-        $filter,
-        $interval,
-        $scope, 
-        $timeout, 
-    )
-    {
+    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
+        UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
+        Version, User, ProfileSelector, $interval, UpdateUI,
+    ){
         var vm = this;
 
         vm.FirstName = '';
@@ -268,7 +240,7 @@
                 ProfileSelector.loadPatientProfile(vm.closestAppointment.patientsernum);
                 params['isCareReceiver'] = true;
 
-                // Reload 'Appointments' in case they were pre-loaded
+                // Reload 'Appointments' for the patient in care in case the appointments were already loaded
                 UpdateUI.updateTimestamps('Appointments', 0);
             }
             NavigatorParameters.setParameters(params);
