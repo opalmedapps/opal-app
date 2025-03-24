@@ -25,7 +25,6 @@
         
         See: https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/
     -->
-    <!-- <access origin="*"/> -->
     <allow-navigation href="https://www.youtube.com/*" requires-certificate-transparency="true"/>
     <allow-intent href="https://*/*"/>
     <allow-intent href="tel:*"/>
