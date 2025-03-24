@@ -432,6 +432,39 @@
             vm.requirePassword = purpose === 'consent' && vm.consentStatus === true;
         }
 
+        /**
+         * @name isInvalidAnswerForQuestion
+         * @desc Non completed questionnaire and invalid answer for the question
+         * @returns {boolean}
+         */
+         function isInvalidAnswerForQuestion() {
+            vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
+                && question.optional === '0'
+                && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED
+        }
+
+        /**
+         * @name isValidAnswerForQuestionAndNotSlider
+         * @desc Non completed questionnaire, valid answer for the question, and not slider
+         * @returns {boolean}
+         */
+         function isValidAnswerForQuestionAndNotSlider() {
+            return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
+                && question.type_id !== vm.allowedType.SLIDER_TYPE_ID
+                && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED);
+        }
+
+        /**
+         * @name isValidAnswerForQuestionAndSlider
+         * @desc Non completed questionnaire, valid answer for the question, and slider
+         * @returns {boolean}
+         */
+        function isValidAnswerForQuestionAndSlider() {
+            return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
+                && question.type_id === vm.allowedType.SLIDER_TYPE_ID
+                && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED);
+        }
+
     }
 
 })();

@@ -139,7 +139,7 @@
 
                                 <!-- Non completed questionnaire and invalid answer for the question -->
                                 <span
-                                    ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.optional === '0' && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED"
+                                    ng-if="vm.isInvalidAnswerForQuestion()"
                                     style="float: right; margin-right: 0px; color: white">
                                     <p style="white-space: nowrap;"><i class="ion-chevron-left"></i>
                                         {{"ANSWER"|translate}} </p>
@@ -147,7 +147,7 @@
 
                                 <!-- Non completed questionnaire, valid answer for the question, and not slider -->
                                 <span
-                                    ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED)">
+                                    ng-if="vm.isValidAnswerForQuestionAndNotSlider()">
                                     <p ng-if="!question.showAnswer"
                                         style="float: right; margin-right: 0px; color: white; white-space:nowrap;">
                                         {{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i>
@@ -160,7 +160,7 @@
 
                                 <!-- Non completed questionnaire, valid answer for the question, and slider -->
                                 <span
-                                    ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id === vm.allowedType.SLIDER_TYPE_ID && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED)"
+                                    ng-if="vm.isValidAnswerForQuestionAndSlider()"
                                     style="float: right; margin-right: 0px; color: white">
                                     <i class="ion-chevron-left"></i>
                                     {{question.patient_answer.answer[0].answer_value}}/{{question.options[0].max_value}}
