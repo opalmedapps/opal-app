@@ -147,7 +147,7 @@
             Logger.logClickedEduMaterial(edumaterial.EducationalMaterialControlSerNum);
 
             // If the material was unread, set it to read.
-            if (edumaterial.ReadStatus == '0')
+            if (edumaterial.ReadStatus === '0')
             {
                 EducationalMaterial.readEducationalMaterial(
                     edumaterial.EducationalMaterialSerNum

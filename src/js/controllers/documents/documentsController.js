@@ -47,9 +47,9 @@
         }
 
         //Go to document function, if not read, read it, then set parameters for navigation
-        function goToDocument(doc){
-
-            if(doc.ReadStatus == '0')
+        function goToDocument(doc)
+        {
+            if (doc.ReadStatus === '0')
             {
                 Documents.readDocument(doc.DocumentSerNum);
                 // Mark corresponding notifications as read
