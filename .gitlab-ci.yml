@@ -197,23 +197,23 @@ include:
 mobsf-android-sast:
   dependencies:
     - build android
-  rules:
-    - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
-      when: never
-    - if: $SAST_EXCLUDED_ANALYZERS =~ /mobsf/
-      when: never
-    - if: $CI_COMMIT_BRANCH &&
-          $SAST_EXPERIMENTAL_FEATURES == 'true'
+  # rules:
+  #   - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
+  #     when: never
+  #   - if: $SAST_EXCLUDED_ANALYZERS =~ /mobsf/
+  #     when: never
+  #   - if: $CI_COMMIT_BRANCH &&
+  #         $SAST_EXPERIMENTAL_FEATURES == 'true'
 
 
 mobsf-ios-sast:
   dependencies:
     - build ios
-  rules:
-    - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
-      when: never
-    - if: $SAST_EXCLUDED_ANALYZERS =~ /mobsf/
-      when: never
-    - if: $CI_COMMIT_BRANCH &&
-          $SAST_EXPERIMENTAL_FEATURES == 'true'
+  # rules:
+  #   - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
+  #     when: never
+  #   - if: $SAST_EXCLUDED_ANALYZERS =~ /mobsf/
+  #     when: never
+  #   - if: $CI_COMMIT_BRANCH &&
+  #         $SAST_EXPERIMENTAL_FEATURES == 'true'
 
