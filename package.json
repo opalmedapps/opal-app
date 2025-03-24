@@ -48,7 +48,7 @@
   },
   "homepage": "https://github.com/Sable/qplus#readme",
   "dependencies": {
-    "@babel/runtime": "7.24.8",
+    "@babel/runtime": "7.25.6",
     "@havesource/cordova-plugin-push": "4.0.0",
     "@zxcvbn-ts/core": "3.0.4",
     "@zxcvbn-ts/language-common": "3.0.4",
@@ -104,9 +104,9 @@
     "tweetnacl-util": "0.15.1"
   },
   "devDependencies": {
-    "@babel/core": "7.24.8",
-    "@babel/plugin-transform-runtime": "7.24.7",
-    "@babel/preset-env": "7.24.8",
+    "@babel/core": "7.25.2",
+    "@babel/plugin-transform-runtime": "7.25.4",
+    "@babel/preset-env": "7.25.4",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
