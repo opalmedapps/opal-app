@@ -234,7 +234,9 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
 
             vm.trustedPromise.promise.then(() => {
                 vm.attemptSuccessful = true;
-                $state.go('loading');
+                $state.go('loading', {
+                    isTrustedDevice: vm.trusted,
+                });
             }).catch(error => {
                 if (error instanceof CancelledPromiseError) {
                     // Cancelled on purpose: nothing additional to do here

@@ -45,6 +45,10 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             deviceIdentifiers.deviceUUID = Constants.app ? device.uuid : browserUUID;
             deviceIdentifiers.deviceType = Constants.app ? device.platform : 'browser';
         },
+        getDeviceIdentifiers:function()
+        {
+            return deviceIdentifiers;
+        },
         /**
          *@ngdoc method
          *@name updateRegistrationId

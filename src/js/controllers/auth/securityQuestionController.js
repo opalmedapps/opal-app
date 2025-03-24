@@ -255,7 +255,9 @@
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {
-                $state.go('loading');
+                $state.go('loading', {
+                    isTrustedDevice: trusted,
+                });
             }
         }
 
