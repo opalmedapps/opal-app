@@ -52,7 +52,6 @@ import '../../css/directives/password-strength-checker.directive.css';
                  *              Keys are the error message keys corresponding to each requirement.
                  *              The values are functions that return true if the password fails the given requirement.
                  *              NOTE: errors should be displayed in this order (with strength error last, since it's the least specific)
-                 * @type {{string: (function(string): boolean)}}
                  */
                 const passwordRequirements = {
                     "PASSWORD_INVALID_MIN_LENGTH": (password) => password.length < Params.minPasswordLength,

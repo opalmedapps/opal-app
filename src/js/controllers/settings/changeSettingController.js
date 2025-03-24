@@ -90,8 +90,11 @@
          *              enables/disables the submit button.
          */
         function passwordFieldChange() {
-            vm.newUpdate = false;
-            vm.disableButton = !vm.passwordIsValid || vm.passwordConfirmationInvalid();
+            // Use $timeout to compute the changes after vm.passwordIsValid is set
+            $timeout(() => {
+                vm.newUpdate = false;
+                vm.disableButton = !vm.passwordIsValid || vm.passwordConfirmationInvalid();
+            });
         }
 
         /**

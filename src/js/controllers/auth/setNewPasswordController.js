@@ -67,11 +67,12 @@
          * @description Updates variables when the user types in the password fields.
          */
         function passwordFieldChange() {
-            if(vm.alert.hasOwnProperty('type') && vm.alert.type === Params.alertTypeDanger)
-            {
-                delete vm.alert.type;
-                delete vm.alert.content;
-            }
+            $timeout(() => {
+                if (vm.alert.hasOwnProperty('type') && vm.alert.type === Params.alertTypeDanger) {
+                    delete vm.alert.type;
+                    delete vm.alert.content;
+                }
+            });
         }
 
         function submitNewPassword() {
