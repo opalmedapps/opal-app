@@ -89,7 +89,6 @@
   "OUTOFTRIES": "Trop de tentatives échouées - Veuillez réessayer plus tard.",
   "PAGE_ACCESS_ERROR": "Erreur d'accès à cette page. Veuillez réessayer plus tard.",
   "PARKING": "Stationnement et transport",
-  "PARKINGINFORMATION": "Informations de stationnement",
   "PASSWORD": "Mot de passe",
   "PASSWORDRESETSERVERERROR": "Il semble y avoir un problème de notre part concernant la réinitialisation de votre mot de passe. Veuillez réessayer de réinitialiser votre mot de passe. Nous nous excusons pour tout inconvénient.",
   "PASSWORD_SERVER_ERROR": "Un problème est survenu avec votre mot de passe, probablement en raison d'une erreur de réinitialisation. Veuillez utiliser le bouton ci-dessous pour le réinitialiser à nouveau.",
