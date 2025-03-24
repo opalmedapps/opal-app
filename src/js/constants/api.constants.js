@@ -25,6 +25,10 @@
                 CAREGIVERS: {
                     method: 'get',
                     url: '/api/app/patients/<PATIENT_ID>/caregivers'
+                },
+                PATIENTS: {
+                    method: 'get',
+                    url: '/api/app/caregiver/<CAREGIVER_ID>/patients'
                 }
             }
         });

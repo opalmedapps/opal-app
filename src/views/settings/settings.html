@@ -34,6 +34,11 @@
             {{"RELATIONSHIPS_CAREGIVERS"|translate}}
         </ons-list-item>
     </ons-list>
+    <ons-list class="settings-list">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/patients.html',{ animation : 'slide' } )" ng-class="fontSizeDesc">
+            {{"RELATIONSHIPS_PATIENTS"|translate}}
+        </ons-list-item>
+    </ons-list>
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PERSONAL"|translate}}</div>
     <ons-list class="settings-list">
