@@ -1,4 +1,3 @@
-
 /**
  *@ngdoc service
  *@name MUHCApp.service:Hospital
@@ -33,9 +32,9 @@
 
         /**
          * @name requestSiteInfo
-         * @desc this function gets parking info for a particular hospital
+         * @desc this function gets site info for the sites linked to a particular hospital
          * @param {string} hospitalKey - an ID of a particular hospital (institution)
-         * @returns {Promise} resolves to the parking's data if success
+         * @returns {Promise} resolves to the sites' data if success
          */
         async function requestSiteInfo(hospitalKey){
             // request parameters
@@ -48,4 +47,3 @@
         }
     }
 })();
-
