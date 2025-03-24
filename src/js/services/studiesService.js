@@ -29,30 +29,29 @@
          * @desc Requests the list of all studies from the listener and stores it in the studies array.
          * @return {promise} 
          */
-        function getStudies() {
-            var q = $q.defer();
-            RequestToServer.sendRequestWithResponse('Studies')
-                .then(function (response) {
-                    studies = response.Data;
-                    q.resolve(studies);
+        async function getStudies() {
+            try {
+                let response = await RequestToServer.sendRequestWithResponse('Studies');
 
-                    if (typeof studies == 'undefined') return;
+                // check if response contains studies
+                if (!response?.Data?.studies) return;
 
-                    studies.forEach(function (study) {
-                        study.creationDate = $filter('formatDate')(study.creationDate)
-                        if (study.hasOwnProperty('startDate')) {
-                            study.startDate = $filter('formatDate')(study.startDate)
-                        }
-                        if (study.hasOwnProperty('endDate')) {
-                            study.endDate = $filter('formatDate')(study.endDate)
-                        }
-                    })
-                }).catch(function (error) {
-                    console.log('Error in getStudies: ', error);
-                    q.resolve([]);
+                studies = response.Data.studies;
+
+                studies.forEach(function (study) {
+                    study.creationDate = $filter('formatDate')(study.creationDate)
+                    if (study?.startDate) {
+                        study.startDate = $filter('formatDate')(study.startDate)
+                    }
+                    if (study?.endDate) {
+                        study.endDate = $filter('formatDate')(study.endDate)
+                    }
                 });
+            } catch (error) {
+                console.log('Error in getStudies: ', error);
+                return [];
+            }
 
-            return q.promise;
         }
 
 
