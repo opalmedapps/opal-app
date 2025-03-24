@@ -109,8 +109,6 @@
     "INVALID_OLD_PASSWORD": "Mot de passe actuel invalide.",
     "INVALID_PASSWORD": "Mot de passe invalide.",
     "INVESTIGATOR": "Chercheur(euse)",
-    "JAILBREAK_TITLE": "Appareil débridé détecté",
-    "JAILBREAK_MESSAGE": "L'exécution de cette application sur un appareil débridé n'est pas permise.",
     "LABELS": "Étiquettes",
     "LAB_BYDATE": "Date",
     "LAB_BYTYPE": "Type",
