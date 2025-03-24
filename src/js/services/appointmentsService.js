@@ -257,28 +257,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
             //Initializing Variables
             userAppointmentsArray = [];
             calendar={};
-            let localAppointments = [];
-
-            appointments.forEach(appointment => {
-                const localAppointment = {
-                    AppointmentSerNum: appointment.appointmentsernum,
-                    Checkin: appointment.checkin,
-                    CheckinPossible: appointment.checkinpossible,
-                    PatientSerNum: appointment.patient?.patientsernum,
-                    ScheduledStartTime: appointment.scheduledstarttime,
-                    ScheduledEndTime: appointment.scheduledendtime,
-                    LastUpdated: appointment.lastupdated,
-                    State: appointment.state,
-                    RoomLocation_EN: appointment.roomlocation_en,
-                    RoomLocation_FR: appointment.roomlocation_fr,
-                    AppointmentType_EN: appointment.alias?.aliastype,
-                    ResourceDescription: appointment.alias?.aliasname_en,
-                    patientName: `${appointment.patient?.firstname} ${appointment.patient?.lastname}`,
-                    CheckInStatus: appointment.checkin == 1 ? 'success' : 'info',
-                }
-                localAppointments.push(localAppointment);
-            });
-            addAppointmentsToService(localAppointments);
+            addAppointmentsToService(appointments);
         },
         /**
          *@ngdoc method
