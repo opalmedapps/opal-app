@@ -30,14 +30,14 @@
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"RELATIONSHIPS"|translate}}</div>
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/caregivers.html', {param:'PASSWORD'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/caregivers.html',{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"RELATIONSHIPS_CAREGIVERS"|translate}}
         </ons-list-item>
     </ons-list>
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PERSONAL"|translate}}</div>
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html',{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'PASSWORD'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"PASSWORD"|translate}}
             <span type="password" class="list-item-note lucent">{{asc.passFill|limitTo:6}}</span>
         </ons-list-item>
