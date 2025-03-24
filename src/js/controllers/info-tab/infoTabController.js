@@ -20,7 +20,6 @@
   /* @ngInject */
     function InfoTabController($timeout, $filter, $sce, NavigatorParameters) {
         var vm = this;
-        vm.title = 'InfoTabController';
         vm.view = {};
 
         const views= {
