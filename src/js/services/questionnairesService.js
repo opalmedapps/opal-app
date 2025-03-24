@@ -311,14 +311,14 @@
             try {
                 let response = await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus);
 
-                if (newStatus === 1) {
-                    numberOfUnreadQuestionnaires[currentPurpose] -= 1;
-                }
-
                 let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus);
 
                 if (!isFailure) {
                     throw new Error("Error updating status internal to app");
+                }
+
+                if (newStatus === 1) {
+                    numberOfUnreadQuestionnaires[currentPurpose] -= 1;
                 }
 
                 return { Success: true, Location: 'Server' };
