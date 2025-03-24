@@ -305,8 +305,23 @@ If at this point you have been unable to install everything properly, reach out 
 - If you get the following error on Windows machine: `EBUSY: resource busy or locked, unlink '\google-services.json'`, go to your task manager, and kill all `Java(TM) Platform SE Binary` processes (select the processes and click on `End Task`).
 - If you're unable to delete the `platforms` folder on Windows, follow the step above to kill the Java binary processes.
   If this fails, reboot your machine.
+- If you have problems building the iOS app, try to delete the `platforms/ios` and `plugins` directories. In some cases, it might even be necessary to delete the cached CocoaPods. For example, when updating a Cordova plugin to a newer version. Follow the [instructions on how to do this](https://stackoverflow.com/a/64040015).
 
-## Running the tests
+### White (or gray) screen of death on iOS
+
+If you get a white (or gray) screen of death on iOS this is most likely due to a JavaScript error.
+Open Safari and navigate to Develop -> Your device.
+There should be an inspectable application being listed (e.g., "localhost - index.html").
+After selecting it, you get a web inspector window that you can use to troubleshoot, test etc.
+
+## Testing
+
+### Testing with a rooted device (Android)
+
+Android Studio allows you to create a [rooted virtual device](https://infosecwriteups.com/get-yourself-a-rooted-android-virtual-device-avd-fb443d590dfa).
+Basically, create a new device and choose an image without Google APIs.
+
+### Running the tests
 
 Tests should be written for all new features. It's important to maintain this effort to avoid any code regression.
 
