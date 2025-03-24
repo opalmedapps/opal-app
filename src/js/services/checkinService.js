@@ -97,14 +97,14 @@
 
         ////////////////////////////////////////////
 
-        async function attemptCheckin(){
+        async function attemptCheckin(patientSerNum){
             if (attemptedCheckin && allCheckedIn) return 'SUCCESS';
             if (attemptedCheckin && errorsExist) return 'ERROR';
 
             const isAllowed = await isWithinCheckinRange();
             if (!isAllowed) return 'NOT_ALLOWED';
 
-            const checkinResult = await checkinToAllAppointments();
+            const checkinResult = await checkinToAllAppointments(patientSerNum);
             attemptedCheckin = true;
             updateCheckinState(checkinResult.appts);
             return checkinResult.status;
@@ -289,12 +289,12 @@
          *@description Checks the users in to all todays appointments.
          *@returns {Promise} Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.
          **/
-        function checkinToAllAppointments(){
+        function checkinToAllAppointments(patientSerNum){
 
             //Create a promise so this can be run asynchronously
             var r = $q.defer();
 
-            RequestToServer.sendRequestWithResponse('Checkin')
+            RequestToServer.sendRequestWithResponse('Checkin',{}, null, {}, {}, patientSerNum)
                 .then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
                 .catch(function () { r.reject({status: 'ERROR', appts: null}); });
 
