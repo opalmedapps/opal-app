@@ -64,23 +64,30 @@
         }
 
         function goToNotification(index,notification){
-            if(notification.ReadStatus==='0'){
-                //TODO: Move this read function in notifications service
-                RequestToServer.sendRequest('Read',{"Id":notification.NotificationSerNum, "Field":"Notifications"});
-                Notifications.readNotification(index,notification);
-            }
-            var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
-            if(notification.hasOwnProperty('PageUrl'))
-            {
-                NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
-                homeNavigator.pushPage(notification.PageUrl);
-            }else{
-                var result = Notifications.goToPost(notification.NotificationType, post);
-                if(result !== -1  )
+            try {
+                if(notification.ReadStatus==='0'){
+                    //TODO: Move this read function in notifications service
+                    RequestToServer.sendRequest('Read',{"Id":notification.NotificationSerNum, "Field":"Notifications"});
+                    Notifications.readNotification(index,notification);
+                }
+                var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
+                if (!post) throw new Error(`No post found for notification with NotificationSerNum = ${notification.NotificationSerNum}`);
+                if(notification.hasOwnProperty('PageUrl'))
                 {
                     NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
-                    homeNavigator.pushPage(result.Url);
+                    homeNavigator.pushPage(notification.PageUrl);
+                }else{
+                    var result = Notifications.goToPost(notification.NotificationType, post);
+                    if(result !== -1  )
+                    {
+                        NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
+                        homeNavigator.pushPage(result.Url);
+                    }
                 }
+            }
+            catch(error) {
+                console.error(error);
+                homeNavigator.pushPage('views/error/error-details.html', { message: "NOTIFICATION_OPEN_ERROR" });
             }
         }
 

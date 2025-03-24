@@ -1,0 +1,9 @@
+<ons-page ng-controller="ErrorDetails as vm">
+    <!-- TOOLBAR -->
+    <generic-toolbar title="{{'ERROR'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <!-- ERROR MESSAGE -->
+    <div align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="{{vm.alert.type}}">{{vm.alert.message|translate}}</uib-alert>
+    </div>
+</ons-page>

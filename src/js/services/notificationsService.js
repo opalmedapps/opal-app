@@ -499,6 +499,8 @@
                     else if (typeof notifications[i].Content !== 'undefined') {
                         notifications[i].Desc = (language === 'EN') ? notifications[i].Content.NameEN : notifications[i].Content.NameFR;
                     }
+
+                    notifications[i].RefTableRowTitle = notifications[i][`RefTableRowTitle_${language}`];
                 } catch (e) {
                     notifications.splice(i, 1);
                 }
