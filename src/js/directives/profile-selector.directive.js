@@ -49,7 +49,7 @@ import "../../css/directives/profile-selector.directive.css"
                             </li>
                         </ul>
                     </div>
-                    <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix"></div>
+                    <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix" ng-click="toggleList()"></div>
                 </ons-toolbar>
             `,
             link: function (scope) {
