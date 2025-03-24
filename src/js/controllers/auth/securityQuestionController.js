@@ -245,7 +245,10 @@
         function handleSuccess(securityAnswerHash){
             if (trusted){
                 $window.localStorage.setItem("deviceID",deviceID);
-                $window.localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns", EncryptionService.encryptWithKey(securityAnswerHash, UserAuthorizationInfo.getPassword()).toString());
+                // CHECK IF THIS ITEM IS ALREADY SET AND DONT OVERRIDE IF SO??
+                $window.localStorage.setItem(EncryptionService.getStorageKey(), EncryptionService.encryptWithKey(securityAnswerHash, UserAuthorizationInfo.getPassword()).toString());
+
+                // $window.localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns", EncryptionService.encryptWithKey(securityAnswerHash, UserAuthorizationInfo.getPassword()).toString());
             }
 
             EncryptionService.setSecurityAns(securityAnswerHash);
@@ -318,7 +321,7 @@
          */
         function removeUserData(){
             $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
-            $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+            $window.localStorage.removeItem(EncryptionService.getStorageKey());
         }
 
         /************************************************

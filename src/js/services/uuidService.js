@@ -53,7 +53,8 @@
          * @returns {String} The UUID.
          **/
         function generate(a){
-
+            // temp debug remove dont forget lol
+            return 'd21730be010be0e503206c0-311109a0b70-4d203403b0-368ea0520100-3e1850da0a70e40aa0170140fc0b30880780';
 
             return a           // if the placeholder was passed, return
                 ? (              // a random number from 0 to 15

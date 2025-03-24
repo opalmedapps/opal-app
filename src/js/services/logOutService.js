@@ -53,7 +53,7 @@
                 localStorage.removeItem("deviceID");
 
                 // clear out security answers
-                localStorage.removeItem(UserAuthorizationInfo.getUsername() + "/securityAns");
+                localStorage.removeItem(EncryptionService.getStorageKey());
 
                 // clear the cordova webview cache
                 if (Constants.app) {

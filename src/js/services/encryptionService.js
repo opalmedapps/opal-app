@@ -10,9 +10,10 @@ var myApp = angular.module('MUHCApp');
  *@ngdoc service
  *@name MUHCApp.service:EncryptionService
  *@requires MUHCApp.service:UserAuthorizationInfo
+ *@requires MUHCApp.service:UserHospitalPreferences
  *@description Provides an API to encrypt and decrypt objects, arrays, or strings.
  **/
-myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAuthorizationInfo) {
+myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPreferences', function (UserAuthorizationInfo, UserHospitalPreferences) {
 
     var securityAnswerHash = '';
     var encryptionHash = '';
@@ -29,7 +30,6 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
             //grab the nonce
             var pair = splitValue(object);
             var decryptedObj = nacl.util.encodeUTF8(nacl.secretbox.open(pair[1], pair[0], secret));
-
             return stripEscapingSlashes(decryptedObj);
 
         } else {
@@ -128,6 +128,20 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
      **/
     function hash(incoming) {
         return CryptoJS.SHA512(incoming).toString();
+    }
+
+    /**
+     * @ngdoc method
+     * @name getStorageKey
+     * @methodOf MUHCApp.service:EncryptionService
+     * @description Generates a storage key that includes the hospital code.
+     * This key is used for storing and retrieving the encrypted security answer specific to a user and hospital.
+     * @return {String} The storage key.
+     */
+    function getStorageKey() {
+        var hospitalCode = UserHospitalPreferences.getHospital();
+        var username = UserAuthorizationInfo.getUsername();
+        return username + ":" + hospitalCode + "/securityAns";
     }
 
     return {
@@ -249,6 +263,14 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAutho
 
         generateNonce: function () {
             return nacl.randomBytes(nacl.secretbox.nonceLength)
+        },
+
+        /**
+         * Public interface to get the storage key from outside the service.
+         * @return {String} The storage key.
+         */
+        getStorageKey: function(){
+            return getStorageKey();
         },
     };
 }]);

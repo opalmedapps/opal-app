@@ -194,7 +194,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
                 $window.localStorage.removeItem('Email');
                 $window.localStorage.removeItem('Password');
                 $window.localStorage.removeItem("deviceID");
-                $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                $window.localStorage.removeItem(EncryptionService.getStorageKey());
                 $window.localStorage.removeItem('hospital');
             }
 
@@ -217,7 +217,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
             const warnTrustedError = (error) => { console.warn("An error occurred while logging in as trusted; now attempting to log in as untrusted.", error) };
 
             try {
-                var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
+               var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(EncryptionService.getStorageKey()), UserAuthorizationInfo.getPassword());
                 EncryptionService.setSecurityAns(ans);
 
                 // Now that we know that both the password and security answer are hashed, we can create our encryption hash
@@ -231,7 +231,6 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
             }
 
             UUID.setUUID(deviceID);
-
             vm.trustedPromise = DeviceIdentifiers.sendDeviceIdentifiersToServer();
 
             vm.trustedPromise.promise.then(() => {
