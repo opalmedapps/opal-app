@@ -223,7 +223,7 @@
     "QUESTIONNAIRE_NONE_NEW": "Pas de nouveau questionnaire.",
     "QUESTIONNAIRE_NONE_OF_THE_ABOVE": "Aucune de ces réponses",
     "QUESTIONNAIRE_NONE_PROGRESS": "Pas de questionnaire en cours.",
-    "QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER": "Ce questionnaire peut être complété uniquement par le patient. Une fois le questionnaire complété, vous pourrez consulter les réponses sur l'onglet « Complétés ».",
+    "QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER": "Votre niveau d'accès aux données de ce patient ne permet pas de répondre aux questionnaires à sa place. Une fois le questionnaire complété par un autre utilisateur, vous pourrez en consulter les réponses sur l'onglet «&nbspComplétés&nbsp».",
     "QUESTIONNAIRE_RESUME_INSTRUCTION": "Cliquez sur \"continuer\" ou glissez vers la gauche pour poursuivre le questionnaire.",
     "QUESTIONNAIRE_SECTION_INSTRUCTION": "Instructions pour cette section",
     "QUESTIONNAIRE_SELECT": "Choisissez",

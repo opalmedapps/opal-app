@@ -37,7 +37,7 @@
                 if (ProfileSelector.getConfirmedProfiles().length === 0) {
                     console.error('Cannot log in when there are no confirmed profiles.');
                     clearTimeout(timeOut);
-                    NativeNotification.showNotificationAlert($filter('translate')("ERROR_NO_CONFIRMED_PROFILES"), LogOutService.logOut, $filter('translate')("INFO"));
+                    NativeNotification.showNotificationAlert($filter('translate')("ERROR_NO_CONFIRMED_PROFILES"), $filter('translate')("INFO"), LogOutService.logOut);
                     return;
                 }
 
@@ -51,14 +51,14 @@
                 console.error(error);
                 clearTimeout(timeOut);
                 // If any part of the initialization fails, then the user cannot log in
-                NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), LogOutService.logOut);
+                NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), null, LogOutService.logOut);
             }
         }
 
         //Timeout to show, alerting user of server problems.
         let timeOut = setTimeout(function(){
             loadingmodal.hide();
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"), LogOutService.logOut);
+            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"), null, LogOutService.logOut);
         }, 90000);
     }
 })();
