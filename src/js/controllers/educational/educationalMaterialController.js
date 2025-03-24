@@ -9,6 +9,10 @@
  *           Developed by Tongyou (Eason) Yang in Summer 2018
  *           Merged by Stacey Beard
  *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
+ *
+ * 2020 Jul: Project: Research Menu --> Education material now categorized as 'clinical' or 'research', which are
+ *                    displayed in Education tab or Research menu, respectively.
+ *           Developed by Kayla O'Sullivan-Steben
  */
 
 (function () {
@@ -18,15 +22,16 @@
         .module('MUHCApp')
         .controller('EducationalMaterialController', EducationalMaterialController);
 
-    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus',
-        'Patient', 'Logger', 'UserHospitalPreferences', '$filter'];
+    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial',
+        'Logger', 'UserHospitalPreferences', '$filter'];
 
     /* @ngInject */
-    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus,
-                                           Patient, Logger, UserHospitalPreferences, $filter) {
+    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial,
+                                           Logger, UserHospitalPreferences, $filter) {
         var vm = this;
         var backButtonPressed = 0;
         let navigator;
+        let params;
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
@@ -34,14 +39,20 @@
         // Variable to toggle visibility of the 'no materials' text. Default is false to avoid errors.
         vm.noMaterials = false;
 
+        // Variable containing filtered educational materials
+        vm.filteredEduMaterials;
+
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
 
+        // Variables to store the current category of material (clinical or research) and corresponding page title
+        vm.eduCategory = '';
+        vm.pageTitle = '';
+        vm.noMaterialMessage = '';
+
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
-
-        // Function used to filter the materials shown based on the search string
-        vm.filterMaterial = filterMaterial;
+        vm.openInfoPage = openInfoPage;
 
         // Used by patient-data-handler
         vm.configureState = configureState;
@@ -50,7 +61,8 @@
         ///////////////////////////////////
 
         function activate(){
-            navigator = NavigatorParameters.getNavigator();
+            setEduCategory();
+            configureNavigator();
 
             bindEvents();
             configureSelectedHospital();
@@ -59,17 +71,56 @@
         function initData() {
             vm.noMaterials = false;
             // Full list of educational materials in the right language.
-            vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
+            vm.edumaterials = EducationalMaterial.setLanguage(
+                EducationalMaterial.getEducationalMaterial(vm.eduCategory)
+            );
             // Educational materials filtered based on the search string.
             vm.filteredEduMaterials = $filter('orderBy')(vm.edumaterials, '-DateAdded');
         }
 
         function educationDeviceBackButton(){
-            tabbar.setActiveTab(0);
+            if (vm.eduCategory === 'clinical'){
+                tabbar.setActiveTab(0);
+            } else {
+                // Regular back button navigation
+                navigator.popPage();
+            }
+        }
+
+        /**
+         * @name setEduCategory
+         * @desc Sets the education material category based on navigator parameters (defaults to clinical)
+         */
+        function setEduCategory(){
+            params = NavigatorParameters.getParameters();
+
+            // Set category if specified in NavigatorParameters, otherwise defaults to clinical
+            if(params.hasOwnProperty('category')){
+                vm.eduCategory = params.category;
+            }else{
+                vm.eduCategory = 'clinical';
+            }
+
+            // Set corresponding page title and no material message
+            vm.pageTitle = EducationalMaterial.getEducationalMaterialTitle(vm.eduCategory);
+            vm.noMaterialMessage = EducationalMaterial.getEducationalMaterialEmptyMessage(vm.eduCategory);
+        }
+
+        /**
+         * @name configureNavigator
+         * @desc Sets navigator to educationNavigator if type clinical, otherwise gets current navigator.
+         *       Needed since navigator does not automatically update when switching to education tab.
+         */
+        function configureNavigator(){
+            // Set navigator to educationNavigator when in clinical educational material
+            if(vm.eduCategory === 'clinical'){
+                NavigatorParameters.setNavigator(educationNavigator);
+            }
+            navigator = NavigatorParameters.getNavigator();
         }
 
         function configureState() {
-            if(EducationalMaterial.materialExists()) {
+            if(EducationalMaterial.materialExists(vm.eduCategory)) {
                 initData();
             } else {
                 vm.noMaterials = true;
@@ -101,6 +152,8 @@
             $scope.$on('$destroy',function()
             {
                 navigator.off('prepop');
+                // Clear navigator parameters
+                NavigatorParameters.setParameters({});
             });
         }
 
@@ -121,41 +174,16 @@
             }
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
-            NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator', 'Post': edumaterial, 'RStep':1 });
+            NavigatorParameters.setParameters({ 'Navigator': navigator, 'Post': edumaterial, 'RStep':1 });
             navigator.pushPage('./views/personal/education/individual-material.html');
         }
 
-        // Function used to filter the materials shown based on the search string.
-        // Author: Tongyou (Eason) Yang
-        function filterMaterial() {
-
-            var searchString_parts = vm.searchString.toLowerCase().split(" ");//split into different parts
-
-            var filtered = [];//generate new show list for educational material
-            vm.edumaterials.forEach(function(edumaterial){
-
-                var name_no_space = edumaterial.Name.replace(/\s/g, '').toLowerCase();
-                var show = true;
-                searchString_parts.forEach(function(part){
-                    if(!name_no_space.includes(part)){
-                        show = false;
-                    }
-                });
-
-                if(show){
-                    filtered.push(edumaterial);
-                }
-
-            });
-
-            vm.filteredEduMaterials = filtered;//assign to new show list
+        /**
+         * @name openInfoPage
+         * @desc Open info page (currently only on education tab)
+         */
+        function openInfoPage() {
+            navigator.pushPage('views/tabs/info-page-tabs.html');
         }
     }
 })();
-
-
-
-
-
-
-

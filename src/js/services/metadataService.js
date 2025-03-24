@@ -23,9 +23,9 @@
         .module('MUHCApp')
         .factory('MetaData', MetaData);
 
-    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial'];
+    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial', 'Studies'];
 
-    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial) {
+    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial, Studies) {
 
         //you only need to use this service the first time entering a tab
         var firstTimeHome = true;
@@ -38,7 +38,8 @@
             documentsUnreadNumber: null,
             txTeamMessagesUnreadNumber: null,
             notificationsUnreadNumber: null,
-            questionnairesUnreadNumber: null
+            questionnairesUnreadNumber: null,
+            researchUnreadNumber: null
         };
 
         var homeTabData = {
@@ -47,6 +48,13 @@
 
         var generalTabData = {
             announcementsUnreadNumber: null
+        };
+
+        var researchTabData = {
+            studiesUnreadNumber: null,
+            researchQuestionnairesUnreadNumber: null,
+            researchEduMaterialsUnreadNumber: null,
+            consentQuestionnairesUnreadNumber: null
         };
 
         var eduMaterials = null;
@@ -58,14 +66,17 @@
             fetchHomeMeta: fetchHomeMeta,
             fetchGeneralMeta: fetchGeneralMeta,
             fetchEducationalMeta: fetchEducationalMeta,
+            fetchResearchMeta: fetchResearchMeta,
             isFirstTimePersonal: isFirstTimePersonal,
             isFirstTimeHome: isFirstTimeHome,
             isFirstTimeGeneral: isFirstTimeGeneral,
             isFirstTimeEducational: isFirstTimeEducational,
+            isFirstTimeResearch: isFirstTimeResearch,
             setFetchedPersonal: setFetchedPersonal,
             setFetchedHome: setFetchedHome,
             setFetchedGeneral: setFetchedGeneral,
             setFetchedEducational: setFetchedEducational,
+            setFetchedResearch: setFetchedResearch,
             noEduMaterial: noEduMaterial,
         };
 
@@ -82,7 +93,6 @@
             personalTabData.txTeamMessagesUnreadNumber = TxTeamMessages.getUnreadTxTeamMessages();
             personalTabData.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             homeTabData.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
-            personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
 
             //load the general tab data
             generalTabData.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
@@ -92,6 +102,33 @@
             var materials = EducationalMaterial.getEducationalMaterial();
             //Setting the language for view
             eduMaterials = EducationalMaterial.setLanguage(materials);
+
+            //load the research tab data
+            researchTabData.researchEduMaterialsUnreadNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research');
+
+            //Request number of unread questionnaires in each category
+            Questionnaires.requestQuestionnaireUnreadNumber('clinical')
+                .then(()=>Questionnaires.requestQuestionnaireUnreadNumber('research'))
+                .then(()=>Questionnaires.requestQuestionnaireUnreadNumber('consent'))
+                .then(()=>{
+                    //get number of unread questionnaires in each category
+                    personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('clinical');
+                    researchTabData.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('research');
+                    researchTabData.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('consent');
+
+                    //sum all notifications in researchTabData
+                    personalTabData.researchUnreadNumber = researchTabData.studiesUnreadNumber + researchTabData.researchQuestionnairesUnreadNumber
+                                                            + researchTabData.researchEduMaterialsUnreadNumber + researchTabData.consentQuestionnairesUnreadNumber;
+                }).catch(function(error){
+                    // Unable to load questionnaires
+                });
+
+            // Load studies to get number unread
+            Studies.getStudies().then(()=>{
+                    researchTabData.studiesUnreadNumber = Studies.getNumberUnreadStudies();
+                }).catch(function(error){
+                    // Unable to load studies
+                });
 
         }
 
@@ -147,6 +184,17 @@
             return noMaterials;
         }
 
+        function fetchResearchMeta(){
+            return researchTabData;
+        }
+
+        function isFirstTimeResearch() {
+            return firstTimeResearch;
+        }
+
+        function setFetchedResearch() {
+            firstTimeResearch = false;
+        }
     }
 
 })();

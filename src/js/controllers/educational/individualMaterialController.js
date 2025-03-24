@@ -144,7 +144,7 @@
                 let nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
                 if (nextStatus !== -1) {
                     NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
-                    window[navigatorPage].pushPage(nextStatus.Url);
+                    navigatorPage.pushPage(nextStatus.Url);
 
                     /* Most calls to logSubClickedEduMaterial() are handled by the function handlePostChangeEventCarousel()
                      * in bookletMaterialController.js. However, the one special case (clicking on the first material in
@@ -282,9 +282,8 @@
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             var rstep = vm.recursive_step + 1;
             NavigatorParameters.setParameters({ 'Navigator': navigatorPage,'Post': material, 'RStep':rstep });
-            window[navigatorPage].pushPage('./views/personal/education/individual-material.html');
+            navigatorPage.pushPage('./views/personal/education/individual-material.html');
 
         }
     }
 })();
-

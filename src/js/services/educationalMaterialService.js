@@ -28,6 +28,24 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
 
 function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger, Params) {
 
+    // Title mapping depending on educational material category
+    const CATEGORY_TITLE_MAP = {
+        clinical: 'EDUCATION',
+        research: 'REFERENCE_MATERIAL',
+    };
+
+    // No material message mapping depending on educational material category
+    const CATEGORY_EMPTY_MAP = {
+        clinical: 'NOEDUCATIONALMATERIAL',
+        research: 'REFERENCE_MATERIAL_NONE',
+    };
+
+     // Variables for education material notifications
+     let numberOfUnreadMaterial = {
+        clinical: 0,
+        research: 0
+     }
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#educationalMaterialArray
@@ -216,13 +234,14 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
          *@ngdoc method
          *@name materialExists
          *@methodOf MUHCApp.service:EducationalMaterial
-         *@description Setter method for educational material
+         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
+         *@description Checks whether educational material exists
          *@return {Boolean} Returns whether the patient has any educational material available.
          **/
-        materialExists:function()
+        materialExists:function(eduCategory='clinical')
         {
             //Check if the educational material array has any elements
-            return educationalMaterialArray.length>0;
+            return educationalMaterialArray.some(eduMaterial => eduMaterial.Category  === eduCategory);
         },
         /**
          *@ngdoc method
@@ -243,12 +262,30 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
          *@ngdoc method
          *@name getEducationalMaterial
          *@methodOf MUHCApp.service:EducationalMaterial
+         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
          *@description Getter for the educational material
          *@returns {Array} Returns array containing educational material
          **/
-        getEducationalMaterial:function()
+        getEducationalMaterial:function(eduCategory='clinical')
         {
-            return educationalMaterialArray;
+            let educationalMaterialArrayByCategory = [];
+
+            // reset number of unread educational material on reload
+            numberOfUnreadMaterial['clinical'] = 0;
+            numberOfUnreadMaterial['research'] = 0;
+
+            educationalMaterialArray.forEach(function(edumaterial){
+                // get material for specified category
+                if(edumaterial.Category === eduCategory){
+                    educationalMaterialArrayByCategory.push(edumaterial);
+                }
+                // count number of unread materials for both categories
+                if(edumaterial.ReadStatus === '0' && numberOfUnreadMaterial.hasOwnProperty(edumaterial.Category)){
+                    numberOfUnreadMaterial[edumaterial.Category] += 1;
+                }
+            });
+
+            return educationalMaterialArrayByCategory;
         },
         /**
          *@ngdoc method
@@ -279,6 +316,21 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         {
             return this.getUnreadEducationalMaterials().length;
         },
+        /**
+         *@ngdoc method
+         *@name getNumberOfUnreadEducationalMaterialByCategory
+         *@methodOf MUHCApp.service:EducationalMaterial
+         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
+         *@description Gets the number of unread materials in a given category
+         *@returns {int} Returns number of unread educational material of type eduCategory
+         **/
+         getNumberOfUnreadEducationalMaterialByCategory:function(eduCategory='clinical')
+         {
+             if(numberOfUnreadMaterial.hasOwnProperty(eduCategory)){
+                 return numberOfUnreadMaterial[eduCategory];
+             }
+             return 0;
+         },
         /**
          *@ngdoc method
          *@name getEducationaMaterialBySerNum
@@ -484,6 +536,30 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         clearEducationalMaterial:function()
         {
             educationalMaterialArray=[];
+        },
+        /**
+         *@ngdoc method
+         *@name getEducationalMaterialTitle
+         *@methodOf MUHCApp.service:EducationalMaterial
+         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
+         *@description Gets title for the education views that corresponds to the educational category param.
+         *@returns {String} The translated title for the education views
+         **/
+        getEducationalMaterialTitle:function(eduCategory='clinical')
+        {
+            return $filter('translate')(CATEGORY_TITLE_MAP[eduCategory]);
+        },
+        /**
+         *@ngdoc method
+         *@name getEducationalMaterialEmptyMessage
+         *@methodOf MUHCApp.service:EducationalMaterial
+         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
+         *@description Gets translated message to display when no education material is available for the given category.
+         *@returns {String} The translated message when no material is available for the education views
+         **/
+        getEducationalMaterialEmptyMessage:function(eduCategory='clinical')
+        {
+            return $filter('translate')(CATEGORY_EMPTY_MAP[eduCategory]);
         }
     };
 
