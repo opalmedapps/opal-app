@@ -210,7 +210,6 @@
          * If a user has been deemed as trusted, then this allows them to skip the security question process and go straight to loading screen
          */
         function loginAsTrustedUser(deviceID){
-            console.log("Login as trusted");
             const warnTrustedError = (error) => { console.warn("An error occurred while logging in as trusted; now attempting to log in as untrusted.", error) };
 
             try {
@@ -252,7 +251,6 @@
          * If a user has been deemed as untrusted, then this takes the user to the security question process
          */
         function loginAsUntrustedUser(deviceID){
-            console.log("Login as untrusted");
             //if using a web browers (via demo or testing)
             if (!Constants.app) UUID.setUUID(UUID.generate());
 
