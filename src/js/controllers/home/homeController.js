@@ -143,6 +143,8 @@
         function checkForVersionUpdates() {
             const currentVersion = Version.currentVersion();
             let lastVersion = localStorage.getItem('lastVersion');
+            // Initialize lastVersion if not defined, so that we could
+            // get all the updates from the beginning of major version
             if (!lastVersion) {
                 const lastPoint = currentVersion.lastIndexOf('.');
                 lastVersion = currentVersion.substr(0, lastPoint) + '.-1';
