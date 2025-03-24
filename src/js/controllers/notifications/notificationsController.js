@@ -11,11 +11,11 @@
         .controller('NotificationsController', NotificationsController);
 
     NotificationsController.$inject = ['$filter','$scope','$timeout','NativeNotification','NavigatorParameters',
-        'Notifications','Permissions','ProfileSelector', 'RequestToServer', 'UpdateUI', 'Utility'];
+        'Notifications','Permissions','ProfileSelector', 'RequestToServer', 'UpdateUI', 'Utility', 'Params'];
 
     /* @ngInject */
     function NotificationsController($filter, $scope, $timeout, NativeNotification, NavigatorParameters,
-                                     Notifications, Permissions, ProfileSelector, RequestToServer, UpdateUI, Utility) {
+                                     Notifications, Permissions, ProfileSelector, RequestToServer, UpdateUI, Utility, Params) {
         let vm = this;
         let navigator;
 
@@ -92,7 +92,7 @@
                     // Special case for the lab results notifications: reload labs in case they were already loaded.
                     // It's necessary because the notification redirects to the "Lab Results" page that lists all labs,
                     // and it's possible that they were already loaded and cached.
-                    if (notification.NotificationType === "NewLabResult")
+                    if (notification.NotificationType === Params.NOTIFICATION_TYPES.NewLabResult)
                         UpdateUI.updateTimestamps(notification.refreshType, 0);
                 }
 

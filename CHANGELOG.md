@@ -1,3 +1,10 @@
+# [1.29.0](https://gitlab.com/opalmedapps/qplus/compare/v1.28.0...v1.29.0) (2024-02-22)
+
+
+### Features
+
+* implicitly mark notifications as read ([1563e2c](https://gitlab.com/opalmedapps/qplus/commit/1563e2cc5e9fe6b3afa69284c3aa9548c2ed7dd0))
+
 # [1.28.0](https://gitlab.com/opalmedapps/qplus/compare/v1.27.4...v1.28.0) (2024-02-20)
 
 
