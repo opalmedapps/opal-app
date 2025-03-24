@@ -183,7 +183,7 @@
                 purpose: auxiliaryParams?.purpose
             };
 
-            let response = await cueRequests('Refresh', {Fields: params});
+            let response = await cueRequests('Refresh', params);
             validateResponse(response);
             await setServices(response.Data, parameters);
             updateTimestamps(parameters, response.Timestamp);
