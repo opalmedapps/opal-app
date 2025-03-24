@@ -1,3 +1,10 @@
+## [1.16.12](https://gitlab.com/opalmedapps/qplus/compare/v1.16.11...v1.16.12) (2023-07-31)
+
+
+### Bug Fixes
+
+* fix total number of research questionnaires display (QSCCD-1340) ([ae665c5](https://gitlab.com/opalmedapps/qplus/commit/ae665c59a0e4e000667d1cca0a7365c2d5cb24ab))
+
 ## [1.16.11](https://gitlab.com/opalmedapps/qplus/compare/v1.16.10...v1.16.11) (2023-07-26)
 
 
