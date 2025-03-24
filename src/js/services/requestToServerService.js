@@ -159,9 +159,8 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
             });
 
             returnObject.promise = new Promise(async (resolve, reject) => {
-                let key;
                 try {
-                    key = await sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID);
+                    let key = await sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID);
 
                     // Sets the reference to fetch a response
                     const username = UserAuthorizationInfo.getUsername();
