@@ -8,10 +8,14 @@
         <ons-list-item modifier="tappable" ng-repeat="app in value.apps">
 
             <!-----------------------------------------------------------------
-            There is an ERROR when:
-                checkIn.alert.type contains a value, regardless of the value
-                  AND
-                app.Checkin == 0  (i.e. Checkin failed)
+            The appointment will show the status according to its checkin status,
+            including:
+                1. 'info': before checkin,
+                2. 'success': successful checkin, 
+                3. 'warning': non-checkin-possible,
+                4. 'danger' : failed checkin
+            Checkin status is defined by appointment's attributes 'Checkin' and
+            'Checkinpossible'
             ------------------------------------------------------------------->
 
             <ons-row>
@@ -86,30 +90,5 @@
         <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
             {{"CHECKIN_NO"|translate}}
         </ons-list-header>
-    </ons-list>
-
-    <!-- If there is an ERROR, the following will show an error message. -->
-    <!-- This Code may never be executed because checkIn.error may never return ERROR because of changes to the Listener
-         that do not return an ERROR anymore.
-         We assume there is an error when:
-                checkIn.alert.type contains a value, regardless of the value
-                  AND
-                app.Checkin == 0  (i.e. Checkin failed)
-         -->
-
-    <ons-list ng-if="checkIn.error">
-        <ons-list-item>
-            <ons-row>
-                <ons-col width="50px" align="center" style="text-align: center;">
-                    <i ng-if="checkIn.error" class="fa fa-times-circle fa-2x" style="color:red;"></i>
-                </ons-col>
-
-                <ons-col>
-                    <p ng-if="checkIn.error" style="color: red;" class="item-desc" ng-class="fontSizeDesc">
-                        {{"CHECKIN_ERROR"|translate}}
-                    </p>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
     </ons-list>
 </ons-page>
