@@ -38,7 +38,6 @@
     "CHECKIN_NOT_ALLOWED": "L'enregistrement sera disponible dès l'arrivée à l'hôpital.",
     "CHECKIN_PATIENT_HEADER_SELF": "Vos rendez-vous",
     "CHECKIN_PATIENT_HEADER_NON_SELF": "Rendez-vous de {name}",
-    "CHECKIN_SUCCESS": "Vous êtes enregistré(e).",
     "CLICKTOOPEN": "Cliquez pour ouvrir",
     "CLINICAL_REPORTS": "Rapports cliniques",
     "CLINICAL_QUESTIONNAIRES": "Questionnaires cliniques",

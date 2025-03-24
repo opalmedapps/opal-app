@@ -54,10 +54,6 @@
 
                         <!-- Successful Checkin -->
                         <div ng-if="app.CheckInStatus == 'success'">
-                            <span class="item-desc" ng-class="fontSizeDesc">
-                                {{"CHECKIN_SUCCESS"|translate}}
-                            </span>
-
                             <span class="item-desc" ng-class="fontSizeDesc"
                                   ng-bind-html="app['CheckinInstruction_' + checkIn.language] | trustHTML">
                             </span>
