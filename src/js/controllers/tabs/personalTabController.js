@@ -26,6 +26,8 @@
         vm.getDisplayData = getDisplayData;
 
         vm.personalDeviceBackButton = () => tabbar.setActiveTab(0);
+        
+        vm.goToClinicalQuestionnaire = goToClinicalQuestionnaire;
 
         activate();
 
