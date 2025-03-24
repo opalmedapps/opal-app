@@ -100,8 +100,8 @@ describe('PatientTestResults service', function() {
     describe('updateTestDates', function() {
         it('should add new dates, without adding duplicates', function() {
             executeUpdateDates();
-            let expectedResult = expectedResultUpdateDates();
 
+            let expectedResult = expectedResultUpdateDates();
             let serviceDatesText = getServiceDatesText();
 
             expect(serviceDatesText).to.have.members(expectedResult);
@@ -131,8 +131,8 @@ describe('PatientTestResults service', function() {
             executeUpdateTypes();
 
             let serviceTypes = PatientTestResults.getTestTypes();
-
             let typeSerNum2 = serviceTypes.find(type => type.testExpressionSerNum === 2);
+
             expect(typeSerNum2.normalRangeMax).to.equal(100);
         });
 
@@ -140,9 +140,9 @@ describe('PatientTestResults service', function() {
             executeUpdateTypes();
 
             let serviceTypes = PatientTestResults.getTestTypes();
-
             let typeSerNum2 = serviceTypes.find(type => type.testExpressionSerNum === 2);
             let type2IsCached = PatientTestResults.testResultByTypeIsCached(typeSerNum2.testExpressionSerNum);
+
             expect(type2IsCached).to.be.false;
         });
     });
@@ -153,7 +153,7 @@ describe('PatientTestResults service', function() {
  * @returns {string[]} The test Dates as formatted strings.
  */
 function getServiceDatesText() {
-    return PatientTestResults.getTestDates().map(date => date.toISOString().substring(0, 10)); // yyyy-mm-dd
+    return PatientTestResults.getTestDates().map(date => date.toISOString().substring(0, 10)); // yyyy-mm-dd (10 chars)
 }
 
 /**
