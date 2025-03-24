@@ -121,6 +121,7 @@ build android:
     expire_in: 1 day
     paths:
       - opal-$ENV.apk
+      - platforms/android
 
 # Builds the app for iOS
 build ios:
@@ -134,12 +135,11 @@ build ios:
     - gem install --user-install ffi -- --enable-libffi-alloc
     - npm run build:app:ios:device:ci --env=$ENV --devteam=$IOS_DEVELOPMENT_TEAM
     - mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-$ENV.ipa"
-    - ls -la ./platforms/ios/build/
-    - ls -la ./platforms/ios/build/Debug-iphoneos/
   artifacts:
     expire_in: 1 day
     paths:
       - opal-$ENV.ipa
+      - platforms/ios
 
 # Builds the web version of the app
 build web:
