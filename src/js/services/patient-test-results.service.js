@@ -1,4 +1,5 @@
 import { PatientTestType } from "./../models/personal/test-results/PatientTestType";
+import { PatientTestResultDetailed } from "../models/personal/test-results/PatientTestResultDetailed";
 /**
  * PatienTest class serves as a model for the PatientTest module of the app.
  */
@@ -112,7 +113,9 @@ class PatientTestResults {
 		} else {
 			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestDateResults",
 				{ date: dateString });
-			this.testResultsByDate[dateString] = results.data || [];
+			let testResults = results.data || { results: [] };
+			testResults.results = testResults.results.map((result) => new PatientTestResultDetailed(result));
+			this.testResultsByDate[dateString] = testResults;
 			return this.testResultsByDate[dateString];
 		}
 	}
@@ -133,6 +136,24 @@ class PatientTestResults {
 	#testResultByDateIsCached = (date) => {
 		return this.testResultsByDate.hasOwnProperty(date.toString());
 	};
+
+	/**
+	 * Returns the class for a given test based on its criticality (within normal range, outside normal range,
+	 * critically outside normal range). The resulting class will be used to change the colour of test results
+	 * outside the normal range.
+	 * @param {*} test Test for which to get the class.
+	 * @returns {string} Name of the class to use with this test.
+	 */
+	getTestClass(test) {
+		let flag;
+		if (test.abnormalFlag) flag = test.abnormalFlag;
+		else if (test.latestAbnormalFlag) flag = test.latestAbnormalFlag;
+		else return "";
+		flag = flag.toLowerCase();
+		return (flag === "h" || flag === "l") ? "lab-results-test-in5" :
+			(flag === "c") ? "lab-results-test-out5" : "";
+	}
+
 	/**
 	 * Upon signing out, clear test results
 	 */

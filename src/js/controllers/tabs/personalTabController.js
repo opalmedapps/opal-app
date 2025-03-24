@@ -13,10 +13,12 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params',
+        'UserHospitalPreferences', 'Browser', 'DynamicContent'];
 
     function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
-                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, UserHospitalPreferences) {
+                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params,
+                                    UserHospitalPreferences, Browser, DynamicContent) {
         var vm = this;
 
         // variable to let the user know which hospital they are logged in
@@ -97,16 +99,8 @@
         }
 
         function goToCarnetSante() {
-            let url = '';
-            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
-            url = Params.carnetSanteUrl;  // English site available after opening the French one
-
-            if (app) {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
-                window.open(url, '_blank');
-            }
+            const url = DynamicContent.getURL("carnet_sante");
+            Browser.openInternal(url);
         }
 
         /**

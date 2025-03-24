@@ -41,7 +41,7 @@
     =================================-->
     <ons-modal var="loadingmodal" style="background-color: white !important;">
         <div style="margin-top: 5%" class="container text-center" align="center">
-            <img style="margin-top: -40%; width: 70%; height: auto;" ng-src="./img/Opal_Name_Logo_Green_Transparent.png">
+            <img style="margin-top: -40%; width: 70%; height: auto;" src="./img/Opal_Name_Logo_Green_Transparent.png">
         </div>
         <br>
         <ons-icon style="color: #0D47A1" size="50px" icon="ion-load-c" spin="true"></ons-icon>
@@ -91,6 +91,14 @@
             </p>
         </div>
     </ons-modal>
+
+    <!--
+    In-App Browser Modal
+    Note: This modal is used as a temporary fix to hide the gap in the in-app browser on iOS (remove if the issue is fixed).
+          https://github.com/apache/cordova-plugin-inappbrowser/issues/870
+          https://github.com/apache/cordova-plugin-inappbrowser/issues/801
+    =================================-->
+    <ons-modal var="browserModal" style="background-color: #7C7C7C"></ons-modal>
 
     <!--
     App

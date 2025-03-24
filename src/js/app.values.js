@@ -19,37 +19,6 @@
                 maxIdleTimeAllowed: 300000,
                 tenMinutesMilliSeconds: 600000,
 
-                /** About Controller URLs **/
-                aboutMuhcCase: 'aboutmuhc',
-                aboutMuhcUrl: {
-                    aboutMuhcUrlEn: 'https://muhc.ca/homepage/page/about-muhc',
-                    aboutMuhcUrlFr: 'https://cusm.ca/homepage/page/propos-du-cusm'
-                },
-                cedarsCancerCenterCase: 'cedarscancercenter',
-                cedarsCancerCenterUrl: {
-                    cedarsCancerCenterUrlEn: 'https://muhc.ca/glen/cedars-cancer-centre',
-                    cedarsCancerCenterUrlFr: 'https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres'
-                },
-                cedarsCancerFoundationCase: 'cedarscancerfoundation',
-                cedarsCancerFoundationUrl: {
-                    cedarsCancerFoundationUrlEn: 'https://www.cedars.ca',
-                    cedarsCancerFoundationUrlFr: 'https://www.cedars.ca'
-                },
-                cedarsCancerSupportCase: 'cedarscansupport',
-                cedarsCanSupportUrl: {
-                    cedarsCanSupportUrlEn: 'https://www.cansupport.ca/',
-                    cedarsCanSupportUrlFr: 'https://www.cansupport.ca/fr/'
-                },
-                donationCase: 'donation',
-                donationUrl: {
-                    donationUrlEn: 'https://www.cedars.ca/en/how-to-help/donations',
-                    donationUrlFr: 'https://www.cedars.ca/aidez-nous/donations'
-                },
-                opalWebsiteCase: 'opalwebsite',
-                opalWebsiteUrl: {
-                    opalWebsiteUrlEn: 'https://www.opalmedapps.com',
-                    opalWebsiteUrlFr: 'https://www.opalmedapps.com/fr-selected'
-                },
                 appointmentType: {
                     appointmentTypeEn: 'appointment',
                     appointmentTypeFr: 'rendez-vous'
@@ -62,9 +31,6 @@
                 alertTypeInfo: 'info',
                 alertClassUpdateMessageError: 'bg-danger updateMessage-error',
                 alertClassUpdateMessageSuccess: "bg-success updateMessage-success",
-
-                /** Registration Link **/
-                registrationPage: 'https://registration.opalmedapps.ca/#!/welcomePage',
 
                 /** Firebase Authentication Error Codes **/
                 invalidEmail: 'auth/invalid-email',
@@ -114,9 +80,13 @@
                     loadingMessageFr: 'Chargement en cours...',
                     loadingMessageEn: 'Loading...'
                 },
-                noDataAvailable: {
-                    noDataAvailableEn:"No plot available",
-                    noDataAvailableFr: "Aucun graphique disponible",
+                noPlotGeneric: {
+                    noPlotGenericEn: "No plot available",
+                    noPlotGenericFr: "Aucun graphique disponible",
+                },
+                noPlotNonNumeric: {
+                    noPlotNonNumericEn: "These results can't be charted because at least one of them isn't a number",
+                    noPlotNonNumericFr: "Ces résultats ne peuvent pas être représentés car au moins l'un d'entre eux n'est pas un nombre",
                 },
                 printChart: {
                     printChartFr: 'Imprimer le graphique',
@@ -133,25 +103,6 @@
                     rangeSelectorToFr: 'au',
                     rangeSelectorFromEn: 'From',
                     rangeSelectorToEr: 'to'
-                },
-
-                /** Parking Controller **/
-                general: {
-                    generalParkingTitleEn: 'Parking',
-                    generalParkingTitleFr: 'Stationnement',
-                    generalParkingUrl: 'https://www.depdocs.com/opal/parking/parking.php',
-                    generalParkingGlenUrlEn: 'https://muhc.ca/patient-and-visitor-parking#glen',
-                    generalParkingGlenUrlFr: 'https://cusm.ca/stationnement'
-                },
-                oncology: {
-                    oncologyParkingTitleEn: 'Oncology Parking',
-                    oncologyParkingTitleFr: 'Stationnement Radiothérapie',
-                    oncologyParkingUrlEn: 'https://www.depdocs.com/opal/parking/oncology_parking.php',
-                    oncologyParkingUrlFr: 'https://www.depdocs.com/opal/parking/radiotherapie_stationnement.php'
-                },
-                gettingHospitalUrl: {
-                    gettingHospitalUrlEn: 'https://muhc.ca/glen',
-                    gettingHospitalUrlFr: 'https://cusm.ca/glen'
                 },
 
                 /** ChangeSettingsController Constants **/
@@ -193,20 +144,6 @@
                     'Scheduling Treatments': []
                 },
 
-                /** GeneralTab Controller **/
-                findDoctorCase: 'finddoctor',
-                findDoctorUrl: {
-                    findDoctorUrlEn: 'https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/',
-                    findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-d-un-medecin-de-famille/'
-                },
-                medicalSchedulerCase: 'medicalscheduler',
-                medicalSchedulerUrl: {
-                    medicalSchedulerUrlEn: 'https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx',
-                    medicalSchedulerUrlFr: 'https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx'
-                },
-                carnetSanteCase: 'carnetsante',
-                carnetSanteUrl: 'https://carnetsante.gouv.qc.ca/portail',
-
                 /** CheckIn Service Constants **/
                 hospitalSite: {
                     hospitalCoordinates: [45.474127399999996, -73.6011402] //Glen Coordinates
@@ -239,14 +176,6 @@
                         color: '#FF7043'
                     },
                 },
-
-                /** Documents, doctors and patient service constants **/
-                cdvDoctorsFilePathAndroid: 'cdvfile://localhost/files/Doctors/',
-                cdvDoctorsFilePathIos: 'cdvfile://localhost/persistent/Doctors/',
-                cdvDocumentFilePathAndroid: 'cdvfile://localhost/sdcard/Documents/',
-                cdvDocumentFilePathIos: 'cdvfile://localhost/persistent/Documents/',
-                cdvPatientFilePathAndroid: 'cdvfile://localhost/files/Patient/',
-                cdvPatientFilePathIos: 'cdvfile://localhost/persistent/Patient/',
 
                 /** newsBanner Service constants **/
                 newsAlertTypes: {
@@ -305,7 +234,7 @@
                     "FFD": 0,
                     "MAS": 0,
                     "EDU": 0,
-                    "SUP": 0,
+                    "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
                 },
