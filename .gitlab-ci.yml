@@ -36,8 +36,8 @@ variables:
 stages:
   - check
   - prepare
-  - test
   - build
+  - test
   - deploy
   - post
 
@@ -238,4 +238,6 @@ include:
 # Secret Detection Customization: 
 # https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
 secret_detection:
-  dependencies: []
+  # don't wait for previous stage to succeed
+  # see: https://docs.gitlab.com/ee/ci/yaml/#when
+  when: always
