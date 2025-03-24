@@ -65,8 +65,8 @@
         activate();
 
         function activate() {
-            let subViewId = NavigatorParameters.getParameters().subView;
-            vm.view = views[subViewId];
+            let params = NavigatorParameters.getNavigator().getCurrentPage().options;
+            vm.view = views[params.id];
         }
 
         /**
