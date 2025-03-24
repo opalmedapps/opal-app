@@ -148,7 +148,6 @@ class PatientTestResultsByTypeController {
 				let interpretableDelay = this.#profileSelector.getActiveProfile().interpretable_lab_result_delay;
 				
 				this.labDelay = this.test.interpretationRecommended ? nonInterpretableDelay : interpretableDelay;
-				this.dayTranslationKey = this.labDelay == 1 ? 'DAY' : 'DAYS';
 				
 				this.showChart = results.hasNumericValues;
 				this.#configureChart(this.test);
