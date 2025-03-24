@@ -1,3 +1,10 @@
+## [1.14.2](https://gitlab.com/opalmedapps/qplus/compare/v1.14.1...v1.14.2) (2023-04-21)
+
+
+### Bug Fixes
+
+* fix appointment's calendar dot display ([50134c6](https://gitlab.com/opalmedapps/qplus/commit/50134c63c7cf133b21c1e2f99d4f0a2faaf07b09))
+
 ## [1.14.1](https://gitlab.com/opalmedapps/qplus/compare/v1.14.0...v1.14.1) (2023-04-20)
 
 

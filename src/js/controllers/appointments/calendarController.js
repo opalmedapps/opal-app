@@ -169,6 +169,11 @@
                 dateFirst=(new Date(vm.appointments[0].ScheduledStartTime.getTime()));
                 dateFirst.setHours(0,0,0,0);
                 dateFirst = dateFirst.getTime();
+
+                // Reset today's date and refresh calendar appointments' dots
+                // When we click refresh circle button on the top-right corner.
+                vm.todays_date = new Date();
+                vm.todays_date.setHours(0,0,0,0);
             }
         }
 
