@@ -94,6 +94,7 @@ p {
 @import url('./views/tab.view.css');
 @import url('./elements/profile.element.css');
 @import url('./elements/list.element.css');
+@import url('./elements/info.element.css');
 @import url('./views/calendar.view.css');
 @import url('./font.css');
 @import url('./elements/action.element.css');
