@@ -57,6 +57,10 @@
                     method: 'post',
                     url: '/api/patients/<PATIENT_UUID>/health-data/quantity-samples/'
                 },
+                DATABANK_CONSENT: {
+                    method: 'post',
+                    url: '/api/patients/<PATIENT_UUID>/databank/consent/'
+                }
             }
         });
 })();
