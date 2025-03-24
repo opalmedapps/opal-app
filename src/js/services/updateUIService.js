@@ -9,12 +9,12 @@
         .module('MUHCApp')
         .factory('UpdateUI', UpdateUI);
 
-    UpdateUI.$inject = ['$filter','$injector','$q','Announcements','Appointments','Diagnoses','Documents',
-        'EducationalMaterial','NativeNotification','Notifications','Patient','PatientTestResults',
+    UpdateUI.$inject = ['Announcements','Appointments','Diagnoses','Documents',
+        'EducationalMaterial', 'Notifications', 'PatientTestResults',
         'Questionnaires','RequestToServer','TxTeamMessages','UserPreferences'];
 
-    function UpdateUI($filter, $injector, $q, Announcements, Appointments, Diagnoses, Documents,
-                      EducationalMaterial, NativeNotification, Notifications, Patient, PatientTestResults,
+    function UpdateUI(Announcements, Appointments, Diagnoses, Documents,
+                      EducationalMaterial, Notifications, PatientTestResults,
                       Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
         /**
          * @desc Mapping of all request types made by this service to the listener. Each key is the name of a
@@ -31,51 +31,61 @@
                 set: Announcements.setAnnouncements,
                 update: Announcements.updateAnnouncements,
                 lastUpdated: 0,
+                multiProfileEnabled: true,
             },
             'Appointments': {
                 set: Appointments.setUserAppointments,
                 update: Appointments.updateUserAppointments,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'Diagnosis': {
                 set: Diagnoses.setDiagnoses,
                 update: Diagnoses.updateDiagnoses,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'Documents': {
                 set: Documents.setDocuments,
                 update: Documents.updateDocuments,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'EducationalMaterial': {
                 set: EducationalMaterial.setEducationalMaterial,
                 update: EducationalMaterial.updateEducationalMaterial,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'Notifications': {
                 set: Notifications.initNotifications,
                 update: Notifications.updateUserNotifications,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'PatientTestDates': {
                 set: PatientTestResults.setTestDates,
                 update: PatientTestResults.updateTestDates,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'PatientTestTypes': {
                 set: PatientTestResults.setTestTypes,
                 update: PatientTestResults.updateTestTypes,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'QuestionnaireList': {
                 set: Questionnaires.setQuestionnaireList,
                 update: Questionnaires.updateQuestionnaireList,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
             'TxTeamMessages': {
                 set: TxTeamMessages.setTxTeamMessages,
                 update: TxTeamMessages.updateTxTeamMessages,
                 lastUpdated: 0,
+                multiProfileEnabled: false,
             },
         };
 
@@ -150,7 +160,7 @@
                 Fields: parameters,
                 Timestamp: findSmallestTimestamp(parameters),
             };
-            let response = await RequestToServer.cueRequests('Refresh', refreshParams); 
+            let response = await cueRequests('Refresh', refreshParams); 
             validateResponse(response);
             await updateServices(response.Data);
             updateTimestamps(parameters, response.Timestamp);
@@ -163,10 +173,22 @@
          * @returns {Promise<void>} Resolves if all data was successfully initialized, or rejects with an error.
          */
         async function setSection(parameters) {
-            let response = await RequestToServer.cueRequests('Refresh', {Fields: parameters});
+            let response = await cueRequests('Refresh', {Fields: parameters});
             validateResponse(response);
             await setServices(response.Data, parameters);
             updateTimestamps(parameters, response.Timestamp);
+        }
+
+        /**
+         * @description - Cue request between multiple patient requests for announcements or normal single request to server.
+         * @param {string} typeOfRequest - Type of request send to the listener
+         * @param {object} parameters - Extra parameters to identify data to be query
+         * @returns Requested data from the listener.
+         */
+        async function cueRequests(typeOfRequest, parameters) {
+            return sectionServiceMappings[parameters.Fields[0]].multiProfileEnabled
+                ? RequestToServer.handleMultiplePatientsRequests(typeOfRequest, parameters, parameters.Fields[0])
+                : RequestToServer.sendRequestWithResponse(typeOfRequest, parameters);
         }
 
         /**

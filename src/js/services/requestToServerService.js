@@ -9,13 +9,12 @@ angular
 
         let firebase_url;
         let response_url;
-        let currentRequestPatientId = null;
 
         return {
             sendRequestWithResponse: sendRequestWithResponse,
             sendRequest: sendRequest,
             apiRequest: apiRequest,
-            cueRequests: cueRequests
+            handleMultiplePatientsRequests: handleMultiplePatientsRequests
         };
 
         /**
@@ -26,13 +25,13 @@ angular
          * @param {string} referenceField Option refenrece field for the listener's legacy section
          * @returns Firebase unique reference key where the data is uploaded
          */
-        function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField) {
+        function sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID) {
             firebase_url = FirebaseService.getDBRef();
             response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
             if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
             let requestType = encryptionKey ? typeOfRequest : EncryptionService.encryptData(typeOfRequest);
             let requestParameters = encryptionKey ? EncryptionService.encryptWithKey(parameters, encryptionKey) : EncryptionService.encryptData(parameters);
-            let request_object = getRequestObject(requestType, requestParameters, typeOfRequest);
+            let request_object = getRequestObject(requestType, requestParameters, typeOfRequest, patientID);
             let reference = getReferenceField(typeOfRequest, referenceField)
             let pushID =  firebase_url.child(reference).push(request_object);
 
@@ -74,49 +73,36 @@ angular
         }
 
         /**
-         * @description - Cue request between multiple patient requests for announcements or normal single request to server.
-         * @param {string} typeOfRequest - Type of request send to the listener
-         * @param {object} parameters - Extra parameters to identify data to be query
-         * @returns Requested data from the listener.
-         */
-        async function cueRequests(typeOfRequest, parameters) {
-            return parameters.Fields[0] === 'Announcements' ? handleMultiplePatientAnnouncements(typeOfRequest, parameters) : sendRequestWithResponse(typeOfRequest, parameters);
-        }
-
-        /**
          * @descrition - Execute multiple requests to get an announcement per patient then merge the data together.
          * @param {string} typeOfRequest - Type of request send to the listener
          * @param {object} parameters - Extra parameters to identify data to be query
+         * @param {categorieRequested} - The data category requested
          * @returns Response with merge data
          */
-        async function handleMultiplePatientAnnouncements(typeOfRequest, parameters) {
+        async function handleMultiplePatientsRequests(typeOfRequest, parameters, categorieRequested) {
             const ProfileSelectorService = $injector.get('ProfileSelector');
             const patientList = ProfileSelectorService.getConfirmedProfiles();
             let combinedArrays = [];
             let results = [];
             await Promise.all(patientList.map(async (patient) => {
                 if (!patient.patient_legacy_id) return;
-                currentRequestPatientId = patient.patient_legacy_id;
-                let response = await sendRequestWithResponse(typeOfRequest, parameters);
+                let response = await sendRequestWithResponse(typeOfRequest, parameters, null, null, null, patient.patient_legacy_id);
                 results.push(response);
             }));
-            currentRequestPatientId = null;
             results.forEach((result) => {
                 if (result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data.Announcements]
             });
             return {
                 ...results[0],
-                Data: {
-                    'Announcements': combinedArrays,
-                }
+                Data: {[categorieRequested]: combinedArrays}
             }
         }
 
 
-        function sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField) {
+        function sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField, patientID) {
             return new Promise((resolve, reject) => {
                 //Sends request and gets random key for request
-                let key = sendRequest(typeOfRequest, parameters, encryptionKey, referenceField);
+                let key = sendRequest(typeOfRequest, parameters, encryptionKey, referenceField, patientID);
                 //Sets the reference to fetch data for that request
                 let refRequestResponse = (!referenceField) ? response_url.child(UserAuthorizationInfo.getUsername() + '/' + key) : firebase_url.child(responseField).child(key);
                 //Waits to obtain the request data.
@@ -163,7 +149,7 @@ angular
          * @param {object} requestParameters Params for the request
          * @returns {object} Formated request parameters
          */
-        function getRequestObject(requestType, requestParameters, typeOfRequest) {
+        function getRequestObject(requestType, requestParameters, typeOfRequest, patientID) {
             let params = {
                 Request : requestType,
                 DeviceId: UUID.getUUID(),
@@ -175,7 +161,7 @@ angular
                 Timestamp: firebase.database.ServerValue.TIMESTAMP
             };
             // Add a target patient if the request type is for patient data
-            if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) params.TargetPatientID = getPatientId();
+            if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) params.TargetPatientID = patientID || getPatientId();
             return params;
         }
 
@@ -187,6 +173,6 @@ angular
         function getPatientId() {
             const ProfileSelectorService = $injector.get('ProfileSelector');
             const selectedProfile = ProfileSelectorService.getActiveProfile();
-            return currentRequestPatientId || selectedProfile?.patient_legacy_id || Patient.getPatientSerNum();
+            return selectedProfile?.patient_legacy_id || Patient.getPatientSerNum();
         }
 }]);

@@ -37,37 +37,10 @@
         $filter
     ) {
         var vm = this;
-
-        /**
-         * @ngdoc property
-         * @name noAnnouncements
-         * @propertyOf AnnouncementController
-         * @returns boolean
-         * @description used by the view to display no announcement message to user if no announcements exist
-         */
         vm.noAnnouncements = true;
-
-        /**
-         * @ngdoc property
-         * @name announcements
-         * @propertyOf AnnouncementController
-         * @returns array
-         * @description used by the view to display the list of existing announcements
-         */
         vm.announcements = [];
-
         vm.goToAnnouncement = goToAnnouncement;
-
-        // Used by patient-data-handler
         vm.setAnnouncementsView = setAnnouncementsView;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-        }
 
         /**
          * @description Filters and displays the announcements from the Announcements service.
