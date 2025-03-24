@@ -24,16 +24,16 @@
             },
             template: `
                         <!-- video url for 'youtube' and 'vimeo' -->
-                        <iframe class="embed-responsive-item" ng-show="iframeTag" ng-src="{{edumaterialUrl|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
+                        <iframe id="opal-video-iframe" class="embed-responsive-item" ng-if="iframeTag" ng-src="{{edumaterialUrl|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
                         </iframe>
 
                         <!-- video format for 'mp4', 'ogv' and 'webm' -->
-                        <video controls ng-show="videoTag" preload="metadata">
+                        <video controls ng-if="videoTag" preload="metadata">
                             <source ng-src="{{formatedUrl|trustThisUrl}}" type="video/{{fileExt}}">
                         </video>
 
                         <!-- ERROR MESSAGE -->
-                        <div ng-show="showError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+                        <div ng-if="showError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
                             <uib-alert type="{{errorAlertType}}">{{errorMessage}}</uib-alert>
                         </div>
             `,
@@ -50,40 +50,43 @@
           *     - iPhones will prevent the video from auto playing, but the poster image appears as the result.
           */
         function checkVideoFormat(scope, element, attrs) {
+            // inialize each division's switch variable
             scope.iframeTag = false;
             scope.videoTag = false;
             scope.showError = false;
+
+            // get error alert type
             scope.errorAlertType = Params.alertTypeDanger;
+
+            // get the material's file extension
+            scope.fileExt = FileManagerService.getFileExtension(scope.edumaterialUrl);
 
             // a new url is just for iphone device to get the poster when time is loading at 0.05s
             scope.formatedUrl = scope.edumaterialUrl;
 
-            scope.$watch('edumaterialUrl', function () {
-                try {
-                    // get the material's file extension
-                    scope.fileExt = FileManagerService.getFileExtension(scope.edumaterialUrl);
+            try {
 
-                    if ((scope.edumaterialUrl.indexOf('youtube') !== -1) || (scope.edumaterialUrl.indexOf('vimeo') !== -1)) {
-                        scope.iframeTag = true;
-                    }
-                    else if (['mp4', 'ogv', 'webm'].indexOf(scope.fileExt.toLowerCase()) !== -1) {
-                        scope.videoTag = true;
-                        /**
-                        *  Modify the video url when using iPhone deice to show the poster at a specific time frame.
-                        */
-                        if(ons.platform.isIOS()){
-                            scope.formatedUrl = scope.formatedUrl + "#t=0.05";
-                        }
-                    }
-                    else {
-                        scope.showError = true;
-                    }
+                if ((scope.edumaterialUrl.indexOf('youtube') !== -1) || (scope.edumaterialUrl.indexOf('vimeo') !== -1)) {
+                    scope.iframeTag = true;
                 }
-                catch (error) {
+                else if (['mp4', 'ogv', 'webm'].indexOf(scope.fileExt.toLowerCase()) !== -1) {
+                    scope.videoTag = true;
+                    /**
+                    *  Modify the video url when using iPhone deice to show the poster at a specific time frame.
+                    */
+                    if(ons.platform.isIOS()){
+                        scope.formatedUrl = scope.formatedUrl + "#t=0.05";
+                    }
+                    
+                }
+                else {
                     scope.showError = true;
-                    console.error(error);
                 }
-            });
+            }
+            catch (error) {
+                scope.showError = true;
+                console.error(error);
+            }
         }
     }
 })();
