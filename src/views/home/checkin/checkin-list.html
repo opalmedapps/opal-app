@@ -1,11 +1,11 @@
 <ons-page ng-controller="CheckInController as checkIn">
     <generic-toolbar title="{{'CHECKIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <ons-list>
-        <ons-list-header class="person-list-header" ng-class="fontSizeTitle">
-            {{"APPOINTMENTS"|translate}}
+    <ons-list ng-repeat="(patientName, apps) in checkIn.displayApps">
+        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
+            {{patientName}}
         </ons-list-header>
-        <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
+        <ons-list-item modifier="tappable" ng-repeat="app in apps">
 
             <!-----------------------------------------------------------------
             There is an ERROR when:
@@ -15,24 +15,12 @@
             ------------------------------------------------------------------->
 
             <ons-row>
-                <ons-col width="50px" align="center" style="text-align: center;">
-
-                    <i ng-if="app.CheckinPossible == 0" class="fa fa-exclamation-triangle fa-2x"
-                       style="color:#FF8F35;"></i>
-
-                    <div ng-show="checkIn.alert.type">
-                        <i ng-if="app.Checkin == 1 && app.CheckinPossible == 1" class="fa fa-check-square-o fa-2x"
-                           style="color:#4CAF50;"></i>
-
-                        <!--<i ng-if="app.Checkin == 0 && app.CheckinPossible == 1" class="fa fa-square-o fa-2x"-->
-                           <!--style="color:#4CAF50;"></i>-->
-
-                        <i ng-if="app.Checkin == 0 && app.CheckinPossible == 1" class="fa fa-times-circle fa-2x" style="color:red;"></i>
-                    </div>
-
+                <ons-col width="25%" align="center" style="text-align: center;">
+                    {{app.ScheduledStartTime | date:'shortTime'}}
                 </ons-col>
+                <ons-col width="1%" > <div style="background-color: rgba(38,100,171,0.81); height: 100%;"></div></ons-col>
                 <ons-col align="center">
-                    <div style="line-height:1;padding:5px;">
+                    <div style="line-height:1;padding-left:10px;padding-top:10px;">
                         <span ng-class="fontSizeTitle">
                             <p ng-if="checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
                                 {{app["AppointmentType_" + checkIn.language]}}
@@ -40,10 +28,10 @@
                             <p ng-if="!checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
                                 {{app["ResourceDescription"]}}
                             </p>
-                            {{app.ScheduledStartTime | date:'shortTime'}}
+
                         </span>
                         <p ng-show="app.RoomLocation_EN" class="item-desc" ng-class="fontSizeDesc" >
-                            {{"APPOINTMENT_ROOM"|translate}} {{app["RoomLocation_" + checkIn.language]}}
+                            {{app["RoomLocation_" + checkIn.language]}}
                         </p>
 
                         <p ng-if="app.CheckinPossible == 0" class="item-desc" ng-class="fontSizeDesc" style="color:#FF803E;"
@@ -51,19 +39,6 @@
                         </p>
 
                         <p></p>
-
-
-                        <!-- Show Circle - Please Wait - while trying to Checkin -->
-                        <div ng-hide="checkIn.alert.type" ng-if="app.CheckinPossible == 1" align="center" style="margin:10px">
-                            <p class="item-desc" ng-class="fontSizeDesc" style="text-align: center; color: #2196F3;">
-                                {{"CHECKIN_PROCESSING"|translate}}
-                            </p>
-                            <svg class="progress-circular">
-                                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none"
-                                        stroke-width="10%"
-                                        stroke-miterlimit="10"/>
-                            </svg>
-                        </div>
 
                         <!-- Successful Checkin -->
                         <div ng-show="checkIn.alert.type" ng-if="app.Checkin == 1 && app.CheckinPossible == 1">
@@ -95,6 +70,11 @@
             </ons-row>
         </ons-list-item>
     </ons-list>
+
+    <ons-row style="width: 90%; margin: 5% 5% 0% 5%">
+        <ons-button class="shadow-2 btn-primary" ng-class="fontSizeTitle" style="width: 100%; text-align: center;"
+                    ng-click="">{{"CHECKINALLTODAY"|translate}}</ons-button>
+    </ons-row>
 
 
     <!-- If there is an ERROR, the following will show an error message. -->
