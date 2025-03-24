@@ -40,7 +40,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 * Homepage: https://fontawesome.com/
 * Repository: https://github.com/FortAwesome/Font-Awesome
-* License: `(OFL-1.1 AND MIT)`
+* License: `(CC-BY-4.0 AND OFL-1.1 AND MIT)`
 
 ```text
 Fonticons, Inc. (https://fontawesome.com)
