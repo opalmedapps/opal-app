@@ -7,7 +7,7 @@ import "../../css/directives/profile-selector.directive.css"
         .module("MUHCApp")
         .directive("profileSelector", ProfileSelector);
 
-    ProfileSelector.$inject = ['$window', '$timeout', 'ProfileSelector', 'Patient', 'UpdateUI'];
+    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'Patient', 'UpdateUI'];
 
     /**
      * @name ProfileSelector
@@ -15,7 +15,7 @@ import "../../css/directives/profile-selector.directive.css"
      * @date 2022-08-18
      * @desc Directive to display the profile selector and scope it's business logic.
      */
-    function ProfileSelector($window, $timeout, ProfileSelector, Patient, UpdateUI)
+    function ProfileSelector($filter, $timeout, ProfileSelector, Patient, UpdateUI)
     {
         return {
             restrict: 'E',
@@ -56,7 +56,7 @@ import "../../css/directives/profile-selector.directive.css"
                     <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix" ng-click="toggleList(false)"></div>
                 </ons-toolbar>
             `,
-            link: function (scope, element) {
+            link: function (scope) {
                 
                 scope.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
                 scope.profileList = ProfileSelector.getPatientList();
