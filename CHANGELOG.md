@@ -1,3 +1,10 @@
+## [1.37.12](https://gitlab.com/opalmedapps/qplus/compare/v1.37.11...v1.37.12) (2024-11-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency babel-loader to v9.2.1 ([30e4fe5](https://gitlab.com/opalmedapps/qplus/commit/30e4fe53013e130dbfcbeacabb0169499a7bb76d))
+
 ## [1.37.11](https://gitlab.com/opalmedapps/qplus/compare/v1.37.10...v1.37.11) (2024-11-20)
 
 
