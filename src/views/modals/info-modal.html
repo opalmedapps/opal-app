@@ -1,11 +1,13 @@
 <ons-modal var="infoModal">
     <div class="info-modal">
         <div class="info-modal-text" id="test">
-            <div><H3 class="info-modal-title">{{"WHATSNEW"|translate}}</H3></div>
-            <div><H4 class="info-modal-text-title">{{"CURRENT_VERSION"|translate}}{{infoModalVersion}}</H4></div>
+            <div><h3 class="info-modal-title">{{"WHATSNEW"|translate}}</h3></div>
+            <div><h4 class="info-modal-text-title">{{"CURRENT_VERSION"|translate}}{{infoModalVersion}}</h4></div>
             <div ng-repeat="data in infoModalData">
-                <H4 class="info-modal-text-title">Version: {{data.title}}</H4>
-                <p class="info-modal-text-description">{{data.content}}</p>
+                <h4 class="info-modal-text-title">Version: {{data.title}}</h4>
+                <ul>
+                    <li class="info-modal-text-description" ng-repeat="content in data.content">{{content}}</li>
+                </ul>
             </div>
         </div>
         <ons-button style="margin-top: 5%;" ng-click="infoModal.hide()">{{"CLOSE"|translate}}</ons-button>

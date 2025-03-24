@@ -18,9 +18,9 @@
         .module('MUHCApp')
         .factory('Version', Version);
 
-    Version.$inject = ['$filter','$q','RequestToServer', 'Constants'];
+    Version.$inject = ['$filter','$q','RequestToServer', 'Constants', '$http'];
 
-    function Version($filter, $q, RequestToServer, Constants) {
+    function Version($filter, $q, RequestToServer, Constants, $http) {
 
         /**
          * @ngdoc property
@@ -48,56 +48,32 @@
          **/
         async function getVersionUpdates(lastVersion, language) {
             var r = $q.defer();
-            const https = require('https');
-            // https.get is async
-            await https.get(version_url,(res) => {
-                let body = "";
 
-                res.on("data", (chunk) => {
-                    body += chunk;
-                });
-
-                res.on("end", () => {
-                    try {
-                        let versions = JSON.parse(body);
-                        versions.sort(function(v1, v2){return versionCompare(v2.VERSION, v1.VERSION)});
-                        let updates = [];
-                        versions.forEach(function(value) {
-                            if (versionCompare(value.VERSION, lastVersion) === 1 && value.DESCRIPTION_EN) {
-                                let infoData = {};
-                                let description = language == 'EN' ? value.DESCRIPTION_EN : value.DESCRIPTION_FR;
-                                description = formatVersionDescription(description);
-                                infoData.title = value.VERSION;
-                                infoData.content = description;
-                                updates.push(infoData);
-                            }
-                        });
-                        r.resolve(updates);
-                    } catch (error) {
-                        console.error(error.message);
-                        r.reject(error.message);
-                    };
-                });
-            }).on("error", (error) => {
-                console.error(error.message);
-                r.reject(error.message);
+            await $http.get(version_url).then(function successCallback(response) {
+                try {
+                    let versions = response.data;
+                    versions.sort(function(v1, v2){return versionCompare(v2.VERSION, v1.VERSION)});
+                    let updates = [];
+                    versions.forEach(function(value) {
+                        if (versionCompare(value.VERSION, lastVersion) === 1 && value.DESCRIPTION_EN) {
+                            let infoData = {};
+                            let description = language == 'EN' ? value.DESCRIPTION_EN : value.DESCRIPTION_FR;
+                            infoData.title = value.VERSION;
+                            infoData.content = description;
+                            updates.push(infoData);
+                        }
+                    });
+                    r.resolve(updates);
+                } catch (error) {
+                    console.error(error.message);
+                    r.reject(error.message);
+                };
+            }, function errorCallback(response) {
+                console.log(response);
+                r.reject(response);
             });
 
             return r.promise;
-        }
-
-        /**
-         * @name formatVersionDescription
-         * @desc format the descriptions as string
-         */
-        function formatVersionDescription(description) {
-            let descriptions = '';
-            if (description && description.length > 0) {
-                description.forEach(function(value, index) {
-                    descriptions += '\u2022 ' + value + '\n\n';
-                });
-            }
-            return descriptions;
         }
 
         /**
