@@ -1,3 +1,45 @@
+## [1.34.2](https://gitlab.com/opalmedapps/qplus/compare/v1.34.1...v1.34.2) (2024-06-26)
+
+
+### Bug Fixes
+
+* update google-services.json for the preprod environment ([b535ad6](https://gitlab.com/opalmedapps/qplus/commit/b535ad60da819d4cca7fc87225b51c1d85c6676e))
+
+## [1.34.1](https://gitlab.com/opalmedapps/qplus/compare/v1.34.0...v1.34.1) (2024-06-20)
+
+
+### Bug Fixes
+
+* add back core-js to add polyfill for missing function in simulators ([6dab2ab](https://gitlab.com/opalmedapps/qplus/commit/6dab2abb78da1ee751e60027751898d663b36d30))
+
+# [1.34.0](https://gitlab.com/opalmedapps/qplus/compare/v1.33.21...v1.34.0) (2024-06-20)
+
+
+### Features
+
+* add bolding for unread lab results ([c4aafd5](https://gitlab.com/opalmedapps/qplus/commit/c4aafd5235eadefae62e8815a0c9205c18865f5b))
+
+## [1.33.21](https://gitlab.com/opalmedapps/qplus/compare/v1.33.20...v1.33.21) (2024-06-19)
+
+
+### Bug Fixes
+
+* add property to make textbox more sensitive ([7276385](https://gitlab.com/opalmedapps/qplus/commit/7276385932d2de202baa49969cee3f3f93c9ecc9))
+
+## [1.33.20](https://gitlab.com/opalmedapps/qplus/compare/v1.33.19...v1.33.20) (2024-06-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pdfjs-dist to v4 ([a3a26e1](https://gitlab.com/opalmedapps/qplus/commit/a3a26e1b745785d31efca99975fb043e9efd36df))
+
+## [1.33.19](https://gitlab.com/opalmedapps/qplus/compare/v1.33.18...v1.33.19) (2024-06-14)
+
+
+### Bug Fixes
+
+* remove ORI from the list of hospitals at login and associated translation strings ([278df62](https://gitlab.com/opalmedapps/qplus/commit/278df6221f4461b8504a0a41401c222115562436))
+
 ## [1.33.18](https://gitlab.com/opalmedapps/qplus/compare/v1.33.17...v1.33.18) (2024-06-12)
 
 
