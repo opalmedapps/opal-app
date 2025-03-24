@@ -60,20 +60,6 @@
 
                 // Validate that all required parameters are there; an error will be thrown if not
                 Questionnaires.formatQuestionnaireStub(questionnaireInfo);
-                // If the relationship type is not 'SELF' and can_answer_questionnaire is False, the questionnaire cannot be opened
-                let relationshipType = ProfileSelector.getActiveProfile().relationship_type.role_type;
-                let answerable = ProfileSelector.getActiveProfile().relationship_type.can_answer_questionnaire;
-                // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
-                if(vm.refreshQuestionnaires) vm.refreshQuestionnaires();
-                // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
-                if ((!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) || (relationshipType !== 'SELF' && !answerable)) {
-                    NativeNotification.showNotificationAlert(
-                        $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
-                        $filter('translate')("TITLE"),
-                    );
-                    goToQuestionnaireSummary(answerQuestionnaireId);
-                    return;
-                }
 
                 $timeout(function () {
                     let answerQuestionnaireId = getAnswerQuestionnaireId(questionnaireInfo);
@@ -97,6 +83,20 @@
          * @param {int} answerQuestionnaireId
          */
         async function goToQuestionnaire(answerQuestionnaireId) {
+            // If the relationship type is not 'SELF' and can_answer_questionnaire is False, the questionnaire cannot be opened
+            let relationshipType = ProfileSelector.getActiveProfile().relationship_type.role_type;
+            let answerable = ProfileSelector.getActiveProfile().relationship_type.can_answer_questionnaire;
+            // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
+            if(vm.refreshQuestionnaires) await vm.refreshQuestionnaires();
+            // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
+            if ((!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) || (relationshipType !== 'SELF' && !answerable)) {
+                navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
+                return;
+            }
             // putting editQuestion false to claim that we are not coming from a summary page
             // Get questionnaire purpose to display correct page contents
             let purposeData = await Questionnaires.requestQuestionnairePurpose(answerQuestionnaireId);

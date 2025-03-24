@@ -92,14 +92,14 @@
             // If the relationship type is not 'SELF' and can_answer_questionnaire is False, the questionnaire cannot be opened
             let relationshipType = ProfileSelector.getActiveProfile().relationship_type.role_type;
             let answerable = ProfileSelector.getActiveProfile().relationship_type.can_answer_questionnaire;
-            if (relationshipType !== 'SELF' && !answerable) {
+            if (relationshipType !== 'SELF' && !answerable && selectedQuestionnaire.status != allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS) {
                 NativeNotification.showNotificationAlert(
                     $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
                     $filter('translate')("TITLE"),
                 );
                 return;
             }
-            
+
             // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
             if (vm.refreshQuestionnaires) {
                 await vm.refreshQuestionnaires();
