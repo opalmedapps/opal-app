@@ -71,6 +71,7 @@
 .change-password--field-error {
     color: red;
     margin: 5px auto 20px;
+    text-align: left;
 }
 
 .change-password--submit-button {
