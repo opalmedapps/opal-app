@@ -294,7 +294,10 @@
             //Create a promise so this can be run asynchronously
             var r = $q.defer();
 
-            RequestToServer.sendRequestWithResponse('Checkin',{}, null, {}, {}, patientSerNum)
+            let objectToSend = {};
+            objectToSend.PatientSerNum = patientSerNum;
+
+            RequestToServer.sendRequestWithResponse('Checkin',objectToSend)
                 .then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
                 .catch(function () { r.reject({status: 'ERROR', appts: null}); });
 
