@@ -28,6 +28,15 @@ stages:
   - build
   - deploy
 
+# Does a test-run of dependency installation to quickly give feedback on whether dependency installation will fail
+check dependencies:
+  stage: .pre
+  rules:
+    - when: always
+  script:
+    - npm -v
+    - npm ci --prefer-offline
+
 build android:
   stage: build
   rules:
@@ -36,7 +45,7 @@ build android:
     - when: manual
   before_script:
     - npm -v
-    - npm install
+    - npm ci --prefer-offline
   script:
     - java -version
     - gradle -v
@@ -56,7 +65,7 @@ build ios:
     - when: manual
   before_script:
     - npm -v
-    - npm install
+    - npm ci --prefer-offline
   script:
     # Fixes Bus Error when cordova invokes pod install
     # See: https://stackoverflow.com/a/70581304
