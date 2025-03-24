@@ -129,7 +129,7 @@
          * @returns {boolean} true if the questionnaire is completed, false otherwise
          */
         function isQuestionnaireCompleted(questionnaireInfo) {
-            return questionnaireInfo.completedFlag === "1";
+            return questionnaireInfo.status == 2;
         }
 
         /**

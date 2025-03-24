@@ -48,7 +48,12 @@
                 language: UserPreferences.getLanguage(),
                 serNum: questionnaireSerNum,
             });
-            return response.Data.hasOwnProperty('QuestionnaireList') ? response.Data?.QuestionnaireList[0] : undefined;
+            let questionnaireStub = response.Data?.hasOwnProperty('QuestionnaireList') ? response.Data?.QuestionnaireList[0] : undefined;
+            if (!questionnaireStub) {
+                console.error(response);
+                throw `GetOneItem for QuestionnaireList with QuestionnaireSerNum = ${questionnaireSerNum} returned an invalid response`;
+            }
+            return questionnaireStub;
         }
 
         /**
