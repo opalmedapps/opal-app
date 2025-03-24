@@ -32,21 +32,6 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('TRP') && tab.allowedModules['TRP']"
-                           ng-click="tab.goToStatus()">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <ons-icon style="color: #9575CD" size="2x" icon="fa-tasks" aria-hidden="true" ></ons-icon>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"TREATMENTPLANNING"|translate}}</span>
-                        </header>
-                        <!--<p class="item-desc" ng-class="fontSizeDesc">{{ 'STAGEOF' | translate:outOf}}</p>-->
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('APT') && tab.allowedModules['APT']"
                            ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
                 <ons-row align="center">
