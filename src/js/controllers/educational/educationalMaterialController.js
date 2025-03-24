@@ -104,6 +104,11 @@
          *       Needed since navigator does not automatically update when switching to education tab.
          */
         function configureNavigator(){
+            // Set navigator to educationNavigator when in clinical educational material
+            if(vm.eduCategory === 'clinical'){
+                NavigatorParameters.setParameters({'Navigator':'educationNavigator', 'category': 'clinical'});
+            }
+
             navigator = NavigatorParameters.getNavigator();
         }
 
@@ -124,21 +129,19 @@
         }
 
         function bindEvents() {
-            navigator.on('prepop',function()
-            {
+            navigator.on('prepop', function () {
                 backButtonPressed = 0;
                 configureState();
             });
 
-            navigator.on('prepush', function(event) {
+            navigator.on('prepush', function (event) {
                 if (navigator._doorLock.isLocked()) {
                     event.cancel();
                 }
             });
 
             //Cleaning up
-            $scope.$on('$destroy',function()
-            {
+            $scope.$on('$destroy', function () {
                 navigator.off('prepop');
                 // Clear navigator parameters
                 NavigatorParameters.setParameters({});

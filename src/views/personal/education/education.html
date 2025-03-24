@@ -40,7 +40,7 @@
     <!-- LIST OF EDUCATIONAL MATERIALS -->
     <ons-scroller-height ng-hide="edu.noMaterials" offset-height="78">
         <ons-list
-            ng-repeat="edumaterial in (edu.filteredEduMaterials (edu.edumaterials | filter: edu.searchString | orderBy: '-DateAdded'))"
+            ng-repeat="edumaterial in (edu.filteredEduMaterials = (edu.edumaterials | filter: edu.searchString | orderBy: '-DateAdded'))"
             ng-click="edu.goToEducationalMaterial(edumaterial)">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle"
                 ng-show="{{edu.filteredEduMaterials | showHeader : $index : 'DateAdded' }}">
