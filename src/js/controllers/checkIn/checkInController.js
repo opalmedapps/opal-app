@@ -39,7 +39,6 @@
         var vm = this;
         vm.apps = [];
         vm.displayApps = {};
-        vm.patients = {};
         vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
@@ -65,10 +64,12 @@
             vm.apps = CheckInService.getCheckInApps();
             vm.apps.forEach(app => {
                 if (!vm.displayApps[app.PatientSerNum]) {
-                    vm.displayApps[app.PatientSerNum] = [];
+                    vm.displayApps[app.PatientSerNum] = {};
+                    vm.displayApps[app.PatientSerNum].apps = [];
+                    vm.displayApps[app.PatientSerNum].patientName = app.patientName;
                 }
-                vm.displayApps[app.PatientSerNum].push(app);
-                vm.patients[app.PatientSerNum] = app.patientName;
+                vm.displayApps[app.PatientSerNum].apps.push(app);
+                vm.displayApps[app.PatientSerNum].patientName = app.patientName;
             });
             vm.language = UserPreferences.getLanguage();
 
@@ -140,7 +141,7 @@
 
             $timeout(() => {
                 let allCheckedIn = true;
-                vm.displayApps[PatientSerNum].forEach(app => {
+                vm.displayApps[PatientSerNum].apps.forEach(app => {
                     const appt = response.appts.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
                     if (appt) {
                         app.Checkin = appt.Checkin;
