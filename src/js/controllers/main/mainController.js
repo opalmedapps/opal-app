@@ -229,12 +229,12 @@
             if (Constants.app && ons.platform.isAndroid()) {
                 if (OPAL_CONFIG.settings.screenshotsAllowed) {
                     window.plugins.preventscreenshot.enable(
-                        (status) => console.log('Android screenshot successfully enabled:', !status),
+                        () => console.log('Android screenshot successfully enabled'),
                         (err) => console.log('Android screenshot cannot be enabled:', err)
                     );
                 } else {
                     window.plugins.preventscreenshot.disable(
-                        (status) => console.log('Android screenshot successfully disabled:', !status), // true - enabled, false - disabled
+                        () => console.log('Android screenshot successfully disabled'),
                         (err) => console.log('Android screenshot cannot be disabled:', err)
                     );
                 }
