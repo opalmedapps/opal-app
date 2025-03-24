@@ -4,7 +4,7 @@
 *Email:davidfherrerar@gmail.com
 */
 angular.module('MUHCApp')
-.directive('rateMaterial', ['Patient', 'RequestToServer', function(Patient, RequestToServer) {
+.directive('rateMaterial', ['ProfileSelector', 'RequestToServer', function(ProfileSelector, RequestToServer) {
   return {
     restrict: 'E',
     transclude: true,
@@ -42,7 +42,7 @@ angular.module('MUHCApp')
 	};
 	scope.submit = function()
 	{
-        var patientSerNum = Patient.getPatientSerNum();
+        var patientSerNum = ProfileSelector.getPatientSerNum();
         var edumaterialControlSerNum = scope.eduMaterialControlSerNum;
         RequestToServer.sendRequest('EducationalMaterialRating',{'PatientSerNum':patientSerNum,'EducationalMaterialControlSerNum':edumaterialControlSerNum,'RatingValue':scope.ratingValue});
         scope.submitted = true;

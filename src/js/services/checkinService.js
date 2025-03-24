@@ -24,10 +24,10 @@
         .module('MUHCApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$q', 'Appointments', 'Hospital', 'Location', 'Params', 'Patient', 'RequestToServer', 'UserHospitalPreferences'];
+    CheckInService.$inject = ['$q', 'Appointments', 'Hospital', 'Location', 'Params', 'RequestToServer', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function CheckInService($q, Appointments, Hospital, Location, Params, Patient, RequestToServer, UserHospitalPreferences) {
+    function CheckInService($q, Appointments, Hospital, Location, Params, RequestToServer, UserHospitalPreferences) {
 
         /**
          *@ngdoc property

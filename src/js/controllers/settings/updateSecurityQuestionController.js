@@ -69,15 +69,13 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
             RequestToServer.sendRequestWithResponse(GET_SECURITY_QUESTION_AND_ANSWER_LIST_API)
                 .then(function(response){
                     $timeout(function(){
-
-                        let activeSecurityQuestionList = response.data.activeSecurityQuestionList || [];
-                        let securityQuestionWithAnsList = response.data.securityQuestionWithAnswerList || [];
-
+                        let securityQuestionList = response.data.securityQuestionList || [];
+                        let activeSecurityQuestions = response.data.activeSecurityQuestions || [];
+                        
                         vm.activeSecurityQuestionList =
-                            activeSecurityQuestionList.map((securityQuestion) => new SecurityQuestion(securityQuestion));
+                            activeSecurityQuestions.map((securityQuestion) => new SecurityQuestion(securityQuestion));
                         vm.securityQuestionWithAnsList =
-                            securityQuestionWithAnsList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer));
-
+                            securityQuestionList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer));
                         vm.loadingList = false;
                     })
                 })
@@ -95,7 +93,6 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          */
         function evaluateSubmission() {
 
-            let allQuestionActive = true;
             let allQuestionAnswered = true;
             let haveAQuestionAnswerModified = false;
 
@@ -115,15 +112,10 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                     allQuestionAnswered = false;
                     break;
                 }
-
-                if (!answerQuestionObj.question.active){
-                    allQuestionActive = false;
-                    break;
-                }
             }
 
             vm.submitDisabled = !(vm.passwordChanged && vm.password.length > 0 &&
-                allQuestionActive && allQuestionAnswered && haveAQuestionAnswerModified);
+                allQuestionAnswered && haveAQuestionAnswerModified);
         }
 
         /**
@@ -161,9 +153,9 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @returns {boolean}
          */
         function filterQuestionList(question){
-            return question.securityQuestionSerNum !== vm.securityQuestionWithAnsList[0].question.securityQuestionSerNum &&
-                question.securityQuestionSerNum !== vm.securityQuestionWithAnsList[1].question.securityQuestionSerNum &&
-                question.securityQuestionSerNum !== vm.securityQuestionWithAnsList[2].question.securityQuestionSerNum;
+            return question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[0].question[`questionText_${lang}`] &&
+                question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[1].question[`questionText_${lang}`] &&
+                question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[2].question[`questionText_${lang}`];
         }
 
         /**
@@ -290,8 +282,8 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
                 // answer is hashed in the objects of this array
                 arrToBeSent.push({
-                    securityAnswerSerNum: answerQuestionObj.securityAnswerSerNum,
-                    questionSerNum: answerQuestionObj.question.securityQuestionSerNum,
+                    question: answerQuestionObj.question[`questionText_${lang}`],
+                    questionId: answerQuestionObj.securityAnswerSerNum,
                     answer: EncryptionService.hash(answerQuestionObj.answer.toUpperCase()),
                 });
 

@@ -4,8 +4,8 @@
 
 angular
     .module('MUHCApp')
-    .service('RequestToServer',['$injector', 'UserAuthorizationInfo', 'EncryptionService', 'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params', 'UserPreferences', 'Patient',
-    function($injector, UserAuthorizationInfo, EncryptionService, FirebaseService, Constants, UUID, ResponseValidator, Params, UserPreferences, Patient){
+    .service('RequestToServer',['$injector', 'UserAuthorizationInfo', 'EncryptionService', 'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params', 'UserPreferences',
+    function($injector, UserAuthorizationInfo, EncryptionService, FirebaseService, Constants, UUID, ResponseValidator, Params, UserPreferences){
 
         let firebase_url;
         let response_url;
@@ -179,6 +179,6 @@ angular
         function getPatientId() {
             const ProfileSelectorService = $injector.get('ProfileSelector');
             const selectedProfile = ProfileSelectorService.getActiveProfile();
-            return selectedProfile?.patient_legacy_id || Patient.getPatientSerNum();
+            return selectedProfile?.patient_legacy_id;
         }
 }]);

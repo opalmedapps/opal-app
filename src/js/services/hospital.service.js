@@ -2,7 +2,6 @@
  *@ngdoc service
  *@name MUHCApp.service:Hospital
  * @requires MUHCApp.service:RequestToServer
- * @requires MUHCApp.service:Patient
  * @requires MUHCApp.service:Params
  *@description Service used to manage patient's hospital settings (e.g., parking info)
  **/
@@ -15,11 +14,11 @@
         .factory('Hospital', Hospital);
 
     Hospital.$inject = [
-        'RequestToServer', 'Patient', 'Params'
+        'RequestToServer', 'Params'
     ];
 
     /* @ngInject */
-    function Hospital(RequestToServer, Patient, Params) {
+    function Hospital(RequestToServer, Params) {
         const endpoint = Params.API.ROUTES.HOSPITAL_SETTINGS.SITES;
 
         let requestHospitalService = {

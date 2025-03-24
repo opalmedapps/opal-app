@@ -37,6 +37,7 @@
   "ERROR_INIT_LINKS": "Erreur de chargement des liens dans l'application. Certains liens pourraient ne pas s'ouvrir.",
   "ERROROBTAININGDOCUMENT": "Erreur lors de l'obtention du document à partir du serveur",
   "ERROR_NETWORK": "Erreur de connection Internet",
+  "ERROR_NO_CONFIRMED_PROFILES": "L'accès à votre compte n'a pas encore été approuvé par le bureau des archives médicales, ou il a été révoqué. Si votre inscription est récente, veuillez attendre que votre accès soit accordé. Sinon, veuillez contacter l'équipe de soutien d'Opal pour obtenir de l'aide.",
   "ERROR_PAGE": "Erreur lors du chargement de cette page",
   "FEEDBACK": "Commentaires",
   "FEEDBACK_MESSAGE": "Votre commentaire est important pour nous. S'il vous plaît, prenez le temps de nous faire savoir ce que vous pensez d'Opal. Chaque commentaire est apprécié.",
@@ -147,6 +148,5 @@
   "REENTER_PASSWORD": "Confirmer le mot de passe",
   "SERVERERRORALERT": "Problème de serveur: impossible de télécharger les données, veuillez réessayer plus tard",
   "TAP_TO_SELECT_HOSPITAL": "Appuyez pour choisir",
-  "LONGERTIMEALERT": "La requête prend plus de temps que prévu... veuillez réessayer plus tard.",
   "WHATSNEW": "Nouveautés"
 }

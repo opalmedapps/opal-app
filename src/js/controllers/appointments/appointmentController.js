@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'Patient', '$timeout', 'Browser'];
+    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', '$timeout', 'Browser'];
 
     /* @ngInject */
-    function AppointmentController(NavigatorParameters, UserPreferences, Patient, $timeout, Browser) {
+    function AppointmentController(NavigatorParameters, UserPreferences, $timeout, Browser) {
 
         let vm = this;
 

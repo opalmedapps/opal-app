@@ -13,12 +13,13 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['NavigatorParameters', 'Patient', 'NetworkStatus', '$timeout', 'UserPreferences', 'Questionnaires',
+    PersonalTabController.$inject = ['NavigatorParameters', 'ProfileSelector', 'NetworkStatus', '$timeout', 'UserPreferences', 'Questionnaires',
         'UserHospitalPreferences', 'RequestToServer', 'Params'];
 
-    function PersonalTabController(NavigatorParameters, Patient, NetworkStatus, $timeout, UserPreferences, Questionnaires,
+    function PersonalTabController(NavigatorParameters, ProfileSelector, NetworkStatus, $timeout, UserPreferences, Questionnaires,
         UserHospitalPreferences, RequestToServer, Params) {
-        var vm = this;
+        let vm = this;
+        let setAccessLevel = () => vm.accessLevelAll = ProfileSelector.getAccessLevel() === "ALL";
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
@@ -39,12 +40,13 @@
             NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator' });
             NavigatorParameters.setNavigator(personalNavigator);
 
+            // Call early to prevent flickering of hidden menu items
+            setAccessLevel();
+
             bindEvents();
 
             vm.language = UserPreferences.getLanguage();
             configureSelectedHospital();
-
-            $timeout(() => { vm.censor = Patient.getAccessLevel() == 3 });
 
             if (NetworkStatus.isOnline()) getDisplayData();
         }
@@ -67,7 +69,7 @@
          */
         async function getDisplayData() {
             try {
-                const patientSernum = Patient.getPatientSerNum();
+                const patientSernum = ProfileSelector.getPatientSerNum();
                 const requestConfig = Params.API.ROUTES.CHART
                 const result = await RequestToServer.apiRequest({
                     ...requestConfig,
@@ -89,6 +91,9 @@
                         result.data.unread_consent_questionnaire_count,
                     );
                     // TODO: fetch badges for the research menu items
+
+                    // Refresh the visible menu items based on access level when changing profiles
+                    setAccessLevel();
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
