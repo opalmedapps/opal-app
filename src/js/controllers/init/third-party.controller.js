@@ -11,15 +11,15 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
 
     angular
         .module('OpalApp')
-        .controller('AcknowledgementsController', acknowledgementsController);
+        .controller('ThirdPartyController', thirdPartyController);
 
-    acknowledgementsController.$inject = ['$filter', 'UserPreferences'];
+    thirdPartyController.$inject = ['$filter', 'UserPreferences'];
 
     /**
      * @description Parses and displays the content of THIRDPARTY.md to make our list of third-party dependencies visible in the app.
      * @author Anton Gladyr, Stacey Beard
      */
-    function acknowledgementsController($filter, UserPreferences) {
+    function thirdPartyController($filter, UserPreferences) {
         const vm = this;
 
         const language = UserPreferences.getLanguage();
@@ -29,18 +29,18 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
         const customRenderExtension = {
             renderer: {
                 // Turn all license text blocks into collapsible sections using <details><summary>
-                code(code) {
+                code(token) {
                     return `
                         <details>
                           <summary>${$filter('translate')('SHOW_LICENSE_TEXT')}</summary>
-                          <pre><code>${code}</code></pre>
+                          <pre><code>${token.text}</code></pre>
                         </details>
                     `;
                 },
                 // Convert all links to open in a new tab (or in an external browser on mobile) using a _blank target
-                link(href, title, text) {
-                    const titleAttr = title ? ` title="${title}"` : '';
-                    return `<a href="${href}"${titleAttr} target="_blank" rel="noopener">${text}</a>`;
+                link(token) {
+                    const titleAttr = token.title ? ` title="${token.title}"` : '';
+                    return `<a href="${token.href}"${titleAttr} target="_blank" rel="noopener">${token.text}</a>`;
                 }
             }
         };
@@ -53,7 +53,7 @@ import thirdPartyLicenses from "../../../../THIRDPARTY.md";
         let htmlContent = marked(thirdPartyLicenses);
 
         // If applicable, add a paragraph at the beginning stating that the page has not been translated
-        if (language !== 'EN') htmlContent = `<p class="acknowledgements-pre">${$filter('translate')('UNTRANSLATED_PAGE_DISCLAIMER')}</p>
+        if (language !== 'EN') htmlContent = `<p class="third-party-pre">${$filter('translate')('UNTRANSLATED_PAGE_DISCLAIMER')}</p>
             <hr>`
             + htmlContent;
 

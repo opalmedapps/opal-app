@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @description Provides a container that renders and displays a pdf from base64 data.
  * @author Originally written by Robert Maglieri, Jan 2017 (documentsController.js).

@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   loginController.js
  * Description  :   Controller in charge of the login process using FireBase as the authentication API.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   May 20, 2015
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 import { CancelledPromiseError } from "../../models/utility/cancelled-promise-error";

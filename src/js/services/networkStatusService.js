@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   networkStatusService.js
  * Description  :   Service that monitors network activity in order to block http requests when offline + display appropriate message.
  * Created by   :   James Brace
  * Date         :   22 May 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * License      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**

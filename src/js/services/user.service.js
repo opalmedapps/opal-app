@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @description Service to store and handle information about the currently logged in user.
  * @author David Gagne

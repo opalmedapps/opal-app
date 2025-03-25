@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
@@ -146,7 +150,7 @@ class OpalEnv {
      */
     static getVersion() {
         let configFile = this.getConfigXML('./env', true);
-        return configFile.elements[0].attributes.version;
+        return configFile.elements[1].attributes.version;
     }
 
     /**
@@ -270,7 +274,7 @@ class OpalEnv {
      */
     static setXMLWidgetAttributeText(xmlObject, attributeName, newValue) {
         if (xmlObject && attributeName && newValue) {
-            xmlObject.elements[0].attributes[String(attributeName)] = String(newValue);
+            xmlObject.elements[1].attributes[String(attributeName)] = String(newValue);
         }
         return xmlObject;
     }

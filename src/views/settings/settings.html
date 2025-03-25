@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="accountSettingController as Ctrl" ng-device-backbutton="Ctrl.accountDeviceBackButton()">
     <generic-toolbar title="{{'ACCOUNT'|translate}}" back-button="false" style-class="fontSizeTitle"></generic-toolbar>
 
@@ -21,7 +27,7 @@
 
     <ons-list class="settings-list">
         <ons-list-item modifier="chevron" ng-click="Ctrl.goToGeneralSettings()" ng-class="fontSizeDesc">
-            {{"ABOUT"|translate}}
+            {{"TECHNICAL_LEGAL"|translate}}
         </ons-list-item>
     </ons-list>
     <div class="settings-header" ng-class="fontSizeTitle">{{"RELATIONSHIPS"|translate}}</div>

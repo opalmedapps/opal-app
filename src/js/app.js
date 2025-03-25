@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   app.js
  * Description  :   Contains all app configurations and routes.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   July 2015
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**
@@ -67,7 +68,6 @@
 import "jquery";
 import angular from "angular";
 import "angular-animate";
-import "../lib/ui-bootstrap-tpls-2.5.6-opal.js";
 import "angular-translate";
 import "angular-dynamic-locale";
 import "angular-translate-handler-log";
@@ -76,8 +76,14 @@ import "angular-translate-interpolation-messageformat";
 import "angular-translate-loader-partial";
 import "angular-ui-router";
 import "angular-touch";
-import "bootstrap";
 import "angular-sanitize";
+
+// Bootstrap
+// The ui-bootstrap library is included directly in this project, and we've modified some of its code
+import "../lib/ui-bootstrap-tpls-2.5.6-opal.js";
+// Of the original bootstrap library, we only use the CSS
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import "onsenui/js/onsenui";
 import "moment";
 import "crypto-js";
@@ -86,13 +92,12 @@ import "tweetnacl-util";
 import "onsenui/css/onsen-css-components-blue-basic-theme.css";
 import "onsenui/css/onsenui.css";
 import "angular/angular-csp.css";
-import "bootstrap/dist/css/bootstrap.css";
 import "animate.css";
 import "../css/app.css";
 import "../css/elements/custom-toast.element.css";
 import "../Languages/angular-locales/angular-locale_en.js";
 
-// Load angular module bootstrap script
+// Load the angular module bootstrapping script, which initializes the application
 import "./app.bootstrap";
 
 // Font Awesome

@@ -1,3 +1,163 @@
+## [2.2.4](https://gitlab.com/opalmedapps/qplus/compare/v2.2.3...v2.2.4) (2025-03-21)
+
+
+### Bug Fixes
+
+* **deps:** update plotly packages to v3 (major) ([ecce3ea](https://gitlab.com/opalmedapps/qplus/commit/ecce3ea437963e0aad2e20365fccd8c896050e8b))
+
+## [2.2.3](https://gitlab.com/opalmedapps/qplus/compare/v2.2.2...v2.2.3) (2025-03-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency marked to v15 ([2abba77](https://gitlab.com/opalmedapps/qplus/commit/2abba77478ee45c171e1e4c433a37e969233d37a))
+
+## [2.2.2](https://gitlab.com/opalmedapps/qplus/compare/v2.2.1...v2.2.2) (2025-03-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency firebase to v11.5.0 ([e291d84](https://gitlab.com/opalmedapps/qplus/commit/e291d84df2406c2dab6801849308b9656e026cd5))
+
+## [2.2.1](https://gitlab.com/opalmedapps/qplus/compare/v2.2.0...v2.2.1) (2025-03-20)
+
+
+### Bug Fixes
+
+* **deps:** update babel monorepo (patch) ([87237cc](https://gitlab.com/opalmedapps/qplus/commit/87237cca429c2859107a241686c1b67646fac604))
+
+# [2.2.0](https://gitlab.com/opalmedapps/qplus/compare/v2.1.0...v2.2.0) (2025-03-19)
+
+
+### Features
+
+* BLE communication with the Xiaomi Mi Scale ([4566e3e](https://gitlab.com/opalmedapps/qplus/commit/4566e3e556b89477e3815f2a4ef0a19d0aa52524))
+
+# [2.1.0](https://gitlab.com/opalmedapps/qplus/compare/v2.0.12...v2.1.0) (2025-03-19)
+
+
+### Features
+
+* BLE communication with the VitalTracer watch ([675ba8c](https://gitlab.com/opalmedapps/qplus/commit/675ba8cef8ab7ce309ca24f313baa33854c9b2f3))
+
+## [2.0.12](https://gitlab.com/opalmedapps/qplus/compare/v2.0.11...v2.0.12) (2025-03-11)
+
+
+### Bug Fixes
+
+* transpile pdfjs-dist with babel-loader to fix iOS 16 issue ([312d6ac](https://gitlab.com/opalmedapps/qplus/commit/312d6acb42fbe49d4d5f7cf8b038706b928da20a))
+
+## [2.0.11](https://gitlab.com/opalmedapps/qplus/compare/v2.0.10...v2.0.11) (2025-03-10)
+
+
+### Bug Fixes
+
+* rename Source Code to Opal Open Source Community ([6993b35](https://gitlab.com/opalmedapps/qplus/commit/6993b35c37429e94b56cb751db8a39caf67e7b8c))
+
+## [2.0.10](https://gitlab.com/opalmedapps/qplus/compare/v2.0.9...v2.0.10) (2025-03-10)
+
+
+### Bug Fixes
+
+* make toast messages dismissible and add general toast to hospital page ([e9af640](https://gitlab.com/opalmedapps/qplus/commit/e9af640af9fb6006f4717f1887426d694e4f94a3))
+
+## [2.0.9](https://gitlab.com/opalmedapps/qplus/compare/v2.0.8...v2.0.9) (2025-03-10)
+
+
+### Bug Fixes
+
+* fix getVersion() setup function ([4bd0175](https://gitlab.com/opalmedapps/qplus/commit/4bd01751a8099aa75c260516851d3880fce7794f))
+* setXMLWidgetAttributeText() setup function ([29d72cb](https://gitlab.com/opalmedapps/qplus/commit/29d72cbd728e33e1e30fad946f382444a5e30a42))
+
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+
+## [2.0.8](https://gitlab.com/opalmedapps/qplus/compare/v2.0.7...v2.0.8) (2025-02-28)
+
+
+### Bug Fixes
+
+* add License and Source Code to Technical / Legal ([e65801e](https://gitlab.com/opalmedapps/qplus/commit/e65801ef112c5c2e67f7580f68960e5023ec121c))
+
+## [2.0.7](https://gitlab.com/opalmedapps/qplus/compare/v2.0.6...v2.0.7) (2025-02-25)
+
+
+### Bug Fixes
+
+* remove "About This App" (previously "Opal Dev Team") ([44264ca](https://gitlab.com/opalmedapps/qplus/commit/44264ca070822e8213a9a658deb912364a71bf53))
+
+## [2.0.6](https://gitlab.com/opalmedapps/qplus/compare/v2.0.5...v2.0.6) (2025-02-21)
+
+
+### Bug Fixes
+
+* update "About Opal" for consistency ([4df55fb](https://gitlab.com/opalmedapps/qplus/commit/4df55fb9eeb454f067e48f08febda9cc43a35f62))
+
+## [2.0.5](https://gitlab.com/opalmedapps/qplus/compare/v2.0.4...v2.0.5) (2025-02-21)
+
+
+### Bug Fixes
+
+* add greyed-out MUHC option to the hospital list ([be5ccd7](https://gitlab.com/opalmedapps/qplus/commit/be5ccd75013465dfaa1846f2ddfb56a49b13ec77))
+
+## [2.0.4](https://gitlab.com/opalmedapps/qplus/compare/v2.0.3...v2.0.4) (2025-02-20)
+
+
+### Bug Fixes
+
+* change the web app's landing page background to the Neuro and Montreal ([f58b7b4](https://gitlab.com/opalmedapps/qplus/commit/f58b7b4e9296982b4cef036eda94c4f6af323900))
+
+## [2.0.3](https://gitlab.com/opalmedapps/qplus/compare/v2.0.2...v2.0.3) (2025-02-19)
+
+
+### Bug Fixes
+
+* replace quebec fleur-de-lys with svg and update its blue background ([5eef4df](https://gitlab.com/opalmedapps/qplus/commit/5eef4df3e375c89d14666bd4e278eaeeffa12d79))
+
+## [2.0.2](https://gitlab.com/opalmedapps/qplus/compare/v2.0.1...v2.0.2) (2025-02-14)
+
+
+### Bug Fixes
+
+* add Opal Demo 1 and 2 to the hospital list ([bc826e8](https://gitlab.com/opalmedapps/qplus/commit/bc826e8f85dcfba78835990583130756de86a921))
+
+## [2.0.1](https://gitlab.com/opalmedapps/qplus/compare/v2.0.0...v2.0.1) (2025-02-13)
+
+
+### Bug Fixes
+
+* replace pdf image in reference materials with an icon ([7172685](https://gitlab.com/opalmedapps/qplus/commit/7172685ab664404d00c0fc8f4be5d7a8bc0f5f97))
+
+# [2.0.0](https://gitlab.com/opalmedapps/qplus/compare/v1.37.33...v2.0.0) (2025-02-07)
+
+
+### major
+
+* bump version to 2.0.0 ([573cc67](https://gitlab.com/opalmedapps/qplus/commit/573cc67d8c9a4f1e43b745e86bf09df7b6a06cf9))
+
+
+### BREAKING CHANGES
+
+* bump app version to 2.0.0
+
+## [1.37.33](https://gitlab.com/opalmedapps/qplus/compare/v1.37.32...v1.37.33) (2025-02-06)
+
+
+### Bug Fixes
+
+* rename the current production hospital to the Neuro ([64d2c7c](https://gitlab.com/opalmedapps/qplus/commit/64d2c7ca89189e30329ebfaa75f9b1ade9d3a700))
+
+## [1.37.32](https://gitlab.com/opalmedapps/qplus/compare/v1.37.31...v1.37.32) (2025-01-30)
+
+
+### Bug Fixes
+
+* **deps:** update babel monorepo to v7.26.7 (patch) ([33e8353](https://gitlab.com/opalmedapps/qplus/commit/33e835328ae833b5e8f2cabc096eaf7ad261defa))
+
 ## [1.37.31](https://gitlab.com/opalmedapps/qplus/compare/v1.37.30...v1.37.31) (2025-01-29)
 
 

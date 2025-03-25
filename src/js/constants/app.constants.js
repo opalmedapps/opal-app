@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 let mobileApp = window.hasOwnProperty("cordova");
 
 angular.module('OpalApp').constant('Constants', {

@@ -1,25 +1,31 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 (()=>{
 	angular.module('OpalApp')
-		.controller("InitSettingsController", InitSettingsController);
+		.controller("TechnicalLegalController", TechnicalLegalController);
 
-	InitSettingsController.$inject = [
-		'Firebase', 'Navigator', 'UserPreferences', 'Constants', '$rootScope'
+	TechnicalLegalController.$inject = [
+		'Browser', 'Constants', 'DynamicContent', 'Firebase', 'Navigator', 'UserPreferences'
 	];
 
 	/* @ngInject */
-	function InitSettingsController(Firebase, Navigator, UserPreferences, Constants, $rootScope) {
+	function TechnicalLegalController(Browser, Constants, DynamicContent, Firebase, Navigator, UserPreferences) {
 
 		let vm = this;
 		let navigator;
 
 		vm.changeLanguage = changeLanguage;
-		vm.openPageLegal = openPageLegal;
-		vm.goToAcknowledgements = () => navigator.pushPage('views/init/acknowledgements.html');
 		vm.goToFeedback = goToFeedback;
-		vm.secureYourDeviceNotice = secureYourDeviceNotice;
+		vm.goToLicense = () => navigator.pushPage('views/init/license.html');
+		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
+		vm.openPageLegal = openPageLegal;
+		vm.openSecurityAndPrivacy = () => Browser.openInternal(DynamicContent.getURL('securityAndPrivacy'));
+		vm.openSourceLink = () => Browser.openExternal(DynamicContent.getURL('openSource'));
 
 		activate();
 
@@ -29,10 +35,6 @@
 			navigator = Navigator.getNavigator();
 			vm.navigatorName = Navigator.getNavigatorName();
 
-			initSettings();
-		}
-
-		function initSettings() {
 			vm.authenticated = !!Firebase.getCurrentUser();
 			vm.languageSwitch = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
 			vm.currentYear = new Date().getFullYear();
@@ -51,13 +53,6 @@
 
 		function goToFeedback() {
 			navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'});
-		}
-
-		function secureYourDeviceNotice() {
-			navigator.pushPage(
-				'./views/templates/content.html',
-				{contentType: 'secureYourDevice', title: 'SECURE_YOUR_DEVICE'},
-			);
 		}
 
 		function openPageLegal(type) {

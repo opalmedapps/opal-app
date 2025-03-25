@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import "../../css/directives/loading-spinning-circle.directive.css";
 
 angular.module('OpalApp').directive("loadingSpinningCircle", LoadingSpinningCircle);

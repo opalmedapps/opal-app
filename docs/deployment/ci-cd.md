@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # GitLab CI/CD
 
 This project is configured with [GitLab CI/CD pipelines](https://docs.gitlab.com/ee/ci/pipelines/)

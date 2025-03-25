@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @description Service providing access to the Firebase Realtime Database.
  * @author David Herrera, Summer 2016, Email:davidfherrerar@gmail.com

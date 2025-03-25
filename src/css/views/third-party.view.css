@@ -4,34 +4,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-.acknowledgements {
+.third-party {
     margin-bottom: 16px;
     overflow-wrap: break-word;
 }
 
-.acknowledgements-pre {
+.third-party-pre {
     font-family: monospace;
     font-size: 0.8em;
     margin-top: 10px;
 }
 
-/* Header font-size adjustments that scale with the user's chosen font size (using fontSizeDesc on the .acknowledgements container) */
-.acknowledgements h1 {
+/* Header font-size adjustments that scale with the user's chosen font size (using fontSizeDesc on the .third-party container) */
+.third-party h1 {
     font-size: 1.6em;
 }
-.acknowledgements h2 {
+.third-party h2 {
     font-size: 1.3em;
 }
-.acknowledgements h3 {
+.third-party h3 {
     font-size: 1.2em;
 }
-.acknowledgements h4 {
+.third-party h4 {
     font-size: 1.1em;
 }
 
 /* See: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary */
 /* Show a grey border box when the details are closed */
-.acknowledgements details {
+.third-party details {
     background-color: #F5F5F5;
     border: 1px solid #CCC;
     border-radius: 4px;
@@ -40,17 +40,17 @@
 }
 
 /* Hide the border box when the details are open */
-.acknowledgements details[open] {
+.third-party details[open] {
     background-color: transparent;
     border: none;
 }
 
-.acknowledgements details[open] summary {
+.third-party details[open] summary {
     margin-bottom: 4px;
 }
 
 /* Arrow in front of details summary (closed) */
-.acknowledgements details summary:before {
+.third-party details summary:before {
     color: #444;
     content: "▶";
     /* The math font family allows the triangle to display on mobile (this character is not available in Roboto) */
@@ -61,6 +61,6 @@
 }
 
 /* Arrow in front of details summary (open) */
-.acknowledgements details[open] summary:before {
+.third-party details[open] summary:before {
     content: "▼";
 }

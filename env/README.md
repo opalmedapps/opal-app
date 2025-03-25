@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Setting Up an Environment
 
 This guide will walk you through connecting this project (the frontend Opal app) to a backend environment,

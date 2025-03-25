@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @description Service that helps manage the Onsen navigator.
  * @author David Herrera, Summer 2016, Email:davidfherrerar@gmail.com

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @file Service that handles downloading, updating and setting other services with patient data for the whole application.
  * @author David Herrera, Stacey Beard

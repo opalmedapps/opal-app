@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   initScreenController.js
  * Description  :   Manages app initialization
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   28 Apr 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 import '../../../css/views/init-page.view.css';
@@ -55,9 +56,9 @@ import '../../../css/views/init-page.view.css';
 		vm.APP_VERSION = Constants.version();
 		vm.APP_BUILD_NUMBER = Constants.build();
 
-		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
+		vm.goToAboutOpal = () => initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
 		vm.goToRegister = goToRegister;
-		vm.goToGeneralSettings = goToGeneralSettings;
+		vm.goToTechnicalLegal = () => initNavigator.pushPage('views/init/technical-legal.html');
 		vm.goToPartners = goToPartners;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
@@ -130,25 +131,11 @@ import '../../../css/views/init-page.view.css';
 		}
 
 		/**
-		 * Go to Learn About Opal
-		 */
-		function gotoLearnAboutOpal() {
-			initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
-		}
-
-		/**
 		 * Go to registration page
 		 */
 		function goToRegister() {
 			const url = DynamicContent.getURL("registration");
 			Browser.openInternal(url);
-		}
-
-		/**
-		 * Go to general settings (About)
-		 */
-		function goToGeneralSettings() {
-			initNavigator.pushPage('./views/init/init-settings.html');
 		}
 
 		/**

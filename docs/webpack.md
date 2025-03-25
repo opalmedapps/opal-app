@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Webpack
 
 [Webpack](https://webpack.js.org/) is a compiler and task manager that handles bundling the app and other common web code development tasks,

@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 /**
  * @description Custom toast message, used to display short pieces of information to the user.
  *              Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
