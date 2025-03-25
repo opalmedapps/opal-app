@@ -26,12 +26,12 @@ path = [
     "res/**",
     "static/landingpage/Opal_Name_Logo_Transparent.png",
     "static/landingpage/opal-tiny.ico",
+    "src/img/branding/opal/Opal_Name_Logo_Transparent.png",
     "src/img/apple-touch-icon.png",
     "src/img/Opal_Logo_Black.png",
     "src/img/Opal_Logo_Transparent_Inverse_Icon.png",
     "src/img/Opal_Logo_Transparent_Inverse.png",
     "src/img/Opal_Name_Logo_Green_Transparent.png",
-    "src/img/Opal_Name_Logo_Transparent.png",
     "src/img/Opal_Name_Logo.png",
     "src/img/opal_notification.png",
     "src/img/OpalHealth_App_Apple_Icon_2.png",
@@ -70,7 +70,7 @@ SPDX-License-Identifier = "LicenseRef-FleurDeLysDuQuebec"
 
 [[annotations]]
 path = [
-    "src/img/opal-init-photo.jpg",
+    "src/img/branding/opal/init-background.jpg",
 ]
 precedence = "override"
 # See:
