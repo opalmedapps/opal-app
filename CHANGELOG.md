@@ -1,3 +1,10 @@
+## [2.2.5](https://gitlab.com/opalmedapps/qplus/compare/v2.2.4...v2.2.5) (2025-03-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cordova-plugin-ble-central to v2 ([e6e7b4d](https://gitlab.com/opalmedapps/qplus/commit/e6e7b4ddf927118c4aa59a26bd2c62b0c0472951))
+
 ## [2.2.4](https://gitlab.com/opalmedapps/qplus/compare/v2.2.3...v2.2.4) (2025-03-21)
 
 
