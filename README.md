@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
-# Opal Patient Portal Application
+# Opal Web And Mobile App
 
 Opal is a patient portal application for mobile devices and the web which originated from the winning project of
 the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG, now known as O-HIG) and was entitled
@@ -12,10 +12,6 @@ the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health In
 It had as its goal the provision of waiting time estimates to radiation oncology patients.
 The app has now extended past its original scope to provide appointments, lab results, clinical reports,
 educational material and much more to patients, making it a full-fledged empowerment tool for those undergoing medical treatment.
-
-## Table of contents
-
-[[_TOC_]]
 
 ## Installation
 
