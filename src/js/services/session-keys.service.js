@@ -9,7 +9,7 @@ import _sodium from 'libsodium-wrappers-sumo';
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .service('SessionKeys', SessionKeys);
 
     SessionKeys.$inject = ['UserHospitalPreferences'];
@@ -41,7 +41,7 @@ import _sodium from 'libsodium-wrappers-sumo';
             sodium = _sodium;
 
             generatePublicKeyPair();
-            hospitalPublicKey = getHospitalPublicKey('A0');
+            hospitalPublicKey = getHospitalPublicKey('A6');
             console.log('Hospital public key is', sodium.to_hex(hospitalPublicKey));
             generateSessionKeys();
         }
