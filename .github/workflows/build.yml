@@ -37,6 +37,7 @@ jobs:
     runs-on: macos-latest
     steps:
       # Setup
+      - run: echo $BASH_VERSION
       - name: Convert environment to all caps
         run: echo "ENVIRONMENT_CAPS=${ENVIRONMENT^^}" >> $GITHUB_ENV
       - name: Print environment
