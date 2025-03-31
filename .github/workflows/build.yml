@@ -46,3 +46,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check npm installation
         run: npm -v
+      - name: Install dependencies
+        run: npm ci --cache .npm --prefer-offline
+
+      # Build the app
+      - name: Build the app
+        run: npm run build:app:ios:device:ci --env=$ENVIRONMENT
