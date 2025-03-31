@@ -206,6 +206,7 @@
                     {
                         uniqueHospitalCode: 'D1',
                         enabled: true,
+                        publicKey: 'TODO',
                         acronymReal: 'OPAL_DEMO_1',
                         fullNameReal: 'OPAL_DEMO_1_FULL',
                         acronymGeneric: 'OPAL_DEMO_1',
@@ -244,6 +245,7 @@
                     {
                         uniqueHospitalCode: 'D2',
                         enabled: true,
+                        publicKey: 'TODO',
                         acronymReal: 'OPAL_DEMO_2',
                         fullNameReal: 'OPAL_DEMO_2_FULL',
                         acronymGeneric: 'OPAL_DEMO_2',
@@ -282,6 +284,7 @@
                     {
                         uniqueHospitalCode: 'A0',
                         enabled: false,
+                        publicKey: 'TODO',
                         acronymReal: 'MUHC',
                         fullNameReal: 'MUHC_FULL',
                         acronymGeneric: 'MUHC',
