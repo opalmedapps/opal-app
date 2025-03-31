@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# TODO
+# This workflow is explained in __________; please keep that documentation file up to date when making changes here.
+
+name: Build App
+# Default to dev when running automatically (see also "env" below)
+run-name: Building the app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦
+on:
+  # When pushing to main, automatically build for dev
+  push:
+    branches:
+      # TODO testing
+#      - main
+      - SB.github-actions
+
+  # Offer a manual interface to build for all other environments as needed
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT:
+        description: 'Environment in which to build'
+        type: choice
+        required: true
+        default: 'dev'
+        options:
+          - dev
+          - prod
+
+# Read the target environment from workflow_dispatch inputs, or default to dev
+env:
+  ENVIRONMENT: ${{ inputs.ENVIRONMENT || 'dev' }}
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      # Setup
+      - name: Convert environment to all caps
+        run: echo "ENVIRONMENT_CAPS=${ENVIRONMENT^^}" >> $GITHUB_ENV
+      - name: Print environment
+        run: |
+          echo "Environment: $ENVIRONMENT ($ENVIRONMENT_CAPS)"
+      - uses: actions/checkout@v4
+      - name: Check npm installation
+        run: npm -v
