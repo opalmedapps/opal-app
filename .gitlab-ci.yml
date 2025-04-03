@@ -82,7 +82,7 @@ check dependencies:
   rules:
     - when: always
   before_script:
-      # add npmrc file with XLTS.dev registry token
+      # add npmrc file with HeroDevs registry token
     - '[ -z "$NPMRC_FILE"] && echo "Error: environment variable NPMRC_FILE must be defined for this job" && exit 1'
     - echo "$NPMRC_FILE" > .npmrc
   script:
@@ -101,7 +101,7 @@ increment version:
   before_script:
     # Set semantic-release author to our own bot user for correct attribution
     - apk add --no-cache curl jq
-    # add npmrc file with XLTS.dev registry token
+    # add npmrc file with HeroDevs registry token
     - '[ -z "$NPMRC_FILE"] && echo "Error: environment variable NPMRC_FILE must be defined for this job" && exit 1'
     - echo "$NPMRC_FILE" > .npmrc
     # use pipe operator to be able to use a colon in the command
@@ -132,7 +132,7 @@ increment version:
       # see: https://docs.gitlab.com/ee/ci/yaml/#when (additional details section)
       allow_failure: true
   before_script:
-    # add npmrc file with XLTS.dev registry token
+    # add npmrc file with HeroDevs registry token
     - '[ -z "$NPMRC_FILE"] && echo "Error: environment variable NPMRC_FILE must be defined for this job" && exit 1'
     - echo "$NPMRC_FILE" > .npmrc
     - npm -v
