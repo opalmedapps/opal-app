@@ -46,6 +46,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check npm installation
         run: npm -v
+      - name: Load .npmrc
+        run: echo "$NPMRC" > .npmrc
       - name: Install dependencies
         run: npm ci --cache .npm --prefer-offline
 
