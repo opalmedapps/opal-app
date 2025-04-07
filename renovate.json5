@@ -30,13 +30,13 @@
     // Group auxiliary angular-related updates
     {
       "matchDepPatterns": ["^angular"],
-      "excludePackagePatterns": ["^@xlts.dev/"],
+      "excludePackagePatterns": ["^@neverendingsupport/"],
       "groupName": "auxiliary angular packages"
     },
-    // Group xlts angular-related updates
+    // Group AngularJS Never-Ending Support updates (from HeroDevs)
     {
       "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
-      "groupName": "xlts angular packages"
+      "groupName": "angularjs NES packages"
     },
     // Rate-limit firebase-tools updates: first day of each month
     {
