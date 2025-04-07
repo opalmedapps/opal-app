@@ -47,7 +47,7 @@ jobs:
       - name: Check npm installation
         run: npm -v
       - name: Load .npmrc
-        run: echo "${NPMRC}" > .npmrc
+        run: echo '${NPMRC}' > .npmrc
         env:
           NPMRC: ${{ secrets.NPMRC }}
       - name: Install dependencies
