@@ -64,6 +64,7 @@ jobs:
 
       # Build the app
       - name: Build the app
-        run: npm run build:app:ios:device:ci --env=$ENVIRONMENT --devteam=$IOS_DEVELOPMENT_TEAM
+        run: npm run build:app:ios:device:ci --env=$ENVIRONMENT --devteam=$IOS_DEVELOPMENT_TEAM --provisioningprofile=$PROVISIONING_PROFILE_UUID
         env:
           IOS_DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
+          PROVISIONING_PROFILE_UUID: ${{ secrets.PROVISIONING_PROFILE_UUID }}
