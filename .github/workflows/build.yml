@@ -52,6 +52,15 @@ jobs:
           NPMRC: ${{ secrets.NPMRC }}
       - name: Install dependencies
         run: npm ci --cache .npm --prefer-offline
+      # Get the environment files needed to build the app from repository-level Actions variables
+      - name: Load environment files
+      - run: |
+          mkdir env/$ENVIRONMENT
+          echo "${ENV_CONFIG_JS}" > env/$ENVIRONMENT/opal.config.js
+          echo "${ENV_GOOGLE_SERVICES}" > env/$ENVIRONMENT/google-services.json
+        env:
+          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT_CAPS)] }}
+          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT_CAPS)] }}
 
       # Build the app
       - name: Build the app
