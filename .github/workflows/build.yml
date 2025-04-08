@@ -54,7 +54,7 @@ jobs:
         run: npm ci --cache .npm --prefer-offline
       # Get the environment files needed to build the app from repository-level Actions variables
       - name: Load environment files
-      - run: |
+        run: |
           mkdir env/$ENVIRONMENT
           echo "${ENV_CONFIG_JS}" > env/$ENVIRONMENT/opal.config.js
           echo "${ENV_GOOGLE_SERVICES}" > env/$ENVIRONMENT/google-services.json
