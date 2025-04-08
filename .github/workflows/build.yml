@@ -64,4 +64,6 @@ jobs:
 
       # Build the app
       - name: Build the app
-        run: npm run build:app:ios:device:ci --env=$ENVIRONMENT
+        run: npm run build:app:ios:device:ci --env=$ENVIRONMENT --devteam=$IOS_DEVELOPMENT_TEAM
+        env:
+          IOS_DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
