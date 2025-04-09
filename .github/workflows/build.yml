@@ -104,7 +104,7 @@ jobs:
       - name: Rename build output
         run: mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-$ENVIRONMENT.ipa"
       - name: Archive build output
-          uses: actions/upload-artifact@v4
-          with:
-            name: iOS App
-            path: opal-$ENVIRONMENT.ipa
+        uses: actions/upload-artifact@v4
+        with:
+          name: iOS App
+          path: opal-$ENVIRONMENT.ipa
