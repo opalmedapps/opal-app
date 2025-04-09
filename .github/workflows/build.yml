@@ -52,6 +52,7 @@ jobs:
           NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
       - name: Install dependencies
         run: npm ci --cache .npm --prefer-offline
+
       # Get the environment files needed to build the app from repository-level Actions variables
       - name: Load environment files
         run: |
@@ -61,6 +62,38 @@ jobs:
         env:
           ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT_CAPS)] }}
           ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT_CAPS)] }}
+
+      # Install an Apple certificate and provisioning profile used to build the app for iOS
+      # See: https://docs.github.com/en/actions/use-cases-and-examples/deploying/installing-an-apple-certificate-on-macos-runners-for-xcode-development
+      - name: Install the Apple certificate and provisioning profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64_FILE }}
+          P12_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISIONING_PROFILE_BASE64_FILE }}
+          KEYCHAIN_PASSWORD: ${{ secrets.CREATE_KEYCHAIN_PASSWORD }}
+        run: |
+          # Create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # Import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+
+          # Create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # Import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          # Apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       # Build the app
       - name: Build the app
