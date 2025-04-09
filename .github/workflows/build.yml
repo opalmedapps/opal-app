@@ -102,9 +102,14 @@ jobs:
           IOS_DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
           PROVISIONING_PROFILE_UUID: ${{ secrets.PROVISIONING_PROFILE_UUID }}
       - name: Rename build output
-        run: mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-${ENVIRONMENT}.ipa"
+        id: rename-output
+        run: |
+          mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-${ENVIRONMENT}.ipa"
+          echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.ipa" >> $GITHUB_OUTPUT
+      - run: echo ${{ steps.rename-output.outputs.ARTIFACT_NAME }}
+      - run: ls
       - name: Archive build output
         uses: actions/upload-artifact@v4
         with:
           name: iOS App
-          path: opal-${ENVIRONMENT}.ipa
+          path: ${{ steps.rename-output.outputs.ARTIFACT_NAME }}
