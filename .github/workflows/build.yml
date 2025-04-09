@@ -47,9 +47,9 @@ jobs:
       - name: Check npm installation
         run: npm -v
       - name: Load .npmrc
-        run: echo "${NPMRC}" > .npmrc
+        run: echo "${NPMRC_FILE}" > .npmrc
         env:
-          NPMRC: ${{ secrets.NPMRC }}
+          NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
       - name: Install dependencies
         run: npm ci --cache .npm --prefer-offline
       # Get the environment files needed to build the app from repository-level Actions variables
