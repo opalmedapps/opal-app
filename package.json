@@ -18,7 +18,7 @@
     "build:app:ios": "npm run prepare:app && npm run build:web && cordova build ios --verbose",
     "build:app:android": "npm run prepare:app && npm run build:web && cordova build android --verbose",
     "build:app:ios:device": "npm run prepare:app && npm run build:web && cordova build ios --device --verbose",
-    "build:app:ios:device:ci": "npm run prepare:app && npm run build:web && cordova build ios --device --verbose --codeSignIdentity=\"iPhone Developer\" --developmentTeam=$npm_config_devteam --provisioningProfile=$npm_config_provisioningprofile",
+    "build:app:ios:device:ci": "npm run prepare:app && npm run build:web && cordova build ios --device --verbose --codeSignIdentity=\"iPhone Developer\" --developmentTeam=$npm_config_devteam --automaticProvisioning=true",
     "build:app:android:device": "npm run prepare:app && npm run build:web && cordova build android --device --verbose",
     "build:app:ios:device:release": "npm run prepare:app && npm run build:web && cordova build ios --device --release --verbose",
     "build:app:ios:device:release:ci": "npm run prepare:app && npm run build:web && cordova build ios --device --release --verbose --developmentTeam=$npm_config_devteam --automaticProvisioning=true",
