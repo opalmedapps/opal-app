@@ -22,6 +22,8 @@ runs:
     - name: Load .npmrc
       run: echo "${NPMRC_FILE}" > .npmrc
       shell: bash
+      env:
+        NPMRC_FILE: ${{ inputs.NPMRC_FILE }}
     - name: Install dependencies
       run: npm ci --cache .npm --prefer-offline
       shell: bash
@@ -33,3 +35,6 @@ runs:
         echo "${ENV_CONFIG_JS}" > env/$ENVIRONMENT/opal.config.js
         echo "${ENV_GOOGLE_SERVICES}" > env/$ENVIRONMENT/google-services.json
       shell: bash
+      env:
+        ENV_CONFIG_JS: ${{ inputs.ENV_CONFIG_JS }}
+        ENV_GOOGLE_SERVICES: ${{ inputs.ENV_GOOGLE_SERVICES }}
