@@ -95,8 +95,6 @@ jobs:
         run: |
           mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-${ENVIRONMENT}.ipa"
           echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.ipa" >> $GITHUB_OUTPUT
-      - run: echo ${{ steps.rename-output.outputs.ARTIFACT_NAME }}
-      - run: ls
       - name: Archive build output
         uses: actions/upload-artifact@v4
         with:
