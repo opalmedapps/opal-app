@@ -37,6 +37,7 @@ jobs:
     runs-on: macos-latest
     steps:
       # Setup
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/build-setup
 
       # Install an Apple certificate and provisioning profile used to build the app for iOS
