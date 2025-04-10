@@ -37,8 +37,20 @@ jobs:
     runs-on: macos-latest
     steps:
       # Setup
-      - uses: actions/checkout@v4
+      - name: Convert environment to all caps
+        run: echo "ENVIRONMENT_CAPS=$(echo $ENVIRONMENT | tr '[a-z]' '[A-Z]')" >> $GITHUB_ENV
+      - name: Print environment
+        run: |
+          echo "Environment: $ENVIRONMENT ($ENVIRONMENT_CAPS)"
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+
       - uses: ./.github/actions/build-setup
+        with:
+          NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
+          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT_CAPS)] }}
+          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT_CAPS)] }}
 
       # Install an Apple certificate and provisioning profile used to build the app for iOS
       # See: https://docs.github.com/en/actions/use-cases-and-examples/deploying/installing-an-apple-certificate-on-macos-runners-for-xcode-development
