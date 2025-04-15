@@ -75,3 +75,13 @@
 	color: #2B6197;
 	text-align: center;
 }
+
+/* See: https://www.w3schools.com/HOWTO/howto_css_center-vertical.asp */
+.center-horizontal-vertical {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
