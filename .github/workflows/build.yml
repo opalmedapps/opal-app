@@ -2,8 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# TODO
-# This workflow is explained in __________; please keep that documentation file up to date when making changes here.
+# This workflow is explained in `docs/deployment/ci-cd.md`; please keep that documentation file up to date when making changes here.
 
 name: Build App
 # Default to dev when running automatically (see also "env" below)
@@ -86,7 +85,7 @@ jobs:
 
       # Build the app
       - name: Build the app
-        run: npm run build:app:ios:device:ci --env=$ENVIRONMENT --devteam=$IOS_DEVELOPMENT_TEAM --provisioningprofile=$PROVISIONING_PROFILE_UUID
+        run: npm run build:app:ios:ci --env=$ENVIRONMENT --devteam=$IOS_DEVELOPMENT_TEAM --provisioningprofile=$PROVISIONING_PROFILE_UUID
         env:
           IOS_DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
           PROVISIONING_PROFILE_UUID: ${{ secrets[format('{0}_PROVISIONING_PROFILE_UUID', env.ENVIRONMENT_CAPS)] }}
@@ -122,7 +121,7 @@ jobs:
 
       # Build the app
       - name: Build the app
-        run: npm run build:app:android:device --env=$ENVIRONMENT
+        run: npm run build:app:android --env=$ENVIRONMENT
       - name: Rename build output
         id: rename-output
         run: |
