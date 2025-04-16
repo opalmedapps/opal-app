@@ -58,7 +58,7 @@ jobs:
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64_FILE }}
           P12_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
-          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISIONING_PROFILE_BASE64_FILE }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets[format('{0}_PROVISIONING_PROFILE_BASE64_FILE', env.ENVIRONMENT_CAPS)] }}
           KEYCHAIN_PASSWORD: ${{ secrets.CREATE_KEYCHAIN_PASSWORD }}
         run: |
           # Create variables
@@ -89,7 +89,7 @@ jobs:
         run: npm run build:app:ios:device:ci --env=$ENVIRONMENT --devteam=$IOS_DEVELOPMENT_TEAM --provisioningprofile=$PROVISIONING_PROFILE_UUID
         env:
           IOS_DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
-          PROVISIONING_PROFILE_UUID: ${{ secrets.PROVISIONING_PROFILE_UUID }}
+          PROVISIONING_PROFILE_UUID: ${{ secrets[format('{0}_PROVISIONING_PROFILE_UUID', env.ENVIRONMENT_CAPS)] }}
       - name: Rename build output
         id: rename-output
         run: |
