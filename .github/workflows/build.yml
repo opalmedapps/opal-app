@@ -11,9 +11,7 @@ on:
   # When pushing to main, automatically build for dev
   push:
     branches:
-      # TODO testing
-#      - main
-      - SB.github-actions
+      - main
 
   # Offer a manual interface to build for all other environments as needed
   workflow_dispatch:
