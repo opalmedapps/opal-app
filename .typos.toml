@@ -12,5 +12,5 @@ extend-ignore-identifiers-re = [
 
 [files]
 extend-exclude = [
-
+    "src/Languages/appTranslationTablesViews/*/fr.json",
 ]
