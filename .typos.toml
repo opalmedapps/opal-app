@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+[default.extend-words]
+
+[default]
+extend-ignore-identifiers-re = [
+    # auto-generated index name
+    "[a-z_]+_[a-f0-9]{6}_idx"
+]
+
+[files]
+extend-exclude = [
+
+]
