@@ -33,4 +33,3 @@ import "../../css/directives/top-page-banner.directive.css";
         return directive;
     }
 })();
-
