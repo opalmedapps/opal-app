@@ -170,7 +170,7 @@ build android:
   script:
     - java -version
     - gradle -v
-    - npm run build:app:android:device --env=$ENV
+    - npm run build:app:android --env=$ENV
     - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-$ENV.apk"
   artifacts:
     expire_in: 1 day
@@ -188,7 +188,7 @@ build android release (apk):
     - gradle -v
     - apksigner --version
     # Build the apk in release mode
-    - npm run build:app:android:device:release:apk --env=$ENV
+    - npm run build:app:android:release:apk --env=$ENV
     - mv ./platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk app-release-unsigned.apk
     # Sign the apk
     - zipalign -v -f -p 4 app-release-unsigned.apk app-unsigned-aligned.apk
@@ -210,7 +210,7 @@ build android release (aab):
     - java -version
     - gradle -v
     # Build the aab in release mode
-    - npm run build:app:android:device:release --env=$ENV
+    - npm run build:app:android:release --env=$ENV
     - mv ./platforms/android/app/build/outputs/bundle/release/app-release.aab app-release-unsigned.aab
     # Sign the aab
     - jarsigner -verbose -sigalg SHA512withRSA -digestalg SHA512 -keystore $ANDROID_UPLOAD_KEY_PATH -storepass $ANDROID_UPLOAD_KEY_PASSWORD -signedjar app-release-signed.aab app-release-unsigned.aab $ANDROID_UPLOAD_KEY_ALIAS
@@ -231,7 +231,7 @@ build ios:
     # Fixes Bus Error when cordova invokes pod install
     # See: https://stackoverflow.com/a/70581304
     - gem install --user-install ffi -- --enable-libffi-alloc
-    - npm run build:app:ios:device:ci --env=$ENV --devteam=$IOS_DEVELOPMENT_TEAM
+    - npm run build:app:ios:ci --env=$ENV --devteam=$IOS_DEVELOPMENT_TEAM
     - mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-$ENV.ipa"
   artifacts:
     expire_in: 1 day

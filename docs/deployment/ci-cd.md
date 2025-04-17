@@ -4,15 +4,32 @@ SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
-# GitLab CI/CD
+_This document refers to some features and uses of GitLab CI/CD which have not yet been converted to GitHub Actions._
+_Content will be updated as this work progresses._
 
-This project is configured with [GitLab CI/CD pipelines](https://docs.gitlab.com/ee/ci/pipelines/)
+# GitHub Actions
+
+This project is configured with [GitHub Actions](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions)
 to build and deploy the application automatically.
 Currently, deployment is only supported for internal distribution, not to end users via the app stores.
 
-Two different workflows are handled by the pipeline, as follows.
+Two different workflows are handled as follows.
 
-## Workflows
+## Workflows - GitHub
+
+The `Build App` workflow runs automatically on all commits to the main branch, to build the app for iOS and Android.
+Commits on this branch are produced as the result of approved "squashed-and-merged" merge requests.
+These commits represent completed work that is ready for deployment to our development environment.
+As such, the jobs in this workflow run by default in the Dev environment.
+
+The workflow also provides a UI interface which can be used to build the app for another environment.
+
+To build the app on demand, go to the [GitHub Actions Tab](https://github.com/opalmedapps/opal-app/actions),
+select `Build App` in the left sidebar, and next to `This workflow has a workflow_dispatch event trigger`,
+select `Run workflow`.
+This will open a panel in which to provide inputs, such as which environment to use.
+
+## Workflows - GitLab
 
 ### 1. Commits on feature branches (regular development)
 
@@ -82,7 +99,7 @@ Any commits to the default branch are handled as follows:
       but using the variables for that environment.
       For more information on downstream pipelines, refer to GitLab's documentation.
 
-## Protected Environments
+## Protected Environments - GitLab
 
 GitLab [Protected Environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 are used to limit which users are authorized to deploy versions of the app to each environment.
