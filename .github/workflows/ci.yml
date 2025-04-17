@@ -10,9 +10,9 @@ on:
       - main
       # TODO testing
       - SB.ci-pre-commit
-    pull_request:
-    workflow_dispatch:
-    merge_group:
+  pull_request:
+  workflow_dispatch:
+  merge_group:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
