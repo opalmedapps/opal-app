@@ -59,7 +59,7 @@
                 },
                 CAREGIVERS: {
                     method: 'get',
-                    url: '/api/patients/legacy/<PATIENT_ID>/caregivers/'
+                    url: '/api/patients/legacy/<PATIENT_ID>/caregivers/',
                 },
                 RELATIONSHIP_TYPES: {
                     method: 'get',
