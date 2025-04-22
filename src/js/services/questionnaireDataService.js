@@ -83,7 +83,7 @@
                 throw {Success: false, Location: '', Error: error};
             }
 
-            
+
             // send to the database
             let params = {
                 'answerQuestionnaire_id': answerQuestionnaireId,

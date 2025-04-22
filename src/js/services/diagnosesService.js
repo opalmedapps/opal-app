@@ -5,12 +5,12 @@
 /*
  * Filename     :   diagnosesService.js
  * Description  :   Service that store and manages the patient diagnosis information.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   02 Mar 2017
  */
- 
- 
- 
+
+
+
 var myApp=angular.module('OpalApp');
 /**
 *@ngdoc service

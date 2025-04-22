@@ -31,7 +31,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
             //grab the nonce
             var pair = splitValue(object);
             var decryptedObj = nacl.util.encodeUTF8(nacl.secretbox.open(pair[1], pair[0], secret));
-            
+
             return stripEscapingSlashes(decryptedObj);
 
         } else {

@@ -5,7 +5,7 @@
 /*
  * Filename     :   infoTabController.js
  * Description  :   Manages the information view.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   28 Apr 2017
  */
 

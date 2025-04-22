@@ -5,7 +5,7 @@
 /*
  * Filename     :   dynamicContentService.js
  * Description  :   Service that manages the dynamic data for Opal, hosted on an external server.
- * Created by   :   Robert Maglieri 
+ * Created by   :   Robert Maglieri
  * Date         :   02 Mar 2017
  */
 

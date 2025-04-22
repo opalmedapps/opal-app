@@ -46,7 +46,7 @@
 
         /**
           * This function check the video url (youtube or vimeo link) and format (other link with mp4, ogv and webm file extention)
-          * 
+          *
           * Some notes of one possible idea about video tag attribute "autopalay"
           *     - Video tag with or without autoplay depending on the device.
           *     - For iPhones it is set to autoplay so the poster image automatically appears on initial load.
@@ -80,7 +80,7 @@
                     if(ons.platform.isIOS()){
                         scope.formatedUrl = scope.formatedUrl + "#t=0.05";
                     }
-                    
+
                 }
                 else {
                     scope.showError = true;

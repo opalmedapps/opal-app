@@ -48,7 +48,7 @@
                                                 loading-message="{{'LOADING'|translate}}"
                                                 margintop="{{loadingMarginTop}}"
                        ></loading-spinning-circle>
-                       
+
                        <!-- Error message -->
                        <div ng-show="initLoadingError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
                            <uib-alert type="{{alertType}}">{{"LOADING_ERROR"|translate}}</uib-alert>

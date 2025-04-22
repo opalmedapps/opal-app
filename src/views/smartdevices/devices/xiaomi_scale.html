@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0
     <generic-toolbar title="{{ 'SMARTDEVICES_XIAOMI_SCALE' | translate }}" style-class="fontSizeTitle">
     </generic-toolbar>
     <network-banner></network-banner>
-    
+
     <div class="smartdevices-page">
         <div align="center" class="smartdevices-fa-logo">
             <i class="fa fa-tachometer fa-lg" style="color: #25a6d9"></i>
@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
             <div style="text-align: justify;">
                 <p>{{ "SMARTDEVICES_SCALE_INSTRUCTIONS" | translate }}</p>
             </div>
-            
+
             <div align="center">
                 <button class="button--large--cta"
                         ng-click="ctrl.scanAndConnect()">
@@ -41,7 +41,7 @@ SPDX-License-Identifier: Apache-2.0
             <p class="data">
                 <span>{{ ctrl.weight }}</span>kg
             </p>
-            <!-- 
+            <!--
             Currently hidden but might be helpful to show to users
             <p><strong>Scale:</strong> {{ctrl.selectedDevice.name}} ({{ctrl.selectedDevice.id}})</p>
             <p><strong>Battery level:</strong> {{ctrl.selectedDevice.battery}}%</p>
@@ -60,7 +60,7 @@ SPDX-License-Identifier: Apache-2.0
                 {{ "SMARTDEVICES_BACK" | translate }}
             </button>
         </div>
-        
+
         <div ng-if="!ctrl.scanning && ctrl.selectedDevice == null && ctrl.getDeviceList().length > 1">
             <p ng-class="fontSizeTitle"><strong>{{ "SMARTDEVICES_MULTIPLE" | translate }}</strong></p>
 
@@ -94,5 +94,5 @@ SPDX-License-Identifier: Apache-2.0
             </div>
         </div>
     </div>
-        
+
 </ons-page>

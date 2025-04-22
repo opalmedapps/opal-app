@@ -227,7 +227,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
             }
 
             UUID.setUUID(deviceID);
-            
+
             vm.trustedPromise = DeviceIdentifiers.sendDeviceIdentifiersToServer();
 
             vm.trustedPromise.promise.then(() => {

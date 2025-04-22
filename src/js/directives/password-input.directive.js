@@ -27,7 +27,7 @@ import '../../css/directives/password-input.directive.css';
                     <ons-icon class="icon" icon={{iconType}} role="button" ng-click="switchInputType($event)" aria-label="{{'SHOW_PASSWORD' | translate}}"></ons-icon>
                 </div>
             `,
-            link: function (scope) {                
+            link: function (scope) {
                 scope.isVisible = false;
                 scope.iconType = 'ion-eye';
                 scope.switchInputType = (event) => {

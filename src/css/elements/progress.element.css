@@ -82,7 +82,7 @@
 	-webkit-transition: width .6s ease;
 	-o-transition: width .6s ease;
 	transition: width .6s ease;
-} 
+}
 @-moz-keyframes progress__rotate {
 	100% {
 		-moz-transform: rotate(360deg);

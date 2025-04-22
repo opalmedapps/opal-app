@@ -91,7 +91,7 @@
             consent: 'CONSENT_FORM_RESUME_INSTRUCTION',
             default: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
         };
-        
+
         const PURPOSE_SUBMIT_BUTTON_MAP = {
             clinical: 'SUBMITANSWERS',
             research: 'SUBMITANSWERS',

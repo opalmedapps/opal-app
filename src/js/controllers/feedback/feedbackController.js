@@ -86,7 +86,7 @@
                     $timeout(function(){
                         $scope.feedbackText = '';
                         vm.submitted = true;
-                        vm.enableSend = false; 
+                        vm.enableSend = false;
                         vm.isSubmitting = false;
                     });
                 }).catch(function(error){
@@ -96,7 +96,7 @@
                         vm.isSubmitting = false;
                     });
                 });
-                
+
             }
         }
 
