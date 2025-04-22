@@ -30,8 +30,6 @@ jobs:
           persist-credentials: false
       - uses: mschoettle/pre-commit-action@v4.2.3
         if: '!cancelled()'
-        env:
-          SKIP: reuse-lint-file
 
   run-reuse-workflow:
     uses: opalmedapps/.github/.github/workflows/reuse.yaml@main
