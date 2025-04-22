@@ -15,7 +15,7 @@
  A multiplatform application built using {@link https://cordova.apache.org Apache Cordova}. The main frameworks for the project are {@link https://angularjs.org/ AngularJS} framework, {@link https://onsen.io/ OnsenUI} Framework, and {@link https://cordova.apache.org Apache Cordova}
  This guide is the first version of the documentation for the Opal mobile app
  Main module for the project: {@link OpalApp}.3
- The external dependecies for the project: {@link ProjectDependencies}.
+ The external dependencies for the project: {@link ProjectDependencies}.
  **/
 
 /**
@@ -27,7 +27,7 @@
 /**
  *@ngdoc object
  *@name ProjectDependencies.ngAnimate
- *@description Depencency used to create jQuery like animations, but within the Angular framework in the project.
+ *@description Dependency used to create jQuery like animations, but within the Angular framework in the project.
  *Link to external reference {@link https://github.com/angular/bower-angular-animate}.
  */
 
@@ -54,14 +54,14 @@
 /**
  *@ngdoc object
  *@name ProjectDependencies.onsen
- *@description Dependency used to create html/AngularJS elements that provide a native like feeling to the app. User accross all the views.
+ *@description Dependency used to create html/AngularJS elements that provide a native like feeling to the app. User across all the views.
  * Link to external reference {@link https://github.com/OnsenUI/OnsenUI}.
  */
 
 /**
  *@ngdoc object
  *@name ProjectDependencies.uibootstrap
- *@description Dependency used accross all views. Provides a way to interact with bootstrap elements using the Angular Framework.
+ *@description Dependency used across all views. Provides a way to interact with bootstrap elements using the Angular Framework.
  *Link to external reference {@link https://github.com/angular-ui/bootstrap}.
  */
 

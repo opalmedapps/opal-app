@@ -31,7 +31,7 @@
         const vm = this;
 
         let todaysTimeMilliseconds;
-        let choosenTimeMilliseconds;
+        let chosenTimeMilliseconds;
         let today;
         let dateLast;
         let dateFirst;
@@ -110,7 +110,7 @@
 
             //Getting time in milliseconds for today's appointment
             todaysTimeMilliseconds =  today.getTime();
-            choosenTimeMilliseconds = todaysTimeMilliseconds;
+            chosenTimeMilliseconds = todaysTimeMilliseconds;
 
             // Initialize calendar styling
             initializeCalendarStyle();
@@ -151,10 +151,10 @@
          */
         function findClosestAnchor() {
             if(vm.appointments.length>0) {
-                if(dateLast<choosenTimeMilliseconds) return 'lastAnchor';
-                else if(dateFirst>choosenTimeMilliseconds) return 'firstAnchor';
+                if(dateLast<chosenTimeMilliseconds) return 'lastAnchor';
+                else if(dateFirst>chosenTimeMilliseconds) return 'firstAnchor';
                 else{
-                    let ind = findClosestAppointmentToTime(choosenTimeMilliseconds);
+                    let ind = findClosestAppointmentToTime(chosenTimeMilliseconds);
                     return 'anchorAppointments'+ ind;
                 }
             }
@@ -258,7 +258,7 @@
          */
         function showHeaderEnd() {
             if(!vm.appointments) return false;
-            return vm.appointments.length > 0 && dateLast < choosenTimeMilliseconds;
+            return vm.appointments.length > 0 && dateLast < chosenTimeMilliseconds;
         }
         /**
          * Determines whether or not to show the date header in the appointment list
@@ -282,18 +282,18 @@
                 same_date_as_prev = date_prev === selected_date;
 
                 // pretty cryptic property.. not really sure what the first expression represents
-                vm.showHeaderNormalDay = (choosenTimeMilliseconds !== selected_date) && !same_date_as_prev;
+                vm.showHeaderNormalDay = (chosenTimeMilliseconds !== selected_date) && !same_date_as_prev;
 
                 if(date_prev===selected_date) {
                     return false;
                 }else{
-                    return (selected_date > choosenTimeMilliseconds && date_prev < choosenTimeMilliseconds)
-                        || selected_date === choosenTimeMilliseconds;
+                    return (selected_date > chosenTimeMilliseconds && date_prev < chosenTimeMilliseconds)
+                        || selected_date === chosenTimeMilliseconds;
                 }
             } else {
                 // pretty cryptic property.. not really sure what the first expression represents
-                vm.showHeaderNormalDay = (choosenTimeMilliseconds !== selected_date) && !same_date_as_prev;
-                return choosenTimeMilliseconds === selected_date || choosenTimeMilliseconds < selected_date;
+                vm.showHeaderNormalDay = (chosenTimeMilliseconds !== selected_date) && !same_date_as_prev;
+                return chosenTimeMilliseconds === selected_date || chosenTimeMilliseconds < selected_date;
             }
         }
 
@@ -324,7 +324,7 @@
          * Scrolls to date when user interacts with the calendar
          */
         function onDateChange() {
-            choosenTimeMilliseconds = vm.todays_date.getTime();
+            chosenTimeMilliseconds = vm.todays_date.getTime();
             scrollToAnchor();
         }
 

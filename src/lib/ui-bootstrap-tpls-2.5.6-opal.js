@@ -2195,7 +2195,7 @@ angular.module('ui.bootstrap.position', [])
       /**
        * Provides the closest positioned ancestor.
        *
-       * @param {element} element - The element to get the offest parent for.
+       * @param {element} element - The element to get the offset parent for.
        *
        * @returns {element} The closest positioned ancestor.
        */
@@ -2346,7 +2346,7 @@ angular.module('ui.bootstrap.position', [])
        * http://api.jquery.com/position/ - distance to closest positioned
        * ancestor.  Does not account for margins by default like jQuery position.
        *
-       * @param {element} elem - The element to caclulate the position on.
+       * @param {element} elem - The element to calculate the position on.
        * @param {boolean=} [includeMargins=false] - Should margins be accounted
        * for, default is false.
        *
@@ -7065,7 +7065,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.debounce', 'ui.bootstrap
       scope.position.top += element.prop('offsetHeight');
     }
 
-    //we need to propagate user's query so we can higlight matches
+    //we need to propagate user's query so we can highlight matches
     scope.query = undefined;
 
     //Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later

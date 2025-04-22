@@ -32,7 +32,7 @@
 
                         <!-- video format for 'mp4', 'ogv' and 'webm' -->
                         <video controls ng-if="videoTag" preload="metadata">
-                            <source ng-src="{{formatedUrl|trustThisUrl}}" type="video/{{fileExt}}">
+                            <source ng-src="{{formattedUrl|trustThisUrl}}" type="video/{{fileExt}}">
                         </video>
 
                         <!-- ERROR MESSAGE -->
@@ -45,7 +45,7 @@
         return directive;
 
         /**
-          * This function check the video url (youtube or vimeo link) and format (other link with mp4, ogv and webm file extention)
+          * This function check the video url (youtube or vimeo link) and format (other link with mp4, ogv and webm file extension)
           *
           * Some notes of one possible idea about video tag attribute "autopalay"
           *     - Video tag with or without autoplay depending on the device.
@@ -53,7 +53,7 @@
           *     - iPhones will prevent the video from auto playing, but the poster image appears as the result.
           */
         function checkVideoFormat(scope, element, attrs) {
-            // inialize each division's switch variable
+            // initialize each division's switch variable
             scope.iframeTag = false;
             scope.videoTag = false;
             scope.showError = false;
@@ -65,7 +65,7 @@
             scope.fileExt = FileManagerService.getFileExtension(scope.edumaterialUrl);
 
             // a new url is just for iphone device to get the poster when time is loading at 0.05s
-            scope.formatedUrl = scope.edumaterialUrl;
+            scope.formattedUrl = scope.edumaterialUrl;
 
             try {
 
@@ -78,7 +78,7 @@
                     *  Modify the video url when using iPhone deice to show the poster at a specific time frame.
                     */
                     if(ons.platform.isIOS()){
-                        scope.formatedUrl = scope.formatedUrl + "#t=0.05";
+                        scope.formattedUrl = scope.formattedUrl + "#t=0.05";
                     }
 
                 }

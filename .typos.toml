@@ -3,14 +3,35 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [default.extend-words]
+muhc = "muhc"
+ser = "ser" # Part of SerNum
+
+# French
+annonce = "annonce"
+autorisation = "autorisation"
+collecte = "collecte"
+informations = "informations"
+sur = "sur"
+
+# Lorem ipsum
+varius = "varius"
+ridiculus = "ridiculus"
+
+# Predefined attributes
+itms = "itms"
 
 [default]
-extend-ignore-identifiers-re = [
-    # auto-generated index name
-    "[a-z_]+_[a-f0-9]{6}_idx"
+extend-ignore-re = [
+    # Commit hashes in CHANGELOG.md
+    "\\[[0-9a-f]{7}\\]",
 ]
 
 [files]
 extend-exclude = [
     "src/Languages/appTranslationTablesViews/*/fr.json",
+    "**/fr.html",
+
+    "LICENSES/*",
+    "src/lib/ui-bootstrap-tpls-2.5.6-original.js",
+    "REUSE.toml",
 ]

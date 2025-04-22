@@ -138,7 +138,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
                 edumaterial[i].Color = educationalMaterialType['Other'].color;
             }
 
-            //Add to my annoucements array
+            //Add to my announcements array
             educationalMaterialArray.push(edumaterial[i]);
         }
 

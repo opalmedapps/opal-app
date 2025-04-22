@@ -12,7 +12,7 @@ var myApp=angular.module('OpalApp');
  *@description Service that deals with the treatment team message information
  **/
 myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'UserPreferences', function($filter,RequestToServer, LocalStorage,UserPreferences){
-    //Initializing array that represents all the informations for TxTeamMessages
+    //Initializing array that represents all the information for TxTeamMessages
     /**
      *@ngdoc property
      *@description Initializing array that represents all the information for TxTeamMessages, this array is passed to appropriate controllers.
@@ -55,7 +55,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name setTxTeamMessages
-         *@param {Object} messages messages array that containts the new messages
+         *@param {Object} messages messages array that contains the new messages
          *@description Setter method for TxTeamMessages
          **/
         setTxTeamMessages:function(messages)

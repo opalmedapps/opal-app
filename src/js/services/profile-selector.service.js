@@ -126,8 +126,8 @@ import {Observer} from "../models/utility/observer";
                 if (!result.data) {
                     return [];
                 }
-                const formatedResult = assignColor(result.data) ? result.data : [];
-                return formatedResult
+                const formattedResult = assignColor(result.data) ? result.data : [];
+                return formattedResult
             } catch (error) {
                 // TODO: Display error in the view (QSCCD-77)
                 console.error(error);
