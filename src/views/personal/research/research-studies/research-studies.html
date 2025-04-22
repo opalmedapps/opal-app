@@ -26,7 +26,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <ons-list class="settings-list" ng-repeat="study in stud.studies | orderBy: '-creationDate'"
         ng-hide="stud.noStudies">
-        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="stud.showHeader($index)">
+        <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="stud.showHeader($index)">
             {{study.creationDate|date:'fullDate'}}</ons-list-header>
         <ons-list-item modifier="chevron" ng-click="stud.openStudy(study)" ng-repeat-end>
             <ons-row>

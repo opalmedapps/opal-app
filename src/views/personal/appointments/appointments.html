@@ -66,7 +66,7 @@ SPDX-License-Identifier: Apache-2.0
                 <div id="anchorAppointments{{$index}}"></div>
                 <ons-list-header ng-if="calendar.showChosenDateHeader($index)" style="color:#2196F3"
                     ng-class="fontSizeTitle">{{calendar.todays_date|date:'fullDate'}}</ons-list-header>
-                <ons-list-header class="person-list-header" ng-if="calendar.showHeaderNormalDay"
+                <ons-list-header class="default-list-header" ng-if="calendar.showHeaderNormalDay"
                     ng-class="fontSizeTitle">{{app.ScheduledStartTime|date:'fullDate'}}</ons-list-header>
                 <ons-list-item modifier="chevron">
                     <ons-row>
