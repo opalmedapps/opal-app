@@ -37,7 +37,7 @@ jobs:
     steps:
       # Setup
       - name: Convert environment to all caps
-        run: echo "ENVIRONMENT_CAPS=$(echo $ENVIRONMENT | tr '[a-z]' '[A-Z]')" >> $GITHUB_ENV
+        run: echo "ENVIRONMENT_CAPS=$(echo $ENVIRONMENT | tr 'a-z' 'A-Z')" >> "$GITHUB_ENV"
       - name: Print environment
         run: |
           echo "Environment: $ENVIRONMENT ($ENVIRONMENT_CAPS)"
@@ -53,12 +53,12 @@ jobs:
 
       # Build the app
       - name: Build the app
-        run: npm run build:app:android --env=$ENVIRONMENT
+        run: npm run build:app:android --env="$ENVIRONMENT"
       - name: Rename build output
         id: rename-output
         run: |
           mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-${ENVIRONMENT}.apk"
-          echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.apk" >> $GITHUB_OUTPUT
+          echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.apk" >> "$GITHUB_OUTPUT"
       - name: Archive build output
         uses: actions/upload-artifact@v4
         with:
@@ -70,7 +70,7 @@ jobs:
     steps:
       # Setup
       - name: Convert environment to all caps
-        run: echo "ENVIRONMENT_CAPS=$(echo $ENVIRONMENT | tr '[a-z]' '[A-Z]')" >> $GITHUB_ENV
+        run: echo "ENVIRONMENT_CAPS=$(echo $ENVIRONMENT | tr 'a-z' 'A-Z')" >> "$GITHUB_ENV"
       - name: Print environment
         run: |
           echo "Environment: $ENVIRONMENT ($ENVIRONMENT_CAPS)"
@@ -94,31 +94,31 @@ jobs:
           KEYCHAIN_PASSWORD: ${{ secrets.CREATE_KEYCHAIN_PASSWORD }}
         run: |
           # Create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          CERTIFICATE_PATH="$RUNNER_TEMP"/build_certificate.p12
+          PP_PATH="$RUNNER_TEMP"/build_pp.mobileprovision
+          KEYCHAIN_PATH="$RUNNER_TEMP"/app-signing.keychain-db
 
           # Import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o "$CERTIFICATE_PATH"
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "$PP_PATH"
 
           # Create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
           # Import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
+          security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
 
           # Apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles
 
       # Build the app
       - name: Build the app
-        run: npm run build:app:ios:ci --env=$ENVIRONMENT --devteam=$IOS_DEVELOPMENT_TEAM --provisioningprofile=$PROVISIONING_PROFILE_UUID
+        run: npm run build:app:ios:ci --env="$ENVIRONMENT" --devteam="$IOS_DEVELOPMENT_TEAM" --provisioningprofile="$PROVISIONING_PROFILE_UUID"
         env:
           IOS_DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
           PROVISIONING_PROFILE_UUID: ${{ secrets[format('{0}_PROVISIONING_PROFILE_UUID', env.ENVIRONMENT_CAPS)] }}
@@ -126,7 +126,7 @@ jobs:
         id: rename-output
         run: |
           mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-${ENVIRONMENT}.ipa"
-          echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.ipa" >> $GITHUB_OUTPUT
+          echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.ipa" >> "$GITHUB_OUTPUT"
       - name: Archive build output
         uses: actions/upload-artifact@v4
         with:
