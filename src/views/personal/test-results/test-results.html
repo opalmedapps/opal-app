@@ -56,7 +56,7 @@ SPDX-License-Identifier: Apache-2.0
                 <div ng-if="tests.testDates.length > 0">
                     <ons-list>
                         <div ng-repeat="testDate in tests.testDates">
-                            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="tests.testDates | showHeader : $index"
+                            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="tests.testDates | showHeader : $index"
                                             >{{
                                                 testDate.collectedDateTime.toLocaleString(
                                                     tests.locale,
@@ -107,7 +107,7 @@ SPDX-License-Identifier: Apache-2.0
                     <search-bar search-text="tests.searchTestTypeText" placeholder="{{'SEARCH'|translate}}" style-class="fontSizeDesc"></search-bar>
                     <!-- HEADER WITH COLUMN TITLES -->
                     <ons-list>
-                        <ons-list-header class="person-list-header" ng-class="fontSizeTitle">
+                        <ons-list-header class="default-list-header" ng-class="fontSizeTitle">
                             <ons-row ng-class="fontSizeDesc" style="font-weight:bold" vertical-align="center">
 
                                 <!-- HEADER - LEFT (NAME) -->

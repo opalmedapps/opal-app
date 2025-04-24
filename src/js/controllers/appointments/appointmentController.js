@@ -98,7 +98,7 @@
                 contentType: vm.app["AppointmentType_" + vm.language],
                 title: 'MORE_EDU_MATERIAL',
             });
-            
+
         }
 
         function openMap(){

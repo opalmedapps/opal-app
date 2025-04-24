@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <div ng-hide="vm.hideContent || vm.noAnnouncements">
         <ons-list  ng-repeat="announcement in vm.announcements" ng-click="vm.goToAnnouncement(announcement)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{vm.announcements | showHeader : $index : 'DateAdded' }}">{{announcement.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ vm.announcements | showHeader : $index : 'DateAdded' }}">{{ announcement.DateAdded | date:'fullDate' }}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center" >
                     <ons-col width="70px" align="center">

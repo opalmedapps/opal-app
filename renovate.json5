@@ -22,7 +22,7 @@
     "schedule:weekly",
   ],
   // Extra rules for node images. See: https://github.com/renovatebot/renovate/discussions/29501
-  // Ensure that node docker versioning doesn't interfer with the custom managers.
+  // Ensure that node docker versioning doesn't interfere with the custom managers.
   "ignorePresets": ["workarounds:nodeDockerVersioning"],
   "assignees": ["staceybeard"],
   "labels": ["dependencies"],

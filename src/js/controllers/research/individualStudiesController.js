@@ -43,7 +43,7 @@
             vm.hasStartDate = vm.study.hasOwnProperty('startDate');
             vm.hasEndDate = vm.study.hasOwnProperty('endDate');
 
-            // Reload studies list after submitting questionnaire 
+            // Reload studies list after submitting questionnaire
             // Required to update studies list with participation status after submitting
             // consent form opened from the individual studies page
             navigator.on('prepop', function (event) {

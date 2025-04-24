@@ -9,11 +9,11 @@
 }
 .card .item {
 	border-left: 0;
-	border-right: 0; 
+	border-right: 0;
 }
 .card .item:first-child {
 	border-top: 0;
 }
 .card .item:last-child {
-	border-bottom: 0; 
+	border-bottom: 0;
 }

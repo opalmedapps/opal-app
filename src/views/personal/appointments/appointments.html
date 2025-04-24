@@ -59,14 +59,14 @@ SPDX-License-Identifier: Apache-2.0
     <!-- THE ONLY REASON FOR THIS DELAY IS A SMOOTHER LOADING OF THE LIST OF APPOINTMENTS -->
     <ons-scroller-height ng-hide="calendar.hideContent" timer="500">
             <div id="firstAnchor"></div>
-            <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center" 
+            <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center"
                 ng-class="fontSizeTitle">{{"NOAPPOINTMENTS"|translate}}</div>
-            <ons-list ng-repeat="app in calendar.appointments" ng-click="calendar.goToAppointment(app)" 
+            <ons-list ng-repeat="app in calendar.appointments" ng-click="calendar.goToAppointment(app)"
                 class="gpu_efficiency" ng-hide="calendar.noAppointments">
                 <div id="anchorAppointments{{$index}}"></div>
-                <ons-list-header ng-if="calendar.showChosenDateHeader($index)" style="color:#2196F3" 
+                <ons-list-header ng-if="calendar.showChosenDateHeader($index)" style="color:#2196F3"
                     ng-class="fontSizeTitle">{{calendar.todays_date|date:'fullDate'}}</ons-list-header>
-                <ons-list-header class="person-list-header" ng-if="calendar.showHeaderNormalDay" 
+                <ons-list-header class="default-list-header" ng-if="calendar.showHeaderNormalDay"
                     ng-class="fontSizeTitle">{{app.ScheduledStartTime|date:'fullDate'}}</ons-list-header>
                 <ons-list-item modifier="chevron">
                     <ons-row>

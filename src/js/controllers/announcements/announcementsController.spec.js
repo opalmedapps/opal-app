@@ -56,7 +56,7 @@ describe('AnnouncementsController', function() {
             spyOn( Announcements, 'setLanguage' ).and.returnValue([]);
         } else {
             spyOn( Announcements, 'getAnnouncements' ).and.returnValue(MockData.test_announcements);
-            spyOn( Announcements, 'setLanguage' ).and.returnValue(MockData.english_test_annoucements);
+            spyOn( Announcements, 'setLanguage' ).and.returnValue(MockData.english_test_announcements);
             spyOn( Announcements, 'readAnnouncementBySerNum' ).and.returnValue(true);
         }
 
@@ -70,7 +70,7 @@ describe('AnnouncementsController', function() {
             expect(Announcements.getAnnouncements).toHaveBeenCalled();
             expect(Announcements.setLanguage).toHaveBeenCalled();
             expect(controller.noAnnouncements).toBe(false);
-            expect(controller.announcements).toEqual(MockData.english_test_annoucements);
+            expect(controller.announcements).toEqual(MockData.english_test_announcements);
         });
     });
 

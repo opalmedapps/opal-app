@@ -93,7 +93,7 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
         }
 
         /**
-         * @descrition - Execute multiple requests to get a categorical data (e.g., announcement) per patient
+         * @description - Execute multiple requests to get a categorical data (e.g., announcement) per patient
          *               then merge the data together.
          * @param {string} typeOfRequest - Type of request send to the listener
          * @param {object} parameters - Extra parameters to identify data to be query
@@ -211,18 +211,17 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
         }
 
         /**
-         * @description Set the correct referentce field to cue request in the good listener's part.
-         *              If reference field is provided user it, if requesType is `api` send the request
-         *              to the new listener part, else use the default `request` legacy path.
-         * @param {string} typeOfRequest Type of request to be process by the listener
+         * @description Set the correct reference field to queue a request in the new part of the listener.
+         *              If referenceField is provided, use it; if typeOfRequest is `api`, send the request
+         *              to the new listener part; otherwise, use the default `requests` legacy path.
+         * @param {string} typeOfRequest Type of request to be processed by the listener
          * @param {string} referenceField Specifies a type of request other than `api` or `request`
-         * @returns The required reference field
+         * @returns {string} The required reference field
          */
         function getReferenceField(typeOfRequest, referenceField) {
             if (referenceField) return referenceField;
             return typeOfRequest === 'api' ? 'api' : 'requests';
         }
-
 
         /**
          * @description Puts together a request object for upload to Firebase.
@@ -250,7 +249,7 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
         }
 
         /**
-         * @description Get the patientSerNum from the currently selected profile, curently selected profile for multiple patient data loading
+         * @description Get the patientSerNum from the currently selected profile, currently selected profile for multiple patient data loading
          *  or fallback to the old patient/user service patientSernum
          * @returns {number} The patientSerNum id required to make the request
          */

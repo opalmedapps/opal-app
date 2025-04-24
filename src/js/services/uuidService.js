@@ -5,7 +5,7 @@
 /*
  * Filename     :   uuidService.js
  * Description  :   Service that generates UUIDS for browsers. These are needed to uniquely identify browsers
- *                  so they can be asscociated with specific security answers.
+ *                  so they can be associated with specific security answers.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   03 Mar 2017
  */
@@ -94,4 +94,3 @@
 
     }
 })();
-

@@ -9,7 +9,7 @@ SPDX-License-Identifier: Apache-2.0
         <h3>{{contentsEduBooklet.Booklet.Name}}</h3>
        <rate-material ser-num="contentsEduBooklet.Booklet.EducationalMaterialControlSerNum"></rate-material>
        <ons-list style="margin: 10px 0 0 0">
-    <ons-list-header class="person-list-header" ng-class="fontSizeTitle" >{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
+    <ons-list-header class="default-list-header" ng-class="fontSizeTitle" >{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
     <ons-list-item modifier="chevron" ng-repeat= "edumaterial in contentsEduBooklet.TableOfContents" class="item gpu_efficiency" ng-click="goToSectionBooklet($index)" >
         <ons-row align="center">
             <ons-col width="60px" align="center">

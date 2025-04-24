@@ -132,7 +132,7 @@
         }
 
         /**
-         * @desc Patch function to hanldle empty categories when switching profile with the profile selector.
+         * @desc Patch function to handle empty categories when switching profile with the profile selector.
          *       This should not be required when switching to data loading from new backend.
          * @param {object} categories Requested data categories.
          * @returns array of requested categories with empty arrays as value.

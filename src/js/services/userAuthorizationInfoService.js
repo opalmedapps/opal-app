@@ -20,12 +20,12 @@ UserAuthorizationInfo.$inject = ['Constants'];
 function UserAuthorizationInfo(Constants) {
     /**
      *@ngdoc property
-    *@description Firebase Username property 
+    *@description Firebase Username property
     **/
     var username = '';
     /**
      *@ngdoc property
-    *@description Firebase Username property 
+    *@description Firebase Username property
     **/
     var expires = '';
     /**
@@ -78,7 +78,7 @@ function UserAuthorizationInfo(Constants) {
             //Encode password
             pass=CryptoJS.SHA512(pass).toString();
             password=pass;
-           
+
         },
         /**
         *@ngdoc method

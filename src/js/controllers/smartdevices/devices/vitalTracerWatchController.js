@@ -42,7 +42,7 @@
 
         vm.selectedDevice = null;
         vm.errorMessage = null;
-        
+
         let devices = new Map();
         vm.messages = [];
 
@@ -63,7 +63,7 @@
         async function scanAndConnect() {
             vm.scanning = true;
             vm.errorMessage = null;
-                
+
             vm.selectDevice = null;
             vm.messages = [];
             devices.clear();
@@ -131,13 +131,13 @@
                 device.connecting = false;
                 devices.clear();
             });
-            
+
             await ble.withPromises.disconnect(device.id);
         }
 
         async function onConnected(device, result) {
             addMessage(`Connected to device`);
-            
+
             addDebugMessage('Subscribing to receive notifications');
             await ble.withPromises.startNotification(
                 result.id,
@@ -190,7 +190,7 @@
                 source: SAMPLE_SOURCE,
                 device: vm.selectedDevice.name,
             }];
-            
+
             submitToBackend(data);
         }
 
@@ -238,7 +238,7 @@
 
             try {
                 let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
-                
+
                 addMessage('Vital signs successfully sent to backend');
             } catch (error) {
                 vm.errorMessage = `${ERROR_BACKEND}: ${error}`;

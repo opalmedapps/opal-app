@@ -105,7 +105,7 @@ increment version:
     - '[ -z "$NPMRC_FILE"] && echo "Error: environment variable NPMRC_FILE must be defined for this job" && exit 1'
     - echo "$NPMRC_FILE" > .npmrc
     # use pipe operator to be able to use a colon in the command
-    - | 
+    - |
       RESPONSE=$(curl -s -X GET -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" "${CI_API_V4_URL}/user")
     - export GIT_AUTHOR_EMAIL=$(echo $RESPONSE | jq ".email")
     - export GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL
@@ -311,12 +311,12 @@ deploy web:
     # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
     - >
       lftp -e "
-        set cmd:fail-exit yes; 
-        open $FTP_HOST; 
-        user $FTP_USER $FTP_PASSWORD; 
+        set cmd:fail-exit yes;
+        open $FTP_HOST;
+        user $FTP_USER $FTP_PASSWORD;
         mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${CI_ENVIRONMENT_NAME}/;
         mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${CI_ENVIRONMENT_NAME}/app/;
-        ls -la app/${CI_ENVIRONMENT_NAME}; 
+        ls -la app/${CI_ENVIRONMENT_NAME};
         bye
       "
 
@@ -328,7 +328,7 @@ include:
   # Add Reuse job: https://reuse.software/
   - project: 'opalmedapps/engineering/ci-templates'
     file: '/templates/jobs/Reuse.gitlab-ci.yml'
-      
+
   # use latest template versions to run security scanning jobs also in merge request pipelines:
   # https://docs.gitlab.com/ee/user/application_security/index.html#use-security-scanning-tools-with-merge-request-pipelines
   # Secret Detection: https://docs.gitlab.com/ee/user/application_security/secret_detection/
