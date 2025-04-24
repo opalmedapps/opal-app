@@ -15,8 +15,6 @@ const config = {
         // For testing purposes (e.g., if no external server is setup), it's possible to provide a path to
         // a local configuration file (e.g., `./content/content.config.json`).
         externalContentFileURL: "./content/content.config.json",
-        // Boolean: whether to kick out a user when another person logs into the same user account on another device.
-        kickOutConcurrentUsers: false,
         // String: the service status URL is used to display a 'service status message' to the user when they log in.
         // Leave empty if no service status URL has been set on the external server.
         // E.g., https://<YOUR-EXTERNAL-HOST>/<PATH-TO-THE-SERVICE-STATUS>
@@ -25,8 +23,8 @@ const config = {
         serviceStatusURL: "./content/service-status.json",
         // Boolean: whether to show the app's version and build number on the front page.
         showVersionOnInit: true,
-        // Boolean: whether to use real (production-ready) institution names and acronyms (such as "RI-MUHC"). If false, generic names are used.
-        useRealInstitutionNames: false,
+        // Boolean: whether to use real (production-ready) hospitals for login. If false, development-specific hospitals are used instead.
+        useProductionHospitals: false,
         // Boolean: whether to use a sourcemap when building the web code. Should be false in production.
         useSourceMap: true,
         // Boolean: whether screenshots can be taken in the app. Should be false in production.

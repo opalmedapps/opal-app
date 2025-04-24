@@ -234,7 +234,7 @@
          * @desc Go to the About Opal page
          */
         function goToAboutOpal() {
-            homeNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': false});
+            homeNavigator.pushPage('./views/home/about/about.html');
         }
 
         /**

@@ -14,17 +14,17 @@
     /* @ngInject */
     function UserHospitalPreferences(Params, UserPreferences, Firebase) {
 
-        let hospitalList = Params.hospitalList;
+        let hospitalList = CONFIG.settings.useProductionHospitals ? Params.productionHospitalList : Params.developmentHospitalList;
         let selectedHospital;
         let localStorageHospitalKey = Params.localStorageHospitalKey;
 
         let service = {
-            getAllowedModulesBeforeLogin: () => Params.allowedModulesBeforeLogin,
-            getHospitalAcronym: getHospitalAcronym,
-            getHospitalAllowedModules: () => selectedHospital ? selectedHospital.modules : Params.allowedModulesBeforeLogin,
+            getHospitalAcronym: () => selectedHospital?.acronym || '',
+            getHospitalAllowedModules: () => selectedHospital?.modules,
             getHospitalCode: () => selectedHospital?.uniqueHospitalCode,
-            getHospitalFullName: getHospitalFullName,
-            getHospitalListForDisplay: getHospitalListForDisplay,
+            getHospitalFullName: () => selectedHospital?.fullName || '',
+            getHospitalList: () => hospitalList,
+            mustKickOutConcurrentUsers: () => selectedHospital?.kickOutConcurrentUsers,
             initializeHospital: initializeHospital,
             isThereSelectedHospital: () => !!selectedHospital,
             setHospital: setHospital,
@@ -44,36 +44,15 @@
         }
 
         /**
-         * @description Returns the full name of the currently selected hospital.
-         *              The returned value depends on the environment setting useRealInstitutionNames.
-         * @returns {string} The name of the currently selected hospital.
-         */
-        function getHospitalFullName() {
-            if (!selectedHospital) return '';
-            return CONFIG.settings.useRealInstitutionNames ? selectedHospital.fullNameReal : selectedHospital.fullNameGeneric;
-        }
-
-        /**
-         * @description Returns the acronym of the currently selected hospital.
-         *              The returned value depends on the environment setting useRealInstitutionNames.
-         * @returns {string} The acronym of the currently selected hospital.
-         */
-        function getHospitalAcronym() {
-            if (!selectedHospital) return '';
-            return CONFIG.settings.useRealInstitutionNames ? selectedHospital.acronymReal : selectedHospital.acronymGeneric;
-        }
-
-        /**
          * @description Initializes this service. Loads the value of the previously selected hospital from local storage,
          *              and initializes the base firebase URL.
          */
         function initializeHospital() {
             let hospital;
-            const displayHospitals = getHospitalListForDisplay();
 
-            // Default to the only available hospital if there's only one choice (after checking the list displayed to the user)
-            if (displayHospitals.length === 1) {
-                hospital = getHospitalByCode(displayHospitals[0].uniqueHospitalCode);
+            // Default to the only available hospital if there's only one choice (from the list available to the user)
+            if (hospitalList.length === 1) {
+                hospital = getHospitalByCode(hospitalList[0].uniqueHospitalCode);
             }
             else {
                 // Read the previous hospital choice stored in local storage
@@ -103,27 +82,6 @@
 
             // Update the firebase branch
             Firebase.updateFirebaseUrl(hospitalCode + '/');
-        }
-
-        /**
-         * @description Returns the list of available hospitals, formatted for display.
-         *              The values in the returned object depend on the environment setting useRealInstitutionNames.
-         *              Note: when useRealInstitutionNames = true, if a hospital has no real name or acronym, then it's
-         *                    omitted from the list of real hospitals.
-         * @returns {{uniqueHospitalCode: string, acronym: string, fullName: string}[]} The list of hospitals for display.
-         */
-        function getHospitalListForDisplay() {
-            let useRealName = CONFIG.settings.useRealInstitutionNames;
-            return hospitalList.map(entry => {
-                // Special case: ignore generic-only hospitals (those without a real name) if real hospitals are used
-                if (useRealName && (!entry.acronymReal || !entry.fullNameReal)) return undefined;
-                return {
-                    uniqueHospitalCode: entry.uniqueHospitalCode,
-                    enabled: entry.enabled,
-                    acronym: useRealName ? entry.acronymReal : entry.acronymGeneric,
-                    fullName: useRealName ? entry.fullNameReal : entry.fullNameGeneric,
-                }
-            }).filter(entry => !!entry); // Filter out undefined entries
         }
     }
 })();
