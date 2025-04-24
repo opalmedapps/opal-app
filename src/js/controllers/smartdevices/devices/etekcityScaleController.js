@@ -46,7 +46,7 @@
         // vm.selectedDevice = {name: 'QN-Scale', id: '1234-5678-aaaa-bbbb', battery: 91};
         vm.errorMessage = null;
         // vm.errorMessage = `${ERROR_BACKEND}: Patient not found`;
-        
+
         let devices = new Map();
         vm.messages = [];
 
@@ -81,9 +81,9 @@
 
             try {
                 let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
-                
+
                 addMessage('Weight successfully sent to backend');
-                
+
                 vm.dataSubmitted = true;
             } catch (error) {
                 vm.errorMessage = `${ERROR_BACKEND}: ${error}`;
@@ -93,7 +93,7 @@
         async function scanAndConnect() {
             vm.scanning = true;
             vm.errorMessage = null;
-                
+
             vm.selectDevice = null;
             vm.messages = [];
             devices.clear();
@@ -162,7 +162,7 @@
                 device.connecting = false;
                 devices.clear();
             });
-            
+
             await ble.withPromises.disconnect(device.id);
         }
 
@@ -172,8 +172,8 @@
             let batteryBuffer = await ble.withPromises.read(result.id, BATTERY_SERVICE_UUID, BATTERY_CHARACTERISTIC_UUID);
             let bytes = new Uint8Array(batteryBuffer);
             device.battery = bytes;
-            addMessage(`Battery level: ${bytes}%`);   
-            
+            addMessage(`Battery level: ${bytes}%`);
+
             addDebugMessage('Subscribing to receive notifications');
             await ble.withPromises.startNotification(result.id, SCALE_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID, (data) => {
                 onSubscribeSuccess(result.id, data);
@@ -207,7 +207,7 @@
                 await ble.withPromises.write(device_id, SCALE_SERVICE_UUID, WRITE_CHARACTERISTIC_UUID, response.buffer);
             } else if (packetType === 0x14) {
                 addDebugMessage('Device responded with unknown packet type')
-                
+
                 let response = mergeArraysWithChecksum([0x20, 8, 0x15], dateToBytes());
                 addDebugMessage(`Sending response: ${toHexString(response)}`);
 
@@ -220,7 +220,7 @@
 
                 if (value[5] === 1) {
                     addDebugMessage('Received final measurement');
-                    
+
                     // the weight is at index 3 and 4
                     let weightArray = value.slice(3, 5);
                     // convert to hex string

@@ -73,7 +73,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                     $timeout(function(){
                         let securityQuestionList = response.data.securityQuestionList || [];
                         let activeSecurityQuestions = response.data.activeSecurityQuestions || [];
-                        
+
                         vm.activeSecurityQuestionList =
                             activeSecurityQuestions.map((securityQuestion) => new SecurityQuestion(securityQuestion));
                         vm.securityQuestionWithAnsList =

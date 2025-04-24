@@ -6,11 +6,11 @@ SPDX-License-Identifier: Apache-2.0
 
 <ons-page style="background-color: white" ng-controller="PatientsController as Ctrl" ng-cloak>
     <generic-toolbar title="{{'RELATIONSHIPS_PATIENTS'|translate}}" style-class="fontSizeTitle">
-        <right-content>   
+        <right-content>
             <ons-toolbar-button ng-click="Ctrl.goToPatientsInfo()">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
-        </right-content> 
+        </right-content>
     </generic-toolbar>
 
     <div ng-if="Ctrl.message" class="container" align="center">

@@ -96,42 +96,53 @@
                 },
 
                 /** Multi-institutional hospital modules and codes **/
-                allowedModulesBeforeLogin: {
-                    "DIA": 0, // Diagnoses
-                    "APT": 0, // Appointments
-                    "LAB": 0, // Lab results
-                    "DOC": 0, // Documents (clinical reports)
-                    "TTM": 0, // Treating team messages
-                    "QUE": 0, // Questionnaires
-                    "CSQ": 0, // Carnet Santé Québec
-                    "RES": 0, // Research menu
-                    "STU": 0, // Research studies
-                    "REF": 0, // Research reference material
-                    "RQU": 0, // Research questionnaires
-                    "CON": 0, // Research consent forms
-                    "CHK": 0, // Check-in
-                    "ABT": 1, // About Opal
-                    "NTF": 0, // Notifications
-                    "ANN": 0, // Announcements
-                    "PAT": 0, // Parking and transport
-                    "FEE": 0, // Feedback
-                    "FFD": 0, // Find a family doctor
-                    "MAS": 0, // Québec Medical Appointment Scheduler
-                    "EDU": 0, // Clinical reference material (educational material)
-                    "SUP": 1, // Opal support
-                    "SMD": 0, // Smart devices
-                    "CTB": 1, // Contribute to Opal development
-                    "RFE": 0, // Research feedback
-                },
                 localStorageHospitalKey: 'hospital',
-                hospitalList: [
+
+                // Hospitals available in development-level environments (e.g. dev, qa, staging)
+                developmentHospitalList: [
                     {
                         uniqueHospitalCode: 'A6',
                         enabled: true,
-                        acronymReal: 'NEURO_ACRONYM',
-                        fullNameReal: 'NEURO_FULL',
-                        acronymGeneric: 'OMI',
-                        fullNameGeneric: 'OMI_FULL',
+                        acronym: 'OMI',
+                        fullName: 'OMI_FULL',
+                        // Whether to kick out a user when another person logs into the same user account (in the same hospital) on another device
+                        kickOutConcurrentUsers: false,
+                        modules: {
+                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
+                            "DIA": 1, // Diagnoses
+                            "APT": 1, // Appointments
+                            "LAB": 1, // Lab results
+                            "DOC": 1, // Documents (clinical reports)
+                            "TTM": 1, // Treating team messages
+                            "QUE": 1, // Questionnaires
+                            "CSQ": 1, // Carnet Santé Québec
+                            "RES": 1, // Research menu
+                            "STU": 0, // Research studies
+                            "REF": 1, // Research reference material
+                            "RQU": 1, // Research questionnaires
+                            "CON": 1, // Research consent forms
+                            "CHK": 1, // Check-in
+                            "NTF": 1, // Notifications
+                            "ANN": 1, // Announcements
+                            "PAT": 1, // Parking and transport
+                            "FEE": 1, // Feedback
+                            "FFD": 1, // Find a family doctor
+                            "MAS": 1, // Québec Medical Appointment Scheduler
+                            "EDU": 1, // Clinical reference material (educational material)
+                            "SMD": 1, // Smart devices
+                            "RFE": 1, // Research feedback
+                        },
+                    },
+                ],
+
+                // Hospitals available in production-level environments (e.g. prod, preprod)
+                productionHospitalList: [
+                    {
+                        uniqueHospitalCode: 'A6',
+                        enabled: true,
+                        acronym: 'NEURO_ACRONYM',
+                        fullName: 'NEURO_FULL',
+                        kickOutConcurrentUsers: true,
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -147,7 +158,6 @@
                             "RQU": 1,
                             "CON": 1,
                             "CHK": 1,
-                            "ABT": 1,
                             "NTF": 1,
                             "ANN": 1,
                             "PAT": 1,
@@ -155,59 +165,16 @@
                             "FFD": 1,
                             "MAS": 1,
                             "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
                             "SMD": 1,
-                            "CTB": 1,
-                            "RFE": 1,
-                        },
-                    },
-                    {
-                        uniqueHospitalCode: 'A4',
-                        enabled: true,
-                        acronymReal: '',
-                        fullNameReal: '',
-                        acronymGeneric: 'OHIGPH',
-                        fullNameGeneric: 'OHIGPH_FULL',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "APT": 1,
-                            "LAB": 1,
-                            "DOC": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "RES": 0,
-                            "STU": 0,
-                            "REF": 1,
-                            "RQU": 0,
-                            "CON": 0,
-                            "CHK": 0,
-                            "ABT": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 1,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
-                            "SMD": 0,
-                            "CTB": 1,
                             "RFE": 1,
                         },
                     },
                     {
                         uniqueHospitalCode: 'D1',
                         enabled: true,
-                        acronymReal: 'OPAL_DEMO_1',
-                        fullNameReal: 'OPAL_DEMO_1_FULL',
-                        acronymGeneric: 'OPAL_DEMO_1',
-                        fullNameGeneric: 'OPAL_DEMO_1_FULL',
+                        acronym: 'OPAL_DEMO_1',
+                        fullName: 'OPAL_DEMO_1_FULL',
+                        kickOutConcurrentUsers: false,
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -223,7 +190,6 @@
                             "RQU": 1,
                             "CON": 1,
                             "CHK": 1,
-                            "ABT": 1,
                             "NTF": 1,
                             "ANN": 1,
                             "PAT": 1,
@@ -231,21 +197,16 @@
                             "FFD": 1,
                             "MAS": 1,
                             "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
                             "SMD": 1,
-                            "CTB": 1,
                             "RFE": 1,
                         },
                     },
                     {
                         uniqueHospitalCode: 'D2',
                         enabled: true,
-                        acronymReal: 'OPAL_DEMO_2',
-                        fullNameReal: 'OPAL_DEMO_2_FULL',
-                        acronymGeneric: 'OPAL_DEMO_2',
-                        fullNameGeneric: 'OPAL_DEMO_2_FULL',
+                        acronym: 'OPAL_DEMO_2',
+                        fullName: 'OPAL_DEMO_2_FULL',
+                        kickOutConcurrentUsers: false,
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -261,7 +222,6 @@
                             "RQU": 1,
                             "CON": 1,
                             "CHK": 1,
-                            "ABT": 1,
                             "NTF": 1,
                             "ANN": 1,
                             "PAT": 1,
@@ -269,21 +229,16 @@
                             "FFD": 1,
                             "MAS": 1,
                             "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
                             "SMD": 1,
-                            "CTB": 1,
                             "RFE": 1,
                         },
                     },
                     {
                         uniqueHospitalCode: 'A0',
                         enabled: false,
-                        acronymReal: 'MUHC',
-                        fullNameReal: 'MUHC_FULL',
-                        acronymGeneric: 'MUHC',
-                        fullNameGeneric: 'MUHC_FULL',
+                        acronym: 'MUHC',
+                        fullName: 'MUHC_FULL',
+                        kickOutConcurrentUsers: true,
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 0,
@@ -307,11 +262,7 @@
                             "FFD": 0,
                             "MAS": 0,
                             "EDU": 0,
-                            "SUP": 0,
-                            "CED": 0,
-                            "HOS": 0,
                             "SMD": 0,
-                            "CTB": 0,
                             "RFE": 0,
                         },
                     },

@@ -38,7 +38,7 @@
 
             loadSettings();
 
-            // After a page is popped reintialize the settings.
+            // After a page is popped reinitialize the settings.
             settingsNavigator.on('postpop', () => {
                 $timeout(() => loadSettings());
             });
@@ -47,7 +47,7 @@
                 if (settingsNavigator._doorLock.isLocked()) event.cancel();
             });
 
-            //On destroy, dettach listener
+            //On destroy, detach listener
             $scope.$on('$destroy', () => {
                 settingsNavigator.off('postpop');
                 settingsNavigator.off('prepush');
@@ -66,4 +66,3 @@
         }
     }
 })();
-

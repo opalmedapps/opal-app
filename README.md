@@ -51,7 +51,7 @@ This section covers installation steps to build the app's web code on your local
     ```shell
     node -v
     ```
-   
+
     This installation also installs the Node.js package manager [npm](https://docs.npmjs.com/getting-started/what-is-npm),
     which is in charge of installing and managing all the libraries and dependencies required by the app.
 
@@ -81,7 +81,7 @@ This section covers installation steps to build the app's web code on your local
     Follow the instructions in [the env folder's README](./env/README.md) to configure your connection to a local or server-hosted backend.
 
 4.  Run the app in a browser (the following command assumes you've configured an environment called `local`;
-    if not, replace this with the name you've chosen). 
+    if not, replace this with the name you've chosen).
 
     ```shell
     npm run start --env=local
@@ -126,7 +126,7 @@ This section covers installation steps to build the app's web code on your local
 
 ### Mobile App
 
-This section covers installation steps to build the mobile app on your local machine. 
+This section covers installation steps to build the mobile app on your local machine.
 
 1.  Make sure you have followed the setup steps for [Web](#web).
 
@@ -203,7 +203,7 @@ downloads a configuration file for this external content based on the `externalC
 If you are getting errors during your installation, here are some things you can try.
 
 ### Dependency Installation Issues
-- If you get unexpected errors in the developer console, and the app's UI looks jumbled, it's likely that one of the packages used by Opal was not properly installed. 
+- If you get unexpected errors in the developer console, and the app's UI looks jumbled, it's likely that one of the packages used by Opal was not properly installed.
   To reinstall the packages from a clean state, delete `node_modules` and rerun `npm install`.
   If one or more packages didn't install correctly, one of the reasons below may be preventing `npm install` from executing correctly.
   - You don't have the required permissions to perform the installation. Make sure you are logged in as an administrator on your computer, and try re-installing the packages. If you have a Mac, precede your npm commands with `sudo` to run the command with administrator permissions.

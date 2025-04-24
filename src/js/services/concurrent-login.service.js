@@ -12,12 +12,15 @@
         .module('OpalApp')
         .factory('ConcurrentLogin', ConcurrentLogin);
 
-    ConcurrentLogin.$inject = ['$filter','$injector','Firebase','Toast'];
+    ConcurrentLogin.$inject = ['$filter','$injector','Firebase','Toast','UserHospitalPreferences'];
 
-    function ConcurrentLogin($filter, $injector, Firebase, Toast) {
+    function ConcurrentLogin($filter, $injector, Firebase, Toast, UserHospitalPreferences) {
 
         // Ignore the first time "onValue" is triggered, since it will trigger once with current user's own initial data
         let firstValueChecked = false;
+
+        // Firebase path on which concurrent logins are monitored for the current user at the current hospital
+        let getUserRef = () => Firebase.getDBRef(`logged_in_users/${Firebase.getCurrentUser().uid}`);
 
         return {
             clearConcurrentLogin: clearConcurrentLogin,
@@ -30,11 +33,14 @@
 
         /**
          * @description Initializes handling of concurrent logins.
+         *              If applicable (based on kickOutConcurrentUsers from the hospital's settings in app.values.js),
+         *              sets a listener to kick out users who are logged in at the same time.
+
          * @returns {Promise<void>}
          */
         async function initConcurrentLogin() {
             await recordCurrentLogin();
-            listenForConcurrentUserLogins();
+            if (UserHospitalPreferences.mustKickOutConcurrentUsers()) listenForConcurrentUserLogins();
         }
 
         /**
@@ -55,20 +61,12 @@
         /******* PRIVATE FUNCTIONS *******/
         /*********************************/
 
-        function getUserRef() {
-            return Firebase.getDBRef(`logged_in_users/${Firebase.getCurrentUser().uid}`);
-        }
-
         /**
-         * @description If applicable (based on the environment settings), adds a listener on Firebase to detect
-         *              other user logins, in order to kick out the current user if someone else logs into the same
-         *              account on another device.
-         *              Note: only executes if CONFIG.settings.kickOutConcurrentUsers is true.
+         * @description Adds a listener on Firebase to detect other user logins,
+         *              in order to kick out the current user if someone else logs into the same
+         *              account for the same hospital on another device.
          */
         function listenForConcurrentUserLogins() {
-            // Only execute the rest if kickOutConcurrentUsers is true
-            if (!CONFIG.settings.kickOutConcurrentUsers) return;
-
             const LogOutService = $injector.get('LogOutService');
 
             // Listen for changes to the user's token value on Firebase (under their uid)

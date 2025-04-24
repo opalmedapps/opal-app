@@ -31,7 +31,7 @@
         /**
          * @name getStudies
          * @desc Requests the list of all studies from the listener and stores it in the studies array.
-         * @return {promise} 
+         * @return {promise}
          */
         async function getStudies() {
             try {
@@ -130,7 +130,7 @@
          * @desc Updates the consent status for the study corresponding to the given consent form Id.
          * @param {int} questionnaireId The ID of the consent form (questionnaire Id in QuestionnaireDB).
          * @param {string} status The consent status submitted, either "opalConsented" or "declined".
-         * @return {promise} 
+         * @return {promise}
          */
         async function updateConsentStatus(questionnaireId, status) {
             let params = {

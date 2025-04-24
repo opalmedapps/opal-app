@@ -56,7 +56,7 @@ import '../../../css/views/init-page.view.css';
 		vm.APP_VERSION = Constants.version();
 		vm.APP_BUILD_NUMBER = Constants.build();
 
-		vm.goToAboutOpal = () => initNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': true});
+		vm.goToAboutOpal = () => initNavigator.pushPage('./views/home/about/about.html');
 		vm.goToRegister = goToRegister;
 		vm.goToTechnicalLegal = () => initNavigator.pushPage('views/init/technical-legal.html');
 		vm.goToPartners = goToPartners;

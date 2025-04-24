@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+[default.extend-words]
+muhc = "muhc"
+ser = "ser" # Part of SerNum
+
+# French
+annonce = "annonce"
+autorisation = "autorisation"
+collecte = "collecte"
+informations = "informations"
+sur = "sur"
+
+# Lorem ipsum
+varius = "varius"
+ridiculus = "ridiculus"
+
+# Predefined attributes
+itms = "itms"
+
+[default]
+extend-ignore-re = [
+    # Commit hashes in CHANGELOG.md
+    "\\[[0-9a-f]{7}\\]",
+]
+
+[files]
+extend-exclude = [
+    "src/Languages/appTranslationTablesViews/*/fr.json",
+    "**/fr.html",
+
+    "LICENSES/*",
+    "src/lib/ui-bootstrap-tpls-2.5.6-original.js",
+    "REUSE.toml",
+]

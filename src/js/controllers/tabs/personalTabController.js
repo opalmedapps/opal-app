@@ -7,7 +7,7 @@
  * User: James Brace
  * Date: 2017-09-20
  * Time: 12:00 PM
- * 
+ *
  */
 
 (function () {

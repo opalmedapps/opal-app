@@ -145,7 +145,7 @@ const config = env => {
 				},
 				// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, When compiling with Webpack, the Fastclick library
 				// in onsenui (get rid of the 300ms delay) has a set of if statements to determine the sort of
-				// module resolution system available in the environment, the rules here simply deactive AMD modules
+				// module resolution system available in the environment, the rules here simply deactivate AMD modules
 				// and node modules and makes Fastclick implement the Web interface.
 				{
 					test: /onsenui.js/,

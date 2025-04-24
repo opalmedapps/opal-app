@@ -51,7 +51,7 @@ angular.module('OpalApp')
         RequestToServer.sendRequest('EducationalMaterialRating',{'PatientSerNum':patientSerNum,'EducationalMaterialControlSerNum':edumaterialControlSerNum,'RatingValue':scope.ratingValue});
         scope.submitted = true;
 	}
-      
+
     }
   };
 }]);

@@ -5,7 +5,7 @@
 /*
  * Filename     :   researchController.js
  * Description  :   Manages the research view.
- * Created by   :   Kayla O'Sullivan-Steben 
+ * Created by   :   Kayla O'Sullivan-Steben
  * Date         :   Jan 2021
  *
  */

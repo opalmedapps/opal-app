@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0
     <generic-toolbar title="{{ 'SMARTDEVICES_VITALTRACER' | translate }}" style-class="fontSizeTitle">
     </generic-toolbar>
     <network-banner></network-banner>
-    
+
     <div class="smartdevices-page">
         <div align="center" class="smartdevices-fa-logo">
             <i class="fa fa-heartbeat fa-lg" style="color: #25a6d9"></i>
@@ -18,7 +18,7 @@ SPDX-License-Identifier: Apache-2.0
             <p class="error">{{ ctrl.errorMessage }}</p>
         </div>
 
-        <div ng-if="ctrl.showInstructions()">            
+        <div ng-if="ctrl.showInstructions()">
             <div align="center">
                 <button class="button--large--cta"
                         ng-click="ctrl.scanAndConnect()">
@@ -85,5 +85,5 @@ SPDX-License-Identifier: Apache-2.0
             </div>
         </div>
     </div>
-        
+
 </ons-page>

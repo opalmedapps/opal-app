@@ -39,7 +39,7 @@ SPDX-License-Identifier: Apache-2.0
     <div ng-hide="notif.hideContent">
         <ons-list ng-repeat="notification in notif.notifications"
                   ng-click="notif.goToNotification($index,notification)">
-            <ons-list-header class="person-list-header" ng-show="{{notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">
+            <ons-list-header class="default-list-header" ng-show="{{ notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">
                 {{notification.DateAdded|date:'fullDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron" class="item">

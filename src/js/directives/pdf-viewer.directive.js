@@ -46,19 +46,19 @@ import * as pdfjsLib from '../../lib/pdfjs_legacy_webpack.mjs';
                                    loading-message="{{loadingMessage}}"
                                    margintop="{{loadingMarginTop}}"
                            ></loading-spinning-circle>
-                           
+
                            <!-- ERROR MESSAGE -->
                            <div ng-show="showError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
                                <uib-alert type="{{errorAlertType}}">{{errorMessage}}</uib-alert>
                            </div>
-                           
+
                            <!-- ZOOM INSTRUCTIONS POPUP -->
                            <div class="popup">
                                <span class="popuptext" ng-class="{'popup-show' : showZoomPopup, 'popup-hide': hideZoomPopup}">
                                    {{"TAPTOZOOM"|translate}}
                                </span>
                            </div>
-                           
+
                            <!-- EMBEDDED PDF -->
                            <div id="pdf-container" ng-hide="loadingPDF" align="center"></div>
                        </div>`,

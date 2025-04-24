@@ -66,7 +66,7 @@
             return current !== previous;
         }
 
-        // Gets the correct message to display based on consentStatus 
+        // Gets the correct message to display based on consentStatus
         function getStatusText(consentStatus) {
             if (consentStatus === 'invited') return $filter('translate')('STUDY_STATUS_INVITED');
             else if (consentStatus === 'declined') return $filter('translate')('STUDY_STATUS_DECLINED');

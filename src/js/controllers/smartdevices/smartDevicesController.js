@@ -17,7 +17,7 @@
     function SmartDevicesController($scope, $timeout, Navigator)
     {
         let vm = this;
-        
+
         vm.showInfo = () => Navigator.getNavigator().pushPage('./views/smartdevices/smartdevices-info.html');
         vm.goToDevice = (deviceView) => Navigator.getNavigator().pushPage(`./views/smartdevices/devices/${deviceView}`);
 

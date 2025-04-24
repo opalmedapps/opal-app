@@ -65,7 +65,7 @@ class PatientTestResultsByTypeController {
 	}
 
 	/**
-	 * Displays disclaimer modal for out-of-app links 
+	 * Displays disclaimer modal for out-of-app links
 	 */
 	showAboutTestAlert() {
 		// TODO(dherre3) Centralize modals of this kind, create factory to manage all modals.
@@ -130,7 +130,7 @@ class PatientTestResultsByTypeController {
 
 	/**
 	 * Updates the user view with the new server information for the TestType
-	 * @param {TestType} testType contains TestType results. 
+	 * @param {TestType} testType contains TestType results.
 	 */
 	#updateView = (results = null) => {
 		this.#$timeout(() => {
@@ -177,7 +177,7 @@ class PatientTestResultsByTypeController {
 	};
 
 	/**
-	 * Returns style declaration for the global fontSize of the app in pixels 
+	 * Returns style declaration for the global fontSize of the app in pixels
 	 * @returns {CSSStyleDeclaration} returns style declaration for the global fontSize of the app in pixels
 	 */
 	#getAppFontSizeInPixels = () => {

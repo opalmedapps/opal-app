@@ -91,7 +91,7 @@
             consent: 'CONSENT_FORM_RESUME_INSTRUCTION',
             default: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
         };
-        
+
         const PURPOSE_SUBMIT_BUTTON_MAP = {
             clinical: 'SUBMITANSWERS',
             research: 'SUBMITANSWERS',
@@ -315,7 +315,7 @@
                 let questionTypeId = question.type_id;
                 let isSuccess = true;
 
-                // the app knows that the answer is invalid, but still would like to save tha answer (that the user has answered but not chosen an answer).
+                // the app knows that the answer is invalid, but still would like to save the answer (that the user has answered but not chosen an answer).
                 // The app should not submit the questionnaire no matter if the DB has received it or not.
                 // This check is here to avoid overwriting the flag saying that the answer is invalid
                 if (question.patient_answer.is_defined !== answerSavedInDBValidStatus.ANSWER_INVALID){
@@ -1054,4 +1054,3 @@
 
     }
 })();
-

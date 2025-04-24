@@ -77,8 +77,8 @@ img {
   height: auto;
 }
 
-.nav, .pagination, .carousel, .panel-title a { 
-  cursor: pointer; 
+.nav, .pagination, .carousel, .panel-title a {
+  cursor: pointer;
 }
 
 p {
@@ -91,7 +91,6 @@ p {
 @import url('./dependencies/onsenui.dependency.css');
 @import url('./elements/menu.element.css');
 @import url('./elements/event.element.css');
-@import url('./elements/contact.element.css');
 @import url('./elements/checkout.element.css');
 @import url('./elements/triangle.element.css');
 @import url('./elements/text.element.css');

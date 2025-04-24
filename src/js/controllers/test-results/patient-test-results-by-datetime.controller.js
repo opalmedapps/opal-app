@@ -73,7 +73,7 @@ class PatientTestResultsByDatetimeController {
 	}
 
 	/**
-	 * Returns the display group name for the current result, some results are under no group, in this case the string 
+	 * Returns the display group name for the current result, some results are under no group, in this case the string
 	 * Other is used as group name
 	 * @param {string} groupName Group name string
 	 * @returns {string} Group name display string
@@ -84,7 +84,7 @@ class PatientTestResultsByDatetimeController {
 	}
 
 	/**
-	 * Returns whether or not to show the group header in the view 
+	 * Returns whether or not to show the group header in the view
 	 * @param {string} $index in the test result
 	 * @returns {boolean} Returns whether or not to show the group header in the view
 	 */
@@ -103,7 +103,7 @@ class PatientTestResultsByDatetimeController {
 			'./views/personal/test-results/test-results-by-type.html',
 			{testTypeSerNum});
 	}
-	
+
 	////////////////////////////////////////////////////////////
 	/**
 	 * Initializes the controller, takes the testTypeSerNum (ExpressionSerNum) for the TestType from the
@@ -132,7 +132,7 @@ class PatientTestResultsByDatetimeController {
 	};
 	/**
 	 * Updates the user view with the new server information for the date test results
-	 * @param {*} results contains TestType results. 
+	 * @param {*} results contains TestType results.
 	 */
 	#updateView=(results=null) =>{
 		this.#$timeout(()=>{

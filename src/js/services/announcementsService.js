@@ -80,7 +80,7 @@
         /**
          *@ngdoc method
          *@name setAnnouncements
-         *@param {Array} array announcements array that containts the new announcements
+         *@param {Array} array announcements array that contains the new announcements
          *@description Setter method for announcements
          **/
         function setAnnouncements(array) {
@@ -93,8 +93,8 @@
          *@ngdoc method
          *@name getAnnouncementBySerNum
          *@param {String} serNum AnnouncementSerNum to be looked for
-         *@description Iterates through the annoucements array and returns annoucement object matching the serNum
-         *@returns {Object} Returns object containing annoucement
+         *@description Iterates through the announcements array and returns announcement object matching the serNum
+         *@returns {Object} Returns object containing announcement
          **/
         function getAnnouncementBySerNum(serNum) {
             for (var i = 0; i < announcements.length; i++) {
@@ -121,7 +121,7 @@
         /**
          *@ngdoc method
          *@name readAnnouncement
-         *@param {String} index index in the annoucement array to be read
+         *@param {String} index index in the announcement array to be read
          *@param {String} serNum AnnouncementSerNum to be read
          *@description Faster method to read an announcement, no iteration required.
          **/

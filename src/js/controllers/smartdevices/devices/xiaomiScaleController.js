@@ -39,7 +39,7 @@
         vm.debug = false;
         vm.selectedDevice = null;
         vm.errorMessage = null;
-        
+
         let devices = new Map();
         vm.messages = [];
 
@@ -74,9 +74,9 @@
 
             try {
                 let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
-                
+
                 addMessage('Weight successfully sent to backend');
-                
+
                 vm.dataSubmitted = true;
             } catch (error) {
                 vm.errorMessage = `${ERROR_BACKEND}: ${error}`;
@@ -86,7 +86,7 @@
         async function scanAndConnect() {
             vm.scanning = true;
             vm.errorMessage = null;
-                
+
             vm.selectDevice = null;
             vm.messages = [];
             devices.clear();
@@ -155,13 +155,13 @@
                 device.connecting = false;
                 devices.clear();
             });
-            
+
             await ble.withPromises.disconnect(device.id);
         }
 
         async function onConnected(device, result) {
             addMessage(`Connected to device`);
-            
+
             addDebugMessage('Subscribing to receive notifications');
             await ble.withPromises.startNotification(result.id, SCALE_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID, (data) => {
                 onSubscribeSuccess(result.id, data);
@@ -185,11 +185,11 @@
             let value = new Uint8Array(result);
 
             addDebugMessage(`Received raw message: ${toHexString(value)}`);
-            
+
             // Xiaomi Mi Scale info: https://github.com/oliexdev/openScale/wiki/Xiaomi-Bluetooth-Mi-Scale
             if (value[0] === 0x22) {
                 addDebugMessage('Received final measurement');
-                
+
                 // the weight is at index 1 and 2 in little endian format
                 let weightArray = value.slice(1, 3);
                 weightArray.reverse();

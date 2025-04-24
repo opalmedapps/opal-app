@@ -9,7 +9,6 @@
  * Date         :   18 Apr 2017
  */
 
-
 /**
  *  @ngdoc controller
  *  @description
@@ -34,37 +33,17 @@
 
         vm.openUrl = openUrl;
         vm.openTechnicalLegal = () => navigator.pushPage('views/init/technical-legal.html');
-        vm.openTour = openTour;
-        vm.allowedModules = {};
+        vm.openTour = () => navigator.pushPage('views/home/tour/tour.html');
 
         let parameters;
-        let isBeforeLogin = true;
 
         activate();
 
         ////////////////
 
         function activate() {
-
             parameters = Navigator.getParameters();
             navigator = Navigator.getNavigator();
-
-            /**
-             * about.html (About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
-             * Different modules are enabled depending on whether it is called before or after login
-             * the parameter isBeforeLogin determines whether the page is called before login or after
-             * if the parameter isBeforeLogin is not passed, default to true
-             */
-            if (parameters.hasOwnProperty('isBeforeLogin')){
-                isBeforeLogin = parameters.isBeforeLogin;
-            }
-
-            // set the modules which are allowed to display depending on whether the user has logged in or not
-            if (isBeforeLogin){
-                vm.allowedModules = UserHospitalPreferences.getAllowedModulesBeforeLogin();
-            } else {
-                vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
-            }
 
             vm.language = UserPreferences.getLanguage();
         }
@@ -72,10 +51,6 @@
         function openUrl(contentKey, openInExternalBrowser = false) {
             const url = DynamicContent.getURL(contentKey);
             openInExternalBrowser ? Browser.openExternal(url) : Browser.openInternal(url);
-        }
-
-        function openTour() {
-            navigator.pushPage('views/home/tour/tour.html');
         }
     }
 })();

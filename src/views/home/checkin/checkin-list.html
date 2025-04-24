@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
     </div>
 
     <ons-list ng-if="!checkIn.loadingPage && !checkIn.loadingError" ng-repeat="(patientSerNum, patient) in checkIn.displayApps">
-        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
+        <ons-list-header class="default-list-header" ng-class="fontSizeTitle" style="padding:10px;">
             {{patient.patientHeader}}
         </ons-list-header>
         <ons-list-item modifier="tappable chevron" ng-repeat="app in patient.apps" ng-click="checkIn.goToAppointment(app)">
@@ -31,7 +31,7 @@ SPDX-License-Identifier: Apache-2.0
             The appointment will show the status according to its checkin status,
             including:
                 1. 'info': before checkin,
-                2. 'success': successful checkin, 
+                2. 'success': successful checkin,
                 3. 'warning': non-checkin-possible,
                 4. 'danger' : failed checkin
             Checkin status is defined by appointment's attributes 'Checkin' and

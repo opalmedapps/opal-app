@@ -222,7 +222,7 @@
                 if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') {
                     console.warn(`Notification with unsupported type ${temp[i].NotificationType}:`, temp[i]);
                     continue;
-                } 
+                }
 
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
@@ -396,7 +396,7 @@
         }
 
         /**
-         * @ngdoc method 
+         * @ngdoc method
          * @name implicitlyMarkCachedNotificationAsRead
          * @desc Implicitly mark cached notifications as read.
          *       E.g., cached notification linked to a new/updated/canceled appointment.

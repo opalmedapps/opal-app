@@ -28,3 +28,7 @@ content/*
 !content/content.config.sample.json
 !content/service-status.sample.json
 !content/README.md
+
+# Local uv / pre-commit installation files
+pyproject.toml
+uv.lock

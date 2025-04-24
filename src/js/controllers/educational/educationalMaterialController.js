@@ -40,10 +40,10 @@
 
         // Variable to toggle visibility of the 'no materials' text. Default is false to avoid errors.
         vm.noMaterials = false;
-        
+
         // Variable containing filtered educational materials
         vm.filteredEduMaterials;
-        
+
         // Variables to store the current category of material (clinical or research) and corresponding page title
         vm.eduCategory = '';
         vm.pageTitle = '';
