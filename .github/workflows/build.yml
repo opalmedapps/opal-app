@@ -40,7 +40,7 @@ jobs:
     steps:
       # Setup
       - name: Convert environment to all caps
-        run: echo ENVIRONMENT_CAPS="$(echo $ENVIRONMENT | tr '[:lower:]' '[:upper:]')" >> "$GITHUB_ENV"
+        run: echo ENVIRONMENT_CAPS="$(echo "$ENVIRONMENT" | tr '[:lower:]' '[:upper:]')" >> "$GITHUB_ENV"
       - name: Print environment
         run: |
           echo "Environment: $ENVIRONMENT ($ENVIRONMENT_CAPS)"
@@ -73,7 +73,7 @@ jobs:
     steps:
       # Setup
       - name: Convert environment to all caps
-        run: echo ENVIRONMENT_CAPS="$(echo $ENVIRONMENT | tr '[:lower:]' '[:upper:]')" >> "$GITHUB_ENV"
+        run: echo ENVIRONMENT_CAPS="$(echo "$ENVIRONMENT" | tr '[:lower:]' '[:upper:]')" >> "$GITHUB_ENV"
       - name: Print environment
         run: |
           echo "Environment: $ENVIRONMENT ($ENVIRONMENT_CAPS)"
