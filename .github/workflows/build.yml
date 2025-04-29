@@ -61,7 +61,7 @@ jobs:
           mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-${ENVIRONMENT}.apk"
           echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.apk" >> "$GITHUB_OUTPUT"
       - name: Archive build output
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: Android app
           path: ${{ steps.rename-output.outputs.ARTIFACT_NAME }}
@@ -133,7 +133,7 @@ jobs:
           mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-${ENVIRONMENT}.ipa"
           echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.ipa" >> "$GITHUB_OUTPUT"
       - name: Archive build output
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: iOS app
           path: ${{ steps.rename-output.outputs.ARTIFACT_NAME }}
