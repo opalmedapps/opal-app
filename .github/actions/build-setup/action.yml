@@ -20,16 +20,22 @@ runs:
   using: "composite"
   steps:
     # Install dependencies
-    - name: Check npm installation
-      run: npm -v
-      shell: bash
     - name: Load .npmrc
       run: echo "${NPMRC_FILE}" > .npmrc
       shell: bash
       env:
         NPMRC_FILE: ${{ inputs.NPMRC_FILE }}
+    # Use setup-node's built-in functionality for caching and restoring npm dependencies
+    # See: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows
+    - uses: actions/setup-node@v4.4.0
+      with:
+        node-version: 22.15.0
+        cache: 'npm'
+    - name: Check npm installation
+      run: npm -v
+      shell: bash
     - name: Install dependencies
-      run: npm ci --cache .npm --prefer-offline
+      run: npm ci
       shell: bash
 
     # Initialize the environment files needed to build the app from repository-level Actions variables
