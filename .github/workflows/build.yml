@@ -92,7 +92,7 @@ jobs:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64_FILE }}
           P12_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets[format('{0}_PROVISIONING_PROFILE_BASE64_FILE', env.ENVIRONMENT_CAPS)] }} # zizmor: ignore[overprovisioned-secrets]
-          KEYCHAIN_PASSWORD: ${{ secrets.CREATE_KEYCHAIN_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.TEMPORARY_KEYCHAIN_PASSWORD }}
         run: |
           # Create variables
           CERTIFICATE_PATH="$RUNNER_TEMP"/build_certificate.p12
