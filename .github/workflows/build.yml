@@ -105,12 +105,16 @@ jobs:
 
           # Create temporary keychain
           security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # Options: -lut: lock keychain when the system sleeps, lock keychain after timeout interval, specify timeout interval in seconds
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
           # Import certificate to keychain
+          # Options: -P: specify wrapping passphrase immediately; -A: allow any application to access the imported key without warning; -t: type; -f: format; -k: target keychain to import into
           security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          # Options: -S: comma-separated list of of allowed partition IDs; -k: password for keychain (required)
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # Options: -d: use the specified preference domain; -s: set the search list to the specified keychains
           security list-keychain -d user -s "$KEYCHAIN_PATH"
 
           # Apply provisioning profile
