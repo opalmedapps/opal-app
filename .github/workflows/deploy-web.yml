@@ -47,3 +47,4 @@ jobs:
           ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
           FTP_HOST: ${{ vars.FTP_HOST }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_USER: ${{ vars.FTP_USER }}
