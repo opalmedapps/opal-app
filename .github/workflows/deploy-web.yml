@@ -33,7 +33,7 @@ jobs:
       - run: ls -la www
       - run: echo ${{ vars.FTP_HOST }}
       # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
-      - run: |
+      - run: >
           lftp -e "
             set cmd:fail-exit yes;
             open $FTP_HOST;
