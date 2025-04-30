@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# TODO
+# This workflow is explained in `docs/deployment/ci-cd.md`; please keep that documentation file up to date when making changes here.
+
+name: Deploy Web
+run-name: Deploying the web app for ${{ inputs.ENVIRONMENT }} 🚀
+on:
+  workflow_call:
+    inputs:
+      ENVIRONMENT:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download web build artifact
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: Web app
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: ls

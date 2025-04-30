@@ -72,3 +72,13 @@ jobs:
         with:
           name: Web app
           path: web-app
+
+  # Call another workflow if applicable to deploy the app
+  deploy-web:
+    needs: build-web
+    # Only deploy from the main branch
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy-web.yml
+    with:
+      ENVIRONMENT: $ENVIRONMENT
+      secrets: inherit
