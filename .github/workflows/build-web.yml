@@ -81,4 +81,4 @@ jobs:
     uses: ./.github/workflows/deploy-web.yml
     with:
       ENVIRONMENT: $ENVIRONMENT
-      secrets: inherit
+    secrets: inherit
