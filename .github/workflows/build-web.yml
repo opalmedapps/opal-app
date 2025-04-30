@@ -63,8 +63,12 @@ jobs:
       # Build for web
       - name: Build the web app
         run: npm run build:web --env="$ENVIRONMENT"
+      - name: Organize the folder structure for the output
+        run: |
+          mkdir web-app
+          cp -r www web-app
       - name: Archive build output
         uses: actions/upload-artifact@v4.6.2
         with:
           name: Web app
-          path: www
+          path: web-app
