@@ -43,7 +43,7 @@ jobs:
             ls -la app/${ENVIRONMENT};
             bye
           "
-        with:
+        env:
           ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
           FTP_HOST: ${{ vars.FTP_HOST }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
