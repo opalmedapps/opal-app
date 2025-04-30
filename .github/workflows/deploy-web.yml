@@ -21,11 +21,11 @@ jobs:
   deploy-web:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ github.event }}"
+      - run: echo "${{ github.run_id }}"
       - name: Download web build artifact
         uses: actions/download-artifact@v4.3.0
         with:
 #          name: Web app
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: ${{ github.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: ls
