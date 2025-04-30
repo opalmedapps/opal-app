@@ -21,6 +21,7 @@ jobs:
   deploy-web:
     runs-on: ubuntu-latest
     steps:
+      # Setup
       - name: Download web build artifact
         uses: actions/download-artifact@v4.3.0
         with:
@@ -31,7 +32,11 @@ jobs:
       - run: lftp --version
       - run: echo "Listing web build directory..."
       - run: ls -la www
-      - run: echo ${{ vars.FTP_HOST }}
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+
+      # Upload web files
       # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
       - run: >
           lftp -e "
