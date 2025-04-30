@@ -77,7 +77,9 @@ jobs:
   deploy-web:
     needs: build-web
     # Only deploy from the main branch
-    if: github.ref == 'refs/heads/main'
+    # TODO testing
+    if: github.ref == 'refs/heads/SB.github-actions-web-build'
+#    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-web.yml
     with:
       ENVIRONMENT: $ENVIRONMENT
