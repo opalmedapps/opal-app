@@ -65,7 +65,7 @@
                 minPasswordStrengthLevel: 3,
 
                 /** CheckIn Service Constants **/
-                checkinRadiusMeters: 500,
+                checkinRadiusMeters: 2000,
 
                 /** EducationalMaterial Service Constants **/
                 educationalMaterial: {

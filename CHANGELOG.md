@@ -1,3 +1,11 @@
+## [2.2.6](https://github.com/opalmedapps/opal-app/compare/v2.2.5...v2.2.6) (2025-04-29)
+
+
+### Bug Fixes
+
+* configure kicking out concurrent users per hospital and reorganize hospital list (#1372) ([407b617](https://github.com/opalmedapps/opal-app/commit/407b6177e39c9bb1a22519273a99e94f1d3088f8))
+* increase check-in radius to facilitate demos (#1374) ([8fb29e0](https://github.com/opalmedapps/opal-app/commit/8fb29e0ef9b3990f0db317d7aa7c65ef6634686b))
+
 ## [2.2.5](https://gitlab.com/opalmedapps/qplus/compare/v2.2.4...v2.2.5) (2025-03-25)
 
 
