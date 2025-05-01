@@ -43,6 +43,13 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_USER: ${{ vars.FTP_USER }}
 
+      # TODO debug
+      - run: lftp -c "open $FTP_HOST --user $FTP_USER --password $FTP_PASSWORD; mirror --exclude 'app' --exclude 'content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/;"
+        env:
+          FTP_HOST: ${{ vars.FTP_HOST }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_USER: ${{ vars.FTP_USER }}
+
       # Upload web files
       # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
       - run: >
