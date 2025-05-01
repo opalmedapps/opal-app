@@ -34,6 +34,8 @@ jobs:
           lftp --version
       - name: Install unzip
         run: sudo apt-get install unzip
+      - run: ls -la
+      - run: file www
       - name: Unzip `www`
         run: unzip www
       - name: List contents of `www`
