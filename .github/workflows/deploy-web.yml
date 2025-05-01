@@ -50,7 +50,7 @@ jobs:
       # See: https://www.cyberciti.biz/faq/lftp-mirror-example/
       # See: https://linuxconfig.org/lftp-tutorial-on-linux-with-examples
       - name: Upload files using lftp
-      - run: >
+        run: >
           lftp -c "
             set cmd:fail-exit yes;
             open $FTP_HOST
