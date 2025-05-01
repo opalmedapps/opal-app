@@ -39,14 +39,12 @@ jobs:
       # Upload web files
       # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
       - run: >
-          lftp -e "
+          lftp -c "
             set cmd:fail-exit yes;
-            open $FTP_HOST;
-            user $FTP_USER $FTP_PASSWORD;
+            open $FTP_HOST --user $FTP_USER --password $FTP_PASSWORD;
             mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/;
             mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${ENVIRONMENT}/app/;
             ls -la app/${ENVIRONMENT};
-            bye
           "
         env:
           ENVIRONMENT: ${{ inputs.ENVIRONMENT }}

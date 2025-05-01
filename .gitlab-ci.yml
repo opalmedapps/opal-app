@@ -310,12 +310,14 @@ deploy web:
     - echo "transferring files and listing remote directory..."
     # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
     - >
-      lftp -c "
+      lftp -e "
         set cmd:fail-exit yes;
-        open $FTP_HOST --user $FTP_USER --password $FTP_PASSWORD;
+        open $FTP_HOST;
+        user $FTP_USER $FTP_PASSWORD;
         mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${CI_ENVIRONMENT_NAME}/;
         mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${CI_ENVIRONMENT_NAME}/app/;
         ls -la app/${CI_ENVIRONMENT_NAME};
+        bye
       "
 
 include:
