@@ -73,6 +73,12 @@ jobs:
           name: Web app
           path: web-app
 
+    # Pass $ENVIRONMENT to the next job (workaround for reusable workflows)
+    # See: https://github.com/actions/runner/issues/2372
+    # See: https://stackoverflow.com/questions/73797254/environment-variables-in-github-actions/74217028#74217028)
+    outputs:
+      ENVIRONMENT: ${{ env.ENVIRONMENT }}
+
   # Call another workflow if applicable to deploy the app
   deploy-web:
     needs: build-web
@@ -82,5 +88,5 @@ jobs:
 #    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-web.yml
     with:
-      ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+      ENVIRONMENT: ${{ needs.build-web.outputs.ENVIRONMENT }}
     secrets: inherit
