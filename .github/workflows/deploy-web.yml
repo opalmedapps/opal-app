@@ -36,6 +36,13 @@ jobs:
         with:
           persist-credentials: false
 
+      # TODO debug
+      - run: lftp -c "open $FTP_HOST --user $FTP_USER --password $FTP_PASSWORD"
+        env:
+          FTP_HOST: ${{ vars.FTP_HOST }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_USER: ${{ vars.FTP_USER }}
+
       # Upload web files
       # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
       - run: >
