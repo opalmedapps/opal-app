@@ -37,7 +37,7 @@ jobs:
 #          persist-credentials: false
 
       # TODO debug
-      - run: if [ -z "$ENVIRONMENT" ]; then exit(1);
+      - run: if [ -z "$ENVIRONMENT" ]; then exit 1;
         shell: bash
 
       # Upload web files
