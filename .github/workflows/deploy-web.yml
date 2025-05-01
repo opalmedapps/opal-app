@@ -37,8 +37,7 @@ jobs:
           persist-credentials: false
 
       # TODO debug
-      - run: ./app/${ENVIRONMENT}/
-        shell: bash
+      - run: if [ -z "$ENVIRONMENT" ]; then exit(1);
 
       # Upload web files
       # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
