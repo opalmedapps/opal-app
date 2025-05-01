@@ -37,25 +37,15 @@ jobs:
           persist-credentials: false
 
       # TODO debug
-      - run: lftp -c "open $FTP_HOST --user $FTP_USER --password $FTP_PASSWORD"
-        env:
-          FTP_HOST: ${{ vars.FTP_HOST }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_USER: ${{ vars.FTP_USER }}
-
-      # TODO debug
-      - run: lftp -c "open $FTP_HOST --user $FTP_USER --password $FTP_PASSWORD; mirror --exclude 'app' --exclude 'content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/;"
-        env:
-          FTP_HOST: ${{ vars.FTP_HOST }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_USER: ${{ vars.FTP_USER }}
+      - run: ./app/${ENVIRONMENT}/
+        shell: bash
 
       # Upload web files
       # lftp mirror arguments: https://www.cyberciti.biz/faq/lftp-mirror-example/
-      - run: >
-          lftp -c "set cmd:fail-exit yes; open $FTP_HOST --user $FTP_USER --password $FTP_PASSWORD; mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/; mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${ENVIRONMENT}/app/; ls -la app/${ENVIRONMENT};"
-        env:
-          ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
-          FTP_HOST: ${{ vars.FTP_HOST }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_USER: ${{ vars.FTP_USER }}
+#      - run: >
+#          lftp -c "set cmd:fail-exit yes; open $FTP_HOST --user $FTP_USER --password $FTP_PASSWORD; mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/; mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${ENVIRONMENT}/app/; ls -la app/${ENVIRONMENT};"
+#        env:
+#          ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
+#          FTP_HOST: ${{ vars.FTP_HOST }}
+#          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+#          FTP_USER: ${{ vars.FTP_USER }}
