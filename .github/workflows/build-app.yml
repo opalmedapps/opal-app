@@ -5,10 +5,10 @@
 # This workflow is explained in `docs/deployment/ci-cd.md`; please keep that documentation file up to date when making changes here.
 
 name: Build App
-# Default to dev when running automatically (see also "env" below)
-run-name: Building the app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦
+# Default to prod when running automatically (see also "env" below)
+run-name: Building the app for ${{ inputs.ENVIRONMENT || 'prod' }} 📦
 on:
-  # When pushing to main, automatically build for dev
+  # When pushing to main, automatically build for prod
   push:
     branches:
       - main
@@ -20,14 +20,14 @@ on:
         description: 'Environment in which to build'
         type: choice
         required: true
-        default: 'dev'
+        default: 'prod'
         options:
           - dev
           - prod
 
-# Read the target environment from workflow_dispatch inputs, or default to dev
+# Read the target environment from workflow_dispatch inputs, or default to prod
 env:
-  ENVIRONMENT: ${{ inputs.ENVIRONMENT || 'dev' }}
+  ENVIRONMENT: ${{ inputs.ENVIRONMENT || 'prod' }}
 
 permissions:
   contents: read

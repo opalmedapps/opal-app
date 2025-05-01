@@ -55,9 +55,9 @@ jobs:
             set cmd:fail-exit yes;
             open $FTP_HOST
             user $FTP_USER $FTP_PASSWORD;
-            mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/;
-            mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${ENVIRONMENT}/app/;
-            ls -la app/${ENVIRONMENT};
+            mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/prod-next/;
+            mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/prod-next/app/;
+            ls -la app/prod-next;
             bye
           "
         env:
