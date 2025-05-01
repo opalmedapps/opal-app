@@ -29,6 +29,7 @@ runs:
     # See: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows
     - uses: actions/setup-node@v4.4.0
       with:
+        # renovate: datasource=node-version dependency=node
         node-version: 22.15.0
         cache: 'npm'
     - name: Check npm installation
