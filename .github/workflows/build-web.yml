@@ -82,5 +82,5 @@ jobs:
 #    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-web.yml
     with:
-      ENVIRONMENT: $ENVIRONMENT
+      ENVIRONMENT: ${{ env.ENVIRONMENT }}
     secrets: inherit
