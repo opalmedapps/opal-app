@@ -80,7 +80,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: ./.github/actions/build-setup
+      - name: Set up build
+        uses: ./.github/actions/build-setup
         with:
           NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
           ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT_CAPS)] }}
