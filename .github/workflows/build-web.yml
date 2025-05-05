@@ -1,0 +1,88 @@
+# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# TODO
+# This workflow is explained in `docs/deployment/ci-cd.md`; please keep that documentation file up to date when making changes here.
+
+name: Build Web
+# Default to dev when running automatically (see also "env" below)
+run-name: Building and deploying (optionally) the web app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
+on:
+  # When pushing to main, automatically build for dev
+  push:
+    branches:
+      - main
+
+  # When updating a pull request or adding a pull request to a merge queue, automatically build for dev
+  pull_request:
+  merge_group:
+
+  # Offer a manual interface to build for all other environments as needed
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT:
+        description: 'Environment in which to build'
+        type: choice
+        required: true
+        default: 'dev'
+        options:
+          - dev
+          - prod
+
+# Read the target environment from workflow_dispatch inputs, or default to dev
+env:
+  ENVIRONMENT: ${{ inputs.ENVIRONMENT || 'dev' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build-web:
+    runs-on: ubuntu-latest
+    steps:
+      # Setup
+      - name: Convert environment to all caps
+        run: echo ENVIRONMENT_CAPS="$(echo "$ENVIRONMENT" | tr '[:lower:]' '[:upper:]')" >> "$GITHUB_ENV"
+      - name: Print environment
+        run: |
+          echo "Environment: $ENVIRONMENT ($ENVIRONMENT_CAPS)"
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up build
+        uses: ./.github/actions/build-setup
+        with:
+          NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
+          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT_CAPS)] }}
+          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT_CAPS)] }}
+
+      # Build for web
+      - name: Build the web app
+        run: npm run build:web --env="$ENVIRONMENT"
+      - name: Organize the folder structure for the output
+        run: |
+          mkdir web-app
+          cp -r www web-app
+      - name: Archive build output
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: Web app
+          path: web-app
+
+    # Pass $ENVIRONMENT to the next job (workaround for reusable workflows)
+    # See: https://github.com/actions/runner/issues/2372
+    # See: https://stackoverflow.com/questions/73797254/environment-variables-in-github-actions/74217028#74217028)
+    outputs:
+      ENVIRONMENT: ${{ env.ENVIRONMENT }}
+
+  # Call another workflow if applicable to deploy the app
+  deploy-web:
+    needs: build-web
+    # Only deploy from the main branch
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy-web.yml
+    with:
+      ENVIRONMENT: ${{ needs.build-web.outputs.ENVIRONMENT }}
+    secrets: inherit
