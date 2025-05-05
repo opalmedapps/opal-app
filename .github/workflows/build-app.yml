@@ -12,8 +12,6 @@ on:
   push:
     branches:
       - main
-      # TODO testing
-      - SB.github-actions
 
   # Offer a manual interface to build for all other environments as needed
   workflow_dispatch:
