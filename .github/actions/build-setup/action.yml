@@ -1,0 +1,51 @@
+# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Build App Setup
+description: Setup before building the app
+
+inputs:
+  NPMRC_FILE:
+    description: 'Secret with the contents of .npmrc'
+    required: true
+  ENV_CONFIG_JS:
+    description: 'Contents of the file `opal.config.js` for the given environment'
+    required: true
+  ENV_GOOGLE_SERVICES:
+    description: 'Contents of the file `google-services.json` for the given environment'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    # Install dependencies
+    - name: Load .npmrc
+      run: echo "${NPMRC_FILE}" > .npmrc
+      shell: bash
+      env:
+        NPMRC_FILE: ${{ inputs.NPMRC_FILE }}
+    # Use setup-node's built-in functionality for caching and restoring npm dependencies
+    # See: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows
+    - uses: actions/setup-node@v4.4.0
+      with:
+        # renovate: datasource=node-version dependency=node
+        node-version: 22.15.0
+        cache: 'npm'
+    - name: Check npm installation
+      run: npm -v
+      shell: bash
+    - name: Install dependencies
+      run: npm ci
+      shell: bash
+
+    # Initialize the environment files needed to build the app from repository-level Actions variables
+    - name: Load environment files
+      run: |
+        mkdir env/$ENVIRONMENT
+        echo "${ENV_CONFIG_JS}" > env/$ENVIRONMENT/opal.config.js
+        echo "${ENV_GOOGLE_SERVICES}" > env/$ENVIRONMENT/google-services.json
+      shell: bash
+      env:
+        ENV_CONFIG_JS: ${{ inputs.ENV_CONFIG_JS }}
+        ENV_GOOGLE_SERVICES: ${{ inputs.ENV_GOOGLE_SERVICES }}
