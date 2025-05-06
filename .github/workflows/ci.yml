@@ -23,7 +23,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@4.2.2
+      - uses: actions/checkout@4
         with:
           persist-credentials: false
       - uses: mschoettle/pre-commit-action@v4.2.3
