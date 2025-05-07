@@ -58,7 +58,6 @@
     "angular-sanitize": "npm:@neverendingsupport/angularjs@1.9.9-sanitize",
     "angular-touch": "npm:@neverendingsupport/angularjs@1.9.9-touch",
     "angular-translate": "2.19.1",
-    "angular-translate-handler-log": "2.19.1",
     "angular-translate-interpolation-messageformat": "2.19.1",
     "angular-translate-loader-partial": "2.19.1",
     "angular-ui-router": "1.0.30",

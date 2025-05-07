@@ -70,7 +70,6 @@ import angular from "angular";
 import "angular-animate";
 import "angular-translate";
 import "angular-dynamic-locale";
-import "angular-translate-handler-log";
 // for pluralization support: https://angular-translate.github.io/docs/#/guide/14_pluralization
 import "angular-translate-interpolation-messageformat";
 import "angular-translate-loader-partial";
