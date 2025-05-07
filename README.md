@@ -121,7 +121,7 @@ This section covers installation steps to build the app's web code on your local
 - To debug the code, open the developer console, switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
   Caching can sometimes interfere with Webpack's live reloading to see updates in real time.
 - If you followed all the steps in the [Web](#web) section correctly, the only errors you should see in the debug console are
-  a 404 error for `cordova.js`, a 404 error for `favicon.ico`, and many warnings for translations that don't exist.
+  errors for `cordova.js` (which only runs in the mobile app, and isn't needed in the web version).
   If you see any additional errors that seem to be interfering with the app's functionality, skip ahead to [Troubleshooting](#troubleshooting).
 
 ### Mobile App

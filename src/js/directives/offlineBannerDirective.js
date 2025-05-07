@@ -36,14 +36,14 @@ angular.module('OpalApp')
                     $timeout(function(){
                         scope.goingBackOnline = false;
                         scope.online = true;
-                        scope.message = "NOINTERNETCONNECTION";
+                        scope.message = "NO_INTERNET_CONNECTION";
                     }, 3000);
                 }
             };
 
             NetworkStatus.registerObserverCallback(updateStatus);
 
-            scope.message = "NOINTERNETCONNECTION";
+            scope.message = "NO_INTERNET_CONNECTION";
             scope.online = NetworkStatus.isOnline();
 
         }

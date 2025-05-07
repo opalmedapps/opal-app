@@ -1,6 +1,24 @@
 {
-  "LOADINGDATA":"Loading data",
-  "HOME":"Home",
-  "UPDATEMESSAGE":"This version of Opal is no longer supported. Please update Opal to log in.",
-  "UPDATEREQUIRED":"Update Required"
+  "ATTENTION": "Attention!",
+  "CLOSE": "Close",
+  "HEADER_MESSAGE_LOGIN": "Sign In",
+  "JAILBREAK_MESSAGE": "Running this app on a jailbroken or rooted device is not supported.",
+  "JAILBREAK_TITLE": "Jailbreak / Rooted Device Detected",
+  "LOADING_ACCOUNT": "Retrieving your account",
+  "NO_INTERNET_CONNECTION": "You are currently offline",
+  "OK": "Ok",
+  "OPAL_ABOUT": "About Opal",
+  "PARTNERS": "Partners",
+  "REGISTER_OPAL": "Register for Opal",
+  "SCREENSHOT_TAKEN": "Screenshot taken. If it was not you, exit the app.",
+  "SECURE_PHONE": "Remember to secure your information by protecting your phone with a passphrase",
+  "SUBMITTING": "Submitting... Please do not leave this page.",
+  "TECHNICAL_LEGAL": "Technical / Legal",
+  "TOUR_MODAL_INTRODUCTION": "To help you get started, a quick tour is available to guide you through the main sections of the app. If you choose to skip it or would like to visit it again later, the tour is always available under \"About Opal\" on the Home tab.",
+  "TOUR_MODAL_LATER_BUTTON": "Later",
+  "TOUR_MODAL_TAKE_TOUR_BUTTON": "Take the tour",
+  "TOUR_WELCOME": "Welcome to Opal!",
+  "UNATTENDED": "Do not leave your phone unattended.",
+  "UPDATE_MESSAGE": "This version of Opal is no longer supported. Please update Opal to log in.",
+  "UPDATE_REQUIRED": "Update Required"
 }
