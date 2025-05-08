@@ -29,9 +29,14 @@ on:
         options:
           - dev
           - prod
+      DEPLOY:
+        description: 'Deploy the resulting web app'
+        required: true
+        default: true
+        type: boolean
 
-# Read the target environment from workflow_dispatch inputs, or default to dev
 env:
+  # Read the target environment from workflow_dispatch inputs, or default to dev
   ENVIRONMENT: ${{ inputs.ENVIRONMENT || 'dev' }}
 
 permissions:
@@ -80,8 +85,8 @@ jobs:
   # Call another workflow if applicable to deploy the app
   deploy-web:
     needs: build-web
-    # Only deploy from the main branch
-    if: github.ref == 'refs/heads/main'
+    # Deploy manually via inputs, or automatically (to dev) when building on main
+    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/deploy-web.yml
     with:
       ENVIRONMENT: ${{ needs.build-web.outputs.ENVIRONMENT }}
