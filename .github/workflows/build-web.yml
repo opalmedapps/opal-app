@@ -7,7 +7,7 @@
 
 name: Build Web
 # Default to dev when running automatically (see also "env" below)
-run-name: Building and deploying (optionally) the web app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
+run-name: Building and (optionally) deploying the web app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
 on:
   # When pushing to main, automatically build for dev
   push:
