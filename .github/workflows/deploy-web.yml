@@ -13,7 +13,6 @@ on:
     secrets:
       FTP_PASSWORD:
         required: true
-        type: string
 
 permissions:
   contents: read
