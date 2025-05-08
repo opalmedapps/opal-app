@@ -2,9 +2,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# TODO
-# This workflow is explained in `docs/deployment/ci-cd.md`; please keep that documentation file up to date when making changes here.
-
 name: Deploy Web
 run-name: Deploying the web app for ${{ inputs.ENVIRONMENT }} 🚀
 on:
