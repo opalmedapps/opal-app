@@ -10,6 +10,10 @@ on:
       ENVIRONMENT:
         required: true
         type: string
+    secrets:
+      FTP_PASSWORD:
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -32,28 +36,37 @@ jobs:
         run: |
           sudo apt-get install lftp
           lftp --version
-      - name: List contents of `www`
-        run: ls -la www
-
-      - name: Ensure $ENVIRONMENT is defined to avoid destructive mirroring on the server
-        run: |
-          echo "Environment: $ENVIRONMENT"
-          if [ -z "$ENVIRONMENT" ]; then exit 1; fi
-        shell: bash
-        env:
-          ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
-
-      # Upload web files
-      # See: https://www.cyberciti.biz/faq/lftp-mirror-example/
-      # See: https://linuxconfig.org/lftp-tutorial-on-linux-with-examples
-      - name: Upload files using lftp
+#      - name: List contents of `www`
+#        run: ls -la www
+#
+#      - name: Ensure $ENVIRONMENT is defined to avoid destructive mirroring on the server
+#        run: |
+#          echo "Environment: $ENVIRONMENT"
+#          if [ -z "$ENVIRONMENT" ]; then exit 1; fi
+#        shell: bash
+#        env:
+#          ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
+#
+#      # Upload web files
+#      # See: https://www.cyberciti.biz/faq/lftp-mirror-example/
+#      # See: https://linuxconfig.org/lftp-tutorial-on-linux-with-examples
+#      - name: Upload files using lftp
+#        run: >
+#          lftp -c "
+#            set cmd:fail-exit yes;
+#            open $FTP_HOST
+#            user $FTP_USER $FTP_PASSWORD;
+#            mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/;
+#            mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${ENVIRONMENT}/app/;
+#            ls -la app/${ENVIRONMENT};
+#            bye
+#          "
+      - name: Check lftp
         run: >
           lftp -c "
             set cmd:fail-exit yes;
             open $FTP_HOST
             user $FTP_USER $FTP_PASSWORD;
-            mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/;
-            mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${ENVIRONMENT}/app/;
             ls -la app/${ENVIRONMENT};
             bye
           "

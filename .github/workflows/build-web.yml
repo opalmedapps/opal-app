@@ -10,6 +10,8 @@ on:
   push:
     branches:
       - main
+      # TODO testing
+      - SB.github-actions-web-build
 
   # When updating a pull request or adding a pull request to a merge queue, automatically build for dev
   pull_request:
@@ -83,8 +85,9 @@ jobs:
   deploy-web:
     needs: build-web
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
+    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/SB.github-actions-web-build' }}
     uses: ./.github/workflows/deploy-web.yml
     with:
       ENVIRONMENT: ${{ needs.build-web.outputs.ENVIRONMENT }}
-    secrets: inherit
+    secrets:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
