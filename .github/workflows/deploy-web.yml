@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Deploy Web
+run-name: Deploying the web app for ${{ inputs.ENVIRONMENT }} 🚀
+on:
+  workflow_call:
+    inputs:
+      ENVIRONMENT:
+        required: true
+        type: string
+    secrets:
+      FTP_PASSWORD:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-web:
+    runs-on: ubuntu-latest
+    steps:
+      # Setup
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - name: Download web build artifact (`www`)
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: Web app
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install lftp
+        run: |
+          sudo apt-get install lftp
+          lftp --version
+      - name: List contents of `www`
+        run: ls -la www
+
+      - name: Ensure $ENVIRONMENT is defined to avoid destructive mirroring on the server
+        run: |
+          echo "Environment: $ENVIRONMENT"
+          if [ -z "$ENVIRONMENT" ]; then exit 1; fi
+        shell: bash
+        env:
+          ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
+
+      # Upload web files
+      # See: https://www.cyberciti.biz/faq/lftp-mirror-example/
+      # See: https://linuxconfig.org/lftp-tutorial-on-linux-with-examples
+      - name: Upload files using lftp
+        run: >
+          lftp -c "
+            set cmd:fail-exit yes;
+            open $FTP_HOST
+            user $FTP_USER $FTP_PASSWORD;
+            mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/;
+            mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${ENVIRONMENT}/app/;
+            ls -la app/${ENVIRONMENT};
+            bye
+          "
+        env:
+          ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
+          FTP_HOST: ${{ vars.FTP_HOST }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_USER: ${{ vars.FTP_USER }}
