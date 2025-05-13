@@ -218,8 +218,7 @@
             $scope.initNavigator.on('postpush', () => {
                 $timeout(() => {
                     const securityAnswer = document.getElementById('security-answer-input');
-                    // iOS blocks focus events and causes issues focussing the input field afterwards
-                    if (securityAnswer && ons.platform.isIOS()) {
+                    if (securityAnswer) {
                         securityAnswer.focus();
                     }
                 });
