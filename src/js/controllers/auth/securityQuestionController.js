@@ -129,6 +129,7 @@
         vm.goToReset = goToReset;
         vm.isThereSelectedHospital = isThereSelectedHospital;
         vm.lockout = lockout;
+        vm.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
 
         activate();
 
@@ -216,8 +217,9 @@
 
             $scope.initNavigator.on('postpush', () => {
                 $timeout(() => {
-                    const securityAnswer = document.getElementById('security_answer_input');
-                    if (securityAnswer) {
+                    const securityAnswer = document.getElementById('security-answer-input');
+                    // iOS blocks focus events and causes issues focussing the input field afterwards
+                    if (securityAnswer && ons.platform.isIOS()) {
                         securityAnswer.focus();
                     }
                 });
