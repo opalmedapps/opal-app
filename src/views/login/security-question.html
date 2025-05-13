@@ -31,17 +31,20 @@ SPDX-License-Identifier: Apache-2.0
             </div>
 
             <!-- LOADING SPINNER -->
-            <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()" loading-message="{{'LOADING'|translate}}" margintop="15vh"></loading-spinning-circle>
+            <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()"
+                loading-message="{{'LOADING'|translate}}" margintop="15vh"></loading-spinning-circle>
 
             <!-- SECURITY ANSWER FIELDS -->
-            <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()" class="container security-question--container">
+            <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()"
+                class="container security-question--container">
                 <form style="text-align: center" novalidate>
-                    <label for="securityAnswer">{{security.Question}}</label>
+                    <label for="security-answer-input">{{security.Question}}</label>
                     <div class="security-question--answer-box">
                         <password-input>
-                            <input name="securityAnswer" ng-model="security.answer"
+                            <input id="security-answer-input" ng-model="security.answer"
                                 placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" type="password" required
-                                ng-change="security.clearErrors()">
+                                ng-change="security.clearErrors()" autocapitalize="none" autocorrect="off"
+                                autocomplete="new-password">
                         </password-input>
                     </div>
                     <button class="button button--large shadow-2 button--large-green security-question--button"
@@ -67,7 +70,9 @@ SPDX-License-Identifier: Apache-2.0
         <h4>{{"RESETERROR"|translate}}</h4>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
         <p class="unattended-message security-question--modal-text">{{"RETRYRESETMESSAGE"|translate}}</p>
-        <ons-button class="button--large-green security-question--modal-button" ng-click="security.goToReset()">{{"RETRY"|translate}}</ons-button>
-        <ons-button class="button--large-blue security-question--modal-button" ng-click="security.goToInit()">{{"HOME"|translate}}</ons-button>
+        <ons-button class="button--large-green security-question--modal-button"
+            ng-click="security.goToReset()">{{"RETRY"|translate}}</ons-button>
+        <ons-button class="button--large-blue security-question--modal-button"
+            ng-click="security.goToInit()">{{"HOME"|translate}}</ons-button>
     </ons-modal>
 </ons-page>
