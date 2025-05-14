@@ -72,6 +72,10 @@ jobs:
           name: android-app
           path: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
 
+    outputs:
+      ARTIFACT_NAME: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
+
+
   build-ios:
     if: ${{ false }} # TODO testing
     runs-on: macos-latest
@@ -173,7 +177,6 @@ jobs:
       - name: Deploy the app
         run: npx firebase-tools appdistribution:distribute $ARTIFACT_NAME --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
         env:
-          # TODO ARTIFACT_NAME is blank
           ARTIFACT_NAME: ${{ needs.build-android.outputs.ARTIFACT_NAME }}
           FIREBASE_APP_ANDROID: ${{ vars[format('{0}_FIREBASE_APP_ANDROID', env.ENVIRONMENT)] }}
           FIREBASE_GROUP: ${{ env.FIREBASE_GROUP }}
