@@ -16,22 +16,18 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Ensure $ENVIRONMENT is defined to avoid deployment issues
+    - name: Prepare Firebase release notes
       run: |
-        echo "Environment: $ENVIRONMENT"
-        if [ -z "$ENVIRONMENT" ]; then exit 1; fi
+        echo RELEASE_NOTES="Build created and deployed by GitHub Actions for environment '$ENVIRONMENT' on $(git log --format=medium -n 1)" >> "$GITHUB_ENV"
+        echo "$RELEASE_NOTES"
       shell: bash
       env:
         ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
-
-    - name: Prepare Firebase release notes
-      run: |
-        echo RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENVIRONMENT' on $(git log --format=medium -n 1)" >> "$GITHUB_ENV"
-        echo "$RELEASE_NOTES"
-      shell: bash
 
     - name: Load service account used to access Firebase
       run: |
         echo "$GOOGLE_APPLICATION_CREDENTIALS" > service-account.txt
         echo GOOGLE_APPLICATION_CREDENTIALS=service-account.txt >> "$GITHUB_ENV"
       shell: bash
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ inputs.GOOGLE_APPLICATION_CREDENTIALS }}
