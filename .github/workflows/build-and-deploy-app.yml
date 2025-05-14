@@ -12,8 +12,6 @@ on:
   push:
     branches:
       - main
-      # TODO testing
-      - SB.ci-cd-app-deployment
 
   # Offer a manual interface to build for all other environments as needed
   workflow_dispatch:
@@ -35,15 +33,13 @@ on:
 env:
   # Read the target environment from workflow_dispatch inputs, or default to dev
   ENVIRONMENT: ${{ inputs.ENVIRONMENT || 'dev' }}
-  # TODO testing
-  FIREBASE_GROUP: "test-ci"  # The name of the group to which the app is deployed (via Firebase App Distribution)
+  FIREBASE_GROUP: "general"  # The name of the group to which the app is deployed (via Firebase App Distribution)
 
 permissions:
   contents: read
 
 jobs:
   build-android:
-    if: ${{ false }} # TODO testing
     runs-on: macos-latest
     steps:
       # Setup
@@ -154,9 +150,7 @@ jobs:
     needs: build-android
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    # TODO testing
-    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/SB.ci-cd-app-deployment' }}
-#    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
+    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
     steps:
       # Setup
       - uses: actions/checkout@v4.2.2
@@ -190,9 +184,7 @@ jobs:
     needs: build-ios
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    # TODO testing
-    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/SB.ci-cd-app-deployment' }}
-    #    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
+    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
     steps:
       # Setup
       - uses: actions/checkout@v4.2.2
