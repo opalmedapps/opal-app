@@ -173,7 +173,7 @@ jobs:
       # This service account provides permissions for Firebase app distribution
       # See: https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments
       - name: Deploy the app
-        run: npx firebase-tools appdistribution:distribute $ARTIFACT_NAME --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+        run: npx firebase-tools appdistribution:distribute "$ARTIFACT_NAME" --app "$FIREBASE_APP_ANDROID" --release-notes "$RELEASE_NOTES" --groups "$FIREBASE_GROUP"
         env:
           ARTIFACT_NAME: ${{ needs.build-android.outputs.ARTIFACT_NAME }}
           FIREBASE_APP_ANDROID: ${{ vars[format('{0}_FIREBASE_APP_ANDROID', env.ENVIRONMENT)] }}
@@ -205,7 +205,7 @@ jobs:
       # Deploy the app
       # Deployment implicitly uses $GOOGLE_APPLICATION_CREDENTIALS; see deploy-android above for more details
       - name: Deploy the app
-        run: npx firebase-tools appdistribution:distribute $ARTIFACT_NAME --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+        run: npx firebase-tools appdistribution:distribute "$ARTIFACT_NAME" --app "$FIREBASE_APP_IOS" --release-notes "$RELEASE_NOTES" --groups "$FIREBASE_GROUP"
         env:
           ARTIFACT_NAME: ${{ needs.build-ios.outputs.ARTIFACT_NAME }}
           FIREBASE_APP_IOS: ${{ vars[format('{0}_FIREBASE_APP_IOS', env.ENVIRONMENT)] }}
