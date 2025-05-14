@@ -73,6 +73,7 @@ jobs:
           path: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
 
   build-ios:
+    if: ${{ false }} # TODO testing
     runs-on: macos-latest
     steps:
       # Setup
