@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+# SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -79,7 +79,7 @@ jobs:
     outputs:
       ENVIRONMENT: ${{ env.ENVIRONMENT }}
 
-  # Call another workflow if applicable to deploy the app
+  # Call another workflow if applicable to deploy the web app
   deploy-web:
     needs: build-web
     # Deploy manually via inputs, or automatically (to dev) when building on main
