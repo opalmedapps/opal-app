@@ -17,9 +17,13 @@ runs:
   using: "composite"
   steps:
     - name: Prepare Firebase release notes
+      # Save release notes as a multiline string: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#multiline-strings
       run: |
-        echo RELEASE_NOTES="Build created and deployed by GitHub Actions for environment '$ENVIRONMENT' on $(git log --format=medium -n 1)" >> "$GITHUB_ENV"
-        echo "$RELEASE_NOTES"
+        {
+          echo 'RELEASE_NOTES<<EOF'
+          "Build created and deployed by GitHub Actions for environment '$ENVIRONMENT' on $(git log --format=medium -n 1)"
+          echo EOF
+        } >> "$GITHUB_ENV"
       shell: bash
       env:
         ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
