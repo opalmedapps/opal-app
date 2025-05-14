@@ -6,11 +6,13 @@ SPDX-License-Identifier: Apache-2.0
 
 <ons-page ng-controller="SecurityQuestionController as security" style="background-color:white">
     <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button ng-show="!security.passwordReset && !security.tooManyAttempts">{{"BACK"|translate}}</ons-back-button>
-            <ons-back-button ng-if="security.passwordReset" ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
+        <div class="left" ng-style="security.iosStyleFix">
+            <ons-back-button
+                ng-show="!security.passwordReset && !security.tooManyAttempts">{{"BACK"|translate}}</ons-back-button>
+            <ons-back-button ng-if="security.passwordReset"
+                ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
         </div>
-        <div class="center">
+        <div class="center" ng-style="security.iosStyleFix">
             <div ng-if="!security.passwordReset">{{"SECURITYQUESTION"|translate}}</div>
             <div ng-if="security.passwordReset">{{"FORGOTPASSWORD_NOQUESTION"|translate}}</div>
         </div>
@@ -29,43 +31,37 @@ SPDX-License-Identifier: Apache-2.0
             </div>
 
             <!-- LOADING SPINNER -->
-            <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()" loading-message="{{'LOADING'|translate}}" margintop="15vh"></loading-spinning-circle>
+            <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()"
+                loading-message="{{'LOADING'|translate}}" margintop="15vh"></loading-spinning-circle>
 
             <!-- SECURITY ANSWER FIELDS -->
-            <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()" class="container security-question--container">
-                <form name="formPassword" novalidate>
-                    <div class="form-group">
-                        <label name="text">{{security.Question}}</label>
-                        <div class="security-question--answer-box">
-                            <password-input>
-                                <input type="password"
-                                       id="security_answer_input"
-                                       autocapitalize="none"
-                                       autocorrect="off"
-                                       autocomplete="new-password"
-                                       name="text"
-                                       ng-model="security.answer"
-                                       ng-change="security.clearErrors()"
-                                       placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}"
-                                       style="touch-action: manipulation"/>
-                            </password-input>
-                        </div>
-                        <button class="button button--large shadow-2 button--large-green security-question--button"
-                                ng-disabled="security.submitting || security.tooManyAttempts"
-                                ng-click="security.submitAnswer(security.answer)">
-                            <span ng-if="!security.submitting">
-                                {{"CONTINUE"|translate}}
-                            </span>
-                            <span ng-if="security.submitting">
-                                <ons-icon icon="ion-load-d" spin="true"></ons-icon>
-                            </span>
-                        </button>
-
-                        <uib-alert class="security-question--alert" ng-show="security.alert.type && security.alertShow"
-                                   type="{{security.alert.type}}">
-                            {{security.alert.content|translate}}
-                        </uib-alert>
+            <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()"
+                class="container security-question--container">
+                <form style="text-align: center" novalidate>
+                    <label for="security-answer-input">{{security.Question}}</label>
+                    <div class="security-question--answer-box">
+                        <password-input>
+                            <input id="security-answer-input" ng-model="security.answer"
+                                placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" type="password" required
+                                ng-change="security.clearErrors()" autocapitalize="none" autocorrect="off"
+                                autocomplete="new-password">
+                        </password-input>
                     </div>
+                    <button class="button button--large shadow-2 button--large-green security-question--button"
+                        ng-disabled="security.submitting || security.tooManyAttempts"
+                        ng-click="security.submitAnswer(security.answer)">
+                        <span ng-if="!security.submitting">
+                            {{"CONTINUE"|translate}}
+                        </span>
+                        <span ng-if="security.submitting">
+                            <ons-icon icon="ion-load-d" spin="true"></ons-icon>
+                        </span>
+                    </button>
+
+                    <uib-alert class="security-question--alert" ng-show="security.alert.type && security.alertShow"
+                        type="{{security.alert.type}}">
+                        {{security.alert.content|translate}}
+                    </uib-alert>
                 </form>
             </div>
         </ons-col>
@@ -74,7 +70,9 @@ SPDX-License-Identifier: Apache-2.0
         <h4>{{"RESETERROR"|translate}}</h4>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
         <p class="unattended-message security-question--modal-text">{{"RETRYRESETMESSAGE"|translate}}</p>
-        <ons-button class="button--large-green security-question--modal-button" ng-click="security.goToReset()">{{"RETRY"|translate}}</ons-button>
-        <ons-button class="button--large-blue security-question--modal-button" ng-click="security.goToInit()">{{"HOME"|translate}}</ons-button>
+        <ons-button class="button--large-green security-question--modal-button"
+            ng-click="security.goToReset()">{{"RETRY"|translate}}</ons-button>
+        <ons-button class="button--large-blue security-question--modal-button"
+            ng-click="security.goToInit()">{{"HOME"|translate}}</ons-button>
     </ons-modal>
 </ons-page>
