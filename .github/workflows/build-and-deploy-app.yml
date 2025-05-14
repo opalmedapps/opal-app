@@ -167,7 +167,7 @@ jobs:
 
       # Deploy the app
       - name: Deploy the app
-        run: npx firebase-tools appdistribution:distribute $ARTIFACT_NAME --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+        run: npx firebase-tools appdistribution:distribute ./android-app/$ARTIFACT_NAME --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
         env:
           ARTIFACT_NAME: ${{ needs.build-android.outputs.ARTIFACT_NAME }}
           FIREBASE_APP_ANDROID: ${{ vars[format('{0}_FIREBASE_APP_ANDROID', env.ENVIRONMENT)] }}
