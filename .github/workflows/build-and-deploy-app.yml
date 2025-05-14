@@ -43,6 +43,7 @@ permissions:
 
 jobs:
   build-android:
+    if: ${{ false }} # TODO testing
     runs-on: macos-latest
     steps:
       # Setup
@@ -77,7 +78,6 @@ jobs:
 
 
   build-ios:
-    if: ${{ false }} # TODO testing
     runs-on: macos-latest
     steps:
       # Setup
@@ -179,4 +179,37 @@ jobs:
         env:
           ARTIFACT_NAME: ${{ needs.build-android.outputs.ARTIFACT_NAME }}
           FIREBASE_APP_ANDROID: ${{ vars[format('{0}_FIREBASE_APP_ANDROID', env.ENVIRONMENT)] }}
+          FIREBASE_GROUP: ${{ env.FIREBASE_GROUP }}
+
+  deploy-ios:
+    needs: build-ios
+    runs-on: ubuntu-latest
+    # Deploy manually via inputs, or automatically (to dev) when building on main
+    # TODO testing
+    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/SB.ci-cd-app-deployment' }}
+    #    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
+    steps:
+      # Setup
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - name: Download iOS build artifact
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: ios-app
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up deployment
+        uses: ./.github/actions/deploy-app-setup
+        with:
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
+
+      # Deploy the app
+      # Deployment implicitly uses $GOOGLE_APPLICATION_CREDENTIALS; see deploy-android above for more details
+      - name: Deploy the app
+        run: npx firebase-tools appdistribution:distribute $ARTIFACT_NAME --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
+        env:
+          ARTIFACT_NAME: ${{ needs.build-ios.outputs.ARTIFACT_NAME }}
+          FIREBASE_APP_IOS: ${{ vars[format('{0}_FIREBASE_APP_IOS', env.ENVIRONMENT)] }}
           FIREBASE_GROUP: ${{ env.FIREBASE_GROUP }}
