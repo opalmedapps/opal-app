@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Deploy App Setup
+description: Setup before deploying the mobile app to Firebase
+
+inputs:
+  ENVIRONMENT:
+    description: 'Environment in which to deploy the app'
+    required: true
+  GOOGLE_APPLICATION_CREDENTIALS:
+    description: 'Contents of the service account file used to access the Firebase project for the given environment'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Ensure $ENVIRONMENT is defined to avoid deployment issues
+      run: |
+        echo "Environment: $ENVIRONMENT"
+        if [ -z "$ENVIRONMENT" ]; then exit 1; fi
+      shell: bash
+      env:
+        ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
+
+    - name: Prepare Firebase release notes
+      run: |
+        echo RELEASE_NOTES="Build created and deployed by GitLab CI/CD for environment '$ENVIRONMENT' on $(git log --format=medium -n 1)" >> "$GITHUB_ENV"
+        echo "$RELEASE_NOTES"
+      shell: bash
+
+    - name: Load service account used to access Firebase
+      run: |
+        echo "$GOOGLE_APPLICATION_CREDENTIALS" > service-account.txt
+        echo GOOGLE_APPLICATION_CREDENTIALS=service-account.txt >> "$GITHUB_ENV"
+      shell: bash

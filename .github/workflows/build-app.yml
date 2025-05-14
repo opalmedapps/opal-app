@@ -6,7 +6,7 @@
 
 name: Build App
 # Default to dev when running automatically (see also "env" below)
-run-name: Building the app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦
+run-name: Building and (optionally) deploying the mobile app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
 on:
   # When pushing to main, automatically build for dev
   push:
@@ -139,3 +139,18 @@ jobs:
         with:
           name: iOS app
           path: ${{ steps.rename-output.outputs.ARTIFACT_NAME }}
+
+    # Pass variables to the next job (workaround for reusable workflows)
+    outputs:
+      ENVIRONMENT: ${{ env.ENVIRONMENT }}
+
+  # Call another workflow if applicable to deploy the app
+  deploy-web:
+    needs: [build-android, build-ios]
+    # Deploy manually via inputs, or automatically (to dev) when building on main
+    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/deploy-app.yml
+    with:
+      ENVIRONMENT: ${{ needs.build-ios.outputs.ENVIRONMENT }}
+    secrets:
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_GOOGLE_APPLICATION_CREDENTIALS', needs.build-ios.outputs.ENVIRONMENT)] }}

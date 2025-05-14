@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: Copyright 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Deploy App
+run-name: Deploying the mobile app for ${{ inputs.ENVIRONMENT }} 🚀
+on:
+  workflow_call:
+    inputs:
+      ENVIRONMENT:
+        required: true
+        type: string
+    secrets:
+      GOOGLE_APPLICATION_CREDENTIALS:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-android:
+    runs-on: ubuntu-latest
+    steps:
+      # Setup
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - name: Download android build artifact
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: Android app
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up deployment
+        uses: ./.github/actions/deploy-app-setup
+        with:
+          ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ inputs.GOOGLE_APPLICATION_CREDENTIALS }}
+
+      - name: Deploy the app
+        run: npx firebase-tools appdistribution:distribute ????????.apk --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
