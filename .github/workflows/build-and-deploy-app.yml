@@ -162,10 +162,13 @@ jobs:
       - name: Set up deployment
         uses: ./.github/actions/deploy-app-setup
         with:
-          ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ inputs.GOOGLE_APPLICATION_CREDENTIALS }}
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
 
       # Deploy the app
+      # Deployment via firebase-tools implicitly uses a service account assigned to $GOOGLE_APPLICATION_CREDENTIALS (from values defined in the GitHub project settings)
+      # This service account provides permissions for Firebase app distribution
+      # See: https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments
       - name: Deploy the app
         run: npx firebase-tools appdistribution:distribute ./android-app/$ARTIFACT_NAME --app $FIREBASE_APP_ANDROID --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
         env:
