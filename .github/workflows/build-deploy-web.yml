@@ -44,21 +44,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Setup
-      - name: Convert environment to all caps
-        run: echo ENVIRONMENT_CAPS="$(echo "$ENVIRONMENT" | tr '[:lower:]' '[:upper:]')" >> "$GITHUB_ENV"
       - name: Print environment
-        run: |
-          echo "Environment: $ENVIRONMENT ($ENVIRONMENT_CAPS)"
+        run: echo "Environment = $ENVIRONMENT"
       - uses: actions/checkout@v4.2.2
         with:
           persist-credentials: false
-
       - name: Set up build
         uses: ./.github/actions/build-setup
         with:
           NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
-          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT_CAPS)] }}
-          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT_CAPS)] }}
+          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
+          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
 
       # Build for web
       - name: Build the web app
@@ -70,22 +66,53 @@ jobs:
       - name: Archive build output
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: Web app
+          name: web-app
           path: web-app
 
-    # Pass $ENVIRONMENT to the next job (workaround for reusable workflows)
-    # See: https://github.com/actions/runner/issues/2372
-    # See: https://stackoverflow.com/questions/73797254/environment-variables-in-github-actions/74217028#74217028)
-    outputs:
-      ENVIRONMENT: ${{ env.ENVIRONMENT }}
 
-  # Call another workflow if applicable to deploy the web app
   deploy-web:
     needs: build-web
+    runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
     if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
-    uses: ./.github/workflows/deploy-web.yml
-    with:
-      ENVIRONMENT: ${{ needs.build-web.outputs.ENVIRONMENT }}
-    secrets:
-      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      # Setup
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - name: Ensure $ENVIRONMENT is defined to avoid destructive mirroring on the server
+        run: |
+          echo "Environment: $ENVIRONMENT"
+          if [ -z "$ENVIRONMENT" ]; then exit 1; fi
+        shell: bash
+      - name: Download web build artifact (`www`)
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: web-app
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install lftp
+        run: |
+          sudo apt-get install lftp
+          lftp --version
+      - name: List contents of `www`
+        run: ls -la www
+
+      # Upload web files
+      # See: https://www.cyberciti.biz/faq/lftp-mirror-example/
+      # See: https://linuxconfig.org/lftp-tutorial-on-linux-with-examples
+      - name: Upload files using lftp
+        run: >
+          lftp -c "
+            set cmd:fail-exit yes;
+            open $FTP_HOST
+            user $FTP_USER $FTP_PASSWORD;
+            mirror --exclude='app' --exclude='content' --reverse --delete --verbose ./static/landingpage/ ./app/${ENVIRONMENT}/;
+            mirror --reverse --delete --use-pget-n=10 --verbose ./www/ ./app/${ENVIRONMENT}/app/;
+            ls -la app/${ENVIRONMENT};
+            bye
+          "
+        env:
+          FTP_HOST: ${{ vars.FTP_HOST }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_USER: ${{ vars.FTP_USER }}
