@@ -49,3 +49,28 @@ runs:
       env:
         ENV_CONFIG_JS: ${{ inputs.ENV_CONFIG_JS }}
         ENV_GOOGLE_SERVICES: ${{ inputs.ENV_GOOGLE_SERVICES }}
+
+    # Calculate the app's build number, for example the number '2' in 1.0.0 (2).
+    - name: Calculate build number
+      id: calculate-build-number
+      # Calculate the number of commits (inclusive) between the last tagged version (e.g. v2.0.0) and the current commit
+      # This represents the build number; for example, the first commit tagged v2.0.0 will be 2.0.0 (1). The next commit will be 2.0.0 (2), and so on, until the next tag.
+      # This is only applicable on the 'main' branch; if not on main, use default value '1'
+      run: |
+        LATEST_TAG=$(git describe --tags --abbrev=0 --match v*)
+        COMMIT_DISTANCE=$(git rev-list --count $LATEST_TAG..HEAD)
+        NEW_BUILD_NUMBER=$((COMMIT_DISTANCE + 1))
+        [ $IS_ON_MAIN ] && BUILD_NUMBER=$NEW_BUILD_NUMBER || BUILD_NUMBER=1
+        echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
+      shell: bash
+      env:
+        IS_ON_MAIN: ${{ github.ref_name == 'main' }}
+
+    # Replace the build number in the file opal.config.js with the newly calculated value.
+    - name: Replace build number in opal.config.js
+      run: |
+        sed -i -E "s/\"BUILD_NUMBER\"\: .+\,/\"BUILD_NUMBER\"\: ${BUILD_NUMBER}\,/" test.js
+        cat env/$ENVIRONMENT/opal.config.js
+      shell: bash
+      env:
+        BUILD_NUMBER: ${{ steps.calculate-build-number.outputs.BUILD_NUMBER }}
