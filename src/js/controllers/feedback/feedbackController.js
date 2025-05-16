@@ -53,7 +53,7 @@
                 case 'general':
                     vm.title = 'FEEDBACK';
                     vm.description = 'FEEDBACK_MESSAGE';
-                    vm.placeholder = 'LEAVEMESSAGE';
+                    vm.placeholder = 'FEEDBACK_LEAVE_MESSAGE';
                     break;
                 case 'research':
                     vm.title = 'RESEARCH_FEEDBACK';
