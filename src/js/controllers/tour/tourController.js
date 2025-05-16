@@ -51,8 +51,8 @@ import "../../../css/views/tour.view.css";
             {
                 iconType: "icon",
                 icon: "fa-user",
-                title: "MYCHART",
-                description: "TOUR_MYCHART",
+                title: "CHART",
+                description: "TOUR_CHART",
             },
             {
                 iconType: "general-icon",

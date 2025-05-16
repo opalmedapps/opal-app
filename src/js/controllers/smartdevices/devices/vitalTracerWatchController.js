@@ -24,9 +24,9 @@
         const BLOOD_PRESSURE_CHARACTERISTIC_UUID = '2A35';
 
         // Error messages
-        const ERROR_BACKEND = $filter('translate')('SMARTDEVICES_ERROR_BACKEND');
-        const ERROR_NO_DEVICE = $filter('translate')('SMARTDEVICES_VITALTRACER_ERROR_NO_DEVICE');
-        const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
+        const ERROR_BACKEND = $filter('translate')('SMART_DEVICES_ERROR_BACKEND');
+        const ERROR_NO_DEVICE = $filter('translate')('SMART_DEVICES_VITALTRACER_ERROR_NO_DEVICE');
+        const ERROR_NO_DATA = $filter('translate')('SMART_DEVICES_ERROR_NO_DATA');
 
         const SAMPLE_TYPE_HEART_RATE = 'HR';
         const SAMPLE_TYPE_BLOOD_PRESSURE_SYSTOLIC = 'BPS';

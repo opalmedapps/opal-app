@@ -55,7 +55,7 @@ import * as pdfjsLib from '../../lib/pdfjs_legacy_webpack.mjs';
                            <!-- ZOOM INSTRUCTIONS POPUP -->
                            <div class="popup">
                                <span class="popuptext" ng-class="{'popup-show' : showZoomPopup, 'popup-hide': hideZoomPopup}">
-                                   {{"TAPTOZOOM"|translate}}
+                                   {{"TAP_TO_ZOOM"|translate}}
                                </span>
                            </div>
 

@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <div ng-hide="docs.hideContent">
         <div style="color:grey;margin-top:25vh" ng-show="docs.noDocuments" align="center" ng-class="fontSizeTitle">
-            {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
+            {{"NO_PATIENT_DOCUMENTS_AVAILABLE"|translate}}
         </div>
         <ons-list ng-repeat="doc in docs.documents" ng-click="docs.goToDocument(doc)">
             <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ docs.documents | showHeader : $index : 'CreatedTimeStamp' }}">

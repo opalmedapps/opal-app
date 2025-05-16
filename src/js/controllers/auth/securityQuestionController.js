@@ -289,18 +289,18 @@
                         vm.alert.content = "INVALID_USER";
                         break;
                     case 4:
-                        vm.alert.content = "OUTOFTRIES";
+                        vm.alert.content = "OUT_OF_TRIES";
                         vm.tooManyAttempts = true;
                         vm.lockout();
                         break;
                     case "corrupted-data":
-                        vm.alert.content = "CONTACTHOSPITAL";
+                        vm.alert.content = "CONTACT_HOSPITAL";
                         break;
                     case "wrong-answer":
-                        vm.alert.content = "ERRORANSWERNOTMATCH";
+                        vm.alert.content = "ERROR_ANSWER_NOT_MATCH";
                         break;
                     case "no-answer":
-                        vm.alert.content = "ENTERANANSWER";
+                        vm.alert.content = "ENTER_AN_ANSWER";
                         break;
                     default:
                         vm.alert.content = "ERROR_GENERIC";

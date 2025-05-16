@@ -17,14 +17,14 @@ SPDX-License-Identifier: Apache-2.0
                 ng-minlength="1"
                 type="password"
                 ng-class="fontSizeDesc"
-                placeholder="{{'ENTEROLDPASSWORDPLACEHOLDER' | translate}}"
+                placeholder="{{'ENTER_OLD_PASSWORD_PLACEHOLDER' | translate}}"
                 ng-model="Ctrl.oldValue"
                 ng-change="Ctrl.passwordFieldChange()">
             </password-input>
         </div>
         <div>
             <p class="change-password--header" ng-class="fontSizeTitle" translate="{{Ctrl.instruction}}"></p>
-            <p class="change-password--instructions" ng-class="fontSizeDesc">{{"RESETINSTRUCTIONS" | translate}}</p>
+            <p class="change-password--instructions" ng-class="fontSizeDesc">{{"RESET_INSTRUCTIONS" | translate}}</p>
             <div class="change-password--div style-4">
                 <!-- NEW PASSWORD INPUT -->
                 <password-input>
@@ -34,7 +34,7 @@ SPDX-License-Identifier: Apache-2.0
                     type="password"
                     ng-class="fontSizeDesc"
                     class="style-4"
-                    placeholder="{{'SETNEWPASSWORDPLACEHOLDER' | translate}}"
+                    placeholder="{{'SET_NEW_PASSWORD_PLACEHOLDER' | translate}}"
                     ng-model="Ctrl.newValue"
                     ng-change="Ctrl.passwordFieldChange()">
                 </password-input>
@@ -55,7 +55,7 @@ SPDX-License-Identifier: Apache-2.0
                     type="password"
                     ng-class="fontSizeDesc"
                     class="style-4"
-                    placeholder="{{'REENTERPASSWORDPLACEHOLDER' | translate}}"
+                    placeholder="{{'REENTER_PASSWORD_PLACEHOLDER' | translate}}"
                     ng-model="Ctrl.newValueValidate"
                     ng-change="Ctrl.passwordFieldChange()">
                 </password-input>
@@ -65,7 +65,7 @@ SPDX-License-Identifier: Apache-2.0
 
                 <!-- NEW PASSWORD SUBMIT BUTTON -->
                 <button class="change-password--submit-button button button--large" ng-disabled="Ctrl.disableButton" ng-click="Ctrl.changePassword()">
-                    {{"UPDATEPASSWORDBUTTON"|translate}}
+                    {{"UPDATE_PASSWORD_BUTTON"|translate}}
                 </button>
 
                 <!-- ERROR MESSAGE -->

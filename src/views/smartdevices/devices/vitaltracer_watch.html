@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="VitalTracerWatchController as ctrl">
-    <generic-toolbar title="{{ 'SMARTDEVICES_VITALTRACER' | translate }}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{ 'SMART_DEVICES_VITALTRACER' | translate }}" style-class="fontSizeTitle">
     </generic-toolbar>
     <network-banner></network-banner>
 
@@ -22,18 +22,18 @@ SPDX-License-Identifier: Apache-2.0
             <div align="center">
                 <button class="button--large--cta"
                         ng-click="ctrl.scanAndConnect()">
-                        <span>{{ "SMARTDEVICES_VITALTRACER_READ" | translate }}</span>
+                        <span>{{ "SMART_DEVICES_VITALTRACER_READ" | translate }}</span>
                 </button>
             </div>
         </div>
 
         <div ng-if="ctrl.isLoading()">
-            <loading-spinning-circle loading-message="{{'SMARTDEVICES_CONNECTING'|translate}}">
+            <loading-spinning-circle loading-message="{{'SMART_DEVICES_CONNECTING'|translate}}">
             </loading-spinning-circle>
         </div>
 
         <div ng-if="ctrl.heartRate && ctrl.bloodPressureSystolic && ctrl.bloodPressureDiastolic" align="center">
-            <p><strong>{{ "SMARTDEVICES_VITAL_SIGNS" | translate }}</strong></p>
+            <p><strong>{{ "SMART_DEVICES_VITAL_SIGNS" | translate }}</strong></p>
             <p class="data">
                 <span>{{ ctrl.heartRate }}</span>bpm
                 <span>{{ ctrl.bloodPressureSystolic }} / {{ ctrl.bloodPressureDiastolic }}</span>mm Hg
@@ -44,16 +44,16 @@ SPDX-License-Identifier: Apache-2.0
         </div>
 
         <div ng-if="ctrl.dataSubmitted" align="center">
-            <p>{{ "SMARTDEVICES_VITALTRACER_SUBMITTED" | translate }}</p>
-            <p>{{ "SMARTDEVICES_INFO_SUBMITTED" | translate }}</p>
+            <p>{{ "SMART_DEVICES_VITALTRACER_SUBMITTED" | translate }}</p>
+            <p>{{ "SMART_DEVICES_INFO_SUBMITTED" | translate }}</p>
             <button class="button--large--cta"
                     ng-click="ctrl.done()">
-                {{ "SMARTDEVICES_BACK" | translate }}
+                {{ "SMART_DEVICES_BACK" | translate }}
             </button>
         </div>
 
         <div ng-if="!ctrl.scanning && ctrl.selectedDevice == null && ctrl.getDeviceList().length > 1">
-            <p ng-class="fontSizeTitle"><strong>{{ "SMARTDEVICES_MULTIPLE" | translate }}</strong></p>
+            <p ng-class="fontSizeTitle"><strong>{{ "SMART_DEVICES_MULTIPLE" | translate }}</strong></p>
 
             <ons-list>
                 <ons-list-item ng-repeat="device in ctrl.getDeviceList()" class="item">
@@ -69,7 +69,7 @@ SPDX-License-Identifier: Apache-2.0
                             </div>
                             <div class="smartdevices-content--right" style="margin-left: 5vh;">
                                 <button class="shadow-2 button--large--cta" ng-click="ctrl.doSelectDevice(device)">
-                                    <span>{{ "SMARTDEVICES_SELECT" | translate }}</span>
+                                    <span>{{ "SMART_DEVICES_SELECT" | translate }}</span>
                                 </button>
                             </div>
                         </div>

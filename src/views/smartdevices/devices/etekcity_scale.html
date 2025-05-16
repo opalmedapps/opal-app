@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="EtekcityScaleController as ctrl">
-    <generic-toolbar title="{{ 'SMARTDEVICES_ETEKCITY' | translate }}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{ 'SMART_DEVICES_ETEKCITY' | translate }}" style-class="fontSizeTitle">
     </generic-toolbar>
     <network-banner></network-banner>
 
@@ -20,24 +20,24 @@ SPDX-License-Identifier: Apache-2.0
 
         <div ng-if="ctrl.showInstructions()">
             <div style="text-align: justify;">
-                <p>{{ "SMARTDEVICES_SCALE_INSTRUCTIONS" | translate }}</p>
+                <p>{{ "SMART_DEVICES_SCALE_INSTRUCTIONS" | translate }}</p>
             </div>
 
             <div align="center">
                 <button class="button--large--cta"
                         ng-click="ctrl.scanAndConnect()">
-                        <span>{{ "SMARTDEVICES_SCALE_READ" | translate }}</span>
+                        <span>{{ "SMART_DEVICES_SCALE_READ" | translate }}</span>
                 </button>
             </div>
         </div>
 
         <div ng-if="ctrl.isLoading()">
-            <loading-spinning-circle loading-message="{{'SMARTDEVICES_CONNECTING'|translate}}">
+            <loading-spinning-circle loading-message="{{'SMART_DEVICES_CONNECTING'|translate}}">
             </loading-spinning-circle>
         </div>
 
         <div ng-if="ctrl.weight && !ctrl.dataSubmitted" align="center">
-            <p><strong>{{ "SMARTDEVICES_WEIGHT" | translate }}</strong></p>
+            <p><strong>{{ "SMART_DEVICES_WEIGHT" | translate }}</strong></p>
             <p class="data">
                 <span>{{ ctrl.weight }}</span>kg
             </p>
@@ -48,21 +48,21 @@ SPDX-License-Identifier: Apache-2.0
             -->
             <button class="button--large--cta"
                     ng-click="ctrl.submitData()">
-                {{ "SMARTDEVICES_SCALE_SUBMIT" | translate }}
+                {{ "SMART_DEVICES_SCALE_SUBMIT" | translate }}
             </button>
         </div>
 
         <div ng-if="ctrl.dataSubmitted" align="center">
-            <p>{{ "SMARTDEVICES_SCALE_SUBMITTED" | translate }}</p>
-            <p>{{ "SMARTDEVICES_INFO_SUBMITTED" | translate }}</p>
+            <p>{{ "SMART_DEVICES_SCALE_SUBMITTED" | translate }}</p>
+            <p>{{ "SMART_DEVICES_INFO_SUBMITTED" | translate }}</p>
             <button class="button--large--cta"
                     ng-click="ctrl.done()">
-                {{ "SMARTDEVICES_BACK" | translate }}
+                {{ "SMART_DEVICES_BACK" | translate }}
             </button>
         </div>
 
         <div ng-if="!ctrl.scanning && ctrl.selectedDevice == null && ctrl.getDeviceList().length > 1">
-            <p ng-class="fontSizeTitle"><strong>{{ "SMARTDEVICES_MULTIPLE" | translate }}</strong></p>
+            <p ng-class="fontSizeTitle"><strong>{{ "SMART_DEVICES_MULTIPLE" | translate }}</strong></p>
 
             <ons-list>
                 <ons-list-item ng-repeat="device in ctrl.getDeviceList()" class="item">
@@ -78,7 +78,7 @@ SPDX-License-Identifier: Apache-2.0
                             </div>
                             <div class="smartdevices-content--right" style="margin-left: 5vh;">
                                 <button class="shadow-2 button--large--cta" ng-click="ctrl.doSelectDevice(device)">
-                                    <span>{{ "SMARTDEVICES_SELECT" | translate }}</span>
+                                    <span>{{ "SMART_DEVICES_SELECT" | translate }}</span>
                                 </button>
                             </div>
                         </div>

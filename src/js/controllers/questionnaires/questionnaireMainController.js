@@ -945,7 +945,7 @@
                     $filter('translate')("TITLE"),
                 );
             }
-            else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+            else NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_ALERT"));
         }
 
         /**

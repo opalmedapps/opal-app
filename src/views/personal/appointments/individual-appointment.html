@@ -19,7 +19,7 @@ SPDX-License-Identifier: Apache-2.0
                     </p>
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ScheduledStartTime|date:'mediumNoSeconds'}}</p>
                     <p class="item-desc" ng-class="fontSizeDesc" ng-show="vm.app['RoomLocation_'+vm.language]">
-                        {{"GOTO_ROOM"|translate}} {{vm.app["RoomLocation_"+vm.language]}}
+                        {{"GO_TO_ROOM"|translate}} {{vm.app["RoomLocation_"+vm.language]}}
                     </p>
                 </div>
             </ons-list-item>
@@ -53,6 +53,6 @@ SPDX-License-Identifier: Apache-2.0
                 </ons-list-item>
             </ons-list>
         </ons-list>
-        <div style="color:grey;margin-top:10vh" ng-show="vm.corrupted_appointment" align="center" ng-class="fontSizeTitle">{{"NOAPPOINTMENTINFO"|translate}}</div>
+        <div style="color:grey;margin-top:10vh" ng-show="vm.corrupted_appointment" align="center" ng-class="fontSizeTitle">{{"NO_APPOINTMENT_INFO"|translate}}</div>
     </div>
 </ons-page>

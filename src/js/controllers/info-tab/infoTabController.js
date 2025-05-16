@@ -33,8 +33,8 @@
             chart: {
                 iconType: 'icon',
                 icon: 'fa-solid fa-user',
-                name: "MYCHART",
-                description: "MYCHART_DESCRIPTION"
+                name: "CHART",
+                description: "CHART_DESCRIPTION"
             },
             general: {
                 iconType: 'general-icon',

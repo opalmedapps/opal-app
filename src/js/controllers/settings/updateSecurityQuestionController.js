@@ -170,7 +170,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
             ons.notification.alert({
                 //message: 'Server problem: could not fetch data, try again later',
-                message: $filter('translate')("SERVERERRORALERT"),
+                message: $filter('translate')("SERVER_ERROR_ALERT"),
                 modifier: (ons.platform.isAndroid())?'material':null
             })
         }

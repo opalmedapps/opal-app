@@ -41,7 +41,7 @@ SPDX-License-Identifier: Apache-2.0
             <!-- Loading wheel while the pdf is being downloaded -->
             <loading-spinning-circle
                     ng-show="edu.loadingContents"
-                    loading-message="{{'LOADINGMATERIAL'|translate}}"
+                    loading-message="{{'LOADING_MATERIAL'|translate}}"
                     margintop="15vh">
             </loading-spinning-circle>
 
@@ -97,7 +97,7 @@ SPDX-License-Identifier: Apache-2.0
 
         <!-- Booklet: table of contents -->
         <ons-list style="margin: 10px 0 0 0" ng-if="edu.displayType === 'booklet'">
-            <ons-list-header class="default-list-header" ng-class="fontSizeTitle">{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle">{{"TABLE_OF_CONTENTS"|translate}}</ons-list-header>
             <ons-list-item modifier="chevron" ng-repeat= "edumaterial in edu.tableOfContents" class="item" ng-click="edu.goToEducationalMaterial($index)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
@@ -134,7 +134,7 @@ SPDX-License-Identifier: Apache-2.0
             <!-- Loading wheel while the material contents is being fetched. -->
             <loading-spinning-circle
                     ng-show="edu.loadingContents"
-                    loading-message="{{'LOADINGMATERIAL'|translate}}">
+                    loading-message="{{'LOADING_MATERIAL'|translate}}">
             </loading-spinning-circle>
             <!-- Message if the material contents could not be loaded. -->
             <div class="ons-row" align="center" ng-show="edu.errorLoadingContents" style="margin-top: 50px">

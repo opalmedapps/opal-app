@@ -171,7 +171,7 @@ class PatientTestResultsByTypeController {
 		this.loading = false;
 		ons.notification.alert({
 			//message: 'Server problem: could not fetch data, try again later',
-			message: this.#$filter('translate')("SERVERERRORALERT"),
+			message: this.#$filter('translate')("SERVER_ERROR_ALERT"),
 			modifier: (ons.platform.isAndroid()) ? 'material' : null
 		});
 	};

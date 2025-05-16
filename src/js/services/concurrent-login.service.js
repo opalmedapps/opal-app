@@ -88,7 +88,7 @@
 
                     // Show message "You have logged in on another device."
                     Toast.showToast({
-                        message: $filter('translate')("KICKEDOUT"),
+                        message: $filter('translate')("KICKED_OUT"),
                     });
                 }
             });

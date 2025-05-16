@@ -43,14 +43,14 @@ SPDX-License-Identifier: Apache-2.0
                     <button class="shadow-2 button button--large button--large-green"
                             ng-click="login.submit()" ng-disabled="!login.isThereSelectedHospital() || login.loading">
                         <span ng-if="!login.loading">{{"LOGIN"|translate}}</span>
-                        <span ng-if="login.loading">{{"LOGGINGIN"|translate}}<ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
+                        <span ng-if="login.loading">{{"LOGGING_IN"|translate}}<ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
                     </button>
                     <br>
                 </form>
 
                 <!-- FORGOT PASSWORD -->
                 <button class="button button--large--quiet" ng-click="login.goToReset()">
-                    {{"FORGOTPASSWORD"|translate}}
+                    {{"FORGOT_PASSWORD"|translate}}
                 </button>
             </div>
         </ons-col>

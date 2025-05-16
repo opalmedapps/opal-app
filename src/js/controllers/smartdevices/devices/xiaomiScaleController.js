@@ -22,9 +22,9 @@
         const NOTIFICATION_CHARACTERISTIC_UUID = '2A9D';
 
         // Error messages
-        const ERROR_BACKEND = $filter('translate')('SMARTDEVICES_ERROR_BACKEND');
-        const ERROR_NO_DEVICE = $filter('translate')('SMARTDEVICES_SCALE_ERROR_NO_DEVICE');
-        const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
+        const ERROR_BACKEND = $filter('translate')('SMART_DEVICES_ERROR_BACKEND');
+        const ERROR_NO_DEVICE = $filter('translate')('SMART_DEVICES_SCALE_ERROR_NO_DEVICE');
+        const ERROR_NO_DATA = $filter('translate')('SMART_DEVICES_ERROR_NO_DATA');
 
         // body mass
         const SAMPLE_TYPE_WEIGHT = 'BM';
