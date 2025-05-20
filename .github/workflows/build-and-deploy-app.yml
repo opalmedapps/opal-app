@@ -1,0 +1,213 @@
+# SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# This workflow is explained in `docs/deployment/ci-cd.md`; please keep that documentation file up to date when making changes here.
+
+name: Build and Deploy App
+# Default to dev when running automatically (see also "env" below)
+run-name: Building and (optionally) deploying the mobile app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
+on:
+  # When pushing to main, automatically build for dev
+  push:
+    branches:
+      - main
+
+  # Offer a manual interface to build for all other environments as needed
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT:
+        description: 'Environment in which to build'
+        type: choice
+        required: true
+        default: 'dev'
+        options:
+          - dev
+          - prod
+      DEPLOY:
+        description: 'Deploy the resulting mobile app'
+        required: true
+        default: true
+        type: boolean
+
+env:
+  # Read the target environment from workflow_dispatch inputs, or default to dev
+  ENVIRONMENT: ${{ inputs.ENVIRONMENT || 'dev' }}
+  # The name of the group to which the app is deployed (via Firebase App Distribution)
+  FIREBASE_GROUP: "general"
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    runs-on: macos-latest
+    steps:
+      # Setup
+      - name: Print environment
+        run: echo "Environment = $ENVIRONMENT"
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - name: Set up build
+        uses: ./.github/actions/build-setup
+        with:
+          NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
+          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
+          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
+
+      # Build the app
+      - name: Build the app
+        run: npm run build:app:android --env="$ENVIRONMENT"
+      - name: Rename build output
+        id: rename-android
+        run: |
+          mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-${ENVIRONMENT}.apk"
+          echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.apk" >> "$GITHUB_OUTPUT"
+      - name: Archive build output
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: android-app
+          path: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
+
+    outputs:
+      ARTIFACT_NAME: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
+
+
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      # Setup
+      - name: Print environment
+        run: echo "Environment = $ENVIRONMENT"
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - name: Set up build
+        uses: ./.github/actions/build-setup
+        with:
+          NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
+          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
+          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
+
+      # Install an Apple certificate and provisioning profile used to build the app for iOS
+      # See: https://docs.github.com/en/actions/use-cases-and-examples/deploying/installing-an-apple-certificate-on-macos-runners-for-xcode-development
+      - name: Install the Apple certificate and provisioning profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64_FILE }}
+          P12_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets[format('{0}_PROVISIONING_PROFILE_BASE64_FILE', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
+          KEYCHAIN_PASSWORD: ${{ secrets.TEMPORARY_KEYCHAIN_PASSWORD }}
+        run: |
+          # Create variables
+          CERTIFICATE_PATH="$RUNNER_TEMP"/build_certificate.p12
+          PP_PATH="$RUNNER_TEMP"/build_pp.mobileprovision
+          KEYCHAIN_PATH="$RUNNER_TEMP"/app-signing.keychain-db
+
+          # Import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o "$CERTIFICATE_PATH"
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "$PP_PATH"
+
+          # Create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # Options: -lut: lock keychain when the system sleeps, lock keychain after timeout interval, specify timeout interval in seconds
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # Import certificate to keychain
+          # Options: -P: specify wrapping passphrase immediately; -A: allow any application to access the imported key without warning; -t: type; -f: format; -k: target keychain to import into
+          security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          # Options: -S: comma-separated list of of allowed partition IDs; -k: password for keychain (required)
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # Options: -d: use the specified preference domain; -s: set the search list to the specified keychains
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+          # Apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles
+
+      # Build the app
+      - name: Build the app
+        run: npm run build:app:ios:ci --env="$ENVIRONMENT" --devteam="$IOS_DEVELOPMENT_TEAM" --provisioningprofile="$PROVISIONING_PROFILE_UUID"
+        env:
+          IOS_DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
+          PROVISIONING_PROFILE_UUID: ${{ secrets[format('{0}_PROVISIONING_PROFILE_UUID', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
+      - name: Rename build output
+        id: rename-ios
+        run: |
+          mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-${ENVIRONMENT}.ipa"
+          echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.ipa" >> "$GITHUB_OUTPUT"
+      - name: Archive build output
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: ios-app
+          path: ${{ steps.rename-ios.outputs.ARTIFACT_NAME }}
+
+    outputs:
+      ARTIFACT_NAME: ${{ steps.rename-ios.outputs.ARTIFACT_NAME }}
+
+
+  deploy-android:
+    needs: build-android
+    runs-on: ubuntu-latest
+    # Deploy manually via inputs, or automatically (to dev) when building on main
+    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
+    steps:
+      # Setup
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - name: Download Android build artifact
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: android-app
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up deployment
+        uses: ./.github/actions/deploy-app-setup
+        with:
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
+
+      # Deploy the app
+      # Deployment via firebase-tools implicitly uses a service account assigned to $GOOGLE_APPLICATION_CREDENTIALS (from values defined in the GitHub project settings)
+      # This service account provides permissions for Firebase app distribution
+      # See: https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments
+      - name: Deploy the app
+        run: npx firebase-tools appdistribution:distribute "$ARTIFACT_NAME" --app "$FIREBASE_APP_ANDROID" --release-notes "$RELEASE_NOTES" --groups "$FIREBASE_GROUP"
+        env:
+          ARTIFACT_NAME: ${{ needs.build-android.outputs.ARTIFACT_NAME }}
+          FIREBASE_APP_ANDROID: ${{ vars[format('{0}_FIREBASE_APP_ANDROID', env.ENVIRONMENT)] }}
+          FIREBASE_GROUP: ${{ env.FIREBASE_GROUP }}
+
+
+  deploy-ios:
+    needs: build-ios
+    runs-on: ubuntu-latest
+    # Deploy manually via inputs, or automatically (to dev) when building on main
+    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
+    steps:
+      # Setup
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - name: Download iOS build artifact
+        uses: actions/download-artifact@v4.3.0
+        with:
+          name: ios-app
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up deployment
+        uses: ./.github/actions/deploy-app-setup
+        with:
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
+
+      # Deploy the app
+      # Deployment implicitly uses $GOOGLE_APPLICATION_CREDENTIALS; see deploy-android above for more details
+      - name: Deploy the app
+        run: npx firebase-tools appdistribution:distribute "$ARTIFACT_NAME" --app "$FIREBASE_APP_IOS" --release-notes "$RELEASE_NOTES" --groups "$FIREBASE_GROUP"
+        env:
+          ARTIFACT_NAME: ${{ needs.build-ios.outputs.ARTIFACT_NAME }}
+          FIREBASE_APP_IOS: ${{ vars[format('{0}_FIREBASE_APP_IOS', env.ENVIRONMENT)] }}
+          FIREBASE_GROUP: ${{ env.FIREBASE_GROUP }}
