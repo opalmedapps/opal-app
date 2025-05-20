@@ -21,7 +21,7 @@ runs:
       run: |
         {
           echo 'RELEASE_NOTES<<EOF'
-          echo "Build created and deployed by GitHub Actions for environment '$ENVIRONMENT' on $(git log --format=medium -n 1)"
+          echo "Build created and deployed by GitHub Actions for environment '$ENVIRONMENT' on commit $(git log --format=medium -n 1)"
           echo EOF
         } >> "$GITHUB_ENV"
       shell: bash
