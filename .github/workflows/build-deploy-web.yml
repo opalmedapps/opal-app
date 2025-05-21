@@ -74,7 +74,6 @@ jobs:
     needs: build-web
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    # TODO test github.ref_name
     if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
     steps:
       # Setup
