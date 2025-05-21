@@ -62,6 +62,7 @@ runs:
         NEW_BUILD_NUMBER=$((COMMIT_DISTANCE + 1))
         [ $IS_ON_MAIN ] && BUILD_NUMBER=$NEW_BUILD_NUMBER || BUILD_NUMBER=1
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
+        echo "Using build number = ($BUILD_NUMBER)"
       shell: bash
       env:
         IS_ON_MAIN: ${{ github.ref_name == 'main' }}
@@ -70,7 +71,7 @@ runs:
     - name: Replace build number in opal.config.js
       run: |
         sed -i -E "s/\"BUILD_NUMBER\"\: .+\,/\"BUILD_NUMBER\"\: ${BUILD_NUMBER}\,/" env/$ENVIRONMENT/opal.config.js
-        cat env/$ENVIRONMENT/opal.config.js
+        grep BUILD_NUMBER env/$ENVIRONMENT/opal.config.js
       shell: bash
       env:
         BUILD_NUMBER: ${{ steps.calculate-build-number.outputs.BUILD_NUMBER }}
