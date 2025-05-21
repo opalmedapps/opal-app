@@ -10,8 +10,6 @@ on:
   push:
     branches:
       - main
-      # TODO test
-      - SB.ci-cd-refactor
 
   # When updating a pull request or adding a pull request to a merge queue, automatically build for dev
   pull_request:
@@ -76,9 +74,8 @@ jobs:
     needs: build-web
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    # TODO testing
-    if: ${{ inputs.DEPLOY || github.ref_name == 'SB.ci-cd-refactor' }}
-#    if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
+    # TODO test github.ref_name
+    if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
     steps:
       # Setup
       - uses: actions/checkout@v4.2.2
