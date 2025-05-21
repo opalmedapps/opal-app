@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-name: Build Web
+name: Build and Deploy Web
 # Default to dev when running automatically (see also "env" below)
 run-name: Building and (optionally) deploying the web app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
 on:
