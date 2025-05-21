@@ -93,7 +93,7 @@
                         vm.noParkingSites = true;
                         vm.alert = {
                             type: Params.alertTypeInfo,
-                            content: "NOPARKINGSITES",
+                            content: "NO_PARKING_SITES",
                         };
                     }
 

@@ -60,7 +60,7 @@ SPDX-License-Identifier: Apache-2.0
     <ons-scroller-height ng-hide="calendar.hideContent" timer="500">
             <div id="firstAnchor"></div>
             <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center"
-                ng-class="fontSizeTitle">{{"NOAPPOINTMENTS"|translate}}</div>
+                ng-class="fontSizeTitle">{{"NO_APPOINTMENTS"|translate}}</div>
             <ons-list ng-repeat="app in calendar.appointments" ng-click="calendar.goToAppointment(app)"
                 class="gpu_efficiency" ng-hide="calendar.noAppointments">
                 <div id="anchorAppointments{{$index}}"></div>

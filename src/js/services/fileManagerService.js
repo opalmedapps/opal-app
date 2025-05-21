@@ -356,7 +356,7 @@ function ($filter, $injector, Browser, Constants, RequestToServer, Toast) {
     function share(name, url) {
         // Sharing is only available on mobile devices
         if (!Constants.app) {
-            ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
+            ons.notification.alert({message: $filter('translate')('AVAILABLE_DEVICES')});
             return;
         }
 

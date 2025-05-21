@@ -13,8 +13,8 @@ SPDX-License-Identifier: Apache-2.0
                 ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
         </div>
         <div class="center" ng-style="security.iosStyleFix">
-            <div ng-if="!security.passwordReset">{{"SECURITYQUESTION"|translate}}</div>
-            <div ng-if="security.passwordReset">{{"FORGOTPASSWORD_NOQUESTION"|translate}}</div>
+            <div ng-if="!security.passwordReset">{{"SECURITY_QUESTION"|translate}}</div>
+            <div ng-if="security.passwordReset">{{"FORGOT_PASSWORD_NO_QUESTION"|translate}}</div>
         </div>
     </ons-toolbar>
     <network-banner></network-banner>
@@ -42,7 +42,7 @@ SPDX-License-Identifier: Apache-2.0
                     <div class="security-question--answer-box">
                         <password-input>
                             <input id="security-answer-input" ng-model="security.answer"
-                                placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" type="password" required
+                                placeholder="{{'ENTER_ANSWER_PLACEHOLDER'|translate}}" type="password" required
                                 ng-change="security.clearErrors()" autocapitalize="none" autocorrect="off"
                                 autocomplete="new-password">
                         </password-input>
@@ -67,9 +67,9 @@ SPDX-License-Identifier: Apache-2.0
         </ons-col>
     </ons-row>
     <ons-modal var="errormodal" class="security-question--modal">
-        <h4>{{"RESETERROR"|translate}}</h4>
+        <h4>{{"RESET_ERROR"|translate}}</h4>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p class="unattended-message security-question--modal-text">{{"RETRYRESETMESSAGE"|translate}}</p>
+        <p class="unattended-message security-question--modal-text">{{"RETRY_RESET_MESSAGE"|translate}}</p>
         <ons-button class="button--large-green security-question--modal-button"
             ng-click="security.goToReset()">{{"RETRY"|translate}}</ons-button>
         <ons-button class="button--large-blue security-question--modal-button"

@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="TxTeamMessagesController as txTeam">
-    <generic-toolbar title="{{'TEAMMESSAGES'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'TEAM_MESSAGES'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
 
     <!-- DATA REFRESHER -->
@@ -40,6 +40,6 @@ SPDX-License-Identifier: Apache-2.0
         </ons-list>
     </div>
     <div ng-hide="txTeam.hideContent" class="container" align="center">
-      <p style="margin-top:25vh;color:grey" ng-show="txTeam.noMessages">{{"NOTEAMMESSAGES"|translate}}</p>
+      <p style="margin-top:25vh;color:grey" ng-show="txTeam.noMessages">{{"NO_TEAM_MESSAGES"|translate}}</p>
     </div>
 </ons-page>

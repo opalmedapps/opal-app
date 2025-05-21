@@ -31,8 +31,6 @@ SPDX-License-Identifier: Apache-2.0
                     <ons-col align="center">
                         <span class="item-title" ng-class="fontSizeTitle"> {{"DIAGNOSIS"|translate}}</span>
                         <span class="item-desc" ng-class="fontSizeDesc">{{diagnosis["Description_" + diag.language]}}</span><br>
-                        <!--<span class="item-title" ng-class="fontSizeTitle"> {{"DATE"|translate}}:</span>
-                        <span class="item-desc" ng-class="fontSizeDesc">{{diagnosis.CreationDate|date:'fullDate'}}</span>-->
                     </ons-col>
                 </ons-row>
             </ons-list-item>
@@ -40,6 +38,6 @@ SPDX-License-Identifier: Apache-2.0
     </div>
 
     <div style="color:grey;margin-top:25vh" ng-show="!diag.hideContent && diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
-        {{"NODIAGNOSIS"|translate}}
+        {{"NO_DIAGNOSIS"|translate}}
     </div>
 </ons-page>

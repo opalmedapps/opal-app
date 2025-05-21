@@ -31,7 +31,7 @@ SPDX-License-Identifier: Apache-2.0
     <!--LOADING CIRCLE FOR QUESTIONNAIRE -->
     <loading-spinning-circle
             ng-show="vm.loadingQuestionnaire"
-            loading-message="{{'LOADINGQUESTIONNAIRE'|translate}}">
+            loading-message="{{'LOADING_QUESTIONNAIRE'|translate}}">
     </loading-spinning-circle>
 
     <div ng-hide="vm.loadingQuestionnaire" class="page__content ons-page-inner">
@@ -291,7 +291,7 @@ SPDX-License-Identifier: Apache-2.0
                         <div align="center" style="margin-top: 20px">
                             <button class="button--large--cta" ng-click="vm.finishQuestionnaireFromQuestion();"
                                     ng-show="vm.questionnaire.status === vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && vm.editQuestion"
-                                    style="width:80%">{{"GOTOSUMMARY"|translate}}
+                                    style="width:80%">{{"GO_TO_SUMMARY"|translate}}
                             </button>
                             <br>
                         </div>

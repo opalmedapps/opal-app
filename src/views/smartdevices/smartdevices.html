@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="SmartDevicesController as ctrl">
-    <generic-toolbar title="{{'SMARTDEVICES'|translate}}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{'SMART_DEVICES'|translate}}" style-class="fontSizeTitle">
         <right-content>
             <ons-toolbar-button ng-click="ctrl.showInfo()">
                 <ons-icon icon="fa-info-circle"></ons-icon>
@@ -17,15 +17,15 @@ SPDX-License-Identifier: Apache-2.0
     <div ng-if="!ctrl.bluetoothEnabled" class="container" align="center">
         <i class="fa-brands fa-bluetooth smartdevices-fa-logo" style="color: #0082fc"></i>
         <div ng-if="ctrl.bluetoothAvailable">
-            <h3>{{"SMARTDEVICES_BLUETOOTH_DISABLED"|translate}}</h3>
-            <p style="color:grey">{{"SMARTDEVICES_BLUETOOTH_PROMPT"|translate}}</p>
+            <h3>{{"SMART_DEVICES_BLUETOOTH_DISABLED"|translate}}</h3>
+            <p style="color:grey">{{"SMART_DEVICES_BLUETOOTH_PROMPT"|translate}}</p>
             <button class="button--large--cta"
                 ng-click="ctrl.refresh()">
-                <span>{{"SMARTDEVICES_BLUETOOTH_REFRESH"|translate}}</span>
+                <span>{{"SMART_DEVICES_BLUETOOTH_REFRESH"|translate}}</span>
             </button>
         </div>
         <div ng-if="!ctrl.bluetoothAvailable">
-            <h3>{{"SMARTDEVICES_BLUETOOTH_UNAVAILABLE"|translate}}</h3>
+            <h3>{{"SMART_DEVICES_BLUETOOTH_UNAVAILABLE"|translate}}</h3>
         </div>
     </div>
 
@@ -41,7 +41,7 @@ SPDX-License-Identifier: Apache-2.0
                             style="color:red; display: inline-block"></i>
                         </div>
                         <div class="smartdevices-content--text">
-                            <p ng-class="fontSizeTitle">{{"SMARTDEVICES_VITALTRACER"|translate}}</p>
+                            <p ng-class="fontSizeTitle">{{"SMART_DEVICES_VITALTRACER"|translate}}</p>
                         </div>
                     </div>
                 </ons-row>
@@ -55,7 +55,7 @@ SPDX-License-Identifier: Apache-2.0
                             style="color:red; display: inline-block"></i>
                         </div>
                         <div class="smartdevices-content--text">
-                            <p ng-class="fontSizeTitle">{{"SMARTDEVICES_ETEKCITY"|translate}}</p>
+                            <p ng-class="fontSizeTitle">{{"SMART_DEVICES_ETEKCITY"|translate}}</p>
                         </div>
                     </div>
                 </ons-row>
@@ -69,7 +69,7 @@ SPDX-License-Identifier: Apache-2.0
                             style="color:red; display: inline-block"></i>
                         </div>
                         <div class="smartdevices-content--text">
-                            <p ng-class="fontSizeTitle">{{"SMARTDEVICES_XIAOMI_SCALE"|translate}}</p>
+                            <p ng-class="fontSizeTitle">{{"SMART_DEVICES_XIAOMI_SCALE"|translate}}</p>
                         </div>
                     </div>
                 </ons-row>

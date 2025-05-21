@@ -93,10 +93,10 @@
         };
 
         const PURPOSE_SUBMIT_BUTTON_MAP = {
-            clinical: 'SUBMITANSWERS',
-            research: 'SUBMITANSWERS',
-            consent: 'SUBMITCONSENT',
-            default: 'SUBMITANSWERS',
+            clinical: 'SUBMIT_ANSWERS',
+            research: 'SUBMIT_ANSWERS',
+            consent: 'SUBMIT_CONSENT',
+            default: 'SUBMIT_ANSWERS',
         };
 
         const PURPOSE_SUBMIT_INSTRUCTION_MAP = {

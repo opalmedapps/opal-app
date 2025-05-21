@@ -68,7 +68,7 @@
         //Timeout to show, alerting user of server problems.
         let timeOut = setTimeout(function(){
             loadingmodal.hide();
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"), null, LogOutService.logOut);
+            NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_ALERT"), null, LogOutService.logOut);
         }, 90000);
     }
 })();
