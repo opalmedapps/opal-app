@@ -151,7 +151,7 @@ jobs:
     needs: build-android
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
+    if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
     steps:
       # Setup
       - uses: actions/checkout@v4.2.2
@@ -185,7 +185,7 @@ jobs:
     needs: build-ios
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    if: ${{ inputs.DEPLOY || github.ref == 'refs/heads/main' }}
+    if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
     steps:
       # Setup
       - uses: actions/checkout@v4.2.2
