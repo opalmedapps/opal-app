@@ -86,7 +86,7 @@ jobs:
           persist-credentials: false
       - name: Ensure $ENVIRONMENT is defined to avoid destructive mirroring on the server
         run: |
-          echo "Environment: $ENVIRONMENT"
+          echo "Environment = $ENVIRONMENT; target folder for upload is ./app/${ENVIRONMENT}/"
           if [ -z "$ENVIRONMENT" ]; then exit 1; fi
         shell: bash
       - name: Download web build artifact (`www`)
