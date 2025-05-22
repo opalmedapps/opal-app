@@ -91,7 +91,7 @@ runs:
     # Replace the build number in the file opal.config.js with the newly calculated value.
     - name: Replace build number in opal.config.js
       run: |
-        sed -i -E "s/\"BUILD_NUMBER\"\: .+\,/\"BUILD_NUMBER\"\: ${BUILD_NUMBER}\,/" env/$ENVIRONMENT/opal.config.js
+        sed --in-place --regexp-extended "s/\"BUILD_NUMBER\"\: .+\,/\"BUILD_NUMBER\"\: ${BUILD_NUMBER}\,/" env/$ENVIRONMENT/opal.config.js
         grep BUILD_NUMBER env/$ENVIRONMENT/opal.config.js
       shell: bash
       env:
