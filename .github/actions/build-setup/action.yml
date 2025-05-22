@@ -50,6 +50,21 @@ runs:
         ENV_CONFIG_JS: ${{ inputs.ENV_CONFIG_JS }}
         ENV_GOOGLE_SERVICES: ${{ inputs.ENV_GOOGLE_SERVICES }}
 
+    # Setup for the next step, calculate-build-number
+    # Ensure the sed command works the same way on Linux and Mac by installing gnu-sed on Mac
+    - name: Install gnu-sed if running on macOS
+      run: |
+        if [ "$IS_ON_MACOS" == "true" ]; then
+          echo "Installing gnu-sed"
+          brew install gnu-sed
+          echo PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" >> $GITHUB_ENV
+        else
+          echo "Not on macOS, using default sed"
+        fi
+      shell: bash
+      env:
+        IS_ON_MACOS: ${{ runner.os == 'macOS' }}
+
     # Calculate the app's build number, for example the number '2' in 1.0.0 (2).
     - name: Calculate build number
       id: calculate-build-number
