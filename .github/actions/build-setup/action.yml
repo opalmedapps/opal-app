@@ -57,7 +57,7 @@ runs:
         if [ "$IS_ON_MACOS" == "true" ]; then
           echo "Installing gnu-sed"
           brew install gnu-sed
-          echo PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH" >> $GITHUB_ENV
+          echo "/opt/homebrew/opt/gnu-sed/libexec/gnubin" >> "$GITHUB_PATH"
         else
           echo "Not on macOS, using default sed"
         fi
