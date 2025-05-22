@@ -61,10 +61,11 @@ runs:
         COMMIT_DISTANCE=$(git rev-list --count $LATEST_TAG..HEAD)
         NEW_BUILD_NUMBER=$((COMMIT_DISTANCE + 1))
         if [ "$IS_ON_MAIN" = true ]; then
+          echo "Calculating build number"
           BUILD_NUMBER=$NEW_BUILD_NUMBER
         else
-          BUILD_NUMBER=1
           echo "Execution is not on the main branch, defaulting to 1"
+          BUILD_NUMBER=1
         fi
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
         echo "Using build number = ($BUILD_NUMBER)"
