@@ -86,7 +86,8 @@ runs:
         echo "Using build number = ($BUILD_NUMBER)"
       shell: bash
       env:
-        IS_ON_MAIN: ${{ github.ref_name == 'main' }}
+        # TODO testing
+        IS_ON_MAIN: ${{ github.ref_name == 'SB.ci-cd-build-number' }}
 
     # Replace the build number in the file opal.config.js with the newly calculated value.
     - name: Replace build number in opal.config.js
