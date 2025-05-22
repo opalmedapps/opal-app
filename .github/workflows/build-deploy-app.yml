@@ -12,8 +12,6 @@ on:
   push:
     branches:
       - main
-      # TODO testing
-      - SB.ci-cd-build-number
 
   # Offer a manual interface to build for all other environments as needed
   workflow_dispatch:
