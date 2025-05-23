@@ -1,0 +1,23 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="ReleaseNotesController as vm" style="background-color: white">
+    <generic-toolbar title="{{'RELEASE_NOTES' | translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <!-- LOADING -->
+    <loading-spinning-circle
+            ng-show="vm.loading"
+            loading-message="{{'LOADING'|translate}}">
+    </loading-spinning-circle>
+
+    <!-- ERROR MESSAGE -->
+    <div ng-show="vm.error" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="danger">{{"LOADING_ERROR_GENERIC"|translate}}</uib-alert>
+    </div>
+
+    <!-- RELEASE NOTES CONTENT -->
+    <div class="third-party container" ng-bind-html="vm.content | trustHTML" ng-class="fontSizeDesc"></div>
+</ons-page>

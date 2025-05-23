@@ -69,6 +69,11 @@
             "en": "https://<REGISTRATION-WEBPAGE-ENGLISH>",
             "fr": "https://<REGISTRATION-WEBPAGE-FRENCH>"
         },
+        "releaseNotes": {
+            "_comment": "Release notes should be written in Markdown format.",
+            "en": "./content/release-notes/en.md",
+            "fr": "./content/release-notes/fr.md"
+        },
         "support": {
             "en": "https://<SUPPORT-WEBPAGE-ENGLISH>",
             "fr": "https://<SUPPORT-WEBPAGE-FRENCH>"

@@ -22,6 +22,7 @@
 		vm.changeLanguage = changeLanguage;
 		vm.goToFeedback = goToFeedback;
 		vm.goToLicense = () => navigator.pushPage('views/init/license.html');
+		vm.goToReleaseNotes = () => navigator.pushPage('views/init/release-notes.html');
 		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
 		vm.openPageLegal = openPageLegal;
 		vm.openSecurityAndPrivacy = () => Browser.openInternal(DynamicContent.getURL('securityAndPrivacy'));
