@@ -20,13 +20,19 @@ jobs:
   increment-version:
     runs-on: ubuntu-latest
     steps:
-      # Install dependencies
+      # Setup
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+          # Fetch part of the commit history and its tags, used by semantic-release to calculate a new version number
+          fetch-depth: ${{ vars.FETCH_DEPTH }}
+          fetch-tags: true
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
         with:
           NPMRC_FILE: ${{ inputs.NPMRC_FILE }}
 
-      # Set semantic-release author to our own bot user for correct attribution
+      # Set the semantic-release author as our own bot user for correct attribution
       - name: Set the author as semantic-release
         run: |
           apk add --no-cache curl jq
