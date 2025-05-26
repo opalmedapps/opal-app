@@ -7,6 +7,10 @@ run-name: Incrementing the app version using semantic-release
 on:
   # Offer a manual interface to run semantic-release
   workflow_dispatch:
+  # TODO testing
+  push:
+    branches:
+      - SB.ci-semantic-release
 
 permissions:
   contents: read

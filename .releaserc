@@ -1,5 +1,6 @@
 {
-  "branches": ["main"],
+  "_comment": "TODO Testing",
+  "branches": ["main", "SB.ci-semantic-release"],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
@@ -16,5 +17,6 @@
       }
     ]
   ],
-  "tagFormat": "v${version}"
+  "__comment": "TODO Testing",
+  "tagFormat": "test${version}"
 }
