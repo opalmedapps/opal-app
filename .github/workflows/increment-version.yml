@@ -24,7 +24,6 @@ jobs:
         uses: ./.github/actions/install-dependencies
         with:
           NPMRC_FILE: ${{ inputs.NPMRC_FILE }}
-        shell: bash
 
       # Set semantic-release author to our own bot user for correct attribution
       - name: Set the author as semantic-release
