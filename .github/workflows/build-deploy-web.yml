@@ -49,6 +49,9 @@ jobs:
       - uses: actions/checkout@v4.2.2
         with:
           persist-credentials: false
+          # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
+          fetch-depth: ${{ vars.FETCH_DEPTH }}
+          fetch-tags: true
       - name: Set up build
         uses: ./.github/actions/build-setup
         with:
@@ -74,7 +77,6 @@ jobs:
     needs: build-web
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    # TODO test github.ref_name
     if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
     steps:
       # Setup
