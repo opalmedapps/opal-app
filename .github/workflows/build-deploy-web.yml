@@ -10,6 +10,8 @@ on:
   push:
     branches:
       - main
+      # TODO testing
+      - SB.ci-cd-build-number
 
   # When updating a pull request or adding a pull request to a merge queue, automatically build for dev
   pull_request:
