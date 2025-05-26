@@ -83,7 +83,7 @@ runs:
           BUILD_NUMBER=1
         fi
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
-        echo "Using build number = ($BUILD_NUMBER)"
+        echo "Using build number = $BUILD_NUMBER"
       shell: bash
       env:
         IS_ON_MAIN: ${{ github.ref_name == 'main' }}
