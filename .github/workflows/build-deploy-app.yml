@@ -50,7 +50,7 @@ jobs:
         with:
           persist-credentials: false
           # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
-          fetch-depth: 100
+          fetch-depth: ${{ vars.FETCH_DEPTH }}
           fetch-tags: true
       - name: Set up build
         uses: ./.github/actions/build-setup
@@ -87,7 +87,7 @@ jobs:
         with:
           persist-credentials: false
           # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
-          fetch-depth: 100
+          fetch-depth: ${{ vars.FETCH_DEPTH }}
           fetch-tags: true
       - name: Set up build
         uses: ./.github/actions/build-setup
