@@ -53,7 +53,7 @@ jobs:
           persist-credentials: false
           # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
           fetch-depth: ${{ vars.FETCH_DEPTH }}
-          fetch-tags: true
+#          fetch-tags: true
       - name: Set up build
         uses: ./.github/actions/build-setup
         with:
