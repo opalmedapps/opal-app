@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
         with:
-          NPMRC_FILE: ${{ inputs.NPMRC_FILE }}
+          NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
 
       # Increment the version
       - name: Run semantic-release
