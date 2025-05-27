@@ -7,13 +7,6 @@ run-name: Incrementing the app version using semantic-release
 on:
   # Offer a manual interface to run semantic-release
   workflow_dispatch:
-    inputs:
-      DEPLOY:
-        description: 'Deploy the new version for dev'
-        required: true
-        default: true
-        type: boolean
-
   # TODO testing
   push:
     branches:
@@ -45,13 +38,3 @@ jobs:
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-and-deploy:
-    needs: increment-version
-    uses: ./.github/workflows/build-deploy-web.yml
-    with:
-      # TODO testing
-      DEPLOY: ${{ inputs.DEPLOY || false }}
-    secrets:
-      NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
-      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
