@@ -13,7 +13,7 @@
     // https://docs.renovatebot.com/presets-default/#separatepatchreleases
     ":separatePatchReleases",
     // get updates for alpine version of node images
-    "gitlab>opalmedapps/renovate-bot//presets/docker-alpine.json5",
+    "github>mschoettle/renovate-presets//presets/docker-alpine.json5",
     // set timezone to local one to ensure schedules are run
     // https://docs.renovatebot.com/configuration-options/#timezone
     ":timezone(America/Toronto)",

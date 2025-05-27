@@ -257,7 +257,9 @@ class OpalEnv {
             fullTagEmptyElement: false,
             indentCdata: true,
             spaces: 4,
-        })
+        });
+        // Make sure the file ends in a newline
+        contentToWrite += '\n';
         fs.writeFileSync(filePath, contentToWrite);
     }
 
