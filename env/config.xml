@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the 
 
 SPDX-License-Identifier: Apache-2.0
 -->
-<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="2.2.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>${APP_NAME}</name>
     <description>
         Opal is a patient portal designed to empower patients with their medical information.

@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/opalmedapps/opal-app/compare/test1.0.0...test1.0.1) (2025-05-27)
+
+
+### Bug Fixes
+
+* replace gitlab links with github ([ab99991](https://github.com/opalmedapps/opal-app/commit/ab9999194ea356ca511be60ebbf1c978dce997b3))
+* test ([f113b63](https://github.com/opalmedapps/opal-app/commit/f113b63f601105a846f6a5e33f568b2b3a709920))
+
 ## [2.2.6](https://github.com/opalmedapps/opal-app/compare/v2.2.5...v2.2.6) (2025-04-29)
 
 
