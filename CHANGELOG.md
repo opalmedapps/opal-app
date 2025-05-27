@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/opalmedapps/opal-app/compare/test1.0.2...test1.0.3) (2025-05-27)
+
+
+### Bug Fixes
+
+* automatically build and deploy after a version increment ([670b1f3](https://github.com/opalmedapps/opal-app/commit/670b1f345d9fff0126b1042d9a25db880da2bb31))
+
 ## [1.0.2](https://github.com/opalmedapps/opal-app/compare/test1.0.1...test1.0.2) (2025-05-27)
 
 
