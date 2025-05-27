@@ -1,3 +1,12 @@
+## [1.0.4](https://github.com/opalmedapps/opal-app/compare/test1.0.3...test1.0.4) (2025-05-27)
+
+
+### Bug Fixes
+
+* make config.xml end in a newline when edited ([7d69a4f](https://github.com/opalmedapps/opal-app/commit/7d69a4ffa9656ef5f5effa869925d0c88d66bc66))
+* remove automatic build trigger ([5e353e7](https://github.com/opalmedapps/opal-app/commit/5e353e72397cb18d764f5eaa5ebd881a7a3e869c))
+* restore missing newline ([0519fc9](https://github.com/opalmedapps/opal-app/commit/0519fc9ceb7380e01a71b45b4542be3f16ebba0f))
+
 ## [1.0.3](https://github.com/opalmedapps/opal-app/compare/test1.0.2...test1.0.3) (2025-05-27)
 
 
