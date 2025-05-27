@@ -1,34 +1,3 @@
-## [1.0.4](https://github.com/opalmedapps/opal-app/compare/test1.0.3...test1.0.4) (2025-05-27)
-
-
-### Bug Fixes
-
-* make config.xml end in a newline when edited ([7d69a4f](https://github.com/opalmedapps/opal-app/commit/7d69a4ffa9656ef5f5effa869925d0c88d66bc66))
-* remove automatic build trigger ([5e353e7](https://github.com/opalmedapps/opal-app/commit/5e353e72397cb18d764f5eaa5ebd881a7a3e869c))
-* restore missing newline ([0519fc9](https://github.com/opalmedapps/opal-app/commit/0519fc9ceb7380e01a71b45b4542be3f16ebba0f))
-
-## [1.0.3](https://github.com/opalmedapps/opal-app/compare/test1.0.2...test1.0.3) (2025-05-27)
-
-
-### Bug Fixes
-
-* automatically build and deploy after a version increment ([670b1f3](https://github.com/opalmedapps/opal-app/commit/670b1f345d9fff0126b1042d9a25db880da2bb31))
-
-## [1.0.2](https://github.com/opalmedapps/opal-app/compare/test1.0.1...test1.0.2) (2025-05-27)
-
-
-### Bug Fixes
-
-* test ([dfcbdb3](https://github.com/opalmedapps/opal-app/commit/dfcbdb30f9a8314ecd57dcfada9dad129390da4f))
-
-## [1.0.1](https://github.com/opalmedapps/opal-app/compare/test1.0.0...test1.0.1) (2025-05-27)
-
-
-### Bug Fixes
-
-* replace gitlab links with github ([ab99991](https://github.com/opalmedapps/opal-app/commit/ab9999194ea356ca511be60ebbf1c978dce997b3))
-* test ([f113b63](https://github.com/opalmedapps/opal-app/commit/f113b63f601105a846f6a5e33f568b2b3a709920))
-
 ## [2.2.6](https://github.com/opalmedapps/opal-app/compare/v2.2.5...v2.2.6) (2025-04-29)
 
 
