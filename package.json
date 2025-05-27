@@ -2,6 +2,8 @@
   "name": "opal-app",
   "description": "Opal Mobile App",
   "main": "index.js",
+  "_comment": "Private: true is used to prevent semantic-release from publishing to the registry: https://semantic-release.gitbook.io/semantic-release/support/faq#there-are-valid-reasons-to-commit-during-a-release",
+  "private": true,
   "scripts": {
     "help": "echo Append a variable at the end of each start or build command to specify which environment to use, for example: --env=local",
     "postinstall": "node -e \"require('./opal-env.setup.js').createWWWFolder()\"",
@@ -32,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/opalmedapps/qplus.git"
+    "url": "https://github.com/opalmedapps/opal-app.git"
   },
   "keywords": [
     "Health",
@@ -41,9 +43,9 @@
   "author": "Opal Health Informatics Group",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/Sable/qplus/issues"
+    "url": "https://github.com/opalmedapps/opal-app/issues"
   },
-  "homepage": "https://github.com/Sable/qplus#readme",
+  "homepage": "https://github.com/opalmedapps/opal-app#readme",
   "dependencies": {
     "@babel/runtime": "7.26.10",
     "@fortawesome/fontawesome-free": "6.7.2",
