@@ -29,10 +29,10 @@ jobs:
         uses: ./.github/actions/install-dependencies
         with:
           NPMRC_FILE: ${{ inputs.NPMRC_FILE }}
-      - name: Install additional tools curl and jq
-        run: |
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install curl jq
+#      - name: Install additional tools curl and jq
+#        run: |
+#          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+#          brew install curl jq
 
 #      # Set the semantic-release author as our own bot user for correct attribution
 #      - name: Set the commit author as semantic-release
