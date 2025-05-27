@@ -24,7 +24,6 @@ runs:
       uses: ./.github/actions/install-dependencies
       with:
         NPMRC_FILE: ${{ inputs.NPMRC_FILE }}
-      shell: bash
 
     # Initialize the environment files needed to build the app from repository-level Actions variables
     - name: Load environment files
