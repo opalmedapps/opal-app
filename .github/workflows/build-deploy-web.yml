@@ -34,6 +34,18 @@ on:
         default: true
         type: boolean
 
+  # Can be called at the end of `increment-version` to build and deploy for dev
+  workflow_call:
+    inputs:
+      DEPLOY:
+        required: true
+        type: boolean
+    secrets:
+      NPMRC_FILE:
+        required: true
+      FTP_PASSWORD:
+        required: true
+
 env:
   # Read the target environment from workflow_dispatch inputs, or default to dev
   ENVIRONMENT: ${{ inputs.ENVIRONMENT || 'dev' }}
