@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/opalmedapps/opal-app/compare/test1.0.1...test1.0.2) (2025-05-27)
+
+
+### Bug Fixes
+
+* test ([dfcbdb3](https://github.com/opalmedapps/opal-app/commit/dfcbdb30f9a8314ecd57dcfada9dad129390da4f))
+
 ## [1.0.1](https://github.com/opalmedapps/opal-app/compare/test1.0.0...test1.0.1) (2025-05-27)
 
 
