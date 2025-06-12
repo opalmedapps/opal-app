@@ -10,7 +10,7 @@ SPDX-License-Identifier: Apache-2.0
         Opal is a patient portal designed to empower patients with their medical information.
     </description>
     <author email="contact@opalmedapps.ca" href="https://www.opalmedapps.com/">
-        Opal Med Apps Inc.
+        Opal Health Informatics Group
     </author>
     <content src="index.html"/>
     <!--
