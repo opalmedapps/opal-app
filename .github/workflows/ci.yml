@@ -43,3 +43,4 @@ jobs:
       - uses: opalmedapps/actions/actions/check-thirdparty-notice@main
         with:
           package-file: './package.json'
+          additional-dependencies: angular-ui-bootstrap Roboto-Font
