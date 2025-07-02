@@ -31,3 +31,14 @@ jobs:
 
   run-reuse-workflow:
     uses: opalmedapps/.github/.github/workflows/reuse.yaml@main
+
+  check-thirdparty-notice:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          persist-credentials: false
+      - uses: opalmedapps/actions/actions/check-thirdparty-notice@main
+        with:
+          package-file: './package.json'
+          additional-dependencies: angular-ui-bootstrap Roboto-Font
