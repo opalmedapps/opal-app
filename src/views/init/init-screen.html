@@ -23,6 +23,18 @@ SPDX-License-Identifier: Apache-2.0
     <!-- LIST OF BUTTONS -->
     <div id="listInitApp" class="animate__animated animate__fadeIn ng-cloak listInitApp">
 
+        <!-- IPS -->
+        <div class="initScreenButtonDiv">
+            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+                        ng-click="init.goToIPS()" var="initButton">
+                <ons-icon icon="fa-receipt fa-lg pull-left"
+                          style="color: #3584ff; display: inline-block"></ons-icon>
+                <div class="initScreenButtonText" align="center">
+                    {{"IPS"|translate}}
+                </div>
+            </ons-button>
+        </div>
+
         <!-- PARTNERS -->
         <div class="initScreenButtonDiv">
             <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"

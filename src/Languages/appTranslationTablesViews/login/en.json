@@ -39,6 +39,8 @@
   "INVALID_EMAIL": "Invalid email",
   "INVALID_EMAIL_OR_PWD": "Incorrect email or password",
   "INVALID_USER": "Invalid user",
+  "IPS": "IPS",
+  "IPS_FULL": "International Patient Summary",
   "KICKED_OUT": "You have logged in on another device.",
   "LICENSE": "License",
   "LOADING": "Loading",
