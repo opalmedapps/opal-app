@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+// Based on: https://github.com/jddamore/IPSviewer/blob/main/src/lib/components/resource-templates/AllergyIntolerance.svelte
+
 (function () {
     'use strict';
 
