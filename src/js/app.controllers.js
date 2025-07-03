@@ -27,6 +27,8 @@ import "./controllers/init/initScreenController.js";
 import "./controllers/init/license.controller.js";
 import "./controllers/init/technical-legal.controller.js";
 import "./controllers/init/third-party.controller.js";
+import "./controllers/ips/ips.controller.js";
+import "./controllers/ips/ips-share.controller.js";
 import "./controllers/loading/loadingController.js";
 import "./controllers/main/mainController.js";
 import "./controllers/notifications/notificationsController.js";

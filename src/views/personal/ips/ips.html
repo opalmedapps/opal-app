@@ -1,0 +1,36 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="IPSController as vm">
+    <generic-toolbar title="{{'IPS_FULL'|translate}}" style-class="fontSizeTitle">
+        <right-content>
+            <ons-toolbar-button ng-if="!vm.loading && !vm.loadingError" ng-click="vm.share()" id="buttonShareMaterial">
+                <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
+            </ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
+
+    <network-banner></network-banner>
+
+    <span style="margin: 10px; background-color: #e3e3e3; color: #6f6f6f" class="text-badge">
+        {{"IPS_PROTOTYPE"|translate}}
+    </span>
+    <span style="background-color: #b9dce8; color: #475f78; float: right; margin: 10px;" class="text-badge"
+          ng-click="vm.switchViewer()">
+        {{"IPS_SWITCH_VIEWER"|translate}}
+    </span>
+
+    <!-- Loading Wheel -->
+    <loading-spinning-circle ng-show="vm.loading" loading-message="{{'LOADING'|translate}}"></loading-spinning-circle>
+
+    <!-- Error Message -->
+    <div ng-show="vm.loadingError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="{{vm.alertType}}">{{"LOADING_ERROR"|translate}}</uib-alert>
+    </div>
+
+    <!-- IPS Viewer -->
+    <iframe ng-if="vm.showFrame && !vm.loading" style="height:92%; width:100%" ng-src="{{vm.ipsLink()}}" title="IPS viewer"></iframe>
+</ons-page>

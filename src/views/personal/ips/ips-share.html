@@ -1,0 +1,35 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="IPSShareController as vm">
+    <generic-toolbar title="{{'IPS_FULL'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <network-banner></network-banner>
+
+    <!-- TODO handle error case -->
+
+    <div class="panel panel-default ips-outer-panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{"SHARE"|translate}}</h3>
+        </div>
+        <div style="margin: 10px">
+            <div style="margin-bottom: 10px; background-color: #e3e3e3; color: #6f6f6f" class="text-badge">
+                {{"IPS_PROTOTYPE"|translate}}
+            </div>
+            <p>{{"IPS_QR_CODE_DESCRIPTION"|translate}}</p>
+            <p>
+                <img ng-src="{{vm.qrCodeData}}" alt="{{'IPS_QR_CODE_ALT'|translate}}" style="margin: auto; display: block"/>
+            </p>
+            <p style="padding: 10px; border-radius: 4px; margin: 10px 10px 0">
+                {{"IPS_QR_CODE_LINK"|translate}}
+            </p>
+            <p style="padding: 10px; border-radius: 4px; margin: 0 10px 20px">
+                <!-- TODO app browser -->
+                <a target="_blank" href="{{vm.ipsLink}}">{{vm.ipsLink}}</a>
+            </p>
+        </div>
+    </div>
+</ons-page>
