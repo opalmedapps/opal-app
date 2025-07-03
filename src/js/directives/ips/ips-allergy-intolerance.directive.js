@@ -39,7 +39,55 @@
 
             link: function(scope) {
                 // TODO fetch data
-                const resource = {};
+                const resource = {
+                    "resourceType": "AllergyIntolerance",
+                    "id": "72884cad-ebe6-4f43-a51a-2f978275f132",
+                    "text": {
+                        "status": "generated",
+                        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><p><b>identifier</b>: id: 3a462598-009c-484a-965c-d6b24a821424</p><p><b>clinicalStatus</b>: <span title=\"Codes: {http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical active}\">Active</span></p><p><b>verificationStatus</b>: <span title=\"Codes: {http://terminology.hl7.org/CodeSystem/allergyintolerance-verification confirmed}\">Confirmed</span></p><p><b>type</b>: allergy</p><p><b>category</b>: medication</p><p><b>criticality</b>: high</p><p><b>code</b>: <span title=\"Codes: {http://snomed.info/sct 373270004}\">Substance with penicillin structure and antibacterial mechanism of action (substance)</span></p><p><b>patient</b>: <a href=\"#Patient_2b90dd2b-2dab-4c75-9bb9-a355e07401e8\">See above (Patient/2b90dd2b-2dab-4c75-9bb9-a355e07401e8)</a></p><p><b>onset</b>: 2010</p></div>"
+                    },
+                    "identifier": [
+                        {
+                            "system": "urn:oid:1.2.3.999",
+                            "value": "3a462598-009c-484a-965c-d6b24a821424"
+                        }
+                    ],
+                    "clinicalStatus": {
+                        "coding": [
+                            {
+                                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+                                "code": "active"
+                            }
+                        ]
+                    },
+                    "verificationStatus": {
+                        "coding": [
+                            {
+                                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+                                "code": "confirmed"
+                            }
+                        ]
+                    },
+                    "type": "allergy",
+                    "category": [
+                        "medication"
+                    ],
+                    "criticality": "high",
+                    "code": {
+                        // text: "Testing"
+                        "coding": [
+                            {
+                                "system": "http://snomed.info/sct",
+                                "code": "373270004",
+                                "display": "Substance with penicillin structure and antibacterial mechanism of action (substance)"
+                            }
+                        ]
+                    },
+                    "patient": {
+                        "reference": "Patient/2b90dd2b-2dab-4c75-9bb9-a355e07401e8"
+                    },
+                    "onsetDateTime": "2010"
+                };
                 scope.resource = resource;
 
                 // Set display variables
