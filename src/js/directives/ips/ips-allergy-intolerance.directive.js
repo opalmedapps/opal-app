@@ -35,7 +35,7 @@
                                    <div ng-if="resource.code.text" class="ips-text">
                                        <div>{{ resource.code.text }}</div>
                                    </div>
-                                   <div ng-if="resource.onsetDateTime" class="ips-text">{{ "IPS_SINCE"|translate }} {{ resource.onsetDateTime }}</div>
+                                   <div ng-if="resource.onsetDateTime" class="ips-text">{{ "IPS_LABEL_SINCE"|translate }} {{ resource.onsetDateTime }}</div>
                                </div>
                            </div>
                        </div>`,

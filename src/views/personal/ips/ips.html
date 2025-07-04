@@ -11,6 +11,13 @@ SPDX-License-Identifier: Apache-2.0
 
     <div class="panel panel-default ips-outer-panel">
         <div class="panel-heading">
+            <h3 class="panel-title">{{"IPS_PATIENT" | translate}}</h3>
+        </div>
+        <ips-patient ng-repeat="patient in vm.displayContent.patient" resource="patient"></ips-patient>
+    </div>
+
+    <div class="panel panel-default ips-outer-panel">
+        <div class="panel-heading">
             <h3 class="panel-title">{{"IPS_ALLERGIES_INTOLERANCES" | translate}}</h3>
         </div>
         <ips-allergy-intolerance ng-repeat="allergy in vm.displayContent.allergies" resource="allergy"></ips-allergy-intolerance>

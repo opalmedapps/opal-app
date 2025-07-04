@@ -58,7 +58,7 @@ import bundle from './sample-bundle.json';
                     console.log('Patient Card');
                     if (patient) {
                         console.log(patient)
-                        render("Patient", patient, "patient");
+                        render("Patient", {patient: [patient]}, "patient");
                     }
                     let alertMissingComposition = false;
                     for (let j = 0; j < composition.section.length; j++) {

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import "./directives/ips/ips-allergy-intolerance.directive.js";
+import "./directives/ips/ips-patient.directive.js";
 import "./directives/loading-spinning-button.directive";
 import "./directives/watchHeightOfElementDirective.js";
 import "./directives/changeHeightDiv.js";
