@@ -21,12 +21,12 @@
             },
             template: `<div class="panel ips-inner-panel">
                            <div class="panel-body">
-                               <div ng-if="statusBadgeText" class="ips-badge">{{ statusBadgeText }}</div>
-                               <div class="ips-badge" ng-style="criticalityBadgeStyle">{{ criticalityBadgeText }}</div>
-                               
+                               <ips-badge ng-if="statusBadgeText">{{ statusBadgeText }}</ips-badge>
+                               <ips-badge use-dynamic-color="true" criticality="resource.criticality">{{ criticalityBadgeText }}</ips-badge>
+
                                <div ng-if="resource.code">
                                    <div ng-if="resource.code.coding">
-                                       <div class="ips-badge">{{ codingBadgeText }}</div>
+                                       <ips-badge>{{ codingBadgeText }}</ips-badge>
 
                                        <div ng-if="resource.code.coding[0].display" class="ips-text">
                                            {{ resource.code.coding[0].display }}
@@ -49,19 +49,8 @@
                                       + (resource.verificationStatus?.coding?.[0].code ?? '');
 
                 scope.criticalityBadgeText = `${resource.type ? `${resource.type} - ` : ''}criticality: ${resource.criticality ?? 'unknown'}`;
-                scope.criticalityBadgeStyle = {
-                    'background-color': badgeColor(resource.criticality)
-                };
 
                 scope.codingBadgeText = `${resource.code.coding[0].system} : ${resource.code.coding[0].code}`;
-
-                function badgeColor(criticality) {
-                    if (criticality) {
-                        if (criticality === 'high') return '#dc3545';
-                        else return '#3584ff';
-                    }
-                    else return '#7a7a7a';
-                }
             }
         }
     }
