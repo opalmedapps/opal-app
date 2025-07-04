@@ -21,7 +21,7 @@
             },
             template: `<div class="panel ips-inner-panel">
                            <div class="panel-body">
-                               <div class="ips-text" ng-if="patientName">{{patientName}}</div>
+                               <div ng-if="patientName">{{patientName}}</div>
                                <div class="ips-text" ng-if="resource.birthDate">{{'IPS_LABEL_BIRTH_DATE' | translate}} {{resource.birthDate | date:'mediumDate'}}</div>
                                <div class="ips-text" ng-if="resource.gender">{{'IPS_LABEL_GENDER' | translate}} {{resource.gender}}</div>
                            </div>
