@@ -11,9 +11,8 @@ SPDX-License-Identifier: Apache-2.0
 
     <div class="panel panel-default ips-outer-panel">
         <div class="panel-heading">
-            <h3 class="panel-title">Allergies and Intolerances</h3>
+            <h3 class="panel-title">{{"IPS_ALLERGIES_INTOLERANCES" | translate}}</h3>
         </div>
-        <ips-allergy-intolerance></ips-allergy-intolerance>
-        <ips-allergy-intolerance></ips-allergy-intolerance>
+        <ips-allergy-intolerance ng-repeat="allergy in vm.displayContent.allergies" resource="allergy"></ips-allergy-intolerance>
     </div>
 </ons-page>

@@ -40,6 +40,7 @@
   "INVALID_EMAIL_OR_PWD": "Incorrect email or password",
   "INVALID_USER": "Invalid user",
   "IPS": "IPS",
+  "IPS_ALLERGIES_INTOLERANCES": "Allergies and Intolerances",
   "IPS_FULL": "International Patient Summary",
   "IPS_SINCE": "Since:",
   "KICKED_OUT": "You have logged in on another device.",

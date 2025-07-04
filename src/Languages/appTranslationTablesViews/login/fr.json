@@ -40,6 +40,7 @@
   "INVALID_EMAIL_OR_PWD": "Adresse courriel ou mot de passe invalide",
   "INVALID_USER": "Utilisateur invalide",
   "IPS": "IPS",
+  "IPS_ALLERGIES_INTOLERANCES": "Allergies et intolérances",
   "IPS_FULL": "Résumé international du dossier médical du patient",
   "IPS_SINCE": "Depuis :",
   "KICKED_OUT": "Votre compte a été ouvert sur un autre appareil.",
