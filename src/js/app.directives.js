@@ -5,6 +5,7 @@
 import "./directives/ips/ips-allergy-intolerance.directive.js";
 import "./directives/ips/ips-badge.directive.js";
 import "./directives/ips/ips-condition.directive.js";
+import "./directives/ips/ips-medication.directive.js";
 import "./directives/ips/ips-patient.directive.js";
 import "./directives/loading-spinning-button.directive";
 import "./directives/watchHeightOfElementDirective.js";
