@@ -11,9 +11,9 @@
         .module('OpalApp')
         .directive('ipsAllergyIntolerance', IPSAllergyIntolerance);
 
-    IPSAllergyIntolerance.$inject = [];
+    IPSAllergyIntolerance.$inject = ['$filter'];
 
-    function IPSAllergyIntolerance() {
+    function IPSAllergyIntolerance($filter) {
         return {
             restrict: 'E',
             scope: {
@@ -48,7 +48,8 @@
                                       + (resource.clinicalStatus && resource.verificationStatus ? ' / ' : '')
                                       + (resource.verificationStatus?.coding?.[0].code ?? '');
 
-                scope.criticalityBadgeText = `${resource.type ? `${resource.type} - ` : ''}criticality: ${resource.criticality ?? 'unknown'}`;
+                // TODO 'unknown'
+                scope.criticalityBadgeText = `${resource.type ? `${resource.type} - ` : ''}${$filter('translate')('IPS_LABEL_CRITICALITY')} ${resource.criticality ?? 'unknown'}`;
 
                 scope.codingBadgeText = `${resource.code.coding[0].system} : ${resource.code.coding[0].code}`;
             }
