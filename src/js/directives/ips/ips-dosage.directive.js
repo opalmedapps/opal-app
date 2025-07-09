@@ -45,11 +45,11 @@
                                        <th>Freq. Period</th>
                                    </tr>
                                    <tr>
-                                       <td>-</td>
-                                       <td>-</td>
-                                       <td>-</td>
-                                       <td>-</td>
-                                       <td>-</td>
+                                       <td>{{ route }}</td>
+                                       <td>{{ qty }}</td>
+                                       <td>{{ unit }}</td>
+                                       <td>{{ freqQty }}</td>
+                                       <td>{{ freqPeriod }}</td>
                                    </tr>
                                </table>
                            </div>
@@ -59,6 +59,13 @@
                 console.log('MEDICATION STATEMENT resource:', scope.resource);
                 let resource = scope.resource;
 
+                scope.route = resource.route?.coding?.[0].display ?? '-';
+                scope.qty = resource.doseAndRate?.[0].doseQuantity?.value ?? '-';
+                scope.unit = resource.doseAndRate?.[0].doseQuantity?.unit ?? '-';
+                scope.freqQty = resource.timing?.repeat?.count ?? '-';
+                scope.freqPeriod = (resource.timing?.repeat?.period && resource.timing?.repeat?.periodUnit)
+                    ? '' + resource.timing?.repeat?.period + resource.timing?.repeat?.periodUnit
+                    : '-';
             }
         }
     }
