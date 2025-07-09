@@ -18,6 +18,7 @@
             transclude: true,
             scope: {
                 criticality: '=?',
+                status: '=?',
                 useDynamicColor: '@?',
             },
             template: `<div class="ips-badge" ng-style="badgeStyle">
@@ -28,16 +29,26 @@
 
                 scope.useDynamicColor = Boolean(scope.useDynamicColor);
 
-                scope.badgeStyle = scope.useDynamicColor ? {
-                    'background-color': badgeColor(scope.criticality)
-                } : {};
+                scope.badgeStyle = {
+                    'background-color': badgeColor()
+                };
 
-                function badgeColor(criticality) {
-                    if (criticality) {
-                        if (criticality === 'high') return '#dc3545';
-                        else return '#3584ff';
+                function badgeColor() {
+                    let important = '#dc3545';
+                    let normal = '#3584ff';
+                    let inactive = '#7a7a7a';
+
+                    if (!scope.useDynamicColor) return normal;
+
+                    if (scope.criticality) {
+                        if (scope.criticality === 'high') return important;
+                        else return normal;
                     }
-                    else return '#7a7a7a'
+                    else if (scope.status) {
+                        if (['stopped', 'unknown'].includes(scope.status)) return inactive;
+                        else return normal;
+                    }
+                    else return inactive;
                 }
             }
         }

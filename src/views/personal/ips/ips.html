@@ -9,31 +9,35 @@ SPDX-License-Identifier: Apache-2.0
 
     <network-banner></network-banner>
 
+    <div class="ips-badge" style="margin: 10px 10px 0 10px; background-color: #e3e3e3; color: #6f6f6f">
+        Note: non-dynamic demo data
+    </div>
+
     <div class="panel panel-default ips-outer-panel">
         <div class="panel-heading">
             <h3 class="panel-title">{{"IPS_PATIENT" | translate}}</h3>
         </div>
-        <ips-patient ng-repeat="resource in vm.displayContent.patient" resource="resource"></ips-patient>
+        <ips-patient ng-repeat="resource in vm.displayContent.Patient.entries" resource="resource"></ips-patient>
     </div>
 
     <div class="panel panel-default ips-outer-panel">
         <div class="panel-heading">
             <h3 class="panel-title">{{"IPS_ACTIVE_PROBLEMS" | translate}}</h3>
         </div>
-        <ips-condition ng-repeat="resource in vm.displayContent.problems" resource="resource"></ips-condition>
+        <ips-condition ng-repeat="resource in vm.displayContent['Active Problems'].entries" resource="resource"></ips-condition>
     </div>
 
-<!--    <div class="panel panel-default ips-outer-panel">-->
-<!--        <div class="panel-heading">-->
-<!--            <h3 class="panel-title">{{"IPS_MEDICATION" | translate}}</h3>-->
-<!--        </div>-->
-<!--        <ips-medication ng-repeat="resource in vm.displayContent.medications" resource="resource"></ips-medication>-->
-<!--    </div>-->
+    <div class="panel panel-default ips-outer-panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{"IPS_MEDICATION" | translate}}</h3>
+        </div>
+        <ips-medication-statement ng-repeat="resource in vm.displayContent.Medication.entries" resource="resource"></ips-medication-statement>
+    </div>
 
     <div class="panel panel-default ips-outer-panel">
         <div class="panel-heading">
             <h3 class="panel-title">{{"IPS_ALLERGIES_INTOLERANCES" | translate}}</h3>
         </div>
-        <ips-allergy-intolerance ng-repeat="resource in vm.displayContent.allergies" resource="resource"></ips-allergy-intolerance>
+        <ips-allergy-intolerance ng-repeat="resource in vm.displayContent['Allergies and Intolerances'].entries" resource="resource"></ips-allergy-intolerance>
     </div>
 </ons-page>

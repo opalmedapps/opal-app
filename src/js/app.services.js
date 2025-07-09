@@ -16,6 +16,7 @@ import "./services/encryptionService.js";
 import "./services/checkinService.js";
 import "./services/location.service.js";
 import "./services/resetPasswordService.js";
+import "./services/ips.service.js";
 import "./services/localStorageService.js";
 import "./services/diagnosesService.js";
 import "./services/nativeNotificationAlertService.js";

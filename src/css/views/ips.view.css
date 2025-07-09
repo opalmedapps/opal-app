@@ -35,3 +35,20 @@
 .ips-text {
     margin-top: 6px;
 }
+
+.ips-table {
+    margin: 10px 0;
+}
+
+.ips-table th {
+    background-color: #3584ff;
+    border: 1px solid #ddd;
+    color: #fff;
+    padding: 8px;
+    text-align: center;
+}
+
+.ips-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
