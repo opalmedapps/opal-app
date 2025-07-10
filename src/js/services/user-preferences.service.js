@@ -49,6 +49,7 @@ import {Observer} from "../models/utility/observer";
             getDefaultLanguage: getDefaultLanguage,
             getFontSize: getFontSize,
             getLanguage: () => language,
+            getSupportedLanguages: () => supportedLanguages,
             initFontSize: initFontSize,
             initializeLanguage: initializeLanguage,
             observeLanguage: fun => languageObserver.attach(fun),
@@ -122,6 +123,7 @@ import {Observer} from "../models/utility/observer";
             // Validate the language
             if (!supportedLanguages.includes(languageUpper)) {
                 console.warn(`Language '${languageUpper}' is not supported; defaulting to '${getDefaultLanguage()}'`);
+                if (window.localStorage.getItem('Language') === languageUpper) window.localStorage.removeItem('Language');
                 return setLanguage(getDefaultLanguage());
             }
 
