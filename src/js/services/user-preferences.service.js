@@ -120,7 +120,10 @@ import {Observer} from "../models/utility/observer";
             let languageUpper = lang.toUpperCase();
 
             // Validate the language
-            if (!supportedLanguages.includes(languageUpper)) throw `Language '${languageUpper}' is not supported`;
+            if (!supportedLanguages.includes(languageUpper)) {
+                console.warn(`Language '${languageUpper}' is not supported; defaulting to '${getDefaultLanguage()}'`);
+                return setLanguage(getDefaultLanguage());
+            }
 
             // Set the language
             // Note: values set for tmhDynamicLocale correspond to those in the files inside the `angular-locales` directory
@@ -149,8 +152,6 @@ import {Observer} from "../models/utility/observer";
          **/
         function clearUserPreferences() {
             fontSize = '';
-            language = '';
-            supportedLanguages = [];
             languageObserver.clear();
         }
     }
