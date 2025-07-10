@@ -26,16 +26,23 @@ import {Observer} from "../models/utility/observer";
         let language = '';
 
         /**
+         * @description The list of languages supported by the system. Each language is a two-letter code in upper case (e.g. 'EN').
+         *              The first language in the list is considered the default.
+         * @type {string[]}
+         */
+        let supportedLanguages = [];
+
+        /**
+         * @description The locale for language files in the app.
+         * @type {string}
+         */
+        let locale = 'ca';
+
+        /**
          * @desc Observer object that notifies other parts of the app when the language changes.
          * @type {Observer}
          */
         const languageObserver = new Observer();
-
-        /**
-         * @description The list of languages supported by the system.
-         * @type {string[]}
-         */
-        let supportedLanguages;
 
         let service = {
             clearUserPreferences: clearUserPreferences,
@@ -80,6 +87,7 @@ import {Observer} from "../models/utility/observer";
             // Read the supported languages from the app's environment variables
             supportedLanguages = CONFIG.settings.supportedLanguages.toUpperCase().replaceAll(' ','').split(',');
 
+            // Initialize the app's language
             return new Promise((resolve) => {
                 let lang = window.localStorage.getItem('Language') || navigator.language;
                 lang = lang.substring(0, 2);
@@ -103,21 +111,24 @@ import {Observer} from "../models/utility/observer";
         }
 
         /**
-         * @param {String} lang Either 'EN' or 'FR'
-         * @param isAuthenticated
-         * @description Setter method for patient language of preference
+         * @param {string} lang The language to which to set the app.
+         * @param {boolean} isAuthenticated Whether the language is being set from a logged-in state.
+         * @description Sets the current app language.
          **/
         function setLanguage(lang, isAuthenticated = false) {
-            if (lang == 'EN') {
-                tmhDynamicLocale.set('en-ca');
-                $translate.use('en');
-                language = 'EN';
-            } else {
-                tmhDynamicLocale.set('fr-ca');
-                $translate.use('fr');
-                language = 'FR';
-            }
-            if (isAuthenticated)  window.localStorage.setItem('Language', language);
+            let languageLower = lang.toLowerCase();
+            let languageUpper = lang.toUpperCase();
+
+            // Validate the language
+            if (!supportedLanguages.includes(languageUpper)) throw `Language '${languageUpper}' is not supported`;
+
+            // Set the language
+            // Note: values set for tmhDynamicLocale correspond to those in the files inside the `angular-locales` directory
+            tmhDynamicLocale.set(`${languageLower}-${locale}`);
+            $translate.use(languageLower);
+            language = languageUpper;
+
+            if (isAuthenticated) window.localStorage.setItem('Language', language);
             languageObserver.notify();
         }
 
@@ -125,16 +136,12 @@ import {Observer} from "../models/utility/observer";
             let username = UserAuthorizationInfo.getUsername();
             window.localStorage.setItem(username + 'fontSize', size);
             fontSize = size;
-            if (size === 'medium') {
-                $rootScope.fontSizeDesc = 'fontDescMedium';
-                $rootScope.fontSizeTitle = 'fontTitleMedium';
-            } else if (size === 'large') {
-                $rootScope.fontSizeDesc = 'fontDescLarge';
-                $rootScope.fontSizeTitle = 'fontTitleLarge';
-            } else if (size === 'xlarge') {
-                $rootScope.fontSizeDesc = 'fontDescXlarge';
-                $rootScope.fontSizeTitle = 'fontTitleXlarge';
-            }
+
+            // Format and save the right font size name
+            // Options: fontDescMedium, fontTitleMedium, fontDescLarge, fontTitleLarge, fontDescXlarge, fontTitleXlarge (see font.css)
+            let sizeText = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
+            $rootScope.fontSizeDesc = `fontDesc${sizeText}`;
+            $rootScope.fontSizeTitle = `fontTitle${sizeText}`;
         }
 
         /**
@@ -142,6 +149,8 @@ import {Observer} from "../models/utility/observer";
          **/
         function clearUserPreferences() {
             fontSize = '';
+            language = '';
+            supportedLanguages = [];
             languageObserver.clear();
         }
     }
