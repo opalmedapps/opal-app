@@ -82,7 +82,7 @@ SPDX-License-Identifier: Apache-2.0
                         <!-- Show the waiting Room when: Non-Checkinable appointment OR Successful Checked-in Appointment -->
                         <div ng-if="['warning', 'success'].indexOf(app.CheckInStatus) > -1">
                             <p></p>
-                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.MapName_EN">
+                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="app['MapName_' + checkIn.language]">
                                 {{"WAITING_ROOM"|translate}} {{app["MapName_" + checkIn.language]}}
                             </p>
                         </div>

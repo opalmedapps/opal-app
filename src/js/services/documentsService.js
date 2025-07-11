@@ -262,28 +262,21 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         /**
          *@ngdoc method
          *@name setDocumentsLanguage
-         *@param {Array} array Array with documents
+         *@param {object[]|object} documents Array of documents, or single document object.
          *@description Translates the array parameter containing documents to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
-        setDocumentsLanguage:function(array)
+        setDocumentsLanguage:function(documents)
         {
-            //Get language
-            var language = UserPreferences.getLanguage();
+            let language = UserPreferences.getLanguage();
+            let documentsList = Array.isArray(documents) ? documents : [documents];
 
-            //Check if array
-            if (Object.prototype.toString.call( array ) === '[object Array]') {
-                for (var i = 0; i < array.length; i++) {
-                    //set language
-                    array[i].Title = (language=='EN')? array[i].AliasName_EN : array[i].AliasName_FR;
-                    array[i].Description = (language == 'EN')? array[i].AliasDescription_EN : array[i].AliasDescription_FR;
-                }
-            }else{
-                //set language if string
-                array.Description = (language == 'EN')? array.AliasDescription_EN : array.AliasDescription_FR;
-                array.Title = (language=='EN')? array.AliasName_EN : array.AliasName_FR;
-            }
-            return array;
+            documentsList.forEach(document => {
+                document.Title = document[`AliasName_${language}`];
+                document.Description = document[`AliasDescription_${language}`];
+            });
+
+            return documents;
         },
         /**
          *@ngdoc method

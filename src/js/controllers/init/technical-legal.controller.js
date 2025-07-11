@@ -35,7 +35,6 @@
 			vm.navigatorName = Navigator.getNavigatorName();
 
 			vm.authenticated = !!Firebase.getCurrentUser();
-			vm.languageSwitch = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
 			vm.currentYear = new Date().getFullYear();
 			vm.APP_VERSION = Constants.version();
 			vm.APP_BUILD_NUMBER = Constants.build();

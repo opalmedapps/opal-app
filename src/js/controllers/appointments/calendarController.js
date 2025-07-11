@@ -61,8 +61,7 @@
         vm.noAppointments = false;
 
         /**
-         * The user's preferred language/
-         * Either 'EN' or 'FR'
+         * The user's preferred language
          * @type {string}
          */
         vm.language = '';
