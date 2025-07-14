@@ -22,7 +22,16 @@ import {Observer} from "../models/utility/observer";
      */
     function UserPreferences($rootScope, $translate, Constants, tmhDynamicLocale, UserAuthorizationInfo) {
 
+        /**
+         * @description The name of the user's chosen font size (medium, large, xlarge).
+         * @type {string}
+         */
         let fontSize = '';
+
+        /**
+         * @description The app's current language.
+         * @type {string}
+         */
         let language = '';
 
         /**
@@ -47,7 +56,7 @@ import {Observer} from "../models/utility/observer";
         let service = {
             clearUserPreferences: clearUserPreferences,
             getDefaultLanguage: getDefaultLanguage,
-            getFontSize: getFontSize,
+            getFontSize: () => fontSize,
             getLanguage: () => language,
             getSupportedLanguages: () => supportedLanguages,
             initFontSize: initFontSize,
@@ -59,37 +68,37 @@ import {Observer} from "../models/utility/observer";
 
         return service;
 
+        /**
+         * @description Gets the default language based on the app's environment variables.
+         * @returns {string} Two-letter code for the default language in upper case (e.g. 'EN').
+         */
         function getDefaultLanguage() {
             return supportedLanguages[0];
         }
 
         /**
-         * @returns {String} Returns font-size
-         **/
-        function getFontSize() {
-            let font = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
-            $rootScope.fontSizeDesc = 'fontDesc' + font;
-            $rootScope.fontSizeTitle = 'fontTitle' + font;
-            return fontSize;
-        }
-
+         * @description Initializes the user's current font size based on the value stored in localStorage.
+         *              If no value has been stored, defaults to 'large'.
+         */
         function initFontSize() {
             let font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
             setFontSize(font || 'large');
         }
 
         /**
-         * @description The method accesses the globalization plugin of the device to find the actual language of device and sets default to that language.
-         *              If language was already set previously within the app, set default to that language.
-         *              If no language was previously set and the device language is not supported, fall back on the app's default language.
-         * @returns {Promise} Returns a promise that fulfills if the language is been found and correctly set or rejects if there was a problem using the plugin.
+         * @description Initializes the app's language. If this is the first time using the device,
+         *              sets it to the mobile device's or browser's language.
+         *              If language was already set and saved in localStorage, sets the app to that language.
+         *              If no language was previously set and the device language is not supported, falls back on the app's default language.
+         * @returns {Promise} Resolves if the language was found and correctly set.
+         *                    If there was an error using the globalization plugin, falls back on the default language and resolves anyways.
          **/
         function initializeLanguage() {
             // Read the supported languages from the app's environment variables
             supportedLanguages = CONFIG.settings.supportedLanguages.toUpperCase().replaceAll(' ','').split(',');
 
             // Initialize the app's language
-            return new Promise((resolve) => {
+            return new Promise(resolve => {
                 let lang = window.localStorage.getItem('Language') || navigator.language;
                 lang = lang.substring(0, 2);
                 // If language is not defined and it's a device
@@ -112,9 +121,9 @@ import {Observer} from "../models/utility/observer";
         }
 
         /**
+         * @description Sets the app's language.
          * @param {string} lang The language to which to set the app.
          * @param {boolean} isAuthenticated Whether the language is being set from a logged-in state.
-         * @description Sets the current app language.
          **/
         function setLanguage(lang, isAuthenticated = false) {
             let languageLower = lang.toLowerCase();
@@ -137,12 +146,16 @@ import {Observer} from "../models/utility/observer";
             languageObserver.notify();
         }
 
+        /**
+         * @description Sets the app's font size.
+         * @param {string} size The name of the new font size to set; see `fontSize` variable for options.
+         */
         function setFontSize(size) {
             let username = UserAuthorizationInfo.getUsername();
             window.localStorage.setItem(username + 'fontSize', size);
             fontSize = size;
 
-            // Format and save the right font size name
+            // Format and save the font size class names
             // Options: fontDescMedium, fontTitleMedium, fontDescLarge, fontTitleLarge, fontDescXlarge, fontTitleXlarge (see font.css)
             let sizeText = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
             $rootScope.fontSizeDesc = `fontDesc${sizeText}`;
@@ -150,7 +163,9 @@ import {Observer} from "../models/utility/observer";
         }
 
         /**
-         * @description Clears user preferences for logout functionality
+         * @description Clears the UserPreferences service.
+         *              Note: The app's current language is not cleared due to the order in which data is initialized.
+         *                    The language is still needed after this service is cleared.
          **/
         function clearUserPreferences() {
             fontSize = '';
