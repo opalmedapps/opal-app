@@ -51,9 +51,9 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         let language = UserPreferences.getLanguage();
         let materialList = Array.isArray(materials) ? materials : [materials];
 
-        if (!materials.hasOwnProperty('Language')) materials.Language = language;
-
         materialList.forEach(material => {
+            // Delete content to be re-downloaded later in the right language (when switching languages)
+            delete material.Content;
             material.Url = material[`URL_${language}`];
             material.Name = material[`Name_${language}`];
             material.ShareURL = material[`ShareURL_${language}`];
