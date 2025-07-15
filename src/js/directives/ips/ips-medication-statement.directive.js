@@ -19,9 +19,8 @@
             scope: {
                 "resource": "=",
             },
-            template: `<div class="panel ips-inner-panel">
-                           <div class="panel-body">
-                               <ips-badge ng-if="resource.status" use-dynamic-color="true" status="resource.status">{{ resource.status }}</ips-badge>
+            template: `<ips-panel-inner>
+                           <ips-badge ng-if="resource.status" use-dynamic-color="true" status="resource.status">{{resource.status}}</ips-badge>
 <!--                                   {#if resource.medicationCodeableConcept}-->
 <!--                                     {#if resource.medicationCodeableConcept.coding}  -->
 <!--                                       <Badge color="primary">{resource.medicationCodeableConcept.coding[0].system} : {resource.medicationCodeableConcept?.coding[0].code}</Badge>-->
@@ -39,27 +38,26 @@
 <!--                                     {/if}-->
 <!--                                   {/if}-->
 
-                               <div ng-if="medication">
-                                   <ips-medication resource="medication"></ips-medication>
-                               </div>
-                               <div ng-if="resource.medicationReference && resource.medicationReference.display" class="ips-text">
-                                   {{ resource.medicationReference?.display }}
-                               </div>
+                           <p ng-if="medication">
+                               <ips-medication resource="medication"></ips-medication>
+                           </p>
+                           <p ng-if="resource.medicationReference && resource.medicationReference.display">
+                               {{resource.medicationReference?.display}}
+                           </p>
 
-                               <div ng-if="resource.reasonReference && resource.reasonReference[0].display" class="ips-text">
-                                   {{ resource.reasonReference[0].display }}
-                               </div>
+                           <p ng-if="resource.reasonReference && resource.reasonReference[0].display">
+                               {{resource.reasonReference[0].display}}
+                           </p>
 
-                               <ips-dosage ng-if="resource.dosage" resource="resource.dosage[0]"></ips-dosage>
+                           <ips-dosage ng-if="resource.dosage" resource="resource.dosage[0]"></ips-dosage>
 
-                               <div ng-if="resource.effectivePeriod" class="ips-text">
-                                   {{ "IPS_LABEL_EFFECTIVE" | translate }} {{ resource.effectivePeriod.start || '??'}} – {{ resource.effectivePeriod.end || '??'}}
-                               </div>
-                               <div ng-if="resource.effectiveDateTime">
-                                   {{ "IPS_LABEL_DATE" | translate }} {{ resource.effectiveDateTime }}
-                               </div>
-                           </div>
-                       </div>`,
+                           <p ng-if="resource.effectivePeriod">
+                               {{"IPS_LABEL_EFFECTIVE" | translate}} {{resource.effectivePeriod.start || '??'}} – {{resource.effectivePeriod.end || '??'}}
+                           </p>
+                           <p ng-if="resource.effectiveDateTime">
+                               {{"IPS_LABEL_DATE" | translate}} {{resource.effectiveDateTime}}
+                           </p>
+                       </ips-panel-inner>`,
 
             link: function(scope) {
                 console.log('MEDICATION STATEMENT resource:', scope.resource);

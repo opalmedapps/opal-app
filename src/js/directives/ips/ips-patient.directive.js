@@ -19,13 +19,11 @@
             scope: {
                 "resource": "=",
             },
-            template: `<div class="panel ips-inner-panel">
-                           <div class="panel-body">
-                               <div ng-if="patientName">{{patientName}}</div>
-                               <div class="ips-text" ng-if="resource.birthDate">{{'IPS_LABEL_BIRTH_DATE' | translate}} {{resource.birthDate | date:'mediumDate'}}</div>
-                               <div class="ips-text" ng-if="resource.gender">{{'IPS_LABEL_GENDER' | translate}} {{resource.gender}}</div>
-                           </div>
-                       </div>`,
+            template: `<ips-panel-inner>
+                           <p ng-if="patientName">{{patientName}}</p>
+                           <p ng-if="resource.birthDate">{{'IPS_LABEL_BIRTH_DATE' | translate}} {{resource.birthDate | date:'mediumDate'}}</p>
+                           <p ng-if="resource.gender">{{'IPS_LABEL_GENDER' | translate}} {{resource.gender}}</p>
+                       </ips-panel-inner>`,
 
             link: function(scope) {
                 let resource = scope.resource;

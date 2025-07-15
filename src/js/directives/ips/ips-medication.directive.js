@@ -20,20 +20,20 @@
                 "resource": "=",
             },
             template: `<div>
-                           <div ng-if="resource.code && resource.code.coding">
-                               <ips-badge>{{ codingBadgeText }}</ips-badge>
-                           </div>
+                           <p ng-if="resource.code && resource.code.coding">
+                               <ips-badge>{{codingBadgeText}}</ips-badge>
+                           </p>
 
-                           <div ng-if="resource.code && resource.code.text" class="ips-text">
-                               {{ resource.code.text }}
-                           </div>
+                           <p ng-if="resource.code && resource.code.text">
+                               {{resource.code.text}}
+                           </p>
 
                            <!-- TODO codingMap -->
-                           <div ng-if="resource.code && resource.code.coding" ng-repeat="coding in resource.code.coding track by $index">
-                               <div ng-if="coding.display" class="ips-text">
-                                   {{ coding.display }}
+                           <p ng-if="resource.code && resource.code.coding" ng-repeat="coding in resource.code.coding track by $index">
+                               <div ng-if="coding.display">
+                                   {{coding.display}}
                                </div>
-                           </div>
+                           </p>
                            <!-- TODO {#if resource.ingredient} -->
                        </div>`,
 

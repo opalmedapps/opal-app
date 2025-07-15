@@ -23,17 +23,24 @@
     margin: 10px;
 }
 
+/* Space out paragraphs in IPS panels */
+.ips-inner-panel ng-transclude p {
+    margin-bottom: 6px;
+}
+
+/* Remove the margin from the last paragraph in IPS panels */
+.ips-inner-panel ng-transclude p:last-child {
+    margin-bottom: 0;
+}
+
 .ips-badge {
     background-color: #3584ff;
     border-radius: 4px;
     color: #fff;
     display: inline-block;
     font-size: 0.8em;
+    margin-bottom: 6px;
     padding: 0 4px;
-}
-
-.ips-text {
-    margin-top: 6px;
 }
 
 .ips-table {

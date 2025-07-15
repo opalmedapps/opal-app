@@ -19,50 +19,49 @@
             scope: {
                 "resource": "=",
             },
-            template: `<div class="panel ips-inner-panel">
-                           <div class="panel-body">
-                               <ips-badge ng-if="statusBadgeText">{{ statusBadgeText }}</ips-badge>
-                               <ips-badge use-dynamic-color="true" criticality="resource.severity.text">{{ severityBadgeText }}</ips-badge>
-                               
-                               <div ng-if="resource.category && resource.category[0]">
-                                   <div ng-if="resource.category[0].coding">
-                                       <ips-badge>{{ categoryBadgeText }}</ips-badge>
+            template: `<ips-panel-inner>
+                           <ips-badge ng-if="statusBadgeText">{{statusBadgeText}}</ips-badge>
+                           <!-- Add resource.severity.coding.display -->
+                           <ips-badge use-dynamic-color="true" criticality="resource.severity.text">{{severityBadgeText}}</ips-badge>
 
-                                       <div ng-if="resource.category[0].coding[0].display" class="ips-text">
-                                           {{ resource.category[0].coding[0].display }}
-                                       </div>
-                                   </div>
-                                   <div ng-if="resource.category[0].text" class="ips-text">
-                                       <div>{{ resource.category[0].text }}</div>
-                                   </div>
-                               </div>
+                           <div ng-if="resource.category && resource.category[0]">
+                               <div ng-if="resource.category[0].coding">
+                                   <ips-badge>{{categoryBadgeText}}</ips-badge>
 
-                               <div ng-if="resource.code">
-                                   <div ng-if="resource.code.coding">
-                                       <ips-badge>{{ codingBadgeText }}</ips-badge>
-
-                                       <div ng-if="resource.code.coding[0].display" class="ips-text">
-                                           {{ resource.code.coding[0].display }}
-                                       </div>
-                                   </div>
-                                   <div ng-if="resource.code.text" class="ips-text">
-                                       <div>{{ resource.code.text }}</div>
-                                   </div>
+                                   <p ng-if="resource.category[0].coding[0].display">
+                                       {{resource.category[0].coding[0].display}}
+                                   </p>
                                </div>
-
-                               <div ng-if="site" class="ips-text">
-                                   {{ 'IPS_LABEL_SITE' | translate }} {{ site }}
-                               </div>
-                               
-                               <div ng-if="resource.onsetDateTime" class="ips-text">
-                                   {{ 'IPS_LABEL_SINCE' | translate }} {{ resource.onsetDateTime }}
-                               </div>
-                               
-                               <div ng-if="resource.recordedDate" class="ips-text">
-                                   {{ 'IPS_LABEL_RECORDED' | translate }} {{ resource.recordedDate }}
-                               </div>
+                               <p ng-if="resource.category[0].text">
+                                   {{resource.category[0].text}}
+                               </p>
                            </div>
-                       </div>`,
+
+                           <div ng-if="resource.code">
+                               <div ng-if="resource.code.coding">
+                                   <ips-badge>{{codingBadgeText}}</ips-badge>
+
+                                   <p ng-if="resource.code.coding[0].display">
+                                       {{resource.code.coding[0].display}}
+                                   </p>
+                               </div>
+                               <p ng-if="resource.code.text">
+                                   {{resource.code.text}}
+                               </p>
+                           </div>
+
+                           <p ng-if="site">
+                               {{'IPS_LABEL_SITE' | translate}} {{site}}
+                           </p>
+                           
+                           <p ng-if="resource.onsetDateTime">
+                               {{'IPS_LABEL_SINCE' | translate}} {{resource.onsetDateTime}}
+                           </p>
+                           
+                           <p ng-if="resource.recordedDate">
+                               {{'IPS_LABEL_RECORDED' | translate}} {{resource.recordedDate}}
+                           </p>
+                       </ips-panel-inner>`,
 
             link: function(scope) {
                 let resource = scope.resource;

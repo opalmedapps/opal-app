@@ -20,15 +20,15 @@
                 "resource": "=",
             },
             template: `<div>
-                           <div ng-if="resource.text" class="ips-text">
-                               {{ "IPS_LABEL_DOSAGE" | translate }} {{ resource.text }}
-                           </div>
-                           <div ng-if="dosage.asNeededBoolean" class="ips-text">
-                               {{ "IPS_LABEL_DOSAGE" | translate }} {{ "IPS_AS_NEEDED" | translate }}
-                           </div>
-                           <div ng-if="!resource.text && !dosage.asNeededBoolean" class="ips-text">
-                               {{ "IPS_LABEL_DOSAGE" | translate }} {{ "IPS_DOSAGE_NONE" | translate }}
-                           </div>
+                           <p ng-if="resource.text">
+                               {{"IPS_LABEL_DOSAGE" | translate}} {{resource.text}}
+                           </p>
+                           <p ng-if="dosage.asNeededBoolean">
+                               {{"IPS_LABEL_DOSAGE" | translate}} {{"IPS_AS_NEEDED" | translate}}
+                           </p>
+                           <p ng-if="!resource.text && !dosage.asNeededBoolean">
+                               {{"IPS_LABEL_DOSAGE" | translate}} {{"IPS_DOSAGE_NONE" | translate}}
+                           </p>
 
                            <!--TODO finish dynamic display-->
                            <div ng-if="(resource.route && resource.route.coding) || resource.doseAndRate || (resource.timing && resource.timing.repeat)"
@@ -45,11 +45,11 @@
                                        <th>Freq. Period</th>
                                    </tr>
                                    <tr>
-                                       <td>{{ route }}</td>
-                                       <td>{{ qty }}</td>
-                                       <td>{{ unit }}</td>
-                                       <td>{{ freqQty }}</td>
-                                       <td>{{ freqPeriod }}</td>
+                                       <td>{{route}}</td>
+                                       <td>{{qty}}</td>
+                                       <td>{{unit}}</td>
+                                       <td>{{freqQty}}</td>
+                                       <td>{{freqPeriod}}</td>
                                    </tr>
                                </table>
                            </div>

@@ -13,31 +13,19 @@ SPDX-License-Identifier: Apache-2.0
         Note: non-dynamic demo data
     </div>
 
-    <div class="panel panel-default ips-outer-panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">{{"IPS_PATIENT" | translate}}</h3>
-        </div>
+    <ips-panel-outer header-title="{{'IPS_PATIENT' | translate}}">
         <ips-patient ng-repeat="resource in vm.displayContent.Patient.entries" resource="resource"></ips-patient>
-    </div>
+    </ips-panel-outer>
 
-    <div class="panel panel-default ips-outer-panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">{{"IPS_ACTIVE_PROBLEMS" | translate}}</h3>
-        </div>
+    <ips-panel-outer header-title="{{'IPS_ACTIVE_PROBLEMS' | translate}}">
         <ips-condition ng-repeat="resource in vm.displayContent['Active Problems'].entries" resource="resource"></ips-condition>
-    </div>
+    </ips-panel-outer>
 
-    <div class="panel panel-default ips-outer-panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">{{"IPS_MEDICATION" | translate}}</h3>
-        </div>
+    <ips-panel-outer header-title="{{'IPS_MEDICATION' | translate}}">
         <ips-medication-statement ng-repeat="resource in vm.displayContent.Medication.entries" resource="resource"></ips-medication-statement>
-    </div>
+    </ips-panel-outer>
 
-    <div class="panel panel-default ips-outer-panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">{{"IPS_ALLERGIES_INTOLERANCES" | translate}}</h3>
-        </div>
+    <ips-panel-outer header-title="{{'IPS_ALLERGIES_INTOLERANCES' | translate}}">
         <ips-allergy-intolerance ng-repeat="resource in vm.displayContent['Allergies and Intolerances'].entries" resource="resource"></ips-allergy-intolerance>
-    </div>
+    </ips-panel-outer>
 </ons-page>
