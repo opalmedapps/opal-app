@@ -86,32 +86,29 @@
         }
 
         // For machine-readable content, use the reference in the Composition.section.entry to retrieve resource from Bundle
-        // Source: https://github.com/jddamore/IPSviewer/blob/main/classic/assets/js/renderIPS.js
+        // Source: https://github.com/jddamore/IPSviewer/blob/main/src/lib/components/viewer/IPSContent.svelte
         function getEntry(fullUrl) {
             let result;
-            if (ips.entry) {
-                ips.entry.forEach(function (entry) {
-                    if (entry.fullUrl.includes(fullUrl)) {
-                        // console.log(`match ${fullUrl}`);
+            ips.entry?.forEach(function (entry) {
+                if (entry.fullUrl?.includes(fullUrl)) {
+                    // console.log(`match ${fullUrl}`);
+                    result = entry.resource;
+                } else {
+                    // Attempt to match based on resource and uuid
+                    let newMatch = fullUrl
+                    if (entry.resource && entry.resource.resourceType) {
+                        // remove the resource from reference
+                        newMatch = newMatch.replace(entry.resource.resourceType, '');
+                        // remove slash
+                        newMatch = newMatch.replace(/\//g, '');
+                        // console.log(newMatch);
+                    }
+                    if (entry.fullUrl?.includes(newMatch)) {
+                        // console.log(`match uuid ${newMatch}`);
                         result = entry.resource;
                     }
-                    // Attempt to match based on resource and uuid
-                    else {
-                        let newMatch = fullUrl
-                        if (entry.resource && entry.resource.resourceType) {
-                            // remove the resource from reference
-                            newMatch = newMatch.replace(entry.resource.resourceType, '');
-                            // remove slash
-                            newMatch = newMatch.replace(/\//g, '');
-                            // console.log(newMatch);
-                        }
-                        if (entry.fullUrl.includes(newMatch)) {
-                            // console.log(`match uuid ${newMatch}`);
-                            result = entry.resource;
-                        }
-                    }
-                });
-            }
+                }
+            });
             if (!result) {
                 console.log(`missing reference ${fullUrl}`);
                 result = {};

@@ -47,7 +47,7 @@
                 // TODO 'unknown'
                 scope.criticalityBadgeText = `${resource.type ? `${resource.type} - ` : ''}${$filter('translate')('IPS_LABEL_CRITICALITY')} ${resource.criticality ?? 'unknown'}`;
 
-                scope.codingBadgeText = `${resource.code.coding[0].system} : ${resource.code.coding[0].code}`;
+                scope.codingBadgeText = `${resource.code?.coding[0].system} : ${resource.code?.coding[0].code}`;
             }
         }
     }

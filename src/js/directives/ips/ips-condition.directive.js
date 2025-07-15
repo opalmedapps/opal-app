@@ -74,7 +74,7 @@
                 // TODO 'unknown'
                 scope.severityBadgeText = `${$filter('translate')('IPS_LABEL_SEVERITY')} ${resource.severity?.text ?? 'unknown'}`;
                 scope.categoryBadgeText = `${resource.category?.[0].coding?.[0].system} : ${resource.category?.[0].coding?.[0].code}`;
-                scope.codingBadgeText = `${resource.code.coding?.[0].system} : ${resource.code.coding?.[0].code}`;
+                scope.codingBadgeText = `${resource.code?.coding?.[0].system} : ${resource.code?.coding?.[0].code}`;
 
                 scope.site = resource.bodySite?.[0]?.coding?.[0]?.display;
             }
