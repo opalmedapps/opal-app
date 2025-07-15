@@ -23,6 +23,33 @@
     margin: 10px;
 }
 
+/* Nested panels: second-level panels are styled differently, with a narrower margin */
+.ips-inner-panel ips-panel-outer .ips-outer-panel {
+    margin: 10px 0;
+}
+
+.ips-inner-panel ips-panel-outer:first-child .ips-outer-panel {
+    margin: 0 0 10px;
+}
+
+.ips-inner-panel ips-panel-outer:first-child .ips-inner-panel {
+    border-bottom: 1px;
+    border-left: 0;
+    border-radius: 0;
+    border-right: 0;
+    margin: 0;
+}
+
+.ips-inner-panel ips-panel-outer:first-child .ips-outer-panel .panel-heading {
+    background-color: #f5f5f5;
+    padding: 5px 10px;
+}
+
+.ips-inner-panel ips-panel-outer:last-child .ips-outer-panel {
+    margin: 10px 0 0;
+}
+/* End of nested panels */
+
 /* Space out paragraphs in IPS panels */
 .ips-inner-panel ng-transclude p {
     margin-bottom: 6px;

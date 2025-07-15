@@ -172,7 +172,43 @@
         "active": true,
         "name":  [
           {
+            "use": "usual",
             "family": "DeLarosa",
+            "given":  [
+              "Martha"
+            ]
+          },
+          {
+            "use": "maiden",
+            "family": "Brown",
+            "given":  [
+              "Martha"
+            ],
+            "prefix": [
+              "Miss"
+            ],
+            "period": {
+              "end": "2022-05-01"
+            }
+          },
+          {
+            "use": "official",
+            "family": "DeLarosa",
+            "given":  [
+              "Martha",
+              "Josephine"
+            ],
+            "prefix": [
+              "The Right Honourable",
+              "Ms"
+            ],
+            "suffix": [
+              "PhD",
+              "JSD"
+            ],
+            "text": "The Right Honourable Ms Martha Josephine DeLarosa, PhD, JSD"
+          },
+          {
             "given":  [
               "Martha"
             ]

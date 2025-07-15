@@ -20,18 +20,15 @@
                 "resource": "=",
             },
             template: `<ips-panel-inner>
-                           <p ng-if="patientName">{{patientName}}</p>
+                           <ips-panel-outer header-title="{{'IPS_NAME' | translate}}">
+                               <ips-name ng-repeat="name in resource.name" resource="name"></ips-name>
+                           </ips-panel-outer>
                            <p ng-if="resource.birthDate">{{'IPS_LABEL_BIRTH_DATE' | translate}} {{resource.birthDate | date:'mediumDate'}}</p>
                            <p ng-if="resource.gender">{{'IPS_LABEL_GENDER' | translate}} {{resource.gender}}</p>
                        </ips-panel-inner>`,
 
             link: function(scope) {
                 let resource = scope.resource;
-
-                // Set display variables
-                let name = resource.name[0] ?? resource.name;
-                let nameList = [].concat(name.prefix).concat(name.given).concat(name.family).filter(word => !!word)
-                scope.patientName = nameList.join(' ');
             }
         }
     }
