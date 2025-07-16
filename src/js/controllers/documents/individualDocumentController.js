@@ -156,14 +156,10 @@
             if (vm.DocumentDescription !== '') {
                 navigator.pushPage('./views/personal/documents/about-document.html', {'Post': docParams});
             } else {
-                // Check if there is any about link
-                var link = null;
-                docParams.hasOwnProperty("URL_EN") ? link = docParams["URL_" + UserPreferences.getLanguage()] : {};
-
                 // Set the options to send to the content controller
                 var contentOptions = {
                     contentType: docParams.AliasName_EN,
-                    contentLink: link,
+                    contentLink: docParams["URL_" + UserPreferences.getLanguage()],
                     title: 'INFO',
                 };
 

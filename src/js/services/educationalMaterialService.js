@@ -46,41 +46,21 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
      **/
     var educationalMaterialType = Params.educationalMaterial;
 
-    function setLanguageEduMaterial(array)
+    function setLanguageEduMaterial(materials)
     {
-        var language = UserPreferences.getLanguage();
+        let language = UserPreferences.getLanguage();
+        let materialList = Array.isArray(materials) ? materials : [materials];
 
-        if (!array.hasOwnProperty("Language")) {
-            array.Language = language;
-        }
+        materialList.forEach(material => {
+            // Delete content to be re-downloaded later in the right language (when switching languages)
+            delete material.Content;
+            material.Url = material[`URL_${language}`];
+            material.Name = material[`Name_${language}`];
+            material.ShareURL = material[`ShareURL_${language}`];
+            material.Type = material[`EducationalMaterialType_${language}`];
+        });
 
-        //Check if array
-        if (Object.prototype.toString.call( array ) === '[object Array]') {
-            if (array.Language != language) {
-                array.forEach(function (element) {
-                    delete element.Content;
-                });
-                array.Language = language;
-            }
-            for (var i = 0; i < array.length; i++) {
-                array[i].Url = (language ==='EN')?array[i].URL_EN:array[i].URL_FR;
-                array[i].Name =(language==='EN')? array[i].Name_EN : array[i].Name_FR;
-                array[i].ShareURL =(language ==='EN')? array[i].ShareURL_EN : array[i].ShareURL_FR;
-                array[i].Type = (language ==='EN')? array[i].EducationalMaterialType_EN : array[i].EducationalMaterialType_FR;
-            }
-        }else{
-            //set language if string
-            if (array.Language != language) {
-                delete array.Content;
-                array.Language = language;
-            }
-            array.Url = (language ==='EN')?array.URL_EN:array.URL_FR;
-            array.Name =(language ==='EN')? array.Name_EN : array.Name_FR;
-            array.Type = (language ==='EN')? array.EducationalMaterialType_EN : array.EducationalMaterialType_FR;
-        }
-        //console.log('Set edu material language:');
-        //console.log(array);
-        return array;
+        return materials;
     }
 
     /**
@@ -119,10 +99,10 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         }
     }
 
-    //Formats the input dates and gets it ready for controllers, updates announcementsArray
+    //Formats the input dates and gets it ready for controllers, updates educationalMaterialArray
     function addEducationalMaterial(edumaterial)
     {
-        //If announcements are undefined simply return
+        //If educational materials are undefined simply return
         if(typeof edumaterial == 'undefined') return;
         for (var i = 0; i < edumaterial.length; i++) {
             //Format the date to javascript
@@ -138,7 +118,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
                 edumaterial[i].Color = educationalMaterialType['Other'].color;
             }
 
-            //Add to my announcements array
+            //Add to educational material array
             educationalMaterialArray.push(edumaterial[i]);
         }
 

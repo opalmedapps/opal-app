@@ -160,26 +160,21 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name setLanguageTxTeamMessages
-         *@param {Array} array Array with TxTeamMessages
+         *@param {object[]|object} messages Array of messages, or single message object.
          *@description Translates the array parameter containing announcements to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
-        setLanguageTxTeamMessages :function(array)
+        setLanguageTxTeamMessages :function(messages)
         {
-            var language = UserPreferences.getLanguage();
-            //Check if array
-            if (Object.prototype.toString.call( array ) === '[object Array]') {
-                for (var i = 0; i < array.length; i++) {
-                    //set language
-                    array[i].Title = (language=='EN')? array[i].PostName_EN : array[i].PostName_FR;
-                    array[i].Body = (language == 'EN')? array[i].Body_EN : array[i].Body_FR;
-                }
-            }else{
-                //set language if string
-                array.Title = (language=='EN')? array.PostName_EN : array.PostName_FR;
-                array.Body = (language == 'EN')? array.Body_EN: array.Body_FR;
-            }
-            return array;
+            let language = UserPreferences.getLanguage();
+            let messageList = Array.isArray(messages) ? messages : [messages];
+
+            messageList.forEach(message => {
+                message.Title = message[`PostName_${language}`];
+                message.Body = message[`Body_${language}`];
+            });
+
+            return messages;
         },
         /**
          *@ngdoc method

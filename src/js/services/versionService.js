@@ -56,10 +56,10 @@
                     versions.forEach(function(value) {
                         if (versionCompare(value.VERSION, lastVersion) === 1 &&
                             versionCompare(value.VERSION, currentVersion) !== 1 &&
-                            value.DESCRIPTION_EN)
+                            value[`DESCRIPTION_${language}`])
                         {
                             let infoData = {};
-                            let description = language == 'EN' ? value.DESCRIPTION_EN : value.DESCRIPTION_FR;
+                            let description = value[`DESCRIPTION_${language}`];
                             infoData.title = value.VERSION;
                             infoData.content = description;
                             updates.push(infoData);

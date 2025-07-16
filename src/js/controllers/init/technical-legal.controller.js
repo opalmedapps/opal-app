@@ -19,7 +19,6 @@
 		let vm = this;
 		let navigator;
 
-		vm.changeLanguage = changeLanguage;
 		vm.goToFeedback = goToFeedback;
 		vm.goToLicense = () => navigator.pushPage('views/init/license.html');
 		vm.goToThirdParty = () => navigator.pushPage('views/init/third-party.html');
@@ -36,19 +35,9 @@
 			vm.navigatorName = Navigator.getNavigatorName();
 
 			vm.authenticated = !!Firebase.getCurrentUser();
-			vm.languageSwitch = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
 			vm.currentYear = new Date().getFullYear();
 			vm.APP_VERSION = Constants.version();
 			vm.APP_BUILD_NUMBER = Constants.build();
-		}
-
-		function changeLanguage(value) {
-
-			if (value) {
-				UserPreferences.setLanguage('FR');
-			} else {
-				UserPreferences.setLanguage('EN');
-			}
 		}
 
 		function goToFeedback() {

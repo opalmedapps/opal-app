@@ -22,7 +22,7 @@
     ) {
         let vm = this;
 
-        vm.language = 'EN';
+        vm.language = '';
         vm.calledApp = null;
         $scope.infoModalData = [];
 
