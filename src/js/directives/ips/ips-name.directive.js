@@ -21,9 +21,7 @@
             },
             template: `<ips-panel-inner>
                            <ips-badge ng-if="resource.use">{{resource.use}}</ips-badge>
-                           <ips-badge ng-if="resource.period">
-                               {{namePeriod}}
-                           </ips-badge>
+                           <ips-badge ng-if="resource.period">{{namePeriod}}</ips-badge>
                            {{patientName}}
                        </ips-panel-inner>`,
 
@@ -31,13 +29,17 @@
                 let name = scope.resource;
 
                 // Construct the name for display
-                let nameList = []
-                    .concat(name.prefix)
-                    .concat(name.given)
-                    .concat(name.family)
-                    .concat(name.suffix)
-
-                scope.patientName = nameList.join(' ');
+                // If name.text is available, use it; "Systems that operate across cultures should generally rely on the text form for presentation and use the parts for index/search functionality."
+                // See: https://build.fhir.org/datatypes.html#HumanName
+                if (name.text) scope.patientName = name.text;
+                else {
+                    let nameList = []
+                        .concat(name.prefix)
+                        .concat(name.given)
+                        .concat(name.family)
+                        .concat(name.suffix)
+                    scope.patientName = nameList.join(' ');
+                }
 
                 scope.namePeriod = `${name.period?.start || '??'} – ${name.period?.end || '??'}`;
             }
