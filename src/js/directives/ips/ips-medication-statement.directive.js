@@ -38,6 +38,14 @@
 <!--                                     {/if}-->
 <!--                                   {/if}-->
 
+                           <p ng-if="resource.medicationCodeableConcept">
+                               <!-- TODO coding -->
+                               <div ng-if="resource.medicationCodeableConcept.coding">TODO coding</div>
+                               <div ng-if="resource.medicationCodeableConcept.text">
+                                   <div>{{resource.medicationCodeableConcept.text}}</div>
+                               </div>
+                           </p>
+
                            <p ng-if="medication">
                                <ips-medication resource="medication"></ips-medication>
                            </p>
