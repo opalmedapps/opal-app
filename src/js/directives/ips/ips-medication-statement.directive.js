@@ -71,16 +71,7 @@
                 console.log('MEDICATION STATEMENT resource:', scope.resource);
                 let resource = scope.resource;
 
-                if (resource.medicationReference) {
-                    if (resource.contained?.[0]?.resourceType === 'Medication') {
-                        // If the medication is contained in the resource
-                        scope.medication = resource.contained[0];
-                    } else if (resource.medicationReference?.reference) {
-                        // If the medication is referenced
-                        scope.medication = IPS.getEntry(resource.medicationReference.reference);
-                    }
-                }
-                console.log('Found medication', scope.medication);
+                scope.medication = IPS.getMedication(resource);
 
                 scope.codingBadgeText = `${resource.code?.coding?.[0].system} : ${resource.code?.coding?.[0].code}`;
             }

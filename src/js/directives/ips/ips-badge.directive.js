@@ -20,6 +20,7 @@
                 criticality: '=?',
                 status: '=?',
                 useDynamicColor: '@?',
+                color: '@?',
             },
             template: `<div class="ips-badge" ng-style="badgeStyle">
                            <ng-transclude></ng-transclude>
@@ -34,21 +35,51 @@
                 };
 
                 function badgeColor() {
-                    let important = '#dc3545';
-                    let normal = '#3584ff';
-                    let inactive = '#7a7a7a';
+                    const colors = {
+                        alert: '#dc3545',
+                        normal: '#3584ff',
+                        inactive: '#7a7a7a',
+                        active: '#4aba5f',
+                    };
 
-                    if (!scope.useDynamicColor) return normal;
+                    const statuses = {
+                        active: [
+                            'active',
+                        ],
+                        alert: [
+
+                        ],
+                        inactive: [
+                            'ended',
+                            'stopped',
+                            'completed',
+                            'cancelled',
+                            'entered-in-error',
+                            'unknown',
+                        ],
+                        normal: [
+                            'on-hold',
+                            'draft',
+                        ],
+                    };
+
+                    if (scope.color) return colors[scope.color];
+                    if (!scope.useDynamicColor) return colors.normal;
+
+                    // TODO Temp
+                    Object.entries(statuses).forEach(([color, statusList]) => {
+                        if (statusList.includes(scope.status || scope.criticality)) return colors[color];
+                    })
 
                     if (scope.criticality) {
-                        if (scope.criticality === 'high') return important;
-                        else return normal;
+                        if (scope.criticality === 'high') return colors.alert;
+                        else return colors.normal;
                     }
                     else if (scope.status) {
-                        if (['stopped', 'unknown'].includes(scope.status)) return inactive;
-                        else return normal;
+                        if (['stopped', 'unknown'].includes(scope.status)) return colors.inactive;
+                        else return colors.normal;
                     }
-                    else return inactive;
+                    else return colors.inactive;
                 }
             }
         }

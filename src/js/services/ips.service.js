@@ -42,6 +42,7 @@
         return {
             getIpsContent: getIpsContent,
             getEntry: getEntry,
+            getMedication: getMedication,
             setBundle: bundle => ips = bundle,
         };
 
@@ -115,6 +116,21 @@
             }
             console.log('ENTRY', result);
             return result;
+        }
+
+        // Source: https://github.com/jddamore/IPSviewer/blob/main/src/lib/components/resource-templates/MedicationStatement.svelte
+        function getMedication(resource) {
+            if (resource.medicationReference) {
+                if (resource.contained?.[0]?.resourceType === 'Medication') {
+                    // If the medication is contained in the resource
+                    return resource.contained[0];
+                }
+                else if (resource.medicationReference?.reference) {
+                    // If the medication is referenced
+                    return IPS.getEntry(resource.medicationReference.reference);
+                }
+            }
+            else console.warn('Function getMedication cannot find medicationReference on the resource:', resource);
         }
     }
 })();

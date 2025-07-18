@@ -22,7 +22,10 @@ SPDX-License-Identifier: Apache-2.0
     </ips-panel-outer>
 
     <ips-panel-outer header-title="{{'IPS_MEDICATION' | translate}}">
-        <ips-medication-statement ng-repeat="resource in vm.displayContent.Medication.entries" resource="resource"></ips-medication-statement>
+        <div ng-repeat="resource in vm.displayContent.Medication.entries">
+            <ips-medication-statement ng-if="resource.resourceType === 'MedicationStatement'" resource="resource"></ips-medication-statement>
+            <ips-medication-request ng-if="resource.resourceType === 'MedicationRequest'" resource="resource"></ips-medication-request>
+        </div>
     </ips-panel-outer>
 
     <ips-panel-outer header-title="{{'IPS_ALLERGIES_INTOLERANCES' | translate}}">
