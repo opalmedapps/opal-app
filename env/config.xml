@@ -55,7 +55,7 @@ SPDX-License-Identifier: Apache-2.0
         <preference name="AndroidPersistentFileLocation" value="Internal"/>
         <preference name="GradlePluginGoogleServicesEnabled" value="true"/>
         <preference name="GradlePluginKotlinEnabled" value="true"/>
-        <preference name="GradlePluginKotlinVersion" value="1.7.10"/>
+        <preference name="GradlePluginKotlinVersion" value="1.9.24"/>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <!-- Security setting; should be false for pen tests and prod builds -->
             <application android:debuggable="${ANDROID_DEBUGGABLE}"/>
