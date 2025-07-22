@@ -246,7 +246,6 @@
   "SERVER_ERROR_MODIFY_SECURITY": "Server problem: the security questions or answers cannot be modified at this time. Please try again later.",
   "SERVER_ERROR_SUBMIT_ANSWER": "Server problem: the answer cannot be submitted. Please try again later.",
   "SERVER_ERROR_SUBMIT_QUESTIONNAIRE": "Server problem: the questionnaire cannot be submitted. Please try again later.",
-  "SHARE": "Share",
   "SHOW": "Show",
   "SIGN_OUT": "Sign out",
   "SMALL": "Small",

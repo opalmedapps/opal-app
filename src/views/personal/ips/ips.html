@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="IPSController as vm">
     <generic-toolbar title="{{'IPS_FULL'|translate}}" style-class="fontSizeTitle">
         <right-content>
-            <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial">
+            <ons-toolbar-button ng-click="vm.share()" id="buttonShareMaterial">
                 <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
             </ons-toolbar-button>
         </right-content>

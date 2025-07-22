@@ -35,8 +35,6 @@ import '../../../css/views/ips.view.css';
          * @param {string} url - The url to the document, either in base64 format or on the web.
          */
         function share(name, url) {
-            // TODO create this view
-            console.log('Open ./views/personal/ips/ips-share.html');
             navigator.pushPage('./views/personal/ips/ips-share.html');
         }
     }
