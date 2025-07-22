@@ -127,7 +127,7 @@
                 }
                 else if (resource.medicationReference?.reference) {
                     // If the medication is referenced
-                    return IPS.getEntry(resource.medicationReference.reference);
+                    return getEntry(resource.medicationReference.reference);
                 }
             }
             else console.warn('Function getMedication cannot find medicationReference on the resource:', resource);
