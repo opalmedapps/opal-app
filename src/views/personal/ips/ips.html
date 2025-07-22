@@ -15,26 +15,9 @@ SPDX-License-Identifier: Apache-2.0
 
     <network-banner></network-banner>
 
-    <div class="ips-badge" style="margin: 10px 10px 0 10px; background-color: #e3e3e3; color: #6f6f6f">
+    <div style="margin: 10px; background-color: #e3e3e3; color: #6f6f6f" class="ips-badge">
         Note: non-dynamic demo data
     </div>
 
-    <ips-panel-outer header-title="{{'IPS_PATIENT' | translate}}">
-        <ips-patient ng-repeat="resource in vm.displayContent.Patient.entries" resource="resource"></ips-patient>
-    </ips-panel-outer>
-
-    <ips-panel-outer header-title="{{'IPS_ACTIVE_PROBLEMS' | translate}}">
-        <ips-condition ng-repeat="resource in vm.displayContent['Active Problems'].entries" resource="resource"></ips-condition>
-    </ips-panel-outer>
-
-    <ips-panel-outer header-title="{{'IPS_MEDICATION' | translate}}">
-        <div ng-repeat="resource in vm.displayContent.Medication.entries">
-            <ips-medication-statement ng-if="resource.resourceType === 'MedicationStatement'" resource="resource"></ips-medication-statement>
-            <ips-medication-request ng-if="resource.resourceType === 'MedicationRequest'" resource="resource"></ips-medication-request>
-        </div>
-    </ips-panel-outer>
-
-    <ips-panel-outer header-title="{{'IPS_ALLERGIES_INTOLERANCES' | translate}}">
-        <ips-allergy-intolerance ng-repeat="resource in vm.displayContent['Allergies and Intolerances'].entries" resource="resource"></ips-allergy-intolerance>
-    </ips-panel-outer>
+    <iframe style="height:92%; width:100%" ng-src="{{vm.ipsLink}}" title="IPS viewer"></iframe>
 </ons-page>

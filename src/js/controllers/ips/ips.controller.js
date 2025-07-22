@@ -4,8 +4,6 @@
 
 import '../../../css/views/ips.view.css';
 
-import bundle from './sample-bundle.json';
-
 (function () {
     'use strict';
 
@@ -20,35 +18,14 @@ import bundle from './sample-bundle.json';
 
         let navigator;
 
-        vm.displayContent = {};
+        vm.ipsLink = 'https://viewer.tcpdev.org/#shlink:/eyJ1cmwiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vc2Vhbm5vL3NoYy1kZW1vLWRhdGEvbWFpbi9pcHMvSVBTX0lHLWJ1bmRsZS0wMS1lbmMudHh0IiwiZmxhZyI6IkxVIiwia2V5IjoicnhUZ1lsT2FLSlBGdGNFZDBxY2NlTjh3RVU0cDk0U3FBd0lXUWU2dVg3USIsImxhYmVsIjoiRGVtbyBTSEwgZm9yIElQU19JRy1idW5kbGUtMDEifQ';
 
-        // Used by the share popover
-        $scope.popoverSharing = undefined;
-        $scope.share = share;
+        vm.share = share;
 
         activate();
 
         function activate() {
             navigator = Navigator.getNavigator();
-
-            bindEvents();
-            IPS.setBundle(bundle);
-            vm.displayContent = IPS.getIpsContent();
-            console.log('Display', vm.displayContent);
-        }
-
-        function bindEvents() {
-            // Instantiate the sharing popover
-            $timeout(async () => {
-                console.log('Create popover');
-                $scope.popoverSharing = await ons.createPopover('./views/personal/education/share-popover.html', {parentScope: $scope});
-            }, 300);
-
-            // On destroy, clean up
-            $scope.$on('$destroy', () => {
-                console.log('Destroy popover');
-                $scope.popoverSharing.destroy;
-            });
         }
 
         /**
