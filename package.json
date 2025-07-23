@@ -121,7 +121,7 @@
     "raw-loader": "4.0.2",
     "run-script-os": "1.1.6",
     "semantic-release": "24.2.7",
-    "semver": "7.7.1",
+    "semver": "7.7.2",
     "shelljs": "0.10.0",
     "style-loader": "4.0.0",
     "terser-webpack-plugin": "5.3.14",
