@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import QRCode from 'qrcode';
+
 // TODO
 // import '../../../css/views/ips-share.view.css';
 
@@ -12,17 +14,27 @@
         .module('OpalApp')
         .controller('IPSShareController', IPSShareController);
 
-    IPSShareController.$inject = [];
+    IPSShareController.$inject = ['Navigator'];
 
-    function IPSShareController() {
+    function IPSShareController(Navigator) {
         const vm = this;
 
-        vm.ipsLink = 'https://viewer.tcpdev.org/#shlink:/eyJ1cmwiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vc2Vhbm5vL3NoYy1kZW1vLWRhdGEvbWFpbi9pcHMvSVBTX0lHLWJ1bmRsZS0wMS1lbmMudHh0IiwiZmxhZyI6IkxVIiwia2V5IjoicnhUZ1lsT2FLSlBGdGNFZDBxY2NlTjh3RVU0cDk0U3FBd0lXUWU2dVg3USIsImxhYmVsIjoiRGVtbyBTSEwgZm9yIElQU19JRy1idW5kbGUtMDEifQ';
+        vm.ipsData = '';
+        vm.ipsLink = '';
+        vm.qrCodeData = '';
 
         activate();
 
-        function activate() {
+        async function activate() {
+            let parameters = Navigator.getParameters();
+            vm.ipsData = parameters.ipsData;
+            vm.ipsLink = parameters.ipsLink;
 
+            try {
+                vm.qrCodeData = await QRCode.toDataURL(vm.ipsLink);
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 })();

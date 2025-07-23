@@ -9,27 +9,25 @@ SPDX-License-Identifier: Apache-2.0
 
     <network-banner></network-banner>
 
-    <div style="margin: 10px 10px 0; background-color: #e3e3e3; color: #6f6f6f" class="ips-badge">
-        Note: non-dynamic demo data
-    </div>
-
     <!-- TODO translate -->
     <div class="panel panel-default ips-outer-panel">
         <div class="panel-heading">
             <h3 class="panel-title">{{"SHARE"|translate}}</h3>
         </div>
         <div style="margin: 10px">
+            <div style="margin-bottom: 10px; background-color: #e3e3e3; color: #6f6f6f" class="ips-badge">
+                Note: non-dynamic demo data
+            </div>
             <p>
                 The following link and QR code provide direct viewing access to your patient summary for ? days.
                 Protect them as you would a password, or your printed medical file.
             </p>
-            <hr>
             <p>
-                QR code:
+                <img ng-src="{{vm.qrCodeData}}" alt="QR code to open IPS externally" style="margin: auto; display: block"/>
             </p>
-            <hr>
-            <p>
-                IPS Link: {{vm.ipsLink}}
+            <p style="border: solid 1px #ddd; padding: 10px; border-radius: 4px; margin: 10px 10px 20px;">
+                <!-- TODO app browser -->
+                <a target="_blank" href="{{vm.ipsLink}}">{{vm.ipsLink}}</a>
             </p>
         </div>
     </div>

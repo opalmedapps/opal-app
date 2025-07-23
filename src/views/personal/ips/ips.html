@@ -15,9 +15,13 @@ SPDX-License-Identifier: Apache-2.0
 
     <network-banner></network-banner>
 
-    <div style="margin: 10px; background-color: #e3e3e3; color: #6f6f6f" class="ips-badge">
+    <span style="margin: 10px; background-color: #e3e3e3; color: #6f6f6f" class="ips-badge">
         Note: non-dynamic demo data
-    </div>
+    </span>
+    <span style="background-color: #b9dce8; color: #475f78; float: right; margin: 10px;" class="ips-badge"
+          ng-click="vm.switchViewer()">
+        Switch viewer
+    </span>
 
-    <iframe style="height:92%; width:100%" ng-src="{{vm.ipsLink}}" title="IPS viewer"></iframe>
+    <iframe style="height:92%; width:100%" ng-src="{{vm.ipsLink()}}" title="IPS viewer"></iframe>
 </ons-page>

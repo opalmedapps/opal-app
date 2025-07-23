@@ -18,6 +18,7 @@
             'self',
             // Allow loading from the IPS viewer
             'https://viewer.tcpdev.org/**',
+            'https://ipsviewer.com/**',
         ]);
     }
 })();
