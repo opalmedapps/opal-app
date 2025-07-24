@@ -11,9 +11,9 @@ import '../../../css/views/ips.view.css';
         .module('OpalApp')
         .controller('IPSController', IPSController);
 
-    IPSController.$inject = ['$scope', '$timeout', 'IPS', 'Navigator'];
+    IPSController.$inject = ['$scope', '$timeout', 'Navigator'];
 
-    function IPSController($scope, $timeout, IPS, Navigator) {
+    function IPSController($scope, $timeout, Navigator) {
         const vm = this;
 
         let navigator;
