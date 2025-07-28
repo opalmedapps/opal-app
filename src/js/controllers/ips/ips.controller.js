@@ -11,21 +11,28 @@ import '../../../css/views/ips.view.css';
         .module('OpalApp')
         .controller('IPSController', IPSController);
 
-    IPSController.$inject = ['$scope', '$timeout', 'Navigator'];
+    IPSController.$inject = ['$scope', '$timeout', 'Navigator', 'Params', 'ProfileSelector', 'RequestToServer'];
 
-    function IPSController($scope, $timeout, Navigator) {
+    function IPSController($scope, $timeout, Navigator, Params, ProfileSelector, RequestToServer) {
         const vm = this;
 
         let navigator;
 
+        let testData = [
+            {
+                viewer: 'https://viewer.tcpdev.org/',
+            },
+            {
+                viewer: 'https://ipsviewer.com/',
+            },
+        ]
+
+        vm.showFrame = false;
+
         // TODO test data
-        vm.ipsData1 = '#shlink:/eyJ1cmwiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vc2Vhbm5vL3NoYy1kZW1vLWRhdGEvbWFpbi9pcHMvSVBTX0lHLWJ1bmRsZS0wMS1lbmMudHh0IiwiZmxhZyI6IkxVIiwia2V5IjoicnhUZ1lsT2FLSlBGdGNFZDBxY2NlTjh3RVU0cDk0U3FBd0lXUWU2dVg3USIsImxhYmVsIjoiRGVtbyBTSEwgZm9yIElQU19JRy1idW5kbGUtMDEifQ';
-        vm.ipsData2 = '#shlink:/eyJ1cmwiOiJodHRwczovL3NtYXJ0LWhlYWx0aC1saW5rcy1zZXJ2ZXIuY2lyZy53YXNoaW5ndG9uLmVkdS9hcGkvc2hsL2FZY2JqLW9wNDJldDNzTXVwSUdyY1dvQ3JJWklqeTlleHUwWm8wUnlnSW8iLCJmbGFnIjoiIiwia2V5IjoibndJRTRYMGxjYU1ubzl6UHdhRHJ1djVkUDlURDZFN2JIcmF1OXI5S2xEUSIsImxhYmVsIjoiU0hMIGZyb20gMjAyMy0wOS0xMCBlUGF0aWVudERhdmUgIzJiIn0';
-        vm.ipsDataSelected = vm.ipsData1;
-        vm.ipsLink = () => vm.ipsViewerSelected + vm.ipsDataSelected;
-        vm.ipsViewer1 = 'https://viewer.tcpdev.org/';
-        vm.ipsViewer2 = 'https://ipsviewer.com/';
-        vm.ipsViewerSelected = vm.ipsViewer1;
+        vm.ipsDataIndex = 0;
+        vm.ipsDataSelected = undefined;
+        vm.ipsLink = () => testData[vm.ipsDataIndex].viewer + '#' + vm.ipsDataSelected;
         vm.switchViewer = switchViewer;
 
         vm.share = share;
@@ -33,7 +40,31 @@ import '../../../css/views/ips.view.css';
         activate();
 
         function activate() {
-            navigator = Navigator.getNavigator();
+            vm.showFrame = false;
+
+            $timeout(async () => {
+                navigator = Navigator.getNavigator();
+
+                const patient_uuid = ProfileSelector.getActiveProfile()?.patient_uuid || 'fc55f9127bb44544854a1bf4ebb41aed';
+                const requestParams = Params.API.ROUTES.IPS;
+                const formattedParams = {
+                    ...requestParams,
+                    url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid) + vm.ipsDataIndex,
+                };
+
+                try {
+                    console.log('Call API with index', vm.ipsDataIndex);
+                    let result = await RequestToServer.apiRequest(formattedParams);
+                    console.log('Result API', result.data);
+                    vm.ipsDataSelected = result.data;
+                    console.log(result);
+                    console.log('Link', vm.ipsLink());
+                    vm.showFrame = true;
+                }
+                catch (error) {
+                    console.error(error);
+                }
+            });
         }
 
         /**
@@ -50,8 +81,9 @@ import '../../../css/views/ips.view.css';
         }
 
         function switchViewer() {
-            vm.ipsViewerSelected = vm.ipsViewerSelected === vm.ipsViewer1 ? vm.ipsViewer2 : vm.ipsViewer1;
-            vm.ipsDataSelected = vm.ipsDataSelected === vm.ipsData1 ? vm.ipsData2 : vm.ipsData1;
+            vm.ipsDataIndex = vm.ipsDataIndex + 1;
+            if (vm.ipsDataIndex >= testData.length) vm.ipsDataIndex = 0;
+            activate();
         }
     }
 })();

@@ -9,6 +9,8 @@ SPDX-License-Identifier: Apache-2.0
 
     <network-banner></network-banner>
 
+    <!-- TODO handle error case -->
+
     <!-- TODO translate -->
     <div class="panel panel-default ips-outer-panel">
         <div class="panel-heading">
@@ -19,13 +21,17 @@ SPDX-License-Identifier: Apache-2.0
                 Note: non-dynamic demo data
             </div>
             <p>
-                The following link and QR code provide direct viewing access to your patient summary for ? days.
+                The following QR code and associated link provide direct viewing access to your patient summary for ? days.
                 Protect them as you would a password, or your printed medical file.
             </p>
             <p>
                 <img ng-src="{{vm.qrCodeData}}" alt="QR code to open IPS externally" style="margin: auto; display: block"/>
             </p>
-            <p style="border: solid 1px #ddd; padding: 10px; border-radius: 4px; margin: 10px 10px 20px;">
+            <!-- border: solid 1px #ddd; -->
+            <p style="padding: 10px; border-radius: 4px; margin: 10px 10px 0">
+                QR code link:
+            </p>
+            <p style="padding: 10px; border-radius: 4px; margin: 0 10px 20px">
                 <!-- TODO app browser -->
                 <a target="_blank" href="{{vm.ipsLink}}">{{vm.ipsLink}}</a>
             </p>

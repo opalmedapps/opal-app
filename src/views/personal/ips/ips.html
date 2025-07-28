@@ -23,5 +23,5 @@ SPDX-License-Identifier: Apache-2.0
         Switch viewer
     </span>
 
-    <iframe style="height:92%; width:100%" ng-src="{{vm.ipsLink()}}" title="IPS viewer"></iframe>
+    <iframe ng-if="vm.showFrame" style="height:92%; width:100%" ng-src="{{vm.ipsLink()}}" title="IPS viewer"></iframe>
 </ons-page>
