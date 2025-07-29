@@ -55,7 +55,7 @@ SPDX-License-Identifier: Apache-2.0
         <preference name="AndroidPersistentFileLocation" value="Internal"/>
         <preference name="GradlePluginGoogleServicesEnabled" value="true"/>
         <preference name="GradlePluginKotlinEnabled" value="true"/>
-        <preference name="GradlePluginKotlinVersion" value="1.7.10"/>
+        <preference name="GradlePluginKotlinVersion" value="1.9.24"/>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <!-- Security setting; should be false for pen tests and prod builds -->
             <application android:debuggable="${ANDROID_DEBUGGABLE}"/>
@@ -82,12 +82,6 @@ SPDX-License-Identifier: Apache-2.0
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/receiver" mode="merge">
             <receiver android:exported="false"/>
-        </edit-config>
-        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity[@android:name='com.adobe.phonegap.push.PushHandlerActivity']" mode="merge">
-            <activity android:exported="false"/>
-        </edit-config>
-        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity[@android:name='com.adobe.phonegap.push.BackgroundHandlerActivity']" mode="merge">
-            <activity android:exported="false"/>
         </edit-config>
         <resource-file src="google-services.json" target="/app/google-services.json"/>
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/Opal-splash-android-inverse-1400x1400.png"/>

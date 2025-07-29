@@ -23,6 +23,8 @@ const config = {
         serviceStatusURL: "./content/service-status.json",
         // Boolean: whether to show the app's version and build number on the front page.
         showVersionOnInit: true,
+        // String: comma-separated list of languages supported in the system (ISO 639-1 codes) with the first language being the default
+        supportedLanguages: 'en,fr',
         // Boolean: whether to use real (production-ready) hospitals for login. If false, development-specific hospitals are used instead.
         useProductionHospitals: false,
         // Boolean: whether to use a sourcemap when building the web code. Should be false in production.

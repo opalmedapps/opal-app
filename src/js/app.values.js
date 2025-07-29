@@ -51,7 +51,6 @@
                 setPasswordParam: 'PASSWORD',
                 setLanguageParam: 'LANGUAGE',
                 setLanguageParamProperCase: 'Language',
-                settingsLanguageOptions: ['EN', 'FR'],
                 setFontSizeParam: 'FONTSIZE',
                 settingFontOptions: [
                     {size: 'medium', style: 'fontDescMedium', text: 'SMALL'},

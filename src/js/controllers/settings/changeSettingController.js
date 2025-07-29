@@ -66,7 +66,7 @@
                 } else if (parameters === Params.setLanguageParam) {
                     vm.instruction = "SELECT_LANGUAGE";
                     vm.pickLanguage = UserPreferences.getLanguage();
-                    vm.settingsLanguageOptions = Params.settingsLanguageOptions;
+                    vm.settingsLanguageOptions = UserPreferences.getSupportedLanguages();
                 } else if (parameters === Params.setFontSizeParam) {
                     vm.settingFontOptions = Params.settingFontOptions;
                     vm.instruction = "SELECT_FONT_SIZE";
@@ -82,11 +82,11 @@
 
         //Function to change the language
         function changeLanguage(val) {
-            var objectToSend = {};
-            objectToSend.NewValue = val;
-            objectToSend.FieldToChange = Params.setLanguageParamProperCase;
-            RequestToServer.sendRequest('AccountChange', objectToSend);
             UserPreferences.setLanguage(val, true);
+            RequestToServer.sendRequest('AccountChange', {
+                NewValue: val,
+                FieldToChange: Params.setLanguageParamProperCase,
+            });
         }
 
         /**

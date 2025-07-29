@@ -56,7 +56,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PREFERENCES"|translate}}</div>
     <ons-list>
-        <ons-list-item modifier="chevron" ng-click="Ctrl.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-if="Ctrl.multipleLanguageOptions" ng-click="Ctrl.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
             {{"LANGUAGE"|translate}}
             <span class="list-item-note lucent">{{Ctrl.Language}}</span>
         </ons-list-item>

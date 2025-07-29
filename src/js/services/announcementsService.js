@@ -133,25 +133,20 @@
         /**
          *@ngdoc method
          *@name setLanguage
-         *@param {Array} item Array or object with announcements
+         *@param {object[]|object} announcements Array of announcements, or single announcement object.
          *@description Translates the array parameter containing announcements to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
-        function setLanguage(item) {
-            var language = UserPreferences.getLanguage();
-            if (Array.isArray( item )) {
-                for (var i = 0; i < item.length; i++) {
-                    //set language
-                    item[i].Title = (language === 'EN')? item[i].PostName_EN : item[i].PostName_FR;
-                    item[i].Body = (language === 'EN')? item[i].Body_EN : item[i].Body_FR;
-                }
-            }else{
-                //set language if string
-                item.Title = (language ==='EN')? item.PostName_EN : item.PostName_FR;
-                item.Body = (language === 'EN')? item.Body_EN: item.Body_FR;
-            }
+        function setLanguage(announcements) {
+            let language = UserPreferences.getLanguage();
+            let announcementList = Array.isArray(announcements) ? announcements : [announcements];
 
-            return item;
+            announcementList.forEach(announcement => {
+                announcement.Title = announcement[`PostName_${language}`];
+                announcement.Body = announcement[`Body_${language}`];
+            });
+
+            return announcements;
         }
 
         /**
