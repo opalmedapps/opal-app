@@ -19,7 +19,7 @@ import QRCode from 'qrcode';
     function IPSShareController(Navigator) {
         const vm = this;
 
-        vm.ipsData = '';
+        vm.ipsLinkData = '';
         vm.ipsLink = '';
         vm.qrCodeData = '';
 
@@ -27,7 +27,7 @@ import QRCode from 'qrcode';
 
         async function activate() {
             let parameters = Navigator.getParameters();
-            vm.ipsData = parameters.ipsData;
+            vm.ipsLinkData = parameters.ipsLinkData;
             vm.ipsLink = parameters.ipsLink;
 
             try {

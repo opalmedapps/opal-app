@@ -16,26 +16,19 @@ import '../../../css/views/ips.view.css';
     function IPSController($scope, $timeout, Navigator, Params, ProfileSelector, RequestToServer) {
         const vm = this;
 
+        let ipsLinkData = undefined;
         let navigator;
-
-        let testData = [
-            {
-                viewer: 'https://viewer.tcpdev.org/',
-            },
-            {
-                viewer: 'https://ipsviewer.com/',
-            },
+        let viewers = [
+            'https://viewer.tcpdev.org/',
+            'https://ipsviewer.com/',
         ]
+        let viewerIndex = 0;
 
         vm.showFrame = false;
 
-        // TODO test data
-        vm.ipsDataIndex = 0;
-        vm.ipsDataSelected = undefined;
-        vm.ipsLink = () => testData[vm.ipsDataIndex].viewer + '#' + vm.ipsDataSelected;
-        vm.switchViewer = switchViewer;
-
+        vm.ipsLink = () => viewers[viewerIndex] + '#' + ipsLinkData;
         vm.share = share;
+        vm.switchViewer = switchViewer;
 
         activate();
 
@@ -45,20 +38,18 @@ import '../../../css/views/ips.view.css';
             $timeout(async () => {
                 navigator = Navigator.getNavigator();
 
-                const patient_uuid = ProfileSelector.getActiveProfile()?.patient_uuid || 'fc55f9127bb44544854a1bf4ebb41aed';
+                const patient_uuid = ProfileSelector.getActiveProfile()?.patient_uuid;
                 const requestParams = Params.API.ROUTES.IPS;
                 const formattedParams = {
                     ...requestParams,
-                    url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid) + vm.ipsDataIndex,
+                    url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid),
                 };
 
                 try {
-                    console.log('Call API with index', vm.ipsDataIndex);
+                    // TODO handle 404
                     let result = await RequestToServer.apiRequest(formattedParams);
-                    console.log('Result API', result.data);
-                    vm.ipsDataSelected = result.data;
-                    console.log(result);
-                    console.log('Link', vm.ipsLink());
+                    ipsLinkData = result.data;
+                    console.log('Link', vm.ipsLink(), result);
                     vm.showFrame = true;
                 }
                 catch (error) {
@@ -75,14 +66,14 @@ import '../../../css/views/ips.view.css';
          */
         function share(name, url) {
             navigator.pushPage('./views/personal/ips/ips-share.html', {
-                ipsData: vm.ipsDataSelected,
+                ipsLinkData: ipsLinkData,
                 ipsLink: vm.ipsLink(),
             });
         }
 
         function switchViewer() {
-            vm.ipsDataIndex = vm.ipsDataIndex + 1;
-            if (vm.ipsDataIndex >= testData.length) vm.ipsDataIndex = 0;
+            viewerIndex = viewerIndex + 1;
+            if (viewerIndex >= viewers.length) viewerIndex = 0;
             activate();
         }
     }
