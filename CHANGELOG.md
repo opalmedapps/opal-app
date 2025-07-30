@@ -1,3 +1,21 @@
+## [2.2.7](https://github.com/opalmedapps/opal-app/compare/v2.2.6...v2.2.7) (2025-07-30)
+
+
+### Bug Fixes
+
+* add unilingual support ([#1395](https://github.com/opalmedapps/opal-app/issues/1395)) ([b722b3e](https://github.com/opalmedapps/opal-app/commit/b722b3e9db6ac2dd4ac10baf31d5a9d1d98eac84))
+* clean up translations ([#1381](https://github.com/opalmedapps/opal-app/issues/1381)) ([72a8c2c](https://github.com/opalmedapps/opal-app/commit/72a8c2c7c080c9c44746a30e2621c826ffd7c399))
+* **deps:** update babel monorepo (minor) ([#1392](https://github.com/opalmedapps/opal-app/issues/1392)) ([72bdd16](https://github.com/opalmedapps/opal-app/commit/72bdd163130be866eae55ea0fe64dae2afadcf5f))
+* **deps:** update dependency @babel/runtime to v7.28.2 ([#1412](https://github.com/opalmedapps/opal-app/issues/1412)) ([31810ab](https://github.com/opalmedapps/opal-app/commit/31810ab75eea9cce6a299056568b0cd1dc9aded5))
+* **deps:** update dependency @havesource/cordova-plugin-push to v6 ([#1408](https://github.com/opalmedapps/opal-app/issues/1408)) ([d2ec52e](https://github.com/opalmedapps/opal-app/commit/d2ec52e6b6ecfa5d7119eb36078cab2fca411a2e))
+* **deps:** update dependency cordova-android to v14 ([#1403](https://github.com/opalmedapps/opal-app/issues/1403)) ([34902b1](https://github.com/opalmedapps/opal-app/commit/34902b12d315963f14ceb11085a0cc2157433e38))
+* **deps:** update dependency firebase to v12 ([#1409](https://github.com/opalmedapps/opal-app/issues/1409)) ([fd8e559](https://github.com/opalmedapps/opal-app/commit/fd8e5592984d6dcdecd87d63a3119693d704cfba))
+* **deps:** update dependency marked to v15.0.12 ([#1402](https://github.com/opalmedapps/opal-app/issues/1402)) ([fc58702](https://github.com/opalmedapps/opal-app/commit/fc58702e9ea63a38a78cbca2d6e0ec81775e236e))
+* **deps:** update plotly packages to v3.0.2 (patch) ([#1406](https://github.com/opalmedapps/opal-app/issues/1406)) ([1ae73a0](https://github.com/opalmedapps/opal-app/commit/1ae73a0b9a2737cf0ce367e28c9b242f61472ff4))
+* **deps:** update plotly packages to v3.0.3 (patch) ([#1411](https://github.com/opalmedapps/opal-app/issues/1411)) ([144067f](https://github.com/opalmedapps/opal-app/commit/144067f31a8018b6ae07f74c350874ba4047ab65))
+* ensure that security answer input field can be selected on iOS ([#1378](https://github.com/opalmedapps/opal-app/issues/1378)) ([8c73ba6](https://github.com/opalmedapps/opal-app/commit/8c73ba661fcf249203d150922fb8dc8c38cd3c16))
+* remove false untranslated string warnings from the init page ([#1376](https://github.com/opalmedapps/opal-app/issues/1376)) ([767b57c](https://github.com/opalmedapps/opal-app/commit/767b57c063c4448a29f99e9290a717107b689ce2))
+
 ## [2.2.6](https://github.com/opalmedapps/opal-app/compare/v2.2.5...v2.2.6) (2025-04-29)
 
 
