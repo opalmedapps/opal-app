@@ -24,6 +24,9 @@ import '../../../css/views/ips.view.css';
         ]
         let viewerIndex = 0;
 
+        vm.alertType = Params.alertTypeDanger;
+        vm.loading = false;
+        vm.loadingError = false;
         vm.showFrame = false;
 
         vm.ipsLink = () => viewers[viewerIndex] + '#' + ipsLinkData;
@@ -33,6 +36,7 @@ import '../../../css/views/ips.view.css';
         activate();
 
         function activate() {
+            vm.loading = true;
             vm.showFrame = false;
 
             $timeout(async () => {
@@ -54,6 +58,10 @@ import '../../../css/views/ips.view.css';
                 }
                 catch (error) {
                     console.error(error);
+                    vm.loadingError = true;
+                }
+                finally {
+                    vm.loading = false;
                 }
             });
         }
@@ -74,7 +82,6 @@ import '../../../css/views/ips.view.css';
         function switchViewer() {
             viewerIndex = viewerIndex + 1;
             if (viewerIndex >= viewers.length) viewerIndex = 0;
-            activate();
         }
     }
 })();

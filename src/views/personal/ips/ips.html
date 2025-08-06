@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="IPSController as vm">
     <generic-toolbar title="{{'IPS_FULL'|translate}}" style-class="fontSizeTitle">
         <right-content>
-            <ons-toolbar-button ng-click="vm.share()" id="buttonShareMaterial">
+            <ons-toolbar-button ng-if="!vm.loading && !vm.loadingError" ng-click="vm.share()" id="buttonShareMaterial">
                 <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
             </ons-toolbar-button>
         </right-content>
@@ -23,7 +23,14 @@ SPDX-License-Identifier: Apache-2.0
         Switch viewer
     </span>
 
-    <!-- TODO add loading wheel -->
+    <!-- Loading Wheel -->
+    <loading-spinning-circle ng-show="vm.loading" loading-message="{{'LOADING'|translate}}"></loading-spinning-circle>
 
-    <iframe ng-if="vm.showFrame" style="height:92%; width:100%" ng-src="{{vm.ipsLink()}}" title="IPS viewer"></iframe>
+    <!-- Error Message -->
+    <div ng-show="vm.loadingError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="{{vm.alertType}}">{{"LOADING_ERROR"|translate}}</uib-alert>
+    </div>
+
+    <!-- IPS Viewer -->
+    <iframe ng-if="vm.showFrame && !vm.loading" style="height:92%; width:100%" ng-src="{{vm.ipsLink()}}" title="IPS viewer"></iframe>
 </ons-page>
