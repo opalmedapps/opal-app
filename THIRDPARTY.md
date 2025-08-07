@@ -399,10 +399,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
-### Notes
-
-We use the extended long-term support version provided by HeroDevs (paid service).
-
 ## angular-animate
 
 * Homepage: http://angularjs.org
@@ -432,10 +428,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
-
-### Notes
-
-We use the extended long-term support version provided by HeroDevs (paid service).
 
 ## angular-dynamic-locale
 
@@ -497,10 +489,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
-### Notes
-
-We use the extended long-term support version provided by HeroDevs (paid service).
-
 ## angular-touch
 
 * Homepage: http://angularjs.org
@@ -530,10 +518,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
-
-### Notes
-
-We use the extended long-term support version provided by HeroDevs (paid service).
 
 ## angular-translate
 

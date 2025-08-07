@@ -55,7 +55,6 @@ jobs:
       - name: Set up build
         uses: ./.github/actions/build-setup
         with:
-          NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
           ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
           ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
 
