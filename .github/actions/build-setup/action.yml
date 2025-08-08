@@ -6,9 +6,6 @@ name: Build App Setup
 description: Setup before building the app
 
 inputs:
-  NPMRC_FILE:
-    description: 'Secret with the contents of .npmrc'
-    required: true
   ENV_CONFIG_JS:
     description: 'Contents of the file `opal.config.js` for the given environment'
     required: true
@@ -22,8 +19,6 @@ runs:
     # Install dependencies
     - name: Install dependencies
       uses: ./.github/actions/install-dependencies
-      with:
-        NPMRC_FILE: ${{ inputs.NPMRC_FILE }}
 
     # Initialize the environment files needed to build the app from repository-level Actions variables
     - name: Load environment files

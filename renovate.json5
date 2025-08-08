@@ -31,13 +31,12 @@
     // Group auxiliary angular-related updates
     {
       "matchDepPatterns": ["^angular"],
-      "excludePackagePatterns": ["^@neverendingsupport/"],
       "groupName": "auxiliary angular packages"
     },
-    // Group AngularJS Never-Ending Support updates (from HeroDevs)
+    // Group angular-translate updates
     {
-      "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
-      "groupName": "angularjs NES packages"
+      "matchPackagePatterns": ["^angular-translate"],
+      "groupName": "angular-translate packages"
     },
     // Rate-limit firebase-tools updates: first day of each month
     {
@@ -63,11 +62,6 @@
     {
       "matchPackagePatterns": ["-loader$"],
       "groupName": "webpack loader packages",
-    },
-    // Group angular-translate updates
-    {
-      "matchPackagePatterns": ["^angular-translate"],
-      "groupName": "angular-translate packages"
     },
   ],
 }

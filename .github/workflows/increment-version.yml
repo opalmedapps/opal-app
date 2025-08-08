@@ -26,8 +26,6 @@ jobs:
           fetch-depth: ${{ vars.FETCH_DEPTH }}
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
-        with:
-          NPMRC_FILE: ${{ secrets.NPMRC_FILE }}
 
       # Increment the version
       - name: Run semantic-release
