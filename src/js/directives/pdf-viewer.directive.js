@@ -9,7 +9,7 @@
  *         Refactored as a directive by Stacey Beard, Aug 2021 (pdf-viewer.directive.js).
  */
 // See: https://github.com/mozilla/pdf.js/tree/master/examples/webpack
-import * as pdfjsLib from 'pdfjs-dist/webpack.mjs';
+import * as pdfjsLib from '../../lib/pdfjs_legacy_webpack.mjs';
 
 (function () {
     'use strict';
