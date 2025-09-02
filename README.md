@@ -195,6 +195,14 @@ You may choose to simply execute `cordova run ios`, if you know there already ex
 The app includes dynamically loaded pages such as `Terms of Use`, `Service Agreement`, `About`, etc., which are retrieved from an external server. On startup, it
 downloads a configuration file for this external content based on the `externalContentFileURL` setting in `opal.config.js`. **For testing purposes**, you can include the external configuration and content files in the webpack build, allowing them to be accessed as regular local static files. Follow the instructions in [the content folder's README](./content/README.md) to use the external content samples.
 
+### Password Reset
+
+To support password reset in the Opal app, a standalone web page must be deployed,
+which redirects users from password reset emails to the right page in the app.
+
+To deploy this webpage, follow the steps related to the password reset redirect page
+in [Pushing a Webpage to Firebase](./docs/deployment/firebase-webpage-deployment.md).
+
 ## Troubleshooting
 
 If you are getting errors during your installation, here are some things you can try.
