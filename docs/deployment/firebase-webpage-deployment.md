@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Pushing a Webpage to Firebase
 
 Firebase projects provide free hosting for a webpage, via [Firebase Hosting](https://firebase.google.com/docs/hosting/quickstart).
