@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import "./configs/firebase.config";
+import "./configs/i18n.config.js";
 import "./configs/qProvider.config";
 import "./configs/imageSanitation.config";
 import "./configs/translation.config";

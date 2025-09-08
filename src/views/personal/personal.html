@@ -159,6 +159,21 @@ SPDX-License-Identifier: Apache-2.0
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
+                           ng-click="personalNavigator.pushPage('./views/init/react-tutorial.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-atom" size="2x" style="color:#61DAFB"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"REACT_FEATURE"|translate}}</span>
+                        </header>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
                 ng-if="tab.allowedModules.hasOwnProperty('SMD') && tab.allowedModules['SMD']"
                 ng-click="personalNavigator.pushPage('views/smartdevices/smartdevices.html')">
                 <ons-row align="center">

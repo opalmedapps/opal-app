@@ -38,6 +38,11 @@
       "matchPackagePatterns": ["^angular-translate"],
       "groupName": "angular-translate packages"
     },
+    // Group React translation updates
+    {
+      "matchPackagePatterns": ["i18n"],
+      "groupName": "react translation packages"
+    },
     // Rate-limit firebase-tools updates: first day of each month
     {
       "matchPackageNames": ["firebase-tools"],
@@ -63,5 +68,10 @@
       "matchPackagePatterns": ["-loader$"],
       "groupName": "webpack loader packages",
     },
+    // Group babel updates
+    {
+      "matchPackagePatterns": ["babel"],
+      "groupName": "babel packages",
+    }
   ],
 }

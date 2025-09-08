@@ -88,7 +88,7 @@ const config = env => {
 					loader: 'raw-loader',
 				},
 				{
-					test: /\.m?js$/,
+					test: /\.(js|mjs|jsx)$/,
 					// See: https://www.npmjs.com/package/babel-loader#some-files-in-my-node_modules-are-not-transpiled-for-ie-11
 					exclude: {
 						// By default, exclude all node_modules (recommended by babel-loader)
@@ -101,7 +101,10 @@ const config = env => {
 					use: {
 						loader: 'babel-loader',
 						options: {
-							presets: ['@babel/preset-env'],
+							presets: [
+								'@babel/preset-env',
+								'@babel/preset-react',
+							],
 							plugins: [
 								["@babel/plugin-transform-runtime", {
 									// Note: this option will be removed with @babel/core version 8

@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import i18n from 'i18next';
+
 import {Observer} from "../models/utility/observer";
 
 /**
@@ -144,6 +146,11 @@ import {Observer} from "../models/utility/observer";
 
             if (isAuthenticated) window.localStorage.setItem('Language', language);
             languageObserver.notify();
+
+            // Configuration for translations in React
+            i18n.changeLanguage(languageLower, error => {
+                if (error) console.error('Error during i18n configuration for React', error);
+            });
         }
 
         /**
