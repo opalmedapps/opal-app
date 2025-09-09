@@ -1,0 +1,15 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-modal var="versionModal">
+    <div id="rcorners">
+        <h3>{{"UPDATE_AVAILABLE"|translate}}</h3>
+        <i class="fa-solid fa-mobile-screen-button" style="font-size:40px"></i>
+        <p style="margin-top: 5%" class="secure-message">{{"SECURE_PHONE"|translate}}</p>
+        <p class="unattended-message">{{"UNATTENDED"|translate}}</p>
+        <ons-button style="margin-top: 5%" ng-click="versionModal.hide()">{{"CLOSE"|translate}}</ons-button>
+    </div>
+</ons-modal>
