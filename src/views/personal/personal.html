@@ -36,6 +36,23 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+            <ons-list-item modifier="chevron"
+                ng-if="tab.accessLevelAll && tab.allowedModules.hasOwnProperty('DIA') && tab.allowedModules['DIA']" class="item"
+                ng-click="personalNavigator.pushPage('views/personal/diagnoses/diagnoses.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <i class="fa-solid fa-stethoscope fa18x" style="color: #994741"></i>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"DIAGNOSIS"|translate}} ({{"REACT_FEATURE"|translate}})</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                 ng-if="tab.allowedModules.hasOwnProperty('APT') && tab.allowedModules['APT']"
                 ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">

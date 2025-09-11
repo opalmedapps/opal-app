@@ -21,15 +21,14 @@
 
     angular
         .module('OpalApp')
-        .controller('DiagnosesController', DiagnosesController);
+        .controller('DiagnosesControllerLegacy', DiagnosesControllerLegacy);
 
     /* @ngInject */
-    DiagnosesController.$inject = ['Diagnoses','UserPreferences'];
+    DiagnosesControllerLegacy.$inject = ['Diagnoses','UserPreferences'];
 
 
-    function DiagnosesController(Diagnoses, UserPreferences) {
+    function DiagnosesControllerLegacy(Diagnoses, UserPreferences) {
         var vm = this;
-        vm.title = 'DiagnosesController';
         vm.diagnoses = [];
         vm.language = '';
         vm.noDiagnosis = false;
