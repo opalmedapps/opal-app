@@ -15,22 +15,22 @@ SPDX-License-Identifier: Apache-2.0
 
     <network-banner></network-banner>
 
-    <span style="margin: 10px; background-color: #e3e3e3; color: #6f6f6f" class="text-badge">
-        {{"IPS_PROTOTYPE"|translate}}
-    </span>
-    <span style="background-color: #b9dce8; color: #475f78; float: right; margin: 10px;" class="text-badge"
-          ng-click="vm.switchViewer()">
+    <!-- PROTOTYPE BADGE -->
+    <span class="text-badge ips-prototype-badge" style="margin: 10px">{{"IPS_PROTOTYPE"|translate}}</span>
+
+    <!-- BUTTON TO SWITCH VIEWER -->
+    <span class="text-badge ips-viewer-badge" ng-click="vm.switchViewer()">
         {{"IPS_SWITCH_VIEWER"|translate}}
     </span>
 
-    <!-- Loading Wheel -->
+    <!-- LOADING WHEEL -->
     <loading-spinning-circle ng-show="vm.loading" loading-message="{{'LOADING'|translate}}"></loading-spinning-circle>
 
-    <!-- Error Message -->
+    <!-- ERROR -->
     <div ng-show="vm.loadingError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
         <uib-alert type="{{vm.alertType}}">{{"LOADING_ERROR"|translate}}</uib-alert>
     </div>
 
-    <!-- IPS Viewer -->
-    <iframe ng-if="vm.showFrame && !vm.loading" style="height:92%; width:100%" ng-src="{{vm.ipsLink()}}" title="IPS viewer"></iframe>
+    <!-- IPS VIEWER -->
+    <iframe ng-if="vm.showFrame && !vm.loading" ng-src="{{vm.ipsLink()}}" title="{{'IPS_VIEWER_ALT'|translate}}" class="ips-iframe"></iframe>
 </ons-page>

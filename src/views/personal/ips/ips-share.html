@@ -13,20 +13,24 @@ SPDX-License-Identifier: Apache-2.0
         <div class="panel-heading">
             <h3 class="panel-title">{{"SHARE"|translate}}</h3>
         </div>
-        <div style="margin: 10px">
-            <div style="margin-bottom: 10px; background-color: #e3e3e3; color: #6f6f6f" class="text-badge">
-                {{"IPS_PROTOTYPE"|translate}}
-            </div>
+        <div class="ips-outer-panel">
+
+            <!-- PROTOTYPE BADGE -->
+            <div class="text-badge ips-prototype-badge" style="margin-bottom: 10px">{{"IPS_PROTOTYPE"|translate}}</div>
+
+            <!-- DESCRIPTION -->
             <p>{{"IPS_QR_CODE_DESCRIPTION"|translate}}</p>
+
+            <!-- QR CODE -->
             <p>
-                <img ng-src="{{vm.qrCodeData}}" alt="{{'IPS_QR_CODE_ALT'|translate}}" style="margin: auto; display: block"/>
+                <img class="ips-qr-code" ng-src="{{vm.qrCodeData}}" alt="{{'IPS_QR_CODE_ALT'|translate}}"/>
             </p>
-            <p style="padding: 10px; border-radius: 4px; margin: 10px 10px 0">
-                {{"IPS_QR_CODE_LINK"|translate}}
-            </p>
-            <p ng-click="vm.openIpsLink()" style="padding: 10px; border-radius: 4px; margin: 0 10px 20px; color: #337AB7">
-                {{vm.ipsLink}}
-            </p>
+
+            <!-- LINK LABEL -->
+            <p class="ips-link-label">{{"IPS_QR_CODE_LINK"|translate}}</p>
+
+            <!-- QR CODE LINK -->
+            <p class="ips-link" ng-click="vm.openIpsLink()">{{vm.ipsLink}}</p>
         </div>
     </div>
 </ons-page>

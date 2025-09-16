@@ -99,6 +99,7 @@
   "IPS_QR_CODE_DESCRIPTION": "Le code QR suivant et l'hyperlien représenté par celui-ci permettent de visualiser directement votre résumé de dossier patient. Protégez-les comme vous le feriez avec un mot de passe ou une copie imprimée de votre dossier médical.",
   "IPS_QR_CODE_LINK": "Hyperlien du code QR :",
   "IPS_SWITCH_VIEWER": "Changer de vue",
+  "IPS_VIEWER_ALT": "Visualiseur du résumé de dossier patient",
   "LABELS": "Étiquettes",
   "LAB_BY_DATE": "Date",
   "LAB_BY_TYPE": "Type",

@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+.ips-iframe {
+    height: 92%;
+    width: 100%;
+}
+
 .ips-outer-panel {
     margin: 10px;
 }
@@ -14,4 +19,34 @@
 
 .ips-outer-panel .panel-title {
     font-size: 1em;
+}
+
+.ips-prototype-badge {
+    background-color: #e3e3e3;
+    color: #6f6f6f;
+}
+
+.ips-qr-code {
+    display: block;
+    margin: auto;
+}
+
+.ips-link {
+    border-radius: 4px;
+    color: #337ab7;
+    margin: 0 10px 20px;
+    padding: 10px;
+}
+
+.ips-link-label {
+    border-radius: 4px;
+    margin: 10px 10px 0;
+    padding: 10px;
+}
+
+.ips-viewer-badge {
+    background-color: #b9dce8;
+    color: #475f78;
+    float: right;
+    margin: 10px;
 }

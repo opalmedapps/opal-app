@@ -99,6 +99,7 @@
   "IPS_QR_CODE_DESCRIPTION": "The following QR code and associated link provide direct viewing access to your patient summary. Protect them as you would a password, or your printed medical file.",
   "IPS_QR_CODE_LINK": "QR code link:",
   "IPS_SWITCH_VIEWER": "Switch viewer",
+  "IPS_VIEWER_ALT": "IPS viewer",
   "LABELS": "Labels",
   "LAB_BY_DATE": "By Date",
   "LAB_BY_TYPE": "By Type",
