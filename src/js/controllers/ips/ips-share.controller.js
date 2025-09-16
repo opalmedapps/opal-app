@@ -11,14 +11,16 @@ import QRCode from 'qrcode';
         .module('OpalApp')
         .controller('IPSShareController', IPSShareController);
 
-    IPSShareController.$inject = ['Navigator'];
+    IPSShareController.$inject = ['Browser', 'Navigator'];
 
-    function IPSShareController(Navigator) {
+    function IPSShareController(Browser, Navigator) {
         const vm = this;
 
         vm.ipsLinkData = '';
         vm.ipsLink = '';
         vm.qrCodeData = '';
+
+        vm.openIpsLink = openIpsLink;
 
         activate();
 
@@ -33,6 +35,13 @@ import QRCode from 'qrcode';
             catch (err) {
                 console.error(err);
             }
+        }
+
+        /**
+         * @description Opens the IPS outside of the app in an external viewer.
+         */
+        function openIpsLink() {
+            Browser.openExternal(vm.ipsLink);
         }
     }
 })();

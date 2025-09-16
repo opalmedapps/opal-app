@@ -9,8 +9,6 @@ SPDX-License-Identifier: Apache-2.0
 
     <network-banner></network-banner>
 
-    <!-- TODO handle error case -->
-
     <div class="panel panel-default ips-outer-panel">
         <div class="panel-heading">
             <h3 class="panel-title">{{"SHARE"|translate}}</h3>
@@ -26,9 +24,8 @@ SPDX-License-Identifier: Apache-2.0
             <p style="padding: 10px; border-radius: 4px; margin: 10px 10px 0">
                 {{"IPS_QR_CODE_LINK"|translate}}
             </p>
-            <p style="padding: 10px; border-radius: 4px; margin: 0 10px 20px">
-                <!-- TODO app browser -->
-                <a target="_blank" href="{{vm.ipsLink}}">{{vm.ipsLink}}</a>
+            <p ng-click="vm.openIpsLink()" style="padding: 10px; border-radius: 4px; margin: 0 10px 20px; color: #337AB7">
+                {{vm.ipsLink}}
             </p>
         </div>
     </div>
