@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import '../../../css/views/ips.view.css';
+import ipsViewers from '../../constants/ips-viewers.constants.js';
 
 (function () {
     'use strict';
@@ -18,10 +19,6 @@ import '../../../css/views/ips.view.css';
 
         let ipsLinkData = undefined;
         let navigator;
-        let viewers = [
-            'https://viewer.commonhealth.org/',
-            'https://ipsviewer.com/',
-        ]
         let viewerIndex = 0;
 
         vm.alertType = Params.alertTypeDanger;
@@ -29,7 +26,7 @@ import '../../../css/views/ips.view.css';
         vm.loadingError = false;
         vm.showFrame = false;
 
-        vm.ipsLink = () => viewers[viewerIndex] + '#' + ipsLinkData;
+        vm.ipsLink = () => ipsViewers[viewerIndex] + '#' + ipsLinkData;
         vm.share = share;
         vm.switchViewer = switchViewer;
 
@@ -73,7 +70,7 @@ import '../../../css/views/ips.view.css';
 
         function switchViewer() {
             viewerIndex = viewerIndex + 1;
-            if (viewerIndex >= viewers.length) viewerIndex = 0;
+            if (viewerIndex >= ipsViewers.length) viewerIndex = 0;
         }
     }
 })();
