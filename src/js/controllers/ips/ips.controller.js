@@ -17,8 +17,17 @@ import ipsViewers from '../../constants/ips-viewers.constants.js';
     function IPSController($scope, $timeout, Navigator, Params, ProfileSelector, RequestToServer) {
         const vm = this;
 
-        let ipsLinkData = undefined;
         let navigator;
+
+        /**
+         * @description SMART Health Link data for the IPS, which usually follows # in the URL when passed to an IPS viewer.
+         */
+        let ipsLinkData;
+
+        /**
+         * @description Keeps track of the IPS viewer currently being used.
+         * @type {number}
+         */
         let viewerIndex = 0;
 
         vm.alertType = Params.alertTypeDanger;
@@ -61,6 +70,9 @@ import ipsViewers from '../../constants/ips-viewers.constants.js';
             });
         }
 
+        /**
+         * @description Opens the IPS sharing view.
+         */
         function share() {
             navigator.pushPage('./views/personal/ips/ips-share.html', {
                 ipsLinkData: ipsLinkData,
@@ -68,6 +80,9 @@ import ipsViewers from '../../constants/ips-viewers.constants.js';
             });
         }
 
+        /**
+         * @description Cycles through which viewer is currently being used, and saves this information as the viewerIndex.
+         */
         function switchViewer() {
             viewerIndex = viewerIndex + 1;
             if (viewerIndex >= ipsViewers.length) viewerIndex = 0;
