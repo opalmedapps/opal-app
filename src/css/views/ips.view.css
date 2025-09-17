@@ -32,14 +32,12 @@
 }
 
 .ips-link {
-    border-radius: 4px;
     color: #337ab7;
     margin: 0 10px 20px;
     padding: 10px;
 }
 
 .ips-link-label {
-    border-radius: 4px;
     margin: 10px 10px 0;
     padding: 10px;
 }
