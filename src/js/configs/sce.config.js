@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import ipsViewerUrls from '../constants/ips-viewers.constants.js';
+import ipsViewerUrl from '../constants/ips-viewer.constants.js';
 
 (function () {
     'use strict';
@@ -22,8 +22,8 @@ import ipsViewerUrls from '../constants/ips-viewers.constants.js';
             // Allow same origin resource loads
             'self',
         ].concat(
-            // Allow loading from IPS viewers (iframe)
-            ipsViewerUrls.map(url => url + '**')
+            // Allow loading from the IPS viewer (iframe)
+            ipsViewerUrl + '**'
         ));
     }
 })();

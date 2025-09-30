@@ -3,12 +3,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /*
- * The list of IPS viewers is provided here as a simple export to be available both early in the app's
+ * The IPS viewer URL is provided here as a simple export to be available both early in the app's
  * configuration phase (to $sceDelegateProvider) and after configuration (to the IPS controller).
  *
- * Each URL must end in a forward slash.
+ * The URL must end in a forward slash.
  */
-export default [
-    'https://viewer.commonhealth.org/',
-    'https://ipsviewer.com/',
-]
+export default 'https://viewer.commonhealth.org/';
