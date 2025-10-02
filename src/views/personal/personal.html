@@ -86,6 +86,23 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+
+            <!-- IPS -->
+            <ons-list-item modifier="chevron" class="item"
+                           ng-click="personalNavigator.pushPage('views/personal/ips/ips-description.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon icon="fa-receipt" size="2x" style="color: #708ee9"></ons-icon>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"IPS_FULL"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
             <ons-list-item modifier="chevron" class="item"
                 ng-if="tab.allowedModules.hasOwnProperty('TTM') && tab.allowedModules['TTM']"
                 ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">

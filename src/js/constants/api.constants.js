@@ -72,7 +72,11 @@
                 DATABANK_CONSENT: {
                     method: 'post',
                     url: '/api/patients/<PATIENT_UUID>/databank/consent/'
-                }
+                },
+                IPS: {
+                    method: 'get',
+                    url: '/api/patients/<PATIENT_UUID>/ips/',
+                },
             }
         });
 })();

@@ -1,0 +1,23 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="IPSDescriptionController as vm">
+    <generic-toolbar title="{{'IPS_SHORT'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <network-banner></network-banner>
+
+    <div class="ips--description">
+        <!-- IPS DESCRIPTION -->
+        <p>{{"IPS_DESCRIPTION_PART_1"|translate}}</p>
+        <p>{{"IPS_DESCRIPTION_PART_2"|translate}}</p>
+
+        <!-- BUTTON TO OPEN IPS -->
+        <button class="button button--large shadow-2 button--large-blue ips--button-preview-share"
+                ng-click="vm.openPreviewOrShare()">
+            {{"IPS_PREVIEW_OR_SHARE"|translate}}
+        </button>
+    </div>
+</ons-page>
