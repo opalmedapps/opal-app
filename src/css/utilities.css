@@ -75,14 +75,3 @@
 	color: #2B6197;
 	text-align: center;
 }
-
-.text-badge {
-	background-color: #3584ff;
-	border-radius: 4px;
-	color: #fff;
-	display: inline-block;
-	font-size: 0.8em;
-	margin-bottom: 6px;
-	padding: 0 4px;
-	word-break: break-word;
-}
