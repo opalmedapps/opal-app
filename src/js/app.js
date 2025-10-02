@@ -106,6 +106,10 @@ import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
 
+// Mantine
+// Core styles are required for all packages
+import '@mantine/core/styles.css';
+
 //Routes for angular views
 angular
     .module('OpalApp', ['tmh.dynamicLocale','pascalprecht.translate',

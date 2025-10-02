@@ -4,7 +4,12 @@
 
 import React from 'react';
 import { StrictMode } from 'react';
-import {createRoot} from "react-dom/client";
+import { createRoot } from "react-dom/client";
+import { createTheme, MantineProvider } from '@mantine/core';
+
+const theme = createTheme({
+    /** Put your mantine theme override here */
+});
 
 import DiagnosesComponent from "../../react/Diagnoses.js";
 
@@ -27,7 +32,9 @@ import DiagnosesComponent from "../../react/Diagnoses.js";
             const root = createRoot(rootElement);
             root.render(
                 <StrictMode>
-                    <DiagnosesComponent diagnoses={Diagnoses.getDiagnoses()} />
+                    <MantineProvider theme={theme}>
+                        <DiagnosesComponent diagnoses={Diagnoses.getDiagnoses()} />
+                    </MantineProvider>
                 </StrictMode>
             );
         }

@@ -96,6 +96,8 @@ const config = env => {
 						not: [
 							// Use babel to transpile pdfjs, which includes modern syntax that crashes on old devices (e.g. on iOS 16).
 							/pdfjs-dist/,
+							// Fix error: node_modules\node-stdlib-browser\cjs\proxy\process failed to resolve only because it was resolved as fully specified [...] The extension in the request is mandatory for it to be fully specified.
+							/@mantine/,
 						]
 					},
 					use: {
@@ -122,7 +124,25 @@ const config = env => {
 				},
 				{
 					test: /\.css$/,
-					use: ['style-loader', 'css-loader']
+					use: [
+						'style-loader',
+						'css-loader',
+						{
+							loader: 'postcss-loader',
+							options: {
+								postcssOptions: {
+									plugins: [
+										[
+											'postcss-preset-env',
+											{
+												// Options
+											},
+										],
+									],
+								},
+							},
+						},
+					],
 				},
 				{
 					test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
