@@ -4,6 +4,12 @@ import { initReactI18next } from 'react-i18next';
 import enTopLevel from '../../Languages/appTranslationTablesViews/top-view/en.json';
 import frTopLevel from '../../Languages/appTranslationTablesViews/top-view/fr.json';
 
+// TODO load later
+import enLogin from '../../Languages/appTranslationTablesViews/login/en.json';
+import frLogin from '../../Languages/appTranslationTablesViews/login/fr.json';
+import enAllViews from '../../Languages/appTranslationTablesViews/all-views/en.json';
+import frAllViews from '../../Languages/appTranslationTablesViews/all-views/fr.json';
+
 // See: https://locize.com/blog/react-i18next
 i18n
     // Connect the i18n instance to react-i18next
@@ -21,10 +27,18 @@ i18n
         },
         resources: {
             en: {
-                translation: enTopLevel,
+                translation: {
+                    ...enTopLevel,
+                    ...enLogin,
+                    ...enAllViews,
+                },
             },
             fr: {
-                translation: frTopLevel,
+                translation: {
+                    ...frTopLevel,
+                    ...frLogin,
+                    ...frAllViews,
+                },
             },
         }
     });
