@@ -76,7 +76,7 @@
                 IPS: {
                     method: 'get',
                     url: '/api/patients/<PATIENT_UUID>/ips/',
-                }
+                },
             }
         });
 })();
