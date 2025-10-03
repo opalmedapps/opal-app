@@ -46,7 +46,7 @@ jobs:
       # Setup
       - name: Print environment
         run: echo "Environment = $ENVIRONMENT"
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.3.0
         with:
           persist-credentials: false
           # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
@@ -82,7 +82,7 @@ jobs:
       # Setup
       - name: Print environment
         run: echo "Environment = $ENVIRONMENT"
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.3.0
         with:
           persist-credentials: false
           # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
@@ -158,7 +158,7 @@ jobs:
     if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
     steps:
       # Setup
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.3.0
         with:
           persist-credentials: false
       - name: Download Android build artifact
@@ -192,7 +192,7 @@ jobs:
     if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
     steps:
       # Setup
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.3.0
         with:
           persist-credentials: false
       - name: Download iOS build artifact
