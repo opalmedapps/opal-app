@@ -19,14 +19,14 @@ export default function Diagnoses({ diagnoses }) {
             <Table.Td>
                 <Group gap="sm">
                     <i className="fa-solid fa-stethoscope fa14x" style={{color: '#994741'}} />
-                    <Text fz="sm" fw={500}>
+                    <Text fz="md" fw={500}>
                         {diagnosis[`Description_${language}`]}
                     </Text>
                 </Group>
             </Table.Td>
 
             <Table.Td>
-                <Text fz="sm" fw={500}>
+                <Text fz="md" fw={500}>
                     {t('intlDateTime', {
                         val: diagnosis.CreationDate,
                         formatParams: {

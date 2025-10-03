@@ -8,7 +8,7 @@ import { createRoot } from "react-dom/client";
 import { createTheme, MantineProvider } from '@mantine/core';
 
 const theme = createTheme({
-    /** Put your mantine theme override here */
+    scale: 1.6,
 });
 
 import DiagnosesComponent from "../../react/Diagnoses.js";
