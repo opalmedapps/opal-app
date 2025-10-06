@@ -1,6 +1,11 @@
+// SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
+import universalLocalizations from '../../Languages/appTranslationTablesViews/localization/all-languages.json';
 import enTopLevel from '../../Languages/appTranslationTablesViews/top-view/en.json';
 import frTopLevel from '../../Languages/appTranslationTablesViews/top-view/fr.json';
 
@@ -28,6 +33,7 @@ i18n
         resources: {
             en: {
                 translation: {
+                    ...universalLocalizations,
                     ...enTopLevel,
                     ...enLogin,
                     ...enAllViews,
@@ -35,6 +41,7 @@ i18n
             },
             fr: {
                 translation: {
+                    ...universalLocalizations,
                     ...frTopLevel,
                     ...frLogin,
                     ...frAllViews,

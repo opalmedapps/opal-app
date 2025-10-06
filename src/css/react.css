@@ -1,4 +1,19 @@
-/* Source: https://react.dev/learn/tutorial-tic-tac-toe */
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.list-header {
+    padding: 4px 8px;
+}
+
+.list-item {
+    padding: 10px;
+    border-bottom: #DDD 1px solid;
+}
+
+/* Tic-Tac-Toe Tutorial - Source: https://react.dev/learn/tutorial-tic-tac-toe */
 
 .square {
     background: #fff;
@@ -37,3 +52,5 @@
 .game-info {
     margin-left: 20px;
 }
+
+/* End of Tic-Tac-Toe Tutorial */

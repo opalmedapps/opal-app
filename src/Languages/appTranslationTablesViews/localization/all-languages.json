@@ -1,0 +1,4 @@
+{
+  "_intlDateTime": "https://www.i18next.com/translation-function/formatting#datetime",
+  "intlDateTime": "{{val, datetime}}"
+}

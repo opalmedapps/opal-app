@@ -21,6 +21,7 @@ path = [
     "content/service-status.sample.json",
     "src/Languages/appTranslationTablesViews/all-views/en.json",
     "src/Languages/appTranslationTablesViews/all-views/fr.json",
+    "src/Languages/appTranslationTablesViews/localization/all-languages.json",
     "src/Languages/appTranslationTablesViews/login/en.json",
     "src/Languages/appTranslationTablesViews/login/fr.json",
     "src/Languages/appTranslationTablesViews/top-view/en.json",

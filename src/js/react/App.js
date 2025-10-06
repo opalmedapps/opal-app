@@ -49,7 +49,7 @@ export default function Board() {
 
     return (
         <>
-            <div className="status">{t('title')}</div>
+            <div className="status">{t('TOUR_WELCOME')}</div>
             <div className="status">{status}</div>
             <div className="board-row">
                 <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
