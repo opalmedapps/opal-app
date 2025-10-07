@@ -5,4 +5,5 @@
 import "./configs/firebase.config";
 import "./configs/qProvider.config";
 import "./configs/imageSanitation.config";
+import "./configs/sce.config.js";
 import "./configs/translation.config";

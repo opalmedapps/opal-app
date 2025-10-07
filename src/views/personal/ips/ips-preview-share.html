@@ -1,0 +1,62 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="IPSPreviewShareController as vm">
+    <generic-toolbar title="{{'IPS_SHORT'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <network-banner></network-banner>
+
+    <!-- LOADING WHEEL -->
+    <loading-spinning-circle ng-show="vm.loading" loading-message="{{'LOADING'|translate}}"></loading-spinning-circle>
+
+    <!-- ERROR -->
+    <div ng-show="vm.loadingError && !vm.showContent" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="{{vm.alertType}}">{{"LOADING_ERROR"|translate}}</uib-alert>
+    </div>
+
+    <!-- SHARE PANEL -->
+    <div ng-if="vm.showContent" class="panel panel-default ips--outer-panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{"SHARE"|translate}}</h3>
+        </div>
+        <div class="ips--inner-panel">
+
+            <!-- SHARE DESCRIPTION -->
+            <div class="ips--description-sharing">
+                <p>
+                    <span>{{"IPS_SHARE_DESCRIPTION_PART_1"|translate}}</span> <span class="ips--qr-expiry">{{"IPS_SHARE_DESCRIPTION_PART_2"|translate}}</span>.
+                </p>
+                <p>{{"IPS_SHARE_DESCRIPTION_PART_3"|translate}}</p>
+                <p>{{"IPS_SHARE_DESCRIPTION_PART_4"|translate}}</p>
+            </div>
+
+            <!-- QR CODE -->
+            <p>
+                <img class="ips--qr-code" ng-src="{{vm.qrCodeData}}" alt="{{'IPS_QR_CODE_ALT'|translate}}"/>
+            </p>
+        </div>
+    </div>
+
+    <!-- PREVIEW PANEL -->
+    <div ng-if="vm.showContent" class="panel panel-default ips--outer-panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{"PREVIEW"|translate}}</h3>
+        </div>
+
+        <!-- BUTTON TO OPEN IN AN EXTERNAL BROWSER -->
+        <button class="button button--large shadow-2 button--large-blue ips--button-external"
+                ng-click="vm.openIpsExternally()">
+            <ons-col>
+                {{"IPS_OPEN_EXTERNAL"|translate}}
+                <!-- "OPEN" ICON -->
+                <ons-icon icon="ion-android-open" style="color: #ddd; margin-top: 8px" class="pull-right" size="1.2em"></ons-icon>
+            </ons-col>
+        </button>
+
+        <!-- IPS VIEWER -->
+        <iframe ng-src="{{vm.ipsLink()}}" title="{{'IPS_VIEWER_ALT'|translate}}" class="ips--iframe"></iframe>
+    </div>
+</ons-page>
