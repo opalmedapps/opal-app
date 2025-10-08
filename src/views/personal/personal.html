@@ -89,7 +89,8 @@ SPDX-License-Identifier: Apache-2.0
 
             <!-- IPS -->
             <ons-list-item modifier="chevron" class="item"
-                           ng-click="personalNavigator.pushPage('views/personal/ips/ips-description.html')">
+                ng-if="tab.accessLevelAll && tab.allowedModules.hasOwnProperty('IPS') && tab.allowedModules['IPS']"
+                ng-click="personalNavigator.pushPage('views/personal/ips/ips-description.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <ons-icon icon="fa-receipt" size="2x" style="color: #708ee9"></ons-icon>
