@@ -20,6 +20,9 @@ ridiculus = "ridiculus"
 # Predefined attributes
 itms = "itms"
 
+# Words in URLs
+commonhealth = "commonhealth"
+
 [default]
 extend-ignore-re = [
     # Commit hashes in CHANGELOG.md
