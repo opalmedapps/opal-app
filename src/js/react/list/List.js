@@ -3,8 +3,26 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
-import { Group, Text } from '@mantine/core';
+import { Group, Stack, Text } from '@mantine/core';
+
+/**
+ * @description A simple vertical list of items. Typically used with ListItem components as children.
+ * @param children The items displayed in the list.
+ */
+export function List({ children }) {
+    return (
+        <Stack
+            bg="var(--mantine-color-body)"
+            align="stretch"
+            justify="flex-start"
+            gap={0}
+        >
+            {children}
+        </Stack>
+    )
+}
 
 /**
  * @description A standard Opal list item with an icon on the left, text in the middle, and an optional chevron at the end.
@@ -27,6 +45,27 @@ export function ListItem({ iconClasses, iconColor, text, showChevron }) {
                 </Group>
                 {optionalChevron}
             </Group>
+        </div>
+    )
+}
+
+/**
+ * @description A simple header used to display a date above some of the items in a list.
+ * @param {Date} date The date to display.
+ */
+export function ListDateHeader({ date }) {
+    const { t } = useTranslation();
+
+    return (
+        <div className="list-header">
+            <Text c="#787878" fz="lg">
+                {t('intlDateTime', {
+                    val: date,
+                    formatParams: {
+                        val: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
+                    },
+                })}
+            </Text>
         </div>
     )
 }

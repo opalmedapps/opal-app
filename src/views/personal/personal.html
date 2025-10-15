@@ -21,7 +21,7 @@ SPDX-License-Identifier: Apache-2.0
         <ons-list style="margin: 0px 0">
             <ons-list-item modifier="chevron"
                 ng-if="tab.accessLevelAll && tab.allowedModules.hasOwnProperty('DIA') && tab.allowedModules['DIA']" class="item"
-                ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
+                ng-click="personalNavigator.pushPage('views/personal/diagnoses/diagnoses.legacy.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -105,7 +105,7 @@ SPDX-License-Identifier: Apache-2.0
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                 ng-if="tab.allowedModules.hasOwnProperty('TTM') && tab.allowedModules['TTM']"
-                ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
+                ng-click="personalNavigator.pushPage('views/personal/treating-team-messages/treating-team-messages.legacy.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon>
@@ -115,7 +115,25 @@ SPDX-License-Identifier: Apache-2.0
                     <ons-col>
                         <header>
                             <span class="item-title"
-                                ng-class="fontSizeTitle">{{"TREATING_TEAM_NOTIFICATIONS"|translate}}</span>
+                                ng-class="fontSizeTitle">{{"TREATING_TEAM_MESSAGES"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                ng-if="tab.allowedModules.hasOwnProperty('TTM') && tab.allowedModules['TTM']"
+                ng-click="personalNavigator.pushPage('views/personal/treating-team-messages/treating-team-messages.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon>
+                        <span class="notification"
+                            ng-show="tab.txTeamMessagesUnreadNumber > 0">{{tab.txTeamMessagesUnreadNumber}}</span>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title"
+                                ng-class="fontSizeTitle">{{"TREATING_TEAM_MESSAGES"|translate}} ({{"REACT_FEATURE"|translate}})</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>

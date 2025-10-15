@@ -153,9 +153,9 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
          *@description Returns TxTeamMessage url to be used by the {@link OpalApp.service:Notifications Notifications Service}.
          *@returns {String} Returns Url for individual TxTeamMessages
          **/
-        getTxTeamMessageUrl:function(serNum)
+        getTxTeamMessageUrl:function()
         {
-            return './views/personal/treatment-team-messages/individual-team-message.html';
+            return './views/personal/treating-team-messages/treating-team-message-individual.legacy.html';
         },
         /**
          *@ngdoc method

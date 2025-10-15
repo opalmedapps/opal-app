@@ -3,25 +3,42 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Stack } from '@mantine/core';
+import { ScrollArea } from '@mantine/core';
 
-import { ListDateHeader } from './list/ListDateHeader.js';
-import { ListItem } from './list/ListItem.js';
+import { List, ListDateHeader, ListItem } from './list/List.js';
 import { ListUtility } from '../models/utility/lists.js';
 
-export default function Diagnoses({ diagnoses }) {
+export default function Diagnoses({ diagnosesService, updateUIService }) {
+    let diagnoses = [];
+    const [diagnosesByDate, setDiagnosesByDate] = useState([]);
+
     const { i18n } = useTranslation();
     const language = i18n.language.toUpperCase();
 
-    // Filter out "N/A" diagnoses
-    diagnoses = diagnoses.filter(e => {
-        return e[`Description_${language}`].toUpperCase() !== 'N/A';
-    });
+    useEffect(() => {
+        async function getData() {
+            // Call to get Diagnoses
+            await updateUIService.getData('Diagnosis');
+            console.log('Call to get Diagnoses');
+            diagnoses = diagnosesService.getDiagnoses();
+            display();
+        }
+        getData();
+        return () => {};
+    }, []);
 
-    // Group diagnoses together by date before displaying
-    const diagnosesByDate = ListUtility.groupByDate(diagnoses, 'CreationDate');
+    function display() {
+        // Filter out "N/A" diagnoses
+        diagnoses = diagnoses.filter(e => {
+            return e[`Description_${language}`].toUpperCase() !== 'N/A';
+        });
+
+        // Group diagnoses together by date before displaying
+        setDiagnosesByDate(ListUtility.groupByDate(diagnoses, 'CreationDate'));
+    }
 
     const rows = Object.entries(diagnosesByDate).map(entry => {
         const [dateString, values] = entry;
@@ -30,12 +47,7 @@ export default function Diagnoses({ diagnoses }) {
             <>
                 {/* DATE HEADER */}
                 <ListDateHeader date={values[0].CreationDate} />
-                <Stack
-                    bg="var(--mantine-color-body)"
-                    align="stretch"
-                    justify="flex-start"
-                    gap={0}
-                >
+                <List>
                     {/* LIST OF DIAGNOSES */}
                     {values.map(diagnosis => (
                         <ListItem
@@ -46,7 +58,7 @@ export default function Diagnoses({ diagnoses }) {
                             showChevron={false}
                         />
                     ))}
-                </Stack>
+                </List>
             </>
         )
     });

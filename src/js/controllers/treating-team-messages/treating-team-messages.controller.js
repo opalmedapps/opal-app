@@ -7,33 +7,34 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createTheme, MantineProvider } from '@mantine/core';
 
+// TODO make reusable
 const theme = createTheme({
     scale: 1.6,
 });
 
-import DiagnosesComponent from '../../react/Diagnoses.js';
+import TreatingTeamMessagesComponent from '../../react/TreatingTeamMessages.js';
 
 (function () {
     angular
         .module('OpalApp')
-        .controller('DiagnosesController', DiagnosesController);
+        .controller('TreatingTeamMessagesController', TreatingTeamMessagesController);
 
     /* @ngInject */
-    DiagnosesController.$inject = ['Diagnoses', 'UpdateUI'];
+    TreatingTeamMessagesController.$inject = ['TxTeamMessages', 'UpdateUI'];
 
-    function DiagnosesController(Diagnoses, UpdateUI) {
+    function TreatingTeamMessagesController(TxTeamMessages, UpdateUI) {
 
         activate();
 
         ////////////////
 
         function activate() {
-            const rootElement = document.getElementById('diagnoses-root');
+            const rootElement = document.getElementById('treating-team-messages-root');
             const root = createRoot(rootElement);
             root.render(
                 <StrictMode>
                     <MantineProvider theme={theme}>
-                        <DiagnosesComponent diagnosesService={Diagnoses} updateUIService={UpdateUI} />
+                        <TreatingTeamMessagesComponent treatingTeamMessagesService={TxTeamMessages} updateUIService={UpdateUI} />
                     </MantineProvider>
                 </StrictMode>
             );

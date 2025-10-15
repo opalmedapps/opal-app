@@ -58,7 +58,7 @@
                     Params.NOTIFICATION_TYPES.TxTeamMessage,
                 );
             }
-            navigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html', {'Post': message});
+            navigator.pushPage('./views/personal/treating-team-messages/treating-team-message-individual.legacy.html', {'Post': message});
         }
     }
 })();

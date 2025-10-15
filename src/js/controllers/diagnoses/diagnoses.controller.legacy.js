@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /*
- * Filename     :   diagnosesController.js
+ * Filename     :   diagnoses.controller.legacy.js
  * Description  :   Manages the diagnosis view.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   27 Apr 2017
