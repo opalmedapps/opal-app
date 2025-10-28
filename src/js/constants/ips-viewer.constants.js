@@ -10,4 +10,4 @@
  *
  * The URL must end in a forward slash.
  */
-export default 'https://viewer.commonhealth.org/';
+export default 'https://viewer.opalmedapps.ca/';
