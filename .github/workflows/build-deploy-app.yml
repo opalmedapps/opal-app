@@ -162,7 +162,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Download Android build artifact
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v6.0.0
         with:
           name: android-app
           run-id: ${{ github.run_id }}
@@ -196,7 +196,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Download iOS build artifact
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v6.0.0
         with:
           name: ios-app
           run-id: ${{ github.run_id }}
