@@ -32,3 +32,8 @@ jobs:
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Configure the commit author/committer to have access to commit to the repository
+          GIT_AUTHOR_EMAIL: ${{ vars.SEMANTIC_RELEASE_GIT_EMAIL }}
+          GIT_AUTHOR_NAME: ${{ vars.SEMANTIC_RELEASE_GIT_NAME }}
+          GIT_COMMITTER_EMAIL: ${{ vars.SEMANTIC_RELEASE_GIT_EMAIL }}
+          GIT_COMMITTER_NAME: ${{ vars.SEMANTIC_RELEASE_GIT_NAME }}
