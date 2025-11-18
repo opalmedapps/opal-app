@@ -21,18 +21,23 @@ jobs:
       # Setup
       - uses: actions/checkout@v5.0.0
         with:
-          persist-credentials: false
           # Fetch part of the commit history, used by semantic-release to calculate a new version number
           fetch-depth: ${{ vars.FETCH_DEPTH }}
+          # Deploy key used to give write access to semantic-release
+          ssh-key: ${{ secrets.SEMANTIC_RELEASE_SSH_PRIVATE_KEY }}
+          # Persist credentials for running with semantic-release
+          persist-credentials: true
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
 
       # Increment the version
       - name: Run semantic-release
+        # Note: semantic-release implicitly uses SSH with the key above to write to the repository
+        # To achieve this, repositoryUrl in .releaserc had to be configured with an SSH URL
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Configure the commit author/committer to have access to commit to the repository
+          # Configure the commit author and committer
           GIT_AUTHOR_EMAIL: ${{ vars.SEMANTIC_RELEASE_GIT_EMAIL }}
           GIT_AUTHOR_NAME: ${{ vars.SEMANTIC_RELEASE_GIT_NAME }}
           GIT_COMMITTER_EMAIL: ${{ vars.SEMANTIC_RELEASE_GIT_EMAIL }}
