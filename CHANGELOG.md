@@ -1,11 +1,3 @@
-## [1.0.1](https://github.com/opalmedapps/opal-app/compare/test1.0.0...test1.0.1) (2025-11-18)
-
-
-### Reverts
-
-* Revert "chore(release): version 1.0.0" ([3e214a6](https://github.com/opalmedapps/opal-app/commit/3e214a65be37e16a8a24e295074d3f16480a51b3))
-* Revert "ci: configure testing for semantic-release" ([3884066](https://github.com/opalmedapps/opal-app/commit/3884066c5b4be90b5b415cd73f69458fced47319))
-
 ## [2.2.7](https://github.com/opalmedapps/opal-app/compare/v2.2.6...v2.2.7) (2025-07-30)
 
 
