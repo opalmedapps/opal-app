@@ -1,5 +1,5 @@
 {
-  "branches": ["semantic-release-test"],
+  "branches": ["main"],
   "repositoryUrl": "git@github.com:opalmedapps/opal-app.git",
   "plugins": [
     "@semantic-release/commit-analyzer",
@@ -17,5 +17,5 @@
       }
     ]
   ],
-  "tagFormat": "test${version}"
+  "tagFormat": "v${version}"
 }
