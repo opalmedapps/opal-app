@@ -32,6 +32,8 @@ jobs:
 
       # Increment the version
       - name: Run semantic-release
+        # Note: semantic-release implicitly uses SSH with the key above to write to the repository
+        # To achieve this, repositoryUrl in .releaserc had to be configured with an SSH URL
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
