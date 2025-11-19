@@ -111,7 +111,7 @@ jobs:
       # Sign the aab
       - name: Sign the app
         run: |
-          cat $ANDROID_UPLOAD_KEY_BASE64 > android_upload_key_base64.txt
+          echo $ANDROID_UPLOAD_KEY_BASE64 > android_upload_key_base64.txt
           base64 --help
           base64 --decode android_upload_key_base64.txt > android_upload_key.jks
           jarsigner -verbose -sigalg SHA512withRSA -digestalg SHA512 -keystore android_upload_key.jks -storepass $ANDROID_UPLOAD_KEY_PASSWORD -signedjar app-release-signed.aab app-release-unsigned.aab $ANDROID_UPLOAD_KEY_ALIAS
