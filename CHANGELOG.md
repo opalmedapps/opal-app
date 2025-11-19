@@ -1,3 +1,27 @@
+# [2.3.0](https://github.com/opalmedapps/opal-app/compare/v2.2.7...v2.3.0) (2025-11-19)
+
+
+### Bug Fixes
+
+* add a feature flag for IPS ([#1434](https://github.com/opalmedapps/opal-app/issues/1434)) ([0f3e396](https://github.com/opalmedapps/opal-app/commit/0f3e39608672e09eaf164542801e5cb0247fea55))
+* add CommonHealth viewer iframe to CSP headers for the web app ([#1433](https://github.com/opalmedapps/opal-app/issues/1433)) ([d3d777d](https://github.com/opalmedapps/opal-app/commit/d3d777df1a7942378e311b90602db66c0925740a))
+* add viewer URL to allowed URLs for iOS ATS ([ed1cef9](https://github.com/opalmedapps/opal-app/commit/ed1cef928f0aa71933f1da109e4549279bcaed37))
+* change link to the Opal deployment of the IPS viewer ([#1441](https://github.com/opalmedapps/opal-app/issues/1441)) ([9e97719](https://github.com/opalmedapps/opal-app/commit/9e97719b6ce3e2d39b241843db5b0036c125c8d4))
+* **deps:** update babel monorepo (patch) ([#1424](https://github.com/opalmedapps/opal-app/issues/1424)) ([57ad1e3](https://github.com/opalmedapps/opal-app/commit/57ad1e39bafb08bb99d16f0de3b41645ff94cb03))
+* **deps:** update dependency cordova-plugin-iroot to v3.2.1 ([#1438](https://github.com/opalmedapps/opal-app/issues/1438)) ([ef5d945](https://github.com/opalmedapps/opal-app/commit/ef5d945bc792f895925426083903e5e9391de2fe))
+* **deps:** update dependency firebase to v12.1.0 ([#1421](https://github.com/opalmedapps/opal-app/issues/1421)) ([bb4c718](https://github.com/opalmedapps/opal-app/commit/bb4c7187c674a5e1979c753ebb2e55c40da3cf1d))
+* **deps:** update dependency firebase to v12.3.0 ([#1430](https://github.com/opalmedapps/opal-app/issues/1430)) ([c3ba724](https://github.com/opalmedapps/opal-app/commit/c3ba7244b7f3e7a56107edee0571137ddfc60e81))
+* **deps:** update dependency firebase to v12.6.0 ([#1445](https://github.com/opalmedapps/opal-app/issues/1445)) ([91e06ca](https://github.com/opalmedapps/opal-app/commit/91e06ca5e70cfb52416d0b59df3890638722d166))
+* **deps:** update plotly packages to v3.1.1 (minor) ([#1432](https://github.com/opalmedapps/opal-app/issues/1432)) ([4cd9165](https://github.com/opalmedapps/opal-app/commit/4cd91651ee699000865136d024967bde5d91640b))
+* **deps:** update plotly packages to v3.1.2 (patch) ([#1437](https://github.com/opalmedapps/opal-app/issues/1437)) ([7b7b109](https://github.com/opalmedapps/opal-app/commit/7b7b10953b64bb561dad3bd9f8da1f4668075036))
+* **deps:** update plotly packages to v3.2.0 (minor) ([#1446](https://github.com/opalmedapps/opal-app/issues/1446)) ([46586ab](https://github.com/opalmedapps/opal-app/commit/46586ab6bec761397bb67be538fb49202992b08f))
+* **deps:** update plotly packages to v3.3.0 (minor) ([#1450](https://github.com/opalmedapps/opal-app/issues/1450)) ([b6580ea](https://github.com/opalmedapps/opal-app/commit/b6580ea218e9c267de7a2de1e1d35e1fa60ffbeb))
+
+
+### Features
+
+* add international patient summary ([#1422](https://github.com/opalmedapps/opal-app/issues/1422)) ([1b30696](https://github.com/opalmedapps/opal-app/commit/1b3069669ef18a796b3f30b586e7cc9c3d164b5d))
+
 ## [2.2.7](https://github.com/opalmedapps/opal-app/compare/v2.2.6...v2.2.7) (2025-07-30)
 
 
