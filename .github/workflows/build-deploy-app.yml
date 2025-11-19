@@ -107,13 +107,11 @@ jobs:
           npm run build:app:android:release --env="$ENVIRONMENT"
           mv "./platforms/android/app/build/outputs/bundle/release/app-release.aab" "app-release-unsigned.aab"
 
-      # TODO remove --help line
       # Sign the aab
       - name: Sign the app
         run: |
           echo $ANDROID_UPLOAD_KEY_BASE64 > android_upload_key_base64.txt
-          base64 --help
-          base64 --decode android_upload_key_base64.txt > android_upload_key.jks
+          base64 --decode --input android_upload_key_base64.txt --output android_upload_key.jks
           jarsigner -verbose -sigalg SHA512withRSA -digestalg SHA512 -keystore android_upload_key.jks -storepass $ANDROID_UPLOAD_KEY_PASSWORD -signedjar app-release-signed.aab app-release-unsigned.aab $ANDROID_UPLOAD_KEY_ALIAS
         env:
           ANDROID_UPLOAD_KEY_BASE64: ${{ secrets.ANDROID_UPLOAD_KEY_BASE64 }}
