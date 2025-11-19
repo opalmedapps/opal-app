@@ -24,10 +24,15 @@ on:
         options:
           - dev
           - prod
-      DEPLOY:
-        description: 'Deploy the resulting mobile app'
+      DEPLOY_FIREBASE:
+        description: 'Deploy the resulting mobile app via Firebase app distribution'
         required: true
-        default: true
+        default: false
+        type: boolean
+      DEPLOY_STORES:
+        description: '[Should only be used for prod] Deploy the resulting mobile app via the app stores'
+        required: true
+        default: false
         type: boolean
 
 env:
@@ -59,13 +64,67 @@ jobs:
           ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
 
       # Build the app
-      - name: Build the app
+      - name: Build the app (.apk)
         run: npm run build:app:android --env="$ENVIRONMENT"
       - name: Rename build output
         id: rename-android
         run: |
           mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-${ENVIRONMENT}.apk"
           echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.apk" >> "$GITHUB_OUTPUT"
+      - name: Archive build output
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: android-app
+          path: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
+
+    outputs:
+      ARTIFACT_NAME: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
+
+
+  build-android-release:
+    runs-on: macos-latest
+    # Build in release mode when deploying to the stores
+    if: ${{ inputs.DEPLOY_STORES }}
+    steps:
+      # Setup
+      - name: Print environment
+        run: echo "Environment = $ENVIRONMENT"
+      - uses: actions/checkout@v5.0.0
+        with:
+          persist-credentials: false
+          # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
+          fetch-depth: ${{ vars.FETCH_DEPTH }}
+          fetch-tags: true
+      - name: Set up build
+        uses: ./.github/actions/build-setup
+        with:
+          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
+          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
+
+      # Build an aab in release mode
+      - name: Build the app (.aab, release mode)
+        run: |
+          npm run build:app:android:release --env="$ENVIRONMENT"
+          mv "./platforms/android/app/build/outputs/bundle/release/app-release.aab" "app-release-unsigned.aab"
+
+      # TODO remove --help line
+      # Sign the aab
+      - name: Sign the app
+        run: |
+          cat $ANDROID_UPLOAD_KEY_BASE64 > android_upload_key_base64.txt
+          base64 --help
+          base64 --decode android_upload_key_base64.txt > android_upload_key.jks
+          jarsigner -verbose -sigalg SHA512withRSA -digestalg SHA512 -keystore android_upload_key.jks -storepass $ANDROID_UPLOAD_KEY_PASSWORD -signedjar app-release-signed.aab app-release-unsigned.aab $ANDROID_UPLOAD_KEY_ALIAS
+        with:
+          ANDROID_UPLOAD_KEY_BASE64: ${{ secrets.ANDROID_UPLOAD_KEY_BASE64 }}
+          ANDROID_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEY_PASSWORD }}
+          ANDROID_UPLOAD_KEY_ALIAS: ${{ vars.ANDROID_UPLOAD_KEY_ALIAS }}
+
+      - name: Rename build output
+        id: rename-android
+        run: |
+          mv "app-release-signed.aab" "opal-${ENVIRONMENT}-release-signed.aab"
+          echo "ARTIFACT_NAME=opal-${ENVIRONMENT}-release-signed.aab" >> "$GITHUB_OUTPUT"
       - name: Archive build output
         uses: actions/upload-artifact@v4.6.2
         with:
@@ -151,11 +210,11 @@ jobs:
       ARTIFACT_NAME: ${{ steps.rename-ios.outputs.ARTIFACT_NAME }}
 
 
-  deploy-android:
+  deploy-android-to-firebase:
     needs: build-android
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
+    if: ${{ inputs.DEPLOY_FIREBASE || github.ref_name == 'main' }}
     steps:
       # Setup
       - uses: actions/checkout@v5.0.0
@@ -173,7 +232,7 @@ jobs:
           ENVIRONMENT: ${{ env.ENVIRONMENT }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
 
-      # Deploy the app
+      # Deploy the app to Firebase app distribution
       # Deployment via firebase-tools implicitly uses a service account assigned to $GOOGLE_APPLICATION_CREDENTIALS (from values defined in the GitHub project settings)
       # This service account provides permissions for Firebase app distribution
       # See: https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments
@@ -185,11 +244,11 @@ jobs:
           FIREBASE_GROUP: ${{ env.FIREBASE_GROUP }}
 
 
-  deploy-ios:
+  deploy-ios-to-firebase:
     needs: build-ios
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
-    if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
+    if: ${{ inputs.DEPLOY_FIREBASE || github.ref_name == 'main' }}
     steps:
       # Setup
       - uses: actions/checkout@v5.0.0
@@ -207,8 +266,8 @@ jobs:
           ENVIRONMENT: ${{ env.ENVIRONMENT }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
 
-      # Deploy the app
-      # Deployment implicitly uses $GOOGLE_APPLICATION_CREDENTIALS; see deploy-android above for more details
+      # Deploy the app to Firebase app distribution
+      # Deployment implicitly uses $GOOGLE_APPLICATION_CREDENTIALS; see deploy-android-to-firebase above for more details
       - name: Deploy the app
         run: npx firebase-tools appdistribution:distribute "$ARTIFACT_NAME" --app "$FIREBASE_APP_IOS" --release-notes "$RELEASE_NOTES" --groups "$FIREBASE_GROUP"
         env:
