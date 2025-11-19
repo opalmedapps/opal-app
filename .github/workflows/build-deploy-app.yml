@@ -126,7 +126,7 @@ jobs:
       - name: Archive build output
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: android-app
+          name: android-app-release
           path: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
 
     outputs:
