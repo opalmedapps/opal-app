@@ -26,6 +26,7 @@ SPDX-License-Identifier: Apache-2.0
         See: https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/
     -->
     <allow-navigation href="https://www.youtube.com/*" requires-certificate-transparency="true"/>
+    <allow-navigation href="https://viewer.opalmedapps.ca/*" requires-certificate-transparency="true"/>
     <allow-intent href="https://*/*"/>
     <allow-intent href="tel:*"/>
     <allow-intent href="sms:*"/>
