@@ -257,11 +257,11 @@ build ios release:
     - gem install --user-install ffi -- --enable-libffi-alloc
     # Build the ipa in release mode
     - npm run build:app:ios:device:release:ci --env=$ENV --devteam=$IOS_DEVELOPMENT_TEAM
-    - mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-$ENV-release-$FULL_VERSION.ipa"
+    - mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-$ENV-release.ipa"
   artifacts:
     expire_in: 1 day
     paths:
-      - opal-$ENV-release-$FULL_VERSION.ipa
+      - opal-$ENV-release.ipa
 
 # Builds the web version of the app
 build web:
@@ -327,9 +327,9 @@ upload ios release app to Apple:
     - build ios release
   script:
     # Verify that the ipa will be accepted by Apple
-    - xcrun altool --validate-app -f "opal-$ENV-release-$FULL_VERSION.ipa" -t ios -u $IOS_UPLOAD_USER -p $IOS_UPLOAD_PASSWORD
+    - xcrun altool --validate-app -f "opal-$ENV-release.ipa" -t ios -u $IOS_UPLOAD_USER -p $IOS_UPLOAD_PASSWORD
     # Deploy the ipa to Apple
-    - xcrun altool --upload-app -f "opal-$ENV-release-$FULL_VERSION.ipa" -t ios -u $IOS_UPLOAD_USER -p $IOS_UPLOAD_PASSWORD
+    - xcrun altool --upload-app -f "opal-$ENV-release.ipa" -t ios -u $IOS_UPLOAD_USER -p $IOS_UPLOAD_PASSWORD
 
 # Deploys the web app online
 deploy web:
