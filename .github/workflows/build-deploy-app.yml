@@ -354,7 +354,7 @@ jobs:
 
   deploy-ios-to-store:
     needs: build-ios-release
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     # Deploy manually via inputs
     if: ${{ inputs.DEPLOY_STORES }}
     steps:
