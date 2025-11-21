@@ -374,5 +374,5 @@ jobs:
         run: xcrun altool --validate-app -f "$ARTIFACT_NAME" -t ios -u $APPLE_STORE_UPLOAD_EMAIL -p $APPLE_STORE_UPLOAD_PASSWORD
         env:
           ARTIFACT_NAME: ${{ needs.build-ios-release.outputs.ARTIFACT_NAME }}
-          APPLE_STORE_UPLOAD_EMAIL: ${{ secrets.APPLE_STORE_UPLOAD_EMAIL }}
+          APPLE_STORE_UPLOAD_EMAIL: ${{ vars.APPLE_STORE_UPLOAD_EMAIL }}
           APPLE_STORE_UPLOAD_PASSWORD: ${{ secrets.APPLE_STORE_UPLOAD_PASSWORD }}
