@@ -46,7 +46,7 @@ jobs:
       # Setup
       - name: Print environment
         run: echo "Environment = $ENVIRONMENT"
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5.0.1
         with:
           persist-credentials: false
           # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
@@ -79,7 +79,7 @@ jobs:
     if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
     steps:
       # Setup
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5.0.1
         with:
           persist-credentials: false
       - name: Ensure $ENVIRONMENT is defined to avoid destructive mirroring on the server
