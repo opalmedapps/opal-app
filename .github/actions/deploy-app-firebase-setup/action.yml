@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-name: Deploy App Setup
+name: Setup to Deploy App to Firebase
 description: Setup before deploying the mobile app to Firebase
 
 inputs:

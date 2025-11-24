@@ -312,8 +312,8 @@ jobs:
           name: android-app
           run-id: ${{ github.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up deployment
-        uses: ./.github/actions/deploy-app-setup
+      - name: Set up deployment to Firebase
+        uses: ./.github/actions/deploy-app-firebase-setup
         with:
           ENVIRONMENT: ${{ env.ENVIRONMENT }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
@@ -346,8 +346,8 @@ jobs:
           name: ios-app
           run-id: ${{ github.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up deployment
-        uses: ./.github/actions/deploy-app-setup
+      - name: Set up deployment to Firebase
+        uses: ./.github/actions/deploy-app-firebase-setup
         with:
           ENVIRONMENT: ${{ env.ENVIRONMENT }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
