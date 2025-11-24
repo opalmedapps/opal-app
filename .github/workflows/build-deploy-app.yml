@@ -25,17 +25,17 @@ on:
           - dev
           - prod
       DEPLOY_FIREBASE:
-        description: 'Deploy the resulting mobile app via Firebase app distribution'
+        description: 'Deploy the app via Firebase app distribution'
         required: true
         default: false
         type: boolean
       DEPLOY_STORES:
-        description: '[Should only be used for prod] Deploy the resulting mobile app via the app stores'
+        description: '[Should only be used for prod] Deploy the app via the app stores'
         required: true
         default: false
         type: boolean
       BUILD_NUMBER_STORES:
-        description: "[Should only be used for prod] If deploying to the stores, the build number to use. CAUTION: choose carefully based on previous uploads; stores don't allow downgrading once a number has been chosen."
+        description: "[Required if deploying to the stores; otherwise leave blank] A specific build number to use. CAUTION: choose carefully based on previous uploads; stores don't allow downgrading once a number has been chosen."
         required: false
         type: number
 
@@ -64,6 +64,8 @@ jobs:
       - name: Set up build
         uses: ./.github/actions/build-setup
         with:
+          # Should only have a value when building for prod and the stores; otherwise, will be undefined and the build number will be calculated
+          BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_STORES }}
           ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
           ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
 
@@ -102,7 +104,7 @@ jobs:
       - name: Set up build
         uses: ./.github/actions/build-setup
         with:
-          BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_STORES || '1' }}
+          BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_STORES }}
           ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
           ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
 
@@ -153,6 +155,8 @@ jobs:
       - name: Set up build
         uses: ./.github/actions/build-setup
         with:
+          # Should only have a value when building for prod and the stores; otherwise, will be undefined and the build number will be calculated
+          BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_STORES }}
           ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
           ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
 
@@ -230,7 +234,7 @@ jobs:
       - name: Set up build
         uses: ./.github/actions/build-setup
         with:
-          BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_STORES || '1' }}
+          BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_STORES }}
           ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
           ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
 
