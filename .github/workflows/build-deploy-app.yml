@@ -117,9 +117,9 @@ jobs:
       # Sign the aab
       - name: Sign the app
         run: |
-          echo $ANDROID_UPLOAD_KEY_BASE64 > android_upload_key_base64.txt
+          echo "$ANDROID_UPLOAD_KEY_BASE64" > android_upload_key_base64.txt
           base64 --decode --input android_upload_key_base64.txt --output android_upload_key.jks
-          jarsigner -verbose -sigalg SHA512withRSA -digestalg SHA512 -keystore android_upload_key.jks -storepass $ANDROID_UPLOAD_KEY_PASSWORD -signedjar app-release-signed.aab app-release-unsigned.aab $ANDROID_UPLOAD_KEY_ALIAS
+          jarsigner -verbose -sigalg SHA512withRSA -digestalg SHA512 -keystore android_upload_key.jks -storepass "$ANDROID_UPLOAD_KEY_PASSWORD" -signedjar app-release-signed.aab app-release-unsigned.aab "$ANDROID_UPLOAD_KEY_ALIAS"
         env:
           ANDROID_UPLOAD_KEY_BASE64: ${{ secrets.ANDROID_UPLOAD_KEY_BASE64 }}
           ANDROID_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEY_PASSWORD }}
@@ -381,7 +381,7 @@ jobs:
 
       # Verify that the ipa will be accepted by Apple
       - name: Verify the bundle with Apple
-        run: xcrun altool --validate-app -f "$ARTIFACT_NAME" -t ios -u $APPLE_STORE_UPLOAD_EMAIL -p $APPLE_STORE_UPLOAD_PASSWORD
+        run: xcrun altool --validate-app -f "$ARTIFACT_NAME" -t ios -u "$APPLE_STORE_UPLOAD_EMAIL" -p "$APPLE_STORE_UPLOAD_PASSWORD"
         env:
           ARTIFACT_NAME: ${{ needs.build-ios-release.outputs.ARTIFACT_NAME }}
           APPLE_STORE_UPLOAD_EMAIL: ${{ vars.APPLE_STORE_UPLOAD_EMAIL }}
@@ -389,7 +389,7 @@ jobs:
 
       # Deploy the ipa to Apple
       - name: Deploy the bundle to Apple
-        run: xcrun altool --upload-app -f "$ARTIFACT_NAME" -t ios -u $APPLE_STORE_UPLOAD_EMAIL -p $APPLE_STORE_UPLOAD_PASSWORD
+        run: xcrun altool --upload-app -f "$ARTIFACT_NAME" -t ios -u "$APPLE_STORE_UPLOAD_EMAIL" -p "$APPLE_STORE_UPLOAD_PASSWORD"
         env:
           ARTIFACT_NAME: ${{ needs.build-ios-release.outputs.ARTIFACT_NAME }}
           APPLE_STORE_UPLOAD_EMAIL: ${{ vars.APPLE_STORE_UPLOAD_EMAIL }}
