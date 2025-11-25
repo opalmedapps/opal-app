@@ -143,12 +143,12 @@ and a distribution profile for App Store release builds.
 
 To create a development provisioning profile via the Apple Developer website:
   - Select "For Development", "iOS App Development".
-  - Pick a specific app ID (`com.hig.opaldev2`, `com.hig.opal2`, etc.).
+  - Pick a specific app ID.
   - Link it to a Development certificate.
 
 To create a distribution provisioning profile via the Apple Developer website:
   - Select "For Distribution", "App Store Connect".
-  - Pick the prod app ID (`com.hig.opal2`).
+  - Pick the prod app ID.
   - Link it to a Distribution certificate.
   - Include all devices.
 
