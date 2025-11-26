@@ -49,7 +49,7 @@ The `Build and Deploy App` workflow runs automatically on all commits to the mai
 to build and deploy the app to Firebase app distribution (and optionally to the stores) for iOS and Android.
 Commits on this branch are produced as the result of approved "squashed-and-merged" merge requests.
 These commits represent completed work that is ready for deployment to our development environment.
-As such, the jobs in this workflow run by default in the Dev environment.
+As such, the jobs in this workflow run by default for the Dev environment.
 
 This workflow also provides a manual interface ([workflow dispatch](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow))
 which can be used to build and deploy the app for another environment.
@@ -152,6 +152,6 @@ To create a distribution provisioning profile via the Apple Developer website:
   - Link it to a Distribution certificate.
   - Include all devices.
 
-The get the UUID of a provisioning profile (for the `UUID` variables above),
+To get the UUID of a provisioning profile (for the `UUID` variables above),
 download the profile and open it in a text editor; copy the string value below `<key>UUID</key>`.
 This value is used by cordova to identify which provisioning profile to use while building.
