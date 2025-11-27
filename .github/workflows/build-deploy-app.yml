@@ -90,7 +90,7 @@ jobs:
   build-android-release:
     runs-on: macos-latest
     # Build in release mode for prod
-    if: ${{ env.ENVIRONMENT == 'prod' }}
+    if: ${{ inputs.ENVIRONMENT == 'prod' }}
     steps:
       # Setup
       - name: Print environment
@@ -220,7 +220,7 @@ jobs:
   build-ios-release:
     runs-on: macos-latest
     # Build in release mode for prod
-    if: ${{ env.ENVIRONMENT == 'prod' }}
+    if: ${{ inputs.ENVIRONMENT == 'prod' }}
     steps:
       # Setup
       - name: Print environment
