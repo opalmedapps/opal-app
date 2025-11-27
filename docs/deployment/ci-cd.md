@@ -39,9 +39,9 @@ The different workflows are handled as follows.
 This workflow executes automatically for all pull-request, merge-queue and main-branch commits,
 to perform a series of checks on the updated code. It can also be run manually. These checks include:
 
-- Linting via pre-commit
-- License checks via REUSE
-- Validation of the contents of THIRDPARTY.md
+- Linting via [pre-commit](https://pre-commit.com/), configured at [mschoettle/pre-commit-action](https://github.com/mschoettle/pre-commit-action)
+- License checks via [REUSE](https://reuse.software/), configured at [opalmedapps/.github](https://github.com/opalmedapps/.github/blob/main/.github/workflows/reuse.yaml)
+- Validation of the contents of THIRDPARTY.md, configured at [opalmedapps/actions](https://github.com/opalmedapps/actions/blob/main/actions/check-thirdparty-notice/check_thirdparty_notice.py)
 
 ### Build and Deploy App
 
