@@ -6,7 +6,7 @@
 
 name: Build and Deploy App
 # Default to dev when running automatically (see also "env" below)
-run-name: Building and (optionally) deploying the mobile app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
+run-name: Building ${{ (inputs.DEPLOY_FIREBASE || inputs.DEPLOY_STORES) && 'and deploying ' || '' }}the mobile app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
 on:
   # When pushing to main, automatically build for dev
   push:
@@ -30,7 +30,7 @@ on:
         default: false
         type: boolean
       DEPLOY_STORES:
-        description: '[Should only be used for prod] Deploy the app via the app stores'
+        description: '[Prod only] Deploy the app via the app stores'
         required: true
         default: false
         type: boolean
