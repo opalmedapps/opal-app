@@ -20,14 +20,16 @@ The Dev app is automatically built and deployed to Firebase App Distribution whe
 
 To build and release the prod app to the stores, follow these steps:
 
-  1. Go to https://github.com/opalmedapps/opal-app/actions, select `Build and Deploy App`,
-     and next to the `workflow_dispatch`, select `Run workflow` with the following options:
+  1. (Recommended) Increment the app version before release.
+     Go to the [GitHub Actions page](https://github.com/opalmedapps/opal-app/actions),
+     select `Increment Version`, and next to the `workflow_dispatch`, select `Run workflow` for the `main` branch.
+  2. After execution completes, on the Actions page, select `Build and Deploy App`, and `Run workflow` with the following options:
       - Deploy the app via the app stores: yes.
       - A specific build number to use: enter a number — check the stores for the next sequential number to use.
-  2. When the build finishes:
+  3. When the build finishes:
       - It will have been automatically uploaded to TestFlight (Apple).
       - You'll need to manually upload the `android-app-release` aab file to Google Play (Android).
-  3. The app won't automatically be published to users;
+  4. The app won't automatically be published to users;
      you'll still need to create new releases in the stores and submit them for review.
 
 ## Workflow Descriptions
