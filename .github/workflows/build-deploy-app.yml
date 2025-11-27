@@ -362,8 +362,32 @@ jobs:
           FIREBASE_GROUP: ${{ env.FIREBASE_GROUP }}
 
 
-  deploy-ios-to-store:
+  verify-ios-build:
     needs: build-ios-release
+    runs-on: macos-latest
+    steps:
+      # Setup
+      - uses: actions/checkout@v5.0.0
+        with:
+          persist-credentials: false
+      - name: Download iOS release build artifact
+        uses: actions/download-artifact@v6.0.0
+        with:
+          name: ios-app-release
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Verify that the ipa can be accepted by Apple
+      - name: Verify the bundle with Apple
+        run: xcrun altool --validate-app -f "$ARTIFACT_NAME" -t ios -u "$APPLE_STORE_UPLOAD_EMAIL" -p "$APPLE_STORE_UPLOAD_PASSWORD"
+        env:
+          ARTIFACT_NAME: ${{ needs.build-ios-release.outputs.ARTIFACT_NAME }}
+          APPLE_STORE_UPLOAD_EMAIL: ${{ vars.APPLE_STORE_UPLOAD_EMAIL }}
+          APPLE_STORE_UPLOAD_PASSWORD: ${{ secrets.APPLE_STORE_UPLOAD_PASSWORD }}
+
+
+  deploy-ios-to-store:
+    needs: verify-ios-build
     runs-on: macos-latest
     # Deploy manually via inputs
     if: ${{ inputs.DEPLOY_STORES }}
@@ -378,14 +402,6 @@ jobs:
           name: ios-app-release
           run-id: ${{ github.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # Verify that the ipa will be accepted by Apple
-      - name: Verify the bundle with Apple
-        run: xcrun altool --validate-app -f "$ARTIFACT_NAME" -t ios -u "$APPLE_STORE_UPLOAD_EMAIL" -p "$APPLE_STORE_UPLOAD_PASSWORD"
-        env:
-          ARTIFACT_NAME: ${{ needs.build-ios-release.outputs.ARTIFACT_NAME }}
-          APPLE_STORE_UPLOAD_EMAIL: ${{ vars.APPLE_STORE_UPLOAD_EMAIL }}
-          APPLE_STORE_UPLOAD_PASSWORD: ${{ secrets.APPLE_STORE_UPLOAD_PASSWORD }}
 
       # Deploy the ipa to Apple
       - name: Deploy the bundle to Apple
