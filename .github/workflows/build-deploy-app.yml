@@ -43,7 +43,7 @@ env:
   # Read the target environment from workflow_dispatch inputs, or default to dev
   ENVIRONMENT: ${{ inputs.ENVIRONMENT || 'dev' }}
   # The name of the group to which the app is deployed (via Firebase App Distribution)
-  FIREBASE_GROUP: "general"
+  FIREBASE_GROUP: "test-ci"
 
 permissions:
   contents: read
