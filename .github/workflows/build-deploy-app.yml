@@ -169,6 +169,7 @@ jobs:
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets[format('{0}_PROVISIONING_PROFILE_BASE64_FILE', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
           KEYCHAIN_PASSWORD: ${{ secrets.TEMPORARY_KEYCHAIN_PASSWORD }}
         # Use a YAML anchor for reuse: https://docs.github.com/en/actions/reference/workflows-and-actions/reusing-workflow-configurations#yaml-anchors-and-aliases
+        # Currently raises an error with actionlint: https://github.com/rhysd/actionlint/issues/133
         run: &ios-setup |
           # Create variables
           CERTIFICATE_PATH="$RUNNER_TEMP"/build_certificate.p12
