@@ -168,7 +168,8 @@ jobs:
           P12_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets[format('{0}_PROVISIONING_PROFILE_BASE64_FILE', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
           KEYCHAIN_PASSWORD: ${{ secrets.TEMPORARY_KEYCHAIN_PASSWORD }}
-        run: |
+        # Use a YAML anchor for reuse: https://docs.github.com/en/actions/reference/workflows-and-actions/reusing-workflow-configurations#yaml-anchors-and-aliases
+        run: &ios-setup |
           # Create variables
           CERTIFICATE_PATH="$RUNNER_TEMP"/build_certificate.p12
           PP_PATH="$RUNNER_TEMP"/build_pp.mobileprovision
@@ -238,7 +239,6 @@ jobs:
           ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
           ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
 
-      # TODO move duplicate iOS setup code into a composite action
       # Install an Apple certificate and provisioning profile used to build the app for iOS
       # See: https://docs.github.com/en/actions/use-cases-and-examples/deploying/installing-an-apple-certificate-on-macos-runners-for-xcode-development
       - name: Install the Apple certificate and provisioning profile
@@ -247,33 +247,8 @@ jobs:
           P12_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_DISTRIBUTION_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets[format('{0}_PROVISIONING_PROFILE_DISTRIBUTION_BASE64_FILE', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
           KEYCHAIN_PASSWORD: ${{ secrets.TEMPORARY_KEYCHAIN_PASSWORD }}
-        run: |
-          # Create variables
-          CERTIFICATE_PATH="$RUNNER_TEMP"/build_certificate.p12
-          PP_PATH="$RUNNER_TEMP"/build_pp.mobileprovision
-          KEYCHAIN_PATH="$RUNNER_TEMP"/app-signing.keychain-db
-
-          # Import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o "$CERTIFICATE_PATH"
-          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "$PP_PATH"
-
-          # Create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          # Options: -lut: lock keychain when the system sleeps, lock keychain after timeout interval, specify timeout interval in seconds
-          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-
-          # Import certificate to keychain
-          # Options: -P: specify wrapping passphrase immediately; -A: allow any application to access the imported key without warning; -t: type; -f: format; -k: target keychain to import into
-          security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
-          # Options: -S: comma-separated list of of allowed partition IDs; -k: password for keychain (required)
-          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          # Options: -d: use the specified preference domain; -s: set the search list to the specified keychains
-          security list-keychain -d user -s "$KEYCHAIN_PATH"
-
-          # Apply provisioning profile
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles
+        # Reuse the same setup steps from build-ios
+        run: *ios-setup
 
       # Build the app in release mode
       - name: Build the app (.ipa, release mode)
