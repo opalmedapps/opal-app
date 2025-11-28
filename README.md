@@ -125,6 +125,9 @@ This section covers installation steps to build the app's web code on your local
 
 This section covers installation steps to build the mobile app on your local machine.
 
+Note that alternatively, the app can be built and released via GitHub Actions workflows.
+See [CI/CD](./docs/deployment/ci-cd.md) for more details.
+
 1.  Make sure you have followed the setup steps for [Web](#web).
 
 2.  Install and set up Cordova for the desired target platform(s) by following the guides below.

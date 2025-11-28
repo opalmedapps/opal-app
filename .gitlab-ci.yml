@@ -238,6 +238,31 @@ build ios:
     paths:
       - opal-$ENV.ipa
 
+# Builds the app for iOS with 'release' settings
+build ios release:
+  # Use our build Mac
+  tags:
+    - macos
+  extends: .build
+  rules:
+    # Inverse of the rule from 'increment version'; this prevents the build from executing on the pipeline that modifies the version number
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    # On version tags for the prod environment, release builds can be executed manually as needed
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX && $ENV == "prod"
+      when: manual
+  script:
+    # Fixes Bus Error when cordova invokes pod install
+    # See: https://stackoverflow.com/a/70581304
+    - gem install --user-install ffi -- --enable-libffi-alloc
+    # Build the ipa in release mode
+    - npm run build:app:ios:device:release:ci --env=$ENV --devteam=$IOS_DEVELOPMENT_TEAM
+    - mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-$ENV-release.ipa"
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - opal-$ENV-release.ipa
+
 # Builds the web version of the app
 build web:
   extends: .build
@@ -291,6 +316,20 @@ deploy ios to firebase:
     - npx firebase-tools appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build ios
+
+upload ios release app to Apple:
+  stage: deploy
+  rules:
+    # Only release the app from release tags, with manual confirmation before uploading to Apple
+    - if: $CI_COMMIT_TAG =~ $VERSION_TAG_REGEX
+      when: manual
+  needs:
+    - build ios release
+  script:
+    # Verify that the ipa will be accepted by Apple
+    - xcrun altool --validate-app -f "opal-$ENV-release.ipa" -t ios -u $IOS_UPLOAD_USER -p $IOS_UPLOAD_PASSWORD
+    # Deploy the ipa to Apple
+    - xcrun altool --upload-app -f "opal-$ENV-release.ipa" -t ios -u $IOS_UPLOAD_USER -p $IOS_UPLOAD_PASSWORD
 
 # Deploys the web app online
 deploy web:
