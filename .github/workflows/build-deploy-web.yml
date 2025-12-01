@@ -29,7 +29,7 @@ on:
       DEPLOY:
         description: 'Deploy the resulting web app'
         required: true
-        default: true
+        default: false
         type: boolean
       BUILD_NUMBER_OVERRIDE:
         description: "[Should only be used for prod; otherwise leave blank] A specific build number to use, to match the value released to the app stores."
