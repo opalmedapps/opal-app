@@ -4,7 +4,7 @@
 
 name: Build and Deploy Web
 # Default to dev when running automatically (see also "env" below)
-run-name: Building and (optionally) deploying the web app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
+run-name: Building ${{ inputs.DEPLOY && 'and deploying ' || '' }}the web app for ${{ inputs.ENVIRONMENT || 'dev' }}
 on:
   # When pushing to main, automatically build for dev
   push:
@@ -27,10 +27,14 @@ on:
           - dev
           - prod
       DEPLOY:
-        description: 'Deploy the resulting web app'
+        description: 'Deploy the resulting web app to the web server'
         required: true
-        default: true
+        default: false
         type: boolean
+      BUILD_NUMBER_OVERRIDE:
+        description: "[Should only be used for prod; otherwise leave blank] A specific build number to use, to match the value released to the app stores."
+        required: false
+        type: number
 
 env:
   # Read the target environment from workflow_dispatch inputs, or default to dev
@@ -55,6 +59,8 @@ jobs:
       - name: Set up build
         uses: ./.github/actions/build-setup
         with:
+          # Should only have a value when building for prod and also releasing the app to the stores; otherwise, will be undefined and the build number will be calculated
+          BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_OVERRIDE }}
           ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
           ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
 
