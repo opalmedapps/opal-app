@@ -19,7 +19,7 @@ jobs:
       contents: write
     steps:
       # Setup
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.0
         with:
           # Fetch part of the commit history, used by semantic-release to calculate a new version number
           fetch-depth: ${{ vars.FETCH_DEPTH }}
