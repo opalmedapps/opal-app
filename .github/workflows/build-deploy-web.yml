@@ -27,7 +27,7 @@ on:
           - dev
           - prod
       DEPLOY:
-        description: 'Deploy the resulting web app'
+        description: 'Deploy the resulting web app to the web server'
         required: true
         default: false
         type: boolean
