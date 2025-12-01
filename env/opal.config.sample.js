@@ -40,7 +40,8 @@ const config = {
         "APP_ID": "",
         // String: the display name of the app when installed on a device.
         "APP_NAME": "Opal Local",
-        // Integer: the build number shown in brackets after the app's version number. Must always increase for consecutive store uploads.
+        // Integer: the build number shown in brackets after the app's version number.
+        // Note: when building in the pipeline, this value is replaced by a number that's calculated automatically, or one that's manually entered via workflow_dispatch inputs.
         "BUILD_NUMBER": 1,
         // Boolean: whether the Android app is debuggable (android:debuggable). Should be false in production.
         "ANDROID_DEBUGGABLE": true,
