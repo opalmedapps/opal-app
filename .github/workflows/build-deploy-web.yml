@@ -4,7 +4,7 @@
 
 name: Build and Deploy Web
 # Default to dev when running automatically (see also "env" below)
-run-name: Building ${{ inputs.DEPLOY && 'and deploying ' || '' }}the web app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
+run-name: Building ${{ inputs.DEPLOY && 'and deploying ' || '' }}the web app for ${{ inputs.ENVIRONMENT || 'dev' }}
 on:
   # When pushing to main, automatically build for dev
   push:

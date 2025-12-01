@@ -6,7 +6,7 @@
 
 name: Build and Deploy App
 # Default to dev when running automatically (see also "env" below)
-run-name: Building ${{ (inputs.DEPLOY_FIREBASE || inputs.DEPLOY_STORES) && 'and deploying ' || '' }}the mobile app for ${{ inputs.ENVIRONMENT || 'dev' }} 📦🚀
+run-name: Building ${{ (inputs.DEPLOY_FIREBASE || inputs.DEPLOY_STORES) && 'and deploying ' || '' }}the mobile app for ${{ inputs.ENVIRONMENT || 'dev' }}
 on:
   # When pushing to main, automatically build for dev
   push:
