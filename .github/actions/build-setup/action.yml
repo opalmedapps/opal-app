@@ -12,6 +12,9 @@ inputs:
   ENV_GOOGLE_SERVICES:
     description: 'Contents of the file `google-services.json` for the given environment'
     required: true
+  BUILD_NUMBER_OVERRIDE:
+    description: 'A specific build number to be used instead of calculating it automatically -- useful in particular for building for the app stores'
+    required: false
 
 runs:
   using: "composite"
@@ -56,7 +59,10 @@ runs:
         LATEST_TAG=$(git describe --tags --abbrev=0 --match v*)
         COMMIT_DISTANCE=$(git rev-list --count $LATEST_TAG..HEAD)
         NEW_BUILD_NUMBER=$((COMMIT_DISTANCE + 1))
-        if [ "$IS_ON_MAIN" = true ]; then
+        if [ -n "$BUILD_NUMBER_OVERRIDE" ]; then
+          echo "Build number was set to $BUILD_NUMBER_OVERRIDE via input arguments"
+          BUILD_NUMBER=$BUILD_NUMBER_OVERRIDE
+        elif [ "$IS_ON_MAIN" = true ]; then
           echo "Calculating build number"
           BUILD_NUMBER=$NEW_BUILD_NUMBER
         else
@@ -67,6 +73,7 @@ runs:
         echo "Using build number = $BUILD_NUMBER"
       shell: bash
       env:
+        BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_OVERRIDE }}
         IS_ON_MAIN: ${{ github.ref_name == 'main' }}
 
     # Replace the build number in the file opal.config.js with the newly calculated value.
