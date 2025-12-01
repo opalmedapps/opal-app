@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# See: https://github.com/rhysd/actionlint/blob/main/docs/config.md
+
+paths:
+  .github/workflows/build-deploy-app.yml:
+    ignore:
+      # Regex to ignore the error caused by YAML anchors
+      # Can be removed once the following issue is resolved and deployed: https://github.com/rhysd/actionlint/issues/133
+      - 'expected scalar node for string value but found alias node with .+ tag'
