@@ -1,16 +1,16 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   forgotPasswordController.js
- * Description  :   Controlls the forgot password view.
+ * Description  :   Controls the forgot password view.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   28 Apr 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: ForgotPasswordController
  *  @description
  *
  * Takes user inputted email and uses FireBases's API to send password reset email
@@ -20,13 +20,13 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
-    ForgotPasswordController.$inject = ['$timeout', '$firebaseAuth', 'Params'];
+    ForgotPasswordController.$inject = ['$timeout','Firebase','Params'];
 
     /* @ngInject */
-    function ForgotPasswordController($timeout, $firebaseAuth, Params) {
+    function ForgotPasswordController($timeout, Firebase, Params) {
         var vm = this;
 
         /**
@@ -59,7 +59,6 @@
         /**
          * @ngdoc method
          * @name clearErrors
-         * @methodOf MUHCApp.controllers.ForgotPasswordController
          * @description
          * Clears errors
          */
@@ -76,14 +75,11 @@
         /**
          * @ngdoc method
          * @name submitPasswordReset
-         * @methodOf MUHCApp.controllers.ForgotPasswordController
          * @description
          * Submits the user-inputted email address to FireBase API. Either displays success or error message based on FireBase response.
          */
         function submitPasswordReset() {
-            var userAuth = $firebaseAuth();
-
-            userAuth.$sendPasswordResetEmail(vm.email).then(function () {
+            Firebase.sendPasswordResetEmail(vm.email).then(function () {
 
                 $timeout(function () {
                     vm.alert.type = Params.alertTypeSuccess;

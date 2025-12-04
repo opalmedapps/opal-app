@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+<widget android-versionCode="${BUILD_NUMBER}" ios-CFBundleVersion="${BUILD_NUMBER}" id="${APP_ID}" version="2.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>${APP_NAME}</name>
+    <description>
+        Opal is a patient portal designed to empower patients with their medical information.
+    </description>
+    <author email="contact@opalmedapps.ca" href="https://www.opalmedapps.com/">
+        Opal Health Informatics Group
+    </author>
+    <content src="index.html"/>
+    <!--
+        Cordova Allow List
+
+        See: https://cordova.apache.org/docs/en/dev/guide/appdev/allowlist/#network-request-allow-list
+        See: https://cordova.apache.org/docs/en/latest/guide/appdev/allowlist/#other-notes
+    -->
+    <!--
+        Don't allow arbitrary loads.
+        Add additional domain names specifically if necessary.
+
+        See: https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/
+    -->
+    <allow-navigation href="https://www.youtube.com/*" requires-certificate-transparency="true"/>
+    <allow-navigation href="https://viewer.opalmedapps.ca/*" requires-certificate-transparency="true"/>
+    <allow-intent href="https://*/*"/>
+    <allow-intent href="tel:*"/>
+    <allow-intent href="sms:*"/>
+    <allow-intent href="mailto:*"/>
+    <allow-intent href="geo:*"/>
+    <allow-intent href="opal:"/>
+    <!-- Fix for cordova-ios 6.2.0 -->
+    <preference name="scheme" value="app"/>
+    <preference name="hostname" value="localhost"/>
+    <!-- Fix for cordova-android 11.0.0/12.0.0 -->
+    <allow-navigation href="https://app/*" requires-certificate-transparency="true"/>
+    <allow-navigation href="https://localhost/*" requires-certificate-transparency="true"/>
+    <!-- Splash screen settings -->
+    <preference name="SplashScreenDelay" value="5000"/>
+    <preference name="FadeSplashScreen" value="true"/>
+    <preference name="FadeSplashScreenDuration" value="500"/>
+    <!-- Required by @havesource/cordova-plugin-push -->
+    <preference name="GradlePluginGoogleServicesEnabled" value="true"/>
+    <preference name="GradlePluginGoogleServicesVersion" value="4.3.5"/>
+    <!-- Other preferences -->
+    <preference name="Orientation" value="default"/>
+    <preference name="DisallowOverscroll" value="true"/>
+    <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
+    <icon src="./res/OpalHealth_App_Apple_Icon_2.png"/>
+    <platform name="android">
+        <preference name="android-minSdkVersion" value="26"/>
+        <preference name="AndroidPersistentFileLocation" value="Internal"/>
+        <preference name="GradlePluginGoogleServicesEnabled" value="true"/>
+        <preference name="GradlePluginKotlinEnabled" value="true"/>
+        <preference name="GradlePluginKotlinVersion" value="1.9.24"/>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <!-- Security setting; should be false for pen tests and prod builds -->
+            <application android:debuggable="${ANDROID_DEBUGGABLE}"/>
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <!-- Security setting; do not set to true -->
+            <application android:allowBackup="false"/>
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <!-- Security setting; do not set to true. Note: blocks access to HTTP (non-HTTPS) links -->
+            <application android:usesCleartextTraffic="false"/>
+        </edit-config>
+        <!-- requestLegacyExternalStorage fixes file access issues in Android 10 / API Level 29. This parameter will be ignored by API Level 30+, when your app is running on Android 11 devices -->
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:requestLegacyExternalStorage="true"/>
+        </edit-config>
+        <!-- Security setting: Ensure that activities, services, providers and receivers are not exported. This avoids them being exposed to other apps. -->
+        <!-- Note that MainActivity must be left with android:exported="true" to be able to launch the app on all devices. -->
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/service" mode="merge">
+            <service android:exported="false"/>
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/provider" mode="merge">
+            <provider android:exported="false"/>
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/receiver" mode="merge">
+            <receiver android:exported="false"/>
+        </edit-config>
+        <resource-file src="google-services.json" target="/app/google-services.json"/>
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/Opal-splash-android-inverse-1400x1400.png"/>
+        <access origin="cdvfile://*"/>
+        <allow-intent href="market:*"/>
+        <!--
+            Fix duplicate permissions for android.permission.ACCESS_COARSE_LOCATION
+            See: https://github.com/don/cordova-plugin-ble-central/issues/925
+        -->
+        <hook src="plugins/cordova-plugin-ble-central/stripDuplicatePermissions.js" type="after_prepare"/>
+        <!-- Security: remove unwanted android permissions added by plugins -->
+        <hook type="after_prepare" src="hooks/remove-unwanted-android-permissions.js"/>
+        <!-- Security: remove unwanted android exports added by plugins -->
+        <hook type="after_prepare" src="hooks/remove-unwanted-android-exports.js"/>
+    </platform>
+    <platform name="ios">
+        <!-- Required to access location data since iOS 10 -->
+        <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+            <string>Localisation nécessaire pour l'enregistrement aux rendez-vous / Location needed for appointment check-in</string>
+        </config-file>
+        <!-- Required by App Store -->
+        <config-file target="*-Info.plist" parent="NSLocationAlwaysAndWhenInUseUsageDescription">
+            <string>Localisation nécessaire pour l'enregistrement aux rendez-vous / Location needed for appointment check-in</string>
+        </config-file>
+        <preference name="deployment-target" value="12.0"/>
+        <preference name="WKWebViewOnly" value="true"/>
+        <splash src="res/screen/ios/Default@2x~universal~anyany.png"/>
+        <allow-intent href="itms:*"/>
+        <allow-intent href="itms-apps:*"/>
+        <icon height="180" src="res/ios/Icon-60@3x.png" width="180"/>
+        <icon height="60" src="res/ios/Icon-60.png" width="60"/>
+        <icon height="120" src="res/ios/Icon-60@2x.png" width="120"/>
+        <icon height="76" src="res/ios/Icon-76.png" width="76"/>
+        <icon height="152" src="res/ios/Icon-76@2x.png" width="152"/>
+        <icon height="40" src="res/ios/Icon-40.png" width="40"/>
+        <icon height="80" src="res/ios/Icon-40@2x.png" width="80"/>
+        <icon height="57" src="res/ios/Icon.png" width="57"/>
+        <icon height="114" src="res/ios/Icon@2x.png" width="114"/>
+        <icon height="72" src="res/ios/Icon-72.png" width="72"/>
+        <icon height="144" src="res/ios/Icon-72@2x.png" width="144"/>
+        <icon height="29" src="res/ios/Icon-small.png" width="29"/>
+        <icon height="58" src="res/ios/Icon-small@2x.png" width="58"/>
+        <icon height="167" src="res/ios/Icon-167.png" width="167"/>
+        <!-- See: https://developer.apple.com/documentation/bundleresources/privacy_manifest_files -->
+        <!-- See: https://developer.apple.com/app-store/app-privacy-details/ -->
+        <!-- See: https://cordova.apache.org/announcements/2024/04/03/cordova-ios-7.1.0.html -->
+        <!-- See: https://stackoverflow.com/questions/78281047/cordova-ios-7-1-0-privacy-manifest-correct-format -->
+        <privacy-manifest>
+            <!-- False, because we don't link our users' data with data from other companies for advertising purposes, or send it to data brokers -->
+            <!-- See: https://developer.apple.com/app-store/user-privacy-and-data-use/ -->
+            <key>NSPrivacyTracking</key>
+            <false/>
+            <key>NSPrivacyTrackingDomains</key>
+            <array/>
+            <!-- For collected data types, see: https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_data_use_in_privacy_manifests -->
+            <key>NSPrivacyCollectedDataTypes</key>
+            <array>
+                <dict>
+                    <!-- Health data is collected non-anonymously, for app functionality, and is not used for tracking -->
+                    <key>NSPrivacyCollectedDataType</key>
+                    <string>NSPrivacyCollectedDataTypeHealth</string>
+                    <key>NSPrivacyCollectedDataTypeLinked</key>
+                    <true/>
+                    <key>NSPrivacyCollectedDataTypeTracking</key>
+                    <false/>
+                    <key>NSPrivacyCollectedDataTypePurposes</key>
+                    <array>
+                        <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+                    </array>
+                </dict>
+                <dict>
+                    <!-- Device ID is collected non-anonymously, for app functionality, and is not used for tracking -->
+                    <key>NSPrivacyCollectedDataType</key>
+                    <string>NSPrivacyCollectedDataTypeDeviceID</string>
+                    <key>NSPrivacyCollectedDataTypeLinked</key>
+                    <true/>
+                    <key>NSPrivacyCollectedDataTypeTracking</key>
+                    <false/>
+                    <key>NSPrivacyCollectedDataTypePurposes</key>
+                    <array>
+                        <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+                    </array>
+                </dict>
+                <dict>
+                    <!-- Clicking/scrolling is collected non-anonymously, for analytics, and is not used for tracking -->
+                    <key>NSPrivacyCollectedDataType</key>
+                    <string>NSPrivacyCollectedDataTypeProductInteraction</string>
+                    <key>NSPrivacyCollectedDataTypeLinked</key>
+                    <true/>
+                    <key>NSPrivacyCollectedDataTypeTracking</key>
+                    <false/>
+                    <key>NSPrivacyCollectedDataTypePurposes</key>
+                    <array>
+                        <string>NSPrivacyCollectedDataTypePurposeAnalytics</string>
+                    </array>
+                </dict>
+            </array>
+            <!-- Cordova doesn't yet pull these declarations from the plugins that wrote them -->
+            <!-- Until that's added, we must add these declarations here directly -->
+            <!-- See: https://cordova.apache.org/announcements/2024/04/03/cordova-ios-7.1.0.html -->
+            <!-- See: https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api -->
+            <key>NSPrivacyAccessedAPITypes</key>
+            <array>
+                <!-- Accessed by cordova-plugin-device -->
+                <!-- See: https://github.com/apache/cordova-plugin-device/pull/193/files -->
+                <dict>
+                    <key>NSPrivacyAccessedAPIType</key>
+                    <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+                    <key>NSPrivacyAccessedAPITypeReasons</key>
+                    <array>
+                        <string>CA92.1</string>
+                    </array>
+                </dict>
+                <!-- Accessed by cordova-plugin-file -->
+                <!-- See: https://github.com/apache/cordova-plugin-file/pull/621/files -->
+                <dict>
+                    <key>NSPrivacyAccessedAPIType</key>
+                    <string>NSPrivacyAccessedAPICategoryDiskSpace</string>
+                    <key>NSPrivacyAccessedAPITypeReasons</key>
+                    <array>
+                        <string>E174.1</string>
+                    </array>
+                </dict>
+                <!-- Accessed by cordova-plugin-file -->
+                <!-- See: https://github.com/apache/cordova-plugin-file/pull/621/files -->
+                <dict>
+                    <key>NSPrivacyAccessedAPIType</key>
+                    <string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+                    <key>NSPrivacyAccessedAPITypeReasons</key>
+                    <array>
+                        <string>C617.1</string>
+                    </array>
+                </dict>
+            </array>
+        </privacy-manifest>
+    </platform>
+</widget>

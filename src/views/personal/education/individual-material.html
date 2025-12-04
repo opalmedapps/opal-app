@@ -1,0 +1,153 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<!-- TODO consolidate duplicate error messages and loading wheels on this page -->
+<ons-page ng-controller="IndividualMaterialController as edu">
+    <generic-toolbar title="{{edu.edumaterial.Type}}" style-class="fontSizeTitle">
+        <left-content>
+            <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
+        </left-content>
+        <right-content>
+            <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial" ng-if="edu.isShareable()">
+                <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
+            </ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
+    <div id="{{edu.recursive_step}}" ng-init="edu.scrollDown()" style="height: 100%; width: auto; overflow: auto;">
+        <!-- Rating bar-->
+        <ons-list>
+            <ons-list-item class="item">
+                <div style="line-height:1" align="center">
+                    <header>
+                        <span ng-class="[fontSizeTitle, 'item-desc']">{{edu.edumaterial.Name}}</span>
+                    </header>
+                    <div style="text-align: center;margin-top:10px">
+                        <rate-material ser-num="edu.edumaterial.EducationalMaterialControlSerNum"></rate-material>
+                    </div>
+                </div>
+            </ons-list-item>
+        </ons-list>
+
+        <!-- Click to open pdf -->
+        <div ng-if="edu.displayType === 'pdf'" style="background-color: #F9F9F9">
+            <!-- Error message if download fails -->
+            <div ng-show="edu.errorLoadingContents" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+                <uib-alert type="{{edu.alert.type}}">{{edu.alert.message|translate}}</uib-alert>
+            </div>
+
+            <!-- Loading wheel while the pdf is being downloaded -->
+            <loading-spinning-circle
+                    ng-show="edu.loadingContents"
+                    loading-message="{{'LOADING_MATERIAL'|translate}}"
+                    margintop="15vh">
+            </loading-spinning-circle>
+
+            <!-- Download icon and button -->
+            <div ng-show="!edu.loadingContents" class="item" ng-click="edu.openPDF()" align="center">
+                <i class="fa-regular fa-file-pdf animate__animated animate__swing" style="color:#4282CC; margin-top:25%; font-size:100px"></i>
+                <br><ons-button ng-class="fontSizeDesc" style="margin-top:30px">{{"OPEN_PDF" | translate}}</ons-button>
+            </div>
+        </div>
+
+        <!-- Click to open link -->
+        <div ng-if="edu.displayType === 'link'" style="background-color: #F9F9F9">
+            <div class="item" ng-click="edu.goToEducationalMaterial()" align="center">
+                <ons-icon class="animate__animated animate__swing" icon="ion-android-open" size="100px" style="color:#4282CC; margin-top:25%;"></ons-icon>
+                <br><ons-button ng-class="fontSizeDesc" style="margin-top:20px">{{"OPEN_LINK" | translate}}</ons-button>
+            </div>
+        </div>
+
+        <!-- Package [Added by Tongyou (Eason) Yang] -->
+        <ons-list ng-if="edu.displayType === 'package'">
+
+            <!-- Loading wheel while the package contents is being fetched. -->
+            <div  align="center" style="margin-top:10vh" ng-show="edu.loadingContents">
+                <svg class="progress-circular">
+                    <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+                </svg>
+            </div>
+
+            <!-- Message if the package contents could not be fetched from the server. -->
+            <div class="ons-row" align="center" ng-show="edu.errorLoadingContents" style="margin: 50px 5px 0">
+                <div class="ons-col" align="center">
+                    <p ng-class="fontSizeTitle" style="color: grey; margin-top: 5vh;">{{"ERROR_GETTING_EDU_MATERIAL"|translate}}</p>
+                </div>
+            </div>
+
+            <!-- Contents -->
+            <ons-list-item modifier="chevron" class="item" ng-repeat = "e in edu.edumaterial.PackageContents" ng-click="edu.goInPackage(e)">
+                <ons-row align="center">
+                    <ons-col width="60px" align="center">
+                        <div>
+                            <i ng-class="e.Icon" ng-style="{color: e.Color}" style="font-size: 26px; margin-left: 15px;"></i>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-desc" ng-class="fontSizeTitle">{{e.Name}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc" >{{e.Type}}</p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+
+        <!-- Booklet: table of contents -->
+        <ons-list style="margin: 10px 0 0 0" ng-if="edu.displayType === 'booklet'">
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle">{{"TABLE_OF_CONTENTS"|translate}}</ons-list-header>
+            <ons-list-item modifier="chevron" ng-repeat= "edumaterial in edu.tableOfContents" class="item" ng-click="edu.goToEducationalMaterial($index)">
+                <ons-row align="center">
+                    <ons-col width="60px" align="center">
+                        <div style="margin-left:20px">
+                            <strong>{{$index+1}}</strong>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{edumaterial.Name}}</span>
+                        </header>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+
+        <!-- Video -->
+        <ons-list class="settings-list" ng-if="edu.displayType === 'video'">
+            <ons-list-item class="item">
+                <div align="center" class="embed-responsive embed-responsive-16by9">
+
+                    <!-- Video tag based on different video url or file format -->
+                    <video-tag-by-format
+                        edumaterial-url="{{edu.edumaterial.Url}}"
+                        error-message="{{'ERROR_IN_VIDEO_URL_OR_FORMAT'|translate}}">
+                    </video-tag-by-format>
+
+                </div>
+            </ons-list-item>
+        </ons-list>
+
+        <!-- HTML page (Booklet, Factsheet, etc.) -->
+        <ons-list class="settings-list" ng-if="edu.displayType === 'html'">
+            <!-- Loading wheel while the material contents is being fetched. -->
+            <loading-spinning-circle
+                    ng-show="edu.loadingContents"
+                    loading-message="{{'LOADING_MATERIAL'|translate}}">
+            </loading-spinning-circle>
+            <!-- Message if the material contents could not be loaded. -->
+            <div class="ons-row" align="center" ng-show="edu.errorLoadingContents" style="margin-top: 50px">
+                <div class="ons-col" align="center">
+                    <p ng-class="fontSizeTitle" style="color: grey; margin-top: 5vh;">{{"ERROR_GETTING_EDU_MATERIAL"|translate}}</p>
+                </div>
+            </div>
+            <!-- Contents -->
+            <ons-list-item class="item">
+                <div class="container" style="background-color:white; overflow-y:scroll" ng-style="{height:edu.heightSection}" ng-show="edu.edumaterial.Content">
+                    <div ng-bind-html="edu.edumaterial.Content | trustHTML" ng-class="fontSizeDesc"></div>
+                </div>
+            </ons-list-item>
+        </ons-list>
+    </div>
+</ons-page>

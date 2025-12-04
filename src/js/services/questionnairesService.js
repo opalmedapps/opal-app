@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function() {
     'use strict';
 
@@ -9,7 +13,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Questionnaires', Questionnaires);
 
     /*
@@ -19,14 +23,88 @@
         '$sce',
         'Params',
         'QuestionnaireDataService',
+        'User',
+        'UserAuthorizationInfo',
     ];
 
     /* @ngInject */
-    function Questionnaires($sce, Params, QuestionnaireDataService) {
+    function Questionnaires($sce, Params, QuestionnaireDataService, User, UserAuthorizationInfo) {
         // constants for DB conventions
         const questionnaireValidStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const questionnaireValidType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
         const answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
+        const allowedPurpose = Params.QUESTIONNAIRE_PURPOSES;
+
+         // the following are not in the constants file since they concern translation
+         const PURPOSE_TITLE_MAP = {
+            clinical: 'CLINICAL_QUESTIONNAIRES',
+            research: 'RESEARCH_QUESTIONNAIRES',
+            consent: 'CONSENT_FORMS',
+            default: 'QUESTIONNAIRES',
+        };
+
+        const PURPOSE_EMPTY_LIST_MAP = {
+            new: {
+                clinical: 'QUESTIONNAIRE_NONE_NEW',
+                research: 'QUESTIONNAIRE_NONE_NEW',
+                consent: 'CONSENT_FORMS_NONE_NEW',
+                default: 'QUESTIONNAIRE_NONE_NEW',
+            },
+            progress: {
+                clinical: 'QUESTIONNAIRE_NONE_PROGRESS',
+                research: 'QUESTIONNAIRE_NONE_PROGRESS',
+                consent: 'CONSENT_FORMS_NONE_PROGRESS',
+                default: 'QUESTIONNAIRE_NONE_PROGRESS',
+            },
+            completed: {
+                clinical: 'QUESTIONNAIRE_NONE_COMPLETED',
+                research: 'QUESTIONNAIRE_NONE_COMPLETED',
+                consent: 'CONSENT_FORMS_NONE_COMPLETED',
+                default: 'QUESTIONNAIRE_NONE_COMPLETED',
+            }
+        };
+
+        const PURPOSE_THANKS_MAP = {
+            clinical: 'QUESTIONNAIRE_THANKS',
+            research: 'QUESTIONNAIRE_THANKS',
+            consent: 'CONSENT_FORM_THANKS',
+            default: 'QUESTIONNAIRE_THANKS',
+        };
+
+        const PURPOSE_LIST_MAP = {
+            clinical: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+            research: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+            consent: 'CONSENT_FORM_GO_BACK_TO_LIST',
+            default: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+        }
+
+        const PURPOSE_BEGIN_MAP = {
+            clinical: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+            research: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+            consent: 'CONSENT_FORM_BEGIN_INSTRUCTION',
+            default: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+        };
+
+        const PURPOSE_RESUME_MAP = {
+            clinical: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+            research: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+            consent: 'CONSENT_FORM_RESUME_INSTRUCTION',
+            default: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+        };
+
+        const PURPOSE_SUBMIT_BUTTON_MAP = {
+            clinical: 'SUBMIT_ANSWERS',
+            research: 'SUBMIT_ANSWERS',
+            consent: 'SUBMIT_CONSENT',
+            default: 'SUBMIT_ANSWERS',
+        };
+
+        const PURPOSE_SUBMIT_INSTRUCTION_MAP = {
+            clinical: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+            research: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+            consent: 'CONSENT_FORM_SUBMIT_INSTRUCTION',
+            default: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+        };
 
         // constants for the app notifications
         const notifConstants = Params.QUESTIONNAIRE_NOTIFICATION_CONSTANTS;
@@ -42,32 +120,42 @@
                                     // Note that any changes done to the questions in the carousel are reflected back to the currentQuestionnaire since questions is an array and one question is an object.
 
         // variables for the summary page -- saving answer
+        // true if still waiting for an answer to be saved, false otherwise
         let waitingForSavingAnswer = false;
 
+        // Variables for questionnaire notifications
+        let currentPurpose = 'default';
+
         // this is redundant but written for clarity, ordered alphabetically
-        let service = {
+        return {
             clearAllQuestionnaire: clearAllQuestionnaire,
             findInProgressQuestionIndex: findInProgressQuestionIndex,
-            getCarouselItems: getCarouselItems,
-            getCurrentQuestionnaire: getCurrentQuestionnaire,
-            getNumberOfUnreadQuestionnaires: getNumberOfUnreadQuestionnaires,
+            getQuestionnaireBySerNum: getQuestionnaireBySerNum,
+            getCarouselItems: () => carouselItems,
+            getCurrentQuestionnaire: () => currentQuestionnaire, // getter for the current questionnaire
+            getQuestionnaireBackToListByPurpose: (questionnairePurpose = 'default') => PURPOSE_LIST_MAP[questionnairePurpose], //  gets the correct translation key for the questionnaire back to list message. It assumes that the purpose has been validated.
+            getQuestionnaireBeginByPurpose: (questionnairePurpose = 'default') => PURPOSE_BEGIN_MAP[questionnairePurpose], // gets the correct translation key for the begin questionnaire instruction. It assumes that the purpose has been validated.
             getQuestionnaireCount: getQuestionnaireCount,
             getQuestionnaireList: getQuestionnaireList,
-            getQuestionnaireStartUrl: getQuestionnaireStartUrl,
-            isWaitingForSavingAnswer: isWaitingForSavingAnswer,
+            getQuestionnaireNoListMessageByPurpose: getQuestionnaireNoListMessageByPurpose,
+            getQuestionnaireResumeByPurpose: (questionnairePurpose = 'default') => PURPOSE_RESUME_MAP[questionnairePurpose], // gets the correct translation key for the resume questionnaire instruction. It assumes that the purpose has been validated.
+            getQuestionnaireStartUrl: () => notifConstants.QUESTIONNAIRE_URL, // Used by notifications to direct the user to questionnaires
+            getQuestionnaireSubmitButtonByPurpose: (questionnairePurpose = 'default') => PURPOSE_SUBMIT_BUTTON_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire submit button. It assumes that the purpose has been validated.
+            getQuestionnaireSubmitInstructionByPurpose: (questionnairePurpose = 'default') => PURPOSE_SUBMIT_INSTRUCTION_MAP[questionnairePurpose], // gets the correct translation key for the submit questionnaire instruction. It assumes that the purpose has been validated.
+            getQuestionnaireTitleByPurpose: (questionnairePurpose = 'default') => PURPOSE_TITLE_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire title. It assumes that the purpose has been validated.
+            getQuestionnaireThankByPurpose: (questionnairePurpose = 'default') => PURPOSE_THANKS_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire thank you message. It assumes that the purpose has been validated.
+            isWaitingForSavingAnswer: () => waitingForSavingAnswer,
             updateQuestionnaireStatus: updateQuestionnaireStatus,
-            requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
+            requestQuestionnaireStubFromSerNum: requestQuestionnaireStubFromSerNum,
+            formatQuestionnaireStub: formatQuestionnaireStub,
             requestQuestionnaire: requestQuestionnaire,
-            requestQuestionnaireList: requestQuestionnaireList,
-            saveQuestionnaireAnswer: saveQuestionnaireAnswer
+            requestQuestionnairePurpose: (qp_ser_num) => QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num), // gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
+            saveQuestionnaireAnswer: saveQuestionnaireAnswer,
+            validateQuestionnairePurpose: (questionnairePurpose) => allowedPurpose.includes(questionnairePurpose.toLowerCase()), // check whether the questionnaire purpose is valid (true if it is valid, false otherwise)
+            setQuestionnaireList: setQuestionnaireList,
+            updateQuestionnaireList: updateQuestionnaireList,
+
         };
-
-        return service;
-
-        // //////////////
-        /*
-            Public functions
-         */
 
         /**
          * @name findInProgressQuestionIndex
@@ -136,31 +224,30 @@
         }
 
         /**
-         * @name requestQuestionnaireList
-         * @desc this function is requesting the list of questionnaires from questionnaireDataService and process this list to set the questionnaire list variables
-         * @returns {Promise}
+         * @desc Finds and returns a questionnaire from one of the three questionnaire lists.
+         * @param qpSerNum The qp_ser_num of the questionnaire to find.
+         * @returns {object|undefined} The questionnaire, or undefined if it wasn't found.
          */
-        function requestQuestionnaireList() {
-            // re-initiate all the questionnaire related variables
-            clearAllQuestionnaire();
-
-            return QuestionnaireDataService.requestQuestionnaireList()
-                .then(function(responseQuestionnaireList){
-                    setQuestionnaireList(responseQuestionnaireList);
-                    return {Success: true, Location: 'Server'};
-                });
+        function getQuestionnaireBySerNum(qpSerNum) {
+            for (let status of Object.values(questionnaireValidStatus)) {
+                if (getQuestionnaireMap(status).hasOwnProperty(qpSerNum)) return getQuestionnaireMap(status)[qpSerNum];
+            }
         }
 
         /**
-         * @name requestOpalQuestionnaireFromSerNum
-         * @desc this function gets the basic information concerning a questionnaire stored in the OpalDB from its SerNum
-         *       In particular, it gets the answerQuestionnaireId of that questionnaire,
-         *       which allows the questionnaire to be found in the questionnaireDB
-         * @param {string|int} questionnaireSerNum
-         * @returns {Promise}
+         * @name requestQuestionnaireStubFromSerNum
+         * @description Gets the basic information concerning a questionnaire stored in the OpalDB from its SerNum
+         *              In particular, gets the qp_ser_num (answerQuestionnaireId) of that questionnaire,
+         *              which allows the questionnaire to be found in the questionnaireDB.
+         *              This information is also saved to the appropriate list in this service.
+         * @param {string|int} questionnaireSerNum The SerNum of the questionnaire to look up.
+         * @returns {Promise<Object>} Resolves to the basic information (questionnaire stub) for the given questionnaire.
          */
-        function requestOpalQuestionnaireFromSerNum(questionnaireSerNum) {
-            return QuestionnaireDataService.requestOpalQuestionnaireFromSerNum(questionnaireSerNum);
+        async function requestQuestionnaireStubFromSerNum(questionnaireSerNum) {
+            let questionnaireStub = await QuestionnaireDataService.requestQuestionnaireStubFromSerNum(questionnaireSerNum);
+            // Add the questionnaire stub to this service
+            setQuestionnaireList([questionnaireStub], false);
+            return questionnaireStub;
         }
 
         /**
@@ -169,42 +256,16 @@
          * @param {int} answerQuestionnaireId this is the qp_ser_num or the answerQuestionnaireId for the DB (unique identifier for a questionnaire sent to a user)
          * @returns {Promise}
          */
-        function requestQuestionnaire(answerQuestionnaireId){
-            let currentQuestionnaireInService = getCurrentQuestionnaire();
+        async function requestQuestionnaire(answerQuestionnaireId){
 
             // if the current questionnaire is requested, return it.
-            if (currentQuestionnaireInService.qp_ser_num === answerQuestionnaireId){
-                return Promise.resolve({Success: true, Location: 'App'});
-            }
+            if (currentQuestionnaire.qp_ser_num === answerQuestionnaireId) return {Success: true, Location: 'App'};
 
             // re-initiate the current questionnaire related variables
             clearCurrentQuestionnaire();
-
-            return QuestionnaireDataService.requestQuestionnaire(answerQuestionnaireId)
-                .then(function(responseQuestionnaire){
-
-                    setQuestionnaire(responseQuestionnaire);
-
-                    return {Success: true, Location: 'Server'};
-                });
-        }
-
-        /**
-         * @name isWaitingForSavingAnswer
-         * @desc getter for the boolean waitingForSavingAnswer. Used for the answerQuestionnaireController
-         * @returns {boolean} true if still waiting for any answer to be saved, false otherwise
-         */
-        function isWaitingForSavingAnswer(){
-            return waitingForSavingAnswer;
-        }
-
-        /**
-         * @name getCurrentQuestionnaire
-         * @desc this is a getter for the current questionnaire
-         * @returns {object} the current questionnaire
-         */
-        function getCurrentQuestionnaire(){
-            return currentQuestionnaire;
+            const responseQuestionnaire = await QuestionnaireDataService.requestQuestionnaire(answerQuestionnaireId);
+            setQuestionnaire(responseQuestionnaire);
+            return {Success: true, Location: 'Server'};
         }
 
         /**
@@ -217,18 +278,18 @@
          * @return {Promise}
          *
          */
-        function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus){
+        async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus) {
+                let userInfo = User.getUserInfo();
 
-            return QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus)
-                .then(function (response) {
-                    let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus);
+                let response = await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userInfo);
 
-                    if (!isFailure){
-                        throw new Error("Error updating status internal to app");
-                    }
+                let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus, userInfo);
 
-                    return {Success: true, Location: 'Server'};
-                });
+                if (!isFailure) {
+                    throw new Error("Error updating status internal to app");
+                }
+
+                return { Success: true, Location: 'Server', QuestionnaireSerNum: response?.QuestionnaireSerNum};
         }
 
         /**
@@ -254,7 +315,7 @@
                 let questionTypeId = question.type_id;
                 let isSuccess = true;
 
-                // the app knows that the answer is invalid, but still would like to save tha answer (that the user has answered but not chosen an answer).
+                // the app knows that the answer is invalid, but still would like to save the answer (that the user has answered but not chosen an answer).
                 // The app should not submit the questionnaire no matter if the DB has received it or not.
                 // This check is here to avoid overwriting the flag saying that the answer is invalid
                 if (question.patient_answer.is_defined !== answerSavedInDBValidStatus.ANSWER_INVALID){
@@ -318,7 +379,8 @@
                             toggleIsDefinedFlag(question, answerSavedInDBValidStatus.ANSWER_SAVING_ERROR);
                         }
 
-                        reject({Success: false, Location: '', Error: error});
+                        let errorToReject = error.hasOwnProperty('Location') ? error : {Success: false, Location: '', Error: error};
+                        reject(errorToReject);
                     });
 
                 // timeout for saving answer so we do not wait forever
@@ -338,32 +400,58 @@
         }
 
         /**
-         * @name getCarouselItems
-         * @desc getter for carouselItems
-         * @returns {Array}
+         * @name getQuestionnaireNoListMessageByPurpose
+         * @desc gets the correct translation key for the message when there is no questionnaires in the list.
+         *       It assumes that the purpose has been validated.
+         * @param {int} status
+         * @param {string} questionnairePurpose
+         * @returns {string}
          */
-        function getCarouselItems(){
-            return carouselItems;
+        function getQuestionnaireNoListMessageByPurpose(status, questionnairePurpose = 'default') {
+            switch (status) {
+                case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS:
+                    return PURPOSE_EMPTY_LIST_MAP.new[questionnairePurpose];
+
+                case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS:
+                    return PURPOSE_EMPTY_LIST_MAP.progress[questionnairePurpose];
+
+                case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS:
+                    return PURPOSE_EMPTY_LIST_MAP.completed[questionnairePurpose];
+
+                default:
+                    return PURPOSE_EMPTY_LIST_MAP.new['default'];
+            }
         }
 
         /**
-         * @name getQuestionnaires
+         * @name getQuestionnaireMap
+         * @desc Returns the map of questionnaires according to the given status.
+         *       For example, for the "in progress" status, returns the map of in progress questionnaires.
+         * @param {number} status - The status for which to get the map of questionnaires.
+         * @returns {Object} An object mapping from qp_ser_num to questionnaires (see the service's variables for details).
+         */
+        function getQuestionnaireMap(status) {
+            switch (status) {
+                case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS: return newQuestionnaires;
+                case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS: return inProgressQuestionnaires;
+                case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS: return completeQuestionnaires;
+                default: throw new Error(`Requested questionnaire list for invalid status: ${status}`);
+            }
+        }
+
+        /**
+         * @name getQuestionnaireList
          * @desc This function gets the list of questionnaires according to the status given.
          * @param {Number} status
          * @return {object} The object containing the questionnaires with the given status
          */
         function getQuestionnaireList(status){
-            switch (status) {
-                case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS:
-                    return Object.values(newQuestionnaires);
-                case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS:
-                    return Object.values(inProgressQuestionnaires);
-                case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS:
-                    return Object.values(completeQuestionnaires);
-                default:
-                    // TODO: logging
-                    console.error("invalid type of questionnaire requested from questionnairesService.js");
-                    return completeQuestionnaires;
+            try {
+                return Object.values(getQuestionnaireMap(status));
+            }
+            catch (err) {
+                console.error("invalid type of questionnaire requested from questionnairesService.js", err);
+                return [];
             }
         }
 
@@ -374,48 +462,13 @@
          * @returns {int} the number of questionnaires belonging to that type. If the type is not found, return 0 which will mean that the type has 0 questionnaire
          */
         function getQuestionnaireCount(type){
-            if (type === questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS) {
-                return Object.keys(newQuestionnaires).length;
+            try {
+                return Object.keys(getQuestionnaireMap(type)).length;
             }
-            else if (type === questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS) {
-                return Object.keys(inProgressQuestionnaires).length;
+            catch (err) {
+                console.error(err);
+                return 0;
             }
-            else if (type === questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS) {
-                return Object.keys(completeQuestionnaires).length;
-            }
-
-            // TODO: error log
-            return 0;
-        }
-
-        /**
-         * @name getNumberOfUnreadQuestionnaires
-         * @desc This public function is used for showing the badge (count how many questionnaires non completed by patient) by the personalTabController.js
-         * @returns {Number} returns the number of new and in progress questionnaires
-         */
-        function getNumberOfUnreadQuestionnaires(){
-            return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS) + getQuestionnaireCount(questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
-        }
-
-        /**
-         * @name getQuestionnaireStartUrl
-         * @desc This public function is created for notifications.
-         *      The notification uses this URL to direct the user to this page (questionnaire list) when they click on the notification new questionnaire
-         * @returns {string} The URL returned. This constant can be found and modified in the questionnaireConstnant.js
-         */
-        function getQuestionnaireStartUrl(){
-            return notifConstants.QUESTIONNAIRE_URL;
-        }
-
-        /**
-         * @name getQuestionnaireName
-         * @desc This function is used for the notifications and only have one purpose: return a fixed string.
-         *      The current implementation have modified the notificationsService to not need this. But just in case, left it here.
-         *      To use this, add the following to the service variable: getQuestionnaireName: getQuestionnaireName
-         * @returns {string} the questionnaire name hardcoded.
-         */
-        function getQuestionnaireName(){
-            return notifConstants.QUESTIONNAIRE_NAME;
         }
 
         /**
@@ -430,17 +483,6 @@
             clearCurrentQuestionnaire();
         }
 
-        /*
-            Private functions
-         */
-
-        /**
-         * @name clearCarouselItems
-         * @desc this private function resets the carouselItems array
-         */
-        function clearCarouselItems(){
-            carouselItems = [];
-        }
 
         /**
          * @name setCarouselItems
@@ -448,7 +490,7 @@
          *      Note: this assumes that the questionnaire is ordered when sent by the listener
          */
         function setCarouselItems(){
-            clearCarouselItems();
+            carouselItems = [];
 
             // the top level properties are already checked by setQuestionnaire (when we first get the questionnaire)
 
@@ -475,6 +517,7 @@
                 // };
                 //
                 // carouselItems.push(sectionObjectForCarousel);
+
 
                 // loop through questions
                 for (let j = 0; j < currentQuestionnaire.sections[i].questions.length; j++) {
@@ -533,8 +576,43 @@
         }
 
         /**
+         * @name formatQuestionnaireStub
+         * @desc Validates and formats a questionnaire stub (as received by the listener).
+         *       Questionnaire stubs contain enough information to make up the initial questionnaire list, but don't
+         *       contain the complete information for each questionnaire.
+         * @param {object} questionnaireStub The questionnaire stub to format and validate.
+         * @throws Throws an error if the questionnaire stub is missing any required properties.
+         */
+        function formatQuestionnaireStub(questionnaireStub){
+            // Check for the required properties
+            let properties = ['created', 'last_updated', 'nickname', 'qp_ser_num', 'questionnaire_id', 'status', 'respondent_id'];
+            properties.forEach(prop => {
+                if (!questionnaireStub.hasOwnProperty(prop)) throw new Error(`Questionnaire stub is missing a required property: ${prop}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
+            });
+
+            // Format and validate the questionnaire's integer properties
+            const intProperties = ['status', 'respondent_id'];
+            intProperties.forEach(prop => {
+                const intProp = parseInt(questionnaireStub[prop]);
+                if (isNaN(intProp)) throw new Error(`Questionnaire stub's '${prop}' cannot be parsed as an int: ${questionnaireStub[prop]}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
+                questionnaireStub[prop] = intProp;
+            });
+
+            // Format and validate the questionnaire's date properties
+            const dateProperties = ['completed_date', 'created', 'last_updated'];
+            dateProperties.forEach(prop => {
+                // Only format date properties that were provided and that haven't been formatted already (must still be strings)
+                if (typeof questionnaireStub[prop] === 'string') {
+                    const dateProp = Date.parse(questionnaireStub[prop]);
+                    if (isNaN(dateProp)) throw new Error(`Questionnaire stub's '${prop}' cannot be parsed as a date: ${questionnaireStub[prop]}; qp_ser_num = ${questionnaireStub.qp_ser_num}`);
+                    questionnaireStub[prop] = dateProp;
+                }
+            });
+        }
+
+        /**
          * @name verifyQuestionnaireProperty
-         * @desc This private function verify the format and the property of the outer layer of the questionnaire object. Also format html.
+         * @desc This private function verify the format and the property of the outer layer of the questionnaire object.
          * @param {object} questionnaire the object to be verified
          * @returns {boolean} false if the questionnaire did not pass the check, true otherwise
          */
@@ -552,25 +630,14 @@
 
             // set the questionnaire status to an integer for easier comparison
             questionnaire.status = parseInt(questionnaire.status);
-
-            // convert html string
-            questionnaire.instruction = $sce.trustAsHtml(questionnaire.instruction);
-            questionnaire.description = $sce.trustAsHtml(questionnaire.description);
-
-            if (isNaN(questionnaire.status)){
-                return false;
-            }
-
-            if (!Array.isArray(questionnaire.sections)){
-                return false;
-            }
+            if (isNaN(questionnaire.status) || !Array.isArray(questionnaire.sections)) return false;
 
             return true;
         }
 
         /**
          * @name verifySectionProperty
-         * @desc verify properties that the section should have. Also convert html string.
+         * @desc verify properties that the section should have.
          * @param {object} section a section of a questionnaire
          * @returns {boolean} if the section matches the format then return true, else false
          */
@@ -584,18 +651,13 @@
                 return false;
             }
 
-            section.section_instruction = $sce.trustAsHtml(section.section_instruction);
-
-            if (!Array.isArray(section.questions)){
-                return false;
-            }
-
+            if (!Array.isArray(section.questions)) return false;
             return true;
         }
 
         /**
          * @name verifyQuestionProperty
-         * @desc verify the properties of questions, as well as the options and answers for it. Also sort the options according to their orders and convert html string
+         * @desc verify the properties of questions, as well as the options and answers for it. Also sort the options according to their orders.
          * @param {object} question
          * @returns {boolean} true if pass all checks, false otherwise
          */
@@ -617,9 +679,6 @@
 
                 return false;
             }
-
-            // convert html string
-            question.question_text = $sce.trustAsHtml(question.question_text);
 
             if (isNaN(parseInt(question.type_id))){
                 console.error("ERROR: the question's type_id is not valid");
@@ -756,7 +815,7 @@
          * @param {int} oldStatus the old status of the questionnaire. If this parameter is non-existent then the function has to check if the questionnaire exist in every object.
          * @return {boolean} true if success, false if failure
          */
-        function updateAppQuestionnaireStatus (answerQuestionnaireId, newStatus, oldStatus){
+        function updateAppQuestionnaireStatus (answerQuestionnaireId, newStatus, oldStatus, userProfile){
             let questionnaire_to_be_updated;
 
             // verify status
@@ -809,6 +868,7 @@
 
             // update the status of the questionnaire
             questionnaire_to_be_updated.status = newStatus;
+            questionnaire_to_be_updated.respondent_display_name = `${userProfile.first_name} ${userProfile.last_name}`;
 
             // re-classify the questionnaire
             switch (newStatus) {
@@ -844,32 +904,20 @@
          * @name updateAppQuestionnaireLastUpdated
          * @desc This private function helps update the last updated time for the list of questionnaire. The last updated will have ISO 8601 format and have zero UTC offset
          * @param {int} qp_ser_num the qp_ser_num or the answerQuestionnaireId of the questionnaire to be updated
-         * @param {status} status the status of the questionnaire to be updated
+         * @param {number} status the status of the questionnaire to be updated
          * @returns {boolean} true if success, false otherwise
          */
         function updateAppQuestionnaireLastUpdated(qp_ser_num, status){
-            let d = new Date();
-
-            // we know the old status -> clean up old status
-            switch (status) {
-                case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS:
-                    newQuestionnaires[qp_ser_num].last_updated = d.toISOString();
-                    break;
-
-                case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS:
-                    inProgressQuestionnaires[qp_ser_num].last_updated = d.toISOString();
-                    break;
-
-                case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS:
-                    completeQuestionnaires[qp_ser_num].last_updated = d.toISOString();
-                    break;
-
-                default:
-                    console.error("ERROR: error in updating the questionnaire status, it does not have a valid new status");
-                    return false;
+            try {
+                let now = new Date();
+                let questionnaires = getQuestionnaireMap(status);
+                questionnaires[qp_ser_num].last_updated = now.toISOString();
+                return true;
             }
-
-            return true;
+            catch (error) {
+                console.error("Error updating a questionnaire's 'last_updated' attribute", error);
+                return false;
+            }
         }
 
         /**
@@ -903,64 +951,49 @@
 
         /**
          * @name setQuestionnaireList
-         * @desc this is a setter for the list of questionnaires
-         * @param questionnaireList_local
+         * @desc Processes an array of questionnaires from the listener and saves it in this service.
+         *       By default, any previously added questionnaires are overwritten, but this can be disabled to
+         *       just add new questionnaires to the existing list.
+         * @param {Object[]} questionnaireList - An array of questionnaires, as provided by the listener.
+         * @param {boolean} [clearExisting] - Optional, defaults to true; indicates whether to clear away all previously
+         *                                    added questionnaires.
          */
-        function setQuestionnaireList(questionnaireList_local){
-            // verify input
-            if (questionnaireList_local.constructor !== Array){
-                clearAllQuestionnaire();
-                console.error('Error in setting questionnaire list, did not get an array from listener');
-                // TODO: Error handling
-                return;
-            }
+        function setQuestionnaireList(questionnaireList, clearExisting=true) {
+            // Validate input
+            if (!Array.isArray(questionnaireList)) throw new Error('Failed setting or updating questionnaire list; did not get an array from the listener.');
 
-            // sort questionnaires by status
-            for (let i = 0; i < questionnaireList_local.length; i++) {
-                let questionnaire = questionnaireList_local[i];
+            if (clearExisting) clearAllQuestionnaire();
 
-                // verify input properties
-                if (!questionnaire.hasOwnProperty('created') || !questionnaire.hasOwnProperty('last_updated') ||
-                    !questionnaire.hasOwnProperty('nickname') || !questionnaire.hasOwnProperty('qp_ser_num') ||
-                    !questionnaire.hasOwnProperty('questionnaire_id') || !questionnaire.hasOwnProperty('status')) {
+            questionnaireList.forEach(questionnaire => {
+                try {
+                    formatQuestionnaireStub(questionnaire);
 
-                    // TODO: error handling
-                    console.error('Error in setting questionnaire list, did not get the required property for a questionnaire from listener');
-                    clearAllQuestionnaire();
+                    // Delete any existing old copies of the same questionnaire
+                    // This ensures that if a questionnaire changes status, the old copy in the other status list is removed
+                    for (let status of Object.values(questionnaireValidStatus)) {
+                        delete getQuestionnaireMap(status)[questionnaire.qp_ser_num];
+                    }
 
-                    return;
+                    // Save the questionnaire in the appropriate map according to its status
+                    getQuestionnaireMap(questionnaire.status)[questionnaire.qp_ser_num] = questionnaire;
+
+                    // If the current questionnaire has been updated, clear it to force the contents to be re-downloaded from the server
+                    if (currentQuestionnaire.qp_ser_num === questionnaire.qp_ser_num) clearCurrentQuestionnaire();
                 }
-
-                // verify input type
-                questionnaire.status = parseInt(questionnaire.status);
-
-                if (isNaN(questionnaire.status)) {
-                    // TODO: error handling
-                    clearAllQuestionnaire();
-                    return;
+                catch (err) {
+                    console.error('Questionnaire stub failed validation; not including it.', err, questionnaire);
                 }
+            });
+        }
 
-                // add the questionnaire to the appropriate object according to its status
-                switch (questionnaire.status) {
-                    case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS:
-                        newQuestionnaires[questionnaire.qp_ser_num] = questionnaire;
-                        break;
-
-                    case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS:
-                        completeQuestionnaires[questionnaire.qp_ser_num] = questionnaire;
-                        break;
-
-                    case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS:
-                        inProgressQuestionnaires[questionnaire.qp_ser_num] = questionnaire;
-                        break;
-
-                    default:
-                        console.error("in setQuestionnaireList, the questionnaire status is invalid");
-                        // TODO: error handling
-                        clearAllQuestionnaire();
-                        return;
-                }
-            }
+        /**
+         * @name updateQuestionnaireList
+         * @desc Processes an array of updated questionnaires from the listener and uses it to update this service.
+         *             Values with the same qp_ser_num are overwritten; the rest are left untouched.
+         * @param {Object[]} updatedQuestionnaireList - An array of new or updated questionnaires, as provided by the listener.
+         */
+        function updateQuestionnaireList(updatedQuestionnaireList) {
+            setQuestionnaireList(updatedQuestionnaireList, false);
         }
 
         /**
@@ -1021,4 +1054,3 @@
 
     }
 })();
-

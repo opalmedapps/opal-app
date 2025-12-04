@@ -1,20 +1,21 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="SetHospitalController as vm" style="background-color: white">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center">{{"SELECT_HOSPITAL"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'SELECT_HOSPITAL'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <div align="center">
         <ul class="list">
             <li class="list__header" ng-class="fontSizeTitle" style="font-size: 18px">
                 {{"SELECT_HOSPITAL"|translate}}
             </li>
-            <li class="list__item list__item--tappable" ng-repeat="(hospitalKey, hospitalValue) in vm.hospitalObj track by hospitalKey">
-                <label class="radio-button radio-button--list-item">
-                    <input type="radio" value="{{hospitalKey}}" ng-change="vm.saveSelectedHospital();" ng-model="vm.selectedHospitalKey">
+            <li class="list__item list__item--tappable" ng-repeat="(key, hospital) in vm.hospitalList">
+                <label class="radio-button radio-button--list-item" ng-style="vm.styleHospitalDisabled(hospital)" ng-click="vm.showOptionalMessageOnClick(hospital)">
+                    <input type="radio" value="{{hospital.uniqueHospitalCode}}" ng-disabled="!hospital.enabled" ng-change="vm.saveSelectedHospital()" ng-model="vm.selectedHospitalCode">
                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                    {{hospitalValue.fullName|translate}} ({{hospitalValue.acronym|translate}})
+                    {{hospital.fullName|translate}} ({{hospital.acronym|translate}})
                 </label>
             </li>
         </ul>

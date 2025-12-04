@@ -1,0 +1,16 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-popover cancelable modifier="android" style="min-height:10px">
+    <ons-list>
+        <ons-list-item class="item" modifier="tappable" ng-click="markAllRead()">
+            <p ng-class="fontSizeDesc">
+                <ons-icon icon="fa-check-square" style="color:grey"></ons-icon>
+                <span>{{"MARK_ALL_READ"|translate}}</span>
+            </p>
+        </ons-list-item>
+    </ons-list>
+</ons-popover>

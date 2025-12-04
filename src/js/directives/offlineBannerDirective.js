@@ -1,16 +1,17 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   offlineBannerDirective.js
  * Description  :   This directive interacts directly with the Network Status Service and displays a banner notifying
 *                   that the user if offline. And when the user comes online shows the "reconnecting" notification.
  * Created by   :   James Brace
  * Date         :   22 May 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * License      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
-angular.module('MUHCApp')
-    .directive('networkBanner', function($timeout, NetworkStatus, $filter) {
+angular.module('OpalApp')
+    .directive('networkBanner', ['$timeout', 'NetworkStatus', function($timeout, NetworkStatus) {
 
     return {
         restrict: 'E',
@@ -35,17 +36,17 @@ angular.module('MUHCApp')
                     $timeout(function(){
                         scope.goingBackOnline = false;
                         scope.online = true;
-                        scope.message = "NOINTERNETCONNECTION";
+                        scope.message = "NO_INTERNET_CONNECTION";
                     }, 3000);
                 }
             };
 
             NetworkStatus.registerObserverCallback(updateStatus);
 
-            scope.message = "NOINTERNETCONNECTION";
+            scope.message = "NO_INTERNET_CONNECTION";
             scope.online = NetworkStatus.isOnline();
 
         }
     };
 
-});
+}]);

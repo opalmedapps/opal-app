@@ -1,0 +1,77 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*
+*Text class
+*/
+.overflow {
+	white-space: nowrap;
+	overflow: hidden;
+}
+.ellipsis {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.overflow-text-ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-break: break-word;
+}
+/*
+*Utility classes
+*/
+.gpu_efficiency{
+	-ms-transform: translate(0px,0px);
+	transform: translateZ(0);
+	-webkit-transform: translateZ(0);
+}
+.notification {
+	position: absolute;
+	margin-left: -10px;
+	font-size: 12px;
+}
+.about-link {
+	background-color: #E3F2FD;
+}
+.hyphens {
+	hyphens:auto;
+}
+.break-words {
+	word-break: break-all;
+}
+.shadow-2 {
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+#rcorners {
+	border-radius: 25px;
+	background: rgba(0,0,0,0.8);
+	padding: 20px;
+	width: 90%;
+	margin: auto;
+	position: relative;
+}
+.glyphicon-refresh-animate {
+	-animation: spin .7s infinite linear;
+	-ms-animation: spin .7s infinite linear;
+	-webkit-animation: spinw .7s infinite linear;
+	-moz-animation: spinm .7s infinite linear;
+}
+.name {
+	font-weight: 500;
+	line-height: 16px;
+	font-size: 15px;
+	margin-bottom: 6px;
+}
+.iconHomeView {
+	margin-left: 10px;
+	font-size:28px;
+	font-weight: 300;
+	color: #2B6197;
+	text-align: center;
+}

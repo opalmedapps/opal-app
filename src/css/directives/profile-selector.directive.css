@@ -1,0 +1,76 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.profile-selector--overlay {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(159, 159, 159, 0.5);
+}
+
+.profile-selector--title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-selector--title--text {
+    overflow: hidden;
+}
+
+.profile-selector--title--icon {
+    background-color: #F7F6F6;
+    width: 15px;
+    height: 15px;
+    margin-left: 25%;
+}
+
+.profile-selector--list {
+    position: fixed;
+    list-style: none;
+    background-color: #ffffff;
+    padding: 0;
+    width: 80%;
+    left: 10%;
+    margin-top: 1%;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+}
+
+.profile-selector--list li{
+    border-bottom: 1px solid lightgray;
+    overflow: hidden;
+    padding: 0 1rem;
+}
+
+.profile-selector--list li:last-child{
+    border-bottom: none;
+}
+
+.profile-selector--list .selected {
+    background-color: #E0E9F8;
+}
+
+.profile-selector--list .disabled {
+    background-color: #EBEBEB;
+    color: grey;
+}
+
+.profile-selector--text {
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+.scrollingEntry {
+    animation: scrollOverflow 2s linear 1s 1;
+}
+
+@keyframes scrollOverflow {
+    from {margin-left: 0;}
+    to {margin-left: -100%;}
+}

@@ -1,12 +1,18 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>OPAL</title>
     <meta charset="utf-8">
-
+    <!-- Manifest used to configure progressive web app settings. See webpack.config.js for details (WebpackManifestPlugin) -->
+    <link rel="manifest" href="manifest.json"/>
     <!-- Cordova -->
     <script src="./cordova.js"></script>
-
     <!-- Immediately Accessible Functions -->
     <script type="text/javascript">
         /**
@@ -33,6 +39,8 @@
             }
         }
     </script>
+    <!-- Icon shown when installing the web app on Apple devices. See: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 
 </head>
 <body ng-cloak>
@@ -46,23 +54,25 @@
         <br>
         <ons-icon style="color: #0D47A1" size="50px" icon="ion-load-c" spin="true"></ons-icon>
         <br><br>
-        <p style="color: #0D47A1" id="loadingData">{{"LOADINGDATA"|translate}}...</p>
-    </ons-modal>
-
-    <!--
-    Backsplash Modal
-    =================================-->
-    <ons-modal var="backsplashmodal">
-        <img src="img/backsplash.png">
+        <p style="color: #0D47A1" id="loadingData">{{"LOADING_ACCOUNT"|translate}}...</p>
     </ons-modal>
 
     <!--
     Update Required Modal
     =================================-->
     <ons-modal var="updateRequiredModal">
-        <h4>{{"UPDATEREQUIRED"|translate}}</h4>
+        <h4>{{"UPDATE_REQUIRED"|translate}}</h4>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="unattended-message">{{"UPDATEMESSAGE"|translate}}</p>
+        <p style="margin-top: 5%" class="unattended-message">{{"UPDATE_MESSAGE"|translate}}</p>
+    </ons-modal>
+
+    <!--
+        Jailbreak/Rooted Device Modal
+    -->
+    <ons-modal var="jailbreakModal">
+        <h4 style="margin: 5%">{{ "JAILBREAK_TITLE" | translate }}</h4>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin: 5%" class="unattended-message">{{ "JAILBREAK_MESSAGE" | translate }}</p>
     </ons-modal>
 
     <!--
@@ -72,7 +82,7 @@
         <div id="rcorners">
             <h3>Attention!</h3>
             <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-            <p style="margin-top: 5%" class="unattended-message">{{"SCREENSHOTTAKEN"|translate}}</p>
+            <p style="margin-top: 5%" class="unattended-message">{{"SCREENSHOT_TAKEN"|translate}}</p>
             <ons-button style="margin-top: 5%" ng-click="screenshotTakenModal.hide()">{{"OK"|translate}}</ons-button>
         </div>
     </ons-modal>
@@ -99,6 +109,33 @@
           https://github.com/apache/cordova-plugin-inappbrowser/issues/801
     =================================-->
     <ons-modal var="browserModal" style="background-color: #7C7C7C"></ons-modal>
+
+    <!--
+     Security Modal
+     =================================-->
+    <div ng-include="'./views/login/popover-security.html'"></div>
+    <!--
+     Tour Modal
+     =================================-->
+    <ons-modal var="firstLoginTourModal">
+        <div id="rcorners">
+            <h3>{{"TOUR_WELCOME"|translate}}</h3>
+            <p style="margin-top: 10%; margin-bottom:10%;" class="secure-message">{{"TOUR_MODAL_INTRODUCTION"|translate}}</p>
+            <ons-button ng-class="fontSizeTitle" style="background-color: #6a6261; margin: 2px"
+                        ng-click="firstLoginTourModal.hide()">
+                {{"TOUR_MODAL_LATER_BUTTON"|translate}}
+            </ons-button>
+            <ons-button ng-class="fontSizeTitle" style="margin: 2px"
+                        ng-click="firstLoginTourModal.hide(); homeNavigator.pushPage('views/home/tour/tour.html');">
+                {{"TOUR_MODAL_TAKE_TOUR_BUTTON"|translate}}
+            </ons-button>
+        </div>
+    </ons-modal>
+
+    <!--
+    Custom Toast Message
+    =================================-->
+    <div id="custom-toast-container"><div id="custom-toast"></div></div>
 
     <!--
     App

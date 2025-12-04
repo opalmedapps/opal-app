@@ -1,4 +1,8 @@
-angular.module('MUHCApp')
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
+angular.module('OpalApp')
   .factory('d3', [function() {
     return d3;
   }])

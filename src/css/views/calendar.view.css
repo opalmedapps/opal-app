@@ -1,0 +1,134 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*Month Picker*/
+.appointment-calendar .uib-monthpicker thead button {
+	border:0;
+	height:7.2vh;
+	width:33vw;
+	max-height:70px;
+	padding:0;
+	border-top:1px solid lightgrey;
+	border-radius:1px;
+}
+
+.appointment-calendar .uib-monthpicker .uib-month button {
+	border:0;
+	height:10vh;
+	width:33vw;
+	max-width:70px;
+	max-height:70px;
+	padding:0;
+	border-top:1px solid lightgrey;
+	border-radius:1px;
+}
+
+.appointment-calendar .uib-yearpicker thead button {
+	border:0;
+	height:7.2vh;
+	max-height:70px;
+	padding:0;
+	border-top:1px solid lightgrey;
+	border-radius:1px;
+}
+
+.appointment-calendar .uib-yearpicker .uib-year button {
+	border:0;
+	height:10vh;
+	width:16.66vw;
+	max-width:70px;
+	max-height:70px;
+	padding:0;
+	border-top:1px solid lightgrey;
+	border-radius:1px;
+}
+
+.appointment-calendar  .uib-daypicker thead button {
+	border:0;
+	height:7vh;
+	max-height:70px;
+	padding:0;
+	border-top:1px solid lightgrey;
+	border-radius:1px;
+}
+
+.appointment-calendar .uib-daypicker .btn-sm {
+	border:0;
+	height:7vh;
+	width:14.28vw;
+	max-width:70px;
+	max-height:70px;
+	padding:0;
+	border-top:1px solid lightgrey;
+	border-radius:1px;
+}
+
+.uib-daypicker .uib-monthpicker .uib-months .uib-month button {
+	border:0;
+	border-top:1px solid black;
+	height:9vh;
+	background-color: blue;
+}
+
+.appointment-calendar .uib-monthpicker .uib-months .uib-month .btn-sm {
+	border:0;
+	width:60vw;
+	border-top:1px solid lightgrey;
+	border-radius:1px;
+}
+
+.uib-weeks .full button {
+	opacity: 0.8;
+	filter: alpha(opacity=60);
+	color: white;
+	background-color: #D3D3D3 !important;
+	border-bottom-left-radius:5px;
+	border-bottom-right-radius:5px;
+	border-top: 1px solid lightgrey;
+	width:80px;
+	height:80px;
+	border-color: lightgrey;
+}
+
+.uib-weeks .partially button {
+	opacity: 0.8;
+	filter: alpha(opacity=60);
+	color: white;
+	width:50px;
+	height:50px;
+	border-top: 1px solid lightgrey;
+	border-bottom-left-radius:5px;
+	border-bottom-right-radius:5px;
+	background-color: #5CE68A !important;
+	border-color:lightgrey;
+}
+
+.uib-weeks .today button {
+	opacity: 0.8;
+	width:50px;
+	height:50px;
+	filter: alpha(opacity=60);
+	background-color: #cf5c4c;
+	border-color: lightgrey;
+	border-top: 1px solid lightgrey;
+	border-bottom-left-radius:5px;
+	border-bottom-right-radius:5px;
+	color: white;
+}
+
+.calendar-marker {
+	font-size:20px;
+	opacity:0.5;
+}
+
+@media all and (orientation:landscape) {
+	.appointment-calendar, #drag-notify{
+		display: none;
+	}
+	#scrollerAppointments {
+		height: 100% !important;
+	}
+}

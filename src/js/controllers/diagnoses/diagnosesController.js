@@ -1,16 +1,16 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   diagnosesController.js
  * Description  :   Manages the diagnosis view.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   27 Apr 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**
  * @ngdoc controller
- * @name MUHCApp.controller:DiagnosesController
  * @requires Diagnoses
  * @requires UserPreferences
  * @description Controller for the diagnoses view.
@@ -20,7 +20,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('DiagnosesController', DiagnosesController);
 
     /* @ngInject */
@@ -33,47 +33,28 @@
         vm.diagnoses = [];
         vm.language = '';
         vm.noDiagnosis = false;
-        vm.showHeader = showHeader;
+
+        // Used by patient-data-handler
+        vm.setDiagnosesView = setDiagnosesView;
+
         activate();
 
         ////////////////
 
         function activate() {
-
-            //load the diagnoses array into view
-            vm.diagnoses = Diagnoses.getDiagnoses();
-            setDiagnosesView(vm.diagnoses);
-
-            if(vm.diagnoses.length === 0){
-                vm.noDiagnosis = true;
-            }
-
-            //grab the language
             vm.language = UserPreferences.getLanguage();
         }
 
-        // Function to remove the diagnoses from the list if the diagnoses name has N/A or n/a
-        function setDiagnosesView(diagnoses) {
-            let filterDiagnoses = [];
-            for (var i = 0, j = 0; i < diagnoses.length; i++) {
-                if ((diagnoses[i].Description_EN).toUpperCase() !== 'N/A' || (diagnoses[i].Description_FR).toUpperCase() !== 'N/A') {
-                    filterDiagnoses[j] = diagnoses[i];
-                    j++;
-                }
-            }
-            vm.diagnoses = filterDiagnoses;
-        }
-        
-        // Determines whether or not to show the date header in the view. Announcements are grouped by day.
-        function showHeader(index)
-        {
-            if (index === 0) return true;
-            var current = (new Date(vm.diagnoses[index].CreationDate)).setHours(0,0,0,0);
-            var previous = (new Date(vm.diagnoses[index-1].CreationDate)).setHours(0,0,0,0);
-            return current !== previous;
+        /**
+         * @description Filters and displays the diagnoses from the Diagnoses service. N/A diagnoses are not shown (case-insensitive).
+         */
+        function setDiagnosesView() {
+            // Filter out "N/A" diagnoses
+            vm.diagnoses = Diagnoses.getDiagnoses().filter(e => {
+                return e[`Description_${vm.language}`].toUpperCase() !== 'N/A';
+            });
+
+            vm.noDiagnosis = vm.diagnoses.length === 0;
         }
     }
-
 })();
-
-

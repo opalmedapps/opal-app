@@ -1,8 +1,11 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="IndividualAnnouncementController as ind">
-  <ons-toolbar fixed-style>
-    <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-    <div class="center">{{ind.announcement.Name}}</div>
-  </ons-toolbar>
+  <generic-toolbar title="{{'INDIVIDUAL_ANNOUNCEMENT_HEADER'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
   <div>
     <ons-list>
       <ons-list-item class="item">
@@ -10,13 +13,13 @@
           <header>
             <span class="item-title" ng-class="fontSizeTitle">{{ind.announcement.Title}}</span>
           </header>
-          <p class="item-desc" ng-class="fontSizeDesc">{{ind.announcement.DateAdded|date:'medium'}}</p>
+          <p class="item-desc" ng-class="fontSizeDesc">{{ind.announcement.DateAdded|date:'mediumNoSeconds'}}</p>
         </div>
       </ons-list-item>
     </ons-list>
     <ons-list class="settings-list">
       <ons-list-item class="item">
-        <div ng-bind-html="ind.announcement.Body" style =" word-wrap: break-word;" ng-class="fontSizeDesc" ></div>
+        <div ng-bind-html="ind.announcement.Body | trustHTML" style="word-wrap: break-word;" ng-class="fontSizeDesc"></div>
       </ons-list-item>
     </ons-list>
   </div>

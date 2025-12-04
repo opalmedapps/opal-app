@@ -1,0 +1,86 @@
+# SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Build App Setup
+description: Setup before building the app
+
+inputs:
+  ENV_CONFIG_JS:
+    description: 'Contents of the file `opal.config.js` for the given environment'
+    required: true
+  ENV_GOOGLE_SERVICES:
+    description: 'Contents of the file `google-services.json` for the given environment'
+    required: true
+  BUILD_NUMBER_OVERRIDE:
+    description: 'A specific build number to be used instead of calculating it automatically -- useful in particular for building for the app stores'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    # Install dependencies
+    - name: Install dependencies
+      uses: ./.github/actions/install-dependencies
+
+    # Initialize the environment files needed to build the app from repository-level Actions variables
+    - name: Load environment files
+      run: |
+        mkdir env/$ENVIRONMENT
+        echo "${ENV_CONFIG_JS}" > env/$ENVIRONMENT/opal.config.js
+        echo "${ENV_GOOGLE_SERVICES}" > env/$ENVIRONMENT/google-services.json
+      shell: bash
+      env:
+        ENV_CONFIG_JS: ${{ inputs.ENV_CONFIG_JS }}
+        ENV_GOOGLE_SERVICES: ${{ inputs.ENV_GOOGLE_SERVICES }}
+
+    # Setup for the next step, calculate-build-number
+    # Ensure the sed command works the same way on Linux and Mac by installing gnu-sed on Mac
+    - name: Install gnu-sed if running on macOS
+      run: |
+        if [ "$IS_ON_MACOS" == "true" ]; then
+          echo "Installing gnu-sed"
+          brew install gnu-sed
+          echo "/opt/homebrew/opt/gnu-sed/libexec/gnubin" >> "$GITHUB_PATH"
+        else
+          echo "Not on macOS, using default sed"
+        fi
+      shell: bash
+      env:
+        IS_ON_MACOS: ${{ runner.os == 'macOS' }}
+
+    # Calculate the app's build number, for example the number '2' in 1.0.0 (2).
+    - name: Calculate build number
+      id: calculate-build-number
+      # Calculate the number of commits (inclusive) between the last tagged version (e.g. v2.0.0) and the current commit
+      # This represents the build number; for example, the first commit tagged v2.0.0 will be 2.0.0 (1). The next commit will be 2.0.0 (2), and so on, until the next tag.
+      # This is only applicable on the 'main' branch; if not on main, use default value '1'
+      run: |
+        LATEST_TAG=$(git describe --tags --abbrev=0 --match v*)
+        COMMIT_DISTANCE=$(git rev-list --count $LATEST_TAG..HEAD)
+        NEW_BUILD_NUMBER=$((COMMIT_DISTANCE + 1))
+        if [ -n "$BUILD_NUMBER_OVERRIDE" ]; then
+          echo "Build number was set to $BUILD_NUMBER_OVERRIDE via input arguments"
+          BUILD_NUMBER=$BUILD_NUMBER_OVERRIDE
+        elif [ "$IS_ON_MAIN" = true ]; then
+          echo "Calculating build number"
+          BUILD_NUMBER=$NEW_BUILD_NUMBER
+        else
+          echo "Execution is not on the main branch, defaulting to 1"
+          BUILD_NUMBER=1
+        fi
+        echo "BUILD_NUMBER=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
+        echo "Using build number = $BUILD_NUMBER"
+      shell: bash
+      env:
+        BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_OVERRIDE }}
+        IS_ON_MAIN: ${{ github.ref_name == 'main' }}
+
+    # Replace the build number in the file opal.config.js with the newly calculated value.
+    - name: Replace build number in opal.config.js
+      run: |
+        sed --in-place --regexp-extended "s/\"BUILD_NUMBER\"\: .+\,/\"BUILD_NUMBER\"\: ${BUILD_NUMBER}\,/" env/$ENVIRONMENT/opal.config.js
+        grep BUILD_NUMBER env/$ENVIRONMENT/opal.config.js
+      shell: bash
+      env:
+        BUILD_NUMBER: ${{ steps.calculate-build-number.outputs.BUILD_NUMBER }}

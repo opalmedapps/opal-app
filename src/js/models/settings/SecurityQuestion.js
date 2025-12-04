@@ -1,11 +1,13 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * SecurityQuestion class to model the security question from the back-end
  */
 export class SecurityQuestion {
-    constructor({Active, QuestionText_EN, QuestionText_FR, SecurityQuestionSerNum}) {
-        this.active = Active === "1";
-        this.questionText_EN = QuestionText_EN;
-        this.questionText_FR = QuestionText_FR;
-        this.securityQuestionSerNum = Number(SecurityQuestionSerNum);
+    constructor({title_en, title_fr}) {
+        this.questionText_EN = title_en;
+        this.questionText_FR = title_fr;
     }
 }

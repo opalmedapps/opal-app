@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  *Code by David Herrera May 20, 2015
  *Github: dherre3
@@ -8,51 +12,51 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('MainController', MainController);
 
-    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
-        '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus',
-        'RequestToServer', 'NewsBanner', 'Security', '$filter', 'Params', 'LogOutService'];
+    MainController.$inject = ["$window", "$state", '$rootScope','Firebase','DeviceIdentifiers',
+        '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'Navigator', 'NetworkStatus',
+        'RequestToServer', 'Toast', 'Security', '$filter', 'Params', 'LogOutService', 'AppState'];
 
     /* @ngInject */
-    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
-                            $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus,
-                            RequestToServer, NewsBanner, Security, $filter, Params, LogOutService) {
+    function MainController($window, $state, $rootScope, Firebase, DeviceIdentifiers,
+                            $translatePartialLoader, LocalStorage, Constants, CleanUp, Navigator, NetworkStatus,
+                            RequestToServer, Toast, Security, $filter, Params, LogOutService, AppState) {
 
         var timeoutLockout;
-        var currentTime;
-        // var maxIdleTimeAllowed = 300000;    // 1000 = 1 second;   300000 = 300 seconds = 5 minutes
 
         activate();
 
         //////////////////////////////////////////
 
         function activate() {
-            $rootScope.firstTime = true;
             $rootScope.online = navigator.onLine;
-
-            currentTime = Date.now();
 
             bindEvents();
             setPushPermissions();
 
-            DeviceIdentifiers.setDeviceIdentifiers();
+            /*
+                Detect jailbroken and rooted devices and prevent continuing.
+                Suggested in the pentest report 2023.
+                Note that this is not a fool-proof solution and some disagree whether it should be done at all.
+                See: https://developer.apple.com/forums/thread/66363#191199022
+            */
+            if (Constants.app) {
+                IRoot.isRooted(jailbreakOrRootedDevice, console.error);
+            }
 
+            DeviceIdentifiers.setDeviceIdentifiers();
         }
 
         function bindEvents() {
             $translatePartialLoader.addPart('top-view');
 
-            //Listen to authentication state, if user get's unauthenticated log user out
-            firebase.auth().onAuthStateChanged(function (authData) {
-                var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
+            // Listen to the Firebase authentication state; if the user gets unauthenticated, print a message
+            // Actual handling should be done in the code that unauthenticated the user; this message is just to be aware if the unauthentication happens unexpectedly
+            Firebase.onAuthStateChanged(function (authData) {
                 if (!authData) {
-                    if ($state.current.name === 'Home') {
-                        LogOutService.logOut();
-                    } else if (authInfoLocalStorage) {
-                        LocalStorage.resetUserLocalStorage();
-                    }
+                    console.log('Firebase authentication null state; currently authenticated user:', Firebase.getCurrentUser());
                 }
             });
 
@@ -72,7 +76,7 @@
                     NetworkStatus.setStatus(true);
                 });
             }, false);
-            
+
             addAppInBackgroundScreen();
 
             setupInactivityChecks();
@@ -83,59 +87,49 @@
 
             addUpdateRequiredDetection();
 
-            document.addEventListener("pause", onPause, false);
-
-            $rootScope.$on("MonitorLoggedInUsers", function (event, uid) {
-                $rootScope.firstTime = true;
-                if (OPAL_CONFIG.env !== "staging") {
-                    addUserListener(uid);
-                }
-            });
+            AppState.addInactiveEvent(clearSensitiveData);
         }
 
         /*****************************************
          * Lockout
          *****************************************/
-        //TimeoutID for locking user out
+
+        // Launches a timer and event checks to log out automatically after a period of inactivity
         function setupInactivityChecks() {
             addEventListener('touchstart', resetTimer, false);
             addEventListener("mousedown", resetTimer, false);
-
             startTimer();
         }
-
 
         function startTimer() {
             timeoutLockout = window.setTimeout(goInactive, Params.maxIdleTimeAllowed);
         }
 
         function resetTimer() {
-
-            if (Date.now() - currentTime > Params.maxIdleTimeAllowed) {
-                currentTime = Date.now();
-                goInactive();
-                return;
-            }
-
-            currentTime = Date.now();
             window.clearTimeout(timeoutLockout);
-            goActive();
+            startTimer();
         }
 
         function goInactive() {
             resetTimer();
             if ($state.current.name === 'Home') {
                 LogOutService.logOut();  // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
-                localStorage.setItem('locked', 1);
 
                 // Display a warning message to the users after being disconnected
-                NewsBanner.showCustomBanner($filter('translate')("INACTIVE"), '#333333', '#F0F3F4',
-                    13, 'top', null, 5000);
+                Toast.showToast({
+                    message: $filter('translate')("INACTIVE"),
+                    positionOffset: 30,
+                });
             }
         }
 
-        function goActive() {
-            startTimer();
+        function jailbreakOrRootedDevice(detected) {
+            console.log('jailbreak or rooted device detection result', detected);
+            if (detected) {
+                loadingmodal.hide();
+                jailbreakModal.show();
+                $state.go('init');
+            }
         }
 
         /*****************************************
@@ -158,10 +152,6 @@
                         sound: true
                     },
                     android: {
-                        icon: "opal_notification",
-                        iconColor: "#74A333",
-                        // senderID: "810896751588",   // PRODUCTION
-                        // senderID: "476395494069",   // pre-prod
                         forceShow: "true"
                     }
                 });
@@ -169,13 +159,13 @@
                 push.on('notification', function (data) {
                     if (ons.platform.isIOS() && data.additionalData.foreground) {
                         // on iOS, it will allow push notification to appear when app is running
-                        NewsBanner.showCustomBanner(data.title + "\n" + data.message, '#333333', '#F0F3F4', 13,
-                            'top', null, 9000);
+                        Toast.showToast({
+                            message: data.title + "\n" + data.message,
+                        });
                         navigator.vibrate(3000);
                     }
                 });
-                push.on('error', function (e) {
-                });
+                push.on('error', console.error);
                 push.on('registration', function (data) {
                     DeviceIdentifiers.updateRegistrationId(data.registrationId);
                 });
@@ -183,50 +173,18 @@
         }
 
         /*****************************************
-         * Data wipe  - onPause event is triggered when the app goes in the background (switch apps on a device)
+         * Clear sensitive data
          *****************************************/
-        function onPause() {
-            var currentPage = NavigatorParameters.getNavigator().getCurrentPage().name;
+        function clearSensitiveData() {
+            var currentPage = Navigator.getNavigator().getCurrentPage().name;
             // Check that the current location is either documents or lab
             if (currentPage.indexOf('my-chart') !== -1 || currentPage.indexOf('lab') !== -1) {
-                NavigatorParameters.getNavigator().resetToPage('./views/personal/personal.html');
+                Navigator.getNavigator().resetToPage('./views/personal/personal.html');
             }
 
-            // Wipe documents and lab-results
+            // Wipe lab results
             CleanUp.clearSensitive();
         }
-
-
-        /*****************************************
-         * Manage concurrent users
-         *****************************************/
-        function addUserListener(uid) {
-            //
-            // add a listener to the firebase database that watches for the changing of the token value
-            // (this means that the same user has logged in somewhere else)
-            //
-            let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + uid);
-
-            refCurrentUser.on('value', function () {
-                if (!$rootScope.firstTime && !localStorage.getItem('locked')) {
-                    //
-                    // If it is detected that a user has concurrently logged on with a different device.
-                    // Then force the "first" user to log out and clear the observer
-                    //
-                    CleanUp.clear();
-
-                    // Show message "You have logged in on another device."
-                    NewsBanner.showCustomBanner($filter('translate')("KICKEDOUT"), '#333333', '#F0F3F4',
-                        13, 'top', null, 5000);
-                    refCurrentUser.off();
-                    $state.go('init');
-                }
-                else {
-                    $rootScope.firstTime = false;
-                }
-            });
-        }
-
 
         /**************************************************
          * Detect When Screenshot is taken on iOS device
@@ -236,7 +194,9 @@
             window.addEventListener('screenshotDidTake', onScreenshotDidTake, false);
 
             function onScreenshotDidTake() {
-                screenshotTakenModal.show();
+                if (!CONFIG.settings.screenshotsAllowed) {
+                    screenshotTakenModal.show();
+                }
             }
 
         }
@@ -247,10 +207,17 @@
          *****************************************/
         function preventAndroidScreenshot() {
             if (Constants.app && ons.platform.isAndroid()) {
-                window.plugins.preventscreenshot.disable(
-                    (status) => console.log('Android screenshot successfully disabled:', !status), // true - enabled, false - disabled
-                    (err) => console.log('Android screenshot cannot be disabled:', err)
-                );
+                if (CONFIG.settings.screenshotsAllowed) {
+                    window.plugins.preventscreenshot.enable(
+                        () => console.log('Android screenshot successfully enabled'),
+                        (err) => console.log('Android screenshot cannot be enabled:', err)
+                    );
+                } else {
+                    window.plugins.preventscreenshot.disable(
+                        () => console.log('Android screenshot successfully disabled'),
+                        (err) => console.log('Android screenshot cannot be disabled:', err)
+                    );
+                }
             }
         }
 
@@ -266,35 +233,16 @@
             updateRequiredModal.show();
             $state.go('init')
         }
+
         /**
          * Function takes care of displaying the splash screen when app is placed in the background. Note that this
          * works with the plugin: cordova-plugin-privacyscreen which offers a black screen. This is not so pretty
          * so this code below is an attempt to mitigate that slightly.
-         * For iOS the right events to use is active, resign; these are iOS only events
-         * In Android we can use pause and resume but since these fire for iOS as well we have to make sure to only
-         * run in Android.
          */
-        function addAppInBackgroundScreen(){
-            // Events only affects iOS: https://cordova.apache.org/docs/en/latest/cordova/events/events.html#resume
-            document.addEventListener('active', () => {
-                setTimeout(navigator.splashscreen.hide, 0);
-            });
-            // Events only affects iOS: https://cordova.apache.org/docs/en/latest/cordova/events/events.html#pause
-            document.addEventListener('resign', () => {
-                setTimeout(navigator.splashscreen.show, 0);
-            });
-            // Same as above but we are only interested in running it for Android
-            document.addEventListener('resume', () => {
-                setTimeout(()=>{
-                    if(ons.platform.isAndroid())
-                        navigator.splashscreen.hide();
-                },0);
-            });
-            document.addEventListener('pause', () => {
-                setTimeout(()=>{
-                    if(ons.platform.isAndroid()) navigator.splashscreen.show();
-                },0);
-            });
+        function addAppInBackgroundScreen() {
+            if (!Constants.app) return;
+            AppState.addInactiveEvent(navigator.splashscreen.show);
+            AppState.addActiveEvent(navigator.splashscreen.hide);
         }
     }
 })();

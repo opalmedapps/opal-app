@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function() {
     'use strict';
 
@@ -9,7 +13,7 @@
      * Note: Change this will probably break the questionnaire
      */
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .constant('QuestionnaireConstants', {
             QUESTIONNAIRE_DB_TYPE_CONVENTIONS: {
                 'DATE_TYPE_ID': 7,
@@ -28,9 +32,8 @@
             QUESTIONNAIRE_API: {
                 'UPDATE_STATUS': 'QuestionnaireUpdateStatus',
                 'SAVE_ANSWER': 'QuestionnaireSaveAnswer',
-                'GET_LIST': 'QuestionnaireList',
                 'GET_QUESTIONNAIRE': 'Questionnaire',
-                'GET_OPAL_QUESTIONNAIRE_FROM_SERNUM': 'QuestionnaireInOpalDBFromSerNum',
+                'GET_PURPOSE': 'QuestionnairePurpose'
             },
             QUESTIONNAIRE_NOTIFICATION_CONSTANTS: {
                 'QUESTIONNAIRE_URL': './views/personal/questionnaires/questionnaireNotifRedirect.html',
@@ -47,5 +50,10 @@
                 'ANSWER_CHANGED': '2',
                 'ANSWER_SAVING_WAITING_TIME': 30000
             },
+            QUESTIONNAIRE_PURPOSES: ['clinical', 'research', 'quality', 'consent', 'clerical', 'opal'],
+            BACKEND_ERROR_CODES: {
+                'LOCKING_ERROR': '-8',
+                'NOT_ALLOWED_TO_ANSWER': 'Not allowed'
+            }
         });
 })();

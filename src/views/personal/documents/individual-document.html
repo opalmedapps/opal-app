@@ -1,56 +1,50 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="IndividualDocumentController as doc">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button ng-hide="doc.loading">{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center">{{doc.doc_title|limitTo:25}}{{doc.doc_title.length > 25 ? '...' : ''}}</div>
-        <div class="right">
+    <generic-toolbar title="{{'DOCUMENT'|translate}}" style-class="fontSizeTitle">
+        <right-content>
             <ons-toolbar-button ng-click="popoverDocsInfo.show('#buttonDocInfo')" id="buttonDocInfo">
                 <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
             </ons-toolbar-button>
-        </div>
-    </ons-toolbar>
+        </right-content>
+    </generic-toolbar>
 
-    <div ng-show="doc.loading" align="center" style="margin-top:25vh">
-        <svg class="progress-circular">
-            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
-                    stroke-miterlimit="10"/>
-        </svg>
-        <p style="margin-top: 30px">{{ "LOADINGDOCUMENT" | translate }}</p>
-    </div>
 
-    <div ng-show="doc.errorDownload">
-        <p class="lucent">{{"ERROROBTAININGDOCUMENT"|translate}}</p>
-    </div>
-
-    <div class="popup">
-        <span class="popuptext"
-              ng-class="{'popup-show' : doc.show, 'popup-hide': doc.hide}">{{"TAPTOZOOM"| translate}}</span>
-    </div>
-    <div id="holder" ng-hide="doc.loading" align="center"></div>
+    <pdf-viewer pdf-content="docParams.Content"
+                show-error="doc.errorDownload"
+                loading-message="{{'LOADING_DOCUMENT'|translate}}"
+                error-message="{{'ERROR_OBTAINING_DOCUMENT'|translate}}"
+    ></pdf-viewer>
 
     <ons-modal var="modal">
-        <h3>{{"WARNING"|translate}}</h3>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP"|translate}}</p>
-        <p class="unattended-message">{{"CONFIRM_SHARE"|translate}}</p>
-        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modal.hide()">{{"CANCEL"|translate}}</ons-button>
-        <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
-                    ng-click="modal.hide(); doc.share()">{{"CONTINUE"|translate}}
-        </ons-button>
+        <div style="margin-left: 5px; margin-right: 5px">
+            <h3>{{"WARNING"|translate}}</h3>
+            <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+            <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP"|translate}}</p>
+            <p class="unattended-message">{{"CONFIRM_DOWNLOAD"|translate}}</p>
+            <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modal.hide()">{{"CANCEL"|translate}}</ons-button>
+            <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
+                        ng-click="modal.hide(); doc.share()">{{"CONTINUE"|translate}}
+            </ons-button>
+        </div>
     </ons-modal>
 
+    <!-- TODO remove redundancy -->
     <ons-modal var="modalOpenViewer">
-        <h3>{{"WARNING"|translate}}</h3>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP3"|translate}}</p>
-        <p class="unattended-message">{{"CONFIRM_OPEN"|translate}}</p>
-        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modalOpenViewer.hide()">{{"CANCEL"|translate}}
-        </ons-button>
-        <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
-                    ng-click="modalOpenViewer.hide(); doc.openPDF()">{{"CONTINUE"|translate}}
-        </ons-button>
+        <div style="margin-left: 5px; margin-right: 5px">
+            <h3>{{"WARNING"|translate}}</h3>
+            <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+            <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP"|translate}}</p>
+            <p class="unattended-message">{{"CONFIRM_DOWNLOAD"|translate}}</p>
+            <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modalOpenViewer.hide()">{{"CANCEL"|translate}}
+            </ons-button>
+            <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
+                        ng-click="modalOpenViewer.hide(); doc.openPDF()">{{"CONTINUE"|translate}}
+            </ons-button>
+        </div>
     </ons-modal>
-
 </ons-page>
-

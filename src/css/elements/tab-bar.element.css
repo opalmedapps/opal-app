@@ -1,0 +1,168 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.tab-bar {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 17px;
+    display: table;
+    table-layout: fixed;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    height: 49px;
+    background-color: #f8f8f8;
+    border-top: 1px solid #ddd;
+    width: 100%;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .tab-bar {
+        border-top: none;
+        -webkit-background-size: 100% 1px;
+        background-size: 100% 1px;
+        background-repeat: no-repeat;
+        background-position: top;
+        background-image: -webkit-linear-gradient(270deg, #ddd, #ddd 50%, transparent 50%);
+        background-image: -moz-linear-gradient(270deg, #ddd, #ddd 50%, transparent 50%);
+        background-image: -o-linear-gradient(270deg, #ddd, #ddd 50%, transparent 50%);
+        background-image: linear-gradient(180deg, #ddd, #ddd 50%, transparent 50%);
+    }
+}
+.tab-bar__item {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 17px;
+    position: relative;
+    overflow: hidden;
+    display: table-cell;
+    width: auto;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+.tab-bar__item > input {
+    position: absolute;
+    overflow: hidden;
+    right: 0px;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    padding: 0;
+    border: 0;
+    opacity: 0.001;
+    z-index: 1;
+    vertical-align: top;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.tab-bar__button {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 17px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    line-height: normal;
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-decoration: none;
+    padding: 0;
+    height: 49px;
+    letter-spacing: 0;
+    color: #666;
+    text-shadow: 0 1px none;
+    vertical-align: top;
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-top: none;
+    width: 100%;
+    font-weight: 400;
+    line-height: 49px;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .tab-bar__button {
+        border-top: none;
+    }
+}
+.tab-bar__icon {
+    font-size: 24px;
+    padding: 0;
+    margin: 0;
+    line-height: 32px;
+    display: block;
+    height: 32px;
+}
+.tab-bar__label {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 17px;
+}
+.tab-bar__icon + .tab-bar__label {
+    font-size: 11px;
+    line-height: 1;
+    margin: 0;
+    font-weight: 400;
+}
+.tab-bar__label:first-child {
+    font-size: 16px;
+    line-height: 49px;
+    margin: 0;
+    padding: 0;
+}
+.tab-bar__button {
+    color: #666;
+}
+:checked + .tab-bar__button {
+    color: #1284ff;
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-top: none;
+}
+:checked + .tab-bar__button > .tab-bar__icon {
+    color: #1284ff;
+}
+.tab-bar__button:disabled {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
+.tab-bar__button:focus {
+    z-index: 1;
+    border-top: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: 0;
+}

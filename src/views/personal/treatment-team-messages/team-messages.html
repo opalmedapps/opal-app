@@ -1,29 +1,45 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="TxTeamMessagesController as txTeam">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{"TEAMMESSAGES"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'TEAM_MESSAGES'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <div ng-hide="txTeam.noMessages">
+
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="txTeam.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="TxTeamMessages"
+                          display-function="txTeam.setTxTeamMessagesView"
+                          refresh="txTeam.pullHookRefresh"
+                          hide-content="txTeam.hideContent"
+    ></patient-data-handler>
+
+    <div ng-hide="txTeam.hideContent || txTeam.noMessages">
         <ons-list  ng-repeat="message in txTeam.txTeamMessages | orderBy:'-DateAdded'" ng-click="txTeam.goToTeamMessage(message)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="txTeam.showHeader($index)">{{message.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ txTeam.txTeamMessages | showHeader : $index : 'DateAdded' }}">{{ message.DateAdded | date:'fullDate' }}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center" >
                     <ons-col width="60px" align="center">
                         <div style="margin-left:10px">
-                            <i class="fa fa-user-md  iconHomeView" style="color:#2196F3"></i><span class="notification" ng-if="message.ReadStatus==='0'">&nbsp;</span>
+                            <i class="fa fa-user-md  iconHomeView" style="color:#2196F3"></i>
                         </div>
                     </ons-col>
                     <ons-col style="word-wrap: break-word;">
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{message.Title}}</span>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': message.ReadStatus==='0'}]">{{message.Title}}</span>
                         </header>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
         </ons-list>
     </div>
-    <div class="container" align="center">
-      <p style="margin-top:25vh;color:grey" ng-show="txTeam.noMessages">{{"NOTEAMMESSAGES"|translate}}</p>
+    <div ng-hide="txTeam.hideContent" class="container" align="center">
+      <p style="margin-top:25vh;color:grey" ng-show="txTeam.noMessages">{{"NO_TEAM_MESSAGES"|translate}}</p>
     </div>
 </ons-page>

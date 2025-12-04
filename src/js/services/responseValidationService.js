@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2018 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * __author__ : James Brace
  *
@@ -11,34 +15,20 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('ResponseValidator', ResponseValidator);
 
-    ResponseValidator.$inject = ['FirebaseService', '$state', '$window', 'Security', 'EncryptionService'];
+    ResponseValidator.$inject = ['$filter', 'Firebase', '$state', '$window', 'Security', 'EncryptionService', 'Params', 'Toast'];
 
     /* @ngInject */
-    function ResponseValidator(FirebaseService, $state, $window, Security, EncryptionService) {
-
-        /**
-         * ERROR CODES
-         */
-        const ENCRYPTION_ERROR = 1;
-        const SERVER_RESPONSE_ERROR = 2;
-        const CLIENT_ERROR = 400;
-        const TOO_MANY_ATTEMPTS_ERROR = 4;
-        const INVALID_VERSION_ERROR = 5;
-
-        /**
-         * SUCCESS CODE
-         */
-        const SUCCESS = 3;
-
+    function ResponseValidator($filter, Firebase, $state, $window, Security, EncryptionService, Params, Toast) {
 
         /**
          * Expose API to consumers
          */
         return {
-            validate: validate
+            validate: validate,
+            validateApiResponse: validateApiResponse
         };
 
         //////////////////////////////////
@@ -52,16 +42,18 @@
 
         function validate(response, encryptionKey, timeOut) {
             let timestamp = response.Timestamp;
-
-            if (response.Code === ENCRYPTION_ERROR) {
+            // TODO improve error handling flow, taking into account which response types are encrypted and which ones aren't
+            if (response.Code === Params.REQUEST.CODE.ENCRYPTION_ERROR) {
                 return {error: response}
-            } else {
+            }
+            else if (response.Code === Params.REQUEST.CODE.INVALID_VERSION) return handleResponseError(response);
+            else {
                 response.Timestamp = timestamp;
                 clearTimeout(timeOut);
 
                 if (!encryptionKey) response = EncryptionService.decryptData(response);
 
-                if (response.Code === SUCCESS) {
+                if (response.Code === Params.REQUEST.CODE.SUCCESS) {
                     return {success: response};
                 } else {
                     return handleResponseError(response)
@@ -70,19 +62,33 @@
         }
 
         /**
+         * @description Validate response incoming from the new listener's section. On error show the toast with the error message.
+         * @param {object} response Object fetch from firebase
+         * @returns {object} A decrypted response object on success, an error data object on error
+         */
+        function validateApiResponse(response) {
+            let decryptedresponse = (typeof response.status_code === 'number') ? response : EncryptionService.decryptData(response);
+            // TODO: Create a list of all valid status codes and check that
+            if (response.status_code !== Params.API.SUCCESS && response.status_code !== Params.API.CREATED) {
+                return new Error(`API ERROR: ${response.status_code}: ${response.data.errorMessage}`);
+            }
+            return decryptedresponse;
+        }
+
+
+
+        /**
          * Handles responses that have an error code
          * @param response
          * @returns {*}
          */
         function handleResponseError(response){
             switch (response.Code) {
-                case SERVER_RESPONSE_ERROR:
+                case Params.REQUEST.CODE.SERVER_ERROR:
+                case Params.REQUEST.CODE.TOO_MANY_ATTEMPTS:
+                case Params.REQUEST.CODE.CLIENT_ERROR:
                     return {error: response};
-                case TOO_MANY_ATTEMPTS_ERROR:
-                    return {error: response};
-                case CLIENT_ERROR:
-                    return {error: response};
-                case INVALID_VERSION_ERROR:
+                case Params.REQUEST.CODE.INVALID_VERSION:
                     handleInvalidVersionError();
                     return {error: {Code: 'INVALID_VERSION_ERROR'}}
             }
@@ -98,7 +104,7 @@
             $window.sessionStorage.removeItem('UserAuthorizationInfo');
 
             //signout on FireBase
-            FirebaseService.signOut();
+            Firebase.signOut();
 
             // Change state of security
             Security.update('validVersion', false)

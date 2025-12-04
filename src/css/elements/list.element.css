@@ -1,0 +1,170 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+:root {
+    --info: rgba(38,100,171,0.81);
+    --success: #4CAF50;
+    --warning: #FF8F35;
+    --danger: red;
+}
+
+.default-list-header {
+    opacity: 0.6;
+}
+
+.list-item-note {
+    position: absolute;
+    right: 36px;
+    top: 0px;
+    font-size: 14px;
+}
+.list__item--tight {
+    -webkit-transition: background-color 0.2s linear;
+    -moz-transition: background-color 0.2s linear;
+    -o-transition: background-color 0.2s linear;
+    transition: background-color 0.2s linear;
+    min-height: inherit;
+    line-height: inherit;
+}
+.list__item--tight:active {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+.list__item--tight:hover {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+.item {
+    padding: 10px;
+    line-height: 1;
+}
+.item-thum {
+    background-color: #ccc;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+}
+.item-title {
+    font-size: 16px;
+    font-weight: 500;
+}
+.item-desc {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.3;
+    margin: 4px 0 0 0;
+    padding: 0 0px 0 0;
+}
+.item-unread {
+    font-weight: 700;
+    color: #1f1f21;
+}
+.item-label {
+    font-size: 12px;
+    color: #999;
+    float: right;
+}
+.lucent {
+    opacity: 0.4;
+}
+.lucent-subtle {
+    opacity: 0.7;
+}
+.switch--list-item {
+    margin-right: 0px;
+}
+
+.separator-info {
+    background-color: var(--info);
+    height: 100%;
+}
+
+.separator-success {
+    background-color: var(--success);
+    height: 100%;
+}
+
+.separator-warning {
+    background-color: var(--warning);
+    height: 100%;
+}
+
+.separator-error {
+    background-color: var(--danger);
+    height: 100%;
+}
+
+.color-info {
+    color: var(--info);
+}
+
+.color-success {
+    color: var(--success);
+}
+
+.color-warning {
+    color: var(--warning);
+}
+
+.color-error {
+    color: var(--danger);
+}
+
+.item-btn {
+    text-align: center;
+    background-color:rgba(0,0,0,0);
+    padding: 8px 10px;
+}
+
+.checkin-btn {
+    background-color: var(--info);
+    width: 100%;
+}
+
+.appointment-content {
+    line-height:1;
+    padding-left:10px;
+    padding-top:10px;
+}
+
+.unreadMessage {
+    border-radius: 50%;
+    display: inline-block;
+    width: 10px;
+    height:10px;
+    background: #3399ff;
+}
+.my-class {
+    padding: 10px 0px 10px 0px;
+    background-color: #C8C8C8;
+    font-size:10%;
+}
+.my-message-container {
+    width:100vw;
+    padding:10px;
+    border:1px solid rgba(0, 0, 0, 0.1);
+    border-radius:4px;
+    background-color:white;
+    color:black;
+    margin-left:1px;
+}
+#bottomMessage {
+    margin-top: 30vh;
+    padding: 0;
+}
+@media only screen and (max-device-width : 321px) {
+    .secure-message, .unattended-message{
+        font-size: 14px;
+    }
+    #lock-logo {
+        display: none;
+    }
+}

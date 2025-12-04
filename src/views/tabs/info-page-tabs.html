@@ -1,17 +1,25 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="InfoTabController as info">
-    <ons-toolbar fixed-style>
-      <div class="left">
-          <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+    <generic-toolbar title="{{'INFO'|translate}}" style-class="fontSizeTitle">
+        <left-content>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </left-content>
+    </generic-toolbar>
+
+    <div style="margin-top: 10vh; padding: 0 20px 0 20px" class="text-center">
+        <!-- ICON -->
+        <i ng-if="info.view.iconType === 'icon'" ng-class="info.view.icon" class="info-page-icon"></i>
+        <general-icon ng-if="info.view.iconType === 'general-icon'" icon-class="info-page-icon"></general-icon>
+
+        <!-- TEXT -->
+        <p class="item-title" ng-class="fontSizeTitle" style="font-weight:bold; margin:5px 0 10px" translate="{{info.view.name}}"></p>
+        <div class="container" style="text-align: center" ng-class="fontSizeDesc">
+            {{info.view.description|translate}}
+        </div>
       </div>
-        <div class="center">{{"INFO"|translate}}</div>
-    </ons-toolbar>
-    <div style="margin-top:10vh;padding: 0 20px 0 20px" class="text-center">
-      <div >
-        <ons-icon icon="{{info.view.icon}}" style="font-size:80px; color: #2196F3"></ons-icon>
-      </div>
-      <p class="item-title" ng-class="fontSizeTitle" ng-style="{color:view.color}" style="font-weight: bold;" translate= "{{info.view.name}}"></p>
-      <div class="container" style="text-align:center;" ng-class="fontSizeDesc">
-          {{info.view.description}}
-      </div>
-    </div>
- </ons-page>
+</ons-page>

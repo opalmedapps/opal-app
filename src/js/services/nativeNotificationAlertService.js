@@ -1,77 +1,80 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 //
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
-var myApp=angular.module('MUHCApp');
+// SPDX-License-Identifier: Apache-2.0
+
 /**
-*@ngdoc service
-*@name MUHCApp.service:NativeNotification
-*@description API to display native looking alert, it's more code but makes it easier to use and cleaner in my opinion. Reference {@link https://onsen.io/v1/reference/ons-alert-dialog.html Onsen Alert Dialog}
-**/
-myApp.service('NativeNotification',function(){
-   /**
-  *@ngdoc property
-  *@name  MUHCApp.service.#mod
-  *@propertyOf MUHCApp.service:NativeNotification
-  *@description string representing the style for the alert, 'material' for Android and undefined for IOS
-  **/
-  var currentAlert = null;
-  var mod= (ons.platform.isAndroid())?'material' : undefined;
-  return {
-    /**
-		*@ngdoc method
-		*@name showNotificationAlert
-		*@methodOf MUHCApp.service:NativeNotification
-		*@param {String} message Alert message to be displayed
-		*@description Displays message as a native looking alert
-		**/
-    showNotificationAlert:function(message)
-    {
-      if(currentAlert&&message === currentAlert) return;
-      currentAlert = message;
-      ons.notification.confirm({
-        
-        message: message,
-        modifier: mod,
-        title:'Alert',
-        buttonLabels:['OK'],
-        callback:function(idx)
-        {
-          currentAlert = null;
+ * @description API to display notification popups using OnsenUI.
+ *              Reference: https://onsen.io/v1/reference/ons.notification.html
+ * @author David Herrera, Summer 2016, Email:davidfherrerar@gmail.com
+ */
+(function () {
+    'use strict';
+
+    angular
+        .module('OpalApp')
+        .service('NativeNotification', NativeNotification);
+
+    NativeNotification.$inject = ['$filter'];
+
+    function NativeNotification($filter) {
+
+        let currentAlert = null;
+
+        /**
+         *@ngdoc property
+         *@description string representing the style for the alert, 'material' for Android and undefined for IOS
+         **/
+        const mod = (ons.platform.isAndroid()) ? 'material' : undefined;
+
+        return {
+            showNotificationAlert: showNotificationAlert,
+            showConfirmation: showConfirmation,
+        };
+
+        /**
+         *@ngdoc method
+         *@name showNotificationAlert
+         *@param {String} message Alert message to be displayed
+         *@param {string} [title] - Optional. Alternate title to show instead of the default one ("Alert").
+         *                          Must already be translated.
+         *@param {function} [callback] - Optional. Called when the OK button is pressed.
+         *@description Displays message as a native looking alert
+         **/
+        function showNotificationAlert(message, title, callback) {
+            if (currentAlert && message === currentAlert) return;
+            currentAlert = message;
+            ons.notification.confirm({
+                message: message,
+                modifier: mod,
+                title: title ? title : $filter('translate')("ALERT"),
+                buttonLabels: [$filter('translate')("OK_BUTTON")],
+                callback: (idx) => {
+                    currentAlert = null;
+                    if (callback) callback();
+                }
+            });
         }
-      });
-      
-    },
-    /**
-		*@ngdoc method
-		*@name showNotificationConfirm
-		*@methodOf MUHCApp.service:NativeNotification
-		*@param {String} url url to check and extract file type
-    *@param {Function} confirmCallback If user pressed ok callback
-    *@param {Function} cancelCallback If user pressed cancel callback
-		*@description Prompts the user with an OK, Cancel alert.
-		**/
-    showNotificationConfirm:function(message,confirmCallback, cancelCallback)
-    {
-      if(currentAlert&&message === currentAlert) return;
-      currentAlert = message;
-      ons.notification.confirm({
-        message: message,
-        modifier: mod,
-        callback: function(idx) {
-          currentAlert = null;
-          switch (idx) {
-            case 0:
-              if(cancelCallback&&typeof cancelCallback == "function")cancelCallback();
-              break;
-            case 1:
-              if(confirmCallback&&typeof confirmCallback == "function")confirmCallback();
-              break;
-          }
+
+        /**
+         *@ngdoc method
+         *@name showConfirmation
+         *@param {String} message Confirmation message to be displayed
+         *@param {function} callback Called when the OK button is pressed.
+         *@description Displays message as a native looking confirmation dialog with an OK and Cancel button
+         **/
+        function showConfirmation(message, callback) {
+            if (currentAlert && message === currentAlert) return;
+            currentAlert = message;
+            ons.notification.confirm({
+                message: message,
+                modifier: mod,
+                title: $filter('translate')("CONFIRM"),
+                buttonLabels: [$filter('translate')("CANCEL"), $filter('translate')("OK_BUTTON")],
+                callback: (idx) => {
+                    currentAlert = null;
+                    if (callback && idx === 1) callback();
+                }
+            });
         }
-      });
     }
-  };
-
-
-
-  });
+})();

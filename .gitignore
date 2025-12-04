@@ -1,4 +1,9 @@
+# SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
 .idea
+.npmrc
 *.swp
 .DS_Store
 .firebase/
@@ -13,3 +18,17 @@
 /GoogleService-Info.plist
 /web-version.json
 /www
+
+# Environments
+env/*/*
+
+# External content
+content/*
+!content/samples/
+!content/content.config.sample.json
+!content/service-status.sample.json
+!content/README.md
+
+# Local uv / pre-commit installation files
+pyproject.toml
+uv.lock

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
@@ -5,20 +9,22 @@ import nacl from "tweetnacl";
 import util from "tweetnacl-util";
 
 nacl.util = util;
-var myApp = angular.module('MUHCApp');
+var myApp = angular.module('OpalApp');
 /**
  *@ngdoc service
- *@name MUHCApp.service:EncryptionService
- *@requires MUHCApp.service:UserAuthorizationInfo
  *@description Provides an API to encrypt and decrypt objects, arrays, or strings.
  **/
-myApp.service('EncryptionService', function (UserAuthorizationInfo) {
+myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPreferences', function (UserAuthorizationInfo, UserHospitalPreferences) {
 
     var securityAnswerHash = '';
     var encryptionHash = '';
-    var tempEncryptionHash = '';
 
-    const main_fields = ['UserID', 'Timestamp', 'Code', 'DeviceId'];
+    const main_fields = ['UserID', 'timestamp', 'Timestamp', 'Code', 'DeviceId'];
+
+    // Constants for key derivation
+    const keySizeBits = 256; // Key size in bits
+    const iterations = 25000;
+    const bitsPerWord = 32; // Used to convert keySizeBits, since crypto-js expects key sizes in 32-bit words
 
     function decryptObject(object, secret) {
         if (typeof object === 'string') {
@@ -118,21 +124,32 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
     /**
      *@ngdoc method
      *@name hash
-     *@methodOf MUHCApp.service:EncryptionService
-     *@description Encrypts a given password using SHA512
-     *@return {String} Returns hashed password
+     *@description Hashes a given string using SHA512
+     *@return {String} Returns hashed string
      **/
     function hash(incoming) {
         return CryptoJS.SHA512(incoming).toString();
+    }
+
+    /**
+     * @ngdoc method
+     * @name getStorageKey
+     * @description Generates a storage key that includes the hospital code.
+     * This key is used for storing and retrieving the encrypted security answer specific to a user and hospital.
+     * @return {String} The storage key.
+     */
+    function getStorageKey() {
+        var hospitalCode = UserHospitalPreferences.getHospitalCode();
+        var username = UserAuthorizationInfo.getUsername();
+        return `${username}:${hospitalCode}:securityAns`;
     }
 
     return {
         /**
          *@ngdoc method
          *@name decryptData
-         *@methodOf MUHCApp.service:EncryptionService
          *@params {Object} object Object to be decrypted
-         *@description Uses the hashed of the password from the {@link MUHCApp.service:UserAuthorizationInfo  UserAuthorizationInfo} service as key to decrypt object parameter
+         *@description Uses the hashed of the password from the {@link OpalApp.service:UserAuthorizationInfo  UserAuthorizationInfo} service as key to decrypt object parameter
          *@return {Object} Returns decrypted object
          **/
         decryptData: function (object) {
@@ -143,8 +160,8 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
         /**
          *@ngdoc method
          *@name decryptDataWithKey
-         *@methodOf MUHCApp.service:EncryptionService
-         *@params {Object} object Object to be decrypted, {String} key fo
+         *@params {Object} object Object to be decrypted
+         *@params {String} key Key for decryption
          *@description Uses the given key as the decryption hash
          *@return {Object} Returns decrypted object
          **/
@@ -155,9 +172,8 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
         /**
          *@ngdoc method
          *@name encryptData
-         *@methodOf MUHCApp.service:EncryptionService
          *@params {Object} object Object to be encrypted
-         *@description Uses the hashed of the password from the {@link MUHCApp.service:UserAuthorizationInfo  UserAuthorizationInfo} service as key to encrypt object parameter
+         *@description Uses the hashed of the password from the {@link OpalApp.service:UserAuthorizationInfo  UserAuthorizationInfo} service as key to encrypt object parameter
          *@return {Object} Returns encrypted object
          **/
         encryptData: function (object) {
@@ -168,7 +184,6 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
         /**
          *@ngdoc method
          *@name encryptWithKey
-         *@methodOf MUHCApp.service:EncryptionService
          *@params {Object} object Object to be encrypted
          *@params {String} secret Key for encrypting
          *@description Uses the secret parameter as key to encrypt object parameter
@@ -182,7 +197,6 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
         /**
          *@ngdoc method
          *@name setSecurityAns
-         *@methodOf MUHCApp.service:EncryptionService
          *@params {String} answer Security answer
          *@description Sets the security answer to be used as the encryption key for all future communication.
          **/
@@ -193,7 +207,6 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
         /**
          *@ngdoc method
          *@name getSecurityAns
-         *@methodOf MUHCApp.service:EncryptionService
          *@description Uses the secret parameter as key to encrypt object parameter
          *@return {String} Returns hashed security answer
          **/
@@ -204,7 +217,6 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
         /**
          *@ngdoc method
          *@name hash
-         *@methodOf MUHCApp.service:EncryptionService
          *@description Forwarded to private function.
          **/
         hash: function (incoming) {
@@ -212,52 +224,44 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
         },
 
         /**
-         *@ngdoc method
-         *@name generateTempEncryptionHash
-         *@methodOf MUHCApp.service:EncryptionService
-         *@description returns a one-time encryption hash based on inputted parameters
-         *@return {String} Returns temporary encryption hash
-         **/
-        generateTempEncryptionHash: function (ssn, answer) {
-            tempEncryptionHash = CryptoJS.PBKDF2(ssn, answer, {
-                keySize: 512 / 32,
-                iterations: 1000
+         * @desc Generates a specific encryption key using the provided secret and salt (via PBKDF2).
+         *       This function is typically used to get an encryption key for specific types of requests which cannot
+         *       be encrypted in the usual way (e.g. password reset).
+         * @param {string} secret The secret passed to PBKDF2 (also called 'password').
+         * @param {string} salt The salt passed to PBKDF2.
+         * @returns {string} The key derived from PBKDF2 based on the provided inputs.
+         */
+        generateSpecificEncryptionKey: function (secret, salt) {
+            return CryptoJS.PBKDF2(secret, salt, {
+                keySize: keySizeBits /bitsPerWord,
+                iterations: iterations,
+                hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
-
-        },
-
-        /**
-         *@ngdoc method
-         *@name removeTempEncryptionHash
-         *@methodOf MUHCApp.service:EncryptionService
-         *@description deletes existing Temporary Encryption Hash
-         **/
-        removeTempEncryptionHash: function () {
-            tempEncryptionHash = "";
-
         },
 
         /**
          *@ngdoc method
          *@name generateEncryptionHash
-         *@methodOf MUHCApp.service:EncryptionService
-         *@description Encrypts a given password using SHA512
+         *@description Encrypts a given password using SHA-256
          *@return {String} Returns hashed password
          **/
-        generateEncryptionHash: function () {
-            encryptionHash = CryptoJS.PBKDF2(hash(UserAuthorizationInfo.getUsername()), securityAnswerHash, {
-                keySize: 512 / 32,
-                iterations: 1000
+         generateEncryptionHash: function () {
+            var usernameHash = hash(UserAuthorizationInfo.getUsername());
+            encryptionHash = CryptoJS.PBKDF2(usernameHash, securityAnswerHash, {
+                keySize: keySizeBits /bitsPerWord,
+                iterations: iterations,
+                hasher: CryptoJS.algo.SHA256,
             }).toString(CryptoJS.enc.Hex);
-
         },
 
         generateNonce: function () {
             return nacl.randomBytes(nacl.secretbox.nonceLength)
         },
 
-        getTempEncryptionHash: function () {
-            return tempEncryptionHash;
-        }
+        /**
+         * Public interface to get the storage key from outside the service.
+         * @return {String} The storage key.
+         */
+        getStorageKey: getStorageKey,
     };
-});
+}]);

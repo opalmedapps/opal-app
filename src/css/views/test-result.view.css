@@ -1,0 +1,31 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.list-item-container {
+	line-height: 1.3;
+	font-size: 14px;
+	padding: 15px 0px 15px 15px;
+}
+.list-item-container-narrow {
+	line-height: 1.3;
+	padding: 10px 0px 10px 10px;
+}
+.thumbnail2 {
+	width: 80px;
+	height: 80px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+}
+.labtest-col {
+	padding-right: 0px;
+	padding-left: 10px;
+}
+.name1 {
+	color: blue;
+}
+.lab-results-new-result {
+	display: inline;
+}

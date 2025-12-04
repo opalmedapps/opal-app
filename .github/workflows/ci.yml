@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.0
+        with:
+          persist-credentials: false
+      - uses: mschoettle/pre-commit-action@v4.2.3
+        if: '!cancelled()'
+
+  run-reuse-workflow:
+    uses: opalmedapps/.github/.github/workflows/reuse.yaml@main
+
+  check-thirdparty-notice:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.0
+        with:
+          persist-credentials: false
+      - uses: opalmedapps/actions/actions/check-thirdparty-notice@main
+        with:
+          package-file: './package.json'
+          additional-dependencies: angular-ui-bootstrap Roboto-Font

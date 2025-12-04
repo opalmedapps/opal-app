@@ -1,0 +1,49 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="InfoTabController as info">
+    <generic-toolbar title="{{'INFO'|translate}}" style-class="fontSizeTitle">
+        <left-content>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </left-content>
+    </generic-toolbar>
+
+    <!-- TODO resolve code duplication with info-page-tabs.html -->
+    <div style="margin-top: 10vh; padding: 0 20px 0 20px" class="text-center">
+        <!-- ICON -->
+        <i ng-if="info.view.iconType === 'icon'" ng-class="info.view.icon" class="info-page-icon"></i>
+        <general-icon ng-if="info.view.iconType === 'general-icon'" icon-class="info-page-icon"></general-icon>
+
+        <!-- TEXT -->
+        <p class="item-title" ng-class="fontSizeTitle" style="font-weight:bold; margin:5px 0 10px" translate="{{info.view.name}}"></p>
+        <div class="container" style="text-align: center" ng-class="fontSizeDesc">
+            {{info.view.description|translate}}
+        </div>
+    </div>
+
+    <div ng-controller="RelationshipTypeController as ctrl">
+        <!-- Error message -->
+        <div ng-show="ctrl.message" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+            <uib-alert type="{{ctrl.errorAlertType}}">{{ctrl.message|translate}}</uib-alert>
+        </div>
+
+        <!-- List of Caregivers/Patients -->
+        <div style="background-color: white; margin: 10px auto 10px; max-width: 75%" class="container: text-center">
+            <ons-list ng-if="!ctrl.message" ng-class="fontSizeDesc">
+                <div class="container">
+                    <!-- Role and Description -->
+                    <ons-list-item ng-repeat="relationshipType in ctrl.relationshipTypes" class="item">
+                        <ons-row>
+                            <ons-col>
+                                <p><strong>{{relationshipType.name}}</strong>: {{relationshipType.description}}</p>
+                            </ons-col>
+                        </ons-row>
+                    </ons-list-item>
+                </div>
+            </ons-list>
+        </div>
+    </div>
+</ons-page>

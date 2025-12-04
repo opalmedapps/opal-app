@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * Created by PhpStorm.
  * User: James Brace
@@ -9,20 +13,20 @@
         'use strict';
 
         angular
-            .module('MUHCApp')
+            .module('OpalApp')
             .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus',
-            'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences', 'Browser', 'DynamicContent'];
+        GeneralTabController.$inject = ['$scope', 'Navigator', 'NetworkStatus', '$timeout',
+            'UserPreferences', 'UserHospitalPreferences', 'Browser', 'DynamicContent', 'RequestToServer', 'Params'];
 
-        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData,
-                                      UserPreferences, Params, UserHospitalPreferences, Browser, DynamicContent) {
+        function GeneralTabController($scope, Navigator, NetworkStatus, $timeout,
+                                      UserPreferences, UserHospitalPreferences, Browser, DynamicContent, RequestToServer, Params) {
             var vm = this;
 
             vm.goToParking = goToParking;
             vm.generalDeviceBackButton = generalDeviceBackButton;
             vm.goToUrl = goToUrl;
-
+            vm.goToCarnetSante = goToCarnetSante;
             // variable to let the user know which hospital they are logged in
             vm.selectedHospitalToDisplay = "";
             vm.allowedModules = {};
@@ -36,17 +40,14 @@
              */
 
             function activate() {
-                if (NetworkStatus.isOnline()) {
-                    initGeneralTab();
-                }
-
-                NavigatorParameters.setParameters({'Navigator': 'generalNavigator'});
-                NavigatorParameters.setNavigator(generalNavigator);
+                Navigator.setNavigator(generalNavigator);
 
                 bindEvents();
 
                 vm.language = UserPreferences.getLanguage();
                 configureSelectedHospital();
+
+                if(NetworkStatus.isOnline()) getDisplayData();
             }
 
             /**
@@ -59,10 +60,11 @@
             }
 
             function bindEvents() {
+                // Refresh the page on coming back from other pages
                 generalNavigator.on('prepop', function () {
-                    setBadges();
+                    if(NetworkStatus.isOnline()) getDisplayData();
                 });
-
+                //This avoids constant repushing which causes bugs
                 generalNavigator.on('prepush', function (event) {
                     if (generalNavigator._doorLock.isLocked()) {
                         event.cancel();
@@ -76,32 +78,26 @@
                 });
             }
 
-            function initGeneralTab() {
-                if (MetaData.isFirstTimeGeneral()) {
-                    $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
+            /**
+             * @description Function to get view specific data from Django API
+             */
+            async function getDisplayData() {
+                try {
+                    const result = await RequestToServer.apiRequest(Params.API.ROUTES.GENERAL);
+                    $timeout(() => {
+                        vm.announcementsUnreadNumber = result.data.unread_announcement_count;
+                    });
+                } catch (error) {
+                    // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
+                    console.error(error);
                 }
-                else if (Announcements.getLastUpdated() < Date.now() - 300000) {
-                    // TODO: MAKE THIS INTO A BACKGROUND REFRESH
-
-                    UpdateUI.set([
-                        'Doctors',
-                        'Announcements'
-                    ])
-                }
-                setBadges();
             }
-
-            function setBadges() {
-                vm.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
-            }
-
 
             /**
              * PUBLIC FUNCTIONS
              */
 
             function goToParking() {
-                NavigatorParameters.setParameters('generalNavigator');
                 generalNavigator.pushPage('views/general/parking/parking.html');
             }
 
@@ -111,6 +107,11 @@
 
             function goToUrl(contentKey) {
                 const url = DynamicContent.getURL(contentKey);
+                Browser.openInternal(url);
+            }
+
+            function goToCarnetSante() {
+                const url = DynamicContent.getURL("carnetSante");
                 Browser.openInternal(url);
             }
         }

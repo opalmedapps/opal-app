@@ -1,42 +1,35 @@
-<!--<ons-modal var="tourModal">-->
-    <!--<div id="rcorners" style="height: 60%">-->
-        <!--<ons-carousel swipeable overscrollable auto-scroll style="height: 100%" var="tourCarousel">-->
-            <!--<ons-carousel-item>-->
-                <!--<img src="img/opal_notification.png" style="max-width:20vw">-->
-                <!--<div ng-class="fontSizeTitle">{{"TOUR_WELCOME"|translate}}</div>-->
-                <!--<div ng-class="fontSizeDesc">{{"TOUR_WELCOME_DESC"|translate}}</div>-->
-            <!--</ons-carousel-item>-->
-            <!--<ons-carousel-item>-->
-                <!--<ons-icon icon="fa-home" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>-->
-                <!--<div ng-class="fontSizeTitle">{{"HOME"|translate}}</div>-->
-                <!--<div ng-class="fontSizeDesc">{{"TOUR_HOME"|translate}}</div>-->
-            <!--</ons-carousel-item>-->
-            <!--<ons-carousel-item>-->
-                <!--<ons-icon icon="fa-user" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>-->
-                <!--<div ng-class="fontSizeTitle">{{"MYCHART"|translate}}</div>-->
-                <!--<div ng-class="fontSizeDesc">{{"TOUR_MYCHART"|translate}}</div>-->
-            <!--</ons-carousel-item>-->
-            <!--<ons-carousel-item>-->
-                <!--<ons-icon icon="fa-th" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>-->
-                <!--<div ng-class="fontSizeTitle">{{"GENERAL"|translate}}</div>-->
-                <!--<div ng-class="fontSizeDesc">{{"TOUR_GENERAL"|translate}}</div>-->
-            <!--</ons-carousel-item>-->
-            <!--<ons-carousel-item>-->
-                <!--<ons-icon icon="fa-mortar-board" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>-->
-                <!--<div ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>-->
-                <!--<div ng-class="fontSizeDesc">{{"TOUR_EDUCATION"|translate}}</div>-->
-            <!--</ons-carousel-item>-->
-            <!--<ons-carousel-item>-->
-                <!--<ons-icon icon="fa-info-circle" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>-->
-                <!--<div ng-class="fontSizeTitle">{{"ABOUT"|translate}}</div>-->
-                <!--<div ng-class="fontSizeDesc">{{"TOUR_INFO"|translate}}</div>-->
-            <!--</ons-carousel-item>-->
-        <!--</ons-carousel>-->
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 
-        <!--<div id="tourButtons">-->
-            <!--<span><ons-icon icon="fa-arrow-left" aria-hidden="true" style="color:white" ng-click="tourCarousel.prev()"></ons-icon></span>-->
-            <!--<ons-button modifier="cta" ng-click="tourModal.hide()" style="background-color: inherit; font-size: 125%">{{"CLOSE"|translate}}</ons-button>-->
-            <!--<ons-icon icon="fa-arrow-right" aria-hidden="true" style="color:white" ng-click="tourCarousel.next()"></ons-icon>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</ons-modal>-->
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="TourController as vm">
+    <generic-toolbar title="{{'TOUR_NAME'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <!-- TOUR NAVIGATION BAR -->
+    <div id="tourCarouselBar" align="center">
+        <ons-row>
+            <ons-col>
+                <div class="ion-chevron-left tour-carousel-arrow-margin" aria-hidden="true" ng-click="vm.prev()" ng-hide="vm.currentIndex == 0"></div>
+            </ons-col>
+            <ons-col ng-class="fontSizeTitle">
+                {{vm.currentIndex + 1}} / {{vm.tourSections.length}}
+            </ons-col>
+            <ons-col>
+                <div class="ion-chevron-right tour-carousel-arrow-margin" aria-hidden="true" ng-click="vm.next()" ng-hide="vm.currentIndex == vm.tourSections.length - 1"></div>
+            </ons-col>
+        </ons-row>
+    </div>
+
+    <!-- TOUR CAROUSEL -->
+    <ons-carousel swipeable overscrollable auto-scroll fullscreen class="tour-carousel">
+        <ons-carousel-item ng-repeat="section in vm.tourSections" class="tour-carousel-text-margin">
+            <img ng-if="section.iconType === 'opal-logo'" src="img/Opal_Logo_Black.png" class="tour-icon-image">
+            <ons-icon ng-if="section.iconType === 'icon'" icon="{{section.icon}}" class="tour-icon" aria-hidden="true"></ons-icon>
+            <general-icon ng-if="section.iconType === 'general-icon'" icon-class="tour-icon"></general-icon>
+            <div ng-class="fontSizeTitle" class="tour-title">{{section.title | translate}}</div>
+            <div ng-class="fontSizeDesc">{{section.description | translate | replaceAll: "%%HELP_EMAIL%%":vm.helpEmail}}</div>
+        </ons-carousel-item>
+    </ons-carousel>
+</ons-page>

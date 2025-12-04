@@ -1,0 +1,115 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="ResearchController as tab">
+
+    <!-- TOOLBAR -->
+    <generic-toolbar title="{{'RESEARCH'|translate}}" style-class="fontSizeTitle">
+        <left-content>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </left-content>
+
+        <right-content>
+            <ons-toolbar-button ng-click="tab.openInfoPage()">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
+
+    <network-banner></network-banner>
+
+    <ons-list style="margin: 0px 0">
+        <ons-list-item modifier="chevron" class="item" ng-click="tab.openResearchStudies()"
+            ng-if="tab.allowedModules.hasOwnProperty('STU') && tab.allowedModules['STU']">
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <i class="fa-solid fa-dna fa18x" style="color: #FFA13D"></i>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"STUDIES"|translate}}</span>
+                    </header>
+                    <p class="item-desc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item" ng-click="tab.openReferenceMaterial()"
+            ng-if="tab.allowedModules.hasOwnProperty('REF') && tab.allowedModules['REF']">
+            <ons-row align="center">
+
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-book" size="2x" style="color: #9575CD"></ons-icon><span
+                            class="notification"
+                            ng-show="tab.researchReferenceUnreadNumber > 0">{{tab.researchReferenceUnreadNumber}}</span>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH_REFERENCE_MATERIAL"|translate}}</span>
+                    </header>
+                    <p class="item-desc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item" ng-click="tab.openResearchQuestionnaires()"
+            ng-if="tab.allowedModules.hasOwnProperty('RQU') && tab.allowedModules['RQU']">
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="ion-clipboard" size="2x" style="color: #607d8b"></ons-icon><span
+                            class="notification"
+                            ng-show="tab.researchQuestionnairesUnreadNumber>0">{{tab.researchQuestionnairesUnreadNumber}}</span>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH_QUESTIONNAIRES"|translate}}</span>
+                    </header>
+                    <p class="item-desc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item" ng-click="tab.openConsentForms()"
+            ng-if="tab.allowedModules.hasOwnProperty('CON') && tab.allowedModules['CON']">
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <i class="fa-solid fa-file-signature fa18x" style="color: #7D3B82; margin-left: 8px"></i>
+                        <span class="notification" ng-show="tab.consentQuestionnairesUnreadNumber>0" style="margin-left: -14px">
+                            {{tab.consentQuestionnairesUnreadNumber}}
+                        </span>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"CONSENT_FORMS"|translate}}</span>
+                    </header>
+                    <p class="item-desc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('RFE') && tab.allowedModules['RFE']"
+                           ng-click="tab.openResearchFeedback()">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-thumbs-up fa18x" style="color: #4CAF50"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH_FEEDBACK"|translate}}</span>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
+        </ons-list-item>
+    </ons-list>
+</ons-page>

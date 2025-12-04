@@ -1,113 +1,87 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('UserHospitalPreferences', UserHospitalPreferences);
 
-    UserHospitalPreferences.$inject = ['Params', 'UserPreferences', 'FirebaseService'];
+    UserHospitalPreferences.$inject = ['Params', 'UserPreferences', 'Firebase'];
 
     /* @ngInject */
-    function UserHospitalPreferences(Params, UserPreferences, FirebaseService) {
+    function UserHospitalPreferences(Params, UserPreferences, Firebase) {
 
-        let hospitalList = Params.hospitalList;
-        let selectedHospitalKey = '';
+        let hospitalList = CONFIG.settings.useProductionHospitals ? Params.productionHospitalList : Params.developmentHospitalList;
+        let selectedHospital;
         let localStorageHospitalKey = Params.localStorageHospitalKey;
 
         let service = {
-            getHospitalFullName: getHospitalFullName,
-            getHospitalAcronym: getHospitalAcronym,
-            getHospitalAllowedModules: getHospitalAllowedModules,
-            isThereSelectedHospital: isThereSelectedHospital,
+            getHospitalAcronym: () => selectedHospital?.acronym || '',
+            getHospitalAllowedModules: () => selectedHospital?.modules,
+            getHospitalCode: () => selectedHospital?.uniqueHospitalCode,
+            getHospitalFullName: () => selectedHospital?.fullName || '',
+            getHospitalList: () => hospitalList,
+            mustKickOutConcurrentUsers: () => selectedHospital?.kickOutConcurrentUsers,
             initializeHospital: initializeHospital,
+            isThereSelectedHospital: () => !!selectedHospital,
             setHospital: setHospital,
-            getHospital: getHospital,
-            getHospitalList: getHospitalList,
-            getAllowedModulesBeforeLogin: getAllowedModulesBeforeLogin,
         };
 
         return service;
 
         ////////////////
 
-        function getHospitalFullName () {
-            if (isThereSelectedHospital()){
-                return hospitalList[selectedHospitalKey].fullName;
-            } else {
-                return '';
-            }
-        }
-
-        function getHospitalAcronym () {
-            if (isThereSelectedHospital()){
-                return hospitalList[selectedHospitalKey].acronym;
-            } else {
-                return '';
-            }
-        }
-
-        function getHospitalAllowedModules () {
-            if (!isThereSelectedHospital()){
-                return Params.allowedModulesBeforeLogin;
-            } else {
-                return hospitalList[selectedHospitalKey].modules;
-            }
-        }
-
-        function getAllowedModulesBeforeLogin () {
-            return Params.allowedModulesBeforeLogin;
-        }
-
-        function isThereSelectedHospital (){
-            return selectedHospitalKey !== '' && selectedHospitalKey !== null && selectedHospitalKey !== undefined && hospitalList.hasOwnProperty(selectedHospitalKey);
-        }
-
-        function getHospitalList (){
-            return hospitalList;
+        /**
+         * @description Finds and returns a hospital listing based on its uniqueHospitalCode.
+         * @param {string} code The uniqueHospitalCode to search for.
+         * @returns {object|undefined} Returns the hospital code object, or undefined it isn't found.
+         */
+        function getHospitalByCode(code) {
+            return hospitalList.find(entry => entry.uniqueHospitalCode === code);
         }
 
         /**
-         * @name initializeHospital
-         * @desc If hospital was already set previously within the app, set default to that hospital. Otherwise it sets hospital to '' as default.
+         * @description Initializes this service. Loads the value of the previously selected hospital from local storage,
+         *              and initializes the base firebase URL.
          */
-        function initializeHospital (){
-            let localStorageHospital = window.localStorage.getItem(localStorageHospitalKey);
+        function initializeHospital() {
+            let hospital;
 
-            if (localStorageHospital === undefined || localStorageHospital === null || !Object.keys(hospitalList).includes(localStorageHospital)){
-                selectedHospitalKey = '';
-            } else {
-                selectedHospitalKey = localStorageHospital;
-
-                // set hospital firebase branch
-                FirebaseService.updateFirebaseUrl(hospitalList[localStorageHospital].uniqueHospitalCode + '/');
+            // Default to the only available hospital if there's only one choice (from the list available to the user)
+            if (hospitalList.length === 1) {
+                hospital = getHospitalByCode(hospitalList[0].uniqueHospitalCode);
             }
-        }
+            else {
+                // Read the previous hospital choice stored in local storage
+                const localStorageHospitalCode = window.localStorage.getItem(localStorageHospitalKey);
+                hospital = getHospitalByCode(localStorageHospitalCode);
+            }
 
-        function getHospital (){
-            return selectedHospitalKey;
+            // Save the selection if it's a valid entry
+            if (hospital && hospital.enabled) selectedHospital = hospital;
+
+            // If a selection was initialized, update the firebase branch
+            if (selectedHospital) Firebase.updateFirebaseUrl(selectedHospital.uniqueHospitalCode + '/');
         }
 
         /**
-         * @name setHospital
-         * @desc Setter method for patient hospital of preference
-         * @param hospitalKey {string} The string denoting the hospital chosen, must be from the hospital list in constants.js
+         * @description Sets the currently selected hospital.
+         * @param {string} hospitalCode The uniqueHospitalCode of the selected hospital.
+         * @throws Throws an error if the hospitalCode value isn't found in the hospital list.
          */
-        function setHospital (hospitalKey) {
-            if (!Object.keys(hospitalList).includes(hospitalKey)){
-                // TODO: error handling. This means that the hospital the user have entered does not exist
-                return;
-            }
+        function setHospital(hospitalCode) {
+            // Store the new selection in this service
+            selectedHospital = getHospitalByCode(hospitalCode);
+            if (!selectedHospital) throw `Invalid hospital key: ${hospitalCode}`;
 
-            // store hospital choice in local storage
-            window.localStorage.setItem(localStorageHospitalKey, hospitalKey);
+            // Store the hospital choice in local storage
+            window.localStorage.setItem(localStorageHospitalKey, hospitalCode);
 
-            // update firebase hospital branch
-            FirebaseService.updateFirebaseUrl(hospitalList[hospitalKey].uniqueHospitalCode + '/');
-
-            // update local hospital
-            selectedHospitalKey = hospitalKey;
+            // Update the firebase branch
+            Firebase.updateFirebaseUrl(hospitalCode + '/');
         }
     }
-
 })();
-

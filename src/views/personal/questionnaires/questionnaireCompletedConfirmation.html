@@ -1,10 +1,12 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="QuestionnaireCompletionController as vm">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{vm.pageTitle}}" style-class="fontSizeTitle">
+    </generic-toolbar>
 
     <div style="margin-top: 10px">
         <div>
@@ -17,7 +19,7 @@
             <div class="row text-center" style="margin: 0 auto; align: center" ng-class="fontSizeDesc">
                 <div class="col-xs-12 text-center" style="margin: 0 auto; align: center">
                     <h3>
-                        {{"QUESTIONNAIRE_THANKS"|translate}}
+                        {{vm.thankMessage}}
                     </h3>
                     <br>
                     <p>{{"QUESTIONNAIRE_CONTACT"|translate}}</p>
@@ -26,9 +28,9 @@
             <br>
         </div>
         <div align="center" style="margin-bottom:10px">
-            <button class="button--large--cta" style="width:80%; white-space: initial"
+            <button class="button--large--cta button--questionnaire-back-to-list"
                     ng-click="vm.goBackToList()" ng-class="fontSizeDesc">
-                {{"QUESTIONNAIRE_GO_BACK_TO_LIST"|translate}}
+                {{vm.backToListMessage}}
             </button>
         </div>
     </div>

@@ -1,0 +1,37 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="PatientTestResultsDelayInfoController as ctrl">
+    <generic-toolbar title="{{ 'LAB_DELAY' | translate }}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <loading-spinning-circle
+            ng-show="ctrl.loading"
+            loading-message="{{'LOADING'|translate}}">
+    </loading-spinning-circle>
+
+    <div ng-hide="ctrl.loading || ctrl.alert" class="container text-left" style="margin-top: 4px;" ng-class="fontSizeDesc">
+
+        <!-- part of phase 1b (see QSCCD-1555)
+        <p style="font-weight: bold">{{ "LAB_DELAY_INFO_HEADER" | translate }}</p>
+        <p>{{"LAB_DELAY_INFO_TEXT"|translate}}</p>
+        -->
+        <p style="font-weight: bold">{{ "LAB_DELAY_DEFAULTS_HEADER" | translate }}</p>
+        <p>
+            <span style="font-weight: bold">{{ "LAB_DELAY_DEFAULTS_INTERPRETABLE" | translate: { yesno: "yes" } }}</span>
+            {{ "DAYS" | translate: { days: ctrl.default_interpretable } }}
+        </p>
+        <p>{{ "LAB_DELAY_INTERPRETABLE" | translate }}</p>
+        <p>
+            <span style="font-weight: bold">{{ "LAB_DELAY_DEFAULTS_INTERPRETABLE" | translate: { yesno: "no" } }}</span>
+            {{ "DAYS" | translate: { days: ctrl.default_non_interpretable } }}
+        </p>
+        <p>{{ "LAB_DELAY_NON_INTERPRETABLE" | translate }}</p>
+    </div>
+
+    <div ng-show="ctrl.alert.type" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="{{ ctrl.alert.type }}">{{ ctrl.alert.content | translate }}</uib-alert>
+    </div>
+</ons-page>

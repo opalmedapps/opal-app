@@ -1,0 +1,98 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="EtekcityScaleController as ctrl">
+    <generic-toolbar title="{{ 'SMART_DEVICES_ETEKCITY' | translate }}" style-class="fontSizeTitle">
+    </generic-toolbar>
+    <network-banner></network-banner>
+
+    <div class="smartdevices-page">
+        <div align="center" class="smartdevices-fa-logo">
+            <i class="fa fa-tachometer fa-lg" style="color: #25a6d9"></i>
+        </div>
+
+        <div ng-if="ctrl.errorMessage" align="center">
+            <p class="error">{{ ctrl.errorMessage }}</p>
+        </div>
+
+        <div ng-if="ctrl.showInstructions()">
+            <div style="text-align: justify;">
+                <p>{{ "SMART_DEVICES_SCALE_INSTRUCTIONS" | translate }}</p>
+            </div>
+
+            <div align="center">
+                <button class="button--large--cta"
+                        ng-click="ctrl.scanAndConnect()">
+                        <span>{{ "SMART_DEVICES_SCALE_READ" | translate }}</span>
+                </button>
+            </div>
+        </div>
+
+        <div ng-if="ctrl.isLoading()">
+            <loading-spinning-circle loading-message="{{'SMART_DEVICES_CONNECTING'|translate}}">
+            </loading-spinning-circle>
+        </div>
+
+        <div ng-if="ctrl.weight && !ctrl.dataSubmitted" align="center">
+            <p><strong>{{ "SMART_DEVICES_WEIGHT" | translate }}</strong></p>
+            <p class="data">
+                <span>{{ ctrl.weight }}</span>kg
+            </p>
+            <!--
+            Currently hidden but might be helpful to show to users
+            <p><strong>Scale:</strong> {{ctrl.selectedDevice.name}} ({{ctrl.selectedDevice.id}})</p>
+            <p><strong>Battery level:</strong> {{ctrl.selectedDevice.battery}}%</p>
+            -->
+            <button class="button--large--cta"
+                    ng-click="ctrl.submitData()">
+                {{ "SMART_DEVICES_SCALE_SUBMIT" | translate }}
+            </button>
+        </div>
+
+        <div ng-if="ctrl.dataSubmitted" align="center">
+            <p>{{ "SMART_DEVICES_SCALE_SUBMITTED" | translate }}</p>
+            <p>{{ "SMART_DEVICES_INFO_SUBMITTED" | translate }}</p>
+            <button class="button--large--cta"
+                    ng-click="ctrl.done()">
+                {{ "SMART_DEVICES_BACK" | translate }}
+            </button>
+        </div>
+
+        <div ng-if="!ctrl.scanning && ctrl.selectedDevice == null && ctrl.getDeviceList().length > 1">
+            <p ng-class="fontSizeTitle"><strong>{{ "SMART_DEVICES_MULTIPLE" | translate }}</strong></p>
+
+            <ons-list>
+                <ons-list-item ng-repeat="device in ctrl.getDeviceList()" class="item">
+                    <ons-row align="center">
+                        <div class="smartdevices-content">
+                            <div class="smartdevices-content--icon">
+                                <i class="fa fa-heartbeat fa-2x"
+                              style="color:red; display: inline-block"></i>
+                            </div>
+                            <div class="smartdevices-content--text">
+                                <p ng-class="fontSizeTitle">{{ device.name }}</p>
+                                <p class="relationship-list--status" ng-class="fontSizeDesc">{{ device.id }}</p>
+                            </div>
+                            <div class="smartdevices-content--right" style="margin-left: 5vh;">
+                                <button class="shadow-2 button--large--cta" ng-click="ctrl.doSelectDevice(device)">
+                                    <span>{{ "SMART_DEVICES_SELECT" | translate }}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+        </div>
+
+        <div ng-if="ctrl.debug">
+            <p ng-class="fontSizeTitle" style="margin-top: 1vh;"><strong>Debug Messages:</strong></p>
+            <div>
+                <p ng-repeat="message in ctrl.messages">{{ message }}</p>
+            </div>
+        </div>
+    </div>
+
+</ons-page>

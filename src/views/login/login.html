@@ -1,29 +1,28 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="LoginController as login">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center">{{"LOGIN"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'LOGIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <div ng-include="'./views/login/popover-security.html'"></div>
     <ons-row align="center" style="height:70vh;margin:0;top:0">
         <ons-col align="center">
-            <div align="center">
-                <img src="./img/Opal_Name_Logo_Green_Transparent.png" style="margin-top: 1%; width:auto;max-width:70%;height:auto">
-            </div>
+            <img src="./img/Opal_Name_Logo_Green_Transparent.png" class="opal-logo--large" style="margin-top:1%">
             <div class="container" style="margin-top: 1%">
                 <form style="text-align: center" novalidate>
                     <div>
                         <div style="width: 100%" class="style-4">
-                            <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()></div>
+                            <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()>
+                        </div>
                         <br/>
-                        <div style="width: 100%" class="style-4">
-                            <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()"></div>
+                        <password-input>
+                            <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()">
+                        </password-input>
                         <br/>
-
                         <!-- HOSPITAL SELECTOR -->
-                        <hospital-selector></hospital-selector>
+                        <hospital-selector on-click="login.cancelLoginAttempt"></hospital-selector>
 
                         <br/>
                         <div ng-show="login.alert.type">
@@ -31,37 +30,29 @@
                         </div>
                     </div>
 
-                    <div>{{"TRUST_DEVICE"|translate}}
-                        <span><ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch></span>
+                    <!-- TRUSTED / UNTRUSTED -->
+                    <div id="trusted-flex-container">
+                        <p id="trusted-text">{{"TRUST_DEVICE"|translate}}</p>
+                        <span id="trusted-toggle">
+                             <ons-switch ng-disabled="login.loading" var="login.trustSwitch" ng-model="login.trusted"></ons-switch>
+                        </span>
                     </div>
-                        <button class="shadow-2 button button--large " style="max-width:400px;background-color: #4CAF50; font-weight: bolder;margin: auto"
-                                ng-click="login.submit()" ng-disabled="!login.isThereSelectedHospital() || login.loading" >
-                            <span ng-if = "!login.loading" > {{"LOGIN"|translate}} </span>
-                            <span ng-if = "login.loading" > {{"LOGGINGIN"|translate}} <ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
-                        </button>
+                    <br>
+
+                    <!-- LOGIN BUTTON -->
+                    <button class="shadow-2 button button--large button--large-green"
+                            ng-click="login.submit()" ng-disabled="!login.isThereSelectedHospital() || login.loading">
+                        <span ng-if="!login.loading">{{"LOGIN"|translate}}</span>
+                        <span ng-if="login.loading">{{"LOGGING_IN"|translate}}<ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
+                    </button>
                     <br>
                 </form>
-                    <button class="button button--large--quiet" ng-click="initNavigator.pushPage('./views/login/forgot-password.html',{})" >
-                        {{"FORGOTPASSWORD"|translate}}
-                    </button>
+
+                <!-- FORGOT PASSWORD -->
+                <button class="button button--large--quiet" ng-click="login.goToReset()">
+                    {{"FORGOT_PASSWORD"|translate}}
+                </button>
             </div>
         </ons-col>
     </ons-row>
-
-    <ons-modal var="loginerrormodal">
-        <h4>{{"SERVERERROR"|translate}}</h4>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="unattended-message">{{"PASSWORDSERVERERROR"|translate}}</p>
-        <ons-button style="margin-top: 5%; font-size: 22px; background-color: #4caf50" ng-click="login.goToReset()">{{"RETRYRESET"|translate}}</ons-button>
-        <br>
-        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="login.goToInit()">{{"GOTOHOME"|translate}}</ons-button>
-    </ons-modal>
-
-    <ons-modal var="wronghashmodal">
-        <h4>{{"ERROR"|translate}}</h4>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="unattended-message">{{"RESETTRUSTEDMESSAGE"|translate}}</p>
-        <br>
-        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="wronghashmodal.hide()">{{"OK"|translate}}</ons-button>
-    </ons-modal>
 </ons-page>

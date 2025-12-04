@@ -1,64 +1,84 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   infoTabController.js
  * Description  :   Manages the information view.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   28 Apr 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['$timeout','$filter','$sce'];
+    InfoTabController.$inject = ['$filter', '$scope', 'Navigator'];
 
-  /* @ngInject */
-    function InfoTabController($timeout,$filter,$sce) {
-        var vm = this;
-        vm.title = 'InfoTabController';
+    /* @ngInject */
+    function InfoTabController($filter, $scope, Navigator) {
+        let vm = this;
         vm.view = {};
 
-        var views=[
-            {
-                icon:'fa-home',
-                color:'SteelBlue',
-                name:"HOME",
-                description:"HOME_DESCRIPTION"
+        const views = {
+            home: {
+                iconType: 'icon',
+                icon: 'fa-solid fa-home',
+                name: "HOME",
+                description: "HOME_DESCRIPTION"
             },
-            {
-                icon:'fa-user',
-                color:'maroon',
-                name:"MYCHART" ,
-                description:"MYCHART_DESCRIPTION"
+            chart: {
+                iconType: 'icon',
+                icon: 'fa-solid fa-user',
+                name: "CHART",
+                description: "CHART_DESCRIPTION"
             },
-            {
-                icon:'fa-th',
-                color:'darkblue',
+            general: {
+                iconType: 'general-icon',
+                icon: 'general-icon',
                 name: "GENERAL",
-                description:"GENERAL_DESCRIPTION"
+                description: "GENERAL_DESCRIPTION"
             },
-            {
-                icon:'fa-book',
-                color:'Chocolate',
+            caregivers: {
+                iconType: 'icon',
+                icon: 'fa-solid fa-user',
+                name: "RELATIONSHIPS_CAREGIVERS",
+                description: "RELATIONSHIPS_CAREGIVERS_DESCRIPTION"
+            },
+            patients: {
+                iconType: 'icon',
+                icon: 'fa-solid fa-user',
+                name: "RELATIONSHIPS_PATIENTS",
+                description: "RELATIONSHIPS_PATIENTS_DESCRIPTION"
+            },
+            education: {
+                iconType: 'icon',
+                icon:'fa-solid fa-book',
                 name:"EDUCATION",
                 description:"EDUCATION_DESCRIPTION"
+            },
+            research: {
+                iconType: 'icon',
+                icon: 'fa-solid fa-microscope',
+                name: "RESEARCH",
+                description: "RESEARCH_DESCRIPTION"
+            },
+            studies: {
+                iconType: 'icon',
+                icon: 'fa-solid fa-dna',
+                name: "STUDIES",
+                description: "STUDIES_DESCRIPTION"
             }
-        ];
+        };
 
         activate();
 
-        ////////////////
-
         function activate() {
-            var tab=tabbar.getActiveTabIndex();
-            vm.view = views[tab];
-            vm.view.description = $filter('translate')(vm.view.description );
+            let params = Navigator.getNavigator().getCurrentPage().options;
+            vm.view = views[params.id];
         }
     }
-
 })();

@@ -1,0 +1,167 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.lee-checkbox {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 400;
+	font-size: 17px;
+	line-height: 24px;
+	margin: 10px 0;
+}
+.lee-checkbox > .lee-checkbox__checkmark {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 400;
+	font-size: 17px;
+	position: relative;
+	overflow: hidden;
+	height: 24px;
+	pointer-events: none;
+}
+.lee-checkbox > input[type="checkbox"] {
+	position: absolute;
+	overflow: hidden;
+	right: 0px;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	padding: 0;
+	border: 0;
+	opacity: 0.001;
+	z-index: 1;
+	vertical-align: top;
+	outline: none;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	-webkit-appearance: none;
+	appearance: none;
+	height: 0;
+	width: 0;
+}
+.lee-checkbox > input[type="checkbox"]:checked {
+	background: rgba(24,103,194,0.81);
+}
+.lee-checkbox > input[type="checkbox"]:checked + .lee-checkbox__checkmark:before {
+	background: rgba(24,103,194,0.81);
+	border: 1px solid rgba(24,103,194,0.81);
+}
+.lee-checkbox > input[type="checkbox"]:checked + .lee-checkbox__checkmark:after {
+	opacity: 1;
+}
+.lee-checkbox > .lee-checkbox__checkmark:before {
+	content: '';
+	position: absolute;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	width: 24px;
+	height: 24px;
+	background: transparent;
+	border: 1px solid rgba(24,103,194,0.81);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	left: 0;
+}
+.lee-checkbox > .lee-checkbox__checkmark {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 400;
+	font-size: 17px;
+	position: relative;
+	overflow: hidden;
+	width: 24px;
+	height: 24px;
+}
+.lee-checkbox > .lee-checkbox__checkmark:after {
+	content: '';
+	position: absolute;
+	top: 6px;
+	left: 5px;
+	width: 12px;
+	height: 6px;
+	background: transparent;
+	border: 3px solid #fff;
+	border-width: 2px;
+	border-top: none;
+	border-right: none;
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+	opacity: 0;
+}
+.lee-checkbox > input[type="checkbox"]:focus + .lee-checkbox__checkmark:before {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.lee-checkbox > input[type="checkbox"]:disabled + .lee-checkbox__checkmark {
+	opacity: 0.3;
+	cursor: default;
+	pointer-events: none;
+}
+.lee-checkbox > input[type="checkbox"]:disabled:active + .lee-checkbox__checkmark:before {
+	background: transparent;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.lee-checkbox--list-item {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	line-height: 44px;
+}
+.lee-checkbox--list-item__checkmark {
+	margin-top: 10px;
+}
+.question-not-answered {
+	background-color: #d9534f;
+}
+
+.button--questionnaire-back-to-list {
+	line-height: 1.5;
+	width: 80%;
+	white-space: initial;
+}

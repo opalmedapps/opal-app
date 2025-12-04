@@ -1,36 +1,36 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function() {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Params', Params);
 
     /*
     This factory keeps track of all constants across the app.
      */
 
-    Params.$inject = ['QuestionnaireConstants'];
+    Params.$inject = ['QuestionnaireConstants', 'RequestConstants', 'ApiConstants', 'NotificationConstants'];
 
     /* @ngInject */
-    function Params (QuestionnaireConstants) {
+    function Params (QuestionnaireConstants, RequestConstants, ApiConstants, NotificationConstants) {
 
         let appConstants =
             {
-                maxIdleTimeAllowed: 300000,
+                maxIdleTimeAllowed: 300000, // 300 000 ms = 5 min. If changed, also edit the "INACTIVE" string
                 tenMinutesMilliSeconds: 600000,
+                requestTimeout: 30000,
 
-                appointmentType: {
-                    appointmentTypeEn: 'appointment',
-                    appointmentTypeFr: 'rendez-vous'
-                },
+                firebaseBaseUrl: 'dev3/',
 
                 /** Alert Types and Classes **/
                 alertTypeDanger: 'danger',
                 alertTypeSuccess: 'success',
                 alertTypeWarning: 'warning',
                 alertTypeInfo: 'info',
-                alertClassUpdateMessageError: 'bg-danger updateMessage-error',
-                alertClassUpdateMessageSuccess: "bg-success updateMessage-success",
 
                 /** Firebase Authentication Error Codes **/
                 invalidEmail: 'auth/invalid-email',
@@ -46,108 +46,25 @@
                 emailInUse: 'auth/email-already-in-use',
                 weakPassword: 'auth/weak-password',
 
-                monthsArray: {
-                    monthsArrayEn: ["January", "February", "March", "April", "May",
-                        "June", "July", "August", "September", "October", "November", "December"],
-                    monthsShortEn: ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                    monthsArrayFr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-                        'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-                    monthsShortFr: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
-                        'août', 'sept.', 'oct.', 'nov.', 'déc.'],
-                },
-                daysArray: {
-                    daysArrayFr: ['dimanche', 'lundi', 'mardi', 'mercredi',
-                        'jeudi', 'vendredi', 'samedi'],
-                    daysArrayEn: ["Sunday", "Monday", "Tuesday", "Wednesday",
-                        "Thursday", "Friday", "Saturday"]
-                },
-                download: {
-                    imageDownloadPngFr: 'Télécharger en image PNG',
-                    imageDownloadPngEn: 'Download PNG image',
-                    imageDownloadJpegFr: 'Télécharger en image JPEG',
-                    imageDownloadJpegEn: 'Download JPEG image',
-                    downloadPdfFr: 'Télécharger en document PDF',
-                    downloadPdfEn: 'Download PDF document',
-                    downloadSvgFr: 'Télécharger en document Vectoriel',
-                    downloadSvgEn: 'Download SVG vector image'
-                },
-                exportButtonTitle: {
-                    exportButtonTitleFr: 'Export du graphique',
-                    exportButtonTitleEn: 'Graphics export'
-                },
-                loadingMessage: {
-                    loadingMessageFr: 'Chargement en cours...',
-                    loadingMessageEn: 'Loading...'
-                },
-                noPlotGeneric: {
-                    noPlotGenericEn: "No plot available",
-                    noPlotGenericFr: "Aucun graphique disponible",
-                },
-                noPlotNonNumeric: {
-                    noPlotNonNumericEn: "These results can't be charted because at least one of them isn't a number",
-                    noPlotNonNumericFr: "Ces résultats ne peuvent pas être représentés car au moins l'un d'entre eux n'est pas un nombre",
-                },
-                printChart: {
-                    printChartFr: 'Imprimer le graphique',
-                    printChartEn: 'Print chart'
-                },
-                resetZoom: {
-                    resetZoomMessageFr: 'Réinitialiser le zoom',
-                    resetZoomMessageTitleFr: 'Réinitialiser le zoom au niveau 1:1',
-                    resetZoomMessageEn: 'Reset zoom',
-                    resetZoomMessageTitleEn: 'Reset zoom level 1:1'
-                },
-                rangeSelector: {
-                    rangeSelectorFromFr: 'Du',
-                    rangeSelectorToFr: 'au',
-                    rangeSelectorFromEn: 'From',
-                    rangeSelectorToEr: 'to'
-                },
-
                 /** ChangeSettingsController Constants **/
-                setAliasParam: 'ALIAS',
-                setAliasLowerCaseParam: 'Alias',
-                setPhoneNumbersParam: 'PHONENUMBER',
-                setEmailParam: 'EMAIL',
-                setEmailType: 'email',
-                setEmailField: 'Email',
-                setPasswordType: 'password',
                 setPasswordField: 'Password',
                 setPasswordParam: 'PASSWORD',
                 setLanguageParam: 'LANGUAGE',
                 setLanguageParamProperCase: 'Language',
-                setFirstLanguageInstruction: 'EN',
-                setSecondLanguageInstruction: 'FR',
                 setFontSizeParam: 'FONTSIZE',
-                setFontOptionMedium: 'medium',
-                setFontOptionLarge: 'large',
-                setFontOptionExtraLarge: 'xlarge',
-                setNicknameAlias: 'NICKNAME',
-                setTelephoneNumberParam: 'TelNum',
+                settingFontOptions: [
+                    {size: 'medium', style: 'fontDescMedium', text: 'SMALL'},
+                    {size: 'large', style: 'fontDescLarge', text: 'MEDIUM'},
+                    {size: 'xlarge', style: 'fontDescXlarge', text: 'LARGE'}
+                ],
 
-                /** Status Controller **/
-                setMap: {
-                    'CT for Radiotherapy Planning': 1,
-                    'Physician Plan Preparation': 2,
-                    'Calculation of Dose': 3,
-                    'Physics Quality Control': 4,
-                    'Scheduling Treatments': 5
-                },
-
-                /** PlanningStep Service **/
-                setSequence: {
-                    'CT for Radiotherapy Planning': [],
-                    'Physician Plan Preparation': [],
-                    'Calculation of Dose': [],
-                    'Physics Quality Control': [],
-                    'Scheduling Treatments': []
-                },
+                /** Password settings **/
+                minPasswordLength: 10,
+                maxPasswordLength: 50,
+                minPasswordStrengthLevel: 3,
 
                 /** CheckIn Service Constants **/
-                hospitalSite: {
-                    hospitalCoordinates: [45.474127399999996, -73.6011402] //Glen Coordinates
-                },
+                checkinRadiusMeters: 2000,
 
                 /** EducationalMaterial Service Constants **/
                 educationalMaterial: {
@@ -156,11 +73,11 @@
                         color: '#ef5350'
                     },
                     'Factsheet': {
-                        icon: 'fa fa-list',
+                        icon: 'fa-solid fa-file-lines',
                         color: '#1E88E5'
                     },
                     'Booklet': {
-                        icon: 'fa fa-leanpub',
+                        icon: 'fa-solid fa-book-open',
                         color: '#66BB6A'
                     },
                     'Treatment Guidelines': {
@@ -172,291 +89,208 @@
                         color: '#8A5B45'
                     },
                     'Other': {
-                        icon: 'fa fa-book',
-                        color: '#FF7043'
+                        icon: 'fa-solid fa-file',
+                        color: '#FFDF80'
                     },
-                },
-
-                /** newsBanner Service constants **/
-                newsAlertTypes: {
-                    'notifications': {
-                        Type: 'notifications',
-                        Color: '#5bc0de',
-                        Message: "NEWNOTIFICATIONS",
-                        Duration: 'short'
-                    },
-                    'nointernet': {
-                        Type: 'nointernet',
-                        Message: "NOINTERNETCONNECTION",
-                        Duration: 10000
-                    },
-                    'connected': {
-                        Type: 'connected',
-                        Color: '#5cb85c',
-                        Message: "CONNECTED",
-                        Duration: 'short'
-                    }
-                },
-
-                /** UpdateUi Service constants **/
-                lastUpdateTimestamp: {
-                    'All': 0,
-                    'Appointments': 0,
-                    'Messages': 0,
-                    'Documents': 0,
-                    'Tasks': 0,
-                    'Doctors': 0,
-                    'LabTests': 0,
-                    'Patient': 0,
-                    'Notifications': 0,
-                    'EducationalMaterial': 0,
-                    'Questionnaires': 0
                 },
 
                 /** Multi-institutional hospital modules and codes **/
-                allowedModulesBeforeLogin: {
-                    "DIA": 0,
-                    "TRP": 0,
-                    "APT": 0,
-                    "LAB": 0,
-                    "DOC": 0,
-                    "TRT": 0,
-                    "TTM": 0,
-                    "QUE": 0,
-                    "CSQ": 0,
-                    "CHK": 0,
-                    "LAO": 1,
-                    "NTF": 0,
-                    "ANN": 0,
-                    "PAT": 0,
-                    "PFP": 0,
-                    "FEE": 0,
-                    "FFD": 0,
-                    "MAS": 0,
-                    "EDU": 0,
-                    "SUP": 1,
-                    "CED": 0,
-                    "HOS": 0,
-                },
                 localStorageHospitalKey: 'hospital',
-                hospitalList: {
-                    'MUHC': {
-                        acronym: 'MUHC',
-                        fullName: 'MUHC_FULL',
-                        uniqueHospitalCode: 'A0',
+
+                // Hospitals available in development-level environments (e.g. dev, qa, staging)
+                developmentHospitalList: [
+                    {
+                        uniqueHospitalCode: 'A6',
+                        enabled: true,
+                        acronym: 'OMI',
+                        fullName: 'OMI_FULL',
+                        // Whether to kick out a user when another person logs into the same user account (in the same hospital) on another device
+                        kickOutConcurrentUsers: false,
+                        modules: {
+                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
+                            "DIA": 1, // Diagnoses
+                            "APT": 1, // Appointments
+                            "LAB": 1, // Lab results
+                            "DOC": 1, // Documents (clinical reports)
+                            "IPS": 1, // International Patient Summary
+                            "TTM": 1, // Treating team messages
+                            "QUE": 1, // Questionnaires
+                            "CSQ": 1, // Carnet Santé Québec
+                            "RES": 1, // Research menu
+                            "STU": 0, // Research studies
+                            "REF": 1, // Research reference material
+                            "RQU": 1, // Research questionnaires
+                            "CON": 1, // Research consent forms
+                            "CHK": 1, // Check-in
+                            "NTF": 1, // Notifications
+                            "ANN": 1, // Announcements
+                            "PAT": 1, // Parking and transport
+                            "FEE": 1, // Feedback
+                            "FFD": 1, // Find a family doctor
+                            "MAS": 1, // Québec Medical Appointment Scheduler
+                            "EDU": 1, // Clinical reference material (educational material)
+                            "SMD": 1, // Smart devices
+                            "RFE": 1, // Research feedback
+                        },
+                    },
+                ],
+
+                // Hospitals available in production-level environments (e.g. prod, preprod)
+                productionHospitalList: [
+                    {
+                        uniqueHospitalCode: 'A6',
+                        enabled: true,
+                        acronym: 'NEURO_ACRONYM',
+                        fullName: 'NEURO_FULL',
+                        kickOutConcurrentUsers: true,
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
-                            "TRP": 1,
                             "APT": 1,
                             "LAB": 1,
                             "DOC": 1,
-                            "TRT": 1,
+                            "IPS": 0,
                             "TTM": 1,
                             "QUE": 1,
                             "CSQ": 1,
+                            "RES": 1,
+                            "STU": 0,
+                            "REF": 1,
+                            "RQU": 1,
+                            "CON": 1,
                             "CHK": 1,
-                            "LAO": 1,
                             "NTF": 1,
                             "ANN": 1,
                             "PAT": 1,
-                            "PFP": 1,
                             "FEE": 1,
                             "FFD": 1,
                             "MAS": 1,
                             "EDU": 1,
-                            "SUP": 1,
-                            "CED": 1,
-                            "HOS": 1,
+                            "SMD": 1,
+                            "RFE": 1,
                         },
                     },
-                    'CHUM': {
-                        acronym: 'CHUM_ACRONYM',
-                        fullName: 'CHUM_FULL',
-                        uniqueHospitalCode: 'A2',
+                    {
+                        uniqueHospitalCode: 'D1',
+                        enabled: true,
+                        acronym: 'OPAL_DEMO_1',
+                        fullName: 'OPAL_DEMO_1_FULL',
+                        kickOutConcurrentUsers: false,
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
-                            "TRP": 0,
                             "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
+                            "LAB": 1,
+                            "DOC": 1,
+                            "IPS": 1,
                             "TTM": 1,
                             "QUE": 1,
                             "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
+                            "RES": 1,
+                            "STU": 0,
+                            "REF": 1,
+                            "RQU": 1,
+                            "CON": 1,
+                            "CHK": 1,
                             "NTF": 1,
                             "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
+                            "PAT": 1,
                             "FEE": 1,
                             "FFD": 1,
                             "MAS": 1,
                             "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
+                            "SMD": 1,
+                            "RFE": 1,
                         },
                     },
-                    'HMR': {
-                        acronym: 'HMR_ACRONYM',
-                        fullName: 'HMR_FULL',
-                        uniqueHospitalCode: 'A3',
+                    {
+                        uniqueHospitalCode: 'D2',
+                        enabled: true,
+                        acronym: 'OPAL_DEMO_2',
+                        fullName: 'OPAL_DEMO_2_FULL',
+                        kickOutConcurrentUsers: false,
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
-                            "TRP": 0,
                             "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
+                            "LAB": 1,
+                            "DOC": 1,
+                            "IPS": 1,
                             "TTM": 1,
                             "QUE": 1,
                             "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
+                            "RES": 1,
+                            "STU": 0,
+                            "REF": 1,
+                            "RQU": 1,
+                            "CON": 1,
+                            "CHK": 1,
                             "NTF": 1,
                             "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
+                            "PAT": 1,
                             "FEE": 1,
                             "FFD": 1,
                             "MAS": 1,
                             "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
+                            "SMD": 1,
+                            "RFE": 1,
                         },
                     },
-                    'SMHC': {
-                        acronym: 'SMHC_ACRONYM',
-                        fullName: 'SMHC_FULL',
-                        uniqueHospitalCode: 'A1',
+                    {
+                        uniqueHospitalCode: 'A0',
+                        enabled: false,
+                        acronym: 'MUHC',
+                        fullName: 'MUHC_FULL',
+                        kickOutConcurrentUsers: true,
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "TRP": 0,
-                            "APT": 1,
+                            "DIA": 0,
+                            "APT": 0,
                             "LAB": 0,
                             "DOC": 0,
-                            "TRT": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
+                            "IPS": 0,
+                            "TTM": 0,
+                            "QUE": 0,
+                            "CSQ": 0,
+                            "RES": 0,
+                            "STU": 0,
+                            "REF": 0,
+                            "RQU": 0,
+                            "CON": 0,
                             "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
+                            "LAO": 0,
+                            "NTF": 0,
+                            "ANN": 0,
                             "PAT": 0,
-                            "PFP": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
+                            "FEE": 0,
+                            "FFD": 0,
+                            "MAS": 0,
+                            "EDU": 0,
+                            "SMD": 0,
+                            "RFE": 0,
                         },
                     },
-                    'CHU_SJ': {
-                        acronym: 'CHU_SJ_ACRONYM',
-                        fullName: 'CHU_SJ_FULL',
-                        uniqueHospitalCode: 'A4',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "TRP": 0,
-                            "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
-                        },
-                    },
-                    'Cite-de-la-sante': {
-                        acronym: 'CITE_ACRONYM',
-                        fullName: 'CITE_FULL',
-                        uniqueHospitalCode: 'A5',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "TRP": 0,
-                            "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
-                        },
-                    },
-                    'RI-MUHC': {
-                        acronym: 'RI_MUHC_ACRONYM',
-                        fullName: 'RI_MUHC_FULL',
-                        uniqueHospitalCode: 'A6',
-                        modules: {
-                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
-                            "DIA": 1,
-                            "TRP": 0,
-                            "APT": 1,
-                            "LAB": 0,
-                            "DOC": 0,
-                            "TRT": 0,
-                            "TTM": 1,
-                            "QUE": 1,
-                            "CSQ": 1,
-                            "CHK": 0,
-                            "LAO": 1,
-                            "NTF": 1,
-                            "ANN": 1,
-                            "PAT": 0,
-                            "PFP": 0,
-                            "FEE": 1,
-                            "FFD": 1,
-                            "MAS": 1,
-                            "EDU": 1,
-                            "SUP": 1,
-                            "CED": 0,
-                            "HOS": 0,
-                        },
-                    }
+                ],
+                relationshipStatus: {
+                    pending: 'PEN',
+                    confirmed: 'CON',
+                    denied: 'DEN',
+                    expired: 'EXP',
+                    revoked: 'REV',
                 }
             };
 
-        let allConstants = Object.assign(appConstants, QuestionnaireConstants);
-
-        return allConstants;
+        // Return an assembled object containing all constants
+        return {
+            ...appConstants,
+            ...QuestionnaireConstants,
+            ...NotificationConstants,
+            REQUEST: {
+                ...RequestConstants
+            },
+            API: {
+                ...ApiConstants
+            }
+        };
     }
 }) ();
-
-

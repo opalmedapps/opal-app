@@ -1,4 +1,8 @@
-import "../../css/top-page-banner.directive.css";
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
+import "../../css/directives/top-page-banner.directive.css";
 (function () {
     'use strict';
 
@@ -7,12 +11,12 @@ import "../../css/top-page-banner.directive.css";
      * It is used in
      *      www/views/settings/settings.html
      *      www/views/home/home.html
-     *      www/views/education/education.html
+     *      www/views/personal/education/education.html
      *      www/views/personal/personal.html
      *      www/views/general/general.html
      */
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .directive('topPageBanner', topPageBanner);
 
     topPageBanner.$inject = [];
@@ -29,4 +33,3 @@ import "../../css/top-page-banner.directive.css";
         return directive;
     }
 })();
-

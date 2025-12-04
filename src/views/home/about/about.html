@@ -1,139 +1,103 @@
-<ons-page ng-controller="AboutController as about">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button ng-class="fontSizeDesc">{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">Opal</div>
-    </ons-toolbar>
-    <network-banner></network-banner>
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="AboutController as about">
+    <generic-toolbar title="{{'OPAL_ABOUT'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <network-banner></network-banner>
     <ons-list>
-        <ons-list-item class="item" modifier="tappable chevron" ng-click="tourModal.show()" >
+        <!-- TOUR -->
+        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTour()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <ons-icon icon="fa-map-signs" style="color: #795548" size="1.7em" fixed-width="true"></ons-icon>
+                        <ons-icon icon="fa-map-signs" style="color: #795548" size="2em" fixed-width="true"></ons-icon>
                     </div>
                 </ons-col>
                 <ons-col>
-                        <span ng-class="fontSizeTitle">{{"OPAL_TOUR"|translate}}</span>
+                    <span ng-class="fontSizeTitle">{{"OPAL_TOUR"|translate}}</span>
                 </ons-col>
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('opal_website')">
+        <!-- WEBSITE -->
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('opalWebsite')">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <img style="width: 50px;" src="./img/Opal_Logo_Transparent_Inverse.png">
+                        <img style="width: 34px;" src="./img/Opal_Logo_Transparent_Inverse_Icon.png">
                     </div>
                 </ons-col>
                 <ons-col>
                     <span ng-class="fontSizeTitle">{{"OPAL_WEBSITE"|translate}}</span>
-                    <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 5%; margin-right: -10px" class="pull-right"
+                    <ons-icon icon="ion-android-open" style="color:#ddd; margin-right: -10px" class="pull-right"
                               size="1.2em">
                     </ons-icon>
                 </ons-col>
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('donation', true)" ng-show="about.allowedModules.hasOwnProperty('SUP') && about.allowedModules['SUP']">
+        <!-- CONTRIBUTE -->
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('donation', true)">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <ons-icon icon="fa-heart" style="color:#f44336" size="1.7em" fixed-width="true"></ons-icon>
+                        <ons-icon icon="fa-heart" style="color:#f44336" size="1.8em" fixed-width="true"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <span ng-class="fontSizeTitle">{{"OPAL_CONTRIBUTE"|translate}}</span>
+                    <ons-icon icon="ion-android-open" style="color:#ddd; margin-right: -10px" class="pull-right"
+                              size="1.2em">
+                    </ons-icon>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+
+        <!-- CONTACT SUPPORT -->
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('support', true)">
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-medkit" style="color:#bada55" size="2em" fixed-width="true"></ons-icon>
                     </div>
                 </ons-col>
                 <ons-col>
                     <span ng-class="fontSizeTitle">{{"OPAL_SUPPORT"|translate}}</span>
-                    <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 5%; margin-right: -10px" class="pull-right"
+                    <ons-icon icon="ion-android-open" style="color:#ddd; margin-right: -10px" class="pull-right"
                               size="1.2em">
                     </ons-icon>
                 </ons-col>
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTeam()">
+        <!-- TECHNICAL / LEGAl -->
+        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTechnicalLegal()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
-                    <div>
-                        <ons-icon icon="fa-group" style="color:#2196F3" size="1.7em" fixed-width="true"></ons-icon>
-                    </div>
+                    <span class="fa-layers fa-2x">
+                        <!-- Gear icon -->
+                        <i class="fa-solid fa-gear" data-fa-transform="shrink-5 up-4 left-4" style="color:#CDD0D3"></i>
+                        <div>
+                            <!-- Copies of the scale icon in fa-inverse create a white cut-out border between the scale and the gear behind it -->
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-1"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-3 right-1"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-1 right-1"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-3"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-2 left-0.5"></i>
+                            <i class="fa-solid fa-scale-balanced fa-inverse" data-fa-transform="shrink-4 down-2 right-1.5"></i>
+                        </div>
+                        <!-- Main scale icon -->
+                        <i class="fa-solid fa-scale-balanced" data-fa-transform="shrink-4 down-2 right-0.5" style="color:#828893"></i>
+                    </span>
                 </ons-col>
                 <ons-col>
-                    <span ng-class="fontSizeTitle">{{"OPAL_DEV"|translate}}</span>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
-
-        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openCedars()" ng-if="about.allowedModules.hasOwnProperty('CED') && about.allowedModules['CED']">
-            <ons-row align="center">
-                <ons-col width="60px" style="text-align: center">
-                    <div>
-                        <img style="width: 27px;" src="./img/cedarsLogoSmall.png">
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <span ng-class="fontSizeTitle"> {{"CEDARS"|translate}}</span>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
-
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('about_muhc')" ng-if="about.allowedModules.hasOwnProperty('HOS') && about.allowedModules['HOS']">
-            <ons-row align="center">
-                <ons-col width="60px" style="text-align: center">
-                    <div>
-                        <img style="width: 27px;" src="./img/MUHC.png">
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <span ng-class="fontSizeTitle"> {{"MUHC"|translate}}</span>
-                    <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 4.5%; margin-right: -10px" class="pull-right" size="1.2em"> </ons-icon>
+                    <span ng-class="fontSizeTitle">{{"TECHNICAL_LEGAL"|translate}}</span>
                 </ons-col>
             </ons-row>
         </ons-list-item>
     </ons-list>
-
-    <ons-modal var="tourModal">
-        <div id="rcorners" style="height: 60%">
-            <ons-carousel swipeable overscrollable auto-scroll style="height: 100%" var="tourCarousel">
-                <ons-carousel-item>
-                    <img src="img/opal_notification.png" style="max-width:20vw">
-                    <div ng-class="fontSizeTitle">{{"TOUR_WELCOME"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_WELCOME_DESC"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-home" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"HOME"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_HOME"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-user" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"MYCHART"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_MYCHART"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-th" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"GENERAL"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_GENERAL"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-book" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_EDUCATION"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-info-circle" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"ABOUT"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_INFO"|translate}}</div>
-                </ons-carousel-item>
-            </ons-carousel>
-
-            <div id="tourButtons">
-                <span><ons-icon icon="fa-arrow-left" aria-hidden="true" style="color:white" ng-click="tourCarousel.prev()"></ons-icon></span>
-                <ons-button modifier="cta" ng-click="tourModal.hide()" style="background-color: inherit; font-size: 125%">{{"CLOSE"|translate}}</ons-button>
-                <ons-icon icon="fa-arrow-right" aria-hidden="true" style="color:white" ng-click="tourCarousel.next()"></ons-icon>
-            </div>
-        </div>
-    </ons-modal>
 </ons-page>

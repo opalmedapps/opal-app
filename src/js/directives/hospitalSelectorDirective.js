@@ -1,8 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .directive('hospitalSelector', hospitalSelector);
 
     hospitalSelector.$inject = ['UserHospitalPreferences'];
@@ -12,7 +16,8 @@
         let directive = {
             restrict: 'E',
             scope: {
-
+                // Optional function called when clicking on the hospital selector
+                "onClick": "=?",
             },
             template: `<ons-list>
                            <ons-list-item modifier="chevron" ng-click="goToHospitalSelection()" ng-style="!hospitalIsSelected() && {'background-color': 'rgba(241, 241, 88, 0.25882352941176473)'}">
@@ -30,17 +35,16 @@
                 /**
                  * @ngdoc method
                  * @name goToHospitalSelection
-                 * @methodOf MUHCApp.directives.hospitalSelector
                  * @description Navigates to the hospital selection screen.
                  */
                 function goToHospitalSelection() {
+                    if (scope.onClick && typeof scope.onClick === 'function') scope.onClick();
                     initNavigator.pushPage('./views/login/set-hospital.html', {});
                 }
 
                 /**
                  * @ngdoc method
                  * @name hospitalIsSelected
-                 * @methodOf MUHCApp.directives.hospitalSelector
                  * @description Returns whether the user has already selected a hospital.
                  * @returns {boolean} True if there is a hospital selected; false otherwise.
                  */
@@ -51,7 +55,6 @@
                 /**
                  * @ngdoc method
                  * @name getSelectedHospitalAcronym
-                 * @methodOf MUHCApp.directives.hospitalSelector
                  * @description Returns a translatable string for display on the hospital selection button
                  *              (either the selected hospital's acronym, or a placeholder).
                  * @returns {string} A translatable string: the selected hospital's acronym, or "Tap to select"

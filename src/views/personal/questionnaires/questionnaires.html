@@ -1,45 +1,37 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="QuestionnaireMainController as vm">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle" >
-            <!--if is the start of a questionnaire: display questionnaire home on the top bar-->
-            <span ng-if="vm.questionnaireStart" ng-class="fontSizeDesc">
-              {{"QUESTIONNAIRE_HOME"|translate}}
-            </span>
-            <!--this is in the middle of a questionnaire: display the title of that section-->
-            <!-- note: uncomment the following when sections are implemented in OpalAdmin -->
-<!--            <span ng-class="fontSizeDesc" ng-if="!vm.questionnaireStart">-->
-<!--                &lt;!&ndash; if the title is too long, limit it&ndash;&gt;-->
-<!--                {{vm.questionnaire.sections[vm.sectionIndex].section_title | limitTo:25}}{{vm.questionnaire.sections[vm.sectionIndex].section_title.length > 25 ? '...': ''}}-->
-<!--            </span>-->
-        </div>
-        <div class="right" >
+    <generic-toolbar title="{{'QUESTIONNAIRE_HOME'|translate}}" style-class="fontSizeTitle">
+        <right-content>
             <!--the words leading to begin / resume questionnaire depending on the status of the questionnaire-->
             <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == vm.allowedStatus.NEW_QUESTIONNAIRE_STATUS && !vm.loadingQuestionnaire"
-                  class="toolbar-button--quiet navigation-bar__line-height"
-                  ng-click="vm.beginQuestionnaire(false);">
-            {{"BEGIN"|translate}}
+                class="toolbar-button--quiet navigation-bar__line-height"
+                ng-click="vm.beginQuestionnaire(false);">
+                {{"BEGIN"|translate}}
             </span>
             <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && !vm.loadingQuestionnaire"
-                  class="toolbar-button--quiet navigation-bar__line-height"
-                  ng-click="vm.resumeQuestionnaire(vm.startIndex);">
-            {{"RESUME"|translate}}
+            class="toolbar-button--quiet navigation-bar__line-height"
+            ng-click="vm.resumeQuestionnaire(vm.startIndex);">
+                {{"RESUME"|translate}}
             </span>
             <!--this is for the last question going into the summary page-->
             <span ng-if="vm.isQuestion && (carousel.getActiveCarouselItemIndex() == vm.carouselItems.length) && !vm.loadingQuestionnaire"
-                  style="padding-left:0px" class="toolbar-button--quiet navigation-bar__line-height"
-                  ng-click="vm.finishQuestionnaireFromQuestion();">
-            {{"DONE"|translate}}
+            style="padding-left:0px" class="toolbar-button--quiet navigation-bar__line-height"
+            ng-click="vm.finishQuestionnaireFromQuestion();">
+                {{"DONE"|translate}}
             </span>
-        </div>
-    </ons-toolbar>
+        </right-content>
+    </generic-toolbar>
+
 
     <!--LOADING CIRCLE FOR QUESTIONNAIRE -->
     <loading-spinning-circle
             ng-show="vm.loadingQuestionnaire"
-            loading-message="{{'LOADINGQUESTIONNAIRE'|translate}}">
+            loading-message="{{'LOADING_QUESTIONNAIRE'|translate}}">
     </loading-spinning-circle>
 
     <div ng-hide="vm.loadingQuestionnaire" class="page__content ons-page-inner">
@@ -71,10 +63,10 @@
                                 <div class="col-xs-12">
                                     <h4 ng-if="vm.questionnaire.status === vm.allowedStatus.NEW_QUESTIONNAIRE_STATUS"
                                         ng-class="fontSizeDesc">
-                                        {{"QUESTIONNAIRE_BEGIN_INSTRUCTION"|translate}}</h4>
+                                        {{vm.beginInstructions}}</h4>
                                     <h4 ng-if="vm.questionnaire.status === vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS"
                                         ng-class="fontSizeDesc">
-                                        {{"QUESTIONNAIRE_RESUME_INSTRUCTION"|translate}}</h4>
+                                        {{vm.resumeInstructions}}</h4>
                                     <p ng-if="vm.hasDescription" style="margin-top:2vh; margin-bottom:2vh"
                                        ng-class="fontSizeDesc">
                                         <b>
@@ -82,7 +74,9 @@
                                                 {{"QUESTIONNAIRE_DESCRIPTION"|translate}}
                                             </span>
                                         </b>
-                                        <span ng-bind-html="vm.questionnaire.description"></span>
+                                        <!-- Left align description for consent forms, centered otherwise -->
+                                        <span ng-if="vm.isConsent" align="justify" ng-bind-html="vm.questionnaire.description | trustHTML"></span>
+                                        <span ng-if="!vm.isConsent" ng-bind-html="vm.questionnaire.description | trustHTML"></span>
                                     </p>
                                     <p ng-if="vm.hasInstruction" style="margin-top:2vh; margin-bottom:2vh"
                                        ng-class="fontSizeDesc">
@@ -91,7 +85,7 @@
                                                 {{"QUESTIONNAIRE_INSTRUCTION"|translate}}
                                             </span>
                                         </b>
-                                        <span ng-bind-html="vm.questionnaire.instruction"></span>
+                                        <span ng-bind-html="vm.questionnaire.instruction | trustHTML"></span>
                                     </p>
                                 </div>
                             </div>
@@ -146,7 +140,7 @@
                             </div>
 
                             <div class="col-xs-12 text-center">
-                                <!--<img src="img/MUHC.png" alt="MUHC Logo" style="margin-top: 1cm; margin-bottom: 1cm"></img>-->
+                                <!--<img src="img/logo.png" alt="Logo" style="margin-top: 1cm; margin-bottom: 1cm"></img>-->
                                 <!-- TODO: implement in general for any logo-->
                             </div>
                         </div>
@@ -160,7 +154,7 @@
                                                     {{"QUESTIONNAIRE_SECTION_INSTRUCTION"|translate}}
                                                 </span>
                                     </b>
-                                    <span ng-bind-html="item.instruction"></span>
+                                    <span ng-bind-html="item.instruction | trustHTML"></span>
                                 </p>
                             </div>
                         </div>
@@ -200,7 +194,7 @@
                     <div style="height:93%; position: relative">
                         <!-- QUESTION -->
                         <div class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
-                            <h4 ng-class="fontSizeDesc" ng-bind-html="item.data.question_text">
+                            <h4 ng-class="fontSizeDesc" ng-bind-html="item.data.question_text | trustHTML">
                             </h4>
                         </div>
 
@@ -297,7 +291,7 @@
                         <div align="center" style="margin-top: 20px">
                             <button class="button--large--cta" ng-click="vm.finishQuestionnaireFromQuestion();"
                                     ng-show="vm.questionnaire.status === vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && vm.editQuestion"
-                                    style="width:80%">{{"GOTOSUMMARY"|translate}}
+                                    style="width:80%">{{"GO_TO_SUMMARY"|translate}}
                             </button>
                             <br>
                         </div>

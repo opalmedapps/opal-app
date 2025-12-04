@@ -1,43 +1,50 @@
-<ons-page ng-controller="accountSettingController as asc" ng-device-backbutton="asc.accountDeviceBackButton()">
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 
-    <ons-toolbar fixed-style>
-        <div class="center" ng-class="fontSizeTitle">{{"ACCOUNT"|translate}}</div>
-    </ons-toolbar>
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="accountSettingController as Ctrl" ng-device-backbutton="Ctrl.accountDeviceBackButton()">
+    <generic-toolbar title="{{'ACCOUNT'|translate}}" back-button="false" style-class="fontSizeTitle"></generic-toolbar>
 
     <!-- HOSPITAL NAME BAR -->
-    <top-page-banner title="asc.selectedHospitalToDisplay"></top-page-banner>
+    <top-page-banner title="Ctrl.selectedHospitalToDisplay"></top-page-banner>
 
     <network-banner></network-banner>
 
     <div class="container">
-        <ons-row style="padding:5px">
-            <ons-col width="90px">
-                <div class="image-profile-wrapper">
-                    <img ng-if="!asc.ProfilePicture" src="./img/patient.png" class="image-profile">
-                    <img ng-if="asc.ProfilePicture"  ng-src="{{asc.ProfilePicture}}" class="image-profile">
+        <ons-row align="center" style="padding:5px">
+            <ons-col width="120px">
+                <div class="image-profile--wrapper">
+                    <div class="image-profile--icon" ng-style="{'background-color': Ctrl.userInfo.color}">{{Ctrl.userInfo | profileInitials}}</div>
                 </div>
             </ons-col>
             <ons-col>
-                <div>
-                    <p><strong ng-class="fontSizeTitle">{{asc.FirstName}} {{asc.LastName}}</strong><br>
-                        <span class="profile-id" ng-class="fontSizeDesc">{{"PATIENTID"|translate}} {{asc.PatientId}}</span>
-                    </p>
-                </div>
+                    <div class="image-profile--text">{{Ctrl.userInfo.first_name}} {{Ctrl.userInfo.last_name}}</div>
             </ons-col>
         </ons-row>
     </div>
 
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="asc.goToGeneralSettings()" ng-class="fontSizeDesc">
-            {{"ABOUT"|translate}}
+        <ons-list-item modifier="chevron" ng-click="Ctrl.goToGeneralSettings()" ng-class="fontSizeDesc">
+            {{"TECHNICAL_LEGAL"|translate}}
+        </ons-list-item>
+    </ons-list>
+    <div class="settings-header" ng-class="fontSizeTitle">{{"RELATIONSHIPS"|translate}}</div>
+    <ons-list class="settings-list">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/caregivers.html',{ animation : 'slide' } )" ng-class="fontSizeDesc">
+            {{"RELATIONSHIPS_CAREGIVERS"|translate}}
+        </ons-list-item>
+    </ons-list>
+    <ons-list class="settings-list">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/patients.html',{ animation : 'slide' } )" ng-class="fontSizeDesc">
+            {{"RELATIONSHIPS_PATIENTS"|translate}}
         </ons-list-item>
     </ons-list>
     <div class="settings-header" ng-class="fontSizeTitle">{{"PERSONAL"|translate}}</div>
-
     <ons-list class="settings-list">
         <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'PASSWORD'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"PASSWORD"|translate}}
-            <span type="password" class="list-item-note lucent">{{asc.passFill|limitTo:6}}</span>
         </ons-list-item>
     </ons-list>
 
@@ -49,17 +56,17 @@
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PREFERENCES"|translate}}</div>
     <ons-list>
-        <ons-list-item modifier="chevron" ng-click="asc.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-if="Ctrl.multipleLanguageOptions" ng-click="Ctrl.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
             {{"LANGUAGE"|translate}}
-            <span class="list-item-note lucent">{{asc.Language}}</span>
+            <span class="list-item-note lucent">{{Ctrl.Language}}</span>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="asc.goToUpdateAccountField('FONTSIZE', 'slide')" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="Ctrl.goToUpdateAccountField('FONTSIZE', 'slide')" ng-class="fontSizeDesc">
             {{"FONTSIZE"|translate}}
         </ons-list-item>
     </ons-list>
     <ons-list class="settings-list" ng-class="fontSizeDesc">
-        <ons-list-item ng-click="asc.logOut()" modifier="tappable">
-            {{"SIGNOUT"|translate}}
+        <ons-list-item ng-click="Ctrl.logOut()" modifier="tappable">
+            {{"SIGN_OUT"|translate}}
             <ons-icon icon="fa-sign-out"  style="margin-top: 10px; color:#1284FF" class="pull-right"></ons-icon>
         </ons-list-item>
     </ons-list>

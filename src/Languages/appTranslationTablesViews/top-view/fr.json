@@ -1,6 +1,24 @@
 {
-  "LOADINGDATA":"Chargement",
-  "HOME":"Accueil",
-  "UPDATEMESSAGE":"Cette version d'Opal n'est plus supportée. Veuillez installer la nouvelle version pour accéder à votre compte.",
-  "UPDATEREQUIRED":"Mise à jour requise"
+  "ATTENTION": "Attention!",
+  "CLOSE": "Fermer",
+  "HEADER_MESSAGE_LOGIN": "Se connecter",
+  "JAILBREAK_MESSAGE": "L'exécution de cette application sur un appareil débridé n'est pas permise.",
+  "JAILBREAK_TITLE": "Appareil débridé détecté",
+  "LOADING_ACCOUNT": "Chargement de votre compte",
+  "NO_INTERNET_CONNECTION": "Pas de connexion Internet",
+  "OK": "D'accord",
+  "OPAL_ABOUT": "À propos d'Opal",
+  "PARTNERS": "Partenaires",
+  "REGISTER_OPAL": "S'inscrire à Opal",
+  "SCREENSHOT_TAKEN": "Capture d'écran en cours. Si vous n'avez pas effectué une capture d'écran, veuillez quitter l'application.",
+  "SECURE_PHONE": "N'oubliez pas de protéger votre appareil avec un mot de passe.",
+  "SUBMITTING": "Chargement... Ne quittez pas cette page.",
+  "TECHNICAL_LEGAL": "Technique / Légal",
+  "TOUR_MODAL_INTRODUCTION": "Pour vous aider à bien débuter, une visite rapide est disponible afin de vous guider parmi les sections principales de l'application. Si vous souhaitez l'ignorer ou reprendre la visite plus tard, celle-ci restera toujours disponible dans «\u00A0À propos d'Opal\u00A0» sur l'onglet Accueil.",
+  "TOUR_MODAL_LATER_BUTTON": "Plus tard",
+  "TOUR_MODAL_TAKE_TOUR_BUTTON": "Allons-y!",
+  "TOUR_WELCOME": "Bienvenue à Opal!",
+  "UNATTENDED": "Ne laissez pas votre appareil sans surveillance.",
+  "UPDATE_MESSAGE": "Cette version d'Opal n'est plus disponible. Veuillez mettre à jour l'application pour accéder à votre compte.",
+  "UPDATE_REQUIRED": "Mise à jour requise"
 }

@@ -1,0 +1,48 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="TechnicalLegalController as init">
+    <generic-toolbar title="{{'TECHNICAL_LEGAL'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <ons-list class="settings-list" ng-class="fontSizeDesc">
+        <ons-list-item modifier = "chevron" ng-hide="init.navigatorName == 'initNavigator'" ng-click="init.goToFeedback()">
+            {{"FEEDBACK"|translate}}
+        </ons-list-item>
+        <ons-list-item ng-click="init.openSecurityAndPrivacy()">
+            {{"SECURITY_AND_PRIVACY"|translate}}
+            <ons-icon icon="ion-android-open" style="color:#ddd; padding: 10px 5px" class="pull-right" size="1.2em">
+            </ons-icon>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('termsOfUse')">
+            {{"TERMS_OF_USE"|translate}}
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('serviceAgreement')">
+            {{"SERVICE_AGREEMENT"|translate}}
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="init.goToLicense()">
+            {{"LICENSE"|translate}}
+        </ons-list-item>
+        <ons-list-item ng-click="init.openSourceLink()">
+            {{"OPAL_OPEN_SOURCE"|translate}}
+            <ons-icon icon="ion-android-open" style="color:#ddd; padding: 10px 5px" class="pull-right" size="1.2em">
+            </ons-icon>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="init.goToThirdParty()">
+            {{"THIRD_PARTY"|translate}}
+        </ons-list-item>
+    </ons-list>
+
+    <br>
+
+    <ons-list class="settings-list" ng-class="fontSizeDesc">
+        <ons-list-item>
+            {{"APP_VERSION"|translate}}
+            <span class="app-version-number">{{init.APP_VERSION}} ({{init.APP_BUILD_NUMBER}})</span>
+        </ons-list-item>
+    </ons-list>
+
+    <p class="app-copyright text-center">{{init.currentYear}} {{"OPAL_COPYRIGHT"|translate}}</p>
+</ons-page>

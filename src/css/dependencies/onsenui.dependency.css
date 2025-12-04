@@ -1,0 +1,20 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* Override the onsen alert dialog's background to remove its transparency */
+.alert-dialog {
+    background-color: #FFFFFF;
+}
+
+/* Used with ons-col elements meant to contain icons */
+.ons-col-icon {
+    text-align: center;
+}
+
+/* Darken the chevron (the ::before element) slightly to be visible against shaded backgrounds */
+.dark-chevron::before {
+    color: #A6A6A6;
+}

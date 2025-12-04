@@ -1,44 +1,103 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="AnsweredQuestionnaireController as vm">
-<!-- Note: this file is extremely hard coded to obey the desired inconsistent functionality-->
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeDesc">{{"SUMMARY"|translate}}</div>
-    </ons-toolbar>
+    <!-- Note: this file is extremely hard coded to obey the desired inconsistent functionality-->
+    <generic-toolbar title="{{'SUMMARY'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
     <!-- LOADING CIRCLE FOR SUBMITTING QUESTIONNAIRE -->
-    <loading-spinning-circle
-            ng-show="vm.loadingSubmitQuestionnaire"
-            loading-message="{{'SUBMITTING_QUESTIONNAIRE'|translate}}">
+    <loading-spinning-circle ng-show="vm.loadingSubmitQuestionnaire"
+        loading-message="{{'SUBMITTING_QUESTIONNAIRE'|translate}}">
     </loading-spinning-circle>
 
     <!--LOADING CIRCLE FOR QUESTIONNAIRE -->
-    <loading-spinning-circle
-            ng-show="vm.loadingQuestionnaire"
-            loading-message="{{'LOADINGQUESTIONNAIRE'|translate}}">
+    <loading-spinning-circle ng-show="vm.loadingQuestionnaire" loading-message="{{'LOADING_QUESTIONNAIRE'|translate}}">
     </loading-spinning-circle>
 
-    <div ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
-        <!-- Instruction to submit -->
-        <div ng-if="vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="color: gray; padding-left: 10px; padding-right: 10px;">
-            {{"QUESTIONNAIRE_SUBMIT_INSTRUCTION"|translate}}
+    <div ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS"
+        ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire"
+        style="margin-top:5px">
+        <!-- Display title if consent form -->
+        <div class="col-xs-12" align="center" ng-if="vm.isConsent">
+            <h3><b><span style="color: darkmagenta" ng-class="fontSizeTitle">{{vm.questionnaire.nickname}}</span></b>
+            </h3> <br>
         </div>
-        <div ng-if="!vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="color: gray; padding-left: 10px; padding-right: 10px;">
+        <!-- Instruction to submit -->
+        <div ng-if="vm.submitAllowed" ng-class="fontSizeDesc" align="center"
+            style="padding-left: 10px; padding-right: 10px;">
+            {{vm.submitInstructions}}
+        </div>
+        <div ng-if="!vm.submitAllowed" ng-class="fontSizeDesc" align="center"
+            style="padding-left: 10px; padding-right: 10px;">
             {{"QUESTIONNAIRE_INSTRUCTIONS"|translate}}
         </div>
 
-        <!-- Submit button -->
-        <div align="center" style="margin-top:10px;margin-bottom:10px">
-            <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()" ng-class="fontSizeDesc"
-                    ng-disabled="!vm.submitAllowed">{{"SUBMITANSWERS"|translate}}
-            </button>
+        <div ng-if="vm.isConsent && vm.submitAllowed">
+            <br>
+            <div ng-class="fontSizeDesc" align="justify" style="padding-left: 30px; padding-right: 30px;">
+                <i>{{"CONSENT_FORM_ACKNOWLEDGEMENT"|translate}}</i>
+            </div>
+            <div style="padding-left:40px; padding-right:40px;">
+                <li class="list__item list__item--tappable" style="background-color:chartreuse">
+                    <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item"
+                        style="margin:2px; text-align:center">
+                        <input type="radio" name="navi-segment-a" ng-model="vm.consentStatus" ng-value="true"
+                            ng-change="vm.updateRequirePassword()">
+                        <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+                        {{"CONSENT"|translate}}
+                    </label>
+                </li>
+                <li class="list__item list__item--tappable" style="background-color:rgb(255, 75, 75)">
+                    <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item"
+                        style="margin:2px; text-align:center">
+                        <input type="radio" name="navi-segment-a" ng-model="vm.consentStatus" ng-value="false"
+                            ng-change="vm.updateRequirePassword()">
+                        <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+                        &nbsp;{{"DECLINE"|translate}}
+                    </label>
+                </li>
+                <br>
+            </div>
         </div>
 
+        <!-- Password verification -->
+        <div ng-if="vm.requirePassword && vm.submitAllowed" class="style-4" style="padding: 10px;">
+            <div ng-class="fontSizeDesc" align="center" style="padding-left: 10px; padding-right: 10px;">
+                {{"CONSENT_FORM_PASSWORD_INSTRUCTION"|translate}}
+            </div>
+            <br>
+            <input type="password" ng-class="fontSizeDesc" placeholder="{{'PASSWORD'|translate}}"
+                ng-model="vm.password">
+            <br>
+        </div>
+
+        <!-- Submit button -->
+        <div align="center" style="margin-top:15px; margin-bottom:10px">
+            <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()"
+                ng-class="fontSizeDesc"
+                ng-disabled="!vm.submitAllowed || (vm.password == '' && vm.requirePassword) || (vm.isConsent && vm.consentStatus == null)">
+                {{vm.submitButtonText}}
+            </button>
+        </div>
+        <!-- User's name, and patient's name (if different), to make it clear who's submitting the questionnaire -->
+        <div class="light-grey-comment" style="padding: 0 10px">
+            {{ (vm.isAnsweringAsSelf ? 'QUESTIONNAIRE_SUBMIT_AS_SELF' : 'QUESTIONNAIRE_SUBMIT_AS_OTHER') | translate:vm.submittedByNames }}
+        </div>
         <br>
     </div>
 
-    <ons-row align="center" style="margin-left: 0.12vw;" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
+    <ons-row align="center" style="margin-left: 0.12vw;"
+        ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
+        <!-- Display questionnaire title and description on completed questionnaire view -->
+        <div class="col-xs-12" align="center" ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS">
+            <p style="margin-top:2vh; margin-bottom:2vh" ng-class="fontSizeDesc">
+                <h3><b><span style="color: darkmagenta" ng-class="fontSizeTitle">{{vm.questionnaire.nickname}}</span></b></h3>
+                <span ng-if="vm.hasDescription" align="justify" ng-bind-html="vm.questionnaire.description"></span>
+            </p>
+        </div>
         <ons-col align="center">
             <!-- Section -->
             <!-- this will not be displayed until multi-section questionnaire is implemented in OpalAdmin -->
@@ -52,78 +111,94 @@
                 </ons-row>
 
                 <!-- Question -->
-                <ul class="list" style="width: 100vw;" ng-repeat="question in section.questions | orderBy: 'question_position' track by $index">
+                <ul class="list" style="width: 100vw;"
+                    ng-repeat="question in section.questions | orderBy: 'question_position' track by $index">
 
-                    <li class="list__item"
-                        ng-style="question.style"
-                        style="border-bottom: none !important; border-top: 1px solid #ddd"
-                        ng-class="fontSizeDesc">
+                    <li class="list__item" ng-style="question.style"
+                        style="border-bottom: none !important; border-top: 1px solid #ddd" ng-class="fontSizeDesc">
 
-                        <ons-row style="margin:0;padding:0" align="center" ng-click="vm.questionOnClick($parent.$index, $index, question);">
+                        <ons-row style="margin:0;padding:0" align="center"
+                            ng-click="vm.questionOnClick($parent.$index, $index, question);">
                             <ons-col align="left" style="border:1px solid white;color:white">
                                 <div style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
                                     <span style="color:rgba(38,100,171,0.81)">#{{$index+1}}</span>
-                                    <span ng-bind-html="question.question_display"></span>
+                                    <span ng-bind-html="question.question_display | trustHTML"></span>
                                 </div>
                             </ons-col>
                             <ons-col align="center" width="25%">
                                 <!-- completed questionnaire but slider type: special case-->
-                                <span ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id === vm.allowedType.SLIDER_TYPE_ID"
-                                      style="float: right; color: rgba(38,100,171,0.81);">
+                                <span
+                                    ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id === vm.allowedType.SLIDER_TYPE_ID"
+                                    style="float: right; color: rgba(38,100,171,0.81);">
                                     {{question.patient_answer.answer[0].answer_value}}/{{question.options[0].max_value}}
                                 </span>
 
                                 <!-- completed questionnaire but not slider type: toggle dropdown menu -->
-                                <span ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID">
-                                    <p ng-if="!question.showAnswer" style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81); white-space:nowrap;">
-                                        {{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw;"></i>
+                                <span
+                                    ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID">
+                                    <p ng-if="!question.showAnswer"
+                                        style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81); white-space:nowrap;">
+                                        {{"SHOW"|translate}}
+                                        <i class="ion-chevron-right" style="padding-left: 2vw;"></i>
                                     </p>
-                                    <p ng-if="question.showAnswer" style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81); white-space:nowrap;">
-                                        {{"HIDE"|translate}}<i class="ion-chevron-down" style="padding-left: 2vw"></i>
+                                    <p ng-if="question.showAnswer"
+                                        style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81); white-space:nowrap;">
+                                        {{"HIDE"|translate}}
+                                        <i class="ion-chevron-down" style="padding-left: 2vw"></i>
                                     </p>
                                 </span>
 
                                 <!-- Non completed questionnaire and invalid answer for the question -->
-                                <span ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.optional === '0' && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED"
-                                      style="float: right; margin-right: 0px; color: white">
-                                    <p style="white-space: nowrap;"><i class="ion-chevron-left"></i> {{"ANSWER"|translate}} </p>
+                                <span
+                                    ng-if="vm.isInvalidAnswerForQuestion(question)"
+                                    style="float: right; margin-right: 0px; color: white">
+                                    <p style="white-space: nowrap;"><i class="ion-chevron-left"></i>
+                                        {{"ANSWER"|translate}} </p>
                                 </span>
 
                                 <!-- Non completed questionnaire, valid answer for the question, and not slider -->
-                                <span ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED)">
-                                    <p ng-if="!question.showAnswer" style="float: right; margin-right: 0px; color: white; white-space:nowrap;">
+                                <span
+                                    ng-if="vm.isValidAnswerForQuestionAndNotSlider(question)">
+                                    <p ng-if="!question.showAnswer"
+                                        style="float: right; margin-right: 0px; color: white; white-space:nowrap;">
                                         {{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i>
                                     </p>
-                                    <p ng-if="question.showAnswer" style="float: right; margin-right: 0px; color: white; white-space:nowrap;">
+                                    <p ng-if="question.showAnswer"
+                                        style="float: right; margin-right: 0px; color: white; white-space:nowrap;">
                                         {{"HIDE"|translate}}<i class="ion-chevron-down" style="padding-left: 2vw"></i>
                                     </p>
                                 </span>
 
                                 <!-- Non completed questionnaire, valid answer for the question, and slider -->
-                                <span ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id === vm.allowedType.SLIDER_TYPE_ID && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED)" style="float: right; margin-right: 0px; color: white">
-                                    <i class="ion-chevron-left"></i> {{question.patient_answer.answer[0].answer_value}}/{{question.options[0].max_value}}
+                                <span
+                                    ng-if="vm.isValidAnswerForQuestionAndSlider(question)"
+                                    style="float: right; margin-right: 0px; color: white">
+                                    <i class="ion-chevron-left"></i>
+                                    {{question.patient_answer.answer[0].answer_value}}/{{question.options[0].max_value}}
                                 </span>
 
                             </ons-col>
                         </ons-row>
                     </li>
                     <!-- Eye preview -->
-                    <li ng-show="question.showAnswer" style="background:white;color:rgba(38,100,171,0.81);padding:5px 5px 0px 5px;" ng-class="fontSizeDesc">
+                    <li ng-show="question.showAnswer"
+                        style="background:white;color:rgba(38,100,171,0.81);padding:5px 5px 0px 5px;"
+                        ng-class="fontSizeDesc">
                         <div class="item">
                             <div ng-repeat="answer in question.patient_answer.answer track by $index">
                                 <!-- Textbox-->
                                 <span ng-if="question.type_id == vm.allowedType.TEXTBOX_TYPE_ID"
-                                      style="color: rgba(38,100,171,0.81);display:block;width:100%;word-wrap:break-word;">
+                                    style="color: rgba(38,100,171,0.81);display:block;width:100%;word-wrap:break-word;">
                                     {{question.patient_answer.answer[0].answer_value}}
                                 </span>
                                 <!-- Multiple choice-->
                                 <span ng-if="question.type_id == vm.allowedType.RADIOBUTTON_TYPE_ID"
-                                      style="color: rgba(38,100,171,0.81);">
+                                    style="color: rgba(38,100,171,0.81);">
                                     {{question.patient_answer.answer[0].answer_option_text}}
                                 </span>
                                 <!--Checkbox-->
                                 <span ng-if="question.type_id == vm.allowedType.CHECKBOX_TYPE_ID"
-                                      style="color: rgba(38,100,171,0.81);">
+                                    style="color: rgba(38,100,171,0.81);">
                                     {{answer.answer_option_text}}
                                 </span>
 
@@ -131,12 +206,13 @@
                         </div>
 
                         <!-- allow non completed questionnaire to edit question -->
-                        <div align="center" ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS">
+                        <div align="center"
+                            ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS">
                             <!-- need twice parent due to ng-repeat -->
                             <button class="button" style="margin-bottom: 10px" ng-class="fontSizeDesc"
-                                    ng-click="vm.editQuestion($parent.$parent.$index, $index)">
+                                ng-click="vm.editQuestion($parent.$parent.$index, $index)">
                                 <i class="ion-chevron-left"></i>
-                                {{"QUESTIONNAIRE_INSTRUCTIONS4"|translate}}
+                                {{"QUESTIONNAIRE_GO_TO_QUESTION"|translate}}
                             </button>
                         </div>
 

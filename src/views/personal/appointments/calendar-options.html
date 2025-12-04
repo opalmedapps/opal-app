@@ -1,10 +1,13 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page>
-  <ons-toolbar fixed-style>
-    <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-    <div class="center" ng-class="fontSizeTitle">{{"APPOINTMENT"|translate}}</div>
-  </ons-toolbar>
+  <generic-toolbar title="{{'APPOINTMENTS'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
   <ons-list class="settings-list">
-    <ons-list-header class="person-list-header" ng-class="fontSizeDesc">{{"LABELS"|translate}} </ons-list-header>
+    <ons-list-header class="default-list-header" ng-class="fontSizeDesc">{{"LABELS"|translate}} </ons-list-header>
     <ons-list-item >
       <div class="text-left"  ng-class="fontSizeDesc">
         <i class="ion-record" style="color:#5CE68A"></i> {{"PAST"|translate}}

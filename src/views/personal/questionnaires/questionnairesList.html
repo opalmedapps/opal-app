@@ -1,18 +1,27 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="QuestionnairesListController as questionnaireListVm">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{questionnaireListVm.pageTitle}}" style-class="fontSizeTitle">
+    </generic-toolbar>
 
-    <!--LOADING CIRCLE FOR LIST OF QUESTIONNAIRES-->
-    <loading-spinning-circle
-            ng-show="questionnaireListVm.loading"
-            loading-message="{{'LOADINGQUESTIONNAIRES'|translate}}">
-    </loading-spinning-circle>
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="questionnaireListVm.refreshQuestionnaires($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
 
-    <div ng-hide="questionnaireListVm.loading">
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="QuestionnaireList"
+                          display-function="questionnaireListVm.loadQuestionnaireList"
+                          refresh="questionnaireListVm.refreshQuestionnaires"
+                          hide-content="questionnaireListVm.hideContent"
+                          use-parameters="{{questionnaireListVm.dataHandlerParameters}}">
+    </patient-data-handler>
+
+    <div ng-hide="questionnaireListVm.hideContent">
         <!--TABBAR-->
         <div class="navigation-bar">
             <div class="navigation-bar__center">
@@ -43,7 +52,7 @@
                             <!--no new questionnaires-->
                             <p ng-if="!questionnaireListVm.newQuestionnaireExist()" ng-class="fontSizeTitle"
                                style="color: grey; margin-top: 25vh;">
-                                {{"QUESTIONNAIRE_NONE_NEW"|translate}}
+                                {{questionnaireListVm.noNewQuestionnaireText}}
                             </p>
 
                             <!--if there are questionnaires, list them-->
@@ -58,7 +67,7 @@
                                         </ons-row>
                                         <ons-row align="center">
                                             <ons-col  class="questionnaires-list-text">
-                                                <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ADDED"|translate}} {{questionnaire.created|date:'yyyy-MM-dd HH:mm'}}</span>
+                                                <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ADDED" | translate}} {{questionnaire.created | date:'mediumNoSeconds'}}</span>
                                             </ons-col>
                                         </ons-row>
                                     </div>
@@ -73,7 +82,7 @@
 
                             <!--no in progress questionnaires-->
                             <p ng-show="!questionnaireListVm.inProgressQuestionnaireExist()" ng-class="fontSizeTitle"
-                               style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_PROGRESS"|translate}}</p>
+                               style="color: grey; margin-top: 25vh;">{{questionnaireListVm.noProgressQuestionnaireText}}</p>
 
                             <!--if there are in progress questionnaires: list them-->
                             <ons-list ng-repeat="questionnaire in questionnaireListVm.inProgressQuestionnaireList | orderBy:'-last_updated' track by $index"
@@ -85,9 +94,14 @@
                                                 <span class="item-title" ng-class="fontSizeTitle">{{questionnaire.nickname}}</span>
                                             </ons-col>
                                         </ons-row>
+                                        <ons-row align="center" ng-hide="questionnaire.respondent_display_name === ''">
+                                            <ons-col  class="questionnaires-list-text">
+                                                <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_IN_PROGRESS_BY" | translate}} {{questionnaire.respondent_display_name}}</span>
+                                            </ons-col>
+                                        </ons-row>
                                         <ons-row align="center">
                                             <ons-col class="questionnaires-list-text">
-                                                <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_LAST_UPDATED"|translate}} {{questionnaire.last_updated|date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                                                <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_LAST_UPDATED" | translate}} {{questionnaire.last_updated | date:'mediumNoSeconds'}}</span>
                                             </ons-col>
                                         </ons-row>
                                     </div>
@@ -102,10 +116,10 @@
 
                             <!--no completed questionnaires-->
                             <p ng-show="!questionnaireListVm.completedQuestionnaireExist()" ng-class="fontSizeTitle"
-                               style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_COMPLETED"|translate}}</p>
+                               style="color: grey; margin-top: 25vh;">{{questionnaireListVm.noCompletedQuestionnaireText}}</p>
 
                             <!--if there are completed questionnaires: list them-->
-                            <ons-list ng-repeat="questionnaire in questionnaireListVm.completedQuestionnaireList | orderBy:'-last_updated' track by $index"
+                            <ons-list ng-repeat="questionnaire in questionnaireListVm.completedQuestionnaireList | orderBy:'-completed_date' track by $index"
                                      ng-click="questionnaireListVm.goToQuestionnaireSummary(questionnaire)">
                                 <ons-list-item modifier="chevron" class="item">
                                     <div class="questionnaires-list">
@@ -114,9 +128,14 @@
                                                 <span class="item-title" ng-class="fontSizeTitle">{{questionnaire.nickname}}</span>
                                             </ons-col>
                                         </ons-row>
+                                        <ons-row align="center" ng-hide="questionnaire.respondent_display_name === ''">
+                                            <ons-col  class="questionnaires-list-text">
+                                                <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_ANSWERED_BY" | translate}} {{questionnaire.respondent_display_name}}</span>
+                                            </ons-col>
+                                        </ons-row>
                                         <ons-row align="center">
                                             <ons-col class="questionnaires-list-text">
-                                                <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ANSWERED"|translate}} {{questionnaire.last_updated|date:'yyyy-MM-dd HH:mm'}}</span>
+                                                <span class="item-desc questionnaires-list-date" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ANSWERED" | translate}} {{questionnaire.completed_date | date:'mediumNoSeconds'}}</span>
                                             </ons-col>
                                         </ons-row>
                                     </div>
@@ -127,6 +146,5 @@
                 </div>
             </div>
         </ons-scroller-height>
-
     </div>
 </ons-page>

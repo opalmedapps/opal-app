@@ -1,12 +1,13 @@
-<ons-page ng-controller="ContentController as about">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button ng-class="fontSizeDesc">{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-hide="about.loading" ng-class="fontSizeTitle">{{about.pageContent.title|translate|ellipsis:25}}</div>
-    </ons-toolbar>
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 
-    <div ng-show="about.loading" align="center" style="margin-top:30px">
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="ContentController as vm" style="background-color:white">
+    <generic-toolbar title="{{vm.pageContent.title|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <div ng-show="vm.loading" align="center" style="margin-top:30px">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10" />
         </svg>
@@ -22,8 +23,8 @@
         }
     </style>
 
-    <div class="container" ng-bind-html="about.pageContent.content" ng-class="fontSizeDesc"></div>{{about.alert}}
-    <div ng-show="about.alert.type" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
-        <uib-alert type="{{about.alert.type}}">{{about.alert.content|translate}}</uib-alert>
+    <div class="container" ng-bind-html="vm.pageContent.content | trustHTML" ng-class="fontSizeDesc"></div>{{vm.alert}}
+    <div ng-show="vm.alert.type" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="{{vm.alert.type}}">{{vm.alert.content|translate}}</uib-alert>
     </div>
 </ons-page>

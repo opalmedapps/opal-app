@@ -1,36 +1,50 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="CalendarController as calendar">
 
     <!--
     PAGE HEADER TOOLBAR
     =============================-->
 
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</div>
-        <div class="right">
-            <ons-toolbar-button ng-click="calendar.goToCalendarOptions()">{{"OPTIONS"|translate}}</ons-toolbar-button>
-        </div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'APPOINTMENTS'|translate}}" style-class="fontSizeTitle">
+        <right-content>
+            <!-- INFO BUTTON -->
+            <ons-toolbar-button ng-click="calendar.goToCalendarOptions()" style="margin-right: -10px">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+
+            <!-- REFRESH BUTTON -->
+            <loading-spinning-button
+                click-function="calendar.executeRefresh"
+                disable="calendar.hideContent">
+            </loading-spinning-button>
+        </right-content>
+    </generic-toolbar>
 
     <!--
     CONDITIONAL NETWORK BANNER
     =============================-->
     <network-banner></network-banner>
 
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="Appointments"
+                          display-function="calendar.setAppointmentsView"
+                          refresh="calendar.executeRefresh"
+                          hide-content="calendar.hideContent">
+    </patient-data-handler>
 
     <!--
     CALENDAR DIRECTIVE
     =============================-->
-    <div align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
+    <div ng-if="!calendar.hideContent" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
         <div class="calendar-list">
-            <uib-datepicker id="scrollTo"
-                            ng-change="calendar.onDateChange()"
+            <uib-datepicker ng-change="calendar.onDateChange()"
                             ng-model="calendar.todays_date"
-                            datepicker-mode="calendar.calendarMode"
                             datepicker-options="calendar.dateOptions"
-                            show-weeks="false"
                             show-color="calendar.showDotColor(date)"
                             style="width:100vw;"
                             ng-class="fontSizeDesc">
@@ -41,35 +55,32 @@
     <!--
     APPOINTMENT LIST
     =============================-->
-    <div id="topListAnchor" style="height:5px; background-color:lightgrey; position:relative; z-index:1"></div>
+    <div ng-hide="calendar.hideContent" id="topListAnchor" style="height:5px; background-color:lightgrey; position:relative; z-index:1"></div>
     <!-- THE ONLY REASON FOR THIS DELAY IS A SMOOTHER LOADING OF THE LIST OF APPOINTMENTS -->
-    <ons-scroller-height timer="500" callback="calendar.scrollToAnchor()">
+    <ons-scroller-height ng-hide="calendar.hideContent" timer="500">
             <div id="firstAnchor"></div>
-            <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center" 
-                ng-class="fontSizeTitle">{{"NOAPPOINTMENTS"|translate}}</div>
-            <ons-list ng-repeat="app in calendar.appointments" ng-click="calendar.goToAppointment(app)" 
+            <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center"
+                ng-class="fontSizeTitle">{{"NO_APPOINTMENTS"|translate}}</div>
+            <ons-list ng-repeat="app in calendar.appointments" ng-click="calendar.goToAppointment(app)"
                 class="gpu_efficiency" ng-hide="calendar.noAppointments">
                 <div id="anchorAppointments{{$index}}"></div>
-                <ons-list-header ng-if="calendar.showChosenDateHeader($index)" style="color:#2196F3" 
+                <ons-list-header ng-if="calendar.showChosenDateHeader($index)" style="color:#2196F3"
                     ng-class="fontSizeTitle">{{calendar.todays_date|date:'fullDate'}}</ons-list-header>
-                <ons-list-header class="person-list-header" ng-if="calendar.showHeaderNormalDay" 
+                <ons-list-header class="default-list-header" ng-if="calendar.showHeaderNormalDay"
                     ng-class="fontSizeTitle">{{app.ScheduledStartTime|date:'fullDate'}}</ons-list-header>
                 <ons-list-item modifier="chevron">
                     <ons-row>
-                        <ons-col align="center" width="60px">
+                        <ons-col align="center" width="64px">
                             <div align="center" style="line-height:1">
-                                <span style="color:grey;" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'shortTime'}}</span>
+                                <span style="color:grey; margin-left:4px" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'veryShortTime'}}</span>
                             </div>
                         </ons-col>
                         <ons-col width="5px" style="opacity:0.8" ng-style="{ 'background-color': calendar.getListColor($index) }"></ons-col>
                         <ons-col>
                             <div style="line-height:1;padding:2px">
                                 <header>
-                                    <span ng-if="calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="fontSizeTitle">
+                                    <span class="item-title" ng-class="[fontSizeTitle, {'item-unread': app.ReadStatus==='0'}]">
                                         {{app["AppointmentType_" + calendar.language]}}
-                                    </span>
-                                    <span ng-if="!calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="fontSizeTitle">
-                                        {{app["ResourceDescription"]}}
                                     </span>
                                 </header>
                                 <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+ calendar.language]}}</p>

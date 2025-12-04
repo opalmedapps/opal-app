@@ -1,0 +1,18 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<div ng-hide="submitted">
+    <div>
+        <p style="color:grey">{{"RATE_THIS_MATERIAL"|translate}}</p>
+    </div>
+    <span style="display:inline-block;opacity:0.5" ng-repeat="star in rate" ng-click="rateMaterial($index)">
+            <i ng-class="star.Icon" style="font-size:35px;color:#DAA520" ></i>
+        </span>
+    <span style="margin:10px"><ons-button ng-click="submit()" ng-disabled="emptyRating">{{"RATE_IT" | translate}}</ons-button></span>
+</div>
+<div ng-show="submitted" style="margin-top:5px">
+    <p style="color:#5cb85c;opacity:0.8;">{{"THANK_YOU_FOR_FEEDBACK"|translate}}</p>
+</div>

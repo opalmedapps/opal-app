@@ -1,16 +1,22 @@
-<ons-page ng-controller="PatientTestResultsByDatetimeController as testsByDate">
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 
-    <!-- TOOLBAR -->
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{testsByDate.testDate|date:'medium'}}</div>
-        <div class="right">
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="PatientTestResultsByDatetimeController as testsByDate">
+    <generic-toolbar title="{{
+            testsByDate.testDate.toLocaleString(
+                testsByDate.locale,
+                { timeZone: 'America/Toronto', dateStyle: 'medium', timeStyle: 'short', }
+            )
+        }}"
+        style-class="fontSizeTitle">
+        <right-content>
             <labs-info-button></labs-info-button>
-        </div>
-    </ons-toolbar>
-    <loading-spinning-circle ng-if="testsByDate.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
+        </right-content>
+    </generic-toolbar>
+    <loading-spinning-circle ng-if="testsByDate.loading" loading-message="{{'LOADING_LAB_RESULTS'|translate}}">
     </loading-spinning-circle>
 
     <div ng-if="!testsByDate.loading">
@@ -18,7 +24,7 @@
         <div style="position:sticky; top:0; z-index:9999;">
             <!-- SEARCH BAR -->
             <search-bar search-text="testsByDate.searchText" placeholder="{{'SEARCH'|translate}}"
-                style-class="fontSizeDesc">
+               style-class="fontSizeDesc">
             </search-bar>
 
             <!-- DISCLAIMER -->
@@ -70,7 +76,7 @@
                     <ons-list-item modifier="tappable chevron"
                         ng-click="testsByDate.goToTestTypeResults(testResult.testExpressionSerNum)"
                         class="list-item-container">
-                        <ons-row ng-class="[testsByDate.getTestClass(testResult), fontSizeDesc]"
+                        <ons-row ng-class="fontSizeDesc"
                             vertical-align="center">
 
                             <!-- LAB RESULT - LEFT (NAME) -->

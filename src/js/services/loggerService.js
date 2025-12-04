@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   loggerService.js
  * Description  :   Service that sends user activity logs to the server.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   23 Mar 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  *
  * Modification history:
  * 2018-11-30: Educational material logging added by Stacey Beard, based on work by Tongyou (Eason) Yang.
@@ -13,8 +14,6 @@
 
 /**
  *@ngdoc service
- *@name MUHCApp.service:Logger
- *@requires MUHCApp.service:RequestToServer
  *@description Service that logs user activity on the Opal server
  **/
 
@@ -22,7 +21,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Logger', Logger);
 
     Logger.$inject = ['$filter', 'RequestToServer'];
@@ -52,7 +51,6 @@
         /**
          *@ngdoc method
          *@name sendLog
-         *@methodOf MUHCApp.service:Logger
          *@param {String} activity the user activity type to be logged
          *@param {String} activityDetails the activity serial number to be logged
          *@description Sends a log of the current user activity to the server.
@@ -72,7 +70,6 @@
         /**
          *@ngdoc method
          *@name enableLogging
-         *@methodOf MUHCApp.service:Logger
          *@param {Boolean} bool Boolean value that sets the logging
          *@description Enables or disables logging of usage
          **/
@@ -83,7 +80,6 @@
         /**
          * @ngdoc method
          * @name sendLogPatientActionRequest
-         * @methodOf MUHCApp.service:Logger
          * @author Stacey Beard
          * @date 2018-11-30
          * @description Sends a request of type 'LogPatientAction' to the server.
@@ -245,4 +241,3 @@
     }
 
 })();
-

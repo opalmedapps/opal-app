@@ -1,11 +1,17 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Angular <https://github.com/angular/bower-angular-i18n>
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: MIT
+
+// Source: https://github.com/angular/bower-angular-i18n/blob/master/angular-locale_fr-ca.js
 'use strict';
 angular.module("ngLocale", [], ["$provide", function($provide) {
 var PLURAL_CATEGORY = {ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"};
 $provide.value("$locale", {
   "DATETIME_FORMATS": {
     "AMPMS": [
-      "AM",
-      "PM"
+      "a.m.",
+      "p.m."
     ],
     "DAY": [
       "dimanche",
@@ -55,12 +61,26 @@ $provide.value("$locale", {
       "avr.",
       "mai",
       "juin",
-      "juil.",
+      "juill.",
       "ao\u00fbt",
       "sept.",
       "oct.",
       "nov.",
       "d\u00e9c."
+    ],
+    "STANDALONEMONTH": [
+      "janvier",
+      "f\u00e9vrier",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "ao\u00fbt",
+      "septembre",
+      "octobre",
+      "novembre",
+      "d\u00e9cembre"
     ],
     "WEEKENDRANGE": [
       5,
@@ -68,12 +88,14 @@ $provide.value("$locale", {
     ],
     "fullDate": "EEEE d MMMM y",
     "longDate": "d MMMM y",
-    "medium": "d MMM y HH:mm",
+    "medium": "d MMM y HH:mm:ss",
+    "mediumNoSeconds": "d MMM y HH:mm",
     "mediumDate": "d MMM y",
     "mediumTime": "HH:mm:ss",
-    "short": "yy-MM-dd HH:mm",
+    "short": "yy-MM-dd HH 'h' mm",
     "shortDate": "yy-MM-dd",
-    "shortTime": "HH:mm"
+    "shortTime": "HH 'h' mm",
+    "veryShortTime": "HH'h'mm"
   },
   "NUMBER_FORMATS": {
     "CURRENCY_SYM": "$",
@@ -105,6 +127,7 @@ $provide.value("$locale", {
     ]
   },
   "id": "fr-ca",
+  "localeID": "fr_CA",
   "pluralCat": function(n, opt_precision) {  var i = n | 0;  if (i == 0 || i == 1) {    return PLURAL_CATEGORY.ONE;  }  return PLURAL_CATEGORY.OTHER;}
 });
 }]);

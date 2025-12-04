@@ -1,4 +1,8 @@
-var app = angular.module('MUHCApp');
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
+var app = angular.module('OpalApp');
 /*
 *Code by David Herrera May 20, 2015
 *Github: dherre3
@@ -20,7 +24,7 @@ app.directive('scrollCarousel',function()
             pageContent.addEventListener('scroll',function(event)
             {
                 // console.log( this.scrollTop);
-                
+
             });
             scope.$watch('lee',function()
             {

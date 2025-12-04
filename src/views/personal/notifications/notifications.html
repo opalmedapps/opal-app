@@ -1,56 +1,64 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="NotificationsController as notif">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</div>
-    </ons-toolbar>
+    <!-- TOOLBAR -->
+    <generic-toolbar title="{{'NOTIFICATIONS'|translate}}" style-class="fontSizeTitle">
+        <right-content>
+            <ons-toolbar-button id="notificationsMenu" ng-click="notificationsPopover.show('#notificationsMenu')">
+                <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
+            </ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
 
     <network-banner></network-banner>
-    <div ng-show="notif.isLoading" align="center" style="margin-top:25vh">
-        <svg class="progress-circular">
-            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
-                    stroke-miterlimit="10"/>
-        </svg>
-        <p style="margin-top: 30px">{{ "LOADINGNOTIFICATIONS" | translate }}</p>
-    </div>
 
-    <div ng-hide="notif.noNotifications">
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="notif.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND INITIAL LOADING WHEEL -->
+    <patient-data-handler categories="Notifications"
+                          display-function="notif.displayNotifications"
+                          refresh="notif.pullHookRefresh"
+                          hide-content="notif.hideContent">
+    </patient-data-handler>
+
+    <!-- LOADING WHEEL SHOWN AFTER CLICKING ON AN ITEM THAT NEEDS DOWNLOADING -->
+    <!-- margintop = usual height + height of the tab bar -->
+    <loading-spinning-circle ng-show="notif.loading"
+                             loading-message="{{'LOADING'|translate}}"
+                             margintop="calc(25vh + 43px)"
+                             mask-page="true">
+    </loading-spinning-circle>
+
+    <div ng-hide="notif.hideContent">
         <ons-list ng-repeat="notification in notif.notifications"
                   ng-click="notif.goToNotification($index,notification)">
-            <ons-list-header class="person-list-header" ng-show="notif.showHeader($index, notif.notifications.length)"
-                             ng-class="fontSizeTitle">
+            <ons-list-header class="default-list-header" ng-show="{{ notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">
                 {{notification.DateAdded|date:'fullDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center">
-                    <ons-col width="80px" align="center">
-                        <div style="margin-left:10px">
-                            <i class="iconHomeView" ng-class="notification.Icon"
-                               ng-style="{color: notification.Color}">
-                            </i>
-                            <!--<span class="notification" ng-if="notification.ReadStatus==='0'">&nbsp;-->
-                            <!--</span>-->
-                        </div>
+                    <ons-col width="70px" class="ons-col-icon">
+                        <i class="fa18x" ng-class="notification.Icon" ng-style="{color: notification.Color}"></i>
                     </ons-col>
                     <ons-col>
-                        <!-- Bold if Unread, Normal font if already read -->
-                        <!-- Bold is when class="item-title" -->
-                        <!-- Non-Bold is when class="item-desc" -->
-                        <header ng-if="notification.ReadStatus==='0'">
-                            <span class="item-title" ng-class="fontSizeTitle">{{notification.Title}}</span>
+                        <header>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.Title}}</span>
+                            <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.RefTableRowTitle}}</p>
+                            <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{"SENT_TO"|translate}}: {{notification.PatientFirstName}} {{notification.PatientLastName}}</p>
                         </header>
-                        <header ng-if="notification.ReadStatus==='1'">
-                            <span class="item-desc" ng-class="fontSizeTitle">{{notification.Title}}</span>
-                        </header>
-
-                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc|ellipsis:30}}</p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
         </ons-list>
     </div>
-    <div class="container" align="center">
-        <p style="margin-top:25vh;color:grey" ng-show="notif.noNotifications">{{"NONOTIFICATIONS"|translate}}</p>
+    <div ng-show="notif.noNotifications" class="container" align="center">
+        <p style="margin-top:25vh;color:grey">{{"NO_NOTIFICATIONS"|translate}}</p>
     </div>
 </ons-page>

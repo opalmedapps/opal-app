@@ -1,4 +1,8 @@
-angular.module("MUHCApp").directive("onsScrollerHeight", onsScrollerHeight);
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
+angular.module('OpalApp').directive("onsScrollerHeight", onsScrollerHeight);
 
 onsScrollerHeight.$inject = ["$timeout"];
 
@@ -11,7 +15,7 @@ onsScrollerHeight.$inject = ["$timeout"];
  *     given timeout has elapsed (In the case where no events fires to indicate the instantiation)
  * In terms of the height to set the ons-scroller, there are two options:
  *  1. Default: none, the height is then determined based on the other elements that occupy
- *     the page, in this case the ons-scroller height is calculated as the remaining page height left by the other 
+ *     the page, in this case the ons-scroller height is calculated as the remaining page height left by the other
  *     elements; this is calculated from the top children of the `page__content` element.
  *  2. By setting the `offsetHeight` in the directive, this is a numeric value that indicates
  *     the desired height offset from the page for the element.
@@ -51,7 +55,7 @@ function onsScrollerHeight($timeout) {
 
             /**
              * Sets the ons-scroller height
-             * @param {EventListenerOrEventListenerObject|null} [ev=null] Event that calls the function, 
+             * @param {EventListenerOrEventListenerObject|null} [ev=null] Event that calls the function,
              *                                                  null if no event
              */
             function setScrollerHeight(ev = null) {

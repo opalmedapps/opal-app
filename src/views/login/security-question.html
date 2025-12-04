@@ -1,23 +1,29 @@
-<ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="SecurityQuestionController as security">
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="SecurityQuestionController as security" style="background-color:white">
     <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button ng-if="!security.passwordReset">{{"BACK"|translate}}</ons-back-button>
-            <ons-back-button ng-if="security.passwordReset" ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
+        <div class="left" ng-style="security.iosStyleFix">
+            <ons-back-button
+                ng-show="!security.passwordReset && !security.tooManyAttempts">{{"BACK"|translate}}</ons-back-button>
+            <ons-back-button ng-if="security.passwordReset"
+                ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
         </div>
-        <div class="center">
-            <div ng-if="!security.passwordReset">{{"SECURITYQUESTION"|translate}}</div>
-            <div ng-if="security.passwordReset">{{"FORGOTPASSWORD_NOQUESTION"|translate}}</div>
+        <div class="center" ng-style="security.iosStyleFix">
+            <div ng-if="!security.passwordReset">{{"SECURITY_QUESTION"|translate}}</div>
+            <div ng-if="security.passwordReset">{{"FORGOT_PASSWORD_NO_QUESTION"|translate}}</div>
         </div>
     </ons-toolbar>
     <network-banner></network-banner>
 
-    <ons-row align="center" style="height:70vh;margin:0;top:0">
-        <ons-col align="center" style="margin:0;top:0">
+    <ons-row class="security-question--row">
+        <ons-col class="security-question--col">
 
             <!-- OPAL LOGO -->
-            <div align="center">
-                <img src="./img/Opal_Name_Logo_Green_Transparent.png" style="max-width:300px;width:70vw;height:auto">
-            </div>
+            <img src="./img/Opal_Name_Logo_Green_Transparent.png" class="opal-logo--large">
 
             <!-- HOSPITAL SELECTOR -->
             <div ng-if="security.passwordReset" class="container">
@@ -25,37 +31,48 @@
             </div>
 
             <!-- LOADING SPINNER -->
-            <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()" loading-message="{{'LOADING'|translate}}" margintop="15vh"></loading-spinning-circle>
+            <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()"
+                loading-message="{{'LOADING'|translate}}" margintop="15vh"></loading-spinning-circle>
 
             <!-- SECURITY ANSWER FIELDS -->
-            <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()" class="container" align="center" style="margin-top:20px">
-                <form name="formPassword" novalidate>
-                    <div class="form-group" align="center" style="margin-top: 20px">
-
-                        <div ng-show="security.passwordReset" style="width: 100%; margin-top: 15px; margin-bottom: 20px;" class="style-4">
-                            <!-- RAMQ is using ssn field -->
-                            <label>{{'ENTERRAMQ'|translate}}</label><br />
-                            <input autocapitalize="none" autocorrect="off" autocomplete="off" class="text-input" name="text" ng-model="security.ssn" placeholder="{{'ENTERRAMQPLACEHOLDER'|translate}}" />
-                        </div>
-
-                        <label name="text">{{ security.Question }} </label><br />
-                        <div style="width: 100%; margin-top: 15px" class="style-4">
-                            <input autocapitalize="none" autocorrect="off" autocomplete="off" class="text-input" name="text" ng-model="security.answer" ng-change="security.clearErrors()" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
-                            <br /><br />
-                        </div>
-                        <button class="button button--large shadow-2" ng-disabled="security.submitting || security.tooManyAttempts" style="background-color: #4CAF50; font-weight: bolder;" ng-click="security.submitAnswer(security.answer)">{{"CONTINUE"|translate}}</button>
-                        <uib-alert ng-show="security.alert.type && security.alertShow" type="{{security.alert.type}}">{{security.alert.content|translate}}</uib-alert>
+            <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()"
+                class="container security-question--container">
+                <form style="text-align: center" novalidate>
+                    <label for="security-answer-input">{{security.Question}}</label>
+                    <div class="security-question--answer-box">
+                        <password-input>
+                            <input id="security-answer-input" ng-model="security.answer"
+                                placeholder="{{'ENTER_ANSWER_PLACEHOLDER'|translate}}" type="password" required
+                                ng-change="security.clearErrors()" autocapitalize="none" autocorrect="off"
+                                autocomplete="new-password">
+                        </password-input>
                     </div>
+                    <button class="button button--large shadow-2 button--large-green security-question--button"
+                        ng-disabled="security.submitting || security.tooManyAttempts"
+                        ng-click="security.submitAnswer(security.answer)">
+                        <span ng-if="!security.submitting">
+                            {{"CONTINUE"|translate}}
+                        </span>
+                        <span ng-if="security.submitting">
+                            <ons-icon icon="ion-load-d" spin="true"></ons-icon>
+                        </span>
+                    </button>
+
+                    <uib-alert class="security-question--alert" ng-show="security.alert.type && security.alertShow"
+                        type="{{security.alert.type}}">
+                        {{security.alert.content|translate}}
+                    </uib-alert>
                 </form>
             </div>
         </ons-col>
     </ons-row>
-    <ons-modal var="errormodal">
-        <h4>{{"RESETERROR"|translate}}</h4>
+    <ons-modal var="errormodal" class="security-question--modal">
+        <h4>{{"RESET_ERROR"|translate}}</h4>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="unattended-message">{{"RETRYRESETMESSAGE"|translate}}</p>
-        <ons-button style="margin-top: 5%; font-size: 22px; background-color: #4caf50" ng-click="security.goToReset()">{{"RETRYRESET"|translate}}</ons-button>
-        <br>
-        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="security.goToInit()">{{"GOTOHOME"|translate}}</ons-button>
+        <p class="unattended-message security-question--modal-text">{{"RETRY_RESET_MESSAGE"|translate}}</p>
+        <ons-button class="button--large-green security-question--modal-button"
+            ng-click="security.goToReset()">{{"RETRY"|translate}}</ons-button>
+        <ons-button class="button--large-blue security-question--modal-button"
+            ng-click="security.goToInit()">{{"HOME"|translate}}</ons-button>
     </ons-modal>
 </ons-page>

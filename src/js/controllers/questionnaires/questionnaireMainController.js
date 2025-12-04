@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function() {
     'use strict';
 
@@ -9,7 +13,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('QuestionnaireMainController', QuestionnaireMainController);
 
     QuestionnaireMainController.$inject = [
@@ -17,13 +21,14 @@
         '$scope',
         '$timeout',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Params',
-        'Questionnaires'
+        'Questionnaires',
+        'Notifications'
     ];
 
     /* @ngInject */
-    function QuestionnaireMainController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires) {
+    function QuestionnaireMainController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires, Notifications) {
         let vm = this;
 
         // constants
@@ -32,11 +37,12 @@
         const answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
 
         // variables global to this controller
+        let purpose = 'default';
         let hasGoneBackToHomeScreen = false;    // this variable is used for noting whether the user has gone back to the home screen or not because if they did, we have to update the startIndex.
         let navigator = null;
-        let navigatorName = '';
 
         // variables that can be seen from view, sorted alphabetically
+        vm.beginInstructions = '';
         vm.carouselItems = [];  // the items that the carousel will display
             /*
                 If a question is a checkbox question AND it is skipped then vm.checkedNumber = 0. If a question is not a checkbox question vm.checkedNumber is also 0.
@@ -45,6 +51,7 @@
              */
         vm.checkedNumber = 0;   // this is the number of items check for a checkbox question.
         vm.editQuestion = false;    // true if the user completed the questionnaire but came back to edit their answer, false otherwise. Used in the toolbar.
+        vm.isConsent = false;
         vm.isQuestion = false;  // this boolean represent whether the current item in the carousel is a question or not. It is not really needed as of 07 January 2020 but coded for future use, for example for information button.
         vm.hasDescription = false;  // the questionnaire has a description
         vm.hasInstruction = false;      // the questionnaire has an instruction to display
@@ -54,6 +61,7 @@
         vm.progressBarPercent = 0;  // this is for the progress bar in the carousel
         vm.questionnaire = {}; // the questionnaire that this controller is dealing with
         vm.questionnaireStart = true;   // marks whether we just started a questionnaire or not (i.e. the questionnaire home page)
+        vm.resumeInstructions = '';
         vm.startIndex = 1;  // the index where the carousel will start in, skip the questionnaire start home page
         vm.sectionIndex = 0;
         vm.questionIndex = 0;
@@ -77,10 +85,21 @@
         // //////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
 
-            let params = NavigatorParameters.getParameters();
+            let params = Navigator.getParameters();
+
+            if (!params?.questionnairePurpose
+                || !Questionnaires.validateQuestionnairePurpose(params?.questionnairePurpose)
+            ) {
+                setPageText();
+                vm.loading = false;
+                handleLoadQuestionnaireErr();
+            } else {
+                purpose = params.questionnairePurpose.toLowerCase();
+                vm.isConsent = purpose === 'consent';
+                setPageText(purpose);
+            }
 
             /*
              now there are 3 cases:
@@ -107,7 +126,6 @@
 
             if (!params.hasOwnProperty('answerQuestionnaireId')){
                 vm.loadingQuestionnaire = false;
-
                 handleLoadQuestionnaireErr();
             }
 
@@ -140,16 +158,20 @@
                         // listen to the event of destroy the controller in order to do clean up
                         $scope.$on('$destroy', function() {
                             removeListener();
+                            // Reload user profile if questionnaire was opened via Notifications tab,
+                            // and profile was implicitly changed.
+                            Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
                         });
 
                         // no longer loading
                         delayLoading();
                     })
                 })
-                .catch(function(){
+                .catch(function(error){
+                    console.error(error);
                     $timeout(function(){
                         vm.loadingQuestionnaire = false;
-                        handleLoadQuestionnaireErr();
+                        handleLoadQuestionnaireErr(error);
                     });
                 });
         }
@@ -175,45 +197,50 @@
          * @param {boolean} bySwipe if it is activated by swiping to the right then True
          * @desc This function is used to update the questionnaire status when beginning a questionnaire and, in case that the user uses the button "begin" instead of swiping, move the carousel
          */
-        function beginQuestionnaire(bySwipe){
+        async function beginQuestionnaire(bySwipe){
+            let inProgress = vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS;
+            let oldStatus = vm.questionnaire.status;
 
             // if the questionnaire was not started yet, start it
-            if (vm.questionnaireStart){
-                // we are no longer at the home page
-                vm.questionnaireStart = false;
-
-                // update status for the questionnaire of controller
-                let oldStatus = vm.questionnaire.status;
-                vm.questionnaire.status = vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS;
-
+            if (vm.questionnaireStart) {
                 vm.loadingQuestionnaire = true;
 
-                // update status for the questionnaire of service and listener / database
-                Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, vm.questionnaire.status, oldStatus)
-                    .then(function(){
-                        $timeout(function(){
-                            // set the indices (mere formality)
-                            vm.startIndex = 1;  // skip questionnaire home page
-                            vm.sectionIndex = 0;
-                            vm.questionIndex = 0;
+                try {
+                    // update status for the questionnaire of service and listener / database
+                    // send the request before setting the status locally, because the request can fail if the questionnaire was locked by another user
+                    let response = await Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, inProgress, oldStatus);
 
-                            vm.loadingQuestionnaire = false;
+                    Notifications.implicitlyMarkCachedNotificationAsRead(
+                        response?.QuestionnaireSerNum,
+                        Params.NOTIFICATION_TYPES.LegacyQuestionnaire
+                    );
 
-                            if (!bySwipe){
-                                next();
-                            } else {
-                                // this is to force update the carousel even by swiping it
-                                vm.carousel.setActiveCarouselItemIndex(vm.startIndex);
-                            }
+                    $timeout(() => {
+                        vm.questionnaire.status = inProgress;
 
-                            vm.carousel.refresh();
-                        });
-                    })
-                    .catch(function(){
+                        // we are no longer at the home page
+                        vm.questionnaireStart = false;
+
+                        // set the indices (mere formality)
+                        vm.startIndex = 1;  // skip questionnaire home page
+                        vm.sectionIndex = 0;
+                        vm.questionIndex = 0;
+
                         vm.loadingQuestionnaire = false;
 
-                        handleLoadQuestionnaireErr();
+                        // this is to force update the carousel even by swiping it
+                        bySwipe ? vm.carousel.setActiveCarouselItemIndex(vm.startIndex) : next();
+
+                        vm.carousel.refresh();
                     });
+                }
+                catch(error) {
+                    $timeout(() => {
+                        console.error(error);
+                        vm.loadingQuestionnaire = false;
+                        handleLoadQuestionnaireErr(error);
+                    });
+                }
             }
         }
 
@@ -280,6 +307,11 @@
                     answerInvalid(question);
                 }
 
+                // verify if the required textbox questions are answered correctly
+                if (!verifyRequiredTextboxAnswer(question)){
+                    answerInvalid(question);
+                }
+
                 // save answer
                 saveAnswer(question)
                     .then(function(){
@@ -293,12 +325,11 @@
                             summaryPage();
                         });
 
-                    }).catch(function(err){
-
-                        $timeout(function(){
-                            console.error(err);
+                    }).catch(error => {
+                        $timeout(() => {
+                            console.error(error);
                             loadingSaveAnswerModal.hide();
-                            handleSaveAnswerErr();
+                            handleSaveAnswerErr(error);
                         });
                 });
             }
@@ -419,14 +450,25 @@
          * @desc This function leads to the summary page
          */
         function summaryPage(){
-
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
-                answerQuestionnaireId: vm.questionnaire.qp_ser_num
-            });
-
             // go to summary page directly
-            navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html');
+            navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
+                answerQuestionnaireId: vm.questionnaire.qp_ser_num,
+            });
+        }
+
+        /**
+         * @name setPageText
+         * @desc set the page title and descriptions according to the questionnaire purpose requested on the list page
+         *      if the purpose is not passed as an argument, the text will default to the default's translation
+         * @param {string} questionnairePurpose
+         */
+        function setPageText(questionnairePurpose = 'default') {
+            vm.beginInstructions = $filter('translate')(
+                Questionnaires.getQuestionnaireBeginByPurpose(questionnairePurpose)
+            );
+            vm.resumeInstructions = $filter('translate')(
+                Questionnaires.getQuestionnaireResumeByPurpose(questionnairePurpose)
+            );
         }
 
         /**
@@ -710,6 +752,11 @@
                 answerInvalid(question);
             }
 
+            // verify if the required textbox questions are answered correctly
+            if (!verifyRequiredTextboxAnswer(question)){
+                answerInvalid(question);
+            }
+
             // save answer
             saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])
                 .then(function(){
@@ -717,10 +764,11 @@
                         loadingSaveAnswerModal.hide();
                     });
                 })
-                .catch(function(){
-                    $timeout(function(){
+                .catch(error => {
+                    $timeout(() => {
+                        console.error(error);
                         loadingSaveAnswerModal.hide();
-                        handleSaveAnswerErr();
+                        handleSaveAnswerErr(error);
                     });
                 })
         }
@@ -787,6 +835,24 @@
         }
 
         /**
+         * @name verifyRequiredTextboxAnswer
+         * @desc this function performs a check for a user that have completed a textbox type of question having a required field
+         * @param {object} question
+         * @returns {boolean} true if the required textbox is answered, false otherwise
+         */
+        function verifyRequiredTextboxAnswer(question){
+            // only deal with textbox type of question
+            if(question.type_id === vm.allowedType.TEXTBOX_TYPE_ID){
+                // verify if the required textbox questions are answered correctly
+                if(question.optional === '0' && question.patient_answer.answer[0].answer_value === ""){
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /**
          * @name answerInvalid
          * @desc this function is used when the answer given by the user does not respect the required constraints
          * @param {object} question
@@ -835,25 +901,51 @@
          * @name handleSaveAnswerErr
          * @desc shows a notification to the user in case a request to server fails to save the answer
          *      and move the user back to the previous page
+         * @param {Object} error The original error object being handled.
          */
-        function handleSaveAnswerErr (){
-            NavigatorParameters.setParameters({Navigator: navigatorName});
+        function handleSaveAnswerErr(error) {
             navigator.popPage();
 
-            NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"));
+            if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"));
         }
 
         /**
          * @name handleLoadQuestionnaireErr
          * @desc shows a notification to the user in case a request to server fails to load the questionnaire
          *      and move the user back to the previous page
+         * @param {Object} error The original error object being handled.
          */
-        function handleLoadQuestionnaireErr (){
+        function handleLoadQuestionnaireErr(error) {
             // go to the questionnaire list page if there is an error
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+            if (error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR
+                || error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else if (error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER
+                || error?.Error?.Details === Params.BACKEND_ERROR_CODES.NOT_ALLOWED_TO_ANSWER) {
+                NativeNotification.showNotificationAlert(
+                    $filter('translate')("QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER"),
+                    $filter('translate')("TITLE"),
+                );
+            }
+            else NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_ALERT"));
         }
 
         /**
@@ -914,4 +1006,3 @@
     }
 
 })();
-

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function () {
     'use strict';
 
@@ -8,18 +12,22 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('QuestionnaireCompletionController', QuestionnaireCompletionController);
 
-    QuestionnaireCompletionController.$inject = ['NavigatorParameters'];
+    QuestionnaireCompletionController.$inject = ['$filter', '$scope', 'Navigator', 'Questionnaires'];
 
     /* @ngInject */
-    function QuestionnaireCompletionController(NavigatorParameters) {
+    function QuestionnaireCompletionController($filter, $scope, Navigator, Questionnaires) {
         var vm = this;
 
         // variables for controller
+        let purpose = 'default';
         let navigator = null;
-        let navigatorName = '';
+
+        vm.backToListMessage = '';  // the message varies according to the questionnaire purpose
+        vm.pageTitle = '';          // the page title varies according to the questionnaire purpose
+        vm.thankMessage = '';       // the message varies according to the questionnaire purpose
 
         // functions that can be seen from view, sorted alphabetically
         vm.goBackToList = goBackToList;
@@ -29,19 +37,53 @@
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
+
+            let params = Navigator.getParameters();
+
+            if (!params?.questionnairePurpose
+                || !Questionnaires.validateQuestionnairePurpose(params?.questionnairePurpose)
+            ) {
+                setPageText();
+                vm.loading = false;
+            } else {
+                purpose = params.questionnairePurpose.toLowerCase();
+                setPageText(purpose);
+                vm.loading = false;
+            }
         }
 
         /**
-         * goBackToList
-         * @desc this function allows the user to go back to the questionnaire list, it has the same use as back button
+         * @description Sends the user to the questionnaire list, either by popping the current page off the stack (same as the back button),
+         *              or by replacing the page (necessary if the user came from notifications).
          */
         function goBackToList() {
-            NavigatorParameters.setParameters({Navigator: navigatorName});
-            navigator.popPage();
+            let previousPage = Navigator.getPreviousPageName();
+            if (previousPage === 'questionnairesList.html') navigator.popPage();
+            else navigator.replacePage('views/personal/questionnaires/questionnairesList.html', {
+                questionnairePurpose: purpose,
+            });
+        }
+
+        /**
+         * @name setPageText
+         * @desc set the page title and descriptions according to the questionnaire purpose requested
+         *      if the purpose is not passed as an argument, the text will default to the default's translation
+         * @param {string} purpose
+         */
+        function setPageText(purpose = 'default') {
+            vm.pageTitle = $filter('translate')(
+                Questionnaires.getQuestionnaireTitleByPurpose(purpose)
+            );
+
+            vm.backToListMessage = $filter('translate')(
+                Questionnaires.getQuestionnaireBackToListByPurpose(purpose)
+            );
+
+            vm.thankMessage = $filter('translate')(
+                Questionnaires.getQuestionnaireThankByPurpose(purpose)
+            );
         }
     }
 
 })();
-

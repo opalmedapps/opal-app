@@ -1,0 +1,82 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="IndividualStudiesController as stud">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"STUDY"|translate}}</div>
+    </ons-toolbar>
+    <ons-row align="center" style="margin-left: 0.12vw; margin-top: 3.5vh">
+        <ons-col align="center">
+            <div class="container">
+
+                <div class="row text-center" style="margin: 0 auto;" align="center">
+                    <div class="col-xs-12">
+                        <h3><b><span style="color: darkmagenta" ng-class="fontSizeTitle">{{stud.study["title_" +
+                                    stud.language]}}</span></b>
+                        </h3>
+                    </div>
+                </div>
+                <div class="row text-center" style="margin: 0 auto;" align="center">
+                    <div class="col-xs-12">
+                        <span ng-hide="stud.hasEndDate || stud.hasStartDate"
+                            ng-class="fontSizeDesc"><b>{{"DOC_DATE_CREATED"|translate}}:
+                            </b>{{stud.study["creationDate"] | date:'longDate'}}</span></b>
+                        <span ng-show="stud.hasStartDate" ng-class="fontSizeDesc"><b>{{"DATE_START"|translate}}:
+                            </b>{{stud.study["startDate"] | date:'longDate'}}</span></b>
+                        <span ng-show="stud.hasEndDate" ng-class="fontSizeDesc"><br><b>{{"DATE_END"|translate}}:
+                            </b>{{stud.study["endDate"] | date:'longDate'}}</span></b>
+
+                        <span ng-class="fontSizeDesc"><br><br><b>{{"INVESTIGATOR"|translate}}:
+                            </b>{{stud.study["investigator"]}}</span>
+                        <span ng-if="stud.study['email']!==undefined"
+                            ng-class="fontSizeDesc"><br><b>{{"EMAIL"|translate}}: </b><a
+                                href="mailto:{{stud.study['email']}}">{{stud.study["email"]}}</a></span>
+                        <span ng-if="stud.study['phone']!==undefined"
+                            ng-class="fontSizeDesc"><br><b>{{"PHONE_NUMBER"|translate}}: </b><a
+                                href="tel:{{stud.study['phone']}}"> {{stud.study["phone"]|FormatPhoneNumber}}</a></span>
+                        <span ng-if="stud.study['phoneExt']!==undefined" ng-class="fontSizeDesc"> x
+                            {{stud.study["phoneExt"]}}</span>
+                    </div>
+                </div>
+                <br>
+                <ons-list style="margin: 0px 0">
+                    <ons-list-item modifier="chevron" class="item"
+                        ng-click="stud.goToQuestionnaire(stud.study['QuestionnaireSerNum'])">
+                        <ons-row align="center">
+                            <ons-col width="60px" style="text-align: center">
+                                <div>
+                                    <i class="fa-solid fa-file-signature fa18x" style="color: #7D3B82; margin-left: 8px"></i>
+                                </div>
+                            </ons-col>
+                            <ons-col>
+                                <header>
+                                    <span class="item-title" ng-class="fontSizeTitle">{{stud.study["QuestionnaireName_"
+                                        + stud.language]}}</span>
+                                </header>
+                            </ons-col>
+                        </ons-row>
+                    </ons-list-item>
+                </ons-list>
+                <div class="row text-center" style="margin: 0 auto;" align="center">
+                    <div class="col-xs-12">
+                        <p style="margin-top:2vh; margin-bottom:2vh" ng-class="fontSizeDesc">
+                            <b>
+                                <span style="color: darkmagenta">
+                                    {{"QUESTIONNAIRE_DESCRIPTION"|translate}}
+                                </span>
+                            </b>
+                            <span align="justify" ng-bind-html="stud.study['description_' + stud.language]"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ons-col>
+    </ons-row>
+    </div>
+</ons-page>

@@ -1,137 +1,108 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="CheckInController as checkIn">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button ng-class="fontSizeDesc">{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'CHECKIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <ons-list>
-        <ons-list-header class="person-list-header" ng-class="fontSizeTitle">
-            {{"APPOINTMENTS"|translate}}
+
+    <!-- LOADING CIRCLE-->
+    <loading-spinning-circle ng-if="checkIn.loadingPage" loading-message="{{'LOADING_APPOINTMENTS'|translate}}"></loading-spinning-circle>
+
+    <!-- ERROR -->
+    <div ng-if="checkIn.loadingError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="{{checkIn.errorAlertType}}">{{"LOADING_ERROR"|translate}}</uib-alert>
+    </div>
+
+    <!-- NO DATA -->
+    <div style="color:grey; margin-top:25vh; padding:10px" ng-show="checkIn.noAppointments && !checkIn.loadingPage && !checkIn.loadingError" align="center" ng-class="fontSizeTitle">
+        {{"CHECKIN_NONE"|translate}}
+    </div>
+
+    <ons-list ng-if="!checkIn.loadingPage && !checkIn.loadingError" ng-repeat="(patientSerNum, patient) in checkIn.displayApps">
+        <ons-list-header class="default-list-header" ng-class="fontSizeTitle" style="padding:10px;">
+            {{patient.patientHeader}}
         </ons-list-header>
-        <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
+        <ons-list-item modifier="tappable chevron" ng-repeat="app in patient.apps" ng-click="checkIn.goToAppointment(app)">
 
             <!-----------------------------------------------------------------
-            There is an ERROR when:
-                checkIn.alert.type contains a value, regardless of the value
-                  AND
-                app.Checkin == 0  (i.e. Checkin failed)
+            The appointment will show the status according to its checkin status,
+            including:
+                1. 'info': before checkin,
+                2. 'success': successful checkin,
+                3. 'warning': non-checkin-possible,
+                4. 'danger' : failed checkin
+            Checkin status is defined by appointment's attributes 'Checkin' and
+            'Checkinpossible'
             ------------------------------------------------------------------->
 
-            <ons-row>
-                <ons-col width="50px" align="center" style="text-align: center;">
-
-                    <i ng-if="app.CheckinPossible == 0" class="fa fa-exclamation-triangle fa-2x"
-                       style="color:#FF8F35;"></i>
-
-                    <div ng-show="checkIn.alert.type">
-                        <i ng-if="app.Checkin == 1 && app.CheckinPossible == 1" class="fa fa-check-square-o fa-2x"
-                           style="color:#4CAF50;"></i>
-
-                        <!--<i ng-if="app.Checkin == 0 && app.CheckinPossible == 1" class="fa fa-square-o fa-2x"-->
-                           <!--style="color:#4CAF50;"></i>-->
-
-                        <i ng-if="app.Checkin == 0 && app.CheckinPossible == 1" class="fa fa-times-circle fa-2x" style="color:red;"></i>
+            <ons-row style="margin-left: -5px">
+                <ons-col width="25%" align="center" style="margin-right: 5px; text-align: center;">
+                    {{app.ScheduledStartTime | date:'veryShortTime'}}
+                    <svg ng-if="app.loading" class="progress-circular-sm">
+                        <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none"
+                                stroke-width="10%"
+                                stroke-miterlimit="10"/>
+                    </svg>
+                    <!-- Never use a changing ng-if directly on a font-awesome icon to prevent issues caused by DOM-manipulation -->
+                    <div ng-if="app.CheckInStatus == 'success'">
+                        <i class="fa-solid fa-square-check fa-2x color-success"></i>
                     </div>
-
-                    <!--<div class="plan-date" ng-show="app.Checkin == 1 && (!app.CheckinPossible)">-->
-                    <!--<img src="./img/checkedbox.png" width="25px" height="25px">-->
-                    <!--</div>-->
-
-                    <!--<div class="plan-duration" ng-show="app.Checkin == 0 && !app.CheckinPossible">-->
-                    <!--<img src="./img/uncheckedbox.png" width="25px" height="25px">-->
-                    <!--</div>-->
-
+                    <div ng-if="app.CheckInStatus == 'warning'">
+                        <i class="fa-solid fa-triangle-exclamation fa-2x color-warning"></i>
+                    </div>
+                    <div ng-if="app.CheckInStatus == 'danger'">
+                        <i class="fa-solid fa-circle-xmark fa-2x color-error"></i>
+                    </div>
                 </ons-col>
-                <ons-col align="center">
-                    <div style="line-height:1;padding:5px;">
-                        <span ng-class="fontSizeTitle">
-                            <p ng-if="checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
-                                {{app["AppointmentType_" + checkIn.language]}}
-                            </p>
-                            <p ng-if="!checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
-                                {{app["ResourceDescription"]}}
-                            </p>
-                            {{app.ScheduledStartTime | date:'shortTime'}}
-                        </span>
-                        <p ng-show="app.RoomLocation_EN" class="item-desc" ng-class="fontSizeDesc" >
-                            {{"APPOINTMENT_ROOM"|translate}} {{app["RoomLocation_" + checkIn.language]}}
+                <ons-col width="1%" > <div class="{{checkIn.separatorStatus[app.CheckInStatus]}}"></div></ons-col>
+                <ons-col>
+                    <div class="appointment-content">
+                        <span ng-class="fontSizeTitle">{{app['AppointmentType_' + checkIn.language]}}</span>
+
+                        <p ng-if="app['RoomLocation_'+checkIn.language]" class="item-desc" ng-class="fontSizeDesc" >
+                            {{app["RoomLocation_" + checkIn.language]}}
                         </p>
 
-                        <p ng-if="app.CheckinPossible == 0" class="item-desc" ng-class="fontSizeDesc" style="color:#FF803E;"
-                           ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
+                        <p ng-if="app.CheckInStatus == 'warning'" class="item-desc" ng-class="fontSizeDesc" style="color:#FF803E;"
+                           ng-bind-html="app['CheckinInstruction_' + checkIn.language] | trustHTML">
                         </p>
 
                         <p></p>
 
-
-                        <!-- Show Circle - Please Wait - while trying to Checkin -->
-                        <div ng-hide="checkIn.alert.type" ng-if="app.CheckinPossible == 1" align="center" style="margin:10px">
-                            <p class="item-desc" ng-class="fontSizeDesc" style="text-align: center; color: #2196F3;">
-                                {{"CHECKIN_PROCESSING"|translate}}
-                            </p>
-                            <svg class="progress-circular">
-                                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none"
-                                        stroke-width="10%"
-                                        stroke-miterlimit="10"/>
-                            </svg>
-                        </div>
-
                         <!-- Successful Checkin -->
-                        <div ng-show="checkIn.alert.type" ng-if="app.Checkin == 1 && app.CheckinPossible == 1">
-                            <span class="item-desc" ng-class="fontSizeDesc">
-                                {{"CHECKED_IN"|translate}}
-                            </span>
-
+                        <div ng-if="app.CheckInStatus == 'success'">
                             <span class="item-desc" ng-class="fontSizeDesc"
-                                  ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
+                                  ng-bind-html="app['CheckinInstruction_' + checkIn.language] | trustHTML">
                             </span>
                         </div>
 
                         <!-- Show the waiting Room when: Non-Checkinable appointment OR Successful Checked-in Appointment -->
-                        <div ng-if="app.CheckinPossible == 0 || (checkIn.alert.type && app.Checkin == 1 && app.CheckinPossible == 1)">
+                        <div ng-if="['warning', 'success'].indexOf(app.CheckInStatus) > -1">
                             <p></p>
-                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.MapName_EN">
+                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="app['MapName_' + checkIn.language]">
                                 {{"WAITING_ROOM"|translate}} {{app["MapName_" + checkIn.language]}}
                             </p>
                         </div>
 
                         <!-- An Error Occurred - Unsuccessful Checkin -->
-                        <div ng-show="checkIn.alert.type" ng-if="app.Checkin == 0 && app.CheckinPossible == 1">
-                            <span class="item-desc" ng-class="fontSizeDesc" style="color: red;">
-                                {{"CHECKIN_ERROR"|translate}}
+                        <div ng-if="app.CheckInStatus == 'danger'">
+                            <span class="item-desc color-error" ng-class="fontSizeDesc">
+                                {{"CHECKIN_ERROR_ONE"|translate}}
                             </span>
                         </div>
                     </div>
                 </ons-col>
             </ons-row>
         </ons-list-item>
-    </ons-list>
-
-
-    <!-- If there is an ERROR, the following will show an error message. -->
-    <!-- This Code may never be executed because checkIn.error may never return ERROR because of changes to the Listener
-         that do not return an ERROR anymore.
-         We assume there is an error when:
-                checkIn.alert.type contains a value, regardless of the value
-                  AND
-                app.Checkin == 0  (i.e. Checkin failed)
-         -->
-
-    <ons-list ng-if="checkIn.error">
-        <ons-list-item>
-            <ons-row>
-                <ons-col width="50px" align="center" style="text-align: center;">
-                    <i ng-if="checkIn.error" class="fa fa-times-circle fa-2x" style="color:red;"></i>
-                </ons-col>
-
-                <ons-col>
-                    <p ng-if="checkIn.error" style="color: red;" class="item-desc" ng-class="fontSizeDesc">
-                        {{"CHECKIN_ERROR"|translate}}
-                    </p>
-                </ons-col>
-            </ons-row>
+        <ons-list-item ng-if="!patient.allCheckedIn" class="item-btn">
+            <ons-button ng-class="fontSizeTitle" class="checkin-btn"
+                        ng-click="checkIn.checkIntoAppointments(patientSerNum)"
+                        ng-disabled="checkIn.patientHasAppointmentLoading(patient)">
+                {{"CHECKIN_ALL_TODAY"|translate}}
+            </ons-button>
         </ons-list-item>
     </ons-list>
 </ons-page>

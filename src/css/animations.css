@@ -1,0 +1,94 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+
+@-webkit-keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+
+/* Not sure the spinning animation is still used */
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+@-webkit-keyframes spinw {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@-moz-keyframes spinm {
+    from { -moz-transform: rotate(0deg);}
+    to { -moz-transform: rotate(360deg);}
+}
+
+@keyframes pulsate {
+    0% {
+      transform: scale(1, 1);
+    }
+    100% {
+      transform: scale(1.2, 1.2);
+    }
+}
+
+@keyframes expand_line {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes scale {
+    0%, 100% {
+        transform: none;
+    }
+    50% {
+        transform: scale3d(1.1, 1.1, 1);
+    }
+}
+
+@keyframes fill {
+    100% {
+        box-shadow: inset 0 0 0 30px #7ac142;
+    }
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeOut {
+    from {opacity: 0.85;}
+    to {opacity: 0; display: none }
+}
+
+@keyframes fadeOut {
+    from {opacity: 0.85;}
+    to {opacity: 0 ; display: none}
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 0.85;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 0.85 ;}
+}

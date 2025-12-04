@@ -1,94 +1,104 @@
-<ons-page style="background-color: white" ng-controller="ChangeSettingController as csc" ng-cloak>
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{csc.title|translate}} </div>
-    </ons-toolbar>
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
 
-    <div style="margin-top: 3%; margin-bottom: 3%; text-align: center">
-        <p ng-show="csc.newUpdate" ng-class="csc.alertClass" >{{csc.updateMessage|translate}}</p>
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page style="background-color: white" ng-controller="ChangeSettingController as Ctrl" ng-cloak>
+    <generic-toolbar title="{{Ctrl.title|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+
+    <!-- PASSWORD CHANGE -->
+    <div class="container" ng-show="Ctrl.value === 'PASSWORD'">
+        <p class="change-password--header" ng-class="fontSizeTitle" translate="{{Ctrl.instructionOld}}"></p>
+        <div class="change-password--div style-4">
+            <password-input>
+                <input
+                id="currentPassword"
+                ng-minlength="1"
+                type="password"
+                ng-class="fontSizeDesc"
+                placeholder="{{'ENTER_OLD_PASSWORD_PLACEHOLDER' | translate}}"
+                ng-model="Ctrl.oldValue"
+                ng-change="Ctrl.passwordFieldChange()">
+            </password-input>
+        </div>
+        <div>
+            <p class="change-password--header" ng-class="fontSizeTitle" translate="{{Ctrl.instruction}}"></p>
+            <p class="change-password--instructions" ng-class="fontSizeDesc">{{"RESET_INSTRUCTIONS" | translate}}</p>
+            <div class="change-password--div style-4">
+                <!-- NEW PASSWORD INPUT -->
+                <password-input>
+                    <input
+                    id="newPassword"
+                    ng-minlength="1"
+                    type="password"
+                    ng-class="fontSizeDesc"
+                    class="style-4"
+                    placeholder="{{'SET_NEW_PASSWORD_PLACEHOLDER' | translate}}"
+                    ng-model="Ctrl.newValue"
+                    ng-change="Ctrl.passwordFieldChange()">
+                </password-input>
+                <password-strength-checker
+                    password="Ctrl.newValue"
+                    is-valid="Ctrl.passwordIsValid"
+                    error-message-keys="Ctrl.passwordErrors">
+                </password-strength-checker>
+                <p class="change-password--field-error" ng-class="fontSizeDesc" ng-if="Ctrl.passwordErrors">
+                    {{Ctrl.passwordErrors[0] | translate}}
+                </p>
+
+                <!-- NEW PASSWORD CONFIRMATION -->
+                <password-input>
+                    <input
+                    id="passwordConfirmation"
+                    ng-minlength="1"
+                    type="password"
+                    ng-class="fontSizeDesc"
+                    class="style-4"
+                    placeholder="{{'REENTER_PASSWORD_PLACEHOLDER' | translate}}"
+                    ng-model="Ctrl.newValueValidate"
+                    ng-change="Ctrl.passwordFieldChange()">
+                </password-input>
+                <p class="change-password--field-error" ng-class="fontSizeDesc" ng-if="Ctrl.newValueValidate && Ctrl.passwordConfirmationInvalid()">
+                    {{"PASSWORD_INVALID_MATCH" | translate}}
+                </p>
+
+                <!-- NEW PASSWORD SUBMIT BUTTON -->
+                <button class="change-password--submit-button button button--large" ng-disabled="Ctrl.disableButton" ng-click="Ctrl.changePassword()">
+                    {{"UPDATE_PASSWORD_BUTTON"|translate}}
+                </button>
+
+                <!-- ERROR MESSAGE -->
+                <div ng-show="Ctrl.alert.message" align="center" style="margin: 10px auto 0" ng-class="fontSizeDesc">
+                    <uib-alert style="margin: 0" type="{{Ctrl.alert.type}}">{{Ctrl.alert.message|translate}}</uib-alert>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="container" ng-show="csc.personal">
-
-        <div ng-show="csc.value=='PASSWORD'||csc.value=='EMAIL'">
-            <div>
-                <p ng-class="fontSizeTitle" translate ="{{csc.instructionOld}}"></p>
-            </div>
-
-            <div class="style-4" style="width: 100%;">
-                <input ng-minlength="1" type="{{csc.type2}}" ng-class="fontSizeDesc" placeholder="{{csc.placeHolder}}" value="{{csc.valueLabel|translate}}" ng-model="csc.oldValue" ng-change="csc.evaluate()">
-            </div>
-
+    <ul class="list">
+        <!-- LANGUAGE CHANGE -->
+        <div ng-show="Ctrl.value === 'LANGUAGE'">
+            <li class="list__header" translate ="{{Ctrl.instruction}}" ng-class="fontSizeDesc"></li>
+            <li  class="list__item list__item--tappable" ng-repeat="option in Ctrl.settingsLanguageOptions">
+                <label class="radio-button radio-button--list-item">
+                    <input ng-change="Ctrl.changeLanguage(option)" ng-model="Ctrl.pickLanguage" type="radio" value="{{option}}">
+                    <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescLarge"></div>
+                    {{option}}
+                </label>
+            </li>
         </div>
 
-        <div style="margin-top: 5vh">
-            <div>
-                <p ng-class="fontSizeTitle" translate ="{{csc.instruction}}"></p>
-                <small style = "color: red; margin-bottom: 30px" ng-show="csc.value=='PASSWORD'" ng-class="fontSizeDesc"> {{"RESETINSTRUCTIONS" | translate}} </small>
-            </div>
-
-            <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
-                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue" ng-change="csc.evaluate()">
-            </div>
-
-            <br>
-
-            <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
-                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{ csc.inputInstruction |translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValueValidate" ng-change="csc.evaluate()">
-            </div>
-
-            <div class="style-4" style="width: 100%;" ng-show="csc.value =='PHONENUMBER'" >
-                <input phone-input type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue" ng-change="csc.evaluate()">
-            </div>
+        <!-- FONT SIZE CHANGE -->
+        <div ng-show="Ctrl.value === 'FONTSIZE'">
+            <li class="list__header" translate ="{{Ctrl.instruction}}" ng-class="fontSizeDesc"></li>
+            <li class="list__item list__item--tappable" ng-repeat="option in Ctrl.settingFontOptions">
+                <label  class="radio-button radio-button--list-item">
+                    <input ng-change="Ctrl.changeFont(option.size)" ng-model="Ctrl.pickFont" type="radio" value="{{option.size}}">
+                    <div class="radio-button__checkmark radio-button--list-item__checkmark" ng-class="option.style"></div>
+                    <span ng-class="option.style">{{option.text | translate}}</span >
+                </label>
+            </li>
         </div>
-
-        <div class="container" style="margin-top:10px">
-            <button class="button button--large" ng-disabled="csc.disableButton" ng-click="csc.updateValue(csc.value)" style="margin: 0 auto;">{{"UPDATEPASSWORDBUTTON"|translate}}</button><br>
-        </div>
-    </div>
-
-    <div ng-hide="csc.personal">
-        <ul class="list">
-            <li class="list__header" translate ="{{csc.instruction}}" ng-class="fontSizeDesc"></li>
-            <div  ng-hide="csc.fontUpdated">
-                <li class="list__item list__item--tappable" >
-                    <label  class="radio-button radio-button--list-item">
-                        <input ng-change="csc.changeLanguage('EN')" ng-model="csc.pickLanguage" type="radio" value="{{csc.firstOption}}" name="b" >
-                        <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescMedium"></div>
-                        EN
-                    </label>
-                </li>
-                <li  class="list__item list__item--tappable" >
-                    <label  class="radio-button radio-button--list-item">
-                        <input ng-change="csc.changeLanguage('FR')" ng-model="csc.pickLanguage" type="radio" value="{{csc.secondOption}}" name="b">
-                        <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescLarge"></div>
-                        FR
-                    </label>
-                </li>
-            </div>
-            <div ng-show="csc.fontUpdated">
-                <li  class="list__item list__item--tappable" >
-                    <label  class="radio-button radio-button--list-item">
-                        <input ng-change="csc.changeFont('medium')" ng-model="csc.pickFont" type="radio" value="{{csc.firstOption}}" name="b" >
-                        <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescMedium"></div>
-                        <span class="fontDescMedium">{{"SMALL"|translate}}</span>
-                    </label>
-                </li>
-                <li class="list__item list__item--tappable" >
-                    <label  class="radio-button radio-button--list-item">
-                        <input ng-change="csc.changeFont('large')" ng-model="csc.pickFont" type="radio" value="{{csc.secondOption}}" name="b">
-                        <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescLarge"></div>
-                        <span class="fontDescLarge">{{"MEDIUM"|translate}}</span >
-                    </label>
-                </li>
-                <li class="list__item list__item--tappable" >
-                    <label  class="radio-button radio-button--list-item">
-                        <input ng-change="csc.changeFont('xlarge')" ng-model="csc.pickFont" type="radio" value="{{csc.thirdOption}}" name="b">
-                        <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescXlarge"></div>
-                        <span class="fontDescXlarge">{{"LARGE"|translate}}</span >
-                    </label>
-                </li>
-            </div>
-        </ul>
-    </div>
+    </ul>
 </ons-page>

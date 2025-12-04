@@ -1,41 +1,33 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2018 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="AppointmentController as vm">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center">{{"INFO"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'INFO'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <div>
         <ons-list class="settings-list">
             <ons-list-item class="item">
                 <div style="line-height:1" align="left">
-                    <header>
+                    <header style="margin-bottom: 10px">
                         <span class="item-title"
                               ng-class="fontSizeTitle">{{vm.app["AppointmentType_" + vm.language]}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc"
-                       ng-bind-html="vm.app['AppointmentDescription_' + vm.language]">
+                       ng-bind-html="vm.app['AppointmentDescription_' + vm.language] | trustHTML">
                     </p>
                 </div>
             </ons-list-item>
 
-            <ons-list-item modifier="chevron" ng-class="fontSizeDesc" ng-click="vm.moreEducationalMaterial()"
-                           ng-show="vm.app['URL_' + vm.language] != ''" style="background-color: #fde2ed" tappable>
+            <ons-list-item modifier="chevron" class="item dark-chevron" ng-class="fontSizeDesc" ng-click="vm.moreEducationalMaterial()"
+                           ng-show="vm.app['URL_' + vm.language]" style="background-color: #fde2ed" tappable>
                 <ons-row style="padding:0;margin:0;">
                     <ons-col>
                         {{"MORE_EDU_MATERIAL" | translate}}
                     </ons-col>
-                    <!--<ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 3.5%" class="pull-right"-->
-                              <!--size="1.2em"></ons-icon>-->
                 </ons-row>
             </ons-list-item>
-
-            <!--<ons-list-item tappable ng-click="vm.moreEducationalMaterial()"-->
-            <!--ng-show="vm.app['URL_' + vm.language] != ''">-->
-            <!--<button class="button button&#45;&#45;large&#45;&#45;quiet">-->
-            <!--{{"MORE_EDU_MATERIAL"|translate}}-->
-            <!--</button>-->
-            <!--</ons-list-item>-->
         </ons-list>
     </div>
 </ons-page>

@@ -1,21 +1,22 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   appointmentController.spec.js
  * Description  :   Tests the appointmentController
  * Created by   :   James Brace
  * Date         :   25 Sept 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 "use strict";
 describe('AppointmentController', function() {
     beforeEach(function() {spyOn(ons, 'isWebView').and.returnValue(true)});
-    beforeEach(module('MUHCApp'));
+    beforeEach(module('OpalApp'));
 
     var $controller;
     var controller;
-    var NavigatorParameters;
+    var Navigator;
     var UserPreferences;
     var $scope;
     var $timeout;
@@ -23,9 +24,9 @@ describe('AppointmentController', function() {
 
     var isCorrupted = false;
 
-    beforeEach(inject(function(_$controller_, _NavigatorParameters_, _UserPreferences_, _$timeout_){
+    beforeEach(inject(function(_$controller_, _Navigator_, _UserPreferences_, _$timeout_){
 
-        NavigatorParameters= _NavigatorParameters_;
+        Navigator= _Navigator_;
         UserPreferences = _UserPreferences_;
         $timeout = _$timeout_;
         $window = {
@@ -41,18 +42,15 @@ describe('AppointmentController', function() {
             return 'EN';
         } );
 
-
-        spyOn( NavigatorParameters, 'setParameters').and.returnValue(true);
-
         if(!isCorrupted){
-            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Navigator: 'navigator', Post: MockData.test_appointments[0]});
+            spyOn( Navigator, 'getParameters').and.returnValue({Post: MockData.test_appointments[0]});
 
         } else {
-            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Navigator: 'navigator', Post: {}});
+            spyOn( Navigator, 'getParameters').and.returnValue({Post: {}});
         }
 
         $controller = _$controller_;
-        controller = $controller('AppointmentController', { NavigatorParameters: NavigatorParameters, $scope: $scope, UserPreferences: _UserPreferences_, $window: $window});
+        controller = $controller('AppointmentController', { Navigator: Navigator, $scope: $scope, UserPreferences: _UserPreferences_, $window: $window});
 
     }));
 
@@ -74,16 +72,6 @@ describe('AppointmentController', function() {
 
             isCorrupted = false;
         });
-    });
-
-    it('goes to map', function() {
-        var spy = spyOn($window.navigator, 'pushPage');
-        controller.goToMap();
-        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
-        expect(NavigatorParameters.setParameters).toHaveBeenCalledWith(controller.app);
-        expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledWith('./views/general/maps/individual-map.html')
-
     });
 
     it('goes to about appointment', function() {

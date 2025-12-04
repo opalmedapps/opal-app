@@ -1,17 +1,16 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   aboutController.js
  * Description  :   Manages the about view.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   18 Apr 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
-
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: AboutController
  *  @description
  *
  *  Manages the about view.
@@ -20,51 +19,31 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences',
+    AboutController.$inject = ['UserPreferences', 'Navigator', 'Params', 'UserHospitalPreferences',
         'Browser', 'DynamicContent'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser,
+    function AboutController(UserPreferences, Navigator, Params, UserHospitalPreferences, Browser,
                              DynamicContent) {
         const vm = this;
+        var navigator = null;
 
         vm.openUrl = openUrl;
-        vm.openTeam = openTeam;
-        vm.openCedars = openCedars;
-        vm.allowedModules = {};
+        vm.openTechnicalLegal = () => navigator.pushPage('views/init/technical-legal.html');
+        vm.openTour = () => navigator.pushPage('views/home/tour/tour.html');
 
         let parameters;
-        let navigatorName;
-        let isBeforeLogin = true;
 
         activate();
 
         ////////////////
 
         function activate() {
-
-            parameters = NavigatorParameters.getParameters();
-            navigatorName = parameters.Navigator;
-
-            /**
-             * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
-             * Different modules are enabled depending on whether it is called before or after login
-             * the parameter isBeforeLogin determines whether the page is called before login or after
-             * if the parameter isBeforeLogin is not passed, default to true
-             */
-            if (parameters.hasOwnProperty('isBeforeLogin')){
-                isBeforeLogin = parameters.isBeforeLogin;
-            }
-
-            // set the modules which are allowed to display depending on whether the user has logged in or not
-            if (isBeforeLogin){
-                vm.allowedModules = UserHospitalPreferences.getAllowedModulesBeforeLogin();
-            } else {
-                vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
-            }
+            parameters = Navigator.getParameters();
+            navigator = Navigator.getNavigator();
 
             vm.language = UserPreferences.getLanguage();
         }
@@ -72,21 +51,6 @@
         function openUrl(contentKey, openInExternalBrowser = false) {
             const url = DynamicContent.getURL(contentKey);
             openInExternalBrowser ? Browser.openExternal(url) : Browser.openInternal(url);
-        }
-
-        /**
-         * navigatorName = 'initNavigator' or 'homeNavigator'
-         * navigatorName = 'initNavigator' when about.html is called from init-Screen.html (initScreenController)
-         * navigatorName = 'homeNavigator' when about.html is called from home.html (homeController)
-         *
-         * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
-         */
-        function openTeam() {
-            window[navigatorName].pushPage('views/templates/content.html', {contentType: 'hig'});
-        }
-
-        function openCedars() {
-            window[navigatorName].pushPage('views/home/about/cedars.html');
         }
     }
 })();

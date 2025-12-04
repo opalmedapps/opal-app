@@ -1,0 +1,35 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page style="background-color: white" ng-controller="PatientsController as Ctrl" ng-cloak>
+    <generic-toolbar title="{{'RELATIONSHIPS_PATIENTS'|translate}}" style-class="fontSizeTitle">
+        <right-content>
+            <ons-toolbar-button ng-click="Ctrl.goToPatientsInfo()">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
+
+    <div ng-if="Ctrl.message" class="container" align="center">
+        <p style="margin-top:25vh;color:grey">{{Ctrl.message|translate}}</p>
+    </div>
+
+    <ons-list ng-if="!Ctrl.message">
+        <ons-list-item ng-repeat="patient in Ctrl.patients" class="item">
+            <ons-row align="center">
+                <div class="patient-content">
+                    <div class="patient-content--icon" ng-style="{'background-color': patient.color}">
+                        <span class="profile-icon">{{patient | profileInitials}}</span>
+                    </div>
+                    <div class="patient-content--text">
+                        <p ng-class="fontSizeTitle">{{patient.first_name}} {{patient.last_name}}</p>
+                        <p class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate}} {{Ctrl.getRelationshipStatusText(patient.status) | translate | lowercase}} ({{patient.relationship_type_name}})</p>
+                    </div>
+                </div>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+</ons-page>

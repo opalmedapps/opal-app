@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
@@ -9,23 +13,27 @@
  *           Developed by Tongyou (Eason) Yang in Summer 2018
  *           Merged by Stacey Beard
  *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
+ *
+ * 2020 Jul: Project: Research Menu --> Education material now categorized as 'clinical' or 'research', which are
+ *                    displayed in Education tab or Research menu, respectively.
+ *           Developed by Kayla O'Sullivan-Steben
  */
 
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('EducationalMaterialController', EducationalMaterialController);
 
-    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus',
-        'Patient', 'Logger', 'UserHospitalPreferences'];
+    EducationalMaterialController.$inject = ['Navigator', '$scope', 'EducationalMaterial',
+        'Logger', '$filter', 'Notifications', 'Params'];
 
     /* @ngInject */
-    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus,
-                                           Patient, Logger, UserHospitalPreferences) {
-        var vm = this;
-        var backButtonPressed = 0;
+    function EducationalMaterialController(Navigator, $scope, EducationalMaterial,
+                                           Logger, $filter, Notifications, Params) {
+        let vm = this;
+        let navigator;
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
@@ -33,77 +41,59 @@
         // Variable to toggle visibility of the 'no materials' text. Default is false to avoid errors.
         vm.noMaterials = false;
 
-        // variable to let the user know which hospital they are logged in
-        vm.selectedHospitalToDisplay = "";
-        
+        // Variable containing filtered educational materials
+        vm.filteredEduMaterials;
+
+        // Variables to store the current category of material (clinical or research) and corresponding page title
+        vm.eduCategory = '';
+        vm.pageTitle = '';
+
         vm.goToEducationalMaterial = goToEducationalMaterial;
-        vm.educationDeviceBackButton = educationDeviceBackButton;
+        vm.openInfoPage = openInfoPage;
 
-        // Function used to filter the materials shown based on the search string
-        vm.filterMaterial = filterMaterial;
-
-        // Function to show data and time header
-        vm.showHeader = showHeader;
+        // Used by patient-data-handler
+        vm.configureState = configureState;
 
         activate();
         ///////////////////////////////////
 
         function activate(){
-            NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
-
-            bindEvents();
-            configureState();
-            configureSelectedHospital();
+            navigator = Navigator.getNavigator();
+            setEduCategory();
         }
 
         function initData() {
             vm.noMaterials = false;
             // Full list of educational materials in the right language.
-            vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
+            vm.edumaterials = EducationalMaterial.setLanguage(
+                EducationalMaterial.getEducationalMaterial(vm.eduCategory)
+            );
             // Educational materials filtered based on the search string.
-            vm.filteredEduMaterials = vm.edumaterials;
+            vm.filteredEduMaterials = $filter('orderBy')(vm.edumaterials, '-DateAdded');
         }
 
-        function educationDeviceBackButton(){
-            tabbar.setActiveTab(0);
+        /**
+         * @name setEduCategory
+         * @desc Sets the education material category based on navigator parameters (defaults to clinical)
+         */
+         function setEduCategory(){
+            let navigatorParams = Navigator.getParameters();
+
+            // Set category if specified in Navigator, otherwise defaults to clinical
+            vm.eduCategory  = navigatorParams.category || 'clinical';
+
+            // Set corresponding page title and no material message
+            vm.pageTitle = EducationalMaterial.getEducationalMaterialTitle(vm.eduCategory);
         }
 
         function configureState() {
-            if(EducationalMaterial.materialExists()) {
+            if(EducationalMaterial.materialExists(vm.eduCategory)) {
                 initData();
             } else {
                 vm.noMaterials = true;
             }
         }
 
-        /**
-         * @name configureSelectedHospital
-         * @desc Set the hospital name to display
-         */
-        function configureSelectedHospital() {
-            vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
-        }
-
-        function bindEvents() {
-            educationNavigator.on('prepop',function()
-            {
-                backButtonPressed = 0;
-                configureState();
-            });
-
-            educationNavigator.on('prepush', function(event) {
-                if (educationNavigator._doorLock.isLocked()) {
-                    event.cancel();
-                }
-            });
-
-            //Cleaning up
-            $scope.$on('$destroy',function()
-            {
-                educationNavigator.off('prepop');
-            });
-        }
-        
         /**
          * @method goToEducationalMaterial
          * @description If not read reads material, then it opens the material into its individual controller
@@ -115,55 +105,32 @@
             Logger.logClickedEduMaterial(edumaterial.EducationalMaterialControlSerNum);
 
             // If the material was unread, set it to read.
-            if(edumaterial.ReadStatus == 0){
-                edumaterial.ReadStatus = 1;
-                EducationalMaterial.readMaterial(edumaterial.EducationalMaterialSerNum);
+            if (edumaterial.ReadStatus === '0')
+            {
+                EducationalMaterial.readEducationalMaterial(
+                    edumaterial.EducationalMaterialSerNum
+                );
+
+                // Mark corresponding notifications as read
+                Notifications.implicitlyMarkCachedNotificationAsRead(
+                    edumaterial.EducationalMaterialSerNum,
+                    Params.NOTIFICATION_TYPES.EducationalMaterial,
+                );
             }
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
-            NavigatorParameters.setParameters({ 'Navigator': 'educationNavigator', 'Post': edumaterial, 'RStep':1 });
-            educationNavigator.pushPage('./views/education/individual-material.html');
-        }
-
-        // Function used to filter the materials shown based on the search string.
-        // Author: Tongyou (Eason) Yang
-        function filterMaterial() {
-
-            var searchString_parts = vm.searchString.toLowerCase().split(" ");//split into different parts
-
-            var filtered = [];//generate new show list for educational material
-            vm.edumaterials.forEach(function(edumaterial){
-
-                var name_no_space = edumaterial.Name.replace(/\s/g, '').toLowerCase();
-                var show = true;
-                searchString_parts.forEach(function(part){
-                    if(!name_no_space.includes(part)){
-                        show = false;
-                    }
-                });
-
-                if(show){
-                    filtered.push(edumaterial);
-                }
-
+            navigator.pushPage('./views/personal/education/individual-material.html', {
+                'Post': edumaterial,
+                'RStep': 1,
             });
-
-            vm.filteredEduMaterials = filtered;//assign to new show list
         }
 
-
-        function showHeader(index) {
-            if (index === vm.filteredEduMaterials.length - 1) return true;
-            var current = (new Date(vm.filteredEduMaterials[index].DateAdded)).setHours(0, 0, 0, 0);
-            var previous = (new Date(vm.filteredEduMaterials[index + 1].DateAdded)).setHours(0, 0, 0, 0);
-            return current !== previous;
+        /**
+         * @name openInfoPage
+         * @desc Open info page (currently only on education tab)
+         */
+         function openInfoPage() {
+            navigator.pushPage('views/tabs/info-page-tabs.html', {id: 'education'});
         }
     }
 })();
-
-
-
-
-
-
-

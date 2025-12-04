@@ -1,30 +1,44 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="DocumentsController as docs">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"CLINICAL_NOTES"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'CLINICAL_REPORTS'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <div>
+
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="docs.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="Documents"
+                          display-function="docs.setDocumentsView"
+                          refresh="docs.pullHookRefresh"
+                          hide-content="docs.hideContent"
+    ></patient-data-handler>
+
+    <div ng-hide="docs.hideContent">
         <div style="color:grey;margin-top:25vh" ng-show="docs.noDocuments" align="center" ng-class="fontSizeTitle">
-            {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
+            {{"NO_PATIENT_DOCUMENTS_AVAILABLE"|translate}}
         </div>
         <ons-list ng-repeat="doc in docs.documents" ng-click="docs.goToDocument(doc)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="docs.showHeader($index)">
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ docs.documents | showHeader : $index : 'CreatedTimeStamp' }}">
                 {{doc.CreatedTimeStamp|date:'longDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron">
 
                 <ons-row align="center" >
-                    <ons-col width="60px" align="center">
-                        <div style="margin-left:10px">
-                            <i class="ion-android-document iconHomeView" style="color:{{doc.ColorTag}}"></i><span class="notification" ng-if="doc.ReadStatus==='0'">&nbsp;</span>
-                        </div>
+                    <ons-col width="60px" class="ons-col-icon">
+                        <i class="fa-solid fa-file fa16x" style="color:{{doc.ColorTag}}"></i>
                     </ons-col>
                     <ons-col style="word-wrap: break-word;">
                         <div style="line-height:1;padding:5px;" >
-                            <span ng-class="fontSizeTitle"> <strong>{{doc.Title}}</strong></span> <br>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': doc.ReadStatus==='0'}]">
+                                {{doc.Title}}<br>
+                            </span>
                             <span class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{doc.CreatedTimeStamp|date:'shortTime'}}</span>
                         </div>
                     </ons-col>

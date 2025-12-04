@@ -1,80 +1,61 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   cleanUpService.js
  * Description  :   Clears all the app data on New Login so there are no inconsistencies.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   08 Mar 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('CleanUp', CleanUp);
 
-    CleanUp.$inject = ['UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
-        'Appointments', 'Patient', 'Doctors', 'TxTeamMessages', 'Questionnaires',
+    CleanUp.$inject = ['ConcurrentLogin', 'User', 'UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
+        'Appointments', 'TxTeamMessages', 'Questionnaires',
         'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
-        'UpdateUI', 'Tasks', 'PlanningSteps', 'PatientTestResults', 'CheckInService', 
-        'Constants'];
+        'UpdateUI', 'PatientTestResults', 'CheckInService', 'ProfileSelector'];
 
-    function CleanUp(UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
-                     Appointments, Patient, Doctors, TxTeamMessages, Questionnaires,
+    function CleanUp(ConcurrentLogin, User, UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
+                     Appointments, TxTeamMessages, Questionnaires,
                      Announcements, EducationalMaterial, Notifications, UserPreferences,
-                     UpdateUI, Tasks, PlanningSteps, PatientTestResults, CheckInService, Constants) {
-        var service = {
+                     UpdateUI, PatientTestResults, CheckInService, ProfileSelector) {
+        let service = {
             clear: clear,
             clearSensitive: clearSensitive
         };
         return service;
-        
+
         ////////////////
-        
-        function clear() {    
+
+        function clear() {
             PatientTestResults.clear();
             LocalStorage.resetUserLocalStorage();
-            Tasks.destroy();
-            PlanningSteps.destroy();
             Documents.clearDocuments();
-            Documents.deleteDocumentsDownloaded();  // delete documents downloaded to be viewed on Android (view in external viewer option)
+            Documents.deleteDocumentsDownloaded(); // delete documents downloaded to be shared or viewed on Android (open in external viewer option)
             Diagnoses.clearDiagnoses();
             Appointments.clearAppointments();
-            Patient.clearPatient();
-            Doctors.clearDoctors();
             TxTeamMessages.clearTxTeamMessages();
             Questionnaires.clearAllQuestionnaire();
             Announcements.clearAnnouncements();
             EducationalMaterial.clearEducationalMaterial();
             Notifications.clearNotifications();
+            User.clearUserData();
             UserPreferences.clearUserPreferences();
             UserAuthorizationInfo.clearUserAuthorizationInfo();
             UpdateUI.clearUpdateUI();
             CheckInService.clear();
-
-            /**
-             * Delete All Cookies
-             */
-            if (Constants.app) {
-                window.cookieMaster.clear(
-                    function () {
-                        console.log('Cookies have been cleared');
-                    },
-                    function () {
-                        console.log('Cookies could not be cleared');
-                    });
-            }
+            ConcurrentLogin.clearConcurrentLogin();
+            ProfileSelector.clearProfile();
         }
 
         function clearSensitive() {
             PatientTestResults.clear();
-            Documents.clearDocumentContent();
         }
-
-
     }
-
 })();
-

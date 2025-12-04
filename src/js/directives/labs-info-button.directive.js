@@ -1,11 +1,15 @@
+// SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function () {
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("labsInfoButton", LabsInfoButton);
 
-    LabsInfoButton.$inject = ['NavigatorParameters'];
+    LabsInfoButton.$inject = ['Navigator'];
 
     /**
      * @name LabsInfoButton
@@ -14,7 +18,7 @@
      * @desc Directive for the lab results info button.
      * @example <labs-info-button></labs-info-button>
      */
-    function LabsInfoButton(NavigatorParameters)
+    function LabsInfoButton(Navigator)
     {
         let directive = {
             restrict: 'E',
@@ -36,7 +40,7 @@
                  */
                 function goToInfoPage()
                 {
-                    let navigator = NavigatorParameters.getNavigator();
+                    let navigator = Navigator.getNavigator();
                     navigator.pushPage('./views/personal/test-results/test-results-info.html', {});
                 }
             }

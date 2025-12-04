@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @description Service that handles opening browser links (in-app or externally) with the right parameters.
  * @author Stacey Beard
@@ -7,12 +11,12 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('Browser', Browser);
 
-    Browser.$inject = ['$filter', 'Constants', 'NewsBanner'];
+    Browser.$inject = ['$filter', 'Constants', 'Toast'];
 
-    function Browser($filter, Constants, NewsBanner) {
+    function Browser($filter, Constants, Toast) {
 
         return {
             openInternal: openInternal,
@@ -29,7 +33,7 @@
          * @date 2021-06-23
          * @param {string} url - The link to open.
          * @param {boolean} [hideURL] - Whether to hide the location bar that shows the URL in the in-app browser.
-         *                              Set this to true to show content where the link isn't relevant (e.g. an image on DepDocs).
+         *                              Set this to true to show content where the link isn't relevant (e.g. an image on the external server).
          * @param {string} [additionalOptions] - More in-app browser options to use in addition to the default options
          *                                       selected by this service. The string format to use is specified by the plugin
          *                                       documentation: https://github.com/apache/cordova-plugin-inappbrowser#readme.
@@ -125,9 +129,9 @@
         function validateURL(url) {
             const valid = (typeof url === "string" && url !== "");
 
-            if (!valid) NewsBanner.showCustomBanner($filter('translate')("BROWSER_OPEN_FAILED"), '#333333', '#F0F3F4',
-                13, 'top', null, 5000);
-
+            if (!valid) Toast.showToast({
+                message: $filter('translate')("BROWSER_OPEN_FAILED"),
+            });
             return valid;
         }
     }

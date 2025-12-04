@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 (function() {
     'use strict';
 
@@ -9,7 +13,7 @@
      */
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('QuestionnairesListController', QuestionnairesListController);
 
     QuestionnairesListController.$inject = [
@@ -17,13 +21,15 @@
         '$scope',
         '$timeout',
         'NativeNotification',
-        'NavigatorParameters',
+        'Navigator',
         'Params',
-        'Questionnaires'
+        'Questionnaires',
+        'UpdateUI'
     ];
 
     /* @ngInject */
-    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires) {
+    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires, UpdateUI) {
+
         let vm = this;
 
         // constants
@@ -31,14 +37,18 @@
 
         // variables for controller
         let navigator = null;
-        let navigatorName = '';
+        let purpose = 'default';
 
         // variables seen from view
-        vm.loading = true;  // This is for loading the list of questionnaires
         vm.newQuestionnaireList = [];
         vm.inProgressQuestionnaireList = [];
         vm.completedQuestionnaireList = [];
+        vm.noNewQuestionnaireText = '';         // the description varies according to the questionnaire purpose
+        vm.noProgressQuestionnaireText = '';    // the description varies according to the questionnaire purpose
+        vm.noCompletedQuestionnaireText = '';   // the description varies according to the questionnaire purpose
+        vm.pageTitle = '';                      // the page title varies according to the questionnaire purpose
         vm.tab = 'new';
+        vm.dataHandlerParameters = {};
 
         // functions that can be used from view, sorted alphabetically
         vm.completedQuestionnaireExist = completedQuestionnaireExist;
@@ -47,38 +57,35 @@
         vm.goToQuestionnaireSummary = goToQuestionnaireSummary;
         vm.newQuestionnaireExist = newQuestionnaireExist;
 
+        // Used by patient-data-handler
+        vm.loadQuestionnaireList = loadQuestionnaireList;
+
         activate();
 
         // //////////////
 
         function activate() {
+            navigator = Navigator.getNavigator();
+            let params = Navigator.getParameters();
 
-            vm.loading = true;
-
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
-
-            Questionnaires.requestQuestionnaireList()
-                .then(function () {
-                    loadQuestionnaireList();
-
-                    vm.loading = false;
-                })
-                .catch(function(error){
-                    $timeout(function(){
-                        vm.loading = false;
-                        handleRequestError();
-                    })
-                });
+            purpose = params.questionnairePurpose.toLowerCase();
+            vm.dataHandlerParameters.purpose = purpose;
+            setPageText(purpose);
 
             // this is for when the back button is pressed for a questionnaire, reload the questionnaire list to keep the list up to date
-            navigator.on('postpop', function(){
+            navigator.on('postpop', function() {
+                // Refresh the questionnaires from the listener to find out if other users have locked any of them
+                if(vm.refreshQuestionnaires) vm.refreshQuestionnaires();
                 loadQuestionnaireList();
             });
 
             // listen to the event of destroy the controller in order to do clean up
             $scope.$on('$destroy', function() {
                 removeListener();
+
+                // Reload user profile if questionnaire was opened and completed via Notifications tab,
+                // and profile was implicitly changed.
+                Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
             });
         }
 
@@ -89,13 +96,11 @@
          */
         function goToQuestionnaire(selectedQuestionnaire) {
             // putting editQuestion false to claim that we are not coming from a summary page
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.pushPage('views/personal/questionnaires/questionnaires.html', {
                 answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
-                editQuestion: false
+                editQuestion: false,
+                questionnairePurpose: purpose
             });
-
-            navigator.pushPage('views/personal/questionnaires/questionnaires.html');
         }
 
         /**
@@ -104,12 +109,10 @@
          * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
         function goToQuestionnaireSummary(selectedQuestionnaire){
-            NavigatorParameters.setParameters({
-                Navigator: navigatorName,
+            navigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {
+                animation: 'slide', // OnsenUI
                 answerQuestionnaireId: selectedQuestionnaire.qp_ser_num
             });
-
-            navigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {animation: 'slide'});
         }
 
         /**
@@ -143,9 +146,11 @@
          * @name loadQuestionnaireList
          * @desc get the questionnaire list from the service
          */
-        function loadQuestionnaireList (){
+        function loadQuestionnaireList() {
+            $timeout(function () {
+                // TODO: reload data from the service if the requesting purpose is the same as the current one
+                UpdateUI.updateTimestamps('QuestionnaireList', 0);
 
-            $timeout(function(){
                 vm.newQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.NEW_QUESTIONNAIRE_STATUS);
                 vm.inProgressQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
                 vm.completedQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS);
@@ -153,12 +158,22 @@
         }
 
         /**
-         * @name handleRequestError
-         * @desc show a notification to the user in case a request to server fails
+         * @name setPageText
+         * @desc set the page title and descriptions according to the questionnaire purpose requested on the list page
+         *      if the purpose is not passed as an argument, the text will default to the default's translation
+         * @param {string} questionnairePurpose
          */
-        function handleRequestError (){
-            //message: 'Server problem: could not fetch data, try again later',
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+        function setPageText(questionnairePurpose = 'default') {
+            // set the page title
+            vm.pageTitle = $filter('translate')(Questionnaires.getQuestionnaireTitleByPurpose(questionnairePurpose));
+
+            // set the messages when the lists is null
+            vm.noCompletedQuestionnaireText
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByPurpose(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS, questionnairePurpose));
+            vm.noNewQuestionnaireText
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByPurpose(allowedStatus.NEW_QUESTIONNAIRE_STATUS, questionnairePurpose));
+            vm.noProgressQuestionnaireText
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByPurpose(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS, questionnairePurpose));
         }
 
         /**
@@ -169,7 +184,4 @@
             navigator.off('postpop');
         }
     }
-
 })();
-
-

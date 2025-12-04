@@ -1,17 +1,21 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
 *Code by David Herrera May 20, 2015
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
-angular.module('MUHCApp')
-.directive('rateMaterial', function(Patient, RequestToServer) {
+angular.module('OpalApp')
+.directive('rateMaterial', ['ProfileSelector', 'RequestToServer', function(ProfileSelector, RequestToServer) {
   return {
     restrict: 'E',
     transclude: true,
     scope: {
         eduMaterialControlSerNum: '=serNum'
     },
-    templateUrl: './views/education/material-rating-template.html',
+    templateUrl: './views/personal/education/material-rating-template.html',
     link: function (scope, element) {
 
    	initRater();
@@ -42,12 +46,12 @@ angular.module('MUHCApp')
 	};
 	scope.submit = function()
 	{
-        var patientSerNum = Patient.getUserSerNum();
+        var patientSerNum = ProfileSelector.getPatientSerNum();
         var edumaterialControlSerNum = scope.eduMaterialControlSerNum;
         RequestToServer.sendRequest('EducationalMaterialRating',{'PatientSerNum':patientSerNum,'EducationalMaterialControlSerNum':edumaterialControlSerNum,'RatingValue':scope.ratingValue});
         scope.submitted = true;
 	}
-      
+
     }
   };
-});
+}]);

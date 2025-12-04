@@ -1,10 +1,14 @@
-import "../../css/labs-disclaimer.directive.css";
+// SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
+import "../../css/directives/labs-disclaimer.directive.css";
 
 (function () {
     'use strict';
 
     angular
-        .module("MUHCApp")
+        .module('OpalApp')
         .directive("labsDisclaimer", LabsDisclaimer);
 
     LabsDisclaimer.$inject = [];
@@ -23,7 +27,7 @@ import "../../css/labs-disclaimer.directive.css";
             scope: { },
             template: `
                 <div class="labs-disclaimer">
-                    <ons-icon icon="fas fa-exclamation-triangle"></ons-icon>
+                    <ons-icon icon="fa-solid fa-triangle-exclamation"></ons-icon>
                     <span>{{"LAB_DISCLAIMER"|translate}}</span>
                 </div>
             `,

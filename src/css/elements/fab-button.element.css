@@ -1,0 +1,159 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.fab {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	background: transparent;
+	border: none;
+	line-height: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 400;
+	font-size: 17px;
+	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-font-smoothing: antialiased;
+	width: 56px;
+	height: 56px;
+	text-decoration: none;
+	font-size: 25px;
+	line-height: 56px;
+	letter-spacing: 0;
+	color: #fafafa;
+	vertical-align: middle;
+	text-align: center;
+	background-color: #009688;
+	border: 0px solid currentColor;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	overflow: hidden;
+	-webkit-box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.4);
+	box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.4);
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+	display: -webkit-inline-box;
+	display: -webkit-inline-flex;
+	display: -moz-inline-box;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-moz-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-align-content: center;
+	-ms-flex-line-pack: center;
+	align-content: center;
+}
+.fab:active {
+	-webkit-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.4);
+	box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.4);
+	background-color: #009688;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+.fab:focus {
+	outline: 0;
+}
+.fab__icon {
+	position: relative;
+	overflow: hidden;
+	height: 100%;
+	width: 100%;
+	display: block;
+	-webkit-border-radius: 100%;
+	border-radius: 100%;
+	padding: 0;
+	z-index: 100;
+	line-height: 56px;
+}
+.fab:disabled,
+.fab[disabled] {
+	background-color: rgba(0,0,0,0.5);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	opacity: 0.3;
+	cursor: default;
+	pointer-events: none;
+}
+.fab--top__right {
+	top: 20px;
+	bottom: auto;
+	right: 20px;
+	left: auto;
+	position: fixed;
+}
+.fab--bottom__right {
+	top: auto;
+	bottom: 20px;
+	right: 20px;
+	left: auto;
+	position: fixed;
+}
+.fab--top__left {
+	top: 20px;
+	bottom: auto;
+	right: auto;
+	left: 20px;
+	position: fixed;
+}
+.fab--bottom__left {
+	top: auto;
+	bottom: 20px;
+	right: auto;
+	left: 20px;
+	position: fixed;
+}
+.fab--top__center {
+	top: 20px;
+	bottom: auto;
+	margin-left: -28px;
+	left: 50%;
+	right: auto;
+	position: fixed;
+}
+.fab--bottom__center {
+	top: auto;
+	bottom: 20px;
+	margin-left: -28px;
+	left: 50%;
+	right: auto;
+	position: fixed;
+}
+.fab--mini {
+	width: 55px;
+	height: 55px;
+	line-height: 1;
+}
+.fab--mini .fab__icon {
+	line-height: 1;
+}
+.speed-dial__item {
+	position: absolute;
+	-webkit-transform: scale(0);
+	-moz-transform: scale(0);
+	-ms-transform: scale(0);
+	-o-transform: scale(0);
+	transform: scale(0);
+}

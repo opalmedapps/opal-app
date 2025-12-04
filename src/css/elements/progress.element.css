@@ -1,0 +1,167 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.progress-circular {
+	-webkit-animation: progress__rotate 2s linear infinite;
+	-moz-animation: progress__rotate 2s linear infinite;
+	-o-animation: progress__rotate 2s linear infinite;
+	animation: progress__rotate 2s linear infinite;
+	height: 80px;
+	position: relative;
+	width: 80px;
+}
+.progress-circular-sm {
+	-webkit-animation: progress__rotate 2s linear infinite;
+	-moz-animation: progress__rotate 2s linear infinite;
+	-o-animation: progress__rotate 2s linear infinite;
+	animation: progress__rotate 2s linear infinite;
+	height: 30px;
+	position: relative;
+	width: 30px;
+}
+.progress-circular__primary {
+	stroke-dasharray: 1, 200;
+	stroke-dashoffset: 0;
+	-webkit-animation: progress__dash 1.5s ease-in-out infinite;
+	-moz-animation: progress__dash 1.5s ease-in-out infinite;
+	-o-animation: progress__dash 1.5s ease-in-out infinite;
+	animation: progress__dash 1.5s ease-in-out infinite;
+	stroke: #2196F3;
+	-webkit-transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+	-moz-transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+	-o-transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+	transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.progress-circular--determinate {
+	-webkit-transform: rotate(270deg);
+	-moz-transform: rotate(270deg);
+	-ms-transform: rotate(270deg);
+	-o-transform: rotate(270deg);
+	transform: rotate(270deg);
+	-webkit-animation: none;
+	-moz-animation: none;
+	-o-animation: none;
+	animation: none;
+}
+.progress-circular--determinate > .progress-circular__primary {
+	-webkit-animation: none;
+	-moz-animation: none;
+	-o-animation: none;
+	animation: none;
+}
+.progress-circular--determinate > .progress-circular__secondary {
+	-webkit-animation: none;
+	-moz-animation: none;
+	-o-animation: none;
+	animation: none;
+	stroke: #2196F3;
+}
+
+.progress.vertical {
+	float: left;
+	height: 100%;
+	margin-right: 20px;
+	margin-left: 30%;
+	width: 30px;
+}
+
+.vertprogress-bar {
+	float: left;
+	width: 0;
+	height: 100%;
+	font-size: 12px;
+	line-height: 20px;
+	color: black;
+	text-align: center;
+	background-color: #337ab7;
+	-webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+	box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+	-webkit-transition: width .6s ease;
+	-o-transition: width .6s ease;
+	transition: width .6s ease;
+}
+@-moz-keyframes progress__rotate {
+	100% {
+		-moz-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes progress__rotate {
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@-o-keyframes progress__rotate {
+	100% {
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@keyframes progress__rotate {
+	100% {
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@-moz-keyframes progress__dash {
+	0% {
+		stroke-dasharray: 10%, 241.32%;
+		stroke-dashoffset: 0%;
+	}
+	50% {
+		stroke-dasharray: 201%, 50.322%;
+		stroke-dashoffset: -100%;
+	}
+	100% {
+		stroke-dasharray: 10%, 241.32%;
+		stroke-dashoffset: -251.32%;
+	}
+}
+@-webkit-keyframes progress__dash {
+	0% {
+		stroke-dasharray: 10%, 241.32%;
+		stroke-dashoffset: 0%;
+	}
+	50% {
+		stroke-dasharray: 201%, 50.322%;
+		stroke-dashoffset: -100%;
+	}
+	100% {
+		stroke-dasharray: 10%, 241.32%;
+		stroke-dashoffset: -251.32%;
+	}
+}
+@-o-keyframes progress__dash {
+	0% {
+		stroke-dasharray: 10%, 241.32%;
+		stroke-dashoffset: 0%;
+	}
+	50% {
+		stroke-dasharray: 201%, 50.322%;
+		stroke-dashoffset: -100%;
+	}
+	100% {
+		stroke-dasharray: 10%, 241.32%;
+		stroke-dashoffset: -251.32%;
+	}
+}
+@keyframes progress__dash {
+	0% {
+		stroke-dasharray: 10%, 241.32%;
+		stroke-dashoffset: 0%;
+	}
+	50% {
+		stroke-dasharray: 201%, 50.322%;
+		stroke-dashoffset: -100%;
+	}
+	100% {
+		stroke-dasharray: 10%, 241.32%;
+		stroke-dashoffset: -251.32%;
+	}
+}

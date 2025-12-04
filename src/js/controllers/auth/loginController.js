@@ -1,16 +1,18 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   loginController.js
  * Description  :   Controller in charge of the login process using FireBase as the authentication API.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   May 20, 2015
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
+
+import { CancelledPromiseError } from "../../models/utility/cancelled-promise-error";
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: LoginController
  *  @description
  *  Controller in charge of the login process using FireBase as the authentication API.
  */
@@ -18,18 +20,22 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
+    LoginController.$inject = ['$filter', '$rootScope', '$scope', '$state', '$timeout', '$window', 'CleanUp',
+        'ConcurrentLogin', 'Constants', 'DeviceIdentifiers', 'EncryptionService', 'Firebase',
+        'Navigator', 'Params', 'Toast', 'UserAuthorizationInfo', 'UserHospitalPreferences',
+        'UserPreferences', 'UUID'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
+    function LoginController($filter, $rootScope, $scope, $state, $timeout, $window, CleanUp,
+                             ConcurrentLogin, Constants, DeviceIdentifiers, EncryptionService, Firebase,
+                             Navigator, Params, Toast, UserAuthorizationInfo, UserHospitalPreferences,
+                             UserPreferences, UUID) {
 
         var vm = this;
 
-        var patientSerNum = "";
         var sameUser = false;
         var savedEmail;
 
@@ -81,9 +87,27 @@
          */
         vm.trusted = false;
 
+        /**
+         * @description Promise that can be cancelled if the user leaves the page (to cancel any in-progress untrusted login attempt).
+         * @type {{promise: Promise, cancel: function} | undefined}
+         */
+        vm.untrustedPromise = undefined;
+
+        /**
+         * @description Promise that can be cancelled if the user leaves the page (to cancel any in-progress trusted login attempt).
+         * @type {{promise: Promise, cancel: function} | undefined}
+         */
+        vm.trustedPromise = undefined;
+
+        /**
+         * @description Tracks whether the login attempt on this page has been successful; used to decide whether to cancel login on destruction of the controller.
+         * @type {boolean}
+         */
+        vm.attemptSuccessful = false;
+
+        vm.cancelLoginAttempt = cancelLoginAttempt;
         vm.clearErrors = clearErrors;
         vm.submit = submit;
-        vm.goToInit = goToInit;
         vm.goToReset = goToReset;
         vm.isThereSelectedHospital = isThereSelectedHospital;
 
@@ -96,25 +120,11 @@
          *************************/
 
         function activate(){
-
             clearErrors();
-
-            if(!localStorage.getItem('locked')){
-                $timeout(function () {
-                    securityModal.show();
-                },200);
-            }
-
-
+            bindEvents();
             //Obtain email from localStorage and show that email
             savedEmail = $window.localStorage.getItem('Email');
             if(savedEmail) vm.email = savedEmail;
-
-            patientSerNum = Patient.getUserSerNum();
-
-            //Locked out alert
-            if(patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'), 'black', '#F0F3F4', 13, 'top', null, 2000);
-
 
             // Switch for trusting device
             $timeout(function(){
@@ -122,164 +132,179 @@
             });
         }
 
+        function bindEvents() {
+            let navigator = Navigator.getNavigator();
+
+            // On destroy, cancel any unfinished in-progress login attempt
+            $scope.$on('$destroy', () => {
+                // Avoid cancelling login when the attempt was successful and we're destroying the controller to go to the next page
+                if (!vm.attemptSuccessful) cancelLoginAttempt();
+
+                // Remove event listener
+                navigator.off('prepop');
+            });
+
+            // Reset loading when cancelling from the security question screen
+            navigator.on('prepop', function () {
+                vm.loading = false;
+            });
+        }
+
         /**
          * @ngdoc function
          * @name authHandler
-         * @methodOf MUHCApp.controllers.LoginController
-         * @param firebaseUser FireBase User Object
+         * @param firebaseUserCredential Firebase UserCredential object returned after login
          * @description
          * Receives an authenticated FireBase User Object and handles the next step of the logging process
          * which involves determining whether or not the user is handed off to the security question process.
          */
-        function authHandler(firebaseUser) {
-
+        async function authHandler(firebaseUserCredential) {
             CleanUp.clear();
 
-            firebaseUser.getToken(true).then(function(sessionToken){
+            let firebaseUser = firebaseUserCredential.user;
 
-                /**************************************************************************************************************************************
-                 * SINCE PREPROD/DEV IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!
-                 **************************************************************************************************************************************/
+            //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
+            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, vm.email, vm.trusted);
 
-                // Save the current session token to the users "logged in users" node.
-                // This is used to make sure that the user is only logged in for one session at a time.
-                let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
+            //This is for the user case where a user gets logged out automatically by the app after 5 minutes of inactivity.
+            //Ideally the Patient info should stay dormant on the phone for a pre-determined period of time, not indefinitely.
+            //So the time of last activity is stored in local storage here and when the user is timed out, so that once 10 minute goes by
+            //The patient info is cleared from the phone.
+            var lastActive = new Date();
+            lastActive = lastActive.getTime();
 
-                refCurrentUser.set({ 'Token' : sessionToken });
+            let authenticationToLocalStorage = {
+                UserName: firebaseUser.uid,
+                Email: vm.email,
+                LastActive: lastActive,
+            };
 
-                // Evoke an observer function in mainController
-                $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
-                /**************************************************************************************************** */
+            $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
+            $window.localStorage.setItem('Email', vm.email);
+            if (ons.platform.isAndroid() || ons.platform.isIOS()) {
+                $window.localStorage.setItem('Password', vm.password);
+            }
 
+            $window.localStorage.setItem("Language", UserPreferences.getLanguage());
+            // If user sets not trusted remove the local storage as to not continue to the next part which skips the security question
+            if (!vm.trusted) {
+                $window.localStorage.removeItem('Email');
+                $window.localStorage.removeItem('Password');
+                $window.localStorage.removeItem("deviceID");
+                $window.localStorage.removeItem(EncryptionService.getStorageKey());
+                $window.localStorage.removeItem('hospital');
+            }
 
-                //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
-                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email, vm.trusted);
+            var deviceID = localStorage.getItem("deviceID");
 
+            //if the device was a previously trusted device, and is still set to trusted...
+            if (deviceID && sameUser) loginAsTrustedUser(deviceID);
+            else loginAsUntrustedUser();
+        }
 
-                //This is for the user case where a user gets logged out automatically by the app after 5 minutes of inactivity.
-                //Ideally the Patient info should stay dormant on the phone for a pre-determined period of time, not indefinitely.
-                //So the time of last activity is stored in local storage here and when the user is timed out, so that once 10 minute goes by
-                //The patient info is cleared from the phone.
-                var lastActive = new Date();
-                lastActive = lastActive.getTime();
+        /**
+         * @ngdoc function
+         * @name loginAsTrustedUser
+         * @param deviceID a string containing the user's device ID
+         * @description
+         * If a user has been deemed as trusted, then this allows them to skip the security question process and go straight to loading screen
+         */
+        function loginAsTrustedUser(deviceID){
+            const warnTrustedError = (error) => { console.warn("An error occurred while logging in as trusted; now attempting to log in as untrusted.", error) };
 
-                var authenticationToLocalStorage={
-                    UserName:firebaseUser.uid,
-                    Email: vm.email,
-                //    Password: vm.password,
-                    Token:sessionToken,
-                    LastActive: lastActive
-                };
+            try {
+                var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(EncryptionService.getStorageKey()), UserAuthorizationInfo.getPassword());
+                EncryptionService.setSecurityAns(ans);
 
+                // Now that we know that both the password and security answer are hashed, we can create our encryption hash
+                EncryptionService.generateEncryptionHash();
+            }
+            catch (error) {
+                // If there's something wrong with the stored trusted info, log in as untrusted instead
+                warnTrustedError(error);
+                loginAsUntrustedUser(deviceID);
+                return;
+            }
 
-                $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-                $window.localStorage.setItem('Email', vm.email);
-                if (ons.platform.isAndroid() || ons.platform.isIOS()) {
-                    $window.localStorage.setItem('Password', vm.password);
+            UUID.setUUID(deviceID);
+
+            vm.trustedPromise = DeviceIdentifiers.sendDeviceIdentifiersToServer();
+
+            vm.trustedPromise.promise.then(() => {
+                vm.attemptSuccessful = true;
+                $state.go('loading', {
+                    isTrustedDevice: vm.trusted,
+                });
+            }).catch(error => {
+                if (error instanceof CancelledPromiseError) {
+                    // Cancelled on purpose: nothing additional to do here
+                    console.warn(error);
                 }
-
-                $window.localStorage.setItem("Language", UserPreferences.getLanguage());
-                // If user sets not trusted remove the local storage as to not continue to the next part which skips the security question
-                if (!vm.trusted) {
-                    $window.localStorage.removeItem('Email');
-                    $window.localStorage.removeItem('Password');
-                    $window.localStorage.removeItem("deviceID");
-                    $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
-                    $window.localStorage.removeItem('hospital');
+                else if (error.Code === Params.REQUEST.CODE.ENCRYPTION_ERROR || error.code === "PERMISSION_DENIED" ) {
+                    warnTrustedError(error);
+                    loginAsUntrustedUser(deviceID);
                 }
-
-                var deviceID = localStorage.getItem("deviceID");
-
-                //if the device was a previously trusted device, and is still set to trusted...
-                if (deviceID && sameUser){
-                    loginAsTrustedUser(deviceID)
-
-                } else {
-                    loginAsUntrustedUser()
+                else {
+                    console.error('Error sending identifiers to server during trusted login');
+                    Firebase.signOut();
+                    handleError(error);
                 }
             });
         }
 
         /**
          * @ngdoc function
-         * @name loginAsTrustedUser
-         * @methodOf MUHCApp.controllers.LoginController
-         * @param deviceID a string containing the user's device ID
-         * @description
-         * If a user has been deemed as trusted, then this allows them to skip the security question process and go straight to loading screen
-         */
-        function loginAsTrustedUser(deviceID){
-
-            try {
-                var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
-            }
-            catch(err) {
-                handleError({code: "WRONG_SAVED_HASH"})
-            }
-
-            EncryptionService.setSecurityAns(ans);
-
-            //Now that we know that both the password and security answer are hashed, we can create our encryption hash
-            EncryptionService.generateEncryptionHash();
-
-            UUID.setUUID(deviceID);
-            DeviceIdentifiers.sendIdentifiersToServer()
-                .then(function () {
-                    $state.go('loading');
-                })
-                .catch(function (error) {
-                    //TODO: handle this error better... need to know the error object that is returned
-                    firebase.auth().signOut();
-                    handleError(error);
-                });
-        }
-
-        /**
-         * @ngdoc function
          * @name loginAsUntrustedUser
-         * @methodOf MUHCApp.controllers.LoginController
          * @param deviceID a string containing the user's device ID
          * @description
          * If a user has been deemed as untrusted, then this takes the user to the security question process
          */
         function loginAsUntrustedUser(deviceID){
-            //if using a web browers (via demo or testing)
-            if (!Constants.app) UUID.setUUID(UUID.generate());
+            // If the deviceID exists use it, otherwise generate a new one
+            if (!deviceID){
+                UUID.setUUID(UUID.generate());
+            } else {
+                // This will allow the trusted login to work when switching between hospitals
+                UUID.setUUID(deviceID);
+            }
 
             //send new device ID which maps to a security question in the backend
-            DeviceIdentifiers.sendFirstTimeIdentifierToServer()
-                .then(function (response) {
+            vm.untrustedPromise = DeviceIdentifiers.sendFirstTimeIdentifierToServer();
 
-                    vm.loading = false;
-                    //if all goes well, take the user to be asked security question
-                    var language = UserPreferences.getLanguage();
-
-                    initNavigator.pushPage('./views/login/security-question.html', {
-                        securityQuestion: response.Data.securityQuestion["securityQuestion_" + language],
-                        trusted: vm.trusted
-                    });
-                })
-                .catch(function (error) {
-                    $timeout(function(){
+            vm.untrustedPromise.promise.then(response => {
+                vm.attemptSuccessful = true;
+                initNavigator.pushPage('./views/login/security-question.html', {
+                    securityQuestion: response.Data.securityQuestion,
+                    trusted: vm.trusted,
+                });
+            }).catch(error => {
+                if (error instanceof CancelledPromiseError) {
+                    // Cancelled on purpose: nothing additional to do here
+                    console.warn(error);
+                }
+                else {
+                    $timeout(() => {
+                        console.error('Error sending identifiers to server during untrusted login');
                         vm.loading = false;
-                        firebase.auth().signOut();
+                        Firebase.signOut();
                         handleError(error);
                     });
-                });
+                }
+            });
         }
 
         /**
          * @ngdoc function
-         * @name loginAsUntrustedUser
-         * @methodOf MUHCApp.controllers.LoginController
+         * @name handleError
          * @param error an error object
          * @description
          * Evaluates the error object it receives and displays the appropriate error message to the user
          */
         function handleError(error)
         {
-
-            var code = (error.code)? error.code : error.Code;
+            console.error(error);
+            let code = error.code ? error.code : error.Code;
+            vm.loading = false;
 
             switch (code) {
                 case Params.invalidEmail:
@@ -288,51 +313,39 @@
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message= "INVALID_EMAIL_OR_PWD";
-                        vm.loading = false;
                     });
                     break;
                 case Params.largeNumberOfRequests:
                     $timeout(function (){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "TOO_MANY_REQUESTS";
-                        vm.loading = false;
                     });
                     break;
                 case Params.userDisabled:
                     $timeout(function (){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "USER_DISABLED";
-                        vm.loading = false;
                     });
                     break;
                 case Params.networkRequestFailure:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "ERROR_NETWORK";
-                        vm.loading = false;
                     });
                     break;
-                case '1': // Encryption error
+                case Params.REQUEST.CODE.ENCRYPTION_ERROR:
                     $timeout(function(){
-                        vm.loading = false;
-                        loginerrormodal.show();
-                    });
-                    break;
-                case "WRONG_SAVED_HASH":
-                    $timeout(function(){
-                        vm.loading = false;
-                        wronghashmodal.show();
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message = "PASSWORD_SERVER_ERROR";
                     });
                     break;
                 default:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "ERROR_GENERIC";
-                        vm.loading = false;
                     });
             }
         }
-
 
         /*************************
          *  PUBLIC METHODS
@@ -341,7 +354,6 @@
         /**
          * @ngdoc method
          * @name clearErrors
-         * @methodOf MUHCApp.controllers.LoginController
          * @description
          * Clears errors
          */
@@ -353,9 +365,29 @@
         }
 
         /**
+         * @desc Used when the user leaves the page to cancel an in-progress login attempt.
+         */
+        function cancelLoginAttempt() {
+            Firebase.signOut();
+
+            /*
+             * Cancel any in-progress promise when leaving the page.
+             * This fixes a bug where a first attempt made to an invalid hospital would time out after leaving the page.
+             * In particular, it could time out after a successful login at a valid hospital, leading to errors.
+             */
+            let promises = [vm.trustedPromise, vm.untrustedPromise];
+            promises.forEach(promise => {
+                if (promise && typeof promise.cancel === 'function') {
+                    promise.cancel();
+                }
+            });
+
+            vm.loading = false;
+        }
+
+        /**
          * @ngdoc method
          * @name submit
-         * @methodOf MUHCApp.controllers.LoginController
          * @description
          * Validates a user's credentials using FireBase's API and then takes the user to the next steps
          */
@@ -370,68 +402,25 @@
 
             } else {
                 vm.loading = true;
-
-                //the user is still logged in if this is present
-                var authDetails = $window.sessionStorage.getItem('UserAuthorizationInfo');
-
                 if(savedEmail === vm.email) sameUser = true;
-
-                var stillActive = false;
-
-                //if the user is still logged in and was active in the last 10 minutes, then we can skip the loading process and take the user straight to their information
-                if (authDetails) {
-                    var now = new Date();
-                    now = now.getTime();
-                    var tenMinutesAgo = now - Params.tenMinutesMilliSeconds;
-                    authDetails = JSON.parse(authDetails);
-                    stillActive = (authDetails.LastActive > tenMinutesAgo);
-                }
-
-                // Get the authentication state
-                var myAuth = firebase.auth().currentUser;
-
-                //If the user information is still on the phone, they are logged in, and were active in the past 10 minutes.. then skip the logging in and loading process entirely.
-                if(myAuth && patientSerNum && stillActive && authDetails.Email === vm.email && vm.trusted){
-                    firebase.auth().signInWithEmailAndPassword(vm.email, vm.password)
-                        .then(function () {
-                            localStorage.removeItem('locked');
-                            $state.go('Home');
-                        }).catch(handleError);
-                } else{
-                    //Otherwise follow the normal logging in use case
-                    firebase.auth().signInWithEmailAndPassword(vm.email, vm.password).then(authHandler).catch(handleError);
-                }
+                Firebase.signInWithEmailAndPassword(vm.email, vm.password).then(authHandler).catch(handleError);
             }
         }
 
         /**
          * @ngdoc method
-         * @name goToInit
-         * @methodOf MUHCApp.controllers.LoginController
-         * @description
-         * Brings user to init screen
-         */
-        function goToInit(){
-            loginerrormodal.hide();
-            initNavigator.popPage();
-        }
-
-        /**
-         * @ngdoc method
          * @name goToReset
-         * @methodOf MUHCApp.controllers.LoginController
          * @description
          * Brings user to password reset screen
          */
         function goToReset(){
-            loginerrormodal.hide();
-            initNavigator.pushPage('./views/login/forgot-password.html',{})
+            cancelLoginAttempt();
+            initNavigator.pushPage('./views/login/forgot-password.html', {});
         }
 
         /**
          * @ngdoc method
          * @name isThereSelectedHospital
-         * @methodOf MUHCApp.controllers.LoginController
          * @description Returns whether the user has already selected a hospital.
          * @returns {boolean} True if there is a hospital selected; false otherwise.
          */

@@ -1,16 +1,21 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import { PatientTestResult } from "./PatientTestResult";
 /**
  * PatientTestType class to model the TestTypes from the back-end
  */
 export class PatientTestType {
-	constructor({ educationalMaterialURL_EN, educationalMaterialURL_FR, latestAbnormalFlag, latestCollectedDateTime,
+	constructor({ educationalMaterialURL_EN, educationalMaterialURL_FR, interpretationRecommended, latestAbnormalFlag, latestCollectedDateTime,
 		latestPatientTestResultSerNum, latestTestValue, name_EN, name_FR, normalRange, normalRangeMax,
 		normalRangeMin, readStatus, testExpressionSerNum, unitDescription, hasNumericValues = "false",
 		results = null }) {
 		this.educationalMaterialURL_EN = educationalMaterialURL_EN;
 		this.educationalMaterialURL_FR = educationalMaterialURL_FR;
+		this.interpretationRecommended = interpretationRecommended === "1";
 		this.latestAbnormalFlag = latestAbnormalFlag;
-		this.latestCollectedDateTime = Date.parse(latestCollectedDateTime.replace(/-/g, "/"));
+		this.latestCollectedDateTime = Date.parse(latestCollectedDateTime);
 		this.latestPatientTestResultSerNum = Number(latestPatientTestResultSerNum);
 		this.latestTestValue = latestTestValue;
 		this.name_EN = name_EN;

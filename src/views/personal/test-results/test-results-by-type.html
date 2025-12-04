@@ -1,37 +1,36 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="PatientTestResultsByTypeController as testTypeCtrl">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center"
-             ng-class="fontSizeTitle">
-            <p class="overflow-text-ellipsis">{{testTypeCtrl.getTestName(testTypeCtrl.test)}}</p>
-        </div>
-        <div class="right">
+    <generic-toolbar title="{{testTypeCtrl.getTestName(testTypeCtrl.test)}}" style-class="fontSizeTitle">
+        <right-content>
             <labs-info-button></labs-info-button>
-        </div>
-    </ons-toolbar>
-    <loading-spinning-circle ng-show="testTypeCtrl.loading"
-                             loading-message="{{'LOADINGLABRESULTS'|translate}}">
+        </right-content>
+    </generic-toolbar>
+
+    <loading-spinning-circle ng-show="testTypeCtrl.loading" loading-message="{{'LOADING_LAB_RESULTS'|translate}}">
     </loading-spinning-circle>
     <div ng-if="!testTypeCtrl.loading" ng-class="fontSizeDesc">
         <div class="navigation-bar">
-            <div class="navigation-bar__center" >
+            <div class="navigation-bar__center">
                 <div class="button-bar" style="margin-top:10px;width:70%;left:15%;">
                     <div class="button-bar__item">
-                        <input type="radio" name="navi-segment-b" checked ng-model="testTypeCtrl.showChart"
-                               ng-value="true">
+                        <input type="radio" name="navi-segment-b" checked ng-model="testTypeCtrl.showChartTab"
+                            ng-value="true">
                         <div class="button-bar__button">{{'PLOT_VIEW'|translate}}</div>
                     </div>
 
                     <div class="button-bar__item">
-                        <input type="radio" name="navi-segment-b" ng-model="testTypeCtrl.showChart" ng-value="false">
+                        <input type="radio" name="navi-segment-b" ng-model="testTypeCtrl.showChartTab" ng-value="false">
                         <div class="button-bar__button">{{'TABLE_VIEW'|translate}}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div ng-show="!testTypeCtrl.showChart">
+        <div ng-show="!testTypeCtrl.showChartTab">
             <div style="position:sticky; top:0; z-index:9999;">
 
                 <!-- DISCLAIMER -->
@@ -63,12 +62,12 @@
             </div>
             <ons-scroller style="height: 320px;">
                 <ons-list style="margin-top: 20px">
-                    <ons-list-item ng-repeat="testResult in testTypeCtrl.test.results|orderBy:'-'" style="padding-top:10px;">
-                        <ons-row align="center" ng-class="[testTypeCtrl.getTestClass(testResult), fontSizeDesc]"
-                                 style="line-height: 1.5;">
+                    <ons-list-item ng-repeat="testResult in testTypeCtrl.test.results|orderBy:'-'"
+                        style="padding-top:10px;">
+                        <ons-row align="center" ng-class="fontSizeDesc" style="line-height: 1.5;">
                             <ons-col width="60%" align="center" class="labtest-col" vertical-align="center">
                                 <div style="text-align: center; margin-left:4px;">
-                                    {{testResult.collectedDateTime|date:'medium'}}
+                                    {{testResult.collectedDateTime|date:'mediumNoSeconds'}}
                                 </div>
                             </ons-col>
                             <ons-col width="38%" align="center" class="labtest-col" vertical-align="center">
@@ -82,22 +81,28 @@
                 </ons-list>
             </ons-scroller>
         </div>
-        <div ng-show="testTypeCtrl.showChart">
+        <div ng-if="testTypeCtrl.showChartTab">
 
             <!-- DISCLAIMER -->
             <labs-disclaimer></labs-disclaimer>
 
-            <hc-chart options="testTypeCtrl.chartOptions">
-                [Lab results chart]
-            </hc-chart>
+            <plotly-chart
+                data="testTypeCtrl.chartSettings.data"
+                y-axis-label="testTypeCtrl.chartSettings.yAxisLabel"
+                has-non-numeric-values="testTypeCtrl.chartSettings.hasNonNumericValues"
+                normal-range-min="testTypeCtrl.chartSettings.normalRangeMin"
+                normal-range-max="testTypeCtrl.chartSettings.normalRangeMax"
+            >
+            </plotly-chart>
         </div>
+
         <ons-list>
             <!-- SECTION HEADER -->
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list-header>
 
             <!-- LEARN ABOUT (LINK) -->
             <ons-list-item class="about-link list-item-container-narrow" modifier="tappable"
-                           ng-click="testTypeCtrl.showAboutTestAlert()">
+                ng-click="testTypeCtrl.showAboutTestAlert()">
                 <ons-row ng-class="fontSizeDesc" vertical-align="center">
 
                     <!-- LEARN ABOUT - LEFT (LABEL) -->
@@ -117,8 +122,37 @@
                 </ons-row>
             </ons-list-item>
 
+            <!-- LAB DELAYS -->
+            <ons-list-item class="list-item-container-narrow" modifier="chevron tappable"
+                ng-click="testTypeCtrl.showLabDelayInfo()">
+                <ons-row ng-class="fontSizeDesc" vertical-align="center">
+                    <ons-col class="labtest-col" align="left" vertical-align="center">
+                        <div align="left" style="margin-left: 4px">
+                            <p class="hyphens">
+                                <ons-icon icon="fas fa-hourglass-half" size="20px"></ons-icon>
+                                <span style="font-weight: bold;">
+                                    {{ "LAB_RESULT_INTERPRETABLE" | translate }}
+                                </span>
+                                <span ng-if="testTypeCtrl.test.interpretationRecommended">{{ "NO" | translate }}</span>
+                                <span ng-if="!testTypeCtrl.test.interpretationRecommended">{{ "YES" | translate }}</span>
+                            </p>
+                        </div>
+                    </ons-col>
+                </ons-row>
+                <ons-row ng-class="fontSizeDesc">
+                    <ons-col class="labtest-col" vertical-align="center">
+                        <div style="margin-left: 4px; color: red">
+                            <span style="font-weight: bold">
+                                {{ "LAB_RESULT_DELAY" | translate }}
+                            </span>
+                            {{ "DAYS" | translate: { days: testTypeCtrl.labDelay } }}
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
             <!-- RECENT TEST RESULT -->
-            <ons-list-item class="list-item-container-narrow" ng-class="testTypeCtrl.getTestClass(testTypeCtrl.test)">
+            <ons-list-item class="list-item-container-narrow">
                 <ons-row ng-class="fontSizeDesc" vertical-align="center">
 
                     <!-- RECENT TEST RESULT - LEFT (LABEL) -->
@@ -144,7 +178,7 @@
                 <ons-row ng-class="fontSizeDesc">
                     <ons-col class="labtest-col lucent-subtle" vertical-align="center">
                         <div style="margin-left: 4px">
-                            {{testTypeCtrl.test.latestCollectedDateTime|date:'medium'}}
+                            {{testTypeCtrl.test.latestCollectedDateTime|date:'mediumNoSeconds'}}
                         </div>
                     </ons-col>
                 </ons-row>
@@ -165,7 +199,8 @@
                     <ons-col width="48%" class="labtest-col" vertical-align="center">
                         <div align="right">
                             {{testTypeCtrl.test.normalRange}}
-                            <span ng-if="testTypeCtrl.test.normalRange" class="break-words"> {{testTypeCtrl.test.unitWithBrackets}}</span>
+                            <span ng-if="testTypeCtrl.test.normalRange" class="break-words">
+                                {{testTypeCtrl.test.unitWithBrackets}}</span>
                         </div>
                     </ons-col>
                 </ons-row>

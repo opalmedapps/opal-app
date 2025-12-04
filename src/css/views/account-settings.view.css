@@ -1,0 +1,74 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.settings-header {
+    font-weight: 500;
+    font-size: 14px;
+    opacity: 0.4;
+    padding: 10px 0 0px 10px;
+    margin-bottom: -4px;
+}
+
+.settings-list {
+    margin-top: 0px;
+}
+
+.list-item-note {
+    position: absolute;
+    right: 36px;
+    top: 0px;
+    font-size: 14px;
+}
+
+.relationship-list--status {
+    color: gray;
+    font-size: 1.5rem !important;
+}
+
+.patient-content {
+    display: flex;
+    align-items: center;
+}
+
+.patient-content--icon {
+    border-radius: 100%;
+    font-size: 12px;
+    margin: 1em 1.5em
+}
+
+.patient-content--text p {
+    margin-bottom: 3px;
+}
+
+.patient-content--text p:first-child {
+    font-weight: 500;
+}
+
+.change-password--div {
+    background-color: #F4F4F4;
+    margin-bottom: 20px;
+    padding: 14px 10px;
+    width: 100%;
+}
+
+.change-password--header {
+    margin-top: 10px;
+}
+
+.change-password--instructions {
+    color: #6B6B6B;
+    margin-bottom: 20px;
+}
+
+.change-password--field-error {
+    color: red;
+    margin: 5px auto 20px;
+    text-align: left;
+}
+
+.change-password--submit-button {
+    margin-top: 20px;
+}

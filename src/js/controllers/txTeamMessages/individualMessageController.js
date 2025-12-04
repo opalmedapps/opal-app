@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * Created by PhpStorm.
  * User: rob
@@ -9,29 +13,39 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('IndividualTxTeamMessageController', IndividualTxTeamMessageController);
 
-    IndividualTxTeamMessageController.$inject = ['TxTeamMessages', 'NavigatorParameters', 'Patient', '$timeout'];
+    IndividualTxTeamMessageController.$inject = ['$scope', '$timeout', 'Navigator', 'ProfileSelector', 'TxTeamMessages'];
 
     /* @ngInject */
-    function IndividualTxTeamMessageController(TxTeamMessages, NavigatorParameters, Patient, $timeout) {
-        var vm = this;
+    function IndividualTxTeamMessageController($scope, $timeout, Navigator, ProfileSelector, TxTeamMessages) {
+        let vm = this;
+        let navigator;
 
         activate();
 
         ////////////////////
 
         function activate(){
-            var parameters=NavigatorParameters.getParameters();
+            navigator = Navigator.getNavigator();
+            let parameters = Navigator.getParameters();
+
+            bindEvents();
 
             $timeout(function(){
                 vm.message = TxTeamMessages.setLanguageTxTeamMessages(parameters.Post);
-                vm.FirstName = Patient.getFirstName();
-
-
-                // console.log(parameters.Post);
+                vm.FirstName = ProfileSelector.getFirstName();
             });
+        }
+
+        function bindEvents() {
+            // Remove event listeners
+            $scope.$on('$destroy', () => navigator.off('prepop'));
+
+            // Reload user profile if treating team message was opened via Notifications page,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('notifications.html'));
         }
     }
 })();

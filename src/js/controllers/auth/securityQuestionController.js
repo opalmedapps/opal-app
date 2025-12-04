@@ -1,18 +1,18 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   securityQuestionController.js
  * Description  :   Controller that submits the user's security question to be validated by our servers
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   May 20, 2015
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source Code package.
  */
 
 /**
  *  @ngdoc controller
- *  @name MUHCApp.controllers: SecurityQuestionController
  *  @requires '$scope', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService', 'UUID', 'UserAuthorizationInfo',
- *  '$state', 'Constants', 'DeviceIdentifiers', 'NavigatorParameters'
+ *  '$state', 'Constants', 'DeviceIdentifiers', 'Navigator'
  *  @description
  *
  *  Controller that submits the user's security question to be validated by our servers. This leads to the generation of the user's encryption key.
@@ -21,17 +21,17 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope', 'Params',
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'Navigator', '$scope', 'Params', 'Constants',
         'UserHospitalPreferences'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope,
-                                        Params, UserHospitalPreferences) {
+                                        UserAuthorizationInfo, $state, DeviceIdentifiers, Navigator, $scope,
+                                        Params, Constants, UserHospitalPreferences) {
 
         var vm = this;
         var deviceID;
@@ -116,18 +116,20 @@
 
         /**
          * @ngdoc property
-         * @name ssn
+         * @name countdownSeconds
          * @propertyOf SecurityQuestionController
-         * @returns string
-         * @description RAMQ value (called "ssn" here) bound to user input in the view.
+         * @returns int
+         * @description countdown seconds for lockout
          */
-        vm.ssn = "";
-	    
+        vm.countdownSeconds = 10;
+
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
         vm.isThereSelectedHospital = isThereSelectedHospital;
+        vm.lockout = lockout;
+        vm.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
 
         activate();
 
@@ -139,7 +141,7 @@
 
         function activate(){
             deviceID = UUID.getUUID();
-            var nav = NavigatorParameters.getNavigator();
+            var nav = Navigator.getNavigator();
             parameters = nav.getCurrentPage().options;
             trusted = parameters.trusted;
 
@@ -151,7 +153,6 @@
         /**
          * @ngdoc function
          * @name initializeData
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description Fetches and sets the data for this controller. This function is called again after the postpop
          *              event (to attempt to load data after the user has chosen a hospital to target).
          */
@@ -182,7 +183,7 @@
                     })
                     .then(function (response) {
                         $timeout(function () {
-                            vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                            vm.Question = response.Data.securityQuestion;
                             vm.loading = false;
                         });
                     })
@@ -199,7 +200,6 @@
         /**
          * @ngdoc function
          * @name bindEvents
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description Sets up event bindings for this controller.
          */
         function bindEvents() {
@@ -215,48 +215,60 @@
                 });
             });
 
+            $scope.initNavigator.on('postpush', () => {
+                $timeout(() => {
+                    const securityAnswer = document.getElementById('security-answer-input');
+                    // iOS blocks focus events and causes issues focussing the input field afterwards
+                    if (securityAnswer && !(Constants.app && ons.platform.isIOS())) {
+                        securityAnswer.focus();
+                    }
+                });
+            });
+
+
             // Remove the event listeners
             $scope.$on('$destroy', function() {
                 $scope.initNavigator.off('prepop');
                 $scope.initNavigator.off('postpop');
+                $scope.initNavigator.off('postpush');
             });
         }
 
         /**
          * @ngdoc function
          * @name handleSuccess
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
-         * @param key encryption hash
+         * @param {string} securityAnswerHash Hash of the user's security answer
          * @description
          * Handles verified security question answer that returns in success. Brings user to the loading page.
          */
-        function handleSuccess(key){
+        function handleSuccess(securityAnswerHash){
             if (trusted){
                 $window.localStorage.setItem("deviceID",deviceID);
-                $window.localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns", EncryptionService.encryptWithKey(key, UserAuthorizationInfo.getPassword()).toString());
+                $window.localStorage.setItem(EncryptionService.getStorageKey(), EncryptionService.encryptWithKey(securityAnswerHash, UserAuthorizationInfo.getPassword()).toString());
             }
 
-            EncryptionService.setSecurityAns(key);
+            EncryptionService.setSecurityAns(securityAnswerHash);
             EncryptionService.generateEncryptionHash();
 
             if(passwordReset){
-                EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn.toUpperCase()), key);
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {
-                $state.go('loading');
+                $state.go('loading', {
+                    isTrustedDevice: trusted,
+                });
             }
         }
 
         /**
          * @ngdoc function
          * @name handleError
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @param error error object
          * @description
          * Handles errors in order to display the proper message to the user.
          */
         function handleError(error) {
+            console.error(error);
             $timeout(function() {
 
                 // This check prevents from handling old request timeouts that were followed by a successful re-attempt
@@ -277,20 +289,21 @@
                         vm.alert.content = "INVALID_USER";
                         break;
                     case 4:
-                        vm.alert.content = "OUTOFTRIES";
+                        vm.alert.content = "OUT_OF_TRIES";
                         vm.tooManyAttempts = true;
+                        vm.lockout();
                         break;
                     case "corrupted-data":
-                        vm.alert.content = "CONTACTHOSPITAL";
+                        vm.alert.content = "CONTACT_HOSPITAL";
                         break;
                     case "wrong-answer":
-                        vm.alert.content = "ERRORANSWERNOTMATCH";
+                        vm.alert.content = "ERROR_ANSWER_NOT_MATCH";
                         break;
                     case "no-answer":
-                        vm.alert.content = "ENTERANANSWER";
+                        vm.alert.content = "ENTER_AN_ANSWER";
                         break;
                     default:
-                        vm.alert.content = "INTERNETERROR2";
+                        vm.alert.content = "ERROR_GENERIC";
                         break;
                 }
             })
@@ -299,13 +312,12 @@
         /**
          * @ngdoc function
          * @name removeUserData
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Removes user data from local storage
          */
         function removeUserData(){
             $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
-            $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+            $window.localStorage.removeItem(EncryptionService.getStorageKey());
         }
 
         /************************************************
@@ -315,7 +327,6 @@
         /**
          * @ngdoc method
          * @name clearErrors
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Clears errors
          */
@@ -331,7 +342,6 @@
         /**
          * @ngdoc method
          * @name submitAnswer
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @param answer user inputted answer string
          * @description
          * Sends request object containing user-inputted answer to our servers to be validated
@@ -339,9 +349,8 @@
         function submitAnswer (answer) {
             clearErrors();
 
-            if (!answer || (!vm.ssn && passwordReset)) {
+            if (!answer) {
                 handleError({code: "no-answer"});
-
             } else {
                 vm.alertShow = false;
                 vm.submitting = true;
@@ -356,7 +365,6 @@
                 var parameterObject = {
                     Question: vm.Question,
                     Answer: hash,
-                    SSN: vm.ssn,
                     Trusted: trusted
                 };
 
@@ -394,8 +402,23 @@
 
         /**
          * @ngdoc method
+         * @name lockout
+         * @description
+         * lock the screen for too many failed security answer attempts
+         */
+        function lockout(){
+            const sec = vm.countdownSeconds * 1000;
+            $timeout(() => {
+                vm.tooManyAttempts = false;
+                vm.submitting = false;
+                vm.alertShow = false;
+                vm.answer = '';
+            }, sec);
+        }
+
+        /**
+         * @ngdoc method
          * @name goToInit
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Brings user to init screen
          */
@@ -406,7 +429,6 @@
         /**
          * @ngdoc method
          * @name goToReset
-         * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
          * Brings user to password reset screen
          */
@@ -417,7 +439,6 @@
         /**
          * @ngdoc method
          * @name isThereSelectedHospital
-         * @methodOf MUHCApp.controllers.LoginController
          * @description Returns whether the user has already selected a hospital.
          * @returns {boolean} True if there is a hospital selected; false otherwise.
          */

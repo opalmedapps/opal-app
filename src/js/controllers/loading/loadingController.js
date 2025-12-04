@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 //
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
@@ -5,84 +9,66 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', '$filter','UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient',
-        'RequestToServer', 'PlanningSteps', 'MetaData', 'LogOutService'];
+    LoadingController.$inject = ['$state', '$filter', 'ConcurrentLogin', 'DeviceIdentifiers', 'Logger',
+    'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'RequestToServer', '$stateParams', 'LogOutService',
+    'NativeNotification', 'ProfileSelector'];
 
     /* @ngInject */
-    function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient,
-                               RequestToServer, PlanningSteps, MetaData, LogOutService) {
+    function LoadingController($state, $filter, ConcurrentLogin, DeviceIdentifiers, Logger, UpdateUI,
+        UserAuthorizationInfo, UserPreferences, RequestToServer, $stateParams, LogOutService, NativeNotification,
+        ProfileSelector) {
 
         activate();
+
         ///////////////////////////
 
-        function activate() {
+        async function activate() {
+            try {
+                let userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
+                if (!userAuthorizationInfo) $state.go('init');
 
-            var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
+                loadingmodal.show();
 
-            if(!userAuthorizationInfo) {
-                $state.go('init');
-            }
+                Logger.sendLog(  // For analytics only; don't wait for a response
+                    'Login',
+                    {
+                        "isTrustedDevice": $stateParams.isTrustedDevice,
+                        "deviceType": DeviceIdentifiers.getDeviceIdentifiers().deviceType,
+                    },
+                );
+                await UserPreferences.initFontSize();
+                await UpdateUI.init();
+                await ProfileSelector.init();
 
-            loadingmodal.show();
-
-            UpdateUI.init()
-                .then(function() {
-                    $state.go('Home');
-                    RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
-
-                    //fetch all the tab metadata TODO: add the fetching of all the other data
-                    UpdateUI.set([
-                        'Doctors',
-                        'Diagnosis'
-                    ]).then(function(){
-                        MetaData.init();
-                    });
-
-                    PlanningSteps.initializePlanningSequence();
-
-                    loadingmodal.hide();
+                // TODO: Currently, the app isn't able to handle a state in which there are no confirmed profiles. In this case, cancel login.
+                if (ProfileSelector.getConfirmedProfiles().length === 0) {
+                    console.error('Cannot log in when there are no confirmed profiles.');
                     clearTimeout(timeOut);
-                });
+                    NativeNotification.showNotificationAlert($filter('translate')("ERROR_NO_CONFIRMED_PROFILES"), $filter('translate')("INFO"), LogOutService.logOut);
+                    return;
+                }
+
+                await ConcurrentLogin.initConcurrentLogin();
+                $state.go('Home');
+
+                loadingmodal.hide();
+                clearTimeout(timeOut);
+            }
+            catch (error) {
+                console.error(error);
+                clearTimeout(timeOut);
+                // If any part of the initialization fails, then the user cannot log in
+                NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), null, LogOutService.logOut);
+            }
         }
 
         //Timeout to show, alerting user of server problems.
-        var timeOut = setTimeout(function(){
-            var mod;
-            if(typeof Patient.getFirstName()==='undefined'||Patient.getFirstName()===''){
-
-                if(ons.platform.isAndroid())
-                {
-                    mod='material';
-                }
-                loadingmodal.hide();
-                ons.notification.alert({
-                    //message: 'Server problem: could not fetch data, try again later',
-                    message: $filter('translate')("SERVERERRORALERT"),
-                    modifier: mod,
-                    callback: function(idx) {
-                        LogOutService.logOut();
-                    }
-                });
-            }
-            //This means server is working, but being slow
-            else{
-                if(ons.platform.isAndroid())
-                {
-                    mod='material';
-                }
-                ons.notification.alert({
-
-                    //message: 'Request is taking longer than usual...please try again later.',
-                    message: $filter('translate')("LONGERTIMEALERT"),
-                    modifier: mod,
-                    callback: function(idx) {
-                        LogOutService.logOut();
-                    }
-                });
-            }
+        let timeOut = setTimeout(function(){
+            loadingmodal.hide();
+            NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_ALERT"), null, LogOutService.logOut);
         }, 90000);
     }
 })();

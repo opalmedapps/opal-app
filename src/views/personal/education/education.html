@@ -1,0 +1,74 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="EducationalMaterialController as edu">
+
+    <!-- TOOLBAR -->
+    <generic-toolbar title="{{edu.pageTitle}}" style-class="fontSizeTitle">
+        <left-content>
+            <ons-back-button>{{"BACK"| translate}}</ons-back-button>
+        </left-content>
+        <right-content>
+            <ons-toolbar-button ng-click="edu.openInfoPage()" ng-if="edu.eduCategory==='clinical'">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
+
+    <!-- NETWORK BANNER -->
+    <network-banner></network-banner>
+
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="edu.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="EducationalMaterial"
+                          display-function="edu.configureState"
+                          refresh="edu.pullHookRefresh"
+                          hide-content="edu.hideContent">
+    </patient-data-handler>
+
+    <!-- SEARCH BAR -->
+    <search-bar ng-hide="edu.hideContent || edu.noMaterials" search-text="edu.searchString"
+        placeholder="{{'SEARCH_EDU'|translate}}" style-class="fontSizeDesc"></search-bar>
+
+    <!-- NO MATERIAL TEXT -->
+    <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials && !edu.hideContent" align="center"
+        ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
+        {{'REFERENCE_MATERIAL_NONE' | translate}}
+    </div>
+
+    <!-- LIST OF EDUCATIONAL MATERIALS -->
+    <ons-scroller-height ng-hide="edu.noMaterials" offset-height="10">
+        <ons-list
+            ng-repeat="edumaterial in (edu.filteredEduMaterials = (edu.edumaterials | filter: edu.searchString | orderBy: '-DateAdded'))"
+            ng-click="edu.goToEducationalMaterial(edumaterial)">
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle"
+                ng-show="{{edu.filteredEduMaterials | showHeader : $index : 'DateAdded' }}">
+                {{edumaterial.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-item modifier="chevron" class="item">
+                <ons-row align="center">
+                    <ons-col width="60px" class="ons-col-icon">
+                        <div>
+                            <i ng-class="edumaterial.Icon" ng-style="{color: edumaterial.Color}"
+                                style="font-size: 26px"></i>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span
+                                ng-class="[fontSizeTitle, 'item-desc', {'item-unread': edumaterial.ReadStatus==='0'}]">{{edumaterial.Name}}</span>
+                        </header>
+                        <p ng-class="[fontSizeTitle, 'item-desc', {'item-unread': edumaterial.ReadStatus==='0'}]">
+                            {{edumaterial.Type}}</p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+    </ons-scroller-height>
+</ons-page>

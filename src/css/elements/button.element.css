@@ -1,0 +1,299 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.btn-circle.btn-xl {
+	width: 100px;
+	height: 100px;
+	padding: 5px 16px;
+	font-size: 18px;
+	line-height: 1.00;
+	border-radius: 50px;
+}
+.check-in-button {
+	width:150px;
+	height:150px;
+	border-radius: 50%;
+}
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+.button--appointments-past--cta {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	background: transparent;
+	border: none;
+	line-height: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 400;
+	font-size: 17px;
+	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	height: auto;
+	text-decoration: none;
+	padding: 4px 10px;
+	font-size: 17px;
+	line-height: 32px;
+	letter-spacing: 0;
+	color: #fff;
+	vertical-align: middle;
+	background-color: #1284ff;
+	border: 0px solid currentColor;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+	border: none;
+	background-color: #4cda64;
+	color: #fff;
+}
+.button--appointments-past--cta:hover {
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+}
+.button--appointments-past--cta:focus {
+	outline: 0;
+}
+.button--appointments-past--cta:active {
+	color: var-button-cat-color;
+	background-color: #4cda64;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+	opacity: 0.2;
+}
+.button--appointments-past--cta:disabled,
+.button--appointments-past--cta[disabled] {
+	opacity: 0.3;
+	cursor: default;
+	pointer-events: none;
+}
+.button--appointments-future--cta {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	background: transparent;
+	border: none;
+	line-height: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-weight: 400;
+	font-size: 17px;
+	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	height: auto;
+	text-decoration: none;
+	padding: 4px 10px;
+	font-size: 17px;
+	line-height: 32px;
+	letter-spacing: 0;
+	color: #fff;
+	vertical-align: middle;
+	background-color: #1284ff;
+	border: 0px solid currentColor;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+	border: none;
+	background-color: #c8ccc9;
+	color: #fff;
+}
+.button--appointments-future--cta:hover {
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+}
+.button--appointments-future--cta:focus {
+	outline: 0;
+}
+.button--appointments-future--cta:active {
+	color: var-button-cat-color;
+	background-color: #c8ccc9;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+	opacity: 0.2;
+}
+.button--appointments-future--cta:disabled,
+.button--appointments-future--cta[disabled] {
+	opacity: 0.3;
+	cursor: default;
+	pointer-events: none;
+}
+/*
+*Checkin button home
+*/
+.button--large-danger {
+	font-size: 17px;
+	font-weight: 500;
+	line-height: 36px;
+	padding: 4px 12px;
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+.button--large-danger:active {
+	background-color: #eb482f;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+	opacity: 0.2;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+}
+.button--large-danger:disabled,
+.button--large-danger[disabled] {
+	opacity: 0.3;
+	cursor: default;
+	pointer-events: none;
+}
+.button--large-danger:hover {
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+}
+.button--large-danger:focus {
+	outline: 0;
+}
+/*
+*Checkin button success
+*/
+.button--large-success {
+	font-size: 17px;
+	font-weight: 500;
+	line-height: 36px;
+	padding: 4px 12px;
+	display: block;
+	width: 100%;
+	text-align: center;
+	background-color: #4cda64;
+}
+.button--large-success:active {
+	background-color: #4cda64;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+	opacity: 0.2;
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+}
+.button--large-success:disabled,
+.button--large-success[disabled] {
+	opacity: 0.3;
+	cursor: default;
+	pointer-events: none;
+}
+.button--large-success:hover {
+	-webkit-transition: none;
+	-moz-transition: none;
+	-o-transition: none;
+	transition: none;
+}
+.button--large-success:focus {
+	outline: 0;
+}
+
+.button--large-green {
+	background-color: #4CAF50;
+	font-weight: bolder;
+	margin: auto;
+	max-width: 400px;
+}
+
+.button--large-blue {
+	background-color: #2196F3;
+	font-weight: bolder;
+	margin: auto;
+	max-width: 400px;
+}
+
+#more-info-button-outer {
+	text-align: center;
+	width: 90%;
+	margin-left: 5%;
+}
+
+#more-info-button {
+	width: 100%;
+	height: 50px;
+	font-size: x-large;
+	background-color: #F5F5F5;
+}
+
+#more-info-button:hover {
+	background-color: #59D45D;
+}
+
+.opal_btn_small{
+	height: 7vh;
+	width: 14vw;
+	max-width: 70px;
+	padding: 0;
+}

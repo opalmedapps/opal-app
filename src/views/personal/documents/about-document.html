@@ -1,16 +1,17 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2019 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="IndividualDocumentController as vm">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center">{{"INFO"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'INFO'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <div>
         <ons-list class="settings-list">
             <ons-list-item class="item">
                 <div style="line-height:1" align="left">
                     <p class="item-desc" ng-class="fontSizeDesc"
-                       ng-bind-html="vm.DocumentDescription">
+                       ng-bind-html="vm.DocumentDescription | trustHTML">
                     </p>
                 </div>
             </ons-list-item>

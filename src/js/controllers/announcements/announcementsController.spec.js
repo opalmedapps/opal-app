@@ -1,28 +1,29 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   announcementsController.spec.js
  * Description  :   Tests the announcementsController
  * Created by   :   James Brace
  * Date         :   25 Sept 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 "use strict";
 describe('AnnouncementsController', function() {
     beforeEach(function() {spyOn(ons, 'isWebView').and.returnValue(true)});
-    beforeEach(module('MUHCApp'));
+    beforeEach(module('OpalApp'));
 
     var $controller;
     var controller;
-    var NavigatorParameters;
+    var Navigator;
     var Announcements;
     var UserPreferences;
     var $scope;
 
     var no_announcements = false;
 
-    beforeEach(inject(function(_$controller_, _NavigatorParameters_, _UserPreferences_){
+    beforeEach(inject(function(_$controller_, _Navigator_, _UserPreferences_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         Announcements = {
             getAnnouncements: function(){
@@ -36,7 +37,7 @@ describe('AnnouncementsController', function() {
             }
         };
 
-        NavigatorParameters= _NavigatorParameters_;
+        Navigator = _Navigator_;
         UserPreferences = _UserPreferences_;
 
         $scope = {
@@ -55,14 +56,12 @@ describe('AnnouncementsController', function() {
             spyOn( Announcements, 'setLanguage' ).and.returnValue([]);
         } else {
             spyOn( Announcements, 'getAnnouncements' ).and.returnValue(MockData.test_announcements);
-            spyOn( Announcements, 'setLanguage' ).and.returnValue(MockData.english_test_annoucements);
+            spyOn( Announcements, 'setLanguage' ).and.returnValue(MockData.english_test_announcements);
             spyOn( Announcements, 'readAnnouncementBySerNum' ).and.returnValue(true);
         }
 
-        spyOn( NavigatorParameters, 'setParameters').and.returnValue(true);
-
         $controller = _$controller_;
-        controller = $controller('AnnouncementsController', {Announcements: Announcements, NavigatorParameters: NavigatorParameters, $scope: $scope});
+        controller = $controller('AnnouncementsController', {Announcements: Announcements, Navigator: Navigator, $scope: $scope});
 
     }));
 
@@ -71,7 +70,7 @@ describe('AnnouncementsController', function() {
             expect(Announcements.getAnnouncements).toHaveBeenCalled();
             expect(Announcements.setLanguage).toHaveBeenCalled();
             expect(controller.noAnnouncements).toBe(false);
-            expect(controller.announcements).toEqual(MockData.english_test_annoucements);
+            expect(controller.announcements).toEqual(MockData.english_test_announcements);
         });
     });
 
@@ -79,7 +78,6 @@ describe('AnnouncementsController', function() {
         expect(controller.announcements[1].ReadStatus).toBe('0');
         controller.goToAnnouncement(controller.announcements[1]);
         expect(Announcements.readAnnouncementBySerNum).toHaveBeenCalled();
-        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
         expect(controller.announcements[1].ReadStatus).toBe('1');
 
         no_announcements = true;
@@ -90,14 +88,5 @@ describe('AnnouncementsController', function() {
         expect(controller.noAnnouncements).toBeTruthy();
 
         no_announcements = false
-    });
-
-    it('should display headers appropriately', function() {
-        expect(controller.showHeader(0)).toBeTruthy();
-        expect(controller.showHeader(1)).toBeFalsy();
-        expect(controller.showHeader(2)).toBeFalsy();
-        expect(controller.showHeader(3)).toBeFalsy();
-        expect(controller.showHeader(4)).toBeFalsy();
-
     });
 });

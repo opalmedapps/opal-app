@@ -1,25 +1,25 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   appointmentController.spec.js
  * Description  :   Tests the appointmentController
  * Created by   :   James Brace
  * Date         :   25 Sept 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 "use strict";
 describe('CalendarController', function() {
     beforeEach(function() {spyOn(ons, 'isWebView').and.returnValue(true)});
-    beforeEach(module('MUHCApp'));
+    beforeEach(module('OpalApp'));
 
     var $controller;
     var controller;
-    var NavigatorParameters;
+    var Navigator;
     var UserPreferences;
     var $scope;
     var $timeout;
-    var $window;
     var Appointments;
     var $location;
     var $anchorScroll;
@@ -28,18 +28,11 @@ describe('CalendarController', function() {
     var empty_appointments;
     var varied_date = false;
 
-    beforeEach(inject(function(_$controller_, _NavigatorParameters_, _UserPreferences_, _$timeout_){
+    beforeEach(inject(function(_$controller_, _Navigator_, _UserPreferences_, _$timeout_){
 
-        NavigatorParameters= _NavigatorParameters_;
+        Navigator = _Navigator_;
         UserPreferences = _UserPreferences_;
         $timeout = _$timeout_;
-        $window = {
-            navigator: {
-                pushPage: function() {
-                    return true;
-                }
-            }
-        };
 
         $location = {
             hash: function(stuff) {
@@ -52,7 +45,7 @@ describe('CalendarController', function() {
         if(!empty_appointments){
             if(!varied_date){
                 Appointments = {
-                    getUserAppointments: function(){
+                    getAppointments: function() {
                         return MockData.test_appointments;
                     },
                     readAppointmentBySerNum: function(stuff){
@@ -61,7 +54,7 @@ describe('CalendarController', function() {
                 };
             } else {
                 Appointments = {
-                    getUserAppointments: function(){
+                    getAppointments: function() {
                         return MockData.test_appointments_varied_date;
                     },
                     readAppointmentBySerNum: function(stuff){
@@ -71,26 +64,20 @@ describe('CalendarController', function() {
             }
         } else {
             Appointments = {
-                getUserAppointments: function(){
+                getAppointments: function() {
                     return [];
                 }
             };
         }
-
 
         // Spies
         spyOn( UserPreferences, 'getLanguage').and.callFake( function() {
             return 'EN';
         } );
 
-
-        spyOn( NavigatorParameters, 'setParameters').and.returnValue(true);
-        spyOn( NavigatorParameters, 'getParameters').and.returnValue({Navigator: 'navigator'});
-
-
         $controller = _$controller_;
-        controller = $controller('CalendarController', { NavigatorParameters: NavigatorParameters, $scope: $scope,
-            UserPreferences: _UserPreferences_, $window: $window, Appointments: Appointments, $location: $location, $anchorScroll: $anchorScroll});
+        controller = $controller('CalendarController', { Navigator: Navigator, $scope: $scope,
+            UserPreferences: _UserPreferences_, Appointments: Appointments, $location: $location, $anchorScroll: $anchorScroll});
 
     }));
 
@@ -147,27 +134,12 @@ describe('CalendarController', function() {
 
     it('should go to appointment', function(){
         var spy = spyOn(Appointments, 'readAppointmentBySerNum');
-        var spy2 = spyOn($window.navigator, 'pushPage');
         $timeout.flush();
 
         controller.goToAppointment(controller.appointments[0]);
         expect(spy).toHaveBeenCalledTimes(0);
-        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
-        expect(spy2).toHaveBeenCalled();
 
         controller.goToAppointment(controller.appointments[1]);
         expect(spy).toHaveBeenCalled();
-        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
-        expect(spy2).toHaveBeenCalled();
     });
-
-    it('should go to calendar options', function(){
-        var spy = spyOn($window.navigator, 'pushPage');
-        $timeout.flush();
-
-        controller.goToCalendarOptions();
-        expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledWith('./views/personal/appointments/calendar-options.html')
-    });
-
 });

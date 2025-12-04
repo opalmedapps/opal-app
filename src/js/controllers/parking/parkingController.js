@@ -1,38 +1,117 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
 *Code by David Herrera May 20, 2015
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
-(()=>{
-	angular.module("MUHCApp")
-		.controller("ParkingController", ParkingController);
 
-	ParkingController.$inject = ['NavigatorParameters', 'UserPreferences', 'Params', 'Browser', 'DynamicContent'];
+/**
+ * @ngdoc controller
+ * @requires Browser
+ * @requires $filter
+ * @requires Hospital
+ * @requires NativeNotification
+ * @requires Params
+ * @requires $timeout
+ * @requires UserHospitalPreferences
+ * @description Controller for the parking view.
+ */
 
-	/* @ngInject */
-	function ParkingController(NavigatorParameters, UserPreferences, Params, Browser, DynamicContent) {
-		const vm = this;
+(function () {
+    'use strict';
 
-		let navigator;
+    angular
+        .module('OpalApp')
+        .controller("ParkingController", ParkingController);
 
-		vm.goToParkingLink = goToParkingLink;
+    ParkingController.$inject = [
+        'Browser',
+        '$filter',
+        'Hospital',
+        'NativeNotification',
+        'Params',
+        '$timeout',
+        'UserHospitalPreferences',
+    ];
 
-		activate();
+    /* @ngInject */
+    function ParkingController(
+        Browser,
+        $filter,
+        Hospital,
+        NativeNotification,
+        Params,
+        $timeout,
+        UserHospitalPreferences,
+    ) {
+        const vm = this;
 
-		/////////////////////////
+        // variables seen from view
+        vm.loading = true;  // This is for loading the list of sites
+        vm.sites = [];
+        vm.noParkingSites = false;
+        vm.alert = undefined;
 
-		function activate() {
-			navigator = NavigatorParameters.getNavigator();
-		}
+        // functions that can be used from view
+        vm.goToParkingLink = goToParkingLink;
 
-		function goToParkingLink(type) {
-			if (type === "parking_general" || type === "parking_gettingtohospital") {
-				const url = DynamicContent.getURL(type);
-				Browser.openInternal(url);
-			}
-			else if (type ==="parking_oncology") {
-				navigator.pushPage('./views/templates/content.html', {contentType: type});
-			}
-		}
-	}
+        activate();
+
+        /////////////////////////
+
+        function activate() {
+            vm.loading = true;
+
+            loadParkingSites();
+        }
+
+        /**
+         * @name goToParkingLink
+         * @desc This function redirects user to a given parking site url
+         * @param {string} url Parking url
+         */
+        function goToParkingLink(url) {
+            Browser.openInternal(url);
+        }
+
+        /**
+         * @name loadParkingSites
+         * @desc This function loads sites with the parking info
+         */
+        async function loadParkingSites() {
+            try {
+                const parkingInfo = await Hospital.requestSiteInfo();
+
+                $timeout(() => {
+
+                    vm.sites = parkingInfo;
+
+                    if (vm.sites === undefined || vm.sites.length === 0) {
+                        vm.noParkingSites = true;
+                        vm.alert = {
+                            type: Params.alertTypeInfo,
+                            content: "NO_PARKING_SITES",
+                        };
+                    }
+
+                    vm.loading = false;
+                });
+            } catch (error) {
+                $timeout(() => {
+                    // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
+                    console.error(error);
+
+                    vm.loading = false;
+
+                    vm.alert = {
+                        type: Params.alertTypeDanger,
+                        content: "PAGE_ACCESS_ERROR"
+                    };
+                });
+            }
+        }
+    }
 })();

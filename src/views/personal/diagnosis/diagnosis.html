@@ -1,30 +1,43 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="DiagnosesController as diag">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{"DIAGNOSIS"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'DIAGNOSIS'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <div>
+
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="diag.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="Diagnosis"
+                          display-function="diag.setDiagnosesView"
+                          refresh="diag.pullHookRefresh"
+                          hide-content="diag.hideContent"
+    ></patient-data-handler>
+
+    <div ng-hide="diag.hideContent">
         <ons-list class="settings-list" ng-repeat="diagnosis in diag.diagnoses | orderBy: '-CreationDate' ">
-            <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="diag.showHeader($index)">{{diagnosis.CreationDate|date:'fullDate'}}</ons-list-header>
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ diag.diagnoses | showHeader : $index : 'CreationDate' }}">{{ diagnosis.CreationDate | date:'fullDate' }}</ons-list-header>
             <ons-list-item class="item">
                 <ons-row style="padding:5px;">
-                    <ons-col width="50px" align="center">
-                        <ons-icon icon="fa-heartbeat iconHomeView" style="color:#f44336"></ons-icon>
+                    <ons-col width="50px" class="ons-col-icon">
+                        <i class="fa-solid fa-stethoscope fa14x" style="color: #994741"></i>
                     </ons-col>
                     <ons-col align="center">
                         <span class="item-title" ng-class="fontSizeTitle"> {{"DIAGNOSIS"|translate}}</span>
                         <span class="item-desc" ng-class="fontSizeDesc">{{diagnosis["Description_" + diag.language]}}</span><br>
-                        <!--<span class="item-title" ng-class="fontSizeTitle"> {{"DATE"|translate}}:</span>
-                        <span class="item-desc" ng-class="fontSizeDesc">{{diagnosis.CreationDate|date:'fullDate'}}</span>-->
                     </ons-col>
                 </ons-row>
             </ons-list-item>
         </ons-list>
-
     </div>
 
-    <div style="color:grey;margin-top:25vh" ng-show="diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
-        {{"NODIAGNOSIS"|translate}}
+    <div style="color:grey;margin-top:25vh" ng-show="!diag.hideContent && diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
+        {{"NO_DIAGNOSIS"|translate}}
     </div>
 </ons-page>

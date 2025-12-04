@@ -1,0 +1,33 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @description Custom toast message, used to display short pieces of information to the user.
+ *              Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
+ *              Animations were replaced with jQuery calls.
+ * @author Stacey Beard
+ * @date 2021-08-27
+ */
+
+/* Invisible outer container that provides the right location in which to fit the contents */
+#custom-toast-container {
+    position: fixed; /* Floats above the rest of the page */
+    z-index: 99; /* Floats above the rest of the page */
+    pointer-events: none; /* Can click on things under it; does not block navigation bar */
+    width: 100%; /* Fills the screen width */
+}
+
+/* Toast message and background */
+#custom-toast {
+    display: none; /* Hidden by default; necessary for jQuery fadeIn */
+    opacity: 0.9; /* Background transparency */
+    text-align: center; /* Centered text */
+    border-radius: 25px; /* Rounded borders */
+    padding: 10px 16px; /* Padding vertical, horizontal */
+    margin-left: auto; /* Centered horizontally */
+    margin-right: auto; /* Centered horizontally */
+    max-width: min(80%, 400px); /* Fills 80% of the screen width, up to 400 px */
+}

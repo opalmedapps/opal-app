@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Setup to Deploy App to Firebase
+description: Setup before deploying the mobile app to Firebase
+
+inputs:
+  ENVIRONMENT:
+    description: 'Environment in which to deploy the app'
+    required: true
+  GOOGLE_APPLICATION_CREDENTIALS:
+    description: 'Contents of the service account file used to access the Firebase project for the given environment'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare Firebase release notes
+      # Save release notes as a multiline string: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#multiline-strings
+      run: |
+        {
+          echo 'RELEASE_NOTES<<EOF'
+          echo "Build created and deployed by GitHub Actions for environment '$ENVIRONMENT' on $(git log --format=medium -n 1)"
+          echo EOF
+        } >> "$GITHUB_ENV"
+      shell: bash
+      env:
+        ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
+
+    - name: Load service account used to access Firebase
+      run: |
+        echo "$GOOGLE_APPLICATION_CREDENTIALS" > service-account.txt
+        echo GOOGLE_APPLICATION_CREDENTIALS=service-account.txt >> "$GITHUB_ENV"
+      shell: bash
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ inputs.GOOGLE_APPLICATION_CREDENTIALS }}

@@ -1,35 +1,47 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="PatientTestResultsController as tests">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle"><p class="overflow-text-ellipsis">{{"LAB_RESULTS"|translate}}</p></div>
-        <div class="right">
+    <generic-toolbar title="{{'LAB_RESULTS'|translate}}" style-class="fontSizeTitle">
+        <right-content>
+            <!-- INFO BUTTON -->
             <labs-info-button style="margin-right: -10px"></labs-info-button>
-            <ons-toolbar-button ng-click="tests.refresh()">
-                <ons-icon icon="ion-ios-refresh-empty" size="2x" style="color: #4F81BB"></ons-icon>
-            </ons-toolbar-button>
-        </div>
-    </ons-toolbar>
-    <loading-spinning-circle ng-if="tests.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
-    </loading-spinning-circle>
-    <div class="navigation-bar" ng-if="!tests.loading">
+
+            <!-- REFRESH BUTTON -->
+            <loading-spinning-button
+                click-function="tests.executeRefresh"
+                disable="tests.hideContent">
+            </loading-spinning-button>
+        </right-content>
+    </generic-toolbar>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="PatientTestDates,PatientTestTypes"
+                          display-function="tests.setTestsView"
+                          refresh="tests.executeRefresh"
+                          hide-content="tests.hideContent"
+    ></patient-data-handler>
+
+    <div class="navigation-bar" ng-if="!tests.hideContent">
         <div class="navigation-bar__center">
             <div class="button-bar" style="margin-top:10px;width:70%;left:15%;" >
-                <div class="button-bar__item" ng-click="tests.checkForRefresh()">
+                <div class="button-bar__item">
                     <input type="radio" name="navi-segment-a" checked ng-model="tests.showByDate" ng-value="true">
-                    <div class="button-bar__button">{{'LAB_BYDATE'|translate}}</div>
+                    <div class="button-bar__button">{{'LAB_BY_DATE'|translate}}</div>
                 </div>
 
-                <div class="button-bar__item" ng-click="tests.checkForRefresh()">
+                <div class="button-bar__item">
                     <input type="radio" name="navi-segment-a" ng-model="tests.showByDate" ng-value="false">
-                    <div class="button-bar__button">{{'LAB_BYTYPE'|translate}}</div>
+                    <div class="button-bar__button">{{'LAB_BY_TYPE'|translate}}</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div ng-if="!tests.loading && tests.showContent">
+    <div ng-if="!tests.hideContent">
 
         <!-- DISCLAIMER -->
         <labs-disclaimer></labs-disclaimer>
@@ -38,31 +50,40 @@
             <ons-scroller-height>
                 <div ng-if="tests.testDates.length === 0" style="margin-top: 25px; text-align: center;">
                     <p ng-class="fontSizeTitle">
-                        {{"NO"|translate}} {{"LAB_RESULTS"|translate}}
+                        {{"LAB_RESULTS_NONE"|translate}}
                     </p>
                 </div>
                 <div ng-if="tests.testDates.length > 0">
                     <ons-list>
                         <div ng-repeat="testDate in tests.testDates">
-                            <ons-list-header ng-if="tests.showDateHeader($index)"
-                                             ng-class="fontSizeTitle">{{testDate|date:'longDate'}}
+                            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="tests.testDates | showHeader : $index"
+                                            >{{
+                                                testDate.collectedDateTime.toLocaleString(
+                                                    tests.locale,
+                                                    { timeZone: 'America/Toronto', dateStyle: "full" }
+                                                )
+                                            }}
                             </ons-list-header>
                             <ons-list-item
-                                    ng-click="tests.goToTestDateResults(testDate)"
+                                    ng-click="tests.goToTestDateResults(testDate.collectedDateTime)"
                                     modifier="chevron tappable" class="list-item-container">
                                 <ons-row align="center">
                                     <ons-col width="60px" align="center">
                                         <div style="margin-left:10px">
-                                            <ons-icon icon="ion-erlenmeyer-flask" style="color:#8BC34A"
-                                                      size="2x"></ons-icon>
-                                            <!--                    TODO(dherre3) Add logic for notifications-->
-                                            <!--                                                <span class="notification" ng-if="testResultByDate.ReadStatus==='0'">&nbsp;</span>-->
+                                            <ons-icon icon="ion-erlenmeyer-flask" style="color:#8BC34A" size="2x"></ons-icon>
                                         </div>
                                     </ons-col>
                                     <ons-col style="word-wrap: break-word;">
                                         <div style="line-height:1;">
-                                            <p class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}}
-                                                {{testDate | date:'shortTime'}}</p>
+                                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': (testDate.readStatus==='0')}]">
+                                                {{"ADDED"|translate}}
+                                                {{
+                                                    testDate.collectedDateTime.toLocaleString(
+                                                        tests.locale,
+                                                        { timeZone: 'America/Toronto', timeStyle: "short" }
+                                                    )
+                                                }}
+                                            </span>
                                         </div>
                                     </ons-col>
                                 </ons-row>
@@ -74,87 +95,95 @@
             </ons-scroller-height>
         </div>
         <div ng-if="!tests.showByDate">
-            <div style="position:sticky; top:0; z-index:9999;">
-                <!-- SEARCH BAR -->
-                <search-bar search-text="tests.searchTestTypeText" placeholder="{{'SEARCH'|translate}}" style-class="fontSizeDesc"></search-bar>
-                <!-- HEADER WITH COLUMN TITLES -->
-                <ons-list>
-                    <ons-list-item class="list-item-container">
-                        <ons-row ng-class="fontSizeDesc" style="font-weight:bold" vertical-align="center">
-
-                            <!-- HEADER - LEFT (NAME) -->
-                            <ons-col width="35%" class="labtest-col hyphens" vertical-align="center">
-                                <div align="left" style="margin-left:4px">
-                                    {{"LAB_NAME"|translate}}
-                                </div>
-                            </ons-col>
-
-                            <!-- HEADER - CENTRE (VALUE) -->
-                            <ons-col width="25%" class="labtest-col hyphens" vertical-align="center">
-                                <div align="center">
-                                    {{"LAB_RECENT_RESULT"|translate}}
-                                </div>
-                            </ons-col>
-
-                            <!-- HEADER - RIGHT (NORMAL RANGE) -->
-                            <ons-col width="33%" class="labtest-col hyphens" vertical-align="center">
-                                <div align="right">
-                                    {{"LAB_NORM"|translate}}
-                                </div>
-                            </ons-col>
-
-                            <!-- HEADER - SPACE FOR CHEVRON -->
-                            <ons-col width="5%" class="labtest-col" vertical-align="center">
-                                <div align="right">
-
-                                </div>
-                            </ons-col>
-                        </ons-row>
-                    </ons-list-item>
-                </ons-list>
+            <!-- NO LAB RESULTS MESSAGE -->
+            <div ng-if="tests.testTypes.length === 0" style="margin-top: 25px; text-align: center;">
+                <p ng-class="fontSizeTitle">
+                    {{"LAB_RESULTS_NONE"|translate}}
+                </p>
             </div>
-            <ons-scroller-height>
-                <ons-list>
-                    <ons-list-item modifier="tappable chevron"
-                                   ng-repeat="testResult in tests.testTypes | filter: tests.searchTestTypeText"
-                                   ng-click="tests.goToTestTypeResults(testResult.testExpressionSerNum)"
-                                   class="list-item-container">
-                        <ons-row ng-class="[tests.getTestClass(testResult), fontSizeDesc]"
-                                 vertical-align="center">
+            <div ng-if="tests.testTypes.length > 0">
+                <div style="position:sticky; top:0; z-index:9999;">
+                    <!-- SEARCH BAR -->
+                    <search-bar search-text="tests.searchTestTypeText" placeholder="{{'SEARCH'|translate}}" style-class="fontSizeDesc"></search-bar>
+                    <!-- HEADER WITH COLUMN TITLES -->
+                    <ons-list>
+                        <ons-list-header class="default-list-header" ng-class="fontSizeTitle">
+                            <ons-row ng-class="fontSizeDesc" style="font-weight:bold" vertical-align="center">
 
-                            <!-- LAB RESULT - LEFT (NAME) -->
-                            <ons-col width="35%" class="labtest-col" vertical-align="center">
-                                <div align="left" style="margin-left:4px;">
-                                    <p class="hyphens">{{tests.displayType(testResult)}}</p>
-                                </div>
-                            </ons-col>
+                                <!-- HEADER - LEFT (NAME) -->
+                                <ons-col width="35%" class="labtest-col hyphens" vertical-align="center">
+                                    <div align="left" style="margin-left:4px">
+                                        {{"LAB_NAME"|translate}}
+                                    </div>
+                                </ons-col>
 
-                            <!-- LAB RESULT - CENTRE (VALUE) -->
-                            <ons-col width="25%" class="labtest-col" vertical-align="center">
-                                <div align="center">
-                                    {{testResult.latestTestValue}}
-                                    <span ng-if="testResult.latestAbnormalFlag">
-                                        ({{testResult.latestAbnormalFlag}})
-                                    </span>
-                                    <div class="break-words">{{testResult.unitWithBrackets}}</div>
-                                </div>
-                            </ons-col>
+                                <!-- HEADER - CENTRE (VALUE) -->
+                                <ons-col width="25%" class="labtest-col hyphens" vertical-align="center">
+                                    <div align="center">
+                                        {{"LAB_RECENT_RESULT"|translate}}
+                                    </div>
+                                </ons-col>
 
-                            <!-- LAB RESULT - RIGHT (NORMAL RANGE) -->
-                            <ons-col width="33%" class="labtest-col" vertical-align="center">
-                                <div align="right">
-                                    {{testResult.normalRange}}
-                                    <div ng-if="testResult.normalRange" class="break-words">{{testResult.unitWithBrackets}}</div>
-                                </div>
-                            </ons-col>
+                                <!-- HEADER - RIGHT (NORMAL RANGE) -->
+                                <ons-col width="33%" class="labtest-col hyphens" vertical-align="center">
+                                    <div align="right">
+                                        {{"LAB_NORM"|translate}}
+                                    </div>
+                                </ons-col>
 
-                            <!-- LAB RESULT - SPACE FOR CHEVRON -->
-                            <ons-col width="5%" class="labtest-col" vertical-align="center">
-                            </ons-col>
-                        </ons-row>
-                    </ons-list-item>
-                </ons-list>
-            </ons-scroller-height>
+                                <!-- HEADER - SPACE FOR CHEVRON -->
+                                <ons-col width="5%" class="labtest-col" vertical-align="center">
+                                    <div align="right"></div>
+                                </ons-col>
+                            </ons-row>
+                        </ons-list-header>
+                    </ons-list>
+                </div>
+                <ons-scroller-height>
+                    <ons-list>
+                        <ons-list-item
+                        modifier="tappable chevron"
+                        ng-repeat="testResult in tests.testTypes | filter: tests.searchTestTypeText"
+                        ng-click="tests.goToTestTypeResults(testResult.testExpressionSerNum)"
+                        class="list-item-container">
+                            <ons-row
+                                ng-class="fontSizeDesc"
+                                vertical-align="center"
+                                ng-style="{'font-weight': (testResult.readStatus===false) ? 'bold' : 'normal'}">
+                                <!-- LAB RESULT - LEFT (NAME) -->
+                                <ons-col width="35%" class="labtest-col" vertical-align="center">
+                                    <div align="left" style="margin-left:4px;">
+                                        <p class="hyphens">{{tests.displayType(testResult)}}</p>
+                                    </div>
+                                </ons-col>
+
+                                <!-- LAB RESULT - CENTRE (VALUE) -->
+                                <ons-col width="25%" class="labtest-col" vertical-align="center">
+                                    <div align="center">
+                                        {{testResult.latestTestValue}}
+                                        <span ng-if="testResult.latestAbnormalFlag">
+                                            ({{testResult.latestAbnormalFlag}})
+                                        </span>
+                                        <div class="break-words">{{testResult.unitWithBrackets}}</div>
+                                    </div>
+                                </ons-col>
+
+                                <!-- LAB RESULT - RIGHT (NORMAL RANGE) -->
+                                <ons-col width="33%" class="labtest-col" vertical-align="center">
+                                    <div align="right">
+                                        {{testResult.normalRange}}
+                                        <div ng-if="testResult.normalRange" class="break-words">{{testResult.unitWithBrackets}}</div>
+                                    </div>
+                                </ons-col>
+
+                                <!-- LAB RESULT - SPACE FOR CHEVRON -->
+                                <ons-col width="5%" class="labtest-col" vertical-align="center">
+                                </ons-col>
+                            </ons-row>
+                        </ons-list-item>
+                    </ons-list>
+                </ons-scroller-height>
+            </div>
         </div>
     </div>
 

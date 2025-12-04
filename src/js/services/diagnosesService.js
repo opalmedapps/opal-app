@@ -1,35 +1,30 @@
+// SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   diagnosesService.js
  * Description  :   Service that store and manages the patient diagnosis information.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   02 Mar 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
- 
- 
- 
-var myApp=angular.module('MUHCApp');
+
+
+
+var myApp=angular.module('OpalApp');
 /**
 *@ngdoc service
-*@name MUHCApp.service:Diagnoses
 *@requires $filter
-*@requires MUHCApp.service:Diagnoses
 *@description Service stores and manages patient diagnoses
 **/
-myApp.service('Diagnoses',function($filter,LocalStorage){
+myApp.service('Diagnoses', ['$filter', 'LocalStorage', function($filter, LocalStorage) {
   /**
      *@ngdoc property
-    *@name  MUHCApp.service.#diagnoses
-    *@propertyOf MUHCApp.service:Diagnoses
     *@description Diagnoses main service array
     **/
     var diagnoses=[];
     /**
      *@ngdoc property
-    *@name  MUHCApp.service.#diagnosesToLocalStorage
-    *@propertyOf MUHCApp.service:Diagnoses
     *@description Local storage representation of diagnoses
     **/
     var diagnosesToLocalStorage=[];
@@ -62,9 +57,8 @@ myApp.service('Diagnoses',function($filter,LocalStorage){
        /**
       *@ngdoc method
       *@name setDiagnoses
-      *@methodOf MUHCApp.service:Diagnoses
-      *@param {Array} diag diagnoses array that containts all the patient diagnosis
-      *@description Setter method for patient diagoses
+      *@param {Array} diag diagnoses array that contains all the patient diagnoses
+      *@description Setter method for patient diagnoses
       **/
       setDiagnoses:function(diag)
       {
@@ -75,7 +69,6 @@ myApp.service('Diagnoses',function($filter,LocalStorage){
        /**
       *@ngdoc method
       *@name updateDiagnoses
-      *@methodOf MUHCApp.service:Diagnoses
       *@param {Array} diag Finds diagnosis to update or adds new diagnosis if not found
       *@description Updates the diagnoses array with the new information contained in the diag parameter
       **/
@@ -87,7 +80,6 @@ myApp.service('Diagnoses',function($filter,LocalStorage){
         /**
       *@ngdoc method
       *@name getDiagnoses
-      *@methodOf MUHCApp.service:Diagnoses
       *@description Getter for the diagnoses array
       *@returns {Array} Returns diagnoses array.
       **/
@@ -98,8 +90,7 @@ myApp.service('Diagnoses',function($filter,LocalStorage){
       /**
     *@ngdoc method
     *@name clearDiagnoses
-    *@methodOf MUHCApp.service:Diagnoses
-    *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+    *@description Clears the service of any saved state, function used by the {@link OpalApp.controller:LogoutController LogoutController}
     **/
       clearDiagnoses:function()
       {
@@ -107,7 +98,4 @@ myApp.service('Diagnoses',function($filter,LocalStorage){
           diagnosesToLocalStorage=[];
       }
     };
-
-
-
-  });
+}]);

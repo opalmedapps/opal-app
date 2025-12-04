@@ -1,31 +1,48 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="AnnouncementsController as vm">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{"GENERALANNOUNCEMENTSHEADER"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'GENERAL_ANNOUNCEMENTS_HEADER'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
     <network-banner></network-banner>
 
-    <div ng-hide="vm.noAnnouncements">
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="vm.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="Announcements"
+                          display-function="vm.setAnnouncementsView"
+                          refresh="vm.pullHookRefresh"
+                          hide-content="vm.hideContent"
+    ></patient-data-handler>
+
+    <div ng-hide="vm.hideContent || vm.noAnnouncements">
         <ons-list  ng-repeat="announcement in vm.announcements" ng-click="vm.goToAnnouncement(announcement)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="vm.showHeader($index)">{{announcement.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ vm.announcements | showHeader : $index : 'DateAdded' }}">{{ announcement.DateAdded | date:'fullDate' }}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center" >
                     <ons-col width="70px" align="center">
                         <div style="margin-left:10px">
-                            <i class="fa fa-bullhorn iconHomeView" style="color:#FFC107"></i><span class="notification" ng-if="announcement.ReadStatus==='0'">&nbsp;</span>
+                            <i class="fa fa-bullhorn iconHomeView" style="color:#FFC107"></i>
                         </div>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{announcement.Title}}</span>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{announcement.Title}}</span>
+                            <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{"SENT_TO"|translate}}: {{announcement.PatientFirstName}} {{announcement.PatientLastName}}</p>
                         </header>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
         </ons-list>
     </div>
-    <div class="container" align="center">
-        <p style="margin-top:25vh;color:grey" ng-show="vm.noAnnouncements">{{"NOGENERALANNOUNCEMENTS"|translate}}</p>
+
+    <div ng-hide="vm.hideContent" class="container" align="center">
+        <p style="margin-top:25vh;color:grey" ng-show="vm.noAnnouncements">{{"NO_GENERAL_ANNOUNCEMENTS"|translate}}</p>
     </div>
 </ons-page>

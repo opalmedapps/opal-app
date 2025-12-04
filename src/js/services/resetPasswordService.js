@@ -1,31 +1,28 @@
+// SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   resetPasswordService.js
  * Description  :
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   03 Mar 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**
  * @ngdoc service
- * @name MUHCApp.service:ResetPassword
- * @requires MUHCApp.service:Params
  * @description Service used to verify and confirm password resets.
  **/
 (function() {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .factory('ResetPassword', ResetPassword);
 
-    ResetPassword.$inject = ['Params'];
+    ResetPassword.$inject = ['Firebase','Params'];
 
-    function ResetPassword(Params) {
-
-        let auth = firebase.app().auth();
+    function ResetPassword(Firebase, Params) {
 
         let service =  {
             verifyLinkCode: verifyLinkCode,
@@ -39,19 +36,16 @@
          *@ngdoc method
          *@name verifyLinkCode
          *@param {String} url Url that is provided by the redirect from the reset email.
-         *@methodOf MUHCApp.service:ResetPassword
          *@description verifies the password reset code sent to the user.
          **/
         function verifyLinkCode(url) {
-
             var oobCode = this.getParameter('oobCode', url);
 
-            if(oobCode){
-                return auth.verifyPasswordResetCode(oobCode[1]);
+            if (oobCode) {
+                return Firebase.verifyPasswordResetCode(oobCode[1]);
             } else {
                 return Promise.reject({Code: Params.invalidActionCode});
             }
-
         }
 
         /**
@@ -59,13 +53,11 @@
          *@name completePasswordChange
          *@param {String} oobCode  Code sent to user from the reset password email.
          *@param {String} newPassword  New user password.
-         *@methodOf MUHCApp.service:ResetPassword
          *@description confirms the password reset.
          *@returns {Promise} Returns promise containing void.
          **/
-        function completePasswordChange(oobCode, newPassword) {
-
-            return auth.confirmPasswordReset(oobCode[1], newPassword)
+        async function completePasswordChange(oobCode, newPassword) {
+            return await Firebase.confirmPasswordReset(oobCode[1], newPassword);
         }
 
         /**
@@ -73,7 +65,6 @@
          *@name getParameter
          *@param {String} param  Parameter to search for in query string.
          *@param {String} url  URL to scan for parameter.
-         *@methodOf MUHCApp.service:ResetPassword
          *@description Scans the URL using regular expressions for parameters.
          *@returns {Object} The parameter and its value.
          **/

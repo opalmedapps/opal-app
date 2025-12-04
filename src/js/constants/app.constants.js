@@ -1,19 +1,15 @@
-angular.module("MUHCApp").constant('Constants', {
-	app: document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1,
-	version: ()=>{
-		const app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-		if(app){
-			return AppVersion.version;
-		}else{
-			return WEB_VERSION.version;
-		}
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
+let mobileApp = window.hasOwnProperty("cordova");
+
+angular.module('OpalApp').constant('Constants', {
+	app: mobileApp,
+	version: () => {
+		return mobileApp ? AppVersion.version : WEB_VERSION.version;
 	},
-	build: ()=>{
-		const app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-		if(app){
-			return AppVersion.build;
-		}else{
-			return WEB_VERSION.build;
-		}
+	build: () => {
+		return mobileApp ? AppVersion.build : WEB_VERSION.build;
 	}
 });

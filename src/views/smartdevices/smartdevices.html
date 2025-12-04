@@ -1,0 +1,79 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="SmartDevicesController as ctrl">
+    <generic-toolbar title="{{'SMART_DEVICES'|translate}}" style-class="fontSizeTitle">
+        <right-content>
+            <ons-toolbar-button ng-click="ctrl.showInfo()">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
+    <network-banner></network-banner>
+
+    <div ng-if="!ctrl.bluetoothEnabled" class="container" align="center">
+        <i class="fa-brands fa-bluetooth smartdevices-fa-logo" style="color: #0082fc"></i>
+        <div ng-if="ctrl.bluetoothAvailable">
+            <h3>{{"SMART_DEVICES_BLUETOOTH_DISABLED"|translate}}</h3>
+            <p style="color:grey">{{"SMART_DEVICES_BLUETOOTH_PROMPT"|translate}}</p>
+            <button class="button--large--cta"
+                ng-click="ctrl.refresh()">
+                <span>{{"SMART_DEVICES_BLUETOOTH_REFRESH"|translate}}</span>
+            </button>
+        </div>
+        <div ng-if="!ctrl.bluetoothAvailable">
+            <h3>{{"SMART_DEVICES_BLUETOOTH_UNAVAILABLE"|translate}}</h3>
+        </div>
+    </div>
+
+    <div ng-if="ctrl.bluetoothEnabled">
+        <ons-list>
+            <!-- NOTE! Remove ng-show="false" to return VitalTracer watch back to the list of the devices -->
+            <ons-list-item ng-show="false" modifier="chevron" class="item"
+                ng-click="ctrl.goToDevice('vitaltracer_watch.html')">
+                <ons-row align="center">
+                    <div class="smartdevices-content">
+                        <div class="smartdevices-content--icon">
+                            <i class="fa fa-heartbeat fa-2x pull-left"
+                            style="color:red; display: inline-block"></i>
+                        </div>
+                        <div class="smartdevices-content--text">
+                            <p ng-class="fontSizeTitle">{{"SMART_DEVICES_VITALTRACER"|translate}}</p>
+                        </div>
+                    </div>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                ng-click="ctrl.goToDevice('etekcity_scale.html')">
+                <ons-row align="center">
+                    <div class="smartdevices-content">
+                        <div class="smartdevices-content--icon">
+                            <i class="fa fa-heartbeat fa-2x pull-left"
+                            style="color:red; display: inline-block"></i>
+                        </div>
+                        <div class="smartdevices-content--text">
+                            <p ng-class="fontSizeTitle">{{"SMART_DEVICES_ETEKCITY"|translate}}</p>
+                        </div>
+                    </div>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                ng-click="ctrl.goToDevice('xiaomi_scale.html')">
+                <ons-row align="center">
+                    <div class="smartdevices-content">
+                        <div class="smartdevices-content--icon">
+                            <i class="fa fa-heartbeat fa-2x pull-left"
+                            style="color:red; display: inline-block"></i>
+                        </div>
+                        <div class="smartdevices-content--text">
+                            <p ng-class="fontSizeTitle">{{"SMART_DEVICES_XIAOMI_SCALE"|translate}}</p>
+                        </div>
+                    </div>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+    </div>
+</ons-page>

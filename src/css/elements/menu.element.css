@@ -1,0 +1,101 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.page--menu-page__background {
+    background-color: #EBEBEA;
+}
+.page--menu-page__content {
+    color: white;
+}
+.menu-close,
+.menu-close > .toolbar-button {
+    color: #999;
+}
+.menu-list,
+.menu-item:first-child,
+.menu-item:last-child,
+.menu-item {
+    background-color: transparent;
+    background-image: none !important;
+    border-color: transparent;
+    color: #2B6197;
+}
+.popover__content{
+    background-color: #fff;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+    color: #1f1f21;
+    overflow: hidden;
+    min-height: 20px;
+    height: 100%;
+}
+.popover {
+    display: inline;
+}
+.menu-item {
+    color:#2B6197;
+    padding: 0 0 0 20px;
+    line-height: 52px;
+    height: 52px;
+}
+.menu-item:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.menu-notification {
+    display: inline-block;
+    margin-top: 12px;
+
+    height: 16px;
+    line-height: 16px;
+    min-width: 16px;
+    font-weight: 600;
+}
+.bottom-menu-list,
+.bottom-menu-item:first-child,
+.bottom-menu-item:last-child,
+.bottom-menu-item {
+    background-color: transparent;
+    background-image: none !important;
+    color: #626262;
+}
+.bottom-menu-item:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.editFirstNameIcon:hover{
+    display:none;
+}
+.hoverFirstNameEdit:hover+.editFirstNameIcon{
+    display:block;
+}
+.hbtn {
+    height: 44px;
+    line-height: 44px;
+    vertical-align: 0;
+    background: #eee;
+    display:inline-block;
+}
+.list__item, .navigation-bar{
+    border-bottom: 1px solid #ddd !important;
+}
+.navigation-bar {
+    display: flex;
+    align-items: center;
+}
+/* Override default toolbar space allocation of 27-46-27% */
+.navigation-bar__left {
+    width: 22%;
+}
+.navigation-bar__center {
+    width: 56%;
+}
+.navigation-bar__right {
+    width: 22%;
+}
+.tab-bar{
+    border-top: 1px solid #ddd !important;
+}

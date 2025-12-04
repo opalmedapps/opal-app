@@ -1,0 +1,57 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="StudiesController as stud">
+
+    <!-- TODO: The Studies page should have a loading wheel, or an error box to show when the request fails.
+        One way to fix this would be to add a patient-data-handler to this page (this would make it more consistent with the other pages)
+    -->
+    <!-- TOOLBAR -->
+    <generic-toolbar title="{{'STUDIES'|translate}}" style-class="fontSizeTitle">
+        <left-content>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </left-content>
+
+        <right-content>
+            <ons-toolbar-button ng-click="stud.openInfoPage()">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
+
+    <network-banner></network-banner>
+
+    <ons-list class="settings-list" ng-repeat="study in stud.studies | orderBy: '-creationDate'"
+        ng-hide="stud.noStudies">
+        <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="stud.showHeader($index)">
+            {{study.creationDate|date:'fullDate'}}</ons-list-header>
+        <ons-list-item modifier="chevron" ng-click="stud.openStudy(study)" ng-repeat-end>
+            <ons-row>
+                <ons-col width="5px"></ons-col>
+                <ons-col width="60px" align="center" style="text-align: center">
+                    <div style="padding:5px">
+                        <i class="fa-solid fa-dna fa18x" style="color: #FFA13D"></i>
+                    </div>
+                </ons-col>
+                <ons-col align="center">
+                    <div style="padding:4px;line-height:1">
+                        <header ng-if="study.ReadStatus==='0'">
+                            <span class="item-title" ng-class="fontSizeTitle">{{study["title_" + stud.language]}}</span>
+                        </header>
+                        <header ng-if="study.ReadStatus==='1'">
+                            <span class="item-desc" ng-class="fontSizeTitle">{{study["title_" + stud.language]}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc">{{stud.getStatusText(study.consentStatus)}}</p>
+                    </div>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+
+    <div style="color:grey;margin-top:25vh" align="center" ng-show="stud.noStudies" ng-class="fontSizeTitle">
+        {{"STUDIES_NONE"|translate}}
+    </div>
+</ons-page>

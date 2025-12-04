@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright (C) 2024 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Prevent clickjacking and MIME-Sniffing
+Header ADD X-FRAME-OPTIONS DENY
+Header set X-Content-Type-Options nosniff
+
+Header set Strict-Transport-Security max-age=63072000
+
+Header set X-XSS-Protection "1; mode=block"
+
+# add Content-Security-Policy headers
+# generated with https://www.validbot.com/tools/csp-wizard.php
+Header add Content-Security-Policy "base-uri 'self'; default-src 'none'; manifest-src 'self'; form-action 'none'; object-src 'none'; frame-ancestors 'none'; frame-src https://www.youtube.com https://viewer.opalmedapps.ca; font-src 'self'; img-src 'self' data: https://www.depdocs.com https://muhcguides.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.firebaseio.com; connect-src 'self' https://www.depdocs.com https://securetoken.googleapis.com https://identitytoolkit.googleapis.com wss://*.firebaseio.com;"

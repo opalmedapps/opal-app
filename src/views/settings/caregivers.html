@@ -1,0 +1,43 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page style="background-color: white" ng-controller="CaregiversController as Ctrl" ng-cloak>
+    <generic-toolbar title="{{'RELATIONSHIPS_CAREGIVERS'|translate}}" style-class="fontSizeTitle">
+        <right-content>
+            <ons-toolbar-button ng-click="Ctrl.goToCaregiversInfo()">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
+
+    <!-- LOADING CIRCLE-->
+    <loading-spinning-circle ng-if="Ctrl.loadingList" loading-message="{{'LOADING_DATA'|translate}}"></loading-spinning-circle>
+
+    <!-- Error message -->
+    <div ng-show="Ctrl.error" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+        <uib-alert type="'danger'">{{"LOADING_ERROR"|translate}}</uib-alert>
+    </div>
+
+    <div ng-if="Ctrl.message" class="container" align="center">
+        <p style="margin-top:25vh;color:grey">{{Ctrl.message|translate}}</p>
+    </div>
+
+    <ons-list ng-if="!Ctrl.message">
+        <ons-list-item ng-repeat="caregivers in Ctrl.caregivers" class="item">
+            <ons-row align="center" >
+                <ons-col width="60px" align="center">
+                    <div style="margin-left:10px">
+                        <i class="fa fa-user  iconHomeView" style="color:#2196F3"></i>
+                    </div>
+                </ons-col>
+                <ons-col style="word-wrap: break-word;">
+                    <div ng-class="fontSizeTitle">{{caregivers.first_name}} {{caregivers.last_name}}</div>
+                    <div class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate }} {{Ctrl.getRelationshipStatusText(caregivers.status) | translate | lowercase}} ({{caregivers.relationship_type}})</div>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+</ons-page>

@@ -1,19 +1,19 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="GeneralTabController as tab" ng-device-backbutton="tab.generalDeviceBackButton()">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"GENERAL"|translate}}</div>
-        <div class="right">
-            <ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html')">
+    <generic-toolbar title="{{'GENERAL'|translate}}" back-button="false" style-class="fontSizeTitle">
+        <right-content>
+            <ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html', {id:'general'})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
-        </div>
-    </ons-toolbar>
-
+        </right-content>
+    </generic-toolbar>
     <!-- HOSPITAL NAME BAR -->
     <top-page-banner title="tab.selectedHospitalToDisplay"></top-page-banner>
-
     <div>
         <network-banner></network-banner>
         <ons-list style="margin: 0px 0">
@@ -23,14 +23,14 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-bullhorn" size="2x" style="color:#FFC107"></ons-icon>
+                            <i class="fa-solid fa-bullhorn fa18x" style="color:#FFC107"></i>
                             <span class="notification" ng-show="tab.announcementsUnreadNumber>0">{{tab.announcementsUnreadNumber}}</span>
                         </div>
                     </ons-col>
                     <ons-col>
                         <header>
                             <span class="item-title"
-                                  ng-class="fontSizeTitle">{{"GENERALANNOUNCEMENTS"|translate}}</span>
+                                  ng-class="fontSizeTitle">{{"GENERAL_ANNOUNCEMENTS"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>
@@ -42,7 +42,7 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-car" size="2x" style="color:#f44336"></ons-icon>
+                            <i class="fa-solid fa-car fa18x" style="color:#f44336"></i>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -54,29 +54,12 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('PFP') && tab.allowedModules['PFP']"
-                           ng-click="generalNavigator.pushPage('views/general/patientsforpatients/patientsforpatients.html')">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <ons-icon icon="fa-users" size="2x" style="color:#9575CD"></ons-icon>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"PFP"|translate}}</span>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('FEE') && tab.allowedModules['FEE']"
-                           ng-click="generalNavigator.pushPage('views/general/feedback/feedback.html')">
+                           ng-click="generalNavigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'})">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-thumbs-up" size="2x" style="color:#4CAF50"></ons-icon>
+                            <ons-icon icon="fa-thumbs-up fa18x" style="color: #4CAF50"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -89,14 +72,13 @@
             </ons-list-item>
             <ons-list-item class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('FFD') && tab.allowedModules['FFD']"
-                           ng-click="tab.goToUrl('find_doctor')">
+                           ng-click="tab.goToUrl('findDoctor')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <img style="width: 35px;" src="./img/stethoscope.png">
-                            <!--
-                            <ons-icon icon="fa-stethoscope" size="2x" style="color:#f44336"></ons-icon>
-                            -->
+                            <div class="fa-layers fa-2x rounded-icon" style="background-color: #0575B7">
+                                <i class="fa-solid fa-stethoscope" style="color: white" data-fa-transform="shrink-5 left-1"></i>
+                            </div>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -112,14 +94,14 @@
             </ons-list-item>
             <ons-list-item class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('MAS') && tab.allowedModules['MAS']"
-                           ng-click="tab.goToUrl('medical_scheduler')">
+                           ng-click="tab.goToUrl('medicalScheduler')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <img style="width: 35px;" src="./img/calendar.png">
-                            <!--
-                            <ons-icon icon="fa-calendar" size="2x" style="color:#2196F3"></ons-icon>
-                            -->
+                            <span class="fa-layers fa-2x">
+                                <i class="fa-solid fa-calendar" style="color:#3F5CA7"></i>
+                                <i class="fa-solid fa-clock fa-inverse" data-fa-transform="shrink-8.5 down-3"></i>
+                            </span>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -128,6 +110,27 @@
                                   ng-class="fontSizeTitle">{{"QUEBEC_MEDICAL_SCHEDULER"|translate}}</span>
                             <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
                                       size="1.2em">
+                            </ons-icon>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item class="item"
+            ng-if="tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']"
+            ng-click="tab.goToCarnetSante()">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <img class="quebec-icon rounded-icon" src="./img/fleur-de-lys-quebec.svg">
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title"
+                                ng-class="fontSizeTitle">{{"CARNET_SANTE"|translate}}</span>
+                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
+                                    size="1.2em">
                             </ons-icon>
                         </header>
                         <p class="item-desc"></p>

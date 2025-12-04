@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 import {SecurityQuestion} from "../../models/settings/SecurityQuestion";
 import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
@@ -5,31 +9,30 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('UpdateSecurityQuestionController', UpdateSecurityQuestionController);
 
     UpdateSecurityQuestionController.$inject = [
-        'NavigatorParameters',
+        'Navigator',
         '$timeout',
         '$filter',
         'UserPreferences',
         'Params',
-        'FirebaseService',
+        'Firebase',
         'LogOutService',
         'RequestToServer',
         'EncryptionService'
     ];
 
     /* @ngInject */
-    function UpdateSecurityQuestionController(NavigatorParameters, $timeout, $filter, UserPreferences, Params,
-                                              FirebaseService, LogOutService, RequestToServer, EncryptionService) {
+    function UpdateSecurityQuestionController(Navigator, $timeout, $filter, UserPreferences, Params,
+                                              Firebase, LogOutService, RequestToServer, EncryptionService) {
 
         let vm = this;
 
         // variables for controller
         let lang = UserPreferences.getLanguage();
         let navigator = null;
-        let navigatorName = '';
 
         // constants for controller
         const GET_SECURITY_QUESTION_AND_ANSWER_LIST_API = 'SecurityQuestionAnswerList';
@@ -63,26 +66,24 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          *      and initialize the latter for front-end use
          */
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
+            navigator = Navigator.getNavigator();
 
             RequestToServer.sendRequestWithResponse(GET_SECURITY_QUESTION_AND_ANSWER_LIST_API)
                 .then(function(response){
                     $timeout(function(){
-
-                        let activeSecurityQuestionList = response.data.activeSecurityQuestionList || [];
-                        let securityQuestionWithAnsList = response.data.securityQuestionWithAnswerList || [];
+                        let securityQuestionList = response.data.securityQuestionList || [];
+                        let activeSecurityQuestions = response.data.activeSecurityQuestions || [];
 
                         vm.activeSecurityQuestionList =
-                            activeSecurityQuestionList.map((securityQuestion) => new SecurityQuestion(securityQuestion));
+                            activeSecurityQuestions.map((securityQuestion) => new SecurityQuestion(securityQuestion));
                         vm.securityQuestionWithAnsList =
-                            securityQuestionWithAnsList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer));
-
+                            securityQuestionList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer));
                         vm.loadingList = false;
                     })
                 })
                 .catch(function(err){
                     $timeout(function(){
+                        console.error(err);
                         handleLoadSecurityQuestionListRequestErr();
                         vm.loadingList = false;
                     })
@@ -95,7 +96,6 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          */
         function evaluateSubmission() {
 
-            let allQuestionActive = true;
             let allQuestionAnswered = true;
             let haveAQuestionAnswerModified = false;
 
@@ -115,15 +115,10 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                     allQuestionAnswered = false;
                     break;
                 }
-
-                if (!answerQuestionObj.question.active){
-                    allQuestionActive = false;
-                    break;
-                }
             }
 
             vm.submitDisabled = !(vm.passwordChanged && vm.password.length > 0 &&
-                allQuestionActive && allQuestionAnswered && haveAQuestionAnswerModified);
+                allQuestionAnswered && haveAQuestionAnswerModified);
         }
 
         /**
@@ -161,9 +156,9 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @returns {boolean}
          */
         function filterQuestionList(question){
-            return question.securityQuestionSerNum !== vm.securityQuestionWithAnsList[0].question.securityQuestionSerNum &&
-                question.securityQuestionSerNum !== vm.securityQuestionWithAnsList[1].question.securityQuestionSerNum &&
-                question.securityQuestionSerNum !== vm.securityQuestionWithAnsList[2].question.securityQuestionSerNum;
+            return question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[0].question[`questionText_${lang}`] &&
+                question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[1].question[`questionText_${lang}`] &&
+                question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[2].question[`questionText_${lang}`];
         }
 
         /**
@@ -171,12 +166,11 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @desc show a notification to the user in case a request to server fails
          */
         function handleLoadSecurityQuestionListRequestErr (){
-            NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
             ons.notification.alert({
                 //message: 'Server problem: could not fetch data, try again later',
-                message: $filter('translate')("SERVERERRORALERT"),
+                message: $filter('translate')("SERVER_ERROR_ALERT"),
                 modifier: (ons.platform.isAndroid())?'material':null
             })
         }
@@ -194,38 +188,35 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         }
 
         /**
-         * submit
-         * @desc submit the form containing current password, modified security questions and their corresponding answers
+         * @description Re-authenticates the user with their old password, then sets their new security questions
+         *              and answers on the server.
+         * @returns {Promise<void>}
          */
-        function submit() {
-            loadingSubmit.show();
+        async function submit() {
+            try {
+                loadingSubmit.show();
 
-            // verify password first
-            const user = FirebaseService.getAuthenticationCredentials();
-            const credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.password);
+                // Verify the user's password
+                await Firebase.reauthenticateCurrentUser(vm.password);
 
-            user.reauthenticateWithCredential(credential)
-                .then(function(){
-                    // if password is correct, send the request to backend
-                    let params = {
-                        'questionAnswerArr': formatSecurityQuestionWithAnsListForSubmission(vm.securityQuestionWithAnsList),
-                    };
+                // If the password is correct (no error is thrown), send the request to the backend
+                let params = {
+                    'questionAnswerArr': formatSecurityQuestionWithAnsListForSubmission(vm.securityQuestionWithAnsList),
+                };
+                await RequestToServer.sendRequestWithResponse(UPDATE_SECURITY_QUESTION_AND_ANSWER_API, params);
 
-                    return RequestToServer.sendRequestWithResponse(UPDATE_SECURITY_QUESTION_AND_ANSWER_API, params);
-                })
-                .then(function(){
-                    // confirm that the request has been successful and force logout
-                    $timeout(function() {
-                        loadingSubmit.hide();
-                        successfulUpdateConfirmationAndLogout();
-                    });
-                })
-                .catch(function(err) {
-                    $timeout(function() {
-                        loadingSubmit.hide();
-                        handleSubmitErr(err);
-                    });
-                })
+                // Inform the user that the request was successful and force logout
+                $timeout(function() {
+                    loadingSubmit.hide();
+                    successfulUpdateConfirmationAndLogout();
+                });
+            }
+            catch (error) {
+                $timeout(function() {
+                    loadingSubmit.hide();
+                    handleSubmitErr(error);
+                });
+            }
         }
 
         /**
@@ -234,6 +225,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @param {Error} error
          */
         function handleSubmitErr(error) {
+            console.error(error);
             if (error.code === Params.invalidPassword) {
 
                 ons.notification.alert({
@@ -290,8 +282,8 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
                 // answer is hashed in the objects of this array
                 arrToBeSent.push({
-                    securityAnswerSerNum: answerQuestionObj.securityAnswerSerNum,
-                    questionSerNum: answerQuestionObj.question.securityQuestionSerNum,
+                    question: answerQuestionObj.question[`questionText_${lang}`],
+                    questionId: answerQuestionObj.securityAnswerSerNum,
                     answer: EncryptionService.hash(answerQuestionObj.answer.toUpperCase()),
                 });
 

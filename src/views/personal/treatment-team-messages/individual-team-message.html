@@ -1,8 +1,11 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 <ons-page ng-controller="IndividualTxTeamMessageController as txTeam">
-  <ons-toolbar fixed-style>
-    <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-    <div class="center">Message</div>
-  </ons-toolbar>
+  <generic-toolbar title="{{'MESSAGE'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
   <div>
     <ons-list>
       <ons-list-item class="item">
@@ -11,14 +14,14 @@
               <span class="item-title" ng-class="fontSizeTitle">{{txTeam.message.Title}}</span>
 
           </header>
-          <p class="item-desc" ng-class="fontSizeDesc">{{txTeam.message.DateAdded|date:'medium'}}</p>
+          <p class="item-desc" ng-class="fontSizeDesc">{{txTeam.message.DateAdded|date:'mediumNoSeconds'}}</p>
         </div>
       </ons-list-item>
     </ons-list>
     <ons-list class="settings-list">
       <ons-list-item class="item" ng-click="txTeam.openDocument()">
         <div align="left"><h4>{{"DEAR"|translate}} {{txTeam.FirstName|capitalizeFirstLetter}},</h4></div>
-          <div ng-bind-html="txTeam.message.Body" style =" word-wrap: break-word;" ng-class="fontSizeDesc" ></div>
+          <div ng-bind-html="txTeam.message.Body | trustHTML" style =" word-wrap: break-word;" ng-class="fontSizeDesc" ></div>
       </ons-list-item>
     </ons-list>
 </div>

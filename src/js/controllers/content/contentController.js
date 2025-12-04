@@ -1,24 +1,25 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   contentController.js
- * Description  :   Manages the dynamic content grabbed from depdocs. It can take a content link as input.
+ * Description  :   Manages the dynamic content grabbed from the external server. It can take a content link as input.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   27 Apr 2017
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 (function () {
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('ContentController', ContentController);
 
-    ContentController.$inject = ['DynamicContent', 'NavigatorParameters', 'Logger', 'Params', '$timeout'];
+    ContentController.$inject = ['DynamicContent', 'Navigator', 'Logger', 'Params', '$timeout'];
 
     /* @ngInject */
-    function ContentController(DynamicContent, NavigatorParameters, Logger, Params, $timeout) {
+    function ContentController(DynamicContent, Navigator, Logger, Params, $timeout) {
         var vm = this;
         vm.pageContent = {};
         vm.loading = true;
@@ -30,22 +31,20 @@
 
         // Uses the content pushed from a pushPage. See details in Opal wiki for use.
         function activate() {
+            let parameters = Navigator.getParameters();
 
-            var nav = NavigatorParameters.getNavigator();
+            let link = parameters.contentLink;
+            let contentType = parameters.contentType;
 
-            let link = nav.getCurrentPage().options.contentLink;
-            let contentType = nav.getCurrentPage().options.contentType;
-
-            vm.pageContent.title = "";
+            vm.pageContent.title = parameters.title;
 
             link ? loadFromURL(link, contentType) : loadPageContent(contentType);
         }
 
         function loadPageContent(contentType) {
-            // Get the content from DepDocs
+            // Get the content from the external server
             DynamicContent.getPageContent(contentType).then(response => {
                 $timeout(() => {
-                    vm.pageContent.title = response.title;
                     vm.pageContent.content = response.data;
                     vm.loading = false;
                 });
@@ -56,7 +55,6 @@
             DynamicContent.loadFromURL(url).then(response => {
                 $timeout(() => {
                     Logger.sendLog('About', contentType);
-                    vm.pageContent.title = contentType;
                     vm.pageContent.content = response.data;
                     vm.loading = false;
                 });

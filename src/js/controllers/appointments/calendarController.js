@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: Copyright (C) 2017 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Filename     :   calendarController.js
  * Description  :   This file controls the displaying of appointments on the calendar and the UI interactions with it.
  * Created by   :   David Herrera
  * Date         :   May 20, 2015
- * Copyright    :   Copyright 2016, HIG, All rights reserved.
- * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 /**
@@ -18,21 +19,23 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', '$window', 'Params'];
+    CalendarController.$inject = ['$scope', '$timeout', 'Appointments', '$location', '$anchorScroll', 'Navigator',
+        'UserPreferences', 'Params', 'Notifications'];
 
     /* @ngInject */
-    function CalendarController(Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window, Params) {
+    function CalendarController($scope, $timeout, Appointments, $location, $anchorScroll, Navigator,
+                                UserPreferences, Params, Notifications) {
         const vm = this;
 
         let todaysTimeMilliseconds;
-        let choosenTimeMilliseconds;
+        let chosenTimeMilliseconds;
         let today;
         let dateLast;
         let dateFirst;
-        let navigatorName;
+        let navigator;
 
         /**
          * The date options that are fed into the appointment calendar
@@ -41,11 +44,10 @@
         vm.dateOptions = {
             formatYear: 'yyyy',
             startingDay: 0,
-            formatDay:'d',
-            showWeeks:false
+            formatDay: 'd',
+            showWeeks: false,
         };
 
-        vm.HasMeaningfulAlias = HasMeaningfulAlias;
         /**
          * The list of user appointments
          * @type {Array}
@@ -59,8 +61,7 @@
         vm.noAppointments = false;
 
         /**
-         * The user's preferred language/
-         * Either 'EN' or 'FR'
+         * The user's preferred language
          * @type {string}
          */
         vm.language = '';
@@ -78,10 +79,13 @@
         vm.getListColor = getListColor;
         vm.showHeaderEnd = showHeaderEnd;
         vm.showChosenDateHeader = showChosenDateHeader;
-        vm.goToAppointment=goToAppointment;
+        vm.goToAppointment = goToAppointment;
         vm.goToCalendarOptions = goToCalendarOptions;
         vm.onDateChange = onDateChange;
         vm.scrollToAnchor = scrollToAnchor;
+
+        // Used by patient-data-handler
+        vm.setAppointmentsView = setAppointmentsView;
 
         activate();
 
@@ -92,6 +96,9 @@
          *************************/
 
         function activate() {
+            navigator = Navigator.getNavigator();
+
+            bindEvents();
 
             // Get the user's language
             vm.language = UserPreferences.getLanguage();
@@ -102,28 +109,38 @@
 
             //Getting time in milliseconds for today's appointment
             todaysTimeMilliseconds =  today.getTime();
-            choosenTimeMilliseconds = todaysTimeMilliseconds;
+            chosenTimeMilliseconds = todaysTimeMilliseconds;
 
             // Initialize calendar styling
             initializeCalendarStyle();
+        }
 
-            // Get the name of the current navigator
-            navigatorName = NavigatorParameters.getParameters().Navigator;
-
-            vm.appointments=Appointments.getUserAppointments();
+        /**
+         * @description Updates and displays the visible list of appointments and calendar.
+         */
+        function setAppointmentsView() {
+            vm.appointments = Appointments.getAppointments();
             vm.noAppointments = (vm.appointments.length === 0);
             if(vm.appointments.length>0) {
-                
+
                 //Setting time in milliseconds for last appointment
                 dateLast=(new Date(vm.appointments[vm.appointments.length-1].ScheduledStartTime.getTime()));
                 dateLast.setHours(0,0,0,0);
                 dateLast = dateLast.getTime();
-                
+
                 //Setting time in milliseconds for first appointment
                 dateFirst=(new Date(vm.appointments[0].ScheduledStartTime.getTime()));
                 dateFirst.setHours(0,0,0,0);
                 dateFirst = dateFirst.getTime();
+
+                // Reset today's date and refresh calendar appointments' dots
+                // When we click refresh circle button on the top-right corner.
+                vm.todays_date = new Date();
+                vm.todays_date.setHours(0,0,0,0);
             }
+
+            // Scroll after a short delay to make sure the UI is fully loaded
+            $timeout(scrollToAnchor, 500);
         }
 
         /**
@@ -133,14 +150,14 @@
          */
         function findClosestAnchor() {
             if(vm.appointments.length>0) {
-                if(dateLast<choosenTimeMilliseconds) return 'lastAnchor';
-                else if(dateFirst>choosenTimeMilliseconds) return 'firstAnchor';
+                if(dateLast<chosenTimeMilliseconds) return 'lastAnchor';
+                else if(dateFirst>chosenTimeMilliseconds) return 'firstAnchor';
                 else{
-                    let ind = findClosestAppointmentToTime(choosenTimeMilliseconds);
+                    let ind = findClosestAppointmentToTime(chosenTimeMilliseconds);
                     return 'anchorAppointments'+ ind;
                 }
             }
-            return 'firstAnchor';
+            return 'lastAnchor';
         }
 
         /**
@@ -202,8 +219,8 @@
          * @returns {string}
          */
         function showDotColor(date) {
-            if(vm.appointments.length === 0){
-                vm.appointments=Appointments.getUserAppointments();
+            if (vm.appointments.length === 0) {
+                vm.appointments = Appointments.getAppointments();
             }
 
             // TODO: this is a huge bottleneck for the situation where a user has a bunch of appointments!!
@@ -240,7 +257,7 @@
          */
         function showHeaderEnd() {
             if(!vm.appointments) return false;
-            return vm.appointments.length > 0 && dateLast < choosenTimeMilliseconds;
+            return vm.appointments.length > 0 && dateLast < chosenTimeMilliseconds;
         }
         /**
          * Determines whether or not to show the date header in the appointment list
@@ -264,43 +281,49 @@
                 same_date_as_prev = date_prev === selected_date;
 
                 // pretty cryptic property.. not really sure what the first expression represents
-                vm.showHeaderNormalDay = (choosenTimeMilliseconds !== selected_date) && !same_date_as_prev;
+                vm.showHeaderNormalDay = (chosenTimeMilliseconds !== selected_date) && !same_date_as_prev;
 
                 if(date_prev===selected_date) {
                     return false;
                 }else{
-                    return (selected_date > choosenTimeMilliseconds && date_prev < choosenTimeMilliseconds)
-                        || selected_date === choosenTimeMilliseconds;
+                    return (selected_date > chosenTimeMilliseconds && date_prev < chosenTimeMilliseconds)
+                        || selected_date === chosenTimeMilliseconds;
                 }
             } else {
                 // pretty cryptic property.. not really sure what the first expression represents
-                vm.showHeaderNormalDay = (choosenTimeMilliseconds !== selected_date) && !same_date_as_prev;
-                return choosenTimeMilliseconds === selected_date || choosenTimeMilliseconds < selected_date;
+                vm.showHeaderNormalDay = (chosenTimeMilliseconds !== selected_date) && !same_date_as_prev;
+                return chosenTimeMilliseconds === selected_date || chosenTimeMilliseconds < selected_date;
             }
         }
 
         /**
-         * Takes the user to their appointment details
-         * @param appointment
+         * @description Opens the individual appointment view for a given appointment, and marks it as read.
+         * @param {object} appointment The appointment to open.
          */
         function goToAppointment(appointment) {
-            if(appointment.ReadStatus === '0') Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
-            NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':appointment});
-            $window[navigatorName].pushPage('./views/personal/appointments/individual-appointment.html');
+            if(appointment.ReadStatus === '0') {
+                Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+                // Mark corresponding notification as read
+                Notifications.implicitlyMarkCachedNotificationAsRead(
+                    appointment.AppointmentSerNum,
+                    Notifications.appointmentNotificationTypes(),
+                );
+            }
+            navigator.pushPage('./views/personal/appointments/individual-appointment.html', {'Post': appointment});
         }
 
         /**
          * Opens the calendar legend
          */
         function goToCalendarOptions() {
-            $window[navigatorName].pushPage('./views/personal/appointments/calendar-options.html');
+            navigator.pushPage('./views/personal/appointments/calendar-options.html');
         }
 
         /**
          * Scrolls to date when user interacts with the calendar
          */
         function onDateChange() {
-            choosenTimeMilliseconds = vm.todays_date.getTime();
+            chosenTimeMilliseconds = vm.todays_date.getTime();
             scrollToAnchor();
         }
 
@@ -335,16 +358,16 @@
             }
         }
 
-        /**
-         * Checks if AppointmentType has a Meaningful Alias; i.e. other than the word "Appointment" or "Rendez-vous"
-         * @returns {boolean}
-         */
-        function HasMeaningfulAlias(appointmentType) {
-            return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
-        }
+        function bindEvents() {
+            // Remove event listeners
+            $scope.$on('$destroy', () => {
+                $location.hash('');
+                navigator.off('prepop');
+            });
 
+            // Reload user profile if appointments calendar was opened via Home tab,
+            // and profile was implicitly changed.
+            navigator.on('prepop', () => Navigator.reloadPreviousProfilePrepopHandler('home.html', ['Appointments']));
+        }
     }
 })();
-
-
-

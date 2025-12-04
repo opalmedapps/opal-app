@@ -1,0 +1,66 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.smartdevices-info {
+    margin-top: 10vh;
+    padding: 0 20px;
+}
+
+.smartdevices-content {
+    display: flex;
+    align-items: center;
+}
+
+.smartdevices-content--icon {
+    border-radius: 100%;
+    font-size: 12px;
+    margin: 1em 1.5em
+}
+
+.smartdevices-content--text p {
+    margin-bottom: 3px;
+}
+
+.smartdevices-content--text p:first-child {
+    font-weight: 500;
+}
+
+.smartdevices-fa-logo {
+    font-size: 5em;
+    margin: 5vh 0;
+}
+
+.smartdevices-page {
+    width: 90%;
+    margin: 0 5% 3% 5%;
+}
+
+.smartdevices-page > div {
+    margin-bottom: 2vh;
+}
+
+.smartdevices-page .error {
+    color: red;
+    margin: 1vh;
+    padding: 1vh;
+    font-weight: bold;
+}
+
+.smartdevices-page p.data {
+    font-weight: bold;
+}
+
+.smartdevices-page p.data span {
+    border: 1px solid #ddd;
+    padding: 1vh;
+    display: inline-block;
+    margin-right: 1vh;
+}
+
+.smartdevices-page ons-list {
+    border-left: 1px solid #ddd !important;
+    border-right: 1px solid #ddd !important;
+}
