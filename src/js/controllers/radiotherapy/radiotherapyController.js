@@ -7,7 +7,6 @@
 
 /**
  * @ngdoc controller
- * @name MUHCApp.controller:RadiotherapyController
  * @requires Radiotherapy
  * @requires UserPreferences
  * @description Controller for the radiotherapy view.
@@ -17,7 +16,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('RadiotherapyController', RadiotherapyController);
 
     /* @ngInject */

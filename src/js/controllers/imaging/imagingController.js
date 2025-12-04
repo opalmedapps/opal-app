@@ -7,7 +7,6 @@
 
 /**
  * @ngdoc controller
- * @name MUHCApp.controller:ImagingController
  * @requires Radiotherapy -- currently the Radiotherapy service handles both radiotherapy and imaging
  * @requires UserPreferences
  * @description Controller for the imaging view.
@@ -18,7 +17,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('imagingController', imagingController);
 
     /* @ngInject */

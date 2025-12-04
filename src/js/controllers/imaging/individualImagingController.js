@@ -9,7 +9,7 @@
     'use strict';
 
     angular
-        .module('MUHCApp')
+        .module('OpalApp')
         .controller('individualImagingController', individualImagingController);
 
     /* @ngInject */

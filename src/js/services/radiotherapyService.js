@@ -9,7 +9,7 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
 (function()
 {
     angular
-    .module('MUHCApp')
+    .module('OpalApp')
     .service('Radiotherapy', RadiotherapyService);
 
     RadiotherapyService.$inject = ['RequestToServer','$filter','$q'];
