@@ -20,10 +20,10 @@
         .controller('RadiotherapyController', RadiotherapyController);
 
     /* @ngInject */
-    RadiotherapyController.$inject = ['NavigatorParameters','Radiotherapy','UserPreferences'];
+    RadiotherapyController.$inject = ['Navigator','Radiotherapy','UserPreferences'];
 
 
-    function RadiotherapyController(NavigatorParameters, Radiotherapy, UserPreferences) {
+    function RadiotherapyController(Navigator, Radiotherapy, UserPreferences) {
         var vm = this;
 
         vm.language = '';
@@ -34,16 +34,14 @@
         vm.showHeader = showHeader;
         vm.openRTPlan = openRTPlan;
         
-        let navigator = null;
-        let navigatorName = '';
+        let navigator;
 
         activate();
 
         ////////////////
 
         function activate() {
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();   
+            navigator = Navigator.getNavigator();
 
             Radiotherapy.requestRTDicoms(1)
             .then(function(RTPlans){
@@ -72,7 +70,6 @@
 
         // Opens the individual radiotherapy page
         function openRTPlan(plan) {
-            NavigatorParameters.setParameters({'Navigator': navigator, 'Post': plan});
             navigator.pushPage('views/personal/radiotherapy/individual-radiotherapy.html');
         }
 

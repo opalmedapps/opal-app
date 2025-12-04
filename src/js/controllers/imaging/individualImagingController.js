@@ -13,10 +13,10 @@
         .controller('individualImagingController', individualImagingController);
 
     /* @ngInject */
-    individualImagingController.$inject = ['$filter','$scope','$timeout','NavigatorParameters','Radiotherapy','UserPreferences'];
+    individualImagingController.$inject = ['$filter','$scope','$timeout','Navigator','Radiotherapy','UserPreferences'];
 
 
-    function individualImagingController($filter, $scope, $timeout, NavigatorParameters, Radiotherapy, UserPreferences) {
+    function individualImagingController($filter, $scope, $timeout, Navigator, Radiotherapy, UserPreferences) {
         var vm = this;
 
         vm.date;
@@ -31,8 +31,6 @@
         vm.getSrc = getSrc;
      
         // Navigator variables
-        let navigator = null;
-        let navigatorName = '';
         let parameters;
 
 
@@ -53,9 +51,7 @@
 
         function activate() {      
 
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
-            parameters = NavigatorParameters.getParameters();
+            parameters = Navigator.getParameters();
 
             vm.image = parameters.Post;
 

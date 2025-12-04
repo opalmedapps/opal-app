@@ -21,10 +21,10 @@
         .controller('imagingController', imagingController);
 
     /* @ngInject */
-    imagingController.$inject = ['$filter','$scope','$timeout','NavigatorParameters','Radiotherapy','UserPreferences'];
+    imagingController.$inject = ['$filter','$scope','$timeout','Navigator','Radiotherapy','UserPreferences'];
 
 
-    function imagingController($filter, $scope, $timeout, NavigatorParameters, Radiotherapy, UserPreferences) {
+    function imagingController($filter, $scope, $timeout, Navigator, Radiotherapy, UserPreferences) {
         var vm = this;
         
         // vm variables
@@ -38,17 +38,14 @@
         vm.showHeader = showHeader;
 
         // Navigator parameters
-        let params = null;
-        let navigator = null;
-        let navigatorName = '';
+        let navigator;
 
         activate();
 
         ////////////////
 
         function activate() {      
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();   
+            navigator = Navigator.getNavigator();
 
             Radiotherapy.requestRTDicoms(0)
             .then(function(images){
@@ -79,10 +76,7 @@
 
         // Opens the individual image page
         function openImage(image){
-            NavigatorParameters.setParameters({'Navigator': navigator, 'Post': image});
             navigator.pushPage('views/personal/imaging/individual-imaging.html');
         }
     }
-               
-
 })();

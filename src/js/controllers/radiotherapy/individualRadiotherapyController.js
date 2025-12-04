@@ -16,15 +16,14 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
         .controller('IndividualRadiotherapyController', IndividualRadiotherapyController);
 
     /* @ngInject */
-    IndividualRadiotherapyController.$inject = ['$filter','$scope','$timeout','$translatePartialLoader','NavigatorParameters','Radiotherapy','UserPreferences'];
+    IndividualRadiotherapyController.$inject = ['$filter','$scope','$timeout','$translatePartialLoader','Navigator','Radiotherapy','UserPreferences'];
 
 
-    function IndividualRadiotherapyController($filter, $scope, $timeout, $translatePartialLoader, NavigatorParameters, Radiotherapy, UserPreferences) {
+    function IndividualRadiotherapyController($filter, $scope, $timeout, $translatePartialLoader, Navigator, Radiotherapy, UserPreferences) {
         var vm = this;
 
         // Navigator variables
         let navigator = null;
-        let navigatorName = '';
         let parameters;
         
         // vm variables
@@ -48,9 +47,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
         function activate() {      
 
-            navigator = NavigatorParameters.getNavigator();
-            navigatorName = NavigatorParameters.getNavigatorName();
-            parameters = NavigatorParameters.getParameters();
+            navigator = Navigator.getNavigator();
+            parameters = Navigator.getParameters();
    
             vm.plan = parameters.Post;
 
