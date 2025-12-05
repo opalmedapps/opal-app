@@ -100,6 +100,8 @@
   "SET_PASSWORD_LABEL": "Nouveau mot de passe",
   "SHOW_LICENSE_TEXT": "Afficher la licence",
   "SHOW_PASSWORD": "Afficher le mot de passe",
+  "SMART_HEALTH_LOGIN_INSTRUCTIONS_1": "Ce site demande vos données de santé :",
+  "SMART_HEALTH_LOGIN_INSTRUCTIONS_2": "Après la connection, vous aurez la possibilité de vérifier et de choisir quelles données vous aimeriez transférer",
   "SUCCESS": "Succès",
   "TAP_TO_SELECT_HOSPITAL": "Appuyez pour choisir",
   "TERMS_OF_USE": "Conditions d'utilisation",

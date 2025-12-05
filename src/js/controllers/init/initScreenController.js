@@ -112,6 +112,10 @@ import '../../../css/views/init-page.view.css';
 			}, 10);
 
 			AppState.setInitialized(true);
+
+			// Determine whether to redirect for a SMART Health check-in
+			const params = readUrlParameters();
+			if (params.hasOwnProperty('dcql_query')) goToLogin(params);
 		}
 
 		function showMessageOfTheDay() {
@@ -150,9 +154,31 @@ import '../../../css/views/init-page.view.css';
 
 		/**
 		 * Go to login page
+		 * @param {object} [smartHealthRequest] Optional parameters provided when opening the app via a SMART Health data request.
 		 */
-		function goToLogin() {
-			initNavigator.pushPage('./views/login/login.html', {animation: 'lift'});
+		function goToLogin(smartHealthRequest) {
+			initNavigator.pushPage('./views/login/login.html', {smartHealthRequest: smartHealthRequest, animation: 'lift'});
+		}
+
+		/**
+		 * @description Reads the parameters following `?` in the current page's URL.
+		 * @returns {object} An object containing all URL parameters as key and value pairs.
+		 */
+		function readUrlParameters() {
+			const url = window.location.href;
+			const params = url.split('?')[1];
+
+			// See: https://stackoverflow.com/questions/8486099/how-do-i-parse-a-url-query-parameters-in-javascript
+			let result = {};
+			if (params) params.split('&').forEach(part => {
+				let item = part.split("=");
+				result[item[0]] = decodeURIComponent(item[1]);
+			});
+
+			// Special case to parse data from `jmandel/smart-health-checkin-demo`
+			if (result.hasOwnProperty('dcql_query')) result.dcql_query = JSON.parse(result.dcql_query);
+
+			return result;
 		}
 	}
 })();

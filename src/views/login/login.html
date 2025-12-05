@@ -13,6 +13,14 @@ SPDX-License-Identifier: Apache-2.0
             <div class="container" style="margin-top: 1%">
                 <form style="text-align: center" novalidate>
                     <div>
+                        <!-- BANNER FOR SMART HEALTH CHECK-IN (OPTIONAL) -->
+                        <div ng-show="login.smartHealthRequest" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+                            <uib-alert type="info">
+                                <p>{{"SMART_HEALTH_LOGIN_INSTRUCTIONS_1"|translate}} {{login.requesterUrl}}</p>
+                                <p style="margin-bottom: 0">{{"SMART_HEALTH_LOGIN_INSTRUCTIONS_2"|translate}}</p>
+                            </uib-alert>
+                        </div>
+
                         <div style="width: 100%" class="style-4">
                             <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()>
                         </div>

@@ -130,6 +130,11 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
             $timeout(function(){
                 vm.trusted = !!($window.localStorage.getItem("deviceID"));
             });
+
+            // Detect if this login is part of a SMART Health data request
+            vm.smartHealthRequest = Navigator.getParameters()?.smartHealthRequest;
+            console.log(vm.smartHealthRequest);
+            if (vm.smartHealthRequest) vm.requesterUrl = vm.smartHealthRequest.client_id.split('redirect_uri:')[1];
         }
 
         function bindEvents() {
