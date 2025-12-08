@@ -15,6 +15,11 @@
         const vm = this;
 
         let smartHealthRequest;
+        let firstName, lastName;
+
+        vm.dateOfBirth = '';
+        vm.name = '';
+        vm.ramq = '';
 
         vm.shareData = shareData;
 
@@ -27,8 +32,16 @@
 
             $translatePartialLoader.addPart('all-views');
 
-            let {first_name, last_name} = User.getUserInfo();
-            vm.name = first_name + ' ' + last_name;
+            // Collect patient information to share
+            // Name
+            let userInfo = User.getUserInfo();
+            firstName = userInfo.first_name;
+            lastName = userInfo.last_name;
+            vm.name = firstName + ' ' + lastName;
+
+            // DOB and RAMQ (in a non-demo implementation, collect real information from the backend)
+            vm.dateOfBirth = '1990-12-01';
+            vm.ramq = lastName.slice(0, 3).toUpperCase() + firstName.charAt(0).toUpperCase() + '90920101';
         }
 
         function shareData() {
@@ -51,8 +64,8 @@
                 // Pre-fill values
                 if (item.questionnaire?.item) {
                     item.questionnaire.item.forEach(q => {
-                        if (q.linkId === '1') initialValues[item.id][q.linkId] = 'Jane Doe';
-                        else if (q.linkId === '2') initialValues[item.id][q.linkId] = '1985-06-15';
+                        if (q.linkId === '1') initialValues[item.id][q.linkId] = vm.name;
+                        else if (q.linkId === '2') initialValues[item.id][q.linkId] = vm.dateOfBirth;
                         else if (q.linkId === '3') initialValues[item.id][q.linkId] = 'Hypertension';
                         else if (q.linkId === '4') initialValues[item.id][q.linkId] = 'Lisinopril';
                         else if (q.linkId === '5') initialValues[item.id][q.linkId] = 'Penicillin';
@@ -106,17 +119,17 @@
                         resourceType: 'Coverage',
                         id: 'coverage-1',
                         status: 'active',
-                        subscriberId: 'W123456789',
-                        beneficiary: { reference: 'Patient/patient-1', display: 'Jane Doe' },
-                        payor: [{ display: 'Aetna' }],
-                        class: [{ type: { coding: [{ code: 'group' }] }, value: 'TECH-2024' }]
+                        subscriberId: vm.ramq,
+                        beneficiary: { reference: 'Patient/patient-1', display: vm.name },
+                        payor: [{ display: "Régie de l'assurance maladie du Québec" }],
+                        class: [{ type: { coding: [{ code: 'group' }] }, value: 'RAMQ-' + (new Date()).getFullYear() }],
                     });
                 } else if (resourceType === 'Patient') {
                     resources.push({
                         resourceType: 'Patient',
                         id: 'patient-1',
-                        name: [{ text: 'Jane Doe', family: 'Doe', given: ['Jane'] }],
-                        birthDate: '1985-06-15'
+                        name: [{ text: vm.name, family: lastName, given: [firstName] }],
+                        birthDate: vm.dateOfBirth,
                     });
                 } else if (resourceType === 'QuestionnaireResponse') {
                     const values = questionnaireValues[cred.id] || {};
@@ -139,7 +152,6 @@
                 }));
 
                 vp_token[cred.id] = presentations;
-                console.log('vp_token', vp_token);
             });
 
             const redirectUrl = `${returnUrl}#vp_token=${encodeURIComponent(JSON.stringify(vp_token))}&smart_artifacts=${encodeURIComponent(JSON.stringify(smart_artifacts))}&state=${encodeURIComponent(smartHealthRequest.state)}`;
