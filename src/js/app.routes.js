@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import dataRequestPage from "../views/navigators/data-request-navigator.html";
 import initPage from "../views/navigators/initNavigator.html";
 import loadingPage from "../views/login/loading.html";
 import tabsPage from "../views/tabs/tabs.html";
@@ -59,6 +60,7 @@ import tabsPage from "../views/tabs/tabs.html";
 				url: '/loading',
 				params: {
 					isTrustedDevice: null,
+					smartHealthRequest: null,
 				},
 				template: loadingPage,
 				controller: 'LoadingController',
@@ -71,6 +73,14 @@ import tabsPage from "../views/tabs/tabs.html";
 				url: '/Home',
 				template: tabsPage,
 				controller: 'TabsController',
+				resolve: {
+					"currentAuth": ["Firebase", requireSignIn],
+					"preventReload": ["AppState", preventReload],
+				}
+			})
+			.state('data-request', {
+				url: '/data-request',
+				template: dataRequestPage,
 				resolve: {
 					"currentAuth": ["Firebase", requireSignIn],
 					"preventReload": ["AppState", preventReload],

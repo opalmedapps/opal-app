@@ -148,6 +148,10 @@
             initializeData();
 
             bindEvents();
+
+            // Detect if this login is part of a SMART Health data request
+            vm.smartHealthRequest = Navigator.getParameters()?.smartHealthRequest;
+            console.log('smartHealthRequest', vm.smartHealthRequest);
         }
 
         /**
@@ -256,6 +260,7 @@
             else {
                 $state.go('loading', {
                     isTrustedDevice: trusted,
+                    smartHealthRequest: vm.smartHealthRequest,
                 });
             }
         }

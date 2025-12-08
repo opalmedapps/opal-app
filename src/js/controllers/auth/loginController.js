@@ -281,6 +281,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
                 initNavigator.pushPage('./views/login/security-question.html', {
                     securityQuestion: response.Data.securityQuestion,
                     trusted: vm.trusted,
+                    smartHealthRequest: vm.smartHealthRequest,
                 });
             }).catch(error => {
                 if (error instanceof CancelledPromiseError) {

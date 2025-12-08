@@ -13,6 +13,7 @@ import "./controllers/auth/securityQuestionController.js";
 import "./controllers/auth/forgotPasswordController.js";
 import "./controllers/checkIn/checkInController.js";
 import "./controllers/content/contentController.js";
+import "./controllers/data-request/data-request.controller.js";
 import "./controllers/diagnoses/diagnosesController.js";
 import "./controllers/documents/documentsController.js";
 import "./controllers/documents/individualDocumentController.js";

@@ -52,7 +52,10 @@
                 }
 
                 await ConcurrentLogin.initConcurrentLogin();
-                $state.go('Home');
+
+                // Navigate to the right page based on the type of login
+                if ($stateParams.smartHealthRequest) $state.go('data-request');
+                else $state.go('Home');
 
                 loadingmodal.hide();
                 clearTimeout(timeOut);
