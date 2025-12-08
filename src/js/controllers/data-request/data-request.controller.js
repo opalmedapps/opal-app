@@ -41,7 +41,7 @@
 
             // DOB and RAMQ (in a non-demo implementation, collect real information from the backend)
             vm.dateOfBirth = '1990-12-01';
-            vm.ramq = lastName.slice(0, 3).toUpperCase() + firstName.charAt(0).toUpperCase() + '90920101';
+            vm.ramq = lastName.replace(/['".,\- ]/g, '').slice(0, 3).toUpperCase() + firstName.charAt(0).toUpperCase() + '90920101';
         }
 
         function shareData() {
