@@ -4,6 +4,19 @@ SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
+# Branch Notes
+
+This branch was created as a prototype to connect to https://github.com/jmandel/smart-health-checkin-demo.
+It demonstrates the data flow for a patient registering at a new clinic,
+who uses Opal to provide form data back to the clinic's registration system.
+
+To run the demo, follow the instructions at the above link to set up `smart-health-checkin-demo` locally.
+Modify that project to add an `Opal` entry to `demo/config.ts`, using your localhost Opal URL as the `launchBase` value.
+
+When running the `smart-health-checkin-demo`, you'll now be able to select Opal as a data sharing partner,
+and it will redirect to the Opal web app.
+You can then log into a test account, and send data back to the requesting application.
+
 # Opal Web And Mobile App
 
 Opal is a patient portal application for mobile devices and the web which originated from the winning project of
