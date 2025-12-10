@@ -14,11 +14,11 @@
 
     <div>
         <ons-list class="settings-list" ng-repeat="image in img.images">
-            <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="img.showHeader($index)">{{image.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="img.showHeader($index)">{{image.DateAdded|date:'fullDate'}}</ons-list-header>
             <ons-list-item class="item" modifier="chevron" ng-click=img.openImage(image)>
                 <ons-row style="padding:5px;">
-                    <ons-col width="50px" align="center" style="text-align: center">
-                        <img style="width:35px;" src="./img/xray.png">
+                    <ons-col width="50px" class="ons-col-icon">
+                        <i class="fa-solid fa-x-ray fa16x" style="color: #8FA0AD"></i>
                     </ons-col>
                     <ons-col align="center">
                         <!-- <span class="item-title" ng-class="fontSizeTitle"> {{"IMAGING"|translate}}</span> -->

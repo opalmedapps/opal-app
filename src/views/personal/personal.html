@@ -69,6 +69,24 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+
+            <!-- RADIOTHERAPY -->
+            <ons-list-item modifier="chevron" class="item"
+                ng-if="tab.accessLevelAll && tab.allowedModules.hasOwnProperty('RAD') && tab.allowedModules['RAD']"
+                ng-click="personalNavigator.pushPage('views/personal/radiotherapy/radiotherapy.html')">
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <i class="fa-solid fa-radiation fa-2x" style="color: #76C8AC"></i>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"RADIOTHERAPY"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
             <ons-list-item modifier="chevron" class="item"
                 ng-if="tab.accessLevelAll && tab.allowedModules.hasOwnProperty('DOC') && tab.allowedModules['DOC']"
                 ng-click="personalNavigator.pushPage('views/personal/documents/documents.html')">
@@ -81,6 +99,23 @@ SPDX-License-Identifier: Apache-2.0
                     <ons-col>
                         <header>
                             <span class="item-title" ng-class="fontSizeTitle">{{"CLINICAL_REPORTS"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
+            <!-- IMAGING -->
+            <ons-list-item modifier="chevron" class="item"
+                ng-if="tab.accessLevelAll && tab.allowedModules.hasOwnProperty('IMA') && tab.allowedModules['IMA']"
+                ng-click="personalNavigator.pushPage('views/personal/imaging/imaging.html')">
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <i class="fa-solid fa-x-ray fa-2x" style="color: #8FA0AD"></i>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>
@@ -117,38 +152,6 @@ SPDX-License-Identifier: Apache-2.0
                         <header>
                             <span class="item-title"
                                 ng-class="fontSizeTitle">{{"TREATING_TEAM_NOTIFICATIONS"|translate}}</span>
-                        </header>
-                        <p class="item-desc" ng-class="fontSizeDesc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"               
-                           ng-click="personalNavigator.pushPage('views/personal/radiotherapy/radiotherapy.html')">
-                <ons-row align="center" >
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <img style="width: 35px;" src="./img/radiotherapy.png">
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"RADIOTHERAPY"|translate}}</span>
-                        </header>
-                        <p class="item-desc" ng-class="fontSizeDesc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"               
-            ng-click="personalNavigator.pushPage('views/personal/imaging/imaging.html')">
-                <ons-row align="center" >
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <img style="width: 35px;" src="./img/xray.png">
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>

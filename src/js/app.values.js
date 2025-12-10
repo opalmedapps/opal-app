@@ -111,6 +111,8 @@
                             "DIA": 1, // Diagnoses
                             "APT": 1, // Appointments
                             "LAB": 1, // Lab results
+                            "RAD": 1, // Radiotherapy
+                            "IMA": 1, // Imaging
                             "DOC": 1, // Documents (clinical reports)
                             "IPS": 1, // International Patient Summary
                             "TTM": 1, // Treating team messages
@@ -148,6 +150,8 @@
                             "DIA": 1,
                             "APT": 1,
                             "LAB": 1,
+                            "RAD": 0,
+                            "IMA": 0,
                             "DOC": 1,
                             "IPS": 0,
                             "TTM": 1,
@@ -181,6 +185,8 @@
                             "DIA": 1,
                             "APT": 1,
                             "LAB": 1,
+                            "RAD": 1,
+                            "IMA": 1,
                             "DOC": 1,
                             "IPS": 1,
                             "TTM": 1,
@@ -214,6 +220,8 @@
                             "DIA": 1,
                             "APT": 1,
                             "LAB": 1,
+                            "RAD": 1,
+                            "IMA": 1,
                             "DOC": 1,
                             "IPS": 1,
                             "TTM": 1,
@@ -247,6 +255,8 @@
                             "DIA": 0,
                             "APT": 0,
                             "LAB": 0,
+                            "RAD": 0,
+                            "IMA": 0,
                             "DOC": 0,
                             "IPS": 0,
                             "TTM": 0,
