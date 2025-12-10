@@ -76,7 +76,9 @@
 
         // Opens the individual image page
         function openImage(image){
-            navigator.pushPage('views/personal/imaging/individual-imaging.html');
+            navigator.pushPage('views/personal/imaging/individual-imaging.html', {
+                Post: image,
+            });
         }
     }
 })();

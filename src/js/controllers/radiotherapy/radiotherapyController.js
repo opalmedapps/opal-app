@@ -70,7 +70,9 @@
 
         // Opens the individual radiotherapy page
         function openRTPlan(plan) {
-            navigator.pushPage('views/personal/radiotherapy/individual-radiotherapy.html');
+            navigator.pushPage('views/personal/radiotherapy/individual-radiotherapy.html', {
+                Post: plan,
+            });
         }
 
     }
