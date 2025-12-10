@@ -16,7 +16,7 @@ SPDX-License-Identifier: Apache-2.0
                         <!-- BANNER FOR SMART HEALTH CHECK-IN (OPTIONAL) -->
                         <div ng-show="login.smartHealthRequest" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
                             <uib-alert type="info">
-                                <p>{{"SMART_HEALTH_LOGIN_INSTRUCTIONS_1"|translate}} {{login.requesterUrl}}</p>
+                                <p>{{"SMART_HEALTH_LOGIN_INSTRUCTIONS_1"|translate}} <span style="font-weight: bold">{{login.requesterUrl}}</span></p>
                                 <p style="margin-bottom: 0">{{"SMART_HEALTH_LOGIN_INSTRUCTIONS_2"|translate}}</p>
                             </uib-alert>
                         </div>
