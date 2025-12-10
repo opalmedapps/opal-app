@@ -1,4 +1,4 @@
-<ons-page ng-controller="imagingController as img">
+<ons-page ng-controller="imagingController as vm">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</div>
@@ -10,28 +10,27 @@
     </ons-toolbar>
     <network-banner></network-banner>
 
-    <loading-spinning-circle ng-if="img.loading" loading-message="{{'LOADINGIMAGES'|translate}}"></loading-spinning-circle>
+    <loading-spinning-circle ng-if="vm.loading" loading-message="{{'LOADINGIMAGES'|translate}}"></loading-spinning-circle>
 
     <div>
-        <ons-list class="settings-list" ng-repeat="image in img.images">
-            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="img.showHeader($index)">{{image.DateAdded|date:'fullDate'}}</ons-list-header>
-            <ons-list-item class="item" modifier="chevron" ng-click=img.openImage(image)>
-                <ons-row style="padding:5px;">
+        <ons-list class="settings-list" ng-repeat="image in vm.images">
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="vm.showHeader($index)">{{image.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-item class="item" modifier="chevron" ng-click=vm.openImage(image)>
+                <ons-row style="padding:5px">
                     <ons-col width="50px" class="ons-col-icon">
                         <i class="fa-solid fa-x-ray fa16x" style="color: #8FA0AD"></i>
                     </ons-col>
                     <ons-col align="center">
                         <!-- <span class="item-title" ng-class="fontSizeTitle"> {{"IMAGING"|translate}}</span> -->
-                        <!-- <span class="item-desc" ng-class="fontSizeDesc">{{image["Name_" + img.language]}}</span><br> -->
-                        <span class="item-title" ng-class="fontSizeTitle">{{image["Name_" + img.language]}}</span>
+                        <!-- <span class="item-desc" ng-class="fontSizeDesc">{{image["Name_" + vm.language]}}</span><br> -->
+                        <span class="item-title" ng-class="fontSizeTitle">{{image["Name_" + vm.language]}}</span>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
         </ons-list>
-
     </div>
 
-    <div style="color:grey;margin-top:25vh" ng-show="img.noImage" align="center" ng-class="fontSizeTitle">
+    <div style="color:grey; margin-top:25vh" ng-show="vm.noImage" align="center" ng-class="fontSizeTitle">
         {{"NOIMAGE"|translate}}
     </div>
 </ons-page>

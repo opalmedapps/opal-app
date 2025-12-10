@@ -1,4 +1,4 @@
-<ons-page ng-controller="RadiotherapyController as rad">  
+<ons-page ng-controller="RadiotherapyController as vm">
     <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -12,23 +12,23 @@
     </ons-toolbar>
     <network-banner></network-banner>
 
-    <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLANS'|translate}}"></loading-spinning-circle>
+    <loading-spinning-circle ng-if="vm.loading" loading-message="{{'LOADINGRADIOTHERAPYPLANS'|translate}}"></loading-spinning-circle>
 
-    <ons-list class="settings-list" ng-repeat = "plan in rad.RTPlans | orderBy: '-DateAdded'" ng-hide="rad.noRTPlans">
-        <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="rad.showHeader($index)">{{plan.DateAdded|date:'fullDate'}}</ons-list-header>
-        <ons-list-item class="item" modifier="chevron" ng-click="rad.openRTPlan(plan)">
-            <ons-row style="padding: 5px">
+    <ons-list class="settings-list" ng-repeat="plan in vm.RTPlans | orderBy: '-DateAdded'" ng-hide="vm.noRTPlans">
+        <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="vm.showHeader($index)">{{plan.DateAdded|date:'fullDate'}}</ons-list-header>
+        <ons-list-item class="item" modifier="chevron" ng-click="vm.openRTPlan(plan)">
+            <ons-row style="padding:5px">
                 <ons-col width="50px" class="ons-col-icon">
-                    <i class="fa-solid fa-radiation fa16x" style="color: #76C8AC"></i>
+                    <i class="fa-solid fa-radiation fa16x" style="color:#76C8AC"></i>
                 </ons-col>
                 <ons-col align="center">
-                    <span class="item-title" ng-class="fontSizeTitle">{{plan["Name_" + rad.language]}}</span>
+                    <span class="item-title" ng-class="fontSizeTitle">{{plan["Name_" + vm.language]}}</span>
                 </ons-col>
             </ons-row>
         </ons-list-item>
     </ons-list>
 
-    <div style="color:grey;margin-top:25vh" align="center" ng-show="rad.noRTPlans && !rad.loading" ng-class="fontSizeTitle">
+    <div style="color:grey; margin-top:25vh" align="center" ng-show="vm.noRTPlans && !vm.loading" ng-class="fontSizeTitle">
         {{"RADIOTHERAPY_NONE"|translate}}
     </div>
 </ons-page>

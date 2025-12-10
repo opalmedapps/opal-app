@@ -1,29 +1,25 @@
-
 <!--TODO: ADD FRENCH TRANSLATIONS -->
-
-<ons-page ng-controller="individualImagingController as image" class="img-page-background">
+<ons-page ng-controller="individualImagingController as vm" class="img-page-background">
     <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-    </ons-toolbar>    
+    </ons-toolbar>
 
-    <loading-spinning-circle ng-if="image.loading" loading-message="{{'LOADINGIMAGE'|translate}}"></loading-spinning-circle>
-            
-    <div ng-show="!image.loading" style="padding-top:30px;border-top: black;"  class="img-page-background">
-        <ons-row  style="margin-left:2px;text-align:center;color:white">
-            <ons-col style="text-align:center;" width="50%"><b>Date: </b> {{image.date}} </ons-col>
-            <ons-col style="text-align:center;" ><b>Scan Type: </b>{{image.modality}}</ons-col> <br>    
+    <loading-spinning-circle ng-if="vm.loading" loading-message="{{'LOADINGIMAGE'|translate}}"></loading-spinning-circle>
+
+    <div ng-show="!vm.loading" style="padding-top:30px; border-top:black" class="img-page-background">
+        <ons-row  style="margin-left:2px; text-align:center; color:white">
+            <ons-col style="text-align:center" width="50%"><b>Date: </b>{{vm.date}}</ons-col>
+            <ons-col style="text-align:center"><b>Scan Type: </b>{{vm.modality}}</ons-col><br>
         </ons-row>
-        <ons-row  style="margin-left:2px;text-align:center;color:white">
-            <ons-col style="text-align:center;" width="50%"></ons-col>  
-            <ons-col ng-show="image.multiImage" style="text-align:center;"><b>Slice: </b>{{image.index}}/{{image.files.length}}</span></ons-col>
+        <ons-row  style="margin-left:2px; text-align:center; color:white">
+            <ons-col style="text-align:center" width="50%"></ons-col>
+            <ons-col ng-show="vm.multiImage" style="text-align:center"><b>Slice: </b>{{vm.index}}/{{vm.files.length}}</span></ons-col>
         </ons-row>
-    
-        <div id="imgs" class="imgs" >
-            <img id={{$index+1}} ng-show="image.index == {{$index+1}}" style="width:100%" ng-src={{image.getSrc($index)}} ng-repeat="img in image.files">
+
+        <div id="imgs" class="imgs">
+            <img id={{$index+1}} ng-show="vm.index == {{$index+1}}" style="width:100%" ng-src={{vm.getSrc($index)}} ng-repeat="img in vm.files">
         </div>
     </div>
-
 </ons-page>
-
