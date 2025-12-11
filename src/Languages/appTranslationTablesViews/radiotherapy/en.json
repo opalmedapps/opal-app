@@ -1,7 +1,7 @@
 {
     "BEAMS_TITLE": "Radiation Beams",
-    "BEAMS_1": "Once positioned, your treatment will begin. The machine will rotate around you to deliver ",
-    "BEAMS_2": " beams of radiation at different angles. You can visualize these beams on the next page.",
+    "BEAMS_1": "Once positioned, your treatment will begin. The machine will rotate around you to deliver",
+    "BEAMS_2": "beams of radiation at different angles. You can visualize these beams on the next page.",
     "BEAMS_3": "You will be treated with ",
     "BEAMS_3_PHOTON": " beams, which are beams of high energy x-rays and the most common type of radiotherapy.",
     "BEAMS_3_ELECTRON": "beams, which are used when the tumour is very close to the surface or on the skin. This is because electrons can’t travel far into the body.",

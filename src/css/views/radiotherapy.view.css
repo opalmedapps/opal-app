@@ -1,0 +1,75 @@
+.personalized {
+    color: #16a83a;
+    font-weight: bold;
+}
+
+.radiotherapy-image {
+    display: block;
+    height: auto;
+    margin: 0 auto 20px;
+    max-width: 80%;
+}
+
+.radiotherapy-image__small {
+    display: block;
+    height: auto;
+    margin: 0 auto 20px;
+    max-width: 65%;
+}
+
+.radiotherapy-plan {
+    padding-bottom: 15px;
+}
+
+.radiotherapy-plan p {
+    margin-bottom: 20px;
+}
+
+.radiotherapy-section-title {
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/* Settings for accordion drop-down style buttons */
+.radiotherapy-plan input.dropdown[type="checkbox"] {
+    display: none;
+}
+
+.radiotherapy-plan label {
+    margin-top: 20px;
+}
+
+.radiotherapy-plan label.dropdown {
+    display:block;
+    padding: 8px 20px 8px 40px;
+    border: solid 1px;
+    transition: ease 0.5s;
+    margin-bottom: 0;
+    position: relative;
+}
+
+.radiotherapy-plan .content {
+    border: 1px solid;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 20px 20px 0;
+}
+
+.radiotherapy-plan input.dropdown + label.dropdown + .content {
+    display: none;
+}
+
+.radiotherapy-plan input.dropdown:checked + label.dropdown + .content {
+    display: block;
+}
+
+.radiotherapy-plan label.dropdown::before {
+    content: "\02795";
+    position: absolute;
+    left: 10px;
+}
+
+.radiotherapy-plan input.dropdown:checked + label.dropdown::before {
+    content: "\2796";
+}
+/* End of settings for accordion buttons */

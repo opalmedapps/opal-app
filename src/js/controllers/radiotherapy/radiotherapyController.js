@@ -12,6 +12,8 @@
  * @description Controller for the radiotherapy view.
  */
 
+import '../../../css/views/radiotherapy.view.css';
+
  (function () {
     'use strict';
 
