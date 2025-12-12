@@ -1,6 +1,7 @@
 /*
  * Filename     :   radiotherapyService.js
  * Description  :   Service that store and manages the radiotherapy information.
+ *                  Currently, the Radiotherapy service handles both radiotherapy and imaging.
  * Created by   :   Kayla O'Sullivan-Steben
  * Date         :   March 2021
  */

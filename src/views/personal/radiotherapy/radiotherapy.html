@@ -15,7 +15,9 @@
     <loading-spinning-circle ng-if="vm.loading" loading-message="{{'LOADINGRADIOTHERAPYPLANS'|translate}}"></loading-spinning-circle>
 
     <ons-list class="settings-list" ng-repeat="plan in vm.RTPlans | orderBy: '-DateAdded'" ng-hide="vm.noRTPlans">
-        <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="vm.showHeader($index)">{{plan.DateAdded|date:'fullDate'}}</ons-list-header>
+        <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ vm.RTPlans | showHeader : $index : 'DateAdded' }}">
+            {{plan.DateAdded|date:'fullDate'}}
+        </ons-list-header>
         <ons-list-item class="item" modifier="chevron" ng-click="vm.openRTPlan(plan)">
             <ons-row style="padding:5px">
                 <ons-col width="50px" class="ons-col-icon">

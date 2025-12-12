@@ -1,4 +1,4 @@
-<ons-page ng-controller="imagingController as vm">
+<ons-page ng-controller="ImagingController as vm">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</div>
@@ -14,7 +14,9 @@
 
     <div>
         <ons-list class="settings-list" ng-repeat="image in vm.images">
-            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="vm.showHeader($index)">{{image.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ vm.images | showHeader : $index : 'DateAdded' }}">
+                {{image.DateAdded|date:'fullDate'}}
+            </ons-list-header>
             <ons-list-item class="item" modifier="chevron" ng-click=vm.openImage(image)>
                 <ons-row style="padding:5px">
                     <ons-col width="50px" class="ons-col-icon">

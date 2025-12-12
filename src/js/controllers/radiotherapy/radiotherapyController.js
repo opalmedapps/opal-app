@@ -1,42 +1,30 @@
-/*
- * Filename     :   radiotherapyController.js
- * Description  :   Manages the radiotherapy view.
- * Created by   :   Kayla O'Sullivan-Steben
- * Date         :   March 2021
- */
-
-/**
- * @ngdoc controller
- * @requires Radiotherapy
- * @requires UserPreferences
- * @description Controller for the radiotherapy view.
- */
-
 import '../../../css/views/radiotherapy.view.css';
 
- (function () {
+/**
+ * @description Controller for the radiotherapy view.
+ * @author Kayla O'Sullivan-Steben
+ * @date March 2021
+ */
+(function () {
     'use strict';
 
     angular
         .module('OpalApp')
         .controller('RadiotherapyController', RadiotherapyController);
 
-    /* @ngInject */
-    RadiotherapyController.$inject = ['Navigator','Radiotherapy','UserPreferences'];
-
+    RadiotherapyController.$inject = ['Navigator', 'Radiotherapy', 'UserPreferences'];
 
     function RadiotherapyController(Navigator, Radiotherapy, UserPreferences) {
-        var vm = this;
+        let vm = this;
+
+        let navigator;
 
         vm.language = '';
         vm.loading = true;
         vm.noRTPlans = true;
         vm.RTPlans = [];
 
-        vm.showHeader = showHeader;
-        vm.openRTPlan = openRTPlan;
-        
-        let navigator;
+        vm.openRTPlan = plan => navigator.pushPage('views/personal/radiotherapy/individual-radiotherapy.html', { Post: plan });
 
         activate();
 
@@ -44,41 +32,19 @@ import '../../../css/views/radiotherapy.view.css';
 
         function activate() {
             navigator = Navigator.getNavigator();
+            vm.language = UserPreferences.getLanguage();
 
-            Radiotherapy.requestRTDicoms(1)
-            .then(function(RTPlans){
+            Radiotherapy.requestRTDicoms(1).then(RTPlans => {
                 vm.loading  = false;
                 vm.RTPlans = RTPlans;
-                vm.noRTPlans = vm.RTPlans.length === 0
-            })
-            .catch(function(){
+                vm.noRTPlans = vm.RTPlans.length === 0;
+
+            }).catch(error => {
+                console.error(error);
                 vm.loading = false;
                 vm.RTPlans = [];
                 vm.noRTPlans = true;
             });
-
-            //grab the language
-            vm.language = UserPreferences.getLanguage();
         }
-
-        // Determines whether or not to show the date header in the view. Grouped by day.
-        function showHeader(index)
-        {
-            if (index === 0) return true;
-            var current = (new Date(vm.RTPlans[index].DateAdded)).setHours(0,0,0,0);
-            var previous = (new Date(vm.RTPlans[index-1].DateAdded)).setHours(0,0,0,0);
-            return current !== previous;
-        }
-
-        // Opens the individual radiotherapy page
-        function openRTPlan(plan) {
-            navigator.pushPage('views/personal/radiotherapy/individual-radiotherapy.html', {
-                Post: plan,
-            });
-        }
-
     }
-
 })();
-
-
