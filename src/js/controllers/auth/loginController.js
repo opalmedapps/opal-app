@@ -239,6 +239,7 @@ import { CancelledPromiseError } from "../../models/utility/cancelled-promise-er
                 vm.attemptSuccessful = true;
                 $state.go('loading', {
                     isTrustedDevice: vm.trusted,
+                    smartHealthRequest: vm.smartHealthRequest,
                 });
             }).catch(error => {
                 if (error instanceof CancelledPromiseError) {
