@@ -10,12 +10,58 @@ This branch was created as a prototype to connect to https://github.com/jmandel/
 It demonstrates the data flow for a patient registering at a new clinic,
 who uses Opal to provide form data back to the clinic's registration system.
 
-To run the demo, follow the instructions at the above link to set up `smart-health-checkin-demo` locally.
-Modify that project to add an `Opal` entry to `demo/config.ts`, using your localhost Opal URL as the `launchBase` value.
+To run the workflow:
 
-When running the `smart-health-checkin-demo`, you'll now be able to select Opal as a data sharing partner,
-and it will redirect to the Opal web app.
-You can then log into a test account, and send data back to the requesting application.
+1. Follow the instructions at the above link to set up `smart-health-checkin-demo` locally.
+   Then, modify the code by applying the changes listed below.
+2. Run the `smart-health-checkin-demo` (by launching `./start-local.sh`).
+3. Run the Opal app according to the instructions provided in this repository.
+   The app should be running at the URL provided as the `launchBase` below.
+4. In the SMART health demo, click on `Share with SMART Health Check-in`.
+5. Select `Opal` as the data source.
+6. You'll be directed to the login page of Opal, with a note that the SMART health demo site is requesting your data.
+   Log into a test account.
+7. You'll be shown a summary of the data to be shared. Click on `Share Data`.
+8. The Opal instance will close, and you'll be redirected to the SMART health demo site,
+   showing a successful transfer with the patient's insurance information displayed on the screen.
+
+## Modifications to smart-health-checkin-demo
+
+The following changes should be applied to the code of `smart-health-checkin-demo` before running it with Opal.
+
+`demo/checkin/src/App.tsx`
+
+```tsx
+disabled={app.id !== 'flexpa' && app.id !== 'opal'}
+```
+
+`demo/config.ts`
+
+```ts
+const isLocalMultiOrigin = location.hostname.includes('localhost'); // Remove the dot before localhost
+```
+
+```ts
+apps: [
+  {
+    id: 'flexpa',
+    name: 'Flexpa',
+    // ...
+  },
+  {
+    id: 'opal',
+    name: 'Opal',
+    description: 'Your medical information with you',
+    category: 'phr',
+    color: '#bada55',
+    accentColor: '#6cac2c',
+    logo: 'O',
+    logoStyle: 'bold',
+    launchBase: 'http://localhost:9000/#!/'
+  },
+  // ...
+]
+```
 
 # Opal Web And Mobile App
 
