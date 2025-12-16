@@ -3,6 +3,18 @@
     font-weight: bold;
 }
 
+.radiotherapy-beam-checkbox {
+    -webkit-appearance: checkbox !important;
+    display:inline;
+    height:20px;
+    vertical-align: top;
+    width:20px;
+}
+
+.radiotherapy-beam-checkbox-align {
+    vertical-align: middle;
+}
+
 .radiotherapy-image {
     display: block;
     height: auto;
@@ -23,6 +35,12 @@
 
 .radiotherapy-plan p {
     margin-bottom: 20px;
+}
+
+.radiotherapy-render {
+    margin: 0 auto;
+    overflow: scroll;
+    position: fixed;
 }
 
 .radiotherapy-section-title {

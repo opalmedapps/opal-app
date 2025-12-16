@@ -29,7 +29,11 @@
             <div class="col-xs-12 text-center radiotherapy-plan">
                 <h3><b>{{"PERSONALIZED_PLAN"|translate}}</b></h3>
                 <div align="justify">
-                    <p>On this page you will find details about your radiotherapy treatment plan, which has been carefully put together for you based on your CT scan and your specific disease characteristics. The treatment will be repeated over <span class="personalized">{{vm.RTPlan.numFractions}}</span> sessions.</p>
+                    <p>
+                        {{"PERSONALIZED_PLAN_INTRO_1"|translate}}
+                        <span class="personalized">{{vm.RTPlan.numFractions}}</span>
+                        {{"PERSONALIZED_PLAN_INTRO_2"|translate}}
+                    </p>
                 </div>
 
                 <div align="justify">
@@ -42,7 +46,11 @@
                     <div class="content">
                         <p>{{"POSITIONING_1"|translate}}</p>
                         <img src="./img/radiotherapy/GANTRY.PNG" class="radiotherapy-image__small center">
-                        <p>{{"POSITIONING_2"|translate}} <span class="personalized">{{"POSITIONING_2_" + vm.RTPlan.patientPosition | translate}}</span>.</p>
+                        <p>
+                            {{"POSITIONING_2"|translate}}
+                            <span class="personalized">{{"POSITIONING_2_" + vm.RTPlan.patientPosition | translate}}</span>
+                            .
+                        </p>
                         <p ng-if="vm.plan.CancerType == 'breast' || vm.plan.CancerType == 'prostate'">{{"POSITIONING_3_" + vm.plan.CancerType.toUpperCase()|translate}}</p>
                     </div>
 
@@ -53,23 +61,36 @@
                     </label>
 
                     <div class="content">
-                        <p>{{"BEAMS_1"|translate}} <span class="personalized">{{vm.RTPlan.numBeams}}</span> {{"BEAMS_2"|translate}}</p>
+                        <p>
+                            {{"BEAMS_1"|translate}}
+                            <span class="personalized">{{vm.RTPlan.numBeams}}</span>
+                            {{"BEAMS_2"|translate}}
+                        </p>
                         <img src="./img/radiotherapy/radiotherapy_delivery.png" class="radiotherapy-image center">
-                        <p>{{"BEAMS_3"|translate}} <span class="personalized">{{vm.RTPlan.radiationType.toLowerCase()}}</span> {{"BEAMS_3_" + vm.RTPlan.radiationType.toUpperCase()|translate}}</p>
+                        <p>
+                            {{"BEAMS_3"|translate}}
+                            <span class="personalized">{{vm.RTPlan.radiationType.toLowerCase()}}</span>
+                            {{"BEAMS_3_" + vm.RTPlan.radiationType.toUpperCase()|translate}}
+                        </p>
                         <p>
                             <span ng-if="vm.isSingularEnergy">{{"BEAMS_4_SINGULAR"|translate}}</span>
                             <span ng-if="!vm.isSingularEnergy">{{"BEAMS_4_PLURAL"|translate}}</span>
-                            <span class="personalized">{{vm.energyText}}</span> {{"BEAMS_4_" + vm.RTPlan.radiationType.toUpperCase()|translate}}{{"BEAMS_5"|translate}}{{"BEAMS_5_" + vm.RTPlan.radiationType.toUpperCase()|translate}}
+                            <span class="personalized">{{vm.energyText}}</span>
+                            {{"BEAMS_4_" + vm.RTPlan.radiationType.toUpperCase()|translate}}
+                            {{"BEAMS_5"|translate}}
+                            {{"BEAMS_5_" + vm.RTPlan.radiationType.toUpperCase()|translate}}
                         </p>
                         <p>{{"BEAMS_6"|translate}}</p>
-                        <p ng-if="vm.RTPlan.hasMLC">{{"BEAMS_6_MLC"|translate}} </p><!--In your case, the beam is made even smaller with the use of “<span class="personalized">multileaf collimators</span>”, small metal bars that block some of radiation to make a conformal beam.<p></p>-->
-                        <img src="./img/radiotherapy/MLC.png" class="radiotherapy-image center">
+                        <div ng-if="vm.RTPlan.hasMLC">
+                            <p>{{"BEAMS_6_MLC"|translate}}</p>
+                            <img src="./img/radiotherapy/MLC.png" class="radiotherapy-image center">
+                        </div>
                     </div>
 
                     <!-- TODO: Implement below w/ variables -->
 
-                    <!-- <input type="checkbox" id="title3"  class="dropdown">
-                         <label class="dropdown" for="title3"><img src="./img/radiotherapy/lung.png" style="height:30px; vertical-align:middle;"><span><strong>  {{"BREATHING_TITLE"|translate}}</strong></span></label>
+                    <!-- <input type="checkbox" id="title3" class="dropdown">
+                         <label class="dropdown" for="title3"><img src="./img/radiotherapy/lung.png" style="height:30px; vertical-align:middle;"><span><strong> {{"BREATHING_TITLE"|translate}}</strong></span></label>
 
                       <div class="content">
                           Breathing techniques are used for tumours that are close to the heart or likely to move significantly while breathing. During treatment, you will need to <span class="personalized">hold a deep breath</span>.
@@ -85,9 +106,17 @@
                     </label>
 
                     <div class="content">
-                        <p>{{"DOSE_1"|translate}} <span class="personalized">{{vm.RTPlan.dose}}</span> {{"DOSE_2"|translate}}</p>
-                        <p>{{"DOSE_3"|translate}} <span class="personalized">{{vm.RTPlan.numFractions}}</span> {{"DOSE_4"|translate}}</p>
-                        <p>The radiation beam type, energy, angle and shape are all chosen so that the tumour receives this prescribed dose, while the surrounding healthy tissues and organs receive the least amount of radiation possible. Our goal is first to effectively remove the tumour, but also to reduce the side effects you may experience.</p>
+                        <p>
+                            {{"DOSE_1"|translate}}
+                            <span class="personalized">{{vm.RTPlan.dose}}</span>
+                            {{"DOSE_2"|translate}}
+                        </p>
+                        <p>
+                            {{"DOSE_3"|translate}}
+                            <span class="personalized">{{vm.RTPlan.numFractions}}</span>
+                            {{"DOSE_4"|translate}}
+                        </p>
+                        <p>{{"DOSE_5"|translate}}</p>
                     </div>
                 </div>
             </div>
@@ -95,15 +124,15 @@
 
         <!-- 3D Render -->
         <div ng-show="!vm.showDetails">
-            <div class="col-xs-12 text-center" style="margin: 0 auto; align: center; position:fixed; overflow:scroll">
+            <div class="col-xs-12 text-center radiotherapy-render">
                 <h3><b>{{"PERSONALIZED_PLAN"|translate}}</b></h3>
-                <p>Below is a 3D view of your body from your CT scan and the beams of radiation you will receive during treatment.</p>
-                <div style="position:relative" id="holder">
-                    <span><b>Beams displayed:</b></span>
+                <p>{{"3D_RENDER_INTRO"|translate}}</p>
+                <div style="position: relative" id="holder">
+                    <span><b>{{"BEAMS_LABEL"|translate}}</b></span>
                     <span ng-repeat="n in vm.beams">
-                        <label style="vertical-align: middle">
-                            <input type="checkbox" id="beamCheckbox-{{n}}" style="-webkit-appearance: checkbox !important; width:20px; height:20px; vertical-align: top; display:inline" ng-click="vm.updateVisibility(n)" checked>
-                            <span style="vertical-align: middle">{{n+1}}</span>
+                        <label class="radiotherapy-beam-checkbox-align">
+                            <input type="checkbox" id="beamCheckbox-{{n}}" class="radiotherapy-beam-checkbox" ng-click="vm.updateVisibility(n)" checked>
+                            <span class="radiotherapy-beam-checkbox-align">{{n+1}}</span>
                         </label>
                     </span>
                 </div>
