@@ -15,6 +15,7 @@ jobs:
   # See: https://semantic-release.gitbook.io/semantic-release/recipes/ci-configurations/github-actions#node-project-configuration
   increment-version:
     runs-on: ubuntu-latest
+    environment: semantic-release
     permissions:
       contents: write
     steps:
