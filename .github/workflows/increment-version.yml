@@ -18,15 +18,12 @@ jobs:
     # use an environment to be able to protect the SSH private key (below) via an environment secret
     # this allows the secret to be restricted to specific branches
     environment: semantic-release
-    # permissions:
-      # contents: write
     steps:
       # Setup
       - uses: actions/checkout@v6.0.0
         with:
           # Fetch part of the commit history, used by semantic-release to calculate a new version number
           fetch-depth: ${{ vars.FETCH_DEPTH }}
-          token: ''
           # Deploy key used to give write access to semantic-release
           ssh-key: ${{ secrets.TEST }}
           # Persist credentials for running with semantic-release
@@ -38,7 +35,7 @@ jobs:
       - name: Run semantic-release
         # Note: semantic-release implicitly uses SSH with the key above to write to the repository
         # To achieve this, repositoryUrl in .releaserc had to be configured with an SSH URL
-        run: echo ${{ secrets.TEST }}
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Configure the commit author and committer
