@@ -26,7 +26,7 @@ jobs:
         with:
           # Fetch part of the commit history, used by semantic-release to calculate a new version number
           fetch-depth: ${{ vars.FETCH_DEPTH }}
-          # token: ''
+          token: ''
           # Deploy key used to give write access to semantic-release
           ssh-key: ${{ secrets.TEST }}
           # Persist credentials for running with semantic-release
