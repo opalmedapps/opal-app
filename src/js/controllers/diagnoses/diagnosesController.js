@@ -12,7 +12,6 @@
 /**
  * @ngdoc controller
  * @requires Diagnoses
- * @requires UserPreferences
  * @description Controller for the diagnoses view.
  */
 
@@ -24,14 +23,14 @@
         .controller('DiagnosesController', DiagnosesController);
 
     /* @ngInject */
-    DiagnosesController.$inject = ['Diagnoses','UserPreferences'];
+    DiagnosesController.$inject = ['Diagnoses'];
 
 
-    function DiagnosesController(Diagnoses, UserPreferences) {
-        var vm = this;
+    function DiagnosesController(Diagnoses) {
+        const vm = this;
+
         vm.title = 'DiagnosesController';
         vm.diagnoses = [];
-        vm.language = '';
         vm.noDiagnosis = false;
 
         // Used by patient-data-handler
@@ -42,7 +41,7 @@
         ////////////////
 
         function activate() {
-            vm.language = UserPreferences.getLanguage();
+
         }
 
         /**
@@ -51,7 +50,7 @@
         function setDiagnosesView() {
             // Filter out "N/A" diagnoses
             vm.diagnoses = Diagnoses.getDiagnoses().filter(e => {
-                return e[`Description_${vm.language}`].toUpperCase() !== 'N/A';
+                return e.Description.toUpperCase() !== 'N/A';
             });
 
             vm.noDiagnosis = vm.diagnoses.length === 0;
