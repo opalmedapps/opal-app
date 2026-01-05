@@ -129,6 +129,9 @@
                 PatientTestResults.clear();
                 updateTimestamps('PatientTestDates', 0);
                 updateTimestamps('PatientTestTypes', 0);
+
+                TxTeamMessages.clearTxTeamMessages();
+                updateTimestamps('TxTeamMessages', 0);
             });
         }
 
