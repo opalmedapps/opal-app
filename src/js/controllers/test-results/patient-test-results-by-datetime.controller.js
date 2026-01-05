@@ -29,11 +29,6 @@ class PatientTestResultsByDatetimeController {
 	 */
 	locale = "";
 
-	/**
-	* @type {string}
-	*/
-	#language = "";
-
 	#patientTestResults;
 	#navigator;
 	#$timeout;
@@ -44,32 +39,20 @@ class PatientTestResultsByDatetimeController {
 	 *
 	 * @param {PatientTestResults} patientTestResults
 	 * @param {Navigator} navigator
-	 * @param {UserPreferences} userPreferences
 	 * @param {$timeout} $timeout
 	 * @param {$filter} $filter
 	 * @param {UpdateUI} updateUI update UI service
 	 * @param {$locale} $locale
 	 */
 	constructor(patientTestResults, navigator,
-	            userPreferences, $timeout, $filter, updateUI, $locale) {
+	            $timeout, $filter, updateUI, $locale) {
 		this.#patientTestResults = patientTestResults;
 		this.#navigator = navigator.getNavigator();
-		this.#language = userPreferences.getLanguage();
 		this.#$filter = $filter;
 		this.#$timeout = $timeout;
 		this.#updateUI = updateUI;
 		this.locale = $locale.id;
 		this.#initialize(this.#navigator.getCurrentPage().options);
-	}
-
-
-	/**
-	 * Returns the test name in the preferred patient language
-	 * @param {*} testResult Result for given test type
-	 * @returns {string} Returns test name
-	 */
-	getTestName(testResult) {
-		return testResult[`name_${this.#language}`];
 	}
 
 	/**
@@ -155,7 +138,7 @@ class PatientTestResultsByDatetimeController {
 	}
 }
 
-PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator', 'UserPreferences',
+PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator',
 													'$timeout', '$filter', 'UpdateUI', '$locale'];
 angular
 	.module('OpalApp')

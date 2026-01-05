@@ -6,10 +6,6 @@ class PatientTestResultsByTypeController {
 	/**
 	 * @type {string}
 	 */
-	#language;
-	/**
-	 * @type {string}
-	 */
 	#fontSize;
 	/**
 	 * @type {TestType}
@@ -53,7 +49,6 @@ class PatientTestResultsByTypeController {
 	constructor(patientTestResults, userPreferences, navigator, $filter,
 		$timeout, browser, profileSelector, updateUI) {
 		this.#patientTestResults = patientTestResults;
-		this.#language = userPreferences.getLanguage();
 		this.#fontSize = userPreferences.getFontSize();
 		this.#navigator = navigator.getNavigator();
 		this.#$timeout = $timeout;
@@ -80,16 +75,8 @@ class PatientTestResultsByTypeController {
 	 * Routing to EducationalMaterialURL for the test type
 	 */
 	goToUrl() {
-		let url = this.test[`educationalMaterialURL_${this.#language}`];
+		let url = this.test.educationalMaterialURL;
 		this.#browser.openInternal(url);
-	}
-
-	/**
-	 * Returns the test name in the preferred patient language
-	 * @returns {TestType} Returns test name to display in the view
-	 */
-	getTestName(test) {
-		return test[`name_${this.#language}`];
 	}
 
 	////////////////////////////////////////////////////

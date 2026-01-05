@@ -122,6 +122,10 @@
 
                 Diagnoses.clearDiagnoses();
                 updateTimestamps('Diagnosis', 0);
+
+                PatientTestResults.clear();
+                updateTimestamps('PatientTestDates', 0);
+                updateTimestamps('PatientTestTypes', 0);
             });
         }
 
