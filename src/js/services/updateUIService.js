@@ -123,6 +123,9 @@
                 Diagnoses.clearDiagnoses();
                 updateTimestamps('Diagnosis', 0);
 
+                Documents.clearDocuments();
+                updateTimestamps('Documents', 0);
+
                 PatientTestResults.clear();
                 updateTimestamps('PatientTestDates', 0);
                 updateTimestamps('PatientTestTypes', 0);

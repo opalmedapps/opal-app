@@ -18,8 +18,8 @@ var myApp=angular.module('OpalApp');
  *@requires $filter
  *@description Sets the documents and provides an API to interact with them and the server
  **/
-myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage','Constants',
-function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage,Constants){
+myApp.service('Documents',['UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage','Constants',
+function(UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage,Constants){
     //Array documentsArray contains all the documents for the patient
     /**
      *@ngdoc property
@@ -259,25 +259,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
             });
             return r.promise;
         },
-        /**
-         *@ngdoc method
-         *@name setDocumentsLanguage
-         *@param {object[]|object} documents Array of documents, or single document object.
-         *@description Translates the array parameter containing documents to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
-         *@returns {Array} Returns array with translated values
-         **/
-        setDocumentsLanguage:function(documents)
-        {
-            let language = UserPreferences.getLanguage();
-            let documentsList = Array.isArray(documents) ? documents : [documents];
 
-            documentsList.forEach(document => {
-                document.Title = document[`AliasName_${language}`];
-                document.Description = document[`AliasDescription_${language}`];
-            });
-
-            return documents;
-        },
         /**
          *@ngdoc method
          *@name clearDocuments

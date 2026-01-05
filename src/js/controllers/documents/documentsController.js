@@ -44,7 +44,6 @@
          */
         function setDocumentsView() {
             var documents = Documents.getDocuments();
-            documents = Documents.setDocumentsLanguage(documents);
 
             if(documents.length > 0) vm.noDocuments=false;
 
