@@ -21,6 +21,7 @@
     // https://docs.renovatebot.com/presets-schedule/#scheduleweekly
     "schedule:weekly",
     "github>mschoettle/renovate-presets//presets/actions-dependency-version.json5",
+    "github>mschoettle/renovate-presets//presets/pre-commit-hooks.json5",
   ],
   // Extra rules for node images. See: https://github.com/renovatebot/renovate/discussions/29501
   // Ensure that node docker versioning doesn't interfere with the custom managers.
