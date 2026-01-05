@@ -23,23 +23,13 @@
         .module('OpalApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['$scope', 'Navigator', 'UserPreferences', '$timeout', 'Browser'];
+    AppointmentController.$inject = ['$scope', '$timeout', 'Browser', 'Navigator'];
 
     /* @ngInject */
-    function AppointmentController($scope, Navigator, UserPreferences, $timeout, Browser) {
-
+    function AppointmentController($scope, $timeout, Browser, Navigator) {
         let vm = this;
 
         let navigator = null;
-
-        /**
-         * @ngdoc property
-         * @name language
-         * @propertyOf AppointmentController
-         * @returns string
-         * @description used by the controller to display the appropriate appointment information based on User's language
-         */
-        vm.language = '';
 
         /**
          * @ngdoc property
@@ -71,12 +61,10 @@
             navigator = Navigator.getNavigator();
 
             let parameters = Navigator.getParameters();
-            let language = UserPreferences.getLanguage().toUpperCase();
 
             bindEvents();
 
             $timeout(function(){
-                vm.language = language;
                 vm.app = parameters.Post;
             });
         }
@@ -94,15 +82,15 @@
          */
         function moreEducationalMaterial() {
             navigator.pushPage('./views/templates/content.html', {
-                contentLink: vm.app["URL_"+ vm.language],
-                contentType: vm.app["AppointmentType_" + vm.language],
+                contentLink: vm.app.URL,
+                contentType: vm.app.AppointmentType,
                 title: 'MORE_EDU_MATERIAL',
             });
 
         }
 
         function openMap(){
-            let url = vm.app["MapUrl_"+ vm.language];
+            let url = vm.app.MapUrl;
             Browser.openInternal(url, true);
         }
 

@@ -117,6 +117,9 @@
                 Questionnaires.clearAllQuestionnaire();
                 updateTimestamps('QuestionnaireList', 0);
 
+                Appointments.clearAppointments();
+                updateTimestamps('Appointments', 0);
+
                 Diagnoses.clearDiagnoses();
                 updateTimestamps('Diagnosis', 0);
             });
