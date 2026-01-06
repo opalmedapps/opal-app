@@ -1,5 +1,5 @@
 {
-  "branches": ["ms/protect-deploy-key"],
+  "branches": ["main"],
   "repositoryUrl": "git@github.com:opalmedapps/opal-app.git",
   "plugins": [
     "@semantic-release/commit-analyzer",
@@ -17,5 +17,5 @@
       }
     ]
   ],
-  "tagFormat": "test-v${version}"
+  "tagFormat": "v${version}"
 }
