@@ -126,6 +126,9 @@
                 Documents.clearDocuments();
                 updateTimestamps('Documents', 0);
 
+                EducationalMaterial.clearEducationalMaterial();
+                updateTimestamps('EducationalMaterial', 0);
+
                 PatientTestResults.clear();
                 updateTimestamps('PatientTestDates', 0);
                 updateTimestamps('PatientTestTypes', 0);
