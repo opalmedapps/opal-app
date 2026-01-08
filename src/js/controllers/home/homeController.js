@@ -23,7 +23,6 @@
         let vm = this;
 
         vm.language = '';
-        vm.calledApp = null;
         $scope.infoModalData = [];
 
         vm.checkinState = {
