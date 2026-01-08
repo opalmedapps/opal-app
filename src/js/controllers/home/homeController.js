@@ -12,19 +12,18 @@
     HomeController.$inject = [
         '$timeout', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
-        'Version', 'User', 'ProfileSelector', '$interval', 'Permissions',
+        'User', 'ProfileSelector', '$interval', 'Permissions',
     ];
 
     /* @ngInject */
     function HomeController($timeout, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
-        Version, User, ProfileSelector, $interval, Permissions,
+        User, ProfileSelector, $interval, Permissions,
     ) {
         let vm = this;
 
         vm.language = '';
         vm.calledApp = null;
-        $scope.infoModalData = [];
 
         vm.checkinState = {
             noAppointments: true,
@@ -120,8 +119,6 @@
             initModalSize();
             //Set patient info
             setPatientInfo();
-            // display version updates info, if any
-            checkForVersionUpdates();
         }
 
         /**
@@ -156,35 +153,6 @@
             vm.userInfo = User.getUserInfo();
             vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments = false;
-        }
-
-        /**
-         * @name checkForVersionUpdates
-         * @desc get latest version info according to the current version
-         */
-        function checkForVersionUpdates() {
-            const currentVersion = Version.currentVersion();
-            let lastVersion = localStorage.getItem('lastVersion');
-            // Initialize lastVersion if not defined, so that we could
-            // get all the updates from the beginning of major version
-            if (!lastVersion) {
-                const lastPoint = currentVersion.lastIndexOf('.');
-                lastVersion = currentVersion.substr(0, lastPoint) + '.-1';
-                localStorage.setItem('lastVersion', lastVersion);
-            }
-
-            if (currentVersion !== lastVersion) {
-                Version.getVersionUpdates(lastVersion, currentVersion, vm.language).then(function (data) {
-                    if (data && data.length > 0) {
-                        $scope.infoModalVersion = Version.currentVersion();
-                        $scope.infoModalData = data;
-                        $timeout(function () {
-                            infoModal.show();
-                        }, 200);
-                        localStorage.setItem('lastVersion', currentVersion);
-                    }
-                }).catch(console.error);
-            }
         }
 
         /**

@@ -40,7 +40,6 @@ import "./services/questionnaireDataService.js";
 import "./services/logOutService.js";
 import "./services/browser.service.js";
 import "./services/app-state.service";
-import "./services/versionService.js";
 import "./services/hospital.service.js";
 import "./services/profile-selector.service";
 import "./services/user.service";
