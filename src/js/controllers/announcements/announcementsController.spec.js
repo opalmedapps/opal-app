@@ -29,9 +29,6 @@ describe('AnnouncementsController', function() {
             getAnnouncements: function(){
                 return true;
             },
-            setLanguage: function(stuff){
-                return true;
-            },
            readAnnouncementBySerNum: function(SerNum){
                 return true;
             }
@@ -46,17 +43,10 @@ describe('AnnouncementsController', function() {
             }
         };
 
-        // Spies
-        spyOn( UserPreferences, 'getLanguage' ).and.callFake( function() {
-            return 'EN';
-        } );
-
         if(no_announcements) {
             spyOn( Announcements, 'getAnnouncements' ).and.returnValue([]);
-            spyOn( Announcements, 'setLanguage' ).and.returnValue([]);
         } else {
             spyOn( Announcements, 'getAnnouncements' ).and.returnValue(MockData.test_announcements);
-            spyOn( Announcements, 'setLanguage' ).and.returnValue(MockData.english_test_announcements);
             spyOn( Announcements, 'readAnnouncementBySerNum' ).and.returnValue(true);
         }
 
@@ -68,7 +58,6 @@ describe('AnnouncementsController', function() {
     describe('sanity test', function() {
         it('activates announcements properly', function() {
             expect(Announcements.getAnnouncements).toHaveBeenCalled();
-            expect(Announcements.setLanguage).toHaveBeenCalled();
             expect(controller.noAnnouncements).toBe(false);
             expect(controller.announcements).toEqual(MockData.english_test_announcements);
         });

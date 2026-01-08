@@ -114,6 +114,9 @@
         async function init() {
             // Clear data that needs to be re-downloaded when the language changes
             UserPreferences.observeLanguage(() => {
+                Announcements.clearAnnouncements();
+                updateTimestamps('Announcements', 0);
+
                 Appointments.clearAppointments();
                 updateTimestamps('Appointments', 0);
 
