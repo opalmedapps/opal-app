@@ -114,9 +114,6 @@
         async function init() {
             // Clear data that needs to be re-downloaded when the language changes
             UserPreferences.observeLanguage(() => {
-                Questionnaires.clearAllQuestionnaire();
-                updateTimestamps('QuestionnaireList', 0);
-
                 Appointments.clearAppointments();
                 updateTimestamps('Appointments', 0);
 
@@ -135,6 +132,9 @@
 
                 TxTeamMessages.clearTxTeamMessages();
                 updateTimestamps('TxTeamMessages', 0);
+
+                Questionnaires.clearAllQuestionnaire();
+                updateTimestamps('QuestionnaireList', 0);
             });
         }
 
