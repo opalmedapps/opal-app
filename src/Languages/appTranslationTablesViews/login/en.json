@@ -10,7 +10,6 @@
   "CONFIRM": "Confirm",
   "CONTACT_HOSPITAL": "Contact the hospital for assistance",
   "CONTINUE": "Continue",
-  "CURRENT_VERSION": "Current version: ",
   "EDUCATION": "Clinical Reference Material",
   "EDUCATION_SHORT": "Clinical Reference",
   "EMAIL": "Email",
@@ -119,6 +118,5 @@
   "TOUR_WELCOME_DESC": "Opal is a patient portal designed to provide you with some of your medical information right at your fingertips. To get started, tap the arrow or swipe the screen to change slides.",
   "TRUST_DEVICE": "Set this device as a trusted device?",
   "UNTRANSLATED_PAGE_DISCLAIMER": "This page has not yet been translated, but its original content is provided below for reference purposes. Thank you for your understanding.",
-  "USER_DISABLED": "Your account has been blocked, please contact Opal support for further assistance.",
-  "WHATS_NEW": "What's New"
+  "USER_DISABLED": "Your account has been blocked, please contact Opal support for further assistance."
 }
