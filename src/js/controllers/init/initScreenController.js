@@ -68,18 +68,21 @@ import '../../../css/views/init-page.view.css';
 		////////////////
 
 		async function activate() {
-			//Initialize language if not initialized
+			// Initialize the app's language
 			await UserPreferences.initializeLanguage();
+			const language = UserPreferences.getLanguage();
 
 			try {
 				await DynamicContent.ensureInitialized();
 				// Read the Service Status Message from the serviceStatusURL hosted on the external server.
 				const response = await DynamicContent.loadFromURL(CONFIG.settings.serviceStatusURL);
 
-				// Read the Service Status, if one has been defined
-				const language = UserPreferences.getLanguage();
-				// If the user's chosen language isn't available, fall back onto the language of the first listed entry
-				const { message = '', title } = response?.data?.[language.toUpperCase()] || Object.values(response?.data)[0] || {};
+				// Read and display the Service Status, if one has been defined
+				// Pick the best language, in order: the user's chosen language, then the fallback language, or if all fails, the first available entry
+				const { message = '', title } = response?.data?.[language.toLowerCase()]
+					|| response?.data?.[CONFIG.settings.fallbackLanguage.toLowerCase()]
+					|| Object.values(response?.data)[0]
+					|| {};
 
 				if (message !== '') {
 					$timeout(() => {
