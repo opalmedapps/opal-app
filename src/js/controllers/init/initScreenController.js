@@ -91,7 +91,6 @@ import '../../../css/views/init-page.view.css';
 					});
 				}
 			} catch (error) {
-				// TODO: ERROR_INIT_LINKS is not translated
 				if (error.code === "INIT_ERROR") Toast.showToast({
 					message: $filter('translate')("ERROR_INIT_LINKS"),
 				});
