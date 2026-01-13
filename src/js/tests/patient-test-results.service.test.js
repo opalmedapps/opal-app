@@ -47,14 +47,12 @@ describe('PatientTestResults service', function() {
         it('should set all types in the testTypes array', function() {
             let newTypes = [
                 {
-                    educationalMaterialURL_EN: "",
-                    educationalMaterialURL_FR: "",
+                    educationalMaterialURL: "",
                     latestAbnormalFlag: "",
                     latestCollectedDateTime: "",
                     latestPatientTestResultSerNum: "1",
                     latestTestValue: "0",
-                    name_EN: "test",
-                    name_FR: "test",
+                    name: "test",
                     normalRange: "",
                     normalRangeMax: "",
                     normalRangeMin: "",
@@ -75,14 +73,12 @@ describe('PatientTestResults service', function() {
         it('should overwrite any existing types', function() {
             let oldTypes = [
                 {
-                    educationalMaterialURL_EN: "",
-                    educationalMaterialURL_FR: "",
+                    educationalMaterialURL: "",
                     latestAbnormalFlag: "",
                     latestCollectedDateTime: "",
                     latestPatientTestResultSerNum: "1",
                     latestTestValue: "0",
-                    name_EN: "test",
-                    name_FR: "test",
+                    name: "test",
                     normalRange: "",
                     normalRangeMax: "",
                     normalRangeMin: "",
@@ -200,14 +196,12 @@ function expectedResultUpdateDates() {
 function executeUpdateTypes() {
     let types = [
         {
-            educationalMaterialURL_EN: "",
-            educationalMaterialURL_FR: "",
+            educationalMaterialURL: "",
             latestAbnormalFlag: "",
             latestCollectedDateTime: "",
             latestPatientTestResultSerNum: "1",
             latestTestValue: "0",
-            name_EN: "test",
-            name_FR: "test",
+            name: "test",
             normalRange: "",
             normalRangeMax: "",
             normalRangeMin: "",
@@ -216,14 +210,12 @@ function executeUpdateTypes() {
             unitDescription: "",
         },
         {
-            educationalMaterialURL_EN: "",
-            educationalMaterialURL_FR: "",
+            educationalMaterialURL: "",
             latestAbnormalFlag: "",
             latestCollectedDateTime: "",
             latestPatientTestResultSerNum: "1",
             latestTestValue: "0",
-            name_EN: "test",
-            name_FR: "test",
+            name: "test",
             normalRange: "",
             normalRangeMax: "",
             normalRangeMin: "",
@@ -235,14 +227,12 @@ function executeUpdateTypes() {
 
     let newTypes = [
         {
-            educationalMaterialURL_EN: "",
-            educationalMaterialURL_FR: "",
+            educationalMaterialURL: "",
             latestAbnormalFlag: "",
             latestCollectedDateTime: "",
             latestPatientTestResultSerNum: "1",
             latestTestValue: "0",
-            name_EN: "test",
-            name_FR: "test",
+            name: "test",
             normalRange: "",
             normalRangeMax: "100",
             normalRangeMin: "1",
@@ -251,14 +241,12 @@ function executeUpdateTypes() {
             unitDescription: "",
         },
         {
-            educationalMaterialURL_EN: "",
-            educationalMaterialURL_FR: "",
+            educationalMaterialURL: "",
             latestAbnormalFlag: "",
             latestCollectedDateTime: "",
             latestPatientTestResultSerNum: "1",
             latestTestValue: "0",
-            name_EN: "test",
-            name_FR: "test",
+            name: "test",
             normalRange: "",
             normalRangeMax: "",
             normalRangeMin: "",
