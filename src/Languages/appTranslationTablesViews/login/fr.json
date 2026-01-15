@@ -10,7 +10,6 @@
   "CONFIRM": "Confirmer",
   "CONTACT_HOSPITAL": "Contactez l'hôpital pour obtenir de l'aide",
   "CONTINUE": "Continuer",
-  "CURRENT_VERSION": "Version actuelle: ",
   "EDUCATION": "Documents de référence cliniques",
   "EDUCATION_SHORT": "Référence clinique",
   "EMAIL": "Courriel",
@@ -118,6 +117,5 @@
   "TOUR_WELCOME_DESC": "Opal est un portail patient conçu pour vous fournir quelques unes de vos informations médicales à portée de main. Pour commencer, appuyez sur la flèche ou faites glisser l'écran pour changer de page.",
   "TRUST_DEVICE": "Faire confiance à cet appareil?",
   "UNTRANSLATED_PAGE_DISCLAIMER": "La traduction de cette page n'est pas encore disponible, mais son contenu original est tout de même affiché ci-dessous à titre de référence. Merci de votre compréhension.",
-  "USER_DISABLED": "Votre compte a été bloqué. Veuillez contacter l'équipe de soutien d'Opal pour obtenir de l'aide.",
-  "WHATS_NEW": "Nouveautés"
+  "USER_DISABLED": "Votre compte a été bloqué. Veuillez contacter l'équipe de soutien d'Opal pour obtenir de l'aide."
 }
