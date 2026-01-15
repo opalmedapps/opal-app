@@ -82,7 +82,7 @@
   "RECONNECTING": "Reconnecting...",
   "REENTER_PASSWORD_PLACEHOLDER": "Re-enter new password",
   "RESET_ERROR": "Password Reset Error",
-  "RESET_INSTRUCTIONS": "It should be at least 12 characters long, including a number, a lowercase letter, a capital letter and a special character.",
+  "RESET_INSTRUCTIONS": "It should be at least 10 characters long, including a number, a lowercase letter, a capital letter and a special character.",
   "RESET_PASSWORD": "Reset Password",
   "RESET_PASSWORD_CODE_EXPIRED": "You took too long to reset your password. Please try again.",
   "RESET_PASSWORD_CODE_INVALID": "The authorization code used to reset your password is invalid. Please try again.",

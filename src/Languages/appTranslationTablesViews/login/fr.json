@@ -82,7 +82,7 @@
   "RECONNECTING": "En cours de reconnexion...",
   "REENTER_PASSWORD_PLACEHOLDER": "Confirmer le nouveau mot de passe",
   "RESET_ERROR": "Erreur de réinitialisation du mot de passe",
-  "RESET_INSTRUCTIONS": "Il doit comporter au moins 12 caractères, dont un chiffre, une lettre minuscule, une lettre majuscule et un caractère spécial.",
+  "RESET_INSTRUCTIONS": "Il doit comporter au moins 10 caractères, dont un chiffre, une lettre minuscule, une lettre majuscule et un caractère spécial.",
   "RESET_PASSWORD": "Réinitialiser le mot de passe",
   "RESET_PASSWORD_CODE_EXPIRED": "Vous avez pris trop de temps pour réinitialiser votre mot de passe. Veuillez réessayer.",
   "RESET_PASSWORD_CODE_INVALID": "Le code d'autorisation utilisé pour réinitialiser votre mot de passe n'est pas valide. Veuillez réessayer.",
