@@ -1,0 +1,34 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2026 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+.update-security-answer--input::placeholder {
+    font-style: italic;
+}
+
+.update-security-question--dropdown {
+    border-color: #CCC;
+    border-radius: 6px;
+    padding: 6px;
+    margin-bottom: 6px;
+    max-width: 100%;
+    width: 100%;
+}
+
+/* See: https://stackoverflow.com/questions/18578388/html-dropdown-select-with-text-wrap-and-border-after-every-value-option */
+.update-security-question--option {
+    /* wrap text in compatible browsers */
+    -moz-white-space: pre-wrap;
+    -o-white-space: pre-wrap;
+    white-space: pre-wrap;
+    /* hide text that can't wrap with an ellipsis */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.update-security-question--spacing {
+    margin-bottom: 30px;
+    margin-top: 6px;
+}
