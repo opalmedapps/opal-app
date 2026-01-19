@@ -4,6 +4,7 @@
 
 import {SecurityQuestion} from "../../models/settings/SecurityQuestion";
 import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
+import '../../../css/views/update-security-question.view.css';
 
 (function(){
     'use strict';
@@ -27,17 +28,14 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
     /* @ngInject */
     function UpdateSecurityQuestionController(Navigator, $timeout, $filter, UserPreferences, Params,
                                               Firebase, LogOutService, RequestToServer, EncryptionService) {
-
         let vm = this;
 
         // variables for controller
-        let lang = UserPreferences.getLanguage();
+        const language = UserPreferences.getLanguage();
         let navigator = null;
 
         // constants for controller
-        const GET_SECURITY_QUESTION_AND_ANSWER_LIST_API = 'SecurityQuestionAnswerList';
         const MIN_ANSWER_LENGTH = 3;    // the minimum length required for a security answer
-        const UPDATE_SECURITY_QUESTION_AND_ANSWER_API = 'UpdateSecurityQuestionAnswer';
 
         // variables seen from view
         vm.activeSecurityQuestionList = [];   // the list of security question without answers
@@ -52,7 +50,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         vm.changeSecurityQuestion = changeSecurityQuestion;
         vm.displayQuestionName = displayQuestionName;
         vm.evaluateSubmission = evaluateSubmission;
-        vm.filterQuestionList = filterQuestionList;
+        vm.questionAlreadyUsed = questionAlreadyUsed;
         vm.securityQuestionAnswerChanged = securityQuestionAnswerChanged;
         vm.submit = submit;
 
@@ -68,7 +66,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         function activate() {
             navigator = Navigator.getNavigator();
 
-            RequestToServer.sendRequestWithResponse(GET_SECURITY_QUESTION_AND_ANSWER_LIST_API)
+            RequestToServer.sendRequestWithResponse('SecurityQuestionAnswerList')
                 .then(function(response){
                     $timeout(function(){
                         let securityQuestionList = response.data.securityQuestionList || [];
@@ -77,8 +75,24 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                         vm.activeSecurityQuestionList =
                             activeSecurityQuestions.map((securityQuestion) => new SecurityQuestion(securityQuestion));
                         vm.securityQuestionWithAnsList =
-                            securityQuestionList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer));
-                        vm.loadingList = false;
+                            securityQuestionList.map((securityQuestionAnswer) => new SecurityAnswer(securityQuestionAnswer, $filter));
+
+                        // Adds the currently used questions to the active question list; this allows the UI dropdowns to also display the currently used questions
+                        // TODO enforce that users must change inactive questions to active ones
+                        vm.activeSecurityQuestionList = buildSecurityQuestionOptionsList();
+
+                        $timeout(function() {
+                            vm.securityQuestionWithAnsList.map(entry => entry.question[`questionText_${language}`]).forEach((chosenQuestion, questionIndex) => {
+                                const optionIndex = vm.activeSecurityQuestionList.findIndex(entry => {
+                                    return entry[`questionText_${language}`] === chosenQuestion;
+                                });
+                                // Highlight and pre-select the questions already in use
+                                $(`#question-${questionIndex}-option-${optionIndex}`).css({
+                                    "background-color": "#D9F1F4",
+                                }).prop('selected', true);
+                            });
+                            vm.loadingList = false;
+                        });
                     })
                 })
                 .catch(function(err){
@@ -86,8 +100,27 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                         console.error(err);
                         handleLoadSecurityQuestionListRequestErr();
                         vm.loadingList = false;
-                    })
+                    });
                 })
+        }
+
+        /**
+         * @description Builds a new list that contains all newly available security questions and all in-use security questions to populate the dropdowns.
+         */
+        function buildSecurityQuestionOptionsList() {
+            let options = [];
+            const allQuestions = [
+                ...vm.activeSecurityQuestionList,
+                ...vm.securityQuestionWithAnsList.map(entry => entry.question),
+            ];
+
+            // Only add non-duplicate questions to the final list
+            allQuestions.forEach(question => {
+                if (!options.find(option => option[`questionText_${language}`] === question[`questionText_${language}`])) {
+                    options.push(question);
+                }
+            })
+            return options;
         }
 
         /**
@@ -128,37 +161,54 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @returns {string} the text of that question in the language of the app
          */
         function displayQuestionName(question){
-            return question[`questionText_${lang}`];
+            return question[`questionText_${language}`];
         }
 
         /**
-         * changeSecurityQuestion
-         * @desc helps changing one security question to another
-         * @param {object} questionAnswerObj an item in the list of securityQuestionWithAnsList which question is to be changed
-         * @param {object} newQuestion the question to be changed to
+         * @desc Processes the change from one security question to another, by updating the controller state.
+         * @param {number} questionIndex The index of the question being changed, in securityQuestionWithAnsList.
+         * @param {number} newQuestionChoiceIndex The index of the new chosen question, in activeSecurityQuestionList.
          */
-        function changeSecurityQuestion(questionAnswerObj, newQuestion){
+        function changeSecurityQuestion(questionIndex, newQuestionChoiceIndex) {
+            // Don't execute this function before the page is initialized
+            if (!vm.activeSecurityQuestionList || vm.activeSecurityQuestionList.length === 0) return;
+
             vm.submitDisabled = true;
 
-            questionAnswerObj.questionHasChanged = true;
-            questionAnswerObj.question = newQuestion;
+            const questionAnswerObj = vm.securityQuestionWithAnsList[questionIndex];
+            const newQuestion = vm.activeSecurityQuestionList[newQuestionChoiceIndex];
 
-            // re-initialize the answer once the question has been changed
-            questionAnswerObj.answerHasChanged = false;
-            questionAnswerObj.oldAnswerPlaceholder = '';
+            // Determine whether the question is new, or the user has just reset the dropdown to the original question
+            questionAnswerObj.question = newQuestion;
+            if (questionAnswerObj.oldQuestion[`questionText_${language}`] === newQuestion[`questionText_${language}`]) {
+                questionAnswerObj.questionHasChanged = false;
+                questionAnswerObj.oldAnswerPlaceholder = $filter('translate')('SECURITY_ANSWER_UPDATE_PLACEHOLDER');
+            }
+            else {
+                questionAnswerObj.questionHasChanged = true;
+                questionAnswerObj.oldAnswerPlaceholder = '';
+            }
+
+            // Re-initialize the answer once the question has been changed
             questionAnswerObj.answer = '';
+            questionAnswerObj.answerHasChanged = false;
         }
 
-        /**
-         * filterQuestionList
-         * @desc custom filter to be used on the list of question to be chosen by a user
-         * @param {object} question
-         * @returns {boolean}
-         */
-        function filterQuestionList(question){
-            return question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[0].question[`questionText_${lang}`] &&
-                question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[1].question[`questionText_${lang}`] &&
-                question[`questionText_${lang}`] !== vm.securityQuestionWithAnsList[2].question[`questionText_${lang}`];
+        function questionAlreadyUsed(answerIndex) {
+            // Don't execute this function before the page is initialized
+            if (!vm.securityQuestionWithAnsList || vm.securityQuestionWithAnsList.length === 0) return;
+
+            const currentQuestion = vm.securityQuestionWithAnsList[answerIndex].question;
+
+            // Check all selected questions before this one
+            for (let i = 0; i < answerIndex; i++) {
+                const previousQuestion = vm.securityQuestionWithAnsList[i].question;
+                if (currentQuestion[`questionText_${language}`] === previousQuestion[`questionText_${language}`]) {
+                    vm.submitDisabled = true;
+                    return true;
+                }
+            }
+            return false;
         }
 
         /**
@@ -181,8 +231,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          * @param {object} questionAnswerObj
          */
         function securityQuestionAnswerChanged(questionAnswerObj) {
-
-            questionAnswerObj.answerHasChanged = true;
+            questionAnswerObj.answerHasChanged = questionAnswerObj.answer.length > 0;
 
             evaluateSubmission();
         }
@@ -203,7 +252,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
                 let params = {
                     'questionAnswerArr': formatSecurityQuestionWithAnsListForSubmission(vm.securityQuestionWithAnsList),
                 };
-                await RequestToServer.sendRequestWithResponse(UPDATE_SECURITY_QUESTION_AND_ANSWER_API, params);
+                await RequestToServer.sendRequestWithResponse('UpdateSecurityQuestionAnswer', params);
 
                 // Inform the user that the request was successful and force logout
                 $timeout(function() {
@@ -282,7 +331,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
 
                 // answer is hashed in the objects of this array
                 arrToBeSent.push({
-                    question: answerQuestionObj.question[`questionText_${lang}`],
+                    question: answerQuestionObj.question[`questionText_${language}`],
                     questionId: answerQuestionObj.securityAnswerSerNum,
                     answer: EncryptionService.hash(answerQuestionObj.answer.toUpperCase()),
                 });
