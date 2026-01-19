@@ -13,20 +13,11 @@ import '../../../css/views/update-security-question.view.css';
         .module('OpalApp')
         .controller('UpdateSecurityQuestionController', UpdateSecurityQuestionController);
 
-    UpdateSecurityQuestionController.$inject = [
-        'Navigator',
-        '$timeout',
-        '$filter',
-        'Params',
-        'Firebase',
-        'LogOutService',
-        'RequestToServer',
-        'EncryptionService'
-    ];
+    UpdateSecurityQuestionController.$inject = ['$filter', '$timeout', 'EncryptionService', 'Firebase', 'LogOutService',
+        'NativeNotification', 'Navigator', 'Params', 'RequestToServer'];
 
-    /* @ngInject */
-    function UpdateSecurityQuestionController(Navigator, $timeout, $filter, Params,
-                                              Firebase, LogOutService, RequestToServer, EncryptionService) {
+    function UpdateSecurityQuestionController($filter, $timeout, EncryptionService, Firebase, LogOutService,
+                                              NativeNotification, Navigator, Params, RequestToServer) {
         let vm = this;
 
         let navigator = null;
@@ -201,14 +192,9 @@ import '../../../css/views/update-security-question.view.css';
          * handleLoadSecurityQuestionListRequestErr
          * @desc show a notification to the user in case a request to server fails
          */
-        function handleLoadSecurityQuestionListRequestErr (){
+        function handleLoadSecurityQuestionListRequestErr() {
             navigator.popPage();
-
-            ons.notification.alert({
-                //message: 'Server problem: could not fetch data, try again later',
-                message: $filter('translate')("SERVER_ERROR_ALERT"),
-                modifier: (ons.platform.isAndroid())?'material':null
-            })
+            NativeNotification.showNotificationAlert($filter('translate')('SERVER_ERROR_ALERT'));
         }
 
         /**
@@ -262,17 +248,9 @@ import '../../../css/views/update-security-question.view.css';
         function handleSubmitErr(error) {
             console.error(error);
             if (error.code === Params.invalidPassword) {
-
-                ons.notification.alert({
-                    message: $filter('translate')("INVALID_PASSWORD"),
-                    modifier: (ons.platform.isAndroid())?'material':null
-                });
+                NativeNotification.showNotificationAlert($filter('translate')('INVALID_PASSWORD'));
             } else {
-
-                ons.notification.alert({
-                    message: $filter('translate')("SERVER_ERROR_MODIFY_SECURITY"),
-                    modifier: (ons.platform.isAndroid())?'material':null
-                });
+                NativeNotification.showNotificationAlert($filter('translate')('SERVER_ERROR_MODIFY_SECURITY'));
             }
         }
 
@@ -282,20 +260,15 @@ import '../../../css/views/update-security-question.view.css';
          *      logs the user out, and take the user to the init page
          */
         function successfulUpdateConfirmationAndLogout() {
-            ons.notification.alert({
-                message: $filter('translate')("SECURITY_QUESTION_ANSWER_UPDATE_SUCCESS"),
-                modifier: (ons.platform.isAndroid())?'material':null,
-                callback: function(idx) {
-                    switch (idx) {
-                        case 0:
-                            $timeout(function() {
-                                LogOutService.logOut(false);
-                            });
-
-                            break;
-                    }
+            NativeNotification.showNotificationAlert(
+                $filter('translate')('SECURITY_QUESTION_ANSWER_UPDATE_SUCCESS'),
+                $filter('translate')('SUCCESS'),
+                () => {
+                    $timeout(() => {
+                        LogOutService.logOut(false);
+                    });
                 }
-            });
+            );
         }
 
         /**
