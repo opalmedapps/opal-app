@@ -9,12 +9,11 @@ import {SecurityQuestion} from "./SecurityQuestion";
  */
 export class SecurityAnswer {
     constructor({id, question}, $filter) {
-        // The questions are not translated and being assigned to both English and French question texts
-        let title_en = question;
-        let title_fr = question;
+        // The questions are not translated and are being saved in the language they were originally answered
+        let title = question;
         this.securityAnswerSerNum = Number(id);
-        this.question = new SecurityQuestion({title_en, title_fr});
-        this.oldQuestion = new SecurityQuestion({title_en, title_fr});
+        this.question = new SecurityQuestion({title});
+        this.oldQuestion = new SecurityQuestion({title});
         this.answer = "";
         this.answerHasChanged = false;
         this.questionHasChanged = false;

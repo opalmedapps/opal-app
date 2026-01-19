@@ -17,7 +17,6 @@ import '../../../css/views/update-security-question.view.css';
         'Navigator',
         '$timeout',
         '$filter',
-        'UserPreferences',
         'Params',
         'Firebase',
         'LogOutService',
@@ -26,12 +25,10 @@ import '../../../css/views/update-security-question.view.css';
     ];
 
     /* @ngInject */
-    function UpdateSecurityQuestionController(Navigator, $timeout, $filter, UserPreferences, Params,
+    function UpdateSecurityQuestionController(Navigator, $timeout, $filter, Params,
                                               Firebase, LogOutService, RequestToServer, EncryptionService) {
         let vm = this;
 
-        // variables for controller
-        const language = UserPreferences.getLanguage();
         let navigator = null;
 
         // constants for controller
@@ -48,7 +45,6 @@ import '../../../css/views/update-security-question.view.css';
 
         // functions that can be used from view
         vm.changeSecurityQuestion = changeSecurityQuestion;
-        vm.displayQuestionName = displayQuestionName;
         vm.evaluateSubmission = evaluateSubmission;
         vm.questionAlreadyUsed = questionAlreadyUsed;
         vm.securityQuestionAnswerChanged = securityQuestionAnswerChanged;
@@ -82,9 +78,9 @@ import '../../../css/views/update-security-question.view.css';
                         vm.activeSecurityQuestionList = buildSecurityQuestionOptionsList();
 
                         $timeout(function() {
-                            vm.securityQuestionWithAnsList.map(entry => entry.question[`questionText_${language}`]).forEach((chosenQuestion, questionIndex) => {
+                            vm.securityQuestionWithAnsList.map(entry => entry.question.questionText).forEach((chosenQuestion, questionIndex) => {
                                 const optionIndex = vm.activeSecurityQuestionList.findIndex(entry => {
-                                    return entry[`questionText_${language}`] === chosenQuestion;
+                                    return entry.questionText === chosenQuestion;
                                 });
                                 // Highlight and pre-select the questions already in use
                                 $(`#question-${questionIndex}-option-${optionIndex}`).css({
@@ -116,7 +112,7 @@ import '../../../css/views/update-security-question.view.css';
 
             // Only add non-duplicate questions to the final list
             allQuestions.forEach(question => {
-                if (!options.find(option => option[`questionText_${language}`] === question[`questionText_${language}`])) {
+                if (!options.find(option => option.questionText === question.questionText)) {
                     options.push(question);
                 }
             })
@@ -155,16 +151,6 @@ import '../../../css/views/update-security-question.view.css';
         }
 
         /**
-         * displayQuestionName
-         * @desc gets the question text according to the language of the app
-         * @param {object} question
-         * @returns {string} the text of that question in the language of the app
-         */
-        function displayQuestionName(question){
-            return question[`questionText_${language}`];
-        }
-
-        /**
          * @desc Processes the change from one security question to another, by updating the controller state.
          * @param {number} questionIndex The index of the question being changed, in securityQuestionWithAnsList.
          * @param {number} newQuestionChoiceIndex The index of the new chosen question, in activeSecurityQuestionList.
@@ -180,7 +166,7 @@ import '../../../css/views/update-security-question.view.css';
 
             // Determine whether the question is new, or the user has just reset the dropdown to the original question
             questionAnswerObj.question = newQuestion;
-            if (questionAnswerObj.oldQuestion[`questionText_${language}`] === newQuestion[`questionText_${language}`]) {
+            if (questionAnswerObj.oldQuestion.questionText === newQuestion.questionText) {
                 questionAnswerObj.questionHasChanged = false;
                 questionAnswerObj.oldAnswerPlaceholder = $filter('translate')('SECURITY_ANSWER_UPDATE_PLACEHOLDER');
             }
@@ -203,7 +189,7 @@ import '../../../css/views/update-security-question.view.css';
             // Check all selected questions before this one
             for (let i = 0; i < answerIndex; i++) {
                 const previousQuestion = vm.securityQuestionWithAnsList[i].question;
-                if (currentQuestion[`questionText_${language}`] === previousQuestion[`questionText_${language}`]) {
+                if (currentQuestion.questionText === previousQuestion.questionText) {
                     vm.submitDisabled = true;
                     return true;
                 }
@@ -331,7 +317,7 @@ import '../../../css/views/update-security-question.view.css';
 
                 // answer is hashed in the objects of this array
                 arrToBeSent.push({
-                    question: answerQuestionObj.question[`questionText_${language}`],
+                    question: answerQuestionObj.question.questionText,
                     questionId: answerQuestionObj.securityAnswerSerNum,
                     answer: EncryptionService.hash(answerQuestionObj.answer.toUpperCase()),
                 });
