@@ -26,14 +26,13 @@
 
     Logger.$inject = ['$filter', 'RequestToServer'];
 
-    /* @ngInject */
     function Logger($filter, RequestToServer) {
 
-        var loggingEnabled = true;
+        let loggingEnabled = true;
 
-        var service = {
+        let service = {
             sendLog: sendLog,
-            enableLogging: enableLogging,
+            enableLogging: value => loggingEnabled = value,
             // --- BEGINNING OF EDUCATIONAL MATERIAL LOGGING --- //
             logClickedEduMaterial: logClickedEduMaterial,
             logSubClickedEduMaterial: logSubClickedEduMaterial,
@@ -49,37 +48,20 @@
         ////////////////
 
         /**
-         *@ngdoc method
-         *@name sendLog
-         *@param {String} activity the user activity type to be logged
-         *@param {String} activityDetails the activity serial number to be logged
-         *@description Sends a log of the current user activity to the server.
+         * @description Sends a log of the current user activity to the server.
+         * @param {string} activity The user activity type to be logged.
+         * @param {string|number} activityDetails The activity serial number to be logged.
          **/
         function sendLog(activity, activityDetails) {
-
             if (loggingEnabled) {
-
                 RequestToServer.sendRequestWithResponse('Log', {
                     Activity: angular.copy(activity),
                     ActivityDetails: angular.copy(activityDetails)
-                })
-
+                });
             }
         }
 
         /**
-         *@ngdoc method
-         *@name enableLogging
-         *@param {Boolean} bool Boolean value that sets the logging
-         *@description Enables or disables logging of usage
-         **/
-        function enableLogging(bool){
-            loggingEnabled = bool;
-        }
-
-        /**
-         * @ngdoc method
-         * @name sendLogPatientActionRequest
          * @author Stacey Beard
          * @date 2018-11-30
          * @description Sends a request of type 'LogPatientAction' to the server.
@@ -89,8 +71,7 @@
          *                       (ex: SerNum of a row in EducationalMaterialControl).
          * @returns {*} Promise
          */
-        function sendLogPatientActionRequest(action, refTable, refTableSerNum){
-
+        function sendLogPatientActionRequest(action, refTable, refTableSerNum) {
             if (loggingEnabled) {
                 return RequestToServer.sendRequestWithResponse('LogPatientAction', {
                     'Action': action,
@@ -103,141 +84,76 @@
 
         // --- BEGINNING OF EDUCATIONAL MATERIAL LOGGING --- //
 
-        // Logs when a user clicks on an educational material.
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeClickedRequest()
+        /**
+         * @description Logs when a user clicks on an educational material.
+         * @author Tongyou (Eason) Yang, modified by Stacey Beard
+         */
         function logClickedEduMaterial(EducationalMaterialControlSerNum) {
-
             if (loggingEnabled) {
-                return sendLogPatientActionRequest('CLICKED', 'EducationalMaterialControl', EducationalMaterialControlSerNum)
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     ons.notification.alert({message:"Successfully wrote CLICKED in DB for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum});
-                // })
-                // .catch((err)=>{
-                //     console.log("Error in logClickedEduMaterial for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum);
-                //     console.log(err);
-                // });
+                return sendLogPatientActionRequest('CLICKED', 'EducationalMaterialControl', EducationalMaterialControlSerNum);
             }
         }
 
-        // Logs when a user clicks on an educational sub-material (material contained in a booklet).
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeSubClickedRequest()
-        function logSubClickedEduMaterial(EducationalMaterialTOCSerNum){
-
+        /**
+         * @description Logs when a user clicks on an educational sub-material (material contained in a booklet).
+         * @author Tongyou (Eason) Yang, modified by Stacey Beard
+         */
+        function logSubClickedEduMaterial(EducationalMaterialTOCSerNum) {
             if (loggingEnabled) {
-                return sendLogPatientActionRequest('CLICKED', 'EducationalMaterialTOC', EducationalMaterialTOCSerNum)
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     // console.log('Clicked on sub material '+EducationalMaterialTOCSerNum);
-                //     ons.notification.alert({message:"Successfully wrote CLICKED in DB for EducationalMaterialTOCSerNum="+EducationalMaterialTOCSerNum});
-                // })
-                // .catch((err)=>{
-                //     console.log('Error in logSubClickedEduMaterial for EducationalMaterialTOCSerNum='+EducationalMaterialTOCSerNum);
-                //     console.log(err);
-                // });
+                return sendLogPatientActionRequest('CLICKED', 'EducationalMaterialTOC', EducationalMaterialTOCSerNum);
             }
         }
 
-        // Logs when a user clicks on an educational material's pdf button to view or download the pdf.
-        // Author: Stacey Beard
-        function logClickedPdfEduMaterial(EducationalMaterialControlSerNum){
-
+        /**
+         * @description Logs when a user clicks on an educational material's pdf button to view or download the pdf.
+         * @author Stacey Beard
+         */
+        function logClickedPdfEduMaterial(EducationalMaterialControlSerNum) {
             if (loggingEnabled) {
-                return sendLogPatientActionRequest('CLICKED_PDF', 'EducationalMaterialControl', EducationalMaterialControlSerNum)
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     ons.notification.alert({message:"Successfully wrote CLICKED_PDF in DB for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum});
-                // })
-                // .catch((err)=>{
-                //     console.log("Error in logClickedPdfEduMaterial for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum);
-                //     console.log(err);
-                // });
+                return sendLogPatientActionRequest('CLICKED_PDF', 'EducationalMaterialControl', EducationalMaterialControlSerNum);
             }
         }
 
-        // Logs when a user clicks back from an educational material.
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeClickedBackRequest()
-        function logClickedBackEduMaterial(EducationalMaterialControlSerNum){
-
+        /**
+         * @description Logs when a user clicks back from an educational material.
+         * @author Tongyou (Eason) Yang, modified by Stacey Beard
+         */
+        function logClickedBackEduMaterial(EducationalMaterialControlSerNum) {
             if (loggingEnabled) {
-                return sendLogPatientActionRequest('CLICKED_BACK', 'EducationalMaterialControl', EducationalMaterialControlSerNum)
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     ons.notification.alert({message:"Successfully wrote CLICKED_BACK in DB for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum});
-                // })
-                // .catch((err)=>{
-                //     console.log("Error in logClickedBackEduMaterial for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum);
-                //     console.log(err);
-                // });
+                return sendLogPatientActionRequest('CLICKED_BACK', 'EducationalMaterialControl', EducationalMaterialControlSerNum);
             }
         }
 
-        // Logs when a user clicks back from an educational sub-material (material contained in a booklet).
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeSubClickedBackRequest()
-        function logSubClickedBackEduMaterial(EducationalMaterialTOCSerNum){
-
+        /**
+         * @description Logs when a user clicks back from an educational sub-material (material contained in a booklet).
+         * @author Tongyou (Eason) Yang, modified by Stacey Beard
+         */
+        function logSubClickedBackEduMaterial(EducationalMaterialTOCSerNum) {
             if (loggingEnabled) {
-                return sendLogPatientActionRequest('CLICKED_BACK', 'EducationalMaterialTOC', EducationalMaterialTOCSerNum)
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     ons.notification.alert({message:"Successfully wrote CLICKED_BACK in DB for EducationalMaterialTOCSerNum="+EducationalMaterialTOCSerNum});
-                // })
-                // .catch((err)=>{
-                //     console.log("Error in logSubClickedBackEduMaterial for EducationalMaterialTOCSerNum="+EducationalMaterialTOCSerNum);
-                //     console.log(err);
-                // });
+                return sendLogPatientActionRequest('CLICKED_BACK', 'EducationalMaterialTOC', EducationalMaterialTOCSerNum);
             }
         }
 
-        // Logs when a user scrolls to the bottom of an educational material.
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeScrollToBottomRequest()
-        function logScrolledToBottomEduMaterial(EducationalMaterialControlSerNum){
-
+        /**
+         * @description Logs when a user scrolls to the bottom of an educational material.
+         * @author Tongyou (Eason) Yang, modified by Stacey Beard
+         */
+        function logScrolledToBottomEduMaterial(EducationalMaterialControlSerNum) {
             if (loggingEnabled) {
-                return sendLogPatientActionRequest('SCROLLED_TO_BOTTOM', 'EducationalMaterialControl', EducationalMaterialControlSerNum)
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum});
-                // })
-                // .catch((err)=>{
-                //     console.log("Error in logScrolledToBottomEduMaterial for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum);
-                //     console.log(err);
-                // });
+                return sendLogPatientActionRequest('SCROLLED_TO_BOTTOM', 'EducationalMaterialControl', EducationalMaterialControlSerNum);
             }
         }
 
-        // Logs when a user scrolls to the bottom of an educational sub-material (material contained in a booklet).
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeSubScrollToBottomRequest()
-        function logSubScrolledToBottomEduMaterial(EducationalMaterialTOCSerNum){
-
+        /**
+         * @description Logs when a user scrolls to the bottom of an educational sub-material (material contained in a booklet).
+         * @author Tongyou (Eason) Yang, modified by Stacey Beard
+         */
+        function logSubScrolledToBottomEduMaterial(EducationalMaterialTOCSerNum) {
             if (loggingEnabled) {
-                return sendLogPatientActionRequest('SCROLLED_TO_BOTTOM', 'EducationalMaterialTOC', EducationalMaterialTOCSerNum)
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB for EducationalMaterialTOCSerNum="+EducationalMaterialTOCSerNum});
-                // })
-                // .catch((err)=>{
-                //     console.log("Error in logSubScrolledToBottomEduMaterial for EducationalMaterialTOCSerNum="+EducationalMaterialTOCSerNum);
-                //     console.log(err);
-                // });
+                return sendLogPatientActionRequest('SCROLLED_TO_BOTTOM', 'EducationalMaterialTOC', EducationalMaterialTOCSerNum);
             }
         }
 
         // --- END OF EDUCATIONAL MATERIAL LOGGING --- //
-
     }
-
 })();
