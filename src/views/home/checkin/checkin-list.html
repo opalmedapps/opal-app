@@ -98,7 +98,7 @@ SPDX-License-Identifier: Apache-2.0
             </ons-row>
         </ons-list-item>
         <ons-list-item ng-if="!patient.allCheckedIn" class="item-btn">
-            <ons-button ng-class="fontSizeTitle" class="checkin-btn"
+            <ons-button id="checkin-all-btn" ng-class="fontSizeTitle" class="checkin-btn"
                         ng-click="checkIn.checkIntoAppointments(patientSerNum)"
                         ng-disabled="checkIn.patientHasAppointmentLoading(patient)">
                 {{"CHECKIN_ALL_TODAY"|translate}}

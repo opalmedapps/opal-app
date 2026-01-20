@@ -83,7 +83,7 @@ SPDX-License-Identifier: Apache-2.0
             <h3>Attention!</h3>
             <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
             <p style="margin-top: 5%" class="unattended-message">{{"SCREENSHOT_TAKEN"|translate}}</p>
-            <ons-button style="margin-top: 5%" ng-click="screenshotTakenModal.hide()">{{"OK"|translate}}</ons-button>
+            <ons-button id="modal-screenshot-ok-btn" style="margin-top: 5%" ng-click="screenshotTakenModal.hide()">{{"OK"|translate}}</ons-button>
         </div>
     </ons-modal>
 
@@ -121,11 +121,11 @@ SPDX-License-Identifier: Apache-2.0
         <div id="rcorners">
             <h3>{{"TOUR_WELCOME"|translate}}</h3>
             <p style="margin-top: 10%; margin-bottom:10%;" class="secure-message">{{"TOUR_MODAL_INTRODUCTION"|translate}}</p>
-            <ons-button ng-class="fontSizeTitle" style="background-color: #6a6261; margin: 2px"
+            <ons-button id="modal-tour-later-btn" ng-class="fontSizeTitle" style="background-color: #6a6261; margin: 2px"
                         ng-click="firstLoginTourModal.hide()">
                 {{"TOUR_MODAL_LATER_BUTTON"|translate}}
             </ons-button>
-            <ons-button ng-class="fontSizeTitle" style="margin: 2px"
+            <ons-button id="modal-tour-start-btn" ng-class="fontSizeTitle" style="margin: 2px"
                         ng-click="firstLoginTourModal.hide(); homeNavigator.pushPage('views/home/tour/tour.html');">
                 {{"TOUR_MODAL_TAKE_TOUR_BUTTON"|translate}}
             </ons-button>

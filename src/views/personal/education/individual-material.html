@@ -48,7 +48,7 @@ SPDX-License-Identifier: Apache-2.0
             <!-- Download icon and button -->
             <div ng-show="!edu.loadingContents" class="item" ng-click="edu.openPDF()" align="center">
                 <i class="fa-regular fa-file-pdf animate__animated animate__swing" style="color:#4282CC; margin-top:25%; font-size:100px"></i>
-                <br><ons-button ng-class="fontSizeDesc" style="margin-top:30px">{{"OPEN_PDF" | translate}}</ons-button>
+                <br><ons-button id="education-open-pdf-btn" ng-class="fontSizeDesc" style="margin-top:30px">{{"OPEN_PDF" | translate}}</ons-button>
             </div>
         </div>
 
@@ -56,7 +56,7 @@ SPDX-License-Identifier: Apache-2.0
         <div ng-if="edu.displayType === 'link'" style="background-color: #F9F9F9">
             <div class="item" ng-click="edu.goToEducationalMaterial()" align="center">
                 <ons-icon class="animate__animated animate__swing" icon="ion-android-open" size="100px" style="color:#4282CC; margin-top:25%;"></ons-icon>
-                <br><ons-button ng-class="fontSizeDesc" style="margin-top:20px">{{"OPEN_LINK" | translate}}</ons-button>
+                <br><ons-button id="education-open-link-btn" ng-class="fontSizeDesc" style="margin-top:20px">{{"OPEN_LINK" | translate}}</ons-button>
             </div>
         </div>
 
