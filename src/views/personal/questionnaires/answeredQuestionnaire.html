@@ -76,7 +76,7 @@ SPDX-License-Identifier: Apache-2.0
 
         <!-- Submit button -->
         <div align="center" style="margin-top:15px; margin-bottom:10px">
-            <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()"
+            <button id="questionnaire-submit-btn" class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()"
                 ng-class="fontSizeDesc"
                 ng-disabled="!vm.submitAllowed || (vm.password == '' && vm.requirePassword) || (vm.isConsent && vm.consentStatus == null)">
                 {{vm.submitButtonText}}

@@ -289,7 +289,7 @@ SPDX-License-Identifier: Apache-2.0
                         </div>
 
                         <div align="center" style="margin-top: 20px">
-                            <button class="button--large--cta" ng-click="vm.finishQuestionnaireFromQuestion();"
+                            <button id="questionnaire-finish-btn" class="button--large--cta" ng-click="vm.finishQuestionnaireFromQuestion();"
                                     ng-show="vm.questionnaire.status === vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && vm.editQuestion"
                                     style="width:80%">{{"GO_TO_SUMMARY"|translate}}
                             </button>
