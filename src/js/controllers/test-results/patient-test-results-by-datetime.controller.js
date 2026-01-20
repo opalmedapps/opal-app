@@ -34,6 +34,7 @@ class PatientTestResultsByDatetimeController {
 	#$timeout;
 	#$filter;
 	#updateUI;
+	#nativeNotification;
 
 	/**
 	 *
@@ -43,15 +44,17 @@ class PatientTestResultsByDatetimeController {
 	 * @param {$filter} $filter
 	 * @param {UpdateUI} updateUI update UI service
 	 * @param {$locale} $locale
+	 * @param {NativeNotification} nativeNotification NativeNotification service
 	 */
 	constructor(patientTestResults, navigator,
-	            $timeout, $filter, updateUI, $locale) {
+	            $timeout, $filter, updateUI, $locale, nativeNotification) {
 		this.#patientTestResults = patientTestResults;
 		this.#navigator = navigator.getNavigator();
 		this.#$filter = $filter;
 		this.#$timeout = $timeout;
 		this.#updateUI = updateUI;
 		this.locale = $locale.id;
+		this.#nativeNotification = nativeNotification;
 		this.#initialize(this.#navigator.getCurrentPage().options);
 	}
 
@@ -105,13 +108,9 @@ class PatientTestResultsByDatetimeController {
 	 * At the time, Opal does not have a logging mechanism for errors.
 	 */
 	#handleServerFetchError = (err) => {
-		// TODO: (dherre3) logging of the error
+		console.error(err);
 		this.#updateView();
-		ons.notification.alert({
-			//message: 'Server problem: could not fetch data, try again later',
-			message: this.#$filter('translate')("SERVER_ERROR_ALERT"),
-			modifier: (ons.platform.isAndroid()) ? 'material' : null
-		});
+		this.#nativeNotification.showNotificationAlert(this.#$filter('translate')('SERVER_ERROR_ALERT'));
 	};
 	/**
 	 * Updates the user view with the new server information for the date test results
@@ -139,7 +138,7 @@ class PatientTestResultsByDatetimeController {
 }
 
 PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator',
-													'$timeout', '$filter', 'UpdateUI', '$locale'];
+													'$timeout', '$filter', 'UpdateUI', '$locale', 'NativeNotification'];
 angular
 	.module('OpalApp')
 	.controller('PatientTestResultsByDatetimeController', PatientTestResultsByDatetimeController);
