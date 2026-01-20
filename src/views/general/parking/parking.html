@@ -18,7 +18,7 @@ SPDX-License-Identifier: Apache-2.0
     <div ng-hide="parking.loading">
         <ons-list ng-repeat="site in parking.sites" modifier="chevron tappable" class="settings-list">
                 <ons-list-header ng-class="fontSizeTitle">{{site.name}}</ons-list-header>
-                <ons-list-item ng-click="parking.goToParkingLink(site.direction_url)" ng-class="fontSizeDesc">
+                <ons-list-item id="parking-directions-{{$index}}-item" ng-click="parking.goToParkingLink(site.direction_url)" ng-class="fontSizeDesc">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>
@@ -31,7 +31,7 @@ SPDX-License-Identifier: Apache-2.0
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-                <ons-list-item ng-click="parking.goToParkingLink(site.parking_url)" ng-class="fontSizeDesc">
+                <ons-list-item id="parking-info-{{$index}}-item" ng-click="parking.goToParkingLink(site.parking_url)" ng-class="fontSizeDesc">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>

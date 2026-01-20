@@ -19,7 +19,7 @@ SPDX-License-Identifier: Apache-2.0
       </ons-list-item>
     </ons-list>
     <ons-list class="settings-list">
-      <ons-list-item class="item" ng-click="txTeam.openDocument()">
+      <ons-list-item id="team-message-document-item" class="item" ng-click="txTeam.openDocument()">
         <div align="left"><h4>{{"DEAR"|translate}} {{txTeam.FirstName|capitalizeFirstLetter}},</h4></div>
           <div ng-bind-html="txTeam.message.Body | trustHTML" style =" word-wrap: break-word;" ng-class="fontSizeDesc" ></div>
       </ons-list-item>

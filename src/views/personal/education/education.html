@@ -51,7 +51,7 @@ SPDX-License-Identifier: Apache-2.0
             <ons-list-header class="default-list-header" ng-class="fontSizeTitle"
                 ng-show="{{edu.filteredEduMaterials | showHeader : $index : 'DateAdded' }}">
                 {{edumaterial.DateAdded|date:'fullDate'}}</ons-list-header>
-            <ons-list-item modifier="chevron" class="item">
+            <ons-list-item id="education-material-{{$index}}-item" modifier="chevron" class="item">
                 <ons-row align="center">
                     <ons-col width="60px" class="ons-col-icon">
                         <div>

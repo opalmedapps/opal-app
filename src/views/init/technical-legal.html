@@ -8,29 +8,29 @@ SPDX-License-Identifier: Apache-2.0
     <generic-toolbar title="{{'TECHNICAL_LEGAL'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
     <ons-list class="settings-list" ng-class="fontSizeDesc">
-        <ons-list-item modifier = "chevron" ng-hide="init.navigatorName == 'initNavigator'" ng-click="init.goToFeedback()">
+        <ons-list-item id="technical-legal-feedback-item" modifier = "chevron" ng-hide="init.navigatorName == 'initNavigator'" ng-click="init.goToFeedback()">
             {{"FEEDBACK"|translate}}
         </ons-list-item>
-        <ons-list-item ng-click="init.openSecurityAndPrivacy()">
+        <ons-list-item id="technical-legal-security-privacy-item" ng-click="init.openSecurityAndPrivacy()">
             {{"SECURITY_AND_PRIVACY"|translate}}
             <ons-icon icon="ion-android-open" style="color:#ddd; padding: 10px 5px" class="pull-right" size="1.2em">
             </ons-icon>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('termsOfUse')">
+        <ons-list-item id="technical-legal-terms-of-use-item" modifier="chevron" ng-click="init.openPageLegal('termsOfUse')">
             {{"TERMS_OF_USE"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('serviceAgreement')">
+        <ons-list-item id="technical-legal-service-agreement-item" modifier="chevron" ng-click="init.openPageLegal('serviceAgreement')">
             {{"SERVICE_AGREEMENT"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.goToLicense()">
+        <ons-list-item id="technical-legal-license-item" modifier="chevron" ng-click="init.goToLicense()">
             {{"LICENSE"|translate}}
         </ons-list-item>
-        <ons-list-item ng-click="init.openSourceLink()">
+        <ons-list-item id="technical-legal-open-source-item" ng-click="init.openSourceLink()">
             {{"OPAL_OPEN_SOURCE"|translate}}
             <ons-icon icon="ion-android-open" style="color:#ddd; padding: 10px 5px" class="pull-right" size="1.2em">
             </ons-icon>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.goToThirdParty()">
+        <ons-list-item id="technical-legal-third-party-item" modifier="chevron" ng-click="init.goToThirdParty()">
             {{"THIRD_PARTY"|translate}}
         </ons-list-item>
     </ons-list>

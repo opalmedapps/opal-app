@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
     <div ng-hide="txTeam.hideContent || txTeam.noMessages">
         <ons-list  ng-repeat="message in txTeam.txTeamMessages | orderBy:'-DateAdded'" ng-click="txTeam.goToTeamMessage(message)">
             <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ txTeam.txTeamMessages | showHeader : $index : 'DateAdded' }}">{{ message.DateAdded | date:'fullDate' }}</ons-list-header>
-            <ons-list-item modifier="chevron" class="item">
+            <ons-list-item id="team-message-{{$index}}-item" modifier="chevron" class="item">
                 <ons-row align="center" >
                     <ons-col width="60px" align="center">
                         <div style="margin-left:10px">

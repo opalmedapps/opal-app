@@ -25,7 +25,7 @@ SPDX-License-Identifier: Apache-2.0
         <ons-list-header class="default-list-header" ng-class="fontSizeTitle" style="padding:10px;">
             {{patient.patientHeader}}
         </ons-list-header>
-        <ons-list-item modifier="tappable chevron" ng-repeat="app in patient.apps" ng-click="checkIn.goToAppointment(app)">
+        <ons-list-item id="checkin-appointment-{{$index}}-item" modifier="tappable chevron" ng-repeat="app in patient.apps" ng-click="checkIn.goToAppointment(app)">
 
             <!-----------------------------------------------------------------
             The appointment will show the status according to its checkin status,

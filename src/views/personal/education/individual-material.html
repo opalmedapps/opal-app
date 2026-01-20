@@ -78,7 +78,7 @@ SPDX-License-Identifier: Apache-2.0
             </div>
 
             <!-- Contents -->
-            <ons-list-item modifier="chevron" class="item" ng-repeat = "e in edu.edumaterial.PackageContents" ng-click="edu.goInPackage(e)">
+            <ons-list-item id="education-package-content-{{$index}}-item" modifier="chevron" class="item" ng-repeat = "e in edu.edumaterial.PackageContents" ng-click="edu.goInPackage(e)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <div>
@@ -98,7 +98,7 @@ SPDX-License-Identifier: Apache-2.0
         <!-- Booklet: table of contents -->
         <ons-list style="margin: 10px 0 0 0" ng-if="edu.displayType === 'booklet'">
             <ons-list-header class="default-list-header" ng-class="fontSizeTitle">{{"TABLE_OF_CONTENTS"|translate}}</ons-list-header>
-            <ons-list-item modifier="chevron" ng-repeat= "edumaterial in edu.tableOfContents" class="item" ng-click="edu.goToEducationalMaterial($index)">
+            <ons-list-item id="education-toc-{{$index}}-item" modifier="chevron" ng-repeat= "edumaterial in edu.tableOfContents" class="item" ng-click="edu.goToEducationalMaterial($index)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <div style="margin-left:20px">

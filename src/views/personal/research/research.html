@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
     <network-banner></network-banner>
 
     <ons-list style="margin: 0px 0">
-        <ons-list-item modifier="chevron" class="item" ng-click="tab.openResearchStudies()"
+        <ons-list-item id="research-studies-item" modifier="chevron" class="item" ng-click="tab.openResearchStudies()"
             ng-if="tab.allowedModules.hasOwnProperty('STU') && tab.allowedModules['STU']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -38,7 +38,7 @@ SPDX-License-Identifier: Apache-2.0
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item modifier="chevron" class="item" ng-click="tab.openReferenceMaterial()"
+        <ons-list-item id="research-reference-material-item" modifier="chevron" class="item" ng-click="tab.openReferenceMaterial()"
             ng-if="tab.allowedModules.hasOwnProperty('REF') && tab.allowedModules['REF']">
             <ons-row align="center">
 
@@ -57,7 +57,7 @@ SPDX-License-Identifier: Apache-2.0
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item modifier="chevron" class="item" ng-click="tab.openResearchQuestionnaires()"
+        <ons-list-item id="research-questionnaires-item" modifier="chevron" class="item" ng-click="tab.openResearchQuestionnaires()"
             ng-if="tab.allowedModules.hasOwnProperty('RQU') && tab.allowedModules['RQU']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -75,7 +75,7 @@ SPDX-License-Identifier: Apache-2.0
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item modifier="chevron" class="item" ng-click="tab.openConsentForms()"
+        <ons-list-item id="research-consent-forms-item" modifier="chevron" class="item" ng-click="tab.openConsentForms()"
             ng-if="tab.allowedModules.hasOwnProperty('CON') && tab.allowedModules['CON']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -94,7 +94,7 @@ SPDX-License-Identifier: Apache-2.0
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item modifier="chevron" class="item"
+        <ons-list-item id="research-feedback-item" modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('RFE') && tab.allowedModules['RFE']"
                            ng-click="tab.openResearchFeedback()">
                 <ons-row align="center">

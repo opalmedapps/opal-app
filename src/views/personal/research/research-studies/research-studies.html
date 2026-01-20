@@ -28,7 +28,7 @@ SPDX-License-Identifier: Apache-2.0
         ng-hide="stud.noStudies">
         <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="stud.showHeader($index)">
             {{study.creationDate|date:'fullDate'}}</ons-list-header>
-        <ons-list-item modifier="chevron" ng-click="stud.openStudy(study)" ng-repeat-end>
+        <ons-list-item id="research-study-{{$index}}-item" modifier="chevron" ng-click="stud.openStudy(study)" ng-repeat-end>
             <ons-row>
                 <ons-col width="5px"></ons-col>
                 <ons-col width="60px" align="center" style="text-align: center">

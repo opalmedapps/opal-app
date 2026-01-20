@@ -42,7 +42,7 @@ SPDX-License-Identifier: Apache-2.0
             PARTNERS
             ================================
             -->
-            <ons-list-item modifier="chevron tappable" class="item" ng-click="Ctrl.goToPartners()">
+            <ons-list-item id="home-partners-item" modifier="chevron tappable" class="item" ng-click="Ctrl.goToPartners()">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <ons-icon icon="fa-star" size="28px" style="color:#FFEB3B"></ons-icon>
@@ -60,7 +60,7 @@ SPDX-License-Identifier: Apache-2.0
             ABOUT OPAL
             ================================
             -->
-            <ons-list-item modifier="chevron tappable" class="item" ng-click="Ctrl.goToAboutOpal()">
+            <ons-list-item id="home-about-opal-item" modifier="chevron tappable" class="item" ng-click="Ctrl.goToAboutOpal()">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <img class="home-view--opal--logo" src="img/Opal_Logo_Transparent_Inverse_Icon.png">
@@ -78,7 +78,7 @@ SPDX-License-Identifier: Apache-2.0
             NOTIFICATIONS
             ================================
             -->
-            <ons-list-item modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('NTF') && Ctrl.allowedModules['NTF']" ng-click="homeNavigator.pushPage('views/personal/notifications/notifications.html')">
+            <ons-list-item id="home-notifications-item" modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('NTF') && Ctrl.allowedModules['NTF']" ng-click="homeNavigator.pushPage('views/personal/notifications/notifications.html')">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <ons-icon
@@ -148,7 +148,7 @@ SPDX-License-Identifier: Apache-2.0
             APPOINTMENT STATUS
             ================================
             -->
-            <ons-list-item modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('APT') && Ctrl.allowedModules['APT']" ng-click="Ctrl.goToAppointments()">
+            <ons-list-item id="home-appointments-item" modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('APT') && Ctrl.allowedModules['APT']" ng-click="Ctrl.goToAppointments()">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <i class="fa-regular fa-calendar-days fa-2x" style="color: #ffc107"></i>

@@ -17,7 +17,7 @@ SPDX-License-Identifier: Apache-2.0
     <div>
         <network-banner></network-banner>
         <ons-list style="margin: 0px 0">
-            <ons-list-item modifier="chevron" class="item"
+            <ons-list-item id="general-announcements-item" modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('ANN') && tab.allowedModules['ANN']"
                            ng-click="generalNavigator.pushPage('views/general/announcements/announcements.html')">
                 <ons-row align="center">
@@ -36,7 +36,7 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"
+            <ons-list-item id="general-parking-item" modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('PAT') && tab.allowedModules['PAT']"
                            ng-click="tab.goToParking()">
                 <ons-row align="center">
@@ -53,7 +53,7 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"
+            <ons-list-item id="general-feedback-item" modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('FEE') && tab.allowedModules['FEE']"
                            ng-click="generalNavigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'})">
                 <ons-row align="center">
@@ -70,7 +70,7 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="item"
+            <ons-list-item id="general-find-doctor-item" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('FFD') && tab.allowedModules['FFD']"
                            ng-click="tab.goToUrl('findDoctor')">
                 <ons-row align="center">
@@ -92,7 +92,7 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="item"
+            <ons-list-item id="general-medical-scheduler-item" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('MAS') && tab.allowedModules['MAS']"
                            ng-click="tab.goToUrl('medicalScheduler')">
                 <ons-row align="center">
@@ -116,7 +116,7 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="item"
+            <ons-list-item id="general-carnet-sante-item" class="item"
             ng-if="tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']"
             ng-click="tab.goToCarnetSante()">
                 <ons-row align="center">
