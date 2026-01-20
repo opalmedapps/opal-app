@@ -9,7 +9,7 @@ SPDX-License-Identifier: Apache-2.0
     <ons-toolbar fixed-style modifier="transparent">
 
         <div class="left">
-            <ons-back-button ng-show="!edu.isFullscreen" ng-click="edu.subClickBack()">
+            <ons-back-button id="education-booklet-back-btn" ng-show="!edu.isFullscreen" ng-click="edu.subClickBack()">
                 {{"BACK"|translate}}
             </ons-back-button>
             <span class="item-title" ng-class="fontSizeTitle" style="font-size:19px;padding-left:40px;padding-top:10px" ng-show="edu.isFullscreen">

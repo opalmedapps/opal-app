@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="SecurityQuestionController as security" style="background-color:white">
     <ons-toolbar fixed-style>
         <div class="left" ng-style="security.iosStyleFix">
-            <ons-back-button
+            <ons-back-button id="security-question-back-btn"
                 ng-show="!security.passwordReset && !security.tooManyAttempts">{{"BACK"|translate}}</ons-back-button>
             <ons-back-button id="security-question-home-back-btn" ng-if="security.passwordReset"
                 ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>

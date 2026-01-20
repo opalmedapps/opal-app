@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="IndividualMaterialController as edu">
     <generic-toolbar title="{{edu.edumaterial.Type}}" style-class="fontSizeTitle">
         <left-content>
-            <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
+            <div class="left"><ons-back-button id="education-material-back-btn" ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
         </left-content>
         <right-content>
             <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial" ng-if="edu.isShareable()">
