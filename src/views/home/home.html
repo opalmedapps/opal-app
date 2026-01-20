@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="HomeController as Ctrl" ng-device-backbutton="Ctrl.homeDeviceBackButton()">
     <generic-toolbar title="{{'HEADER_MESSAGE_HOME'|translate}}" back-button="false" style-class="fontSizeTitle">
         <right-content>
-            <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html', {id:'home'})"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button>
+            <ons-toolbar-button id="toolbar-home-info-btn" ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html', {id:'home'})"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button>
         </right-content>
     </generic-toolbar>
 

@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="SmartDevicesController as ctrl">
     <generic-toolbar title="{{'SMART_DEVICES'|translate}}" style-class="fontSizeTitle">
         <right-content>
-            <ons-toolbar-button ng-click="ctrl.showInfo()">
+            <ons-toolbar-button id="toolbar-smartdevices-info-btn" ng-click="ctrl.showInfo()">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>

@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="PersonalTabController as tab" ng-device-backbutton="tab.personalDeviceBackButton()">
     <profile-selector refresh-function="tab.getDisplayData">
         <right-content>
-            <ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html', {id:'chart'})">
+            <ons-toolbar-button id="toolbar-personal-info-btn" ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html', {id:'chart'})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>

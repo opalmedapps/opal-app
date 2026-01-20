@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="GeneralTabController as tab" ng-device-backbutton="tab.generalDeviceBackButton()">
     <generic-toolbar title="{{'GENERAL'|translate}}" back-button="false" style-class="fontSizeTitle">
         <right-content>
-            <ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html', {id:'general'})">
+            <ons-toolbar-button id="toolbar-general-info-btn" ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html', {id:'general'})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>

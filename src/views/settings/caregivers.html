@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page style="background-color: white" ng-controller="CaregiversController as Ctrl" ng-cloak>
     <generic-toolbar title="{{'RELATIONSHIPS_CAREGIVERS'|translate}}" style-class="fontSizeTitle">
         <right-content>
-            <ons-toolbar-button ng-click="Ctrl.goToCaregiversInfo()">
+            <ons-toolbar-button id="toolbar-caregivers-info-btn" ng-click="Ctrl.goToCaregiversInfo()">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>
