@@ -209,7 +209,7 @@ SPDX-License-Identifier: Apache-2.0
                         <div align="center"
                             ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS">
                             <!-- need twice parent due to ng-repeat -->
-                            <button class="button" style="margin-bottom: 10px" ng-class="fontSizeDesc"
+                            <button id="questionnaire-edit-question-btn" class="button" style="margin-bottom: 10px" ng-class="fontSizeDesc"
                                 ng-click="vm.editQuestion($parent.$parent.$index, $index)">
                                 <i class="ion-chevron-left"></i>
                                 {{"QUESTIONNAIRE_GO_TO_QUESTION"|translate}}
