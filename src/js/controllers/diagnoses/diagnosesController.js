@@ -50,6 +50,7 @@
         function setDiagnosesView() {
             // Filter out "N/A" diagnoses
             vm.diagnoses = Diagnoses.getDiagnoses().filter(e => {
+                // 'N/A' is a possible output from the OpalDB database function getDiagnosisDescription
                 return e.Description.toUpperCase() !== 'N/A';
             });
 
