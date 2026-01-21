@@ -42,7 +42,7 @@ SPDX-License-Identifier: Apache-2.0
             <ons-list-header class="default-list-header" ng-show="{{ notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">
                 {{notification.DateAdded|date:'fullDate'}}
             </ons-list-header>
-            <ons-list-item modifier="chevron" class="item">
+            <ons-list-item id="notification-{{$index}}-item" modifier="chevron" class="item">
                 <ons-row align="center">
                     <ons-col width="70px" class="ons-col-icon">
                         <i class="fa18x" ng-class="notification.Icon" ng-style="{color: notification.Color}"></i>

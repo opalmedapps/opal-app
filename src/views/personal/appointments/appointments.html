@@ -13,7 +13,7 @@ SPDX-License-Identifier: Apache-2.0
     <generic-toolbar title="{{'APPOINTMENTS'|translate}}" style-class="fontSizeTitle">
         <right-content>
             <!-- INFO BUTTON -->
-            <ons-toolbar-button ng-click="calendar.goToCalendarOptions()" style="margin-right: -10px">
+            <ons-toolbar-button id="toolbar-appointments-info-btn" ng-click="calendar.goToCalendarOptions()" style="margin-right: -10px">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
 
@@ -68,7 +68,7 @@ SPDX-License-Identifier: Apache-2.0
                     ng-class="fontSizeTitle">{{calendar.todays_date|date:'fullDate'}}</ons-list-header>
                 <ons-list-header class="default-list-header" ng-if="calendar.showHeaderNormalDay"
                     ng-class="fontSizeTitle">{{app.ScheduledStartTime|date:'fullDate'}}</ons-list-header>
-                <ons-list-item modifier="chevron">
+                <ons-list-item id="appointment-{{$index}}-item" modifier="chevron">
                     <ons-row>
                         <ons-col align="center" width="64px">
                             <div align="center" style="line-height:1">

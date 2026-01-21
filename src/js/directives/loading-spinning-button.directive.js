@@ -28,7 +28,7 @@
                 // Boolean variable that indicates if the button should be disabled (and greyed out)
                 "disable": "=?",
             },
-            template: `<ons-toolbar-button ng-click="executeClickFunction()" ng-disabled="disable">
+            template: `<ons-toolbar-button id="loading-spinning-btn-{{$id}}" ng-click="executeClickFunction()" ng-disabled="disable">
                            <ons-icon ng-class="{'glyphicon-refresh-animate': spin}" icon="ion-ios-refresh-empty" size="2x" style="color: #4F81BB"></ons-icon>
                        </ons-toolbar-button>
             `,

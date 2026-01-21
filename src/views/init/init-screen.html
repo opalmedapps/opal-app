@@ -25,7 +25,7 @@ SPDX-License-Identifier: Apache-2.0
 
         <!-- PARTNERS -->
         <div class="initScreenButtonDiv">
-            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+            <ons-button id="init-partners-btn" class="shadow-2 initScreenWhiteButton" modifier="large"
                         ng-click="init.goToPartners()" var="initButton">
                 <ons-icon icon="fa-star fa-lg pull-left"
                           style="color:#FFEB3B; display: inline-block"></ons-icon>
@@ -37,7 +37,7 @@ SPDX-License-Identifier: Apache-2.0
 
         <!-- ABOUT OPAL -->
         <div class="initScreenButtonDiv">
-            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+            <ons-button id="init-about-opal-btn" class="shadow-2 initScreenWhiteButton" modifier="large"
                         ng-click="init.goToAboutOpal()" var="initButton">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
@@ -52,7 +52,7 @@ SPDX-License-Identifier: Apache-2.0
 
         <!-- TECHNICAL / LEGAL -->
         <div class="initScreenButtonDiv">
-            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+            <ons-button id="init-legal-btn" class="shadow-2 initScreenWhiteButton" modifier="large"
                         ng-click="init.goToTechnicalLegal()" var="initButton">
                 <i class="fa fa-info-circle fa-lg pull-left"
                           style="color:grey; display: inline-block"></i>
@@ -64,7 +64,7 @@ SPDX-License-Identifier: Apache-2.0
 
         <!-- REGISTER OPAL -->
         <div class="initScreenButtonDiv">
-            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+            <ons-button id="init-register-btn" class="shadow-2 initScreenWhiteButton" modifier="large"
                         ng-click="init.goToRegister()" var="initButton">
                 <i class="fa fa-user-circle fa-lg pull-left"
                    style="color:#4CAF50; display: inline-block"></i>
@@ -76,7 +76,7 @@ SPDX-License-Identifier: Apache-2.0
 
         <!-- SIGN IN -->
         <div class="initScreenButtonDiv">
-            <ons-button class="animate__animated animate__pulse ng-cloak shadow-2 initScreenGreenButton" modifier="large"
+            <ons-button id="init-signin-btn" class="animate__animated animate__pulse ng-cloak shadow-2 initScreenGreenButton" modifier="large"
                         ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}
             </ons-button>
         </div>

@@ -34,13 +34,13 @@ SPDX-License-Identifier: Apache-2.0
                     <div id="trusted-flex-container">
                         <p id="trusted-text">{{"TRUST_DEVICE"|translate}}</p>
                         <span id="trusted-toggle">
-                             <ons-switch ng-disabled="login.loading" var="login.trustSwitch" ng-model="login.trusted"></ons-switch>
+                             <ons-switch id="login-trust-device-switch" ng-disabled="login.loading" var="login.trustSwitch" ng-model="login.trusted"></ons-switch>
                         </span>
                     </div>
                     <br>
 
                     <!-- LOGIN BUTTON -->
-                    <button class="shadow-2 button button--large button--large-green"
+                    <button id="login-submit-btn" class="shadow-2 button button--large button--large-green"
                             ng-click="login.submit()" ng-disabled="!login.isThereSelectedHospital() || login.loading">
                         <span ng-if="!login.loading">{{"LOGIN"|translate}}</span>
                         <span ng-if="login.loading">{{"LOGGING_IN"|translate}}<ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
@@ -49,7 +49,7 @@ SPDX-License-Identifier: Apache-2.0
                 </form>
 
                 <!-- FORGOT PASSWORD -->
-                <button class="button button--large--quiet" ng-click="login.goToReset()">
+                <button id="login-forgot-password-btn" class="button button--large--quiet" ng-click="login.goToReset()">
                     {{"FORGOT_PASSWORD"|translate}}
                 </button>
             </div>

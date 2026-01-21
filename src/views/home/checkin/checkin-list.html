@@ -25,7 +25,7 @@ SPDX-License-Identifier: Apache-2.0
         <ons-list-header class="default-list-header" ng-class="fontSizeTitle" style="padding:10px;">
             {{patient.patientHeader}}
         </ons-list-header>
-        <ons-list-item modifier="tappable chevron" ng-repeat="app in patient.apps" ng-click="checkIn.goToAppointment(app)">
+        <ons-list-item id="checkin-appointment-{{$index}}-item" modifier="tappable chevron" ng-repeat="app in patient.apps" ng-click="checkIn.goToAppointment(app)">
 
             <!-----------------------------------------------------------------
             The appointment will show the status according to its checkin status,
@@ -98,7 +98,7 @@ SPDX-License-Identifier: Apache-2.0
             </ons-row>
         </ons-list-item>
         <ons-list-item ng-if="!patient.allCheckedIn" class="item-btn">
-            <ons-button ng-class="fontSizeTitle" class="checkin-btn"
+            <ons-button id="checkin-all-btn" ng-class="fontSizeTitle" class="checkin-btn"
                         ng-click="checkIn.checkIntoAppointments(patientSerNum)"
                         ng-disabled="checkIn.patientHasAppointmentLoading(patient)">
                 {{"CHECKIN_ALL_TODAY"|translate}}

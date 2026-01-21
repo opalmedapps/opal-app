@@ -10,7 +10,7 @@ SPDX-License-Identifier: Apache-2.0
     <network-banner></network-banner>
     <ons-list>
         <!-- TOUR -->
-        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTour()">
+        <ons-list-item id="about-tour-item" class="item" modifier="tappable chevron" ng-click="about.openTour()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -24,7 +24,7 @@ SPDX-License-Identifier: Apache-2.0
         </ons-list-item>
 
         <!-- WEBSITE -->
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('opalWebsite')">
+        <ons-list-item id="about-website-item" class="item" modifier="tappable" ng-click="about.openUrl('opalWebsite')">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -41,7 +41,7 @@ SPDX-License-Identifier: Apache-2.0
         </ons-list-item>
 
         <!-- CONTRIBUTE -->
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('donation', true)">
+        <ons-list-item id="about-contribute-item" class="item" modifier="tappable" ng-click="about.openUrl('donation', true)">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -58,7 +58,7 @@ SPDX-License-Identifier: Apache-2.0
         </ons-list-item>
 
         <!-- CONTACT SUPPORT -->
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('support', true)">
+        <ons-list-item id="about-support-item" class="item" modifier="tappable" ng-click="about.openUrl('support', true)">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -75,7 +75,7 @@ SPDX-License-Identifier: Apache-2.0
         </ons-list-item>
 
         <!-- TECHNICAL / LEGAl -->
-        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTechnicalLegal()">
+        <ons-list-item id="about-technical-legal-item" class="item" modifier="tappable chevron" ng-click="about.openTechnicalLegal()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <span class="fa-layers fa-2x">

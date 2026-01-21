@@ -28,7 +28,7 @@ SPDX-License-Identifier: Apache-2.0
             <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ docs.documents | showHeader : $index : 'CreatedTimeStamp' }}">
                 {{doc.CreatedTimeStamp|date:'longDate'}}
             </ons-list-header>
-            <ons-list-item modifier="chevron">
+            <ons-list-item id="document-{{$index}}-item" modifier="chevron">
 
                 <ons-row align="center" >
                     <ons-col width="60px" class="ons-col-icon">

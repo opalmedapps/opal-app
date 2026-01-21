@@ -9,10 +9,10 @@ SPDX-License-Identifier: Apache-2.0
     <!-- TOOLBAR -->
     <generic-toolbar title="{{edu.pageTitle}}" style-class="fontSizeTitle">
         <left-content>
-            <ons-back-button>{{"BACK"| translate}}</ons-back-button>
+            <ons-back-button id="education-back-btn">{{"BACK"| translate}}</ons-back-button>
         </left-content>
         <right-content>
-            <ons-toolbar-button ng-click="edu.openInfoPage()" ng-if="edu.eduCategory==='clinical'">
+            <ons-toolbar-button id="toolbar-education-info-btn" ng-click="edu.openInfoPage()" ng-if="edu.eduCategory==='clinical'">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>
@@ -51,7 +51,7 @@ SPDX-License-Identifier: Apache-2.0
             <ons-list-header class="default-list-header" ng-class="fontSizeTitle"
                 ng-show="{{edu.filteredEduMaterials | showHeader : $index : 'DateAdded' }}">
                 {{edumaterial.DateAdded|date:'fullDate'}}</ons-list-header>
-            <ons-list-item modifier="chevron" class="item">
+            <ons-list-item id="education-material-{{$index}}-item" modifier="chevron" class="item">
                 <ons-row align="center">
                     <ons-col width="60px" class="ons-col-icon">
                         <div>

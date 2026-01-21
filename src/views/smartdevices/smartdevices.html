@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="SmartDevicesController as ctrl">
     <generic-toolbar title="{{'SMART_DEVICES'|translate}}" style-class="fontSizeTitle">
         <right-content>
-            <ons-toolbar-button ng-click="ctrl.showInfo()">
+            <ons-toolbar-button id="toolbar-smartdevices-info-btn" ng-click="ctrl.showInfo()">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>
@@ -19,7 +19,7 @@ SPDX-License-Identifier: Apache-2.0
         <div ng-if="ctrl.bluetoothAvailable">
             <h3>{{"SMART_DEVICES_BLUETOOTH_DISABLED"|translate}}</h3>
             <p style="color:grey">{{"SMART_DEVICES_BLUETOOTH_PROMPT"|translate}}</p>
-            <button class="button--large--cta"
+            <button id="smartdevices-bluetooth-refresh-btn" class="button--large--cta"
                 ng-click="ctrl.refresh()">
                 <span>{{"SMART_DEVICES_BLUETOOTH_REFRESH"|translate}}</span>
             </button>
@@ -46,7 +46,7 @@ SPDX-License-Identifier: Apache-2.0
                     </div>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"
+            <ons-list-item id="smartdevices-etekcity-item" modifier="chevron" class="item"
                 ng-click="ctrl.goToDevice('etekcity_scale.html')">
                 <ons-row align="center">
                     <div class="smartdevices-content">
@@ -60,7 +60,7 @@ SPDX-License-Identifier: Apache-2.0
                     </div>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"
+            <ons-list-item id="smartdevices-xiaomi-item" modifier="chevron" class="item"
                 ng-click="ctrl.goToDevice('xiaomi_scale.html')">
                 <ons-row align="center">
                     <div class="smartdevices-content">

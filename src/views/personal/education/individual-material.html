@@ -8,7 +8,7 @@ SPDX-License-Identifier: Apache-2.0
 <ons-page ng-controller="IndividualMaterialController as edu">
     <generic-toolbar title="{{edu.edumaterial.Type}}" style-class="fontSizeTitle">
         <left-content>
-            <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
+            <div class="left"><ons-back-button id="education-material-back-btn" ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
         </left-content>
         <right-content>
             <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial" ng-if="edu.isShareable()">
@@ -48,7 +48,7 @@ SPDX-License-Identifier: Apache-2.0
             <!-- Download icon and button -->
             <div ng-show="!edu.loadingContents" class="item" ng-click="edu.openPDF()" align="center">
                 <i class="fa-regular fa-file-pdf animate__animated animate__swing" style="color:#4282CC; margin-top:25%; font-size:100px"></i>
-                <br><ons-button ng-class="fontSizeDesc" style="margin-top:30px">{{"OPEN_PDF" | translate}}</ons-button>
+                <br><ons-button id="education-open-pdf-btn" ng-class="fontSizeDesc" style="margin-top:30px">{{"OPEN_PDF" | translate}}</ons-button>
             </div>
         </div>
 
@@ -56,7 +56,7 @@ SPDX-License-Identifier: Apache-2.0
         <div ng-if="edu.displayType === 'link'" style="background-color: #F9F9F9">
             <div class="item" ng-click="edu.goToEducationalMaterial()" align="center">
                 <ons-icon class="animate__animated animate__swing" icon="ion-android-open" size="100px" style="color:#4282CC; margin-top:25%;"></ons-icon>
-                <br><ons-button ng-class="fontSizeDesc" style="margin-top:20px">{{"OPEN_LINK" | translate}}</ons-button>
+                <br><ons-button id="education-open-link-btn" ng-class="fontSizeDesc" style="margin-top:20px">{{"OPEN_LINK" | translate}}</ons-button>
             </div>
         </div>
 
@@ -78,7 +78,7 @@ SPDX-License-Identifier: Apache-2.0
             </div>
 
             <!-- Contents -->
-            <ons-list-item modifier="chevron" class="item" ng-repeat = "e in edu.edumaterial.PackageContents" ng-click="edu.goInPackage(e)">
+            <ons-list-item id="education-package-content-{{$index}}-item" modifier="chevron" class="item" ng-repeat = "e in edu.edumaterial.PackageContents" ng-click="edu.goInPackage(e)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <div>
@@ -98,7 +98,7 @@ SPDX-License-Identifier: Apache-2.0
         <!-- Booklet: table of contents -->
         <ons-list style="margin: 10px 0 0 0" ng-if="edu.displayType === 'booklet'">
             <ons-list-header class="default-list-header" ng-class="fontSizeTitle">{{"TABLE_OF_CONTENTS"|translate}}</ons-list-header>
-            <ons-list-item modifier="chevron" ng-repeat= "edumaterial in edu.tableOfContents" class="item" ng-click="edu.goToEducationalMaterial($index)">
+            <ons-list-item id="education-toc-{{$index}}-item" modifier="chevron" ng-repeat= "edumaterial in edu.tableOfContents" class="item" ng-click="edu.goToEducationalMaterial($index)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <div style="margin-left:20px">

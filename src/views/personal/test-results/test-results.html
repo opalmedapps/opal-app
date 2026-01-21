@@ -64,7 +64,7 @@ SPDX-License-Identifier: Apache-2.0
                                                 )
                                             }}
                             </ons-list-header>
-                            <ons-list-item
+                            <ons-list-item id="test-result-by-date-{{$index}}-item"
                                     ng-click="tests.goToTestDateResults(testDate.collectedDateTime)"
                                     modifier="chevron tappable" class="list-item-container">
                                 <ons-row align="center">
@@ -141,7 +141,7 @@ SPDX-License-Identifier: Apache-2.0
                 </div>
                 <ons-scroller-height>
                     <ons-list>
-                        <ons-list-item
+                        <ons-list-item id="test-result-by-type-{{$index}}-item"
                         modifier="tappable chevron"
                         ng-repeat="testResult in tests.testTypes | filter: tests.searchTestTypeText"
                         ng-click="tests.goToTestTypeResults(testResult.testExpressionSerNum)"

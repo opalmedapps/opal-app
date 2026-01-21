@@ -26,46 +26,46 @@ SPDX-License-Identifier: Apache-2.0
     </div>
 
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="Ctrl.goToGeneralSettings()" ng-class="fontSizeDesc">
+        <ons-list-item id="settings-technical-legal-item" modifier="chevron" ng-click="Ctrl.goToGeneralSettings()" ng-class="fontSizeDesc">
             {{"TECHNICAL_LEGAL"|translate}}
         </ons-list-item>
     </ons-list>
     <div class="settings-header" ng-class="fontSizeTitle">{{"RELATIONSHIPS"|translate}}</div>
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/caregivers.html',{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item id="settings-caregivers-item" modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/caregivers.html',{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"RELATIONSHIPS_CAREGIVERS"|translate}}
         </ons-list-item>
     </ons-list>
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/patients.html',{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item id="settings-patients-item" modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/patients.html',{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"RELATIONSHIPS_PATIENTS"|translate}}
         </ons-list-item>
     </ons-list>
     <div class="settings-header" ng-class="fontSizeTitle">{{"PERSONAL"|translate}}</div>
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'PASSWORD'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item id="settings-password-item" modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'PASSWORD'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"PASSWORD"|translate}}
         </ons-list-item>
     </ons-list>
 
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-security-question.html', { animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item id="settings-security-questions-item" modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-security-question.html', { animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"SECURITY_QUESTIONS"|translate}}
         </ons-list-item>
     </ons-list>
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PREFERENCES"|translate}}</div>
     <ons-list>
-        <ons-list-item modifier="chevron" ng-if="Ctrl.multipleLanguageOptions" ng-click="Ctrl.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
+        <ons-list-item id="settings-language-item" modifier="chevron" ng-if="Ctrl.multipleLanguageOptions" ng-click="Ctrl.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
             {{"LANGUAGE"|translate}}
             <span class="list-item-note lucent">{{Ctrl.Language}}</span>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="Ctrl.goToUpdateAccountField('FONTSIZE', 'slide')" ng-class="fontSizeDesc">
+        <ons-list-item id="settings-fontsize-item" modifier="chevron" ng-click="Ctrl.goToUpdateAccountField('FONTSIZE', 'slide')" ng-class="fontSizeDesc">
             {{"FONTSIZE"|translate}}
         </ons-list-item>
     </ons-list>
     <ons-list class="settings-list" ng-class="fontSizeDesc">
-        <ons-list-item ng-click="Ctrl.logOut()" modifier="tappable">
+        <ons-list-item id="settings-sign-out-item" ng-click="Ctrl.logOut()" modifier="tappable">
             {{"SIGN_OUT"|translate}}
             <ons-icon icon="fa-sign-out"  style="margin-top: 10px; color:#1284FF" class="pull-right"></ons-icon>
         </ons-list-item>

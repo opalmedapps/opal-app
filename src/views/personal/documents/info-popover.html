@@ -16,17 +16,17 @@ SPDX-License-Identifier: Apache-2.0
             </ons-list-item>
 
             <div align="left">
-                <ons-list-item class="about-link item" modifier="tappable" ng-click="about()">
+                <ons-list-item id="document-about-item" class="about-link item" modifier="tappable" ng-click="about()">
                     <ons-icon icon="fas fa-info-circle" style="color:#444; margin-right:6px"></ons-icon>
                     {{"DOC_ABOUT"|translate}}
                 </ons-list-item>
 
-                <ons-list-item class="item" modifier="tappable" ng-click="warn()">
+                <ons-list-item id="document-share-item" class="item" modifier="tappable" ng-click="warn()">
                     <ons-icon icon="ion-android-share-alt" style="color:#444; margin-right:6px"></ons-icon>
                     {{"SHARE"|translate}}
                 </ons-list-item>
 
-                <ons-list-item class="item" modifier="tappable" ng-show="isAndroid()" ng-click="warn2()">
+                <ons-list-item id="document-open-external-item" class="item" modifier="tappable" ng-show="isAndroid()" ng-click="warn2()">
                     <ons-icon icon="ion-android-open" style="color:#444; margin-right:6px"></ons-icon>
                     {{"OPEN_EXTERNAL_VIEWER"|translate}}
                 </ons-list-item>

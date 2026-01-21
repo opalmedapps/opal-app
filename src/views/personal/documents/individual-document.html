@@ -26,8 +26,8 @@ SPDX-License-Identifier: Apache-2.0
             <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
             <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP"|translate}}</p>
             <p class="unattended-message">{{"CONFIRM_DOWNLOAD"|translate}}</p>
-            <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modal.hide()">{{"CANCEL"|translate}}</ons-button>
-            <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
+            <ons-button id="modal-document-share-cancel-btn" style="margin-top: 5%; font-size: 22px;" ng-click="modal.hide()">{{"CANCEL"|translate}}</ons-button>
+            <ons-button id="modal-document-share-continue-btn" style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
                         ng-click="modal.hide(); doc.share()">{{"CONTINUE"|translate}}
             </ons-button>
         </div>
@@ -40,9 +40,9 @@ SPDX-License-Identifier: Apache-2.0
             <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
             <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP"|translate}}</p>
             <p class="unattended-message">{{"CONFIRM_DOWNLOAD"|translate}}</p>
-            <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modalOpenViewer.hide()">{{"CANCEL"|translate}}
+            <ons-button id="modal-document-viewer-cancel-btn" style="margin-top: 5%; font-size: 22px;" ng-click="modalOpenViewer.hide()">{{"CANCEL"|translate}}
             </ons-button>
-            <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
+            <ons-button id="modal-document-viewer-continue-btn" style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
                         ng-click="modalOpenViewer.hide(); doc.openPDF()">{{"CONTINUE"|translate}}
             </ons-button>
         </div>
