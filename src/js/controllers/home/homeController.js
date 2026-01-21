@@ -12,13 +12,13 @@
     HomeController.$inject = [
         '$timeout', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
-        'User', 'ProfileSelector', '$interval', 'Permissions',
+        'User', 'ProfileSelector', '$interval', 'Permissions', 'NativeNotification',
     ];
 
     /* @ngInject */
     function HomeController($timeout, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
-        User, ProfileSelector, $interval, Permissions,
+        User, ProfileSelector, $interval, Permissions, NativeNotification,
     ) {
         let vm = this;
 
@@ -188,13 +188,10 @@
          * Note: For Android devices only
          */
         function homeDeviceBackButton() {
-            ons.notification.confirm({
-                message: $filter('translate')('EXIT_APP'),
-                modifier: 'android',
-                callback: (index) => {
-                    if (index === 1) navigator.app.exitApp();
-                }
-            });
+            NativeNotification.showConfirmation(
+                $filter('translate')('EXIT_APP'),
+                navigator?.app?.exitApp,
+            );
         }
 
         /**
