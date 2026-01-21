@@ -20,7 +20,7 @@
                 "onClick": "=?",
             },
             template: `<ons-list>
-                           <ons-list-item modifier="chevron" ng-click="goToHospitalSelection()" ng-style="!hospitalIsSelected() && {'background-color': 'rgba(241, 241, 88, 0.25882352941176473)'}">
+                           <ons-list-item id="hospital-selector-{{$id}}-item" modifier="chevron" ng-click="goToHospitalSelection()" ng-style="!hospitalIsSelected() && {'background-color': 'rgba(241, 241, 88, 0.25882352941176473)'}">
                                {{"HOSPITAL"|translate}}
                                <span class="list-item-note lucent">{{getSelectedHospitalAcronym()|translate}}</span>
                            </ons-list-item>
