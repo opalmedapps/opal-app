@@ -115,7 +115,7 @@ p {
 @import url('./elements/radio-button.element.css');
 @import url('./views/questionnaires.view.css');
 @import url('./elements/input.element.css');
-@import url('./directives/pdf-view.directive.css');
+@import url('./directives/pdf-viewer.directive.css');
 @import url('./elements/checkmark.element.css');
 @import url('./views/third-party.view.css');
 @import url('./views/questionnaires-list.view.css');

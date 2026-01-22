@@ -42,6 +42,15 @@ SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
 path = [
+    "babel.config.json",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (C) 2026 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
+SPDX-License-Identifier = "Apache-2.0"
+
+
+[[annotations]]
+path = [
     "res/**",
     "static/landingpage/Opal_Name_Logo_Transparent.png",
     "static/landingpage/opal-tiny.ico",

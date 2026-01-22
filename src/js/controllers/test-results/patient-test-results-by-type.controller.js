@@ -6,10 +6,6 @@ class PatientTestResultsByTypeController {
 	/**
 	 * @type {string}
 	 */
-	#language;
-	/**
-	 * @type {string}
-	 */
 	#fontSize;
 	/**
 	 * @type {TestType}
@@ -37,7 +33,7 @@ class PatientTestResultsByTypeController {
 	#browser;
 	#profileSelector;
 	#updateUI;
-
+	#nativeNotification;
 
 	/**
 	 * Class constructor for controller
@@ -49,11 +45,11 @@ class PatientTestResultsByTypeController {
 	 * @param {Browser} browser Browser service
 	 * @param {ProfileSelector} profileSelector profile selector service
 	 * @param {UpdateUI} updateUI update UI service
+	 * @param {NativeNotification} nativeNotification NativeNotification service
 	 */
 	constructor(patientTestResults, userPreferences, navigator, $filter,
-		$timeout, browser, profileSelector, updateUI) {
+		$timeout, browser, profileSelector, updateUI, nativeNotification) {
 		this.#patientTestResults = patientTestResults;
-		this.#language = userPreferences.getLanguage();
 		this.#fontSize = userPreferences.getFontSize();
 		this.#navigator = navigator.getNavigator();
 		this.#$timeout = $timeout;
@@ -61,6 +57,7 @@ class PatientTestResultsByTypeController {
 		this.#browser = browser;
 		this.#profileSelector = profileSelector;
 		this.#updateUI = updateUI;
+		this.#nativeNotification = nativeNotification;
 		this.#initialize(this.#navigator.getCurrentPage().options);
 	}
 
@@ -80,16 +77,8 @@ class PatientTestResultsByTypeController {
 	 * Routing to EducationalMaterialURL for the test type
 	 */
 	goToUrl() {
-		let url = this.test[`educationalMaterialURL_${this.#language}`];
+		let url = this.test.educationalMaterialURL;
 		this.#browser.openInternal(url);
-	}
-
-	/**
-	 * Returns the test name in the preferred patient language
-	 * @returns {TestType} Returns test name to display in the view
-	 */
-	getTestName(test) {
-		return test[`name_${this.#language}`];
 	}
 
 	////////////////////////////////////////////////////
@@ -167,13 +156,9 @@ class PatientTestResultsByTypeController {
 	 * At the time, Opal does not have a logging mechanism for errors.
 	 */
 	#handlerServerError = (error) => {
-		// TODO(dherre3) Add logging of error here
+		console.error(error);
 		this.loading = false;
-		ons.notification.alert({
-			//message: 'Server problem: could not fetch data, try again later',
-			message: this.#$filter('translate')("SERVER_ERROR_ALERT"),
-			modifier: (ons.platform.isAndroid()) ? 'material' : null
-		});
+		this.#nativeNotification.showNotificationAlert(this.#$filter('translate')('SERVER_ERROR_ALERT'));
 	};
 
 	/**
@@ -192,4 +177,4 @@ angular
 	.controller('PatientTestResultsByTypeController', PatientTestResultsByTypeController);
 
 PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences',
-	'Navigator', '$filter', '$timeout', 'Browser', 'ProfileSelector', 'UpdateUI'];
+	'Navigator', '$filter', '$timeout', 'Browser', 'ProfileSelector', 'UpdateUI', 'NativeNotification'];

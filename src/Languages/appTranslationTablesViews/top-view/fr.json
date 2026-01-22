@@ -1,6 +1,7 @@
 {
   "ATTENTION": "Attention!",
   "CLOSE": "Fermer",
+  "ERROR_INIT_LINKS": "Erreur de chargement des liens dans l'application. Certains liens pourraient ne pas s'ouvrir.",
   "HEADER_MESSAGE_LOGIN": "Se connecter",
   "JAILBREAK_MESSAGE": "L'exécution de cette application sur un appareil débridé n'est pas permise.",
   "JAILBREAK_TITLE": "Appareil débridé détecté",

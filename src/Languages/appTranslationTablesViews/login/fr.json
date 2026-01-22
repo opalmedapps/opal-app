@@ -20,7 +20,6 @@
   "ERROR_ANSWER_NOT_MATCH": "Votre réponse ne correspond pas à celle dans nos dossiers",
   "ERROR_CONTACTING_HOSPITAL": "Une erreur s'est produite en contactant l'hôpital. Réessayez plus tard.",
   "ERROR_GENERIC": "Une erreur s'est produite",
-  "ERROR_INIT_LINKS": "Erreur de chargement des liens dans l'application. Certains liens pourraient ne pas s'ouvrir.",
   "ERROR_NETWORK": "Erreur de connection Internet",
   "ERROR_NO_CONFIRMED_PROFILES": "L'accès à votre compte n'a pas encore été approuvé par le bureau des archives médicales, ou il a été révoqué. Si votre inscription est récente, veuillez attendre que votre accès soit accordé. Sinon, veuillez contacter l'équipe de soutien d'Opal pour obtenir de l'aide.",
   "ERROR_PAGE": "Erreur lors du chargement de cette page",

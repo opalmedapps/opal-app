@@ -80,10 +80,10 @@ SPDX-License-Identifier: Apache-2.0
                             <div style="line-height:1;padding:2px">
                                 <header>
                                     <span class="item-title" ng-class="[fontSizeTitle, {'item-unread': app.ReadStatus==='0'}]">
-                                        {{app["AppointmentType_" + calendar.language]}}
+                                        {{app.AppointmentType}}
                                     </span>
                                 </header>
-                                <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+ calendar.language]}}</p>
+                                <p class="item-desc" ng-class="fontSizeDesc">{{app.MapName}}</p>
                             </div>
                         </ons-col>
                     </ons-row>

@@ -10,10 +10,7 @@
  */
 
 /**
- *@ngdoc service
- *@requires $q
- *@requires $http
- *@description Service that manages the dynamic data for Opal, hosted on an external server.
+ * @description Service that manages the dynamic data for Opal, hosted on an external server.
  **/
 (function () {
     'use strict';
@@ -22,10 +19,9 @@
         .module('OpalApp')
         .factory('DynamicContent', DynamicContent);
 
-    DynamicContent.$inject = ['$http','$q','UserPreferences'];
+    DynamicContent.$inject = ['$http', 'UserPreferences'];
 
-    /* @ngInject */
-    function DynamicContent($http, $q, UserPreferences) {
+    function DynamicContent($http, UserPreferences) {
 
         /**
          * @description Content mapping for links downloaded from the server.
@@ -38,6 +34,8 @@
          * @type {object}
          */
         let constants = {};
+
+        const getLanguage = () => UserPreferences.getLanguage().toLowerCase();
 
         const service = {
             ensureInitialized: ensureInitialized,
@@ -53,7 +51,6 @@
 
         /**
          * @description Function that gets the available content from the specified file on the external server.
-         * @param variable The variable in which to store the content.
          * @param sourceLink The link on the server from which to fetch the data.
          * @returns {Promise<void>}
          */
@@ -76,41 +73,6 @@
             catch(err) { throw {...err, code: "INIT_ERROR" } }
         }
 
-        /**
-         * @description Checks whether the requested content exists in the links variable.
-         * @param contentKey The key of the content to check.
-         * @returns {boolean} True if a URL in the right language exists for the given contentKey; false otherwise.
-         */
-        function linkContentExists(contentKey) {
-            return links && links[contentKey] && links[contentKey][getURLKey()];
-        }
-
-        /**
-         * @description Checks whether the requested constant exists in the constants variable.
-         * @param constantKey The key of the constant to check.
-         * @returns {boolean} True if the constant exists for the given constantKey; false otherwise.
-         */
-        function constantExists(constantKey) {
-            return constants && typeof constants[constantKey] !== "undefined";
-        }
-
-        /**
-         * @description Returns a URL key based on the user's language.
-         * @returns {string} The URL key.
-         */
-        function getURLKey() {
-            return `${UserPreferences.getLanguage()}`.toLowerCase();
-        }
-
-        /**
-         * @description Helper function to check if an object is empty.
-         * @param obj The object to check (must be an object).
-         * @returns {boolean} Whether the object is empty.
-         */
-        function objectIsEmpty(obj) {
-            return Object.keys(obj).length === 0;
-        }
-
         ////////////////
 
         /**
@@ -121,29 +83,33 @@
          * @throws Throws an error if initialization fails.
          */
         async function ensureInitialized() {
+            const objectIsEmpty = obj => Object.keys(obj).length === 0;
+
             if (objectIsEmpty(constants) || objectIsEmpty(links))
                 await initialize(CONFIG.settings.externalContentFileURL);
         }
 
         /**
-         *@ngdoc method
-         *@name getPageContent
-         *@description Requests a page from the content provided by the server.
-         *             Content must already have been initialized.
-         *@param {String} contentKey The key for the page to request from the external server.
-         *@returns {Promise<*>} The page content to be loaded into the view.
+         * @description Requests a page from the content provided by the server.
+         *              Content must already have been initialized.
+         * @param {string} contentKey The key for the page to request from the external server.
+         * @returns {Promise<*>} Resolves to the page content to be loaded into the view, or rejects with an error.
          **/
         async function getPageContent(contentKey) {
-            // Check whether the requested content's link exists
-            const urlKey = getURLKey();
-            const details = {contentType: contentKey, urlKey: urlKey};
-            if (!linkContentExists(contentKey)) throw {code: "NO_PAGE_CONTENT", ...details};
+            const details = {
+                contentType: contentKey,
+                userLanguage: getLanguage(),
+                fallbackLanguage: CONFIG.settings.fallbackLanguage,
+            };
 
-            try{
+            // Get he requested content's link, if it exists
+            const url = getURL(contentKey);
+
+            try {
                 // Request the content
                 const response = await $http({
                     method: 'GET',
-                    url: links[contentKey][urlKey]
+                    url: url,
                 });
 
                 // Add the title if it exists
@@ -163,26 +129,31 @@
          * @returns {string} The URL, or an empty string if the URL is not found.
          */
         function getURL(contentKey) {
-            let url = "";
+            const details = {
+                contentType: contentKey,
+                userLanguage: getLanguage(),
+                fallbackLanguage: CONFIG.settings.fallbackLanguage,
+            };
 
-            // Check whether the requested content's URL exists
-            const urlKey = getURLKey();
-            if (linkContentExists(contentKey)) url = links[contentKey][urlKey];
-
-            return url;
+            // Return the requested content's link if it exists, or throw an error
+            return links[contentKey][details.userLanguage] || links[contentKey][details.fallbackLanguage] || throw {code: "NO_PAGE_CONTENT", ...details};
         }
 
         /**
          * @description Gets a constant from the constants variable.
          *              Content must already have been initialized; this is done to allow this function to be non-async.
-         * @param contentKey The key for the constant to request.
+         * @param {string} contentKey The key for the constant to request.
          * @returns {*|undefined} The constant, or undefined if the constant is not found.
          */
-        function getConstant(constantKey) {
-            return constantExists(constantKey) ? constants[constantKey] : undefined;
+        function getConstant(contentKey) {
+            return constants?.[contentKey];
         }
 
-        // Loads data from a specific URL without accessing the links variable
+        /**
+         * @description Loads data from a specific URL without accessing the links variable
+         * @param url The URL from which to load data.
+         * @returns {Promise<*>} Resolves to the result of calling GET on the specified URL.
+         */
         function loadFromURL(url) {
             return $http({
                 method: 'GET',

@@ -12,16 +12,16 @@ SPDX-License-Identifier: Apache-2.0
                 <div style="line-height:1" align="left">
                     <header style="margin-bottom: 10px">
                         <span class="item-title"
-                              ng-class="fontSizeTitle">{{vm.app["AppointmentType_" + vm.language]}}</span>
+                              ng-class="fontSizeTitle">{{vm.app.AppointmentType}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc"
-                       ng-bind-html="vm.app['AppointmentDescription_' + vm.language] | trustHTML">
+                       ng-bind-html="vm.app.AppointmentDescription | trustHTML">
                     </p>
                 </div>
             </ons-list-item>
 
             <ons-list-item modifier="chevron" class="item dark-chevron" ng-class="fontSizeDesc" ng-click="vm.moreEducationalMaterial()"
-                           ng-show="vm.app['URL_' + vm.language]" style="background-color: #fde2ed" tappable>
+                           ng-show="vm.app.URL" style="background-color: #fde2ed" tappable>
                 <ons-row style="padding:0;margin:0;">
                     <ons-col>
                         {{"MORE_EDU_MATERIAL" | translate}}

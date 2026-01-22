@@ -16,10 +16,10 @@
         .module('OpalApp')
         .controller('IndividualTxTeamMessageController', IndividualTxTeamMessageController);
 
-    IndividualTxTeamMessageController.$inject = ['$scope', '$timeout', 'Navigator', 'ProfileSelector', 'TxTeamMessages'];
+    IndividualTxTeamMessageController.$inject = ['$scope', '$timeout', 'Navigator', 'ProfileSelector'];
 
     /* @ngInject */
-    function IndividualTxTeamMessageController($scope, $timeout, Navigator, ProfileSelector, TxTeamMessages) {
+    function IndividualTxTeamMessageController($scope, $timeout, Navigator, ProfileSelector) {
         let vm = this;
         let navigator;
 
@@ -34,7 +34,7 @@
             bindEvents();
 
             $timeout(function(){
-                vm.message = TxTeamMessages.setLanguageTxTeamMessages(parameters.Post);
+                vm.message = parameters.Post;
                 vm.FirstName = ProfileSelector.getFirstName();
             });
         }

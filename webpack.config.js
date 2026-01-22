@@ -42,7 +42,14 @@ const config = env => {
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
 
 	// Read environment settings from opal.config.js
-	let requiredSettingNames = ['externalContentFileURL', 'serviceStatusURL', 'supportedLanguages', 'useSourceMap', 'webpackMode'];
+	let requiredSettingNames = [
+		'externalContentFileURL',
+		'fallbackLanguage',
+		'serviceStatusURL',
+		'supportedLanguages',
+		'useSourceMap',
+		'webpackMode',
+	];
 	let settings = {};
 	requiredSettingNames.forEach(name => settings[name] = OpalEnv.getEnvSetting(name, OPAL_ENV));
 	console.log("Required environment settings:", settings);

@@ -12,14 +12,14 @@ SPDX-License-Identifier: Apache-2.0
             <ons-list-item class="item" >
                 <div style="line-height:1" align="left">
                     <header>
-                        <span class="item-title" ng-class="fontSizeTitle">{{vm.app["AppointmentType_"+vm.language]}}</span>
+                        <span class="item-title" ng-class="fontSizeTitle">{{vm.app.AppointmentType}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc" ng-if="vm.app['Status'] === 'Deleted' || vm.app['Status'] === 'Cancelled'" style="color:rgb(243, 33, 33)">
                         {{"APPOINTMENT_CANCELLED"|translate}}
                     </p>
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ScheduledStartTime|date:'mediumNoSeconds'}}</p>
-                    <p class="item-desc" ng-class="fontSizeDesc" ng-show="vm.app['RoomLocation_'+vm.language]">
-                        {{"GO_TO_ROOM"|translate}} {{vm.app["RoomLocation_"+vm.language]}}
+                    <p class="item-desc" ng-class="fontSizeDesc" ng-show="vm.app.RoomLocation">
+                        {{"GO_TO_ROOM"|translate}} {{vm.app.RoomLocation}}
                     </p>
                 </div>
             </ons-list-item>
@@ -41,14 +41,14 @@ SPDX-License-Identifier: Apache-2.0
 
             <!-- MAP DESCRIPTION -->
             <ons-list-item ng-class="fontSizeDesc">
-                <p id="map-desc" class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app['MapDescription_' + vm.language] | trustHTML" align="center"></p>
+                <p id="map-desc" class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app.MapDescription | trustHTML" align="center"></p>
             </ons-list-item>
 
             <!-- MAP -->
             <ons-list class="settings-list" align="center">
                 <ons-list-item ng-click="vm.openMap()" align="center">
                     <div align="center" class="text-center" style="padding:5px">
-                        <img ng-src="{{vm.app['MapUrl_'+ vm.language]}}" style="max-width:100%;height:auto">
+                        <img ng-src="{{vm.app.MapUrl}}" style="max-width:100%;height:auto">
                     </div>
                 </ons-list-item>
             </ons-list>

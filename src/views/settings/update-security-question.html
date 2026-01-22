@@ -48,7 +48,7 @@ SPDX-License-Identifier: Apache-2.0
                     <option ng-repeat="activeQuestion in vm.activeSecurityQuestionList"
                             id="{{'question-'+ $questionIndex +'-option-' + $index}}" value="{{$index}}"
                             class="update-security-question--option" ng-class="fontSizeDesc">
-                        {{vm.displayQuestionName(activeQuestion)}}
+                        {{activeQuestion.questionText}}
                     </option>
                 </select>
             </div>

@@ -29,47 +29,33 @@ class PatientTestResultsByDatetimeController {
 	 */
 	locale = "";
 
-	/**
-	* @type {string}
-	*/
-	#language = "";
-
 	#patientTestResults;
 	#navigator;
 	#$timeout;
 	#$filter;
 	#updateUI;
+	#nativeNotification;
 
 	/**
 	 *
 	 * @param {PatientTestResults} patientTestResults
 	 * @param {Navigator} navigator
-	 * @param {UserPreferences} userPreferences
 	 * @param {$timeout} $timeout
 	 * @param {$filter} $filter
 	 * @param {UpdateUI} updateUI update UI service
 	 * @param {$locale} $locale
+	 * @param {NativeNotification} nativeNotification NativeNotification service
 	 */
 	constructor(patientTestResults, navigator,
-	            userPreferences, $timeout, $filter, updateUI, $locale) {
+	            $timeout, $filter, updateUI, $locale, nativeNotification) {
 		this.#patientTestResults = patientTestResults;
 		this.#navigator = navigator.getNavigator();
-		this.#language = userPreferences.getLanguage();
 		this.#$filter = $filter;
 		this.#$timeout = $timeout;
 		this.#updateUI = updateUI;
 		this.locale = $locale.id;
+		this.#nativeNotification = nativeNotification;
 		this.#initialize(this.#navigator.getCurrentPage().options);
-	}
-
-
-	/**
-	 * Returns the test name in the preferred patient language
-	 * @param {*} testResult Result for given test type
-	 * @returns {string} Returns test name
-	 */
-	getTestName(testResult) {
-		return testResult[`name_${this.#language}`];
 	}
 
 	/**
@@ -122,13 +108,9 @@ class PatientTestResultsByDatetimeController {
 	 * At the time, Opal does not have a logging mechanism for errors.
 	 */
 	#handleServerFetchError = (err) => {
-		// TODO: (dherre3) logging of the error
+		console.error(err);
 		this.#updateView();
-		ons.notification.alert({
-			//message: 'Server problem: could not fetch data, try again later',
-			message: this.#$filter('translate')("SERVER_ERROR_ALERT"),
-			modifier: (ons.platform.isAndroid()) ? 'material' : null
-		});
+		this.#nativeNotification.showNotificationAlert(this.#$filter('translate')('SERVER_ERROR_ALERT'));
 	};
 	/**
 	 * Updates the user view with the new server information for the date test results
@@ -155,8 +137,8 @@ class PatientTestResultsByDatetimeController {
 	}
 }
 
-PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator', 'UserPreferences',
-													'$timeout', '$filter', 'UpdateUI', '$locale'];
+PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator',
+													'$timeout', '$filter', 'UpdateUI', '$locale', 'NativeNotification'];
 angular
 	.module('OpalApp')
 	.controller('PatientTestResultsByDatetimeController', PatientTestResultsByDatetimeController);

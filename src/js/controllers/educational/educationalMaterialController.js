@@ -64,10 +64,7 @@
 
         function initData() {
             vm.noMaterials = false;
-            // Full list of educational materials in the right language.
-            vm.edumaterials = EducationalMaterial.setLanguage(
-                EducationalMaterial.getEducationalMaterial(vm.eduCategory)
-            );
+            vm.edumaterials = EducationalMaterial.getEducationalMaterial(vm.eduCategory);
             // Educational materials filtered based on the search string.
             vm.filteredEduMaterials = $filter('orderBy')(vm.edumaterials, '-DateAdded');
         }

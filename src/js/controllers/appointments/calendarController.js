@@ -61,12 +61,6 @@
         vm.noAppointments = false;
 
         /**
-         * The user's preferred language
-         * @type {string}
-         */
-        vm.language = '';
-
-        /**
          * Today's date, which is fed into the calendar
          * @type {Date}
          */
@@ -99,9 +93,6 @@
             navigator = Navigator.getNavigator();
 
             bindEvents();
-
-            // Get the user's language
-            vm.language = UserPreferences.getLanguage();
 
             // Set today's hours to beginning of the day
             vm.todays_date.setHours(0,0,0,0);

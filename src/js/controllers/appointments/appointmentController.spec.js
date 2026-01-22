@@ -38,10 +38,6 @@ describe('AppointmentController', function() {
         };
 
         // Spies
-        spyOn( UserPreferences, 'getLanguage' ).and.callFake( function() {
-            return 'EN';
-        } );
-
         if(!isCorrupted){
             spyOn( Navigator, 'getParameters').and.returnValue({Post: MockData.test_appointments[0]});
 
@@ -59,7 +55,6 @@ describe('AppointmentController', function() {
             $timeout.flush();
             expect(controller.app).toBe(MockData.test_appointments[0]);
             expect(controller.corrupted_appointment).toBeFalsy();
-            expect(controller.language).toBe('EN');
 
             isCorrupted = true;
 
@@ -68,7 +63,6 @@ describe('AppointmentController', function() {
             $timeout.flush();
             expect(controller.app).toEqual({});
             expect(controller.corrupted_appointment).toBeTruthy();
-            expect(controller.language).toBe('EN');
 
             isCorrupted = false;
         });

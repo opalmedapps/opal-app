@@ -10,8 +10,8 @@ var myApp = angular.module('OpalApp');
  *@ngdoc service
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
-myApp.service('FileManagerService', ['$filter', '$injector', 'Browser', 'Constants', 'RequestToServer', 'Toast',
-function ($filter, $injector, Browser, Constants, RequestToServer, Toast) {
+myApp.service('FileManagerService', ['$filter', '$injector', 'Browser', 'Constants', 'NativeNotification', 'RequestToServer', 'Toast',
+function ($filter, $injector, Browser, Constants, NativeNotification, RequestToServer, Toast) {
 
     /**
      *@ngdoc property
@@ -356,7 +356,7 @@ function ($filter, $injector, Browser, Constants, RequestToServer, Toast) {
     function share(name, url) {
         // Sharing is only available on mobile devices
         if (!Constants.app) {
-            ons.notification.alert({message: $filter('translate')('AVAILABLE_DEVICES')});
+            NativeNotification.showNotificationAlert($filter('translate')('AVAILABLE_DEVICES'));
             return;
         }
 
@@ -476,7 +476,7 @@ function ($filter, $injector, Browser, Constants, RequestToServer, Toast) {
         openPDF: openPDF,
 
         generateDocumentName: function (document) {
-            const title = document.Title.replace(/ /g, "_");
+            const title = document.AliasName.replace(/ /g, "_");
             const date =  document.ApprovedTimeStamp.toDateString().replace(/ /g, "-");
             return `${title}_${date}.${document.DocumentType}`;
         },

@@ -33,7 +33,7 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{announcement.Title}}</span>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{announcement.PostName}}</span>
                             <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{"SENT_TO"|translate}}: {{announcement.PatientFirstName}} {{announcement.PatientLastName}}</p>
                         </header>
                     </ons-col>

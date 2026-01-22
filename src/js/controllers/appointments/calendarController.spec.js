@@ -71,10 +71,6 @@ describe('CalendarController', function() {
         }
 
         // Spies
-        spyOn( UserPreferences, 'getLanguage').and.callFake( function() {
-            return 'EN';
-        } );
-
         $controller = _$controller_;
         controller = $controller('CalendarController', { Navigator: Navigator, $scope: $scope,
             UserPreferences: _UserPreferences_, Appointments: Appointments, $location: $location, $anchorScroll: $anchorScroll});
@@ -87,7 +83,6 @@ describe('CalendarController', function() {
             $timeout.flush();
             expect(controller.appointments).toBe(MockData.test_appointments);
             expect(controller.noAppointments).toBeFalsy();
-            expect(controller.language).toBe('EN');
 
             var date_today = new Date();
             date_today.setHours(0,0,0,0);
@@ -102,7 +97,6 @@ describe('CalendarController', function() {
             $timeout.flush();
             expect(controller.appointments).toEqual([]);
             expect(controller.noAppointments).toBeTruthy();
-            expect(controller.language).toBe('EN');
 
             var date_today = new Date();
             date_today.setHours(0,0,0,0);

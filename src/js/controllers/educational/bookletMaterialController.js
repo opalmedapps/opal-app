@@ -182,7 +182,7 @@
                 if (i >= 0 && i < vm.tableOfContents.length && !vm.tableOfContents[i].hasOwnProperty("Content")) {
                     $http({
                         method: 'GET',
-                        url: vm.tableOfContents[i].Url,
+                        url: vm.tableOfContents[i].URL,
                     }).then(res => {
                         $timeout(() => {
                             vm.tableOfContents[i].Content = $filter('removeTitleEducationalMaterial')(res.data);
