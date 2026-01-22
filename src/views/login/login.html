@@ -14,15 +14,15 @@ SPDX-License-Identifier: Apache-2.0
                 <form style="text-align: center" novalidate>
                     <div>
                         <div style="width: 100%" class="style-4">
-                            <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()>
+                            <input id="login-email-input" placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()>
                         </div>
                         <br/>
                         <password-input>
-                            <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()">
+                            <input id="login-password-input" name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()">
                         </password-input>
                         <br/>
                         <!-- HOSPITAL SELECTOR -->
-                        <hospital-selector on-click="login.cancelLoginAttempt"></hospital-selector>
+                        <hospital-selector id="login-hospital-selector" on-click="login.cancelLoginAttempt"></hospital-selector>
 
                         <br/>
                         <div ng-show="login.alert.type">

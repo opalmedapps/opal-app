@@ -27,7 +27,7 @@ SPDX-License-Identifier: Apache-2.0
 
             <!-- HOSPITAL SELECTOR -->
             <div ng-if="security.passwordReset" class="container">
-                <hospital-selector></hospital-selector>
+                <hospital-selector id="password-reset-hospital-selector"></hospital-selector>
             </div>
 
             <!-- LOADING SPINNER -->
@@ -58,7 +58,7 @@ SPDX-License-Identifier: Apache-2.0
                         </span>
                     </button>
 
-                    <uib-alert class="security-question--alert" ng-show="security.alert.type && security.alertShow"
+                    <uib-alert id="security-question-error" class="security-question--alert" ng-show="security.alert.type && security.alertShow"
                         type="{{security.alert.type}}">
                         {{security.alert.content|translate}}
                     </uib-alert>
