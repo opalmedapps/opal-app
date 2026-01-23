@@ -44,7 +44,6 @@
                     scope.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
 
                     // Get references to the toolbar elements
-                    let leftElement = $(`#toolbar-left-${scope.$id}`) || $(`#toolbar-left-default-${scope.$id}`);
                     let centerElement = $(`#toolbar-center-${scope.$id}`);
                     let rightElement = $(`#toolbar-right-${scope.$id}`);
 
