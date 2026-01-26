@@ -5,28 +5,28 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="QuestionnaireMainController as vm">
-    <generic-toolbar title="{{'QUESTIONNAIRE_HOME'|translate}}" style-class="fontSizeTitle">
-        <right-content>
+    <generic-toolbar title="{{'QUESTIONNAIRE_HOME'|translate}}">
+        <!-- Use float-right to prevent longer translations from being cut off -->
+        <right-content style="float: right">
             <!--the words leading to begin / resume questionnaire depending on the status of the questionnaire-->
             <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == vm.allowedStatus.NEW_QUESTIONNAIRE_STATUS && !vm.loadingQuestionnaire"
                 class="toolbar-button--quiet navigation-bar__line-height"
-                ng-click="vm.beginQuestionnaire(false);">
+                ng-click="vm.beginQuestionnaire(false)">
                 {{"BEGIN"|translate}}
             </span>
             <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && !vm.loadingQuestionnaire"
-            class="toolbar-button--quiet navigation-bar__line-height"
-            ng-click="vm.resumeQuestionnaire(vm.startIndex);">
+                class="toolbar-button--quiet navigation-bar__line-height"
+                ng-click="vm.resumeQuestionnaire(vm.startIndex)">
                 {{"RESUME"|translate}}
             </span>
             <!--this is for the last question going into the summary page-->
             <span ng-if="vm.isQuestion && (carousel.getActiveCarouselItemIndex() == vm.carouselItems.length) && !vm.loadingQuestionnaire"
-            style="padding-left:0px" class="toolbar-button--quiet navigation-bar__line-height"
-            ng-click="vm.finishQuestionnaireFromQuestion();">
+                class="toolbar-button--quiet navigation-bar__line-height"
+                ng-click="vm.finishQuestionnaireFromQuestion()">
                 {{"DONE"|translate}}
             </span>
         </right-content>
     </generic-toolbar>
-
 
     <!--LOADING CIRCLE FOR QUESTIONNAIRE -->
     <loading-spinning-circle
