@@ -25,6 +25,8 @@ const config = {
         showVersionOnInit: true,
         // String: comma-separated list of languages supported in the system (ISO 639-1 codes) with the first language being the default
         supportedLanguages: 'en,fr',
+        // String: language (ISO 639-1 code) used as a fallback for frontend elements that aren't available in the user's chosen language, for example, app links
+        fallbackLanguage: 'en',
         // Boolean: whether to use real (production-ready) hospitals for login. If false, development-specific hospitals are used instead.
         useProductionHospitals: false,
         // Boolean: whether to use a sourcemap when building the web code. Should be false in production.

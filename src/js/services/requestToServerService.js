@@ -241,6 +241,7 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
                 Parameters: encryptedParameters,
                 UserEmail: UserAuthorizationInfo.getEmail(),
                 AppVersion: Constants.version(),
+                'Accept-Language': UserPreferences.getLanguage(),
                 Timestamp: Firebase.serverTimestamp(),
             };
             // Add a target patient if the request type is for patient data

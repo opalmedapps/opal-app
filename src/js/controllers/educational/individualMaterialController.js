@@ -70,8 +70,7 @@
 
             bindEvents();
 
-            // Set educational material language
-            vm.edumaterial = EducationalMaterial.setLanguage(param.Post);
+            vm.edumaterial = param.Post;
 
             // Log the activity
             if (param.Post.EducationalMaterialSerNum) {
@@ -87,11 +86,7 @@
             // Determine the material's display type (pdf, package, html, etc.)
             vm.displayType = EducationalMaterial.getDisplayType(vm.edumaterial);
 
-            //If its a booklet, translate table of contents
-            if (vm.displayType === "booklet") {
-                vm.tableOfContents = vm.edumaterial.TableContents;
-                vm.tableOfContents = EducationalMaterial.setLanguage(vm.tableOfContents);
-            }
+            if (vm.displayType === "booklet") vm.tableOfContents = vm.edumaterial.TableContents;
 
             // If the material is an html page to be shown immediately, download it
             if (vm.displayType === "html") downloadIndividualPage();
@@ -107,9 +102,6 @@
                     EducationalMaterial.getPackageContents(vm.edumaterial.EducationalMaterialControlSerNum).then((packageContents) => {
                         vm.edumaterial.PackageContents = packageContents;
 
-                        // Translate the package materials to the correct language.
-                        EducationalMaterial.setLanguage(vm.edumaterial.PackageContents);
-
                         vm.loadingContents = false;
 
                     }).catch((err) => {
@@ -121,9 +113,6 @@
                     });
                 }
                 else {
-                    // If the package materials were already downloaded, translate them anyways (in case the user switched language).
-                    EducationalMaterial.setLanguage(vm.edumaterial.PackageContents);
-
                     vm.loadingContents = false;
                 }
             }
@@ -218,7 +207,7 @@
          */
         function getURLToShare() {
             let shareURL = vm.edumaterial.ShareURL;
-            let regularURL = vm.edumaterial.Url;
+            let regularURL = vm.edumaterial.URL;
 
             if (shareURL && shareURL !== "") return shareURL;
             else if (regularURL && regularURL !== "") return regularURL;
@@ -238,7 +227,7 @@
             if (!vm.edumaterial.hasOwnProperty('Content')) {
                 vm.loadingContents = true;
 
-                EducationalMaterial.getMaterialPage(vm.edumaterial.Url)
+                EducationalMaterial.getMaterialPage(vm.edumaterial.URL)
                     .then(function (response) {
                         vm.edumaterial.Content = response.data;
                         vm.loadingContents = false;

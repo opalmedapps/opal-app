@@ -69,11 +69,15 @@ external server, with the URL specified in the `serviceStatusURL` setting in
 `opal.config.js`. A sample configuration file for `Service Status` is available at
 `content/service-status.sample.json`.
 
-For testing `Service Status` using a local sample, create
-`content/service-status.json` file by
-copying `content/service-status.sample.json`.
-In the new file provide a string to `Announcement` setting that would
-be shown during app startup.
+In production, it's important to host the service status file on an external server,
+ideally on a different server than the one on which the Opal backend software is running.
+This will allow users to be informed of service disruptions even in the case of a complete failure of the main server.
+
+However, for testing or in non-production environments, a service status file can be provided locally.
+To use a local file, copy `content/service-status.sample.json` to `content/service-status.json`,
+and make sure that the `serviceStatusURL` points to this path.
+In the new file, provide the `title` and `message` strings that will be shown at app startup.
+If `message` is left empty, no pop-up will be shown (this can be used to disable the feature when not in use).
 
 ## Deployment
 

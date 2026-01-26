@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="PatientTestResultsByTypeController as testTypeCtrl">
-    <generic-toolbar title="{{testTypeCtrl.getTestName(testTypeCtrl.test)}}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{testTypeCtrl.test.name}}" style-class="fontSizeTitle">
         <right-content>
             <labs-info-button></labs-info-button>
         </right-content>
@@ -109,7 +109,7 @@ SPDX-License-Identifier: Apache-2.0
                     <ons-col width="85%" class="labtest-col" align="left" vertical-align="center">
                         <p class="hyphens" style="margin-left: 4px">
                             <ons-icon icon="fas fa-info-circle"></ons-icon>
-                            {{"LAB_LEARN_ABOUT"|translate}} {{testTypeCtrl.getTestName(testTypeCtrl.test)}}
+                            {{"LAB_LEARN_ABOUT"|translate}} {{testTypeCtrl.test.name}}
                         </p>
                     </ons-col>
 

@@ -137,7 +137,7 @@ import {Observer} from "../models/utility/observer";
             }
 
             // Set the language
-            // Note: values set for tmhDynamicLocale correspond to those in the files inside the `angular-locales` directory
+            // Note: values set for tmhDynamicLocale must match the end of the file names inside the `angular-locales` directory
             tmhDynamicLocale.set(`${languageLower}-${locale}`);
             $translate.use(languageLower);
             language = languageUpper;

@@ -4,19 +4,18 @@ SPDX-FileCopyrightText: Copyright (C) 2020 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<ons-page style="background-color: white" ng-controller="UpdateSecurityQuestionController as sqc">
+<ons-page style="background-color: white" ng-controller="UpdateSecurityQuestionController as vm">
     <generic-toolbar title="{{'SECURITY_QUESTIONS'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
     <!-- LOADING CIRCLE-->
-    <loading-spinning-circle ng-if="sqc.loadingList" loading-message="{{'LOADING_DATA'|translate}}"></loading-spinning-circle>
+    <loading-spinning-circle ng-show="vm.loadingList" loading-message="{{'LOADING_DATA'|translate}}"></loading-spinning-circle>
 
-    <form class="container" ng-if="!sqc.loadingList" novalidate>
+    <form class="container" ng-show="!vm.loadingList" novalidate>
         <!-- OVERALL INSTRUCTION -->
-        <div>
+        <div class="update-security-question--spacing">
             <p ng-class="fontSizeTitle">{{"SECURITY_QUESTIONS_INSTRUCTIONS"|translate}}</p>
             <p ng-class="fontSizeDesc">{{"SECURITY_QUESTION_LOGOUT_WARNING"|translate}}</p>
         </div>
-        <br>
 
         <!-- INSTRUCTION FOR PASSWORD VERIFICATION -->
         <div>
@@ -24,127 +23,59 @@ SPDX-License-Identifier: Apache-2.0
         </div>
 
         <!-- PASSWORD VERIFICATION -->
-        <div class="style-4" style="width: 100%;">
+        <div class="change-password--div style-4" style="width: 100%;">
             <password-input>
                 <input
                 minlength="1"
                 type="password"
                 ng-class="fontSizeDesc"
                 placeholder="{{'PASSWORD'|translate}}"
-                ng-model="sqc.password"
-                ng-change="sqc.passwordChanged = true; sqc.evaluateSubmission();">
+                ng-model="vm.password"
+                ng-change="vm.passwordChanged = true; vm.evaluateSubmission();">
             </password-input>
         </div>
-        <br>
 
-        <!-- SECURITY QUESTION 1 -->
-        <div>
-            <p ng-class="fontSizeTitle">{{"QUESTION"|translate}} 1</p>
+        <!-- SECURITY QUESTIONS 1 to 3 -->
+        <div ng-repeat="$questionIndex in [0, 1, 2]" class="update-security-question--spacing">
+            <div>
+                <p ng-class="fontSizeTitle">{{"QUESTION"|translate}} {{$questionIndex + 1}}</p>
+            </div>
+            <!-- DROPDOWN TO SELECT A QUESTION -->
+            <div class="dropdown">
+                <select class="update-security-question--dropdown" ng-class="fontSizeDesc"
+                        ng-model="vm['question' + $questionIndex]" ng-change="vm.changeSecurityQuestion($questionIndex, vm['question' + $questionIndex])">
+                    <!-- DROPDOWN MENU OPTIONS (THE QUESTION CHOICES) -->
+                    <option ng-repeat="activeQuestion in vm.activeSecurityQuestionList"
+                            id="{{'question-'+ $questionIndex +'-option-' + $index}}" value="{{$index}}"
+                            class="update-security-question--option" ng-class="fontSizeDesc">
+                        {{activeQuestion.questionText}}
+                    </option>
+                </select>
+            </div>
+            <!-- ANSWER FIELD -->
+            <div class="style-4" style="width: 100%;">
+                <input type="text" class="update-security-answer--input" ng-class="fontSizeDesc"
+                       placeholder="{{vm.securityQuestionWithAnsList[$questionIndex].oldAnswerPlaceholder}}"
+                       ng-model="vm.securityQuestionWithAnsList[$questionIndex].answer" style="margin-top: 2%"
+                       ng-change="vm.securityQuestionAnswerChanged(vm.securityQuestionWithAnsList[$questionIndex]);">
+            </div>
+            <!-- ERROR STRING (ANSWER LENGTH) -->
+            <div ng-show="vm.securityQuestionWithAnsList[$questionIndex].answer.length < vm.min_answer_len && vm.securityQuestionWithAnsList[$questionIndex].answerHasChanged"
+                 style="color: crimson">
+                {{"SECURITY_QUESTION_LENGTH_REQUIREMENT_1"|translate}} {{vm.min_answer_len}} {{"SECURITY_QUESTION_LENGTH_REQUIREMENT_2"|translate}}
+            </div>
+            <!-- ERROR STRING (DUPLICATE QUESTION) -->
+            <div ng-show="vm.questionAlreadyUsed($questionIndex)"
+                 style="color: crimson">
+                {{"SECURITY_QUESTION_ALREADY_USED"|translate}}
+            </div>
         </div>
-        <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle overflow-text-ellipsis" type="button" id="dropdownMenu1"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-class="fontSizeDesc" minlength="1"
-                    style="width: 100%; text-align: left">
-                <span class="caret"></span>
-                {{"SELECT_DROPDOWN_QUESTION"|translate}}
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li ng-class="fontSizeDesc" ng-repeat="activeQuestion in sqc.activeSecurityQuestionList | filter: sqc.filterQuestionList">
-                    <div ng-click="sqc.changeSecurityQuestion(sqc.securityQuestionWithAnsList[0], activeQuestion)">
-                        {{sqc.displayQuestionName(activeQuestion)}}
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <p ng-class="fontSizeDesc">{{sqc.displayQuestionName(sqc.securityQuestionWithAnsList[0].question)}}</p>
-        </div>
-        <div class="style-4" style="width: 100%;">
-            <input type="text" ng-class="fontSizeDesc"
-                   placeholder="{{sqc.securityQuestionWithAnsList[0].oldAnswerPlaceholder}}"
-                   ng-model="sqc.securityQuestionWithAnsList[0].answer" style="margin-top: 2%"
-                   ng-change="sqc.securityQuestionAnswerChanged(sqc.securityQuestionWithAnsList[0]);">
-        </div>
-        <div ng-show="sqc.securityQuestionWithAnsList[0].answer.length < sqc.min_answer_len && sqc.securityQuestionWithAnsList[0].answerHasChanged;"
-             style="color: crimson">
-            {{"SECURITY_QUESTION_LENGTH_REQUIREMENT_1"|translate}} {{sqc.min_answer_len}} {{"SECURITY_QUESTION_LENGTH_REQUIREMENT_2"|translate}}
-        </div>
-        <br>
-
-        <!-- SECURITY QUESTION 2 -->
-        <div>
-            <p ng-class="fontSizeTitle">{{"QUESTION"|translate}} 2</p>
-        </div>
-        <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle overflow-text-ellipsis" type="button" id="dropdownMenu2"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-class="fontSizeDesc" minlength="1"
-                    style="width: 100%; text-align: left">
-                <span class="caret"></span>
-                {{"SELECT_DROPDOWN_QUESTION"|translate}}
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li ng-class="fontSizeDesc" ng-repeat="activeQuestion in sqc.activeSecurityQuestionList | filter: sqc.filterQuestionList">
-                    <div ng-click="sqc.changeSecurityQuestion(sqc.securityQuestionWithAnsList[1], activeQuestion)">
-                        {{sqc.displayQuestionName(activeQuestion)}}
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <p ng-class="fontSizeDesc">{{sqc.displayQuestionName(sqc.securityQuestionWithAnsList[1].question)}}</p>
-        </div>
-        <div class="style-4" style="width: 100%;">
-            <input type="text" ng-class="fontSizeDesc"
-                   placeholder="{{sqc.securityQuestionWithAnsList[1].oldAnswerPlaceholder}}"
-                   ng-model="sqc.securityQuestionWithAnsList[1].answer" style="margin-top: 2%"
-                   ng-change="sqc.securityQuestionAnswerChanged(sqc.securityQuestionWithAnsList[1]);">
-        </div>
-        <div ng-show="sqc.securityQuestionWithAnsList[1].answer.length < sqc.min_answer_len && sqc.securityQuestionWithAnsList[1].answerHasChanged;"
-             style="color: crimson">
-            {{"SECURITY_QUESTION_LENGTH_REQUIREMENT_1"|translate}} {{sqc.min_answer_len}} {{"SECURITY_QUESTION_LENGTH_REQUIREMENT_2"|translate}}
-        </div>
-        <br>
-
-        <!-- SECURITY QUESTION 3 -->
-        <div>
-            <p ng-class="fontSizeTitle">{{"QUESTION"|translate}} 3</p>
-        </div>
-        <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle overflow-text-ellipsis" type="button" id="dropdownMenu3"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-class="fontSizeDesc"
-                    minlength="1" style="width: 100%; text-align: left">
-                <span class="caret"></span>
-                {{"SELECT_DROPDOWN_QUESTION"|translate}}
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li ng-class="fontSizeDesc" ng-repeat="activeQuestion in sqc.activeSecurityQuestionList | filter: sqc.filterQuestionList">
-                    <div ng-click="sqc.changeSecurityQuestion(sqc.securityQuestionWithAnsList[2], activeQuestion)">
-                        {{sqc.displayQuestionName(activeQuestion)}}
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <p ng-class="fontSizeDesc">{{sqc.displayQuestionName(sqc.securityQuestionWithAnsList[2].question)}}</p>
-        </div>
-        <div class="style-4" style="width: 100%;">
-            <input type="text" ng-class="fontSizeDesc"
-                   placeholder="{{sqc.securityQuestionWithAnsList[2].oldAnswerPlaceholder}}"
-                   ng-model="sqc.securityQuestionWithAnsList[2].answer" style="margin-top: 2%"
-                   ng-change="sqc.securityQuestionAnswerChanged(sqc.securityQuestionWithAnsList[2]);">
-        </div>
-        <div ng-show="sqc.securityQuestionWithAnsList[2].answer.length < sqc.min_answer_len && sqc.securityQuestionWithAnsList[2].answerHasChanged;"
-             style="color: crimson">
-            {{"SECURITY_QUESTION_LENGTH_REQUIREMENT_1"|translate}} {{sqc.min_answer_len}} {{"SECURITY_QUESTION_LENGTH_REQUIREMENT_2"|translate}}
-        </div>
-        <br>
 
         <!-- SUBMIT BUTTON -->
-        <div align="center" style="margin-top:10px;margin-bottom:10px">
-            <button class="button--large--cta" style="width:80%; white-space: initial;" ng-click="sqc.submit();" ng-class="fontSizeDesc"
-                    ng-disabled="sqc.submitDisabled">{{"SUBMIT_AND_LOGOUT"|translate}}
+        <div align="center" class="update-security-question--spacing">
+            <button class="button--large--cta" style="width:80%; white-space: initial;" ng-click="vm.submit();" ng-class="fontSizeDesc"
+                    ng-disabled="vm.submitDisabled">{{"SUBMIT_AND_LOGOUT"|translate}}
             </button>
         </div>
-        <br>
     </form>
 </ons-page>

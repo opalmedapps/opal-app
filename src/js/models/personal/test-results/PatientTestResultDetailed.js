@@ -6,16 +6,14 @@
  * PatientTestResultDetailed class to model a test result with all available details
  */
 export class PatientTestResultDetailed {
-	constructor({ abnormalFlag, educationalMaterialURL_EN, educationalMaterialURL_FR, groupName, interpretationRecommended, name_EN, name_FR,
+	constructor({ abnormalFlag, educationalMaterialURL, groupName, interpretationRecommended, name,
 		normalRange, patientTestResultSerNum, readStatus, sequenceNum, testExpressionSerNum, testValue,
 		testValueNumeric, unitDescription }) {
 		this.abnormalFlag = abnormalFlag;
-		this.educationalMaterialURL_EN = educationalMaterialURL_EN;
-		this.educationalMaterialURL_FR = educationalMaterialURL_FR;
+		this.educationalMaterialURL = educationalMaterialURL;
 		this.groupName = groupName;
 		this.interpretationRecommended = interpretationRecommended === "1";
-		this.name_EN = name_EN;
-		this.name_FR = name_FR;
+		this.name = name;
 		this.normalRange = normalRange;
 		this.patientTestResultSerNum = Number(patientTestResultSerNum);
 		this.readStatus = Number(readStatus);

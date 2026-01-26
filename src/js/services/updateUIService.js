@@ -112,8 +112,30 @@
          * @returns {Promise<void>} Resolves when initial data is done downloading.
          */
         async function init() {
-            // When the language changes, force questionnaires to be cleared (since they're saved only for one language)
+            // Clear data that needs to be re-downloaded when the language changes
             UserPreferences.observeLanguage(() => {
+                Announcements.clearAnnouncements();
+                updateTimestamps('Announcements', 0);
+
+                Appointments.clearAppointments();
+                updateTimestamps('Appointments', 0);
+
+                Diagnoses.clearDiagnoses();
+                updateTimestamps('Diagnosis', 0);
+
+                Documents.clearDocuments();
+                updateTimestamps('Documents', 0);
+
+                EducationalMaterial.clearEducationalMaterial();
+                updateTimestamps('EducationalMaterial', 0);
+
+                PatientTestResults.clear();
+                updateTimestamps('PatientTestDates', 0);
+                updateTimestamps('PatientTestTypes', 0);
+
+                TxTeamMessages.clearTxTeamMessages();
+                updateTimestamps('TxTeamMessages', 0);
+
                 Questionnaires.clearAllQuestionnaire();
                 updateTimestamps('QuestionnaireList', 0);
             });

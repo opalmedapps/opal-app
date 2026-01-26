@@ -94,7 +94,6 @@ import "angular/angular-csp.css";
 import "animate.css";
 import "../css/app.css";
 import "../css/elements/custom-toast.element.css";
-import "../Languages/angular-locales/angular-locale_en.js";
 
 // Load the angular module bootstrapping script, which initializes the application
 import "./app.bootstrap";

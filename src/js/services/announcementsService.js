@@ -21,10 +21,10 @@
         .module('OpalApp')
         .factory('Announcements', Announcements);
 
-    Announcements.$inject = ['RequestToServer','$filter', 'UserPreferences'];
+    Announcements.$inject = ['$filter', 'RequestToServer'];
 
     /* @ngInject */
-    function Announcements(RequestToServer,$filter, UserPreferences) {
+    function Announcements($filter, RequestToServer) {
 
         /**
          *@ngdoc property
@@ -46,7 +46,6 @@
             getAnnouncementBySerNum: getAnnouncementBySerNum,
             readAnnouncementBySerNum: readAnnouncementBySerNum,
             readAnnouncement: readAnnouncement,
-            setLanguage: setLanguage,
             getAnnouncementUrl: () => './views/general/announcements/individual-announcement.html',
             clearAnnouncements: clearAnnouncements,
             getLastUpdated: () => lastUpdated,
@@ -128,25 +127,6 @@
         function readAnnouncement(index, serNum) {
             announcements[index].ReadStatus = '1';
             RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Announcements'});
-        }
-
-        /**
-         *@ngdoc method
-         *@name setLanguage
-         *@param {object[]|object} announcements Array of announcements, or single announcement object.
-         *@description Translates the array parameter containing announcements to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
-         *@returns {Array} Returns array with translated values
-         **/
-        function setLanguage(announcements) {
-            let language = UserPreferences.getLanguage();
-            let announcementList = Array.isArray(announcements) ? announcements : [announcements];
-
-            announcementList.forEach(announcement => {
-                announcement.Title = announcement[`PostName_${language}`];
-                announcement.Body = announcement[`Body_${language}`];
-            });
-
-            return announcements;
         }
 
         /**

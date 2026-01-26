@@ -48,7 +48,6 @@
         async function requestQuestionnaireStubFromSerNum(questionnaireSerNum) {
             let response = await RequestToServer.sendRequestWithResponse('GetOneItem', {
                 category: 'QuestionnaireList',
-                language: UserPreferences.getLanguage(),
                 serNum: questionnaireSerNum,
             });
             let questionnaireStub = response.Data?.hasOwnProperty('QuestionnaireList') ? response.Data?.QuestionnaireList[0] : undefined;
@@ -141,7 +140,6 @@
                     'answer': answerToSave,
                     'question_type_id': questionTypeId,
                     'is_skipped': isSkipped,
-                    'language': UserPreferences.getLanguage(),
                 };
 
             try {
@@ -161,7 +159,6 @@
         async function requestQuestionnaire(answerQuestionnaireID){
             let params = {
                 'qp_ser_num': answerQuestionnaireID,
-                'language': UserPreferences.getLanguage(),
             };
             let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
             return response?.Data ? response.Data : {};

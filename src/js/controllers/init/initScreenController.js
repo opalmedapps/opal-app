@@ -68,17 +68,21 @@ import '../../../css/views/init-page.view.css';
 		////////////////
 
 		async function activate() {
-			//Initialize language if not initialized
-			UserPreferences.initializeLanguage();
+			// Initialize the app's language
+			await UserPreferences.initializeLanguage();
+			const language = UserPreferences.getLanguage();
 
 			try {
 				await DynamicContent.ensureInitialized();
 				// Read the Service Status Message from the serviceStatusURL hosted on the external server.
 				const response = await DynamicContent.loadFromURL(CONFIG.settings.serviceStatusURL);
 
-				// Save the Service Status
-				const lang = UserPreferences.getLanguage().toLowerCase();
-				const { message = '', title } = response?.data?.[lang] || {};
+				// Read and display the Service Status, if one has been defined
+				// Pick the best language, in order: the user's chosen language, then the fallback language, or if all fails, the first available entry
+				const { message = '', title } = response?.data?.[language.toLowerCase()]
+					|| response?.data?.[CONFIG.settings.fallbackLanguage.toLowerCase()]
+					|| Object.values(response?.data)[0]
+					|| {};
 
 				if (message !== '') {
 					$timeout(() => {
@@ -87,7 +91,6 @@ import '../../../css/views/init-page.view.css';
 					});
 				}
 			} catch (error) {
-				// TODO: ERROR_INIT_LINKS is not translated
 				if (error.code === "INIT_ERROR") Toast.showToast({
 					message: $filter('translate')("ERROR_INIT_LINKS"),
 				});

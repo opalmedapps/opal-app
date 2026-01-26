@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <!-- TODO consolidate duplicate error messages and loading wheels on this page -->
 <ons-page ng-controller="IndividualMaterialController as edu">
-    <generic-toolbar title="{{edu.edumaterial.Type}}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{edu.edumaterial.EducationalMaterialType}}" style-class="fontSizeTitle">
         <left-content>
             <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
         </left-content>
@@ -89,7 +89,7 @@ SPDX-License-Identifier: Apache-2.0
                         <header>
                             <span class="item-desc" ng-class="fontSizeTitle">{{e.Name}}</span>
                         </header>
-                        <p class="item-desc" ng-class="fontSizeDesc" >{{e.Type}}</p>
+                        <p class="item-desc" ng-class="fontSizeDesc" >{{e.EducationalMaterialType}}</p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
@@ -121,7 +121,7 @@ SPDX-License-Identifier: Apache-2.0
 
                     <!-- Video tag based on different video url or file format -->
                     <video-tag-by-format
-                        edumaterial-url="{{edu.edumaterial.Url}}"
+                        edumaterial-url="{{edu.edumaterial.URL}}"
                         error-message="{{'ERROR_IN_VIDEO_URL_OR_FORMAT'|translate}}">
                     </video-tag-by-format>
 

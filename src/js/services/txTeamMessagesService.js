@@ -11,7 +11,7 @@ var myApp=angular.module('OpalApp');
  *@requires $filter
  *@description Service that deals with the treatment team message information
  **/
-myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'UserPreferences', function($filter,RequestToServer, LocalStorage,UserPreferences){
+myApp.service('TxTeamMessages', ['$filter', 'RequestToServer', 'LocalStorage', function($filter, RequestToServer, LocalStorage) {
     //Initializing array that represents all the information for TxTeamMessages
     /**
      *@ngdoc property
@@ -156,25 +156,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         getTxTeamMessageUrl:function(serNum)
         {
             return './views/personal/treatment-team-messages/individual-team-message.html';
-        },
-        /**
-         *@ngdoc method
-         *@name setLanguageTxTeamMessages
-         *@param {object[]|object} messages Array of messages, or single message object.
-         *@description Translates the array parameter containing announcements to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
-         *@returns {Array} Returns array with translated values
-         **/
-        setLanguageTxTeamMessages :function(messages)
-        {
-            let language = UserPreferences.getLanguage();
-            let messageList = Array.isArray(messages) ? messages : [messages];
-
-            messageList.forEach(message => {
-                message.Title = message[`PostName_${language}`];
-                message.Body = message[`Body_${language}`];
-            });
-
-            return messages;
         },
         /**
          *@ngdoc method
