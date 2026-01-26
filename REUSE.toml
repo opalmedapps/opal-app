@@ -30,6 +30,16 @@ precedence = "override"
 SPDX-FileCopyrightText = "Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
 SPDX-License-Identifier = "Apache-2.0"
 
+[[annotations]]
+path = [
+    "src/Languages/appTranslationTablesViews/all-views/de.json",
+    "src/Languages/appTranslationTablesViews/login/de.json",
+    "src/Languages/appTranslationTablesViews/top-view/de.json",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (C) 2026 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
+SPDX-License-Identifier = "Apache-2.0"
+
 
 [[annotations]]
 path = [
