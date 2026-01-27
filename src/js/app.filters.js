@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import './filters/filters';
+import './filters/module-is-enabled.filter.js';
 import './filters/replaceAll.filter';
 import './filters/showHeader.filter';
 import './filters/profile-initials.filter'
