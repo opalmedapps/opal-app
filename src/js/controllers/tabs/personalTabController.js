@@ -18,13 +18,13 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['$timeout', 'Navigator', 'NetworkStatus', 'Params',
-        'ProfileSelector', 'Questionnaires', 'RequestToServer', 'UserHospitalPreferences', 'UserPreferences'];
+        'ProfileSelector', 'RequestToServer', 'UserHospitalPreferences', 'UserPreferences'];
 
     function PersonalTabController($timeout, Navigator, NetworkStatus, Params,
-        ProfileSelector, Questionnaires, RequestToServer, UserHospitalPreferences, UserPreferences) {
+        ProfileSelector, RequestToServer, UserHospitalPreferences, UserPreferences) {
 
         let vm = this;
-        let setAccessLevel = () => vm.accessLevelAll = ProfileSelector.getAccessLevel() === "ALL";
+        let setAccessLevel = () => vm.accessLevel = ProfileSelector.getAccessLevel();
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
@@ -92,7 +92,6 @@
                     setAccessLevel();
                 });
             } catch (error) {
-                // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
                 console.error(error);
             }
         }
