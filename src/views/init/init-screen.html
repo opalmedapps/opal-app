@@ -23,6 +23,30 @@ SPDX-License-Identifier: Apache-2.0
     <!-- LIST OF BUTTONS -->
     <div id="listInitApp" class="animate__animated animate__fadeIn ng-cloak listInitApp">
 
+        <init-button text="{{'PARTNERS'|translate}}" ng-click="init.goToPartners()">
+            <left-icon>
+                <ons-icon icon="fa-star fa-lg" style="color:#FFEB3B"></ons-icon>
+            </left-icon>
+        </init-button>
+
+        <init-button text="{{'OPAL_ABOUT'|translate}}" ng-click="init.goToAboutOpal()">
+            <left-icon>
+                <img style="width: 25px;" src="img/Opal_Logo_Transparent_Inverse_Icon.png">
+            </left-icon>
+        </init-button>
+
+        <init-button text="{{'TECHNICAL_LEGAL'|translate}}" ng-click="init.goToTechnicalLegal()">
+            <left-icon>
+                <i class="fa fa-info-circle fa-lg" style="color: grey"></i>
+            </left-icon>
+        </init-button>
+
+        <init-button text="{{'REGISTER_OPAL'|translate}}" ng-click="init.goToRegister()">
+            <left-icon>
+                <i class="fa fa-user-circle fa-lg" style="color:#4CAF50"></i>
+            </left-icon>
+        </init-button>
+
         <!-- PARTNERS -->
         <div class="initScreenButtonDiv">
             <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"

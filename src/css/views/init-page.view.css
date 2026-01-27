@@ -20,6 +20,13 @@
     text-align: center;
     width: 90%;
 }
+.initScreenWhiteButtonNew {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 .initScreenWhiteButton {
     background-color: #F5F5F5;
     font-size: x-large;
@@ -34,6 +41,6 @@
 }
 .initScreenButtonText {
     color: #757575;
-    display: inline-block;
-    margin-left: -10%;
+    /*display: inline-block;*/
+    /*margin-left: -10%;*/
 }
