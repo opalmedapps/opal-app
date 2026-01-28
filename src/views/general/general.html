@@ -4,139 +4,55 @@ SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<ons-page ng-controller="GeneralTabController as tab" ng-device-backbutton="tab.generalDeviceBackButton()">
+<ons-page ng-controller="GeneralTabController as vm" ng-device-backbutton="vm.generalDeviceBackButton()">
     <generic-toolbar title="{{'GENERAL'|translate}}" back-button="false">
         <right-content>
-            <ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html', {id:'general'})">
+            <ons-toolbar-button ng-click="vm.navigator.pushPage('./views/tabs/info-page-tabs.html', {id:'general'})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>
     </generic-toolbar>
+
     <!-- HOSPITAL NAME BAR -->
-    <top-page-banner title="tab.selectedHospitalToDisplay"></top-page-banner>
-    <div>
-        <network-banner></network-banner>
-        <ons-list style="margin: 0px 0">
-            <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('ANN') && tab.allowedModules['ANN']"
-                           ng-click="generalNavigator.pushPage('views/general/announcements/announcements.html')">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <i class="fa-solid fa-bullhorn fa18x" style="color:#FFC107"></i>
-                            <span class="notification" ng-show="tab.announcementsUnreadNumber>0">{{tab.announcementsUnreadNumber}}</span>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title"
-                                  ng-class="fontSizeTitle">{{"GENERAL_ANNOUNCEMENTS"|translate}}</span>
-                        </header>
-                        <p class="item-desc" ng-class="fontSizeDesc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('PAT') && tab.allowedModules['PAT']"
-                           ng-click="tab.goToParking()">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <i class="fa-solid fa-car fa18x" style="color:#f44336"></i>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"PARKING"|translate}}</span>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('FEE') && tab.allowedModules['FEE']"
-                           ng-click="generalNavigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'})">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <ons-icon icon="fa-thumbs-up fa18x" style="color: #4CAF50"></ons-icon>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"FEEDBACK"|translate}}</span>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('FFD') && tab.allowedModules['FFD']"
-                           ng-click="tab.goToUrl('findDoctor')">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <div class="fa-layers fa-2x rounded-icon" style="background-color: #0575B7">
-                                <i class="fa-solid fa-stethoscope" style="color: white" data-fa-transform="shrink-5 left-1"></i>
-                            </div>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"FIND_DOCTOR"|translate}}</span>
-                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
-                                      size="1.2em">
-                            </ons-icon>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('MAS') && tab.allowedModules['MAS']"
-                           ng-click="tab.goToUrl('medicalScheduler')">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <span class="fa-layers fa-2x">
-                                <i class="fa-solid fa-calendar" style="color:#3F5CA7"></i>
-                                <i class="fa-solid fa-clock fa-inverse" data-fa-transform="shrink-8.5 down-3"></i>
-                            </span>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title"
-                                  ng-class="fontSizeTitle">{{"QUEBEC_MEDICAL_SCHEDULER"|translate}}</span>
-                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
-                                      size="1.2em">
-                            </ons-icon>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="item"
-            ng-if="tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']"
-            ng-click="tab.goToCarnetSante()">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <img class="quebec-icon rounded-icon" src="./img/fleur-de-lys-quebec.svg">
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title"
-                                ng-class="fontSizeTitle">{{"CARNET_SANTE"|translate}}</span>
-                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
-                                    size="1.2em">
-                            </ons-icon>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-        </ons-list>
-    </div>
+    <top-page-banner title="vm.selectedHospitalToDisplay"></top-page-banner>
+
+    <network-banner></network-banner>
+
+    <ons-list>
+        <menu-item text="{{'GENERAL_ANNOUNCEMENTS'|translate}}" ng-if="'ANN' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/general/announcements/announcements.html')">
+            <i class="fa-solid fa-bullhorn fa18x" style="color:#FFC107"></i>
+            <span class="notification" ng-show="vm.announcementsUnreadNumber>0">{{vm.announcementsUnreadNumber}}</span>
+        </menu-item>
+
+        <menu-item text="{{'PARKING'|translate}}" ng-if="'PAT' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/general/parking/parking.html')">
+            <i class="fa-solid fa-car fa18x" style="color:#f44336"></i>
+        </menu-item>
+
+        <menu-item text="{{'FEEDBACK'|translate}}" ng-if="'FEE' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/general/feedback/feedback.html', {contentType: 'general'})">
+            <ons-icon icon="fa-thumbs-up fa18x" style="color: #4CAF50"></ons-icon>
+        </menu-item>
+
+        <menu-item text="{{'FIND_DOCTOR'|translate}}" ng-if="'FFD' | moduleIsEnabled : vm.accessLevel"
+                   is-link="true" ng-click="vm.goToUrl('findDoctor')">
+            <div class="fa-layers fa-2x rounded-icon" style="background-color: #0575B7">
+                <i class="fa-solid fa-stethoscope" style="color: white" data-fa-transform="shrink-5 left-1"></i>
+            </div>
+        </menu-item>
+
+        <menu-item text="{{'QUEBEC_MEDICAL_SCHEDULER'|translate}}" ng-if="'MAS' | moduleIsEnabled : vm.accessLevel"
+                   is-link="true" ng-click="vm.goToUrl('medicalScheduler')">
+            <span class="fa-layers fa-2x">
+                <i class="fa-solid fa-calendar" style="color:#3F5CA7"></i>
+                <i class="fa-solid fa-clock fa-inverse" data-fa-transform="shrink-8.5 down-3"></i>
+            </span>
+        </menu-item>
+
+        <menu-item text="{{'CARNET_SANTE'|translate}}" ng-if="'CSQ' | moduleIsEnabled : vm.accessLevel"
+                   is-link="true" ng-click="vm.goToUrl('carnetSante')">
+            <img class="quebec-icon rounded-icon" src="./img/fleur-de-lys-quebec.svg">
+        </menu-item>
+    </ons-list>
 </ons-page>
