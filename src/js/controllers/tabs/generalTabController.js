@@ -17,10 +17,10 @@
             .controller('GeneralTabController', GeneralTabController);
 
         GeneralTabController.$inject = ['$scope', 'Navigator', 'NetworkStatus', '$timeout',
-            'UserPreferences', 'UserHospitalPreferences', 'Browser', 'DynamicContent', 'RequestToServer', 'Params'];
+            'UserHospitalPreferences', 'Browser', 'DynamicContent', 'RequestToServer', 'Params'];
 
         function GeneralTabController($scope, Navigator, NetworkStatus, $timeout,
-                                      UserPreferences, UserHospitalPreferences, Browser, DynamicContent, RequestToServer, Params) {
+                                      UserHospitalPreferences, Browser, DynamicContent, RequestToServer, Params) {
             var vm = this;
 
             vm.goToParking = goToParking;
@@ -44,7 +44,6 @@
 
                 bindEvents();
 
-                vm.language = UserPreferences.getLanguage();
                 configureSelectedHospital();
 
                 if(NetworkStatus.isOnline()) getDisplayData();

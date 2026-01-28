@@ -22,11 +22,11 @@
         .module('OpalApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['UserPreferences', 'Navigator', 'Params', 'UserHospitalPreferences',
+    AboutController.$inject = ['Navigator', 'Params', 'UserHospitalPreferences',
         'Browser', 'DynamicContent'];
 
     /* @ngInject */
-    function AboutController(UserPreferences, Navigator, Params, UserHospitalPreferences, Browser,
+    function AboutController(Navigator, Params, UserHospitalPreferences, Browser,
                              DynamicContent) {
         const vm = this;
         var navigator = null;
@@ -44,8 +44,6 @@
         function activate() {
             parameters = Navigator.getParameters();
             navigator = Navigator.getNavigator();
-
-            vm.language = UserPreferences.getLanguage();
         }
 
         function openUrl(contentKey, openInExternalBrowser = false) {
