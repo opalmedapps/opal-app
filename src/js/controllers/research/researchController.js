@@ -17,14 +17,12 @@
         .module('OpalApp')
         .controller('ResearchController', ResearchController);
 
-    ResearchController.$inject = ['$scope', '$timeout', 'Navigator', 'Params', 'ProfileSelector',
-        'Questionnaires', 'RequestToServer', 'Studies', 'UserHospitalPreferences'];
+    ResearchController.$inject = ['$scope', '$timeout', 'Navigator', 'Params', 'ProfileSelector', 'RequestToServer'];
 
-    function ResearchController($scope, $timeout, Navigator, Params, ProfileSelector,
-                                Questionnaires, RequestToServer, Studies, UserHospitalPreferences) {
+    function ResearchController($scope, $timeout, Navigator, Params, ProfileSelector, RequestToServer) {
         let vm = this;
 
-        vm.allowedModules = {};
+        vm.accessLevel = ProfileSelector.getAccessLevel();
 
         vm.openResearchStudies = openResearchStudies;
         vm.openResearchFeedback = openResearchFeedback;
@@ -43,21 +41,12 @@
             navigator = Navigator.getNavigator();
 
             bindEvents();
-            configureSelectedHospital();
             setBadges();
         }
 
         function bindEvents() {
             navigator.on('prepop', () => setBadges());
             $scope.$on('$destroy', () => navigator.off('prepop'));
-        }
-
-        /**
-         * @name configureSelectedHospital
-         * @desc Set the hospital name to display
-         */
-        function configureSelectedHospital() {
-            vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
         }
 
         async function setBadges() {
@@ -101,6 +90,5 @@
         function openInfoPage() {
             navigator.pushPage('views/tabs/info-page-tabs.html', {id: 'research'});
         }
-
     }
 })();

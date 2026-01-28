@@ -21,9 +21,9 @@ SPDX-License-Identifier: Apache-2.0
 
     <network-banner></network-banner>
 
-    <ons-list style="margin: 0px 0">
+    <ons-list>
         <ons-list-item modifier="chevron" class="item" ng-click="tab.openResearchStudies()"
-            ng-if="tab.allowedModules.hasOwnProperty('STU') && tab.allowedModules['STU']">
+                       ng-if="'STU' | moduleIsEnabled : tab.accessLevel">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -39,7 +39,7 @@ SPDX-License-Identifier: Apache-2.0
             </ons-row>
         </ons-list-item>
         <ons-list-item modifier="chevron" class="item" ng-click="tab.openReferenceMaterial()"
-            ng-if="tab.allowedModules.hasOwnProperty('REF') && tab.allowedModules['REF']">
+                       ng-if="'REF' | moduleIsEnabled : tab.accessLevel">
             <ons-row align="center">
 
                 <ons-col width="60px" style="text-align: center">
@@ -58,7 +58,7 @@ SPDX-License-Identifier: Apache-2.0
             </ons-row>
         </ons-list-item>
         <ons-list-item modifier="chevron" class="item" ng-click="tab.openResearchQuestionnaires()"
-            ng-if="tab.allowedModules.hasOwnProperty('RQU') && tab.allowedModules['RQU']">
+                       ng-if="'RQU' | moduleIsEnabled : tab.accessLevel">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -76,7 +76,7 @@ SPDX-License-Identifier: Apache-2.0
             </ons-row>
         </ons-list-item>
         <ons-list-item modifier="chevron" class="item" ng-click="tab.openConsentForms()"
-            ng-if="tab.allowedModules.hasOwnProperty('CON') && tab.allowedModules['CON']">
+                       ng-if="'CON' | moduleIsEnabled : tab.accessLevel">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -95,8 +95,8 @@ SPDX-License-Identifier: Apache-2.0
             </ons-row>
         </ons-list-item>
         <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('RFE') && tab.allowedModules['RFE']"
-                           ng-click="tab.openResearchFeedback()">
+                       ng-if="'RFE' | moduleIsEnabled : tab.accessLevel"
+                       ng-click="tab.openResearchFeedback()">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
