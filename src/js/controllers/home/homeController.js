@@ -22,8 +22,6 @@
     ) {
         let vm = this;
 
-        vm.language = '';
-
         vm.checkinState = {
             noAppointments: true,
             allCheckedIn: false,
@@ -150,7 +148,6 @@
          */
         function setPatientInfo() {
             vm.userInfo = User.getUserInfo();
-            vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments = false;
         }
 
