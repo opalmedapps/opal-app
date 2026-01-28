@@ -31,10 +31,8 @@
             inRange: true
         };
 
-        // variable to let the user know which hospital they are logged in
-        vm.selectedHospitalToDisplay = "";
-        // control the modules to display to users
-        vm.allowedModules = {};
+        vm.accessLevel = ProfileSelector.getAccessLevel();
+        vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
 
         // For displaying the closest upcoming appointment
         vm.closestAppointment = null;
@@ -64,10 +62,9 @@
             //Initialize the page interval to refresh checkin state every 5 second
             setInterval();
             bindEvents();
+
             // Initialize the page data if online
             NetworkStatus.isOnline() ? homePageInit() : setPatientInfo();
-            // set the hospital banner and available modules
-            configureSelectedHospital();
         }
 
         /**
@@ -164,15 +161,6 @@
                 rcorners.setAttribute("style", "height: 60%");
             }
             else rcorners.setAttribute("style", "height: 50%");
-        }
-
-        /**
-         * @name configureSelectedHospital
-         * @desc Set the hospital name to display
-         */
-        function configureSelectedHospital() {
-            vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
-            vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
         }
 
         /*

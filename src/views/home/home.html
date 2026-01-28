@@ -78,7 +78,8 @@ SPDX-License-Identifier: Apache-2.0
             NOTIFICATIONS
             ================================
             -->
-            <ons-list-item modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('NTF') && Ctrl.allowedModules['NTF']" ng-click="homeNavigator.pushPage('views/personal/notifications/notifications.html')">
+            <ons-list-item modifier="chevron" class="item" ng-if="'NTF' | moduleIsEnabled : Ctrl.accessLevel"
+                           ng-click="homeNavigator.pushPage('views/personal/notifications/notifications.html')">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <ons-icon
@@ -107,7 +108,7 @@ SPDX-License-Identifier: Apache-2.0
             <!-- The button is initialized with the "non-navigable" class; this is updated later in the controller according to the check-in state -->
             <ons-list-item
                 id="check-in-button"
-                ng-if="Ctrl.allowedModules.hasOwnProperty('CHK') && Ctrl.allowedModules['CHK']"
+                ng-if="'CHK' | moduleIsEnabled : Ctrl.accessLevel"
                 modifier="chevron tappable"
                 class="item non-navigable"
                 ng-click="Ctrl.checkinState.canNavigate ? Ctrl.goToCheckinAppointments() : undefined">
@@ -147,7 +148,8 @@ SPDX-License-Identifier: Apache-2.0
             APPOINTMENT STATUS
             ================================
             -->
-            <ons-list-item modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('APT') && Ctrl.allowedModules['APT']" ng-click="Ctrl.goToAppointments()">
+            <ons-list-item modifier="chevron" class="item" ng-if="'APT' | moduleIsEnabled : Ctrl.accessLevel"
+                           ng-click="Ctrl.goToAppointments()">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <i class="fa-regular fa-calendar-days fa-2x" style="color: #ffc107"></i>
