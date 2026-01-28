@@ -16,17 +16,16 @@
         .module('OpalApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['$filter', '$timeout', 'Navigator', 'NetworkStatus', 'Params',
+    PersonalTabController.$inject = ['$filter', '$scope', '$timeout', 'Navigator', 'NetworkStatus', 'Params',
         'ProfileSelector', 'RequestToServer', 'UserHospitalPreferences'];
 
-    function PersonalTabController($filter, $timeout, Navigator, NetworkStatus, Params,
+    function PersonalTabController($filter, $scope, $timeout, Navigator, NetworkStatus, Params,
         ProfileSelector, RequestToServer, UserHospitalPreferences) {
 
         let vm = this;
         let setAccessLevel = () => vm.accessLevel = ProfileSelector.getAccessLevel();
 
         vm.navigator = undefined;
-        // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
 
         vm.getDisplayData = getDisplayData;
@@ -53,11 +52,18 @@
             vm.navigator.on('prepop', function () {
                 if (NetworkStatus.isOnline()) getDisplayData();
             });
-            //This avoids constant repushing which causes bugs
+
+            // This avoids constant repushing which causes bugs
             vm.navigator.on('prepush', function (event) {
                 if (vm.navigator._doorLock.isLocked()) {
                     event.cancel();
                 }
+            });
+
+            // Destroying navigator events
+            $scope.$on('$destroy', () => {
+                vm.navigator.off('prepop');
+                vm.navigator.off('prepush');
             });
         }
 

@@ -46,7 +46,7 @@
                 </ons-list-item>
             `,
             link: function(scope) {
-                if (scope.chevron && scope.isLink) throw 'A menu item cannot be configured with both a chevron and an "open link" icon';
+                if (scope.chevron && scope.isLink) throw 'A menu item should not be configured with both a chevron and an "open link" icon';
             }
         };
         return directive;
