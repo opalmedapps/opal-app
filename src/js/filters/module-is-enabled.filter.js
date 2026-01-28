@@ -20,7 +20,7 @@
         return (module, profileAccessLevel) => {
             const needToKnow = profileAccessLevel === "NTK";
             const disabledNeedToKnow = needToKnow && Params.modulesDisabledNeedToKnow.includes(module);
-            const hospitalModuleEnabled = UserHospitalPreferences.getHospitalAllowedModules()[module];
+            const hospitalModuleEnabled = !!UserHospitalPreferences.getHospitalAllowedModules()[module];
 
             return module && hospitalModuleEnabled && !disabledNeedToKnow;
         };
