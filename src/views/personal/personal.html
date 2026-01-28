@@ -4,77 +4,76 @@ SPDX-FileCopyrightText: Copyright (C) 2016 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
-<ons-page ng-controller="PersonalTabController as tab" ng-device-backbutton="tab.personalDeviceBackButton()">
-    <profile-selector refresh-function="tab.getDisplayData">
+<ons-page ng-controller="PersonalTabController as vm" ng-device-backbutton="vm.personalDeviceBackButton()">
+    <profile-selector refresh-function="vm.getDisplayData">
         <right-content>
-            <ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html', {id:'chart'})">
+            <ons-toolbar-button ng-click="vm.navigator.pushPage('views/tabs/info-page-tabs.html', {id:'chart'})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>
     </profile-selector>
 
     <!-- HOSPITAL NAME BAR -->
-    <top-page-banner title="tab.selectedHospitalToDisplay"></top-page-banner>
+    <top-page-banner title="vm.selectedHospitalToDisplay"></top-page-banner>
 
     <network-banner></network-banner>
-    <div>
-        <ons-list style="margin: 0px 0">
-            <menu-item text="{{'DIAGNOSIS'|translate}}" ng-if="'DIA' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
-                <i class="fa-solid fa-stethoscope fa18x" style="color: #994741"></i>
-            </menu-item>
 
-            <menu-item text="{{'APPOINTMENTS'|translate}}" ng-if="'APT' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
-                <i class="fa-regular fa-calendar-days fa-2x" style="color: #FFC107"></i>
-                <span class="notification" ng-show="tab.appointmentsUnreadNumber > 0">{{tab.appointmentsUnreadNumber}}</span>
-            </menu-item>
+    <ons-list>
+        <menu-item text="{{'DIAGNOSIS'|translate}}" ng-if="'DIA' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/diagnosis/diagnosis.html')">
+            <i class="fa-solid fa-stethoscope fa18x" style="color: #994741"></i>
+        </menu-item>
 
-            <menu-item text="{{'LAB_RESULTS'|translate}}" ng-if="'LAB' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="personalNavigator.pushPage('views/personal/test-results/test-results.html')">
-                <i class="ion-erlenmeyer-flask" style="color:#8BC34A; font-size: 2.2em"></i>
-                <span class="notification" ng-show="tab.labsUnreadNumber > 0">{{tab.labsUnreadNumber}}</span>
-            </menu-item>
+        <menu-item text="{{'APPOINTMENTS'|translate}}" ng-if="'APT' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/appointments/appointments.html')">
+            <i class="fa-regular fa-calendar-days fa-2x" style="color: #FFC107"></i>
+            <span class="notification" ng-show="vm.appointmentsUnreadNumber > 0">{{vm.appointmentsUnreadNumber}}</span>
+        </menu-item>
 
-            <menu-item text="{{'CLINICAL_REPORTS'|translate}}" ng-if="'DOC' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="personalNavigator.pushPage('views/personal/documents/documents.html')">
-                <i class="fa-regular fa-folder-open fa18x" style="color:#ffdf80; margin-left: 2px"></i>
-                <span class="notification" ng-show="tab.documentsUnreadNumber > 0">{{tab.documentsUnreadNumber}}</span>
-            </menu-item>
+        <menu-item text="{{'LAB_RESULTS'|translate}}" ng-if="'LAB' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/test-results/test-results.html')">
+            <i class="ion-erlenmeyer-flask" style="color:#8BC34A; font-size: 2.2em"></i>
+            <span class="notification" ng-show="vm.labsUnreadNumber > 0">{{vm.labsUnreadNumber}}</span>
+        </menu-item>
 
-            <menu-item text="{{'IPS_FULL'|translate}}" ng-if="'IPS' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="personalNavigator.pushPage('views/personal/ips/ips-description.html')">
-                <ons-icon icon="fa-receipt" size="2x" style="color: #708ee9"></ons-icon>
-            </menu-item>
+        <menu-item text="{{'CLINICAL_REPORTS'|translate}}" ng-if="'DOC' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/documents/documents.html')">
+            <i class="fa-regular fa-folder-open fa18x" style="color:#ffdf80; margin-left: 2px"></i>
+            <span class="notification" ng-show="vm.documentsUnreadNumber > 0">{{vm.documentsUnreadNumber}}</span>
+        </menu-item>
 
-            <menu-item text="{{'TREATING_TEAM_NOTIFICATIONS'|translate}}" ng-if="'TTM' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
-                <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon>
-                <span class="notification" ng-show="tab.txTeamMessagesUnreadNumber > 0">{{tab.txTeamMessagesUnreadNumber}}</span>
-            </menu-item>
+        <menu-item text="{{'IPS_FULL'|translate}}" ng-if="'IPS' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/ips/ips-description.html')">
+            <ons-icon icon="fa-receipt" size="2x" style="color: #708ee9"></ons-icon>
+        </menu-item>
 
-            <menu-item text="{{'EDUCATION'|translate}}" ng-if="'EDU' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="tab.goToClinicalReference()">
-                <i class="fa fa-solid fa-book fa-2x" style="color: #9575CD"></i>
-                <span class="notification" ng-show="tab.educationalMaterialsUnreadNumber > 0">{{tab.educationalMaterialsUnreadNumber}}</span>
-            </menu-item>
+        <menu-item text="{{'TREATING_TEAM_NOTIFICATIONS'|translate}}" ng-if="'TTM' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
+            <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon>
+            <span class="notification" ng-show="vm.txTeamMessagesUnreadNumber > 0">{{vm.txTeamMessagesUnreadNumber}}</span>
+        </menu-item>
 
-            <menu-item text="{{'CLINICAL_QUESTIONNAIRES'|translate}}" ng-if="'QUE' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="tab.goToClinicalQuestionnaire()">
-                <i class="ion-clipboard" style="color:#607d8b; font-size: 2.2em"></i>
-                <span class="notification" ng-show="tab.questionnairesUnreadNumber>0">{{tab.questionnairesUnreadNumber}}</span>
-            </menu-item>
+        <menu-item text="{{'EDUCATION'|translate}}" ng-if="'EDU' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/education/education.html', {category: 'clinical'})">
+            <i class="fa fa-solid fa-book fa-2x" style="color: #9575CD"></i>
+            <span class="notification" ng-show="vm.educationalMaterialsUnreadNumber > 0">{{vm.educationalMaterialsUnreadNumber}}</span>
+        </menu-item>
 
-            <menu-item text="{{'RESEARCH'|translate}}" ng-if="'RES' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="personalNavigator.pushPage('views/personal/research/research.html')">
-                <i class="fa-solid fa-microscope fa-2x" style="color: #333"></i>
-                <span class="notification" ng-show="tab.researchUnreadNumber>0">{{tab.researchUnreadNumber}}</span>
-            </menu-item>
+        <menu-item text="{{'CLINICAL_QUESTIONNAIRES'|translate}}" ng-if="'QUE' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/questionnaires/questionnairesList.html', {questionnairePurpose: 'clinical'})">
+            <i class="ion-clipboard" style="color:#607d8b; font-size: 2.2em"></i>
+            <span class="notification" ng-show="vm.questionnairesUnreadNumber>0">{{vm.questionnairesUnreadNumber}}</span>
+        </menu-item>
 
-            <menu-item text="{{'SMART_DEVICES'|translate}}" ng-if="'SMD' | moduleIsEnabled : tab.accessLevel"
-                       chevron="true" ng-click="personalNavigator.pushPage('views/smartdevices/smartdevices.html')">
-                <ons-icon icon="fa-heartbeat" size="2x" style="color:#f44336"></ons-icon>
-            </menu-item>
-        </ons-list>
-    </div>
+        <menu-item text="{{'RESEARCH'|translate}}" ng-if="'RES' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/research/research.html')">
+            <i class="fa-solid fa-microscope fa-2x" style="color: #333"></i>
+            <span class="notification" ng-show="vm.researchUnreadNumber>0">{{vm.researchUnreadNumber}}</span>
+        </menu-item>
+
+        <menu-item text="{{'SMART_DEVICES'|translate}}" ng-if="'SMD' | moduleIsEnabled : vm.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/smartdevices/smartdevices.html')">
+            <ons-icon icon="fa-heartbeat" size="2x" style="color:#f44336"></ons-icon>
+        </menu-item>
+    </ons-list>
 </ons-page>
