@@ -65,6 +65,11 @@ SPDX-License-Identifier: Apache-2.0
             <span class="notification" ng-show="vm.questionnairesUnreadNumber>0">{{vm.questionnairesUnreadNumber}}</span>
         </menu-item>
 
+        <menu-item text="{{'ONCE_ONLY_QUESTIONS'|translate}}" ng-if="'OOQ' | moduleIsEnabled : tab.accessLevel"
+                   chevron="true" ng-click="vm.navigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {onceOnly: true})">
+            <i class="fa-solid fa-clipboard-question" style="color:#7b96a3; font-size: 2.2em"></i>
+        </menu-item>
+
         <menu-item text="{{'RESEARCH'|translate}}" ng-if="'RES' | moduleIsEnabled : vm.accessLevel"
                    chevron="true" ng-click="vm.navigator.pushPage('views/personal/research/research.html')">
             <i class="fa-solid fa-microscope fa-2x" style="color: #333"></i>

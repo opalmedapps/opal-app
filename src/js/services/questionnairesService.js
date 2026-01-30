@@ -41,6 +41,7 @@
             research: 'RESEARCH_QUESTIONNAIRES',
             consent: 'CONSENT_FORMS',
             default: 'QUESTIONNAIRES',
+             'once-only': 'ONCE_ONLY_QUESTIONS',
         };
 
         const PURPOSE_EMPTY_LIST_MAP = {
@@ -49,18 +50,21 @@
                 research: 'QUESTIONNAIRE_NONE_NEW',
                 consent: 'CONSENT_FORMS_NONE_NEW',
                 default: 'QUESTIONNAIRE_NONE_NEW',
+                'once-only': 'QUESTIONNAIRE_NONE_NEW',
             },
             progress: {
                 clinical: 'QUESTIONNAIRE_NONE_PROGRESS',
                 research: 'QUESTIONNAIRE_NONE_PROGRESS',
                 consent: 'CONSENT_FORMS_NONE_PROGRESS',
                 default: 'QUESTIONNAIRE_NONE_PROGRESS',
+                'once-only': 'QUESTIONNAIRE_NONE_PROGRESS',
             },
             completed: {
                 clinical: 'QUESTIONNAIRE_NONE_COMPLETED',
                 research: 'QUESTIONNAIRE_NONE_COMPLETED',
                 consent: 'CONSENT_FORMS_NONE_COMPLETED',
                 default: 'QUESTIONNAIRE_NONE_COMPLETED',
+                'once-only': 'QUESTIONNAIRE_NONE_COMPLETED',
             }
         };
 
@@ -69,6 +73,7 @@
             research: 'QUESTIONNAIRE_THANKS',
             consent: 'CONSENT_FORM_THANKS',
             default: 'QUESTIONNAIRE_THANKS',
+            'once-only': 'QUESTIONNAIRE_THANKS',
         };
 
         const PURPOSE_LIST_MAP = {
@@ -76,6 +81,7 @@
             research: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
             consent: 'CONSENT_FORM_GO_BACK_TO_LIST',
             default: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+            'once-only': 'QUESTIONNAIRE_GO_BACK_TO_LIST',
         }
 
         const PURPOSE_BEGIN_MAP = {
@@ -83,6 +89,7 @@
             research: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
             consent: 'CONSENT_FORM_BEGIN_INSTRUCTION',
             default: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+            'once-only': 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
         };
 
         const PURPOSE_RESUME_MAP = {
@@ -90,6 +97,7 @@
             research: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
             consent: 'CONSENT_FORM_RESUME_INSTRUCTION',
             default: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+            'once-only': 'QUESTIONNAIRE_RESUME_INSTRUCTION',
         };
 
         const PURPOSE_SUBMIT_BUTTON_MAP = {
@@ -97,6 +105,7 @@
             research: 'SUBMIT_ANSWERS',
             consent: 'SUBMIT_CONSENT',
             default: 'SUBMIT_ANSWERS',
+            'once-only': 'SAVE_ANSWERS',
         };
 
         const PURPOSE_SUBMIT_INSTRUCTION_MAP = {
@@ -104,6 +113,7 @@
             research: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
             consent: 'CONSENT_FORM_SUBMIT_INSTRUCTION',
             default: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+            'once-only': 'QUESTIONNAIRE_SAVE_INSTRUCTION',
         };
 
         // constants for the app notifications
