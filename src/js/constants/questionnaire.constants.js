@@ -50,7 +50,15 @@
                 'ANSWER_CHANGED': '2',
                 'ANSWER_SAVING_WAITING_TIME': 30000
             },
-            QUESTIONNAIRE_PURPOSES: ['clinical', 'research', 'quality', 'consent', 'clerical', 'opal'],
+            QUESTIONNAIRE_PURPOSES: [
+                'clerical',
+                'clinical',
+                'consent',
+                'once-only',
+                'opal',
+                'quality',
+                'research',
+            ],
             BACKEND_ERROR_CODES: {
                 'LOCKING_ERROR': '-8',
                 'NOT_ALLOWED_TO_ANSWER': 'Not allowed'

@@ -123,6 +123,7 @@
                             "IPS": 1, // International Patient Summary
                             "TTM": 1, // Treating team messages
                             "QUE": 1, // Questionnaires
+                            "OOQ": 1, // Once-only questions
                             "CSQ": 1, // Carnet Santé Québec
                             "RES": 1, // Research menu
                             "STU": 0, // Research studies
@@ -160,6 +161,7 @@
                             "IPS": 0,
                             "TTM": 1,
                             "QUE": 1,
+                            "OOQ": 0,
                             "CSQ": 1,
                             "RES": 1,
                             "STU": 0,
@@ -193,6 +195,7 @@
                             "IPS": 1,
                             "TTM": 1,
                             "QUE": 1,
+                            "OOQ": 1,
                             "CSQ": 1,
                             "RES": 1,
                             "STU": 0,
@@ -226,6 +229,7 @@
                             "IPS": 1,
                             "TTM": 1,
                             "QUE": 1,
+                            "OOQ": 1,
                             "CSQ": 1,
                             "RES": 1,
                             "STU": 0,
@@ -259,6 +263,7 @@
                             "IPS": 0,
                             "TTM": 0,
                             "QUE": 0,
+                            "OOQ": 0,
                             "CSQ": 0,
                             "RES": 0,
                             "STU": 0,
