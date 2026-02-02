@@ -20,7 +20,6 @@
         '$filter',
         '$scope',
         '$timeout',
-        'NativeNotification',
         'Navigator',
         'Params',
         'Questionnaires',
@@ -28,7 +27,7 @@
     ];
 
     /* @ngInject */
-    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires, UpdateUI) {
+    function QuestionnairesListController($filter, $scope, $timeout, Navigator, Params, Questionnaires, UpdateUI) {
 
         let vm = this;
 

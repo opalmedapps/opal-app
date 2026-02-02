@@ -201,7 +201,7 @@
   "QUESTIONNAIRE_NONE_PROGRESS": "No questionnaires in progress.",
   "QUESTIONNAIRE_NOT_ALLOWED_TO_ANSWER": "Your level of access to this patient's data does not allow answering questionnaires on their behalf. Once the questionnaire has been completed by another user, you'll be able to view the answers on the Completed tab.",
   "QUESTIONNAIRE_RESUME_INSTRUCTION": "Tap \"Resume\" or swipe to the left to resume the questionnaire.",
-  "QUESTIONNAIRE_SAVE_INSTRUCTION": "When visiting different clinics or doctors, you may be asked the same questions over and over. This page provides a place to answer these questions once and for all. For more details, click on the information icon at the top of this page. All questions are optional depending on your needs.",
+  "QUESTIONNAIRE_SAVE_INSTRUCTION": "When visiting different clinics or doctors, you may be asked the same questions over and over. This page provides a place to answer these questions once and for all. All questions are optional depending on your needs.",
   "QUESTIONNAIRE_SECTION_INSTRUCTION": "Section instruction:",
   "QUESTIONNAIRE_SELECT": "Select",
   "QUESTIONNAIRE_SUBMIT_AS_OTHER": "Submitting answers as: {userName} (on behalf of {patientName})",

@@ -78,14 +78,9 @@
 
         function activate() {
             navigator = Navigator.getNavigator();
-
             let params = Navigator.getParameters();
 
-            if (!params.hasOwnProperty('answerQuestionnaireId')){
-                vm.loadingQuestionnaire = false;
-
-                handleLoadQuestionnaireErr();
-            }
+            const onceOnly = !!params?.onceOnly;
 
             // Get the user and patient names to display on the submission page
             vm.isAnsweringAsSelf = ProfileSelector.currentProfileIsSelf();
@@ -96,8 +91,16 @@
                 patientName: `${patient.first_name} ${patient.last_name}`,
             };
 
-            Questionnaires.requestQuestionnaire(params.answerQuestionnaireId)
-                .then(function(){
+            if (onceOnly) {
+                // TODO special configuration for once-only questionnaires can go here
+            }
+
+            if (!params.hasOwnProperty('answerQuestionnaireId')){
+                vm.loadingQuestionnaire = false;
+                handleLoadQuestionnaireErr();
+            }
+            else {
+                Questionnaires.requestQuestionnaire(params.answerQuestionnaireId).then(function(){
                     $timeout(function(){
                         vm.questionnaire = Questionnaires.getCurrentQuestionnaire();
 
@@ -125,6 +128,7 @@
                         handleLoadQuestionnaireErr();
                     });
                 });
+            }
         }
 
         /**

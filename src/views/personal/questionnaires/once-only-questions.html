@@ -1,0 +1,17 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2026 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="OnceOnlyController as vm">
+    <generic-toolbar title="{{'ONCE_ONLY_QUESTIONS'|translate}}"></generic-toolbar>
+
+    <network-banner></network-banner>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="QuestionnaireList"
+                          display-function="vm.display"
+                          use-parameters="{{vm.dataHandlerParameters}}">
+    </patient-data-handler>
+</ons-page>

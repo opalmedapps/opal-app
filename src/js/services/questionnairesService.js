@@ -20,15 +20,13 @@
      this factory is named with a s for questionnaire simply to match the existing file name, which is not good
     */
     Questionnaires.$inject = [
-        '$sce',
         'Params',
         'QuestionnaireDataService',
         'User',
-        'UserAuthorizationInfo',
     ];
 
     /* @ngInject */
-    function Questionnaires($sce, Params, QuestionnaireDataService, User, UserAuthorizationInfo) {
+    function Questionnaires(Params, QuestionnaireDataService, User) {
         // constants for DB conventions
         const questionnaireValidStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const questionnaireValidType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
