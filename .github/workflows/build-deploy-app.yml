@@ -95,7 +95,7 @@ jobs:
       # Setup
       - name: Print environment
         run: echo "Environment = $ENVIRONMENT"
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5.0.1
         with:
           persist-credentials: false
           # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
@@ -226,7 +226,7 @@ jobs:
       # Setup
       - name: Print environment
         run: echo "Environment = $ENVIRONMENT"
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5.0.1
         with:
           persist-credentials: false
           # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
@@ -342,7 +342,7 @@ jobs:
     runs-on: macos-latest
     steps:
       # Setup
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5.0.1
         with:
           persist-credentials: false
       - name: Download iOS release build artifact
@@ -368,7 +368,7 @@ jobs:
     if: ${{ inputs.DEPLOY_STORES }}
     steps:
       # Setup
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v5.0.1
         with:
           persist-credentials: false
       - name: Download iOS release build artifact
