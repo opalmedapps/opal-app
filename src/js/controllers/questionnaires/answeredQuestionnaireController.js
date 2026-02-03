@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import '../../../css/views/answered-questionnaire.view.css';
+
 (function () {
     'use strict';
 
@@ -68,9 +70,9 @@
         vm.questionOnClick = questionOnClick;
         vm.submitQuestionnaire = submitQuestionnaire;
         vm.updateRequirePassword = updateRequirePassword
-        vm.isInvalidAnswerForQuestion = isInvalidAnswerForQuestion;
-        vm.isValidAnswerForQuestionAndNotSlider = isValidAnswerForQuestionAndNotSlider;
-        vm.isValidAnswerForQuestionAndSlider = isValidAnswerForQuestionAndSlider;
+        vm.isCompleted = () => vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
+        vm.isSlider = question => question.type_id === vm.allowedType.SLIDER_TYPE_ID;
+        vm.isDefinedAnswer = question => question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED;
 
         activate();
 
@@ -373,26 +375,36 @@
          * @desc Set the question's style to display on the front end
          *      The question is of color:
          *          red if the questionnaire is not completed and the question does not have a valid answer
-         *          green if the questionnaire is not completed and the question do have a valid answer
+         *          green if the questionnaire is not completed and the question does have a valid (defined) answer
+         *          white if the questionnaire is not completed and the question is unanswered but optional
          *          white if the questionnaire is completed or otherwise
          * @param {int} status the status of the questionnaire
          * @param {object} question the question itself
          */
-        function setQuestionStyle(status, question){
+        function setQuestionStyle(status, question) {
+            const redBackground = { 'background-color': '#d9534f' }
+            const whiteBackground = { 'background-color': 'white' }
+            const greenBackground = { 'background-color': '#5cd65c' }
+            const whiteLabel = { 'color': 'white' }
+            const blueLabel = { 'color': '#2664ABCC' }
+
             if (status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS){
                 if (question.optional === '0' && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED){
-                    question.style = {
-                        'background-color': '#d9534f',
-                    }
-                } else {
-                    question.style = {
-                        'background-color': '#5cd65c',
-                    }
+                    question.backgroundColor = redBackground;
+                    question.labelColor = whiteLabel;
                 }
-            } else {
-                question.style = {
-                    'background-color': 'white',
+                else if (question.optional === '1' && question.patient_answer.is_defined === '0') {
+                    question.backgroundColor = whiteBackground;
+                    question.labelColor = blueLabel;
                 }
+                else {
+                    question.backgroundColor = greenBackground;
+                    question.labelColor = whiteLabel;
+                }
+            }
+            else {
+                question.backgroundColor = whiteBackground;
+                question.labelColor = blueLabel;
             }
         }
 
@@ -482,40 +494,5 @@
         function updateRequirePassword() {
             vm.requirePassword = purpose === 'consent' && vm.consentStatus === true;
         }
-
-        /**
-         * @name isInvalidAnswerForQuestion
-         * @desc Non completed questionnaire and invalid answer for the question
-         * @returns {boolean}
-         */
-         function isInvalidAnswerForQuestion(question) {
-            return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
-                && question.optional === '0'
-                && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED
-        }
-
-        /**
-         * @name isValidAnswerForQuestionAndNotSlider
-         * @desc Non completed questionnaire, valid answer for the question, and not slider
-         * @returns {boolean}
-         */
-         function isValidAnswerForQuestionAndNotSlider(question) {
-            return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
-                && question.type_id !== vm.allowedType.SLIDER_TYPE_ID
-                && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED);
-        }
-
-        /**
-         * @name isValidAnswerForQuestionAndSlider
-         * @desc Non completed questionnaire, valid answer for the question, and slider
-         * @returns {boolean}
-         */
-        function isValidAnswerForQuestionAndSlider(question) {
-            return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
-                && question.type_id === vm.allowedType.SLIDER_TYPE_ID
-                && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED);
-        }
-
     }
-
 })();

@@ -114,69 +114,77 @@ SPDX-License-Identifier: Apache-2.0
                 <ul class="list" style="width: 100vw;"
                     ng-repeat="question in section.questions | orderBy: 'question_position' track by $index">
 
-                    <li class="list__item" ng-style="question.style"
+                    <li class="list__item" ng-style="question.backgroundColor"
                         style="border-bottom: none !important; border-top: 1px solid #ddd" ng-class="fontSizeDesc">
 
                         <ons-row style="margin:0;padding:0" align="center"
                             ng-click="vm.questionOnClick($parent.$index, $index, question);">
+
+                            <!-- Short display text for each question -->
                             <ons-col align="left" style="border:1px solid white;color:white">
                                 <div style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
                                     <span style="color:rgba(38,100,171,0.81)">#{{$index+1}}</span>
                                     <span ng-bind-html="question.question_display | trustHTML"></span>
                                 </div>
                             </ons-col>
+
+                            <!-- Label to the right of each question -->
                             <ons-col align="center" width="25%">
-                                <!-- completed questionnaire but slider type: special case-->
+
+                                <!-- Completed questionnaire, slider type -->
                                 <span
-                                    ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id === vm.allowedType.SLIDER_TYPE_ID"
-                                    style="float: right; color: rgba(38,100,171,0.81);">
+                                    ng-if="vm.isCompleted() && vm.isSlider(question)"
+                                    class="answered--label" ng-style="question.labelColor">
                                     {{question.patient_answer.answer[0].answer_value}}/{{question.options[0].max_value}}
                                 </span>
 
-                                <!-- completed questionnaire but not slider type: toggle dropdown menu -->
+                                <!-- Completed questionnaire, not slider type -->
                                 <span
-                                    ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID">
+                                    ng-if="vm.isCompleted() && !vm.isSlider(question)">
                                     <p ng-if="!question.showAnswer"
-                                        style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81); white-space:nowrap;">
+                                       class="answered--label" ng-style="question.labelColor">
                                         {{"SHOW"|translate}}
                                         <i class="ion-chevron-right" style="padding-left: 2vw;"></i>
                                     </p>
                                     <p ng-if="question.showAnswer"
-                                        style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81); white-space:nowrap;">
+                                       class="answered--label" ng-style="question.labelColor">
                                         {{"HIDE"|translate}}
                                         <i class="ion-chevron-down" style="padding-left: 2vw"></i>
                                     </p>
                                 </span>
 
-                                <!-- Non completed questionnaire and invalid answer for the question -->
+                                <!-- Non completed questionnaire, empty or invalid answer for the question -->
                                 <span
-                                    ng-if="vm.isInvalidAnswerForQuestion(question)"
-                                    style="float: right; margin-right: 0px; color: white">
-                                    <p style="white-space: nowrap;"><i class="ion-chevron-left"></i>
-                                        {{"ANSWER"|translate}} </p>
+                                    ng-if="!vm.isCompleted() && !vm.isDefinedAnswer(question)"
+                                    class="answered--label" ng-style="question.labelColor">
+                                    <p>
+                                        <i class="ion-chevron-left"></i>
+                                        {{"ANSWER"|translate}}
+                                    </p>
                                 </span>
 
-                                <!-- Non completed questionnaire, valid answer for the question, and not slider -->
+                                <!-- Non completed questionnaire, defined answer for the question, and not slider -->
                                 <span
-                                    ng-if="vm.isValidAnswerForQuestionAndNotSlider(question)">
+                                    ng-if="!vm.isCompleted() && vm.isDefinedAnswer(question) && !vm.isSlider(question)">
                                     <p ng-if="!question.showAnswer"
-                                        style="float: right; margin-right: 0px; color: white; white-space:nowrap;">
-                                        {{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i>
+                                       class="answered--label" ng-style="question.labelColor">
+                                        {{"SHOW"|translate}}
+                                        <i class="ion-chevron-right" style="padding-left: 2vw"></i>
                                     </p>
                                     <p ng-if="question.showAnswer"
-                                        style="float: right; margin-right: 0px; color: white; white-space:nowrap;">
-                                        {{"HIDE"|translate}}<i class="ion-chevron-down" style="padding-left: 2vw"></i>
+                                       class="answered--label" ng-style="question.labelColor">
+                                        {{"HIDE"|translate}}
+                                        <i class="ion-chevron-down" style="padding-left: 2vw"></i>
                                     </p>
                                 </span>
 
-                                <!-- Non completed questionnaire, valid answer for the question, and slider -->
+                                <!-- Non completed questionnaire, defined answer for the question, and slider -->
                                 <span
-                                    ng-if="vm.isValidAnswerForQuestionAndSlider(question)"
-                                    style="float: right; margin-right: 0px; color: white">
+                                    ng-if="!vm.isCompleted() && vm.isDefinedAnswer(question) && vm.isSlider(question)"
+                                    class="answered--label" ng-style="question.labelColor">
                                     <i class="ion-chevron-left"></i>
                                     {{question.patient_answer.answer[0].answer_value}}/{{question.options[0].max_value}}
                                 </span>
-
                             </ons-col>
                         </ons-row>
                     </li>
