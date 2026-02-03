@@ -1,6 +1,6 @@
 {
   "ADDED": "Hinzugefügt am",
-  "ANSWER": "Antwort",
+  "ANSWER": "Antworten",
   "APPOINTMENT": "Behandlungstermin",
   "APPOINTMENTS": "Behandlungstermine",
   "APPOINTMENT_ABOUT": "Über diesen Behandlungstermin",
@@ -190,7 +190,7 @@
   "QUESTIONNAIRE_GO_TO_QUESTION": "Zur Frage",
   "QUESTIONNAIRE_HOME": "Start",
   "QUESTIONNAIRE_INSTRUCTION": "Anweisung: ",
-  "QUESTIONNAIRE_INSTRUCTIONS": "Beantworten Sie die roten Fragen. Grüne Fragen können bearbeitet werden. Sobald alle Fragen beantwortet sind, können Sie den Fragebogen einreichen.",
+  "QUESTIONNAIRE_INSTRUCTIONS": "Beantworten Sie die roten Fragen. Alle Fragen können bearbeitet werden. Sobald alle Fragen beantwortet sind, können Sie den Fragebogen einreichen.",
   "QUESTIONNAIRE_IN_PROGRESS": "In Bearbeitung",
   "QUESTIONNAIRE_IN_PROGRESS_BY": "In Bearbeitung durch:",
   "QUESTIONNAIRE_LOCKING_ERROR": "Dieser Fragebogen kann nicht beantwortet werden, da ein anderer Benutzer mit Zugriff auf diese Patientenakte bereits begonnen hat. Sobald dieser Benutzer den Fragebogen ausgefüllt hat, können Sie die Antworten im Reiter „Ausgefüllt“ einsehen.",

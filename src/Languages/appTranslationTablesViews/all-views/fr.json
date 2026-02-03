@@ -1,6 +1,6 @@
 {
   "ADDED": "Reçu à",
-  "ANSWER": "Réponse",
+  "ANSWER": "Répondre",
   "APPOINTMENT": "Rendez-vous",
   "APPOINTMENTS": "Rendez-vous",
   "APPOINTMENT_ABOUT": "À propos de ce rendez-vous",
@@ -190,7 +190,7 @@
   "QUESTIONNAIRE_GO_TO_QUESTION": "Aller à la question",
   "QUESTIONNAIRE_HOME": "Accueil",
   "QUESTIONNAIRE_INSTRUCTION": "Instruction: ",
-  "QUESTIONNAIRE_INSTRUCTIONS": "Répondez aux questions en rouge. Les questions en vert peuvent être modifiées. Une fois toutes les questions répondues, vous pouvez soumettre vos réponses.",
+  "QUESTIONNAIRE_INSTRUCTIONS": "Répondez aux questions en rouge. Toutes les questions peuvent être modifiées. Une fois toutes les questions répondues, vous pouvez soumettre vos réponses.",
   "QUESTIONNAIRE_IN_PROGRESS": "En cours",
   "QUESTIONNAIRE_IN_PROGRESS_BY": "En cours par :",
   "QUESTIONNAIRE_LOCKING_ERROR": "Ce questionnaire ne peut être complété car un autre utilisateur ayant access au dossier de ce patient l'a déjà commencé. Une fois le questionnaire complété, vous pourrez consulter les réponses sur l'onglet « Complétés ».",
