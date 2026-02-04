@@ -4,7 +4,7 @@
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: v6.0.0
   hooks:
     - id: check-added-large-files
     - id: check-merge-conflict
@@ -18,23 +18,23 @@ repos:
       exclude: '.gitlab/merge_request_templates/Default.md'
 
 - repo: https://github.com/fsfe/reuse-tool
-  rev: v5.0.2
+  rev: v6.2.0
   hooks:
     - id: reuse-lint-file
 
 - repo: https://github.com/crate-ci/typos
-  rev: v1.31.1
+  rev: v1.43.1
   hooks:
     - id: typos
 
 # zizmor detects security vulnerabilities in GitHub Actions workflows.
 - repo: https://github.com/woodruffw/zizmor-pre-commit
-  rev: v1.5.2
+  rev: v1.22.0
   hooks:
     - id: zizmor
 
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.32.1
+  rev: 0.36.1
   hooks:
     - id: check-github-workflows
       args: ["--verbose"]
@@ -53,4 +53,4 @@ repos:
         # actionlint has a shellcheck integration which extracts shell scripts in `run:` steps from GitHub Actions
         # and checks these with shellcheck.
         # see also: https://github.com/rhysd/actionlint/pull/482
-        - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@v0.10.0"
+        - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@v0.11.1"
