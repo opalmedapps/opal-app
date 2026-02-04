@@ -10,16 +10,22 @@
     ":pinAllExceptPeerDependencies",
     // https://docs.renovatebot.com/presets-default/#separatemultiplemajorreleases
     ":separateMultipleMajorReleases",
-    // https://docs.renovatebot.com/presets-default/#separatepatchreleases
-    ":separatePatchReleases",
-    // get updates for alpine version of node images
-    "github>mschoettle/renovate-presets//presets/docker-alpine.json5",
+    // https://docs.renovatebot.com/presets-default/#maintainlockfilesweekly
+    ":maintainLockFilesWeekly",
+    // https://docs.renovatebot.com/presets-security/#securityminimumreleaseagenpm
+    "security:minimumReleaseAgeNpm",
+    // https://docs.renovatebot.com/presets-default/#configmigration
+    ":configMigration",
+    // https://docs.renovatebot.com/presets-helpers/#helperspingithubactiondigeststosemver
+    "helpers:pinGitHubActionDigestsToSemver",
     // set timezone to local one to ensure schedules are run
     // https://docs.renovatebot.com/configuration-options/#timezone
     ":timezone(America/Toronto)",
     // get weekly updates to lighten load
     // https://docs.renovatebot.com/presets-schedule/#scheduleweekly
     "schedule:weekly",
+    // get updates for alpine version of node images
+    "github>mschoettle/renovate-presets//presets/docker-alpine.json5",
     "github>mschoettle/renovate-presets//presets/actions-dependency-version.json5",
     "github>mschoettle/renovate-presets//presets/pre-commit-hooks.json5",
   ],
