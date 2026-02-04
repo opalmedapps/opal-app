@@ -193,7 +193,7 @@
                         startIndex ++;
                     }
 
-                    // if all questions have been answered (outer loop completed, inner loop not breaked (i.e. i != sections.length))
+                    // if all questions have been answered (outer loop completed, inner loop did not break (i.e. i != sections.length))
                     if (i === currentQuestionnaire.sections.length-1){
                         startIndex = -1;
                     }

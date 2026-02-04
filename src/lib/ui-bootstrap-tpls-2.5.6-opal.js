@@ -2218,10 +2218,10 @@ angular.module('ui.bootstrap.position', [])
       /**
        * Provides the scrollbar width, concept from TWBS measureScrollbar()
        * function in https://github.com/twbs/bootstrap/blob/master/js/modal.js
-       * In IE and Edge, scollbar on body and html element overlay and should
+       * In IE and Edge, scrollbar on body and html element overlay and should
        * return a width of 0.
        *
-       * @returns {number} The width of the browser scollbar.
+       * @returns {number} The width of the browser scrollbar.
        */
       scrollbarWidth: function(isBody) {
         if (isBody) {
