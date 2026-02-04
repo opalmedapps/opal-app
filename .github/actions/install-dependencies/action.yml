@@ -11,7 +11,7 @@ runs:
       # Install dependencies
       # Use setup-node's built-in functionality for caching and restoring npm dependencies
       # See: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows
-      - uses: actions/setup-node@v6.0.0
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           # renovate: datasource=node-version dependency=node
           node-version: 22.21.1
