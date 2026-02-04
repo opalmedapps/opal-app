@@ -1,72 +1,74 @@
+// SPDX-FileCopyrightText: Copyright (C) 2023 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+//
+// SPDX-License-Identifier: Apache-2.0
+
 {
-  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  extends: [
-    'config:recommended',
-    ':pinAllExceptPeerDependencies',
-    ':separateMultipleMajorReleases',
-    ':maintainLockFilesWeekly',
-    'security:minimumReleaseAgeNpm',
-    ':configMigration',
-    'helpers:pinGitHubActionDigestsToSemver',
-    ':timezone(America/Toronto)',
-    'schedule:weekly',
-    'github>mschoettle/renovate-presets//presets/docker-alpine.json5',
-    'github>mschoettle/renovate-presets//presets/actions-dependency-version.json5',
-    'github>mschoettle/renovate-presets//presets/pre-commit-hooks.json5',
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    // https://docs.renovatebot.com/presets-default/#pinallexceptpeerdependencies
+    ":pinAllExceptPeerDependencies",
+    // https://docs.renovatebot.com/presets-default/#separatemultiplemajorreleases
+    ":separateMultipleMajorReleases",
+    // https://docs.renovatebot.com/presets-default/#maintainlockfilesweekly
+    ":maintainLockFilesWeekly",
+    // https://docs.renovatebot.com/presets-security/#securityminimumreleaseagenpm
+    "security:minimumReleaseAgeNpm",
+    // https://docs.renovatebot.com/presets-default/#configmigration
+    ":configMigration",
+    // https://docs.renovatebot.com/presets-helpers/#helperspingithubactiondigeststosemver
+    "helpers:pinGitHubActionDigestsToSemver",
+    // set timezone to local one to ensure schedules are run
+    // https://docs.renovatebot.com/configuration-options/#timezone
+    ":timezone(America/Toronto)",
+    // get weekly updates to lighten load
+    // https://docs.renovatebot.com/presets-schedule/#scheduleweekly
+    "schedule:weekly",
+    // get updates for alpine version of node images
+    "github>mschoettle/renovate-presets//presets/docker-alpine.json5",
+    "github>mschoettle/renovate-presets//presets/actions-dependency-version.json5",
+    "github>mschoettle/renovate-presets//presets/pre-commit-hooks.json5",
   ],
-  ignorePresets: [
-    'workarounds:nodeDockerVersioning',
-  ],
-  assignees: [
-    'staceybeard',
-  ],
-  labels: [
-    'dependencies',
-  ],
-  packageRules: [
+  // Extra rules for node images. See: https://github.com/renovatebot/renovate/discussions/29501
+  // Ensure that node docker versioning doesn't interfere with the custom managers.
+  "ignorePresets": ["workarounds:nodeDockerVersioning"],
+  "assignees": ["staceybeard"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    // Group auxiliary angular-related updates
     {
-      groupName: 'auxiliary angular packages',
-      matchDepNames: [
-        '/^angular/',
-      ],
+      "matchDepNames": ["/^angular/"],
+      "groupName": "auxiliary angular packages"
     },
+    // Group angular-translate updates
     {
-      groupName: 'angular-translate packages',
-      matchPackageNames: [
-        '/^angular-translate/',
-      ],
+      "matchPackageNames": ["/^angular-translate/"],
+      "groupName": "angular-translate packages"
     },
+    // Rate-limit firebase-tools updates: first day of each month
     {
-      matchPackageNames: [
-        'firebase-tools',
-      ],
-      schedule: [
-        '* * 1 * *',
-      ],
+      "matchPackageNames": ["firebase-tools"],
+      "schedule": ["* * 1 * *"],
     },
+    // Group plotly updates
     {
-      groupName: 'plotly packages',
-      matchPackageNames: [
-        '/plotly/',
-      ],
+        "matchPackageNames": ["/plotly/"],
+        "groupName": "plotly packages",
     },
+    // Group @zxcvbn-ts updates
     {
-      groupName: '@zxcvbn-ts packages',
-      matchPackageNames: [
-        '/^@zxcvbn-ts//',
-      ],
+      "matchPackageNames": ["/^@zxcvbn-ts//"],
+      "groupName": "@zxcvbn-ts packages"
     },
+    // Group webpack updates
     {
-      groupName: 'webpack packages',
-      matchPackageNames: [
-        '/webpack/',
-      ],
+      "matchPackageNames": ["/webpack/"],
+      "groupName": "webpack packages",
     },
+    // Group webpack loader updates
     {
-      groupName: 'webpack loader packages',
-      matchPackageNames: [
-        '/-loader$/',
-      ],
+      "matchPackageNames": ["/-loader$/"],
+      "groupName": "webpack loader packages",
     },
   ],
 }
