@@ -37,12 +37,12 @@
   "packageRules": [
     // Group auxiliary angular-related updates
     {
-      "matchDepPatterns": ["^angular"],
+      "matchDepNames": ["/^angular/"],
       "groupName": "auxiliary angular packages"
     },
     // Group angular-translate updates
     {
-      "matchPackagePatterns": ["^angular-translate"],
+      "matchPackageNames": ["/^angular-translate/"],
       "groupName": "angular-translate packages"
     },
     // Rate-limit firebase-tools updates: first day of each month
@@ -52,22 +52,22 @@
     },
     // Group plotly updates
     {
-        "matchPackagePatterns": ["plotly"],
+        "matchPackageNames": ["/plotly/"],
         "groupName": "plotly packages",
     },
     // Group @zxcvbn-ts updates
     {
-      "matchPackagePatterns": ["^@zxcvbn-ts/"],
+      "matchPackageNames": ["/^@zxcvbn-ts//"],
       "groupName": "@zxcvbn-ts packages"
     },
     // Group webpack updates
     {
-      "matchPackagePatterns": ["webpack"],
+      "matchPackageNames": ["/webpack/"],
       "groupName": "webpack packages",
     },
     // Group webpack loader updates
     {
-      "matchPackagePatterns": ["-loader$"],
+      "matchPackageNames": ["/-loader$/"],
       "groupName": "webpack loader packages",
     },
   ],
