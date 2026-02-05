@@ -130,7 +130,7 @@
     "webpack": "5.104.1",
     "webpack-cli": "6.0.1",
     "webpack-dev-server": "5.2.3",
-    "webpack-manifest-plugin": "5.0.1",
+    "webpack-manifest-plugin": "6.0.1",
     "xml-js": "1.6.11"
   },
   "cordova": {
