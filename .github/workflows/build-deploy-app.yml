@@ -78,7 +78,7 @@ jobs:
           mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-${ENVIRONMENT}.apk"
           echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.apk" >> "$GITHUB_OUTPUT"
       - name: Archive build output
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: android-app
           path: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
@@ -131,7 +131,7 @@ jobs:
           mv "app-release-signed.aab" "opal-${ENVIRONMENT}-release-signed.aab"
           echo "ARTIFACT_NAME=opal-${ENVIRONMENT}-release-signed.aab" >> "$GITHUB_OUTPUT"
       - name: Archive build output
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: android-app-release
           path: ${{ steps.rename-android.outputs.ARTIFACT_NAME }}
@@ -209,7 +209,7 @@ jobs:
           mv ./platforms/ios/build/Debug-iphoneos/*.ipa "opal-${ENVIRONMENT}.ipa"
           echo "ARTIFACT_NAME=opal-${ENVIRONMENT}.ipa" >> "$GITHUB_OUTPUT"
       - name: Archive build output
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ios-app
           path: ${{ steps.rename-ios.outputs.ARTIFACT_NAME }}
@@ -262,7 +262,7 @@ jobs:
           mv ./platforms/ios/build/Release-iphoneos/*.ipa "opal-${ENVIRONMENT}-release.ipa"
           echo "ARTIFACT_NAME=opal-${ENVIRONMENT}-release.ipa" >> "$GITHUB_OUTPUT"
       - name: Archive build output
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ios-app-release
           path: ${{ steps.rename-ios.outputs.ARTIFACT_NAME }}
