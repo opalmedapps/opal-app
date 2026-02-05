@@ -50,7 +50,7 @@ jobs:
       # Setup
       - name: Print environment
         run: echo "Environment = $ENVIRONMENT"
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
           # Fetch part of the commit history and its tags, in order to calculate the build number in `build-setup`
@@ -72,7 +72,7 @@ jobs:
           mkdir web-app
           cp -r www web-app
       - name: Archive build output
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: web-app
           path: web-app
@@ -85,7 +85,7 @@ jobs:
     if: ${{ inputs.DEPLOY || github.ref_name == 'main' }}
     steps:
       # Setup
-      - uses: actions/checkout@v6.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
       - name: Ensure $ENVIRONMENT is defined to avoid destructive mirroring on the server
@@ -94,7 +94,7 @@ jobs:
           if [ -z "$ENVIRONMENT" ]; then exit 1; fi
         shell: bash
       - name: Download web build artifact (`www`)
-        uses: actions/download-artifact@v6.0.0
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: web-app
           run-id: ${{ github.run_id }}
