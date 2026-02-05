@@ -282,7 +282,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Download Android build artifact
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: android-app
           run-id: ${{ github.run_id }}
@@ -316,7 +316,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Download iOS build artifact
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: ios-app
           run-id: ${{ github.run_id }}
@@ -346,7 +346,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Download iOS release build artifact
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: ios-app-release
           run-id: ${{ github.run_id }}
@@ -372,7 +372,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Download iOS release build artifact
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: ios-app-release
           run-id: ${{ github.run_id }}
