@@ -103,7 +103,8 @@
             research: 'SUBMIT_ANSWERS',
             consent: 'SUBMIT_CONSENT',
             default: 'SUBMIT_ANSWERS',
-            'once-only': 'SAVE_ANSWERS',
+            // Hide the button for once-only questionnaires
+            'once-only': '',
         };
 
         const PURPOSE_SUBMIT_INSTRUCTION_MAP = {
