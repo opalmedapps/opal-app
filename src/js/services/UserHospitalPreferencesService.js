@@ -9,10 +9,10 @@
         .module('OpalApp')
         .factory('UserHospitalPreferences', UserHospitalPreferences);
 
-    UserHospitalPreferences.$inject = ['Params', 'UserPreferences', 'Firebase'];
+    UserHospitalPreferences.$inject = ['Firebase', 'Params'];
 
     /* @ngInject */
-    function UserHospitalPreferences(Params, UserPreferences, Firebase) {
+    function UserHospitalPreferences(Firebase, Params) {
 
         let hospitalList = CONFIG.settings.useProductionHospitals ? Params.productionHospitalList : Params.developmentHospitalList;
         let selectedHospital;
@@ -20,7 +20,7 @@
 
         let service = {
             getHospitalAcronym: () => selectedHospital?.acronym || '',
-            getHospitalAllowedModules: () => selectedHospital?.modules,
+            getHospitalAllowedModules: () => selectedHospital?.modules || [],
             getHospitalCode: () => selectedHospital?.uniqueHospitalCode,
             getHospitalFullName: () => selectedHospital?.fullName || '',
             getHospitalList: () => hospitalList,

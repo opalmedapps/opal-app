@@ -97,6 +97,14 @@
                 /** Multi-institutional hospital modules and codes **/
                 localStorageHospitalKey: 'hospital',
 
+                // Modules which are disabled when a profile's access level is set to "need to know"
+                modulesDisabledNeedToKnow: [
+                    'DIA',
+                    'LAB',
+                    'DOC',
+                    'IPS',
+                ],
+
                 // Hospitals available in development-level environments (e.g. dev, qa, staging)
                 developmentHospitalList: [
                     {

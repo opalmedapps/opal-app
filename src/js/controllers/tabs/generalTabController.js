@@ -10,110 +10,76 @@
  */
 
 (function () {
-        'use strict';
+    'use strict';
 
-        angular
-            .module('OpalApp')
-            .controller('GeneralTabController', GeneralTabController);
+    angular
+        .module('OpalApp')
+        .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'Navigator', 'NetworkStatus', '$timeout',
-            'UserPreferences', 'UserHospitalPreferences', 'Browser', 'DynamicContent', 'RequestToServer', 'Params'];
+    GeneralTabController.$inject = ['$scope', '$timeout', 'Browser', 'DynamicContent', 'Navigator', 'NetworkStatus',
+        'Params', 'ProfileSelector', 'RequestToServer', 'UserHospitalPreferences'];
 
-        function GeneralTabController($scope, Navigator, NetworkStatus, $timeout,
-                                      UserPreferences, UserHospitalPreferences, Browser, DynamicContent, RequestToServer, Params) {
-            var vm = this;
+    function GeneralTabController($scope, $timeout, Browser, DynamicContent, Navigator, NetworkStatus,
+                                  Params, ProfileSelector, RequestToServer, UserHospitalPreferences) {
+        let vm = this;
 
-            vm.goToParking = goToParking;
-            vm.generalDeviceBackButton = generalDeviceBackButton;
-            vm.goToUrl = goToUrl;
-            vm.goToCarnetSante = goToCarnetSante;
-            // variable to let the user know which hospital they are logged in
-            vm.selectedHospitalToDisplay = "";
-            vm.allowedModules = {};
+        vm.navigator = undefined;
+        vm.accessLevel = ProfileSelector.getAccessLevel();
+        vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
 
-            activate();
+        vm.generalDeviceBackButton = () => tabbar.setActiveTab(0);
+        vm.goToUrl = goToUrl;
 
-            ///////////////////////////
+        activate();
 
-            /**
-             * PRIVATE FUNCTIONS
-             */
+        ///////////////////////////
 
-            function activate() {
-                Navigator.setNavigator(generalNavigator);
+        function activate() {
+            vm.navigator = generalNavigator;
+            Navigator.setNavigator(vm.navigator);
 
-                bindEvents();
+            bindEvents();
 
-                vm.language = UserPreferences.getLanguage();
-                configureSelectedHospital();
+            if(NetworkStatus.isOnline()) getDisplayData();
+        }
 
+        function bindEvents() {
+            // Refresh the page on coming back from other pages
+            vm.navigator.on('prepop', function () {
                 if(NetworkStatus.isOnline()) getDisplayData();
-            }
+            });
 
-            /**
-             * @name configureSelectedHospital
-             * @desc Set the hospital name and module to display
-             */
-            function configureSelectedHospital() {
-                vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
-                vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
-            }
-
-            function bindEvents() {
-                // Refresh the page on coming back from other pages
-                generalNavigator.on('prepop', function () {
-                    if(NetworkStatus.isOnline()) getDisplayData();
-                });
-                //This avoids constant repushing which causes bugs
-                generalNavigator.on('prepush', function (event) {
-                    if (generalNavigator._doorLock.isLocked()) {
-                        event.cancel();
-                    }
-                });
-
-                //Destroying personal navigator events
-                $scope.$on('$destroy', function () {
-                    generalNavigator.off('prepush');
-                    generalNavigator.off('prepop');
-                });
-            }
-
-            /**
-             * @description Function to get view specific data from Django API
-             */
-            async function getDisplayData() {
-                try {
-                    const result = await RequestToServer.apiRequest(Params.API.ROUTES.GENERAL);
-                    $timeout(() => {
-                        vm.announcementsUnreadNumber = result.data.unread_announcement_count;
-                    });
-                } catch (error) {
-                    // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
-                    console.error(error);
+            // This avoids constant repushing which causes bugs
+            vm.navigator.on('prepush', function (event) {
+                if (vm.navigator._doorLock.isLocked()) {
+                    event.cancel();
                 }
-            }
+            });
 
-            /**
-             * PUBLIC FUNCTIONS
-             */
+            // Destroying navigator events
+            $scope.$on('$destroy', () => {
+                vm.navigator.off('prepop');
+                vm.navigator.off('prepush');
+            });
+        }
 
-            function goToParking() {
-                generalNavigator.pushPage('views/general/parking/parking.html');
-            }
-
-            function generalDeviceBackButton() {
-                tabbar.setActiveTab(0);
-            }
-
-            function goToUrl(contentKey) {
-                const url = DynamicContent.getURL(contentKey);
-                Browser.openInternal(url);
-            }
-
-            function goToCarnetSante() {
-                const url = DynamicContent.getURL("carnetSante");
-                Browser.openInternal(url);
+        /**
+         * @description Function to get view specific data from Django API
+         */
+        async function getDisplayData() {
+            try {
+                const result = await RequestToServer.apiRequest(Params.API.ROUTES.GENERAL);
+                $timeout(() => {
+                    vm.announcementsUnreadNumber = result.data.unread_announcement_count;
+                });
+            } catch (error) {
+                console.error(error);
             }
         }
+
+        function goToUrl(contentKey) {
+            const url = DynamicContent.getURL(contentKey);
+            Browser.openInternal(url);
+        }
     }
-)();
+})();

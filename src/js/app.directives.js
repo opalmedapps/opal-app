@@ -14,6 +14,7 @@ import "./directives/scrollCarouselDirective.js";
 import "./directives/offlineBannerDirective.js";
 import "./directives/topPageBannerDirective";
 import "./directives/loading-spinning-circle.directive";
+import "./directives/menu-item.directive.js";
 import "./directives/search-bar.directive";
 import "./directives/ons-scroller-height.directive";
 import "./directives/hospitalSelectorDirective";
