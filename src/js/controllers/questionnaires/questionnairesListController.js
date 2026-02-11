@@ -80,7 +80,7 @@
 
             // listen to the event of destroy the controller in order to do clean up
             $scope.$on('$destroy', function() {
-                removeListener();
+                navigator.off('postpop');
 
                 // Reload user profile if questionnaire was opened and completed via Notifications tab,
                 // and profile was implicitly changed.
@@ -173,14 +173,6 @@
                 = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByPurpose(allowedStatus.NEW_QUESTIONNAIRE_STATUS, questionnairePurpose));
             vm.noProgressQuestionnaireText
                 = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByPurpose(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS, questionnairePurpose));
-        }
-
-        /**
-         * @name removeListener
-         * @desc This private function serves to remove any listener for this controller
-         */
-        function removeListener(){
-            navigator.off('postpop');
         }
     }
 })();

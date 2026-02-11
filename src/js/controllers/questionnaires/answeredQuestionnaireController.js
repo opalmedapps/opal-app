@@ -78,10 +78,13 @@ import '../../../css/views/answered-questionnaire.view.css';
 
         ////////////////
 
-        function activate() {
+        async function activate() {
             navigator = Navigator.getNavigator();
             let params = Navigator.getParameters();
 
+            bindEvents();
+
+            // TODO remove if unused
             const onceOnly = !!params?.onceOnly;
 
             // Get the user and patient names to display on the submission page
@@ -93,44 +96,51 @@ import '../../../css/views/answered-questionnaire.view.css';
                 patientName: `${patient.first_name} ${patient.last_name}`,
             };
 
-            if (onceOnly) {
-                // TODO special configuration for once-only questionnaires can go here
-            }
-
             if (!params.hasOwnProperty('answerQuestionnaireId')){
                 vm.loadingQuestionnaire = false;
+                console.error('Navigator parameter "answerQuestionnaireId" is missing');
+                handleLoadQuestionnaireErr();
+                return;
+            }
+
+            try {
+                await Questionnaires.requestQuestionnaire(params.answerQuestionnaireId);
+
+                vm.questionnaire = Questionnaires.getCurrentQuestionnaire();
+
+                // If the questionnaire still has "new" status (possible for once-only questionnaires), update it to "in progress"
+                if (vm.questionnaire.status === vm.allowedStatus.NEW_QUESTIONNAIRE_STATUS) {
+                    await Questionnaires.updateQuestionnaireStatus(
+                        vm.questionnaire.qp_ser_num,
+                        vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS,
+                        vm.questionnaire.status
+                    );
+                }
+
+                // Verify if we are waiting to save an answer
+                if (Questionnaires.isWaitingForSavingAnswer()) {
+                    setTimeout(init, vm.answerSavedInDBValidStatus.ANSWER_SAVING_WAITING_TIME);
+                }
+                else {
+                    // Process the answers and check if submitting is allowed
+                    init();
+                }
+            }
+            catch (error) {
+                console.error(error);
                 handleLoadQuestionnaireErr();
             }
-            else {
-                Questionnaires.requestQuestionnaire(params.answerQuestionnaireId).then(function(){
-                    $timeout(function(){
-                        vm.questionnaire = Questionnaires.getCurrentQuestionnaire();
-
-                        // verify if we are waiting to save an answer
-                        if (Questionnaires.isWaitingForSavingAnswer()){
-                            setTimeout(init, vm.answerSavedInDBValidStatus.ANSWER_SAVING_WAITING_TIME);
-                        }else{
-                            // process the answers and check if submit is allowed.
-                            init();
-                        }
-
-                        $scope.$on('$destroy', () => {
-                            // Reload user profile if questionnaire was opened via Notifications tab,
-                            // and profile was implicitly changed.
-                            Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
-                        });
-
-                        vm.loadingQuestionnaire = false;
-                    });
-                })
-                .catch(function(){
-                    $timeout(function(){
-                        vm.loadingQuestionnaire = false;
-
-                        handleLoadQuestionnaireErr();
-                    });
-                });
+            finally {
+                vm.loadingQuestionnaire = false;
             }
+        }
+
+        function bindEvents() {
+            $scope.$on('$destroy', () => {
+                // Reload user profile if questionnaire was opened via Notifications tab,
+                // and profile was implicitly changed.
+                Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
+            });
         }
 
         /**

@@ -9,9 +9,11 @@
         .module('OpalApp')
         .controller('OnceOnlyController', OnceOnlyController);
 
-    OnceOnlyController.$inject = ['$filter', '$scope', '$timeout', 'NativeNotification', 'Navigator', 'Params', 'Questionnaires'];
+    OnceOnlyController.$inject = ['$filter', '$scope', '$timeout', 'NativeNotification', 'Navigator', 'Params',
+        'Questionnaires', 'UpdateUI'];
 
-    function OnceOnlyController($filter, $scope, $timeout, NativeNotification, Navigator, Params, Questionnaires) {
+    function OnceOnlyController($filter, $scope, $timeout, NativeNotification, Navigator, Params,
+                                Questionnaires, UpdateUI) {
         const vm = this;
 
         let navigator;
@@ -31,31 +33,29 @@
             let purpose = 'once-only';
             if (!Params.QUESTIONNAIRE_PURPOSES.includes(purpose)) {
                 $timeout(() => {
-                    navigator.popPage();
-                    NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_ALERT"));
-                    console.error(`Configuration error: questionnaire purpose "${purpose}" has not been defined`);
+                    handleError(`Configuration error: questionnaire purpose "${purpose}" has not been defined`);
                 });
             }
             else vm.dataHandlerParameters.purpose = purpose;
         }
 
         function bindEvents() {
-            // Remove event listeners
             $scope.$on('$destroy', () => {
                 pagePushed = 0;
             });
         }
 
-        function display() {
+        async function display() {
+            // Force questionnaires to be re-downloaded after this, if the user visits another questionnaires page
+            UpdateUI.updateTimestamps('QuestionnaireList', 0);
+
             let onceOnlyQuestionnaires = [
                 ...Questionnaires.getQuestionnaireList(Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS.NEW_QUESTIONNAIRE_STATUS),
                 ...Questionnaires.getQuestionnaireList(Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS.IN_PROGRESS_QUESTIONNAIRE_STATUS),
             ];
 
             if (onceOnlyQuestionnaires.length === 0) {
-                console.error('No questionnaires returned from the listener with status new or in progress, and with purpose "once-only"');
-                navigator.popPage();
-                NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_ALERT"));
+                handleError('No questionnaires returned from the listener with status new or in progress, and with purpose "once-only"');
                 return;
             }
 
@@ -75,6 +75,16 @@
                     });
                 }, 500);
             }
+        }
+
+        /**
+         * @description Handle errors on this page by going back to the previous page with a generic message.
+         * @param {*} error A caught error to be printed to the console.
+         */
+        function handleError(error) {
+            if (error) console.error(error);
+            navigator.popPage();
+            NativeNotification.showNotificationAlert($filter('translate')('SERVER_ERROR_ALERT'));
         }
     }
 })();
