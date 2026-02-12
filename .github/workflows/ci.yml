@@ -30,7 +30,7 @@ jobs:
         if: '!cancelled()'
         with:
           # renovate: datasource=pypi dependency=prek
-          prek-version: "0.3.1"
+          prek-version: "0.3.2"
         env:
           SKIP: reuse-lint-file
 
