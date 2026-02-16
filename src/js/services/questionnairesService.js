@@ -20,13 +20,14 @@
      this factory is named with a s for questionnaire simply to match the existing file name, which is not good
     */
     Questionnaires.$inject = [
+        'OnceOnlyQuestions',
         'Params',
         'QuestionnaireDataService',
         'User',
     ];
 
     /* @ngInject */
-    function Questionnaires(Params, QuestionnaireDataService, User) {
+    function Questionnaires(OnceOnlyQuestions, Params, QuestionnaireDataService, User) {
         // constants for DB conventions
         const questionnaireValidStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const questionnaireValidType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
@@ -157,6 +158,7 @@
             updateQuestionnaireStatus: updateQuestionnaireStatus,
             requestQuestionnaireStubFromSerNum: requestQuestionnaireStubFromSerNum,
             formatQuestionnaireStub: formatQuestionnaireStub,
+            requestOnceOnlyQuestionnaire: requestOnceOnlyQuestionnaire,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnairePurpose: (qp_ser_num) => QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num), // gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
             saveQuestionnaireAnswer: saveQuestionnaireAnswer,
@@ -275,6 +277,18 @@
             const responseQuestionnaire = await QuestionnaireDataService.requestQuestionnaire(answerQuestionnaireId);
             setQuestionnaire(responseQuestionnaire);
             return {Success: true, Location: 'Server'};
+        }
+
+        /**
+         * @name requestOnceOnlyQuestionnaire
+         * @desc Requests the unique once-only questionnaire from the once-only data service and sets it as the current questionnaire.
+         */
+        function requestOnceOnlyQuestionnaire() {
+            clearCurrentQuestionnaire();
+            const questionnaire = OnceOnlyQuestions.getOnceOnlyQuestionnaire();
+            setQuestionnaireList([questionnaire]);
+            setQuestionnaire(questionnaire);
+            return {Success: true, Location: 'Local'};
         }
 
         /**

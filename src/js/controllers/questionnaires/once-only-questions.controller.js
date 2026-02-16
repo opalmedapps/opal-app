@@ -17,9 +17,6 @@
         const vm = this;
 
         let navigator;
-        let pagePushed = 0;
-
-        vm.dataHandlerParameters = {};
 
         vm.display = display;
 
@@ -28,53 +25,38 @@
         function activate() {
             navigator = Navigator.getNavigator();
 
-            bindEvents();
+            // Get the once-only questionnaire and set it in the Questionnaire service
+            Questionnaires.clearAllQuestionnaire();
+            Questionnaires.requestOnceOnlyQuestionnaire();
 
-            let purpose = 'once-only';
-            if (!Params.QUESTIONNAIRE_PURPOSES.includes(purpose)) {
-                $timeout(() => {
-                    handleError(`Configuration error: questionnaire purpose "${purpose}" has not been defined`);
-                });
-            }
-            else vm.dataHandlerParameters.purpose = purpose;
-        }
-
-        function bindEvents() {
-            $scope.$on('$destroy', () => {
-                pagePushed = 0;
-            });
-        }
-
-        async function display() {
             // Force questionnaires to be re-downloaded after this, if the user visits another questionnaires page
             UpdateUI.updateTimestamps('QuestionnaireList', 0);
 
+            display();
+        }
+
+        function display() {
             let onceOnlyQuestionnaires = [
                 ...Questionnaires.getQuestionnaireList(Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS.NEW_QUESTIONNAIRE_STATUS),
                 ...Questionnaires.getQuestionnaireList(Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS.IN_PROGRESS_QUESTIONNAIRE_STATUS),
             ];
 
             if (onceOnlyQuestionnaires.length === 0) {
-                handleError('No questionnaires returned from the listener with status new or in progress, and with purpose "once-only"');
+                handleError('No once-only questionnaires found with status new or in progress');
                 return;
             }
 
             if (onceOnlyQuestionnaires.length > 1) {
-                console.warn('Multiple "once-only" questionnaires defined for this user; some data may be ignored');
+                console.warn('Multiple once-only questionnaires defined for this user; some data may be ignored');
             }
 
-            // Needed to prevent multiple pushes, because this function may be called by the patient-data-handler more than once
-            if (pagePushed === 0) {
-                pagePushed += 1;
-
-                $timeout(() => {
-                    navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
-                        animation: 'fade', // OnsenUI
-                        answerQuestionnaireId: onceOnlyQuestionnaires[0].qp_ser_num,
-                        onceOnly: true,
-                    });
-                }, 500);
-            }
+            $timeout(() => {
+                navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
+                    animation: 'fade', // OnsenUI
+                    answerQuestionnaireId: onceOnlyQuestionnaires[0].qp_ser_num,
+                    onceOnly: true,
+                });
+            }, 500);
         }
 
         /**

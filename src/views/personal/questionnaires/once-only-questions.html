@@ -9,9 +9,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <network-banner></network-banner>
 
-    <!-- DATA HANDLER AND LOADING WHEEL -->
-    <patient-data-handler categories="QuestionnaireList"
-                          display-function="vm.display"
-                          use-parameters="{{vm.dataHandlerParameters}}">
-    </patient-data-handler>
+    <!-- LOADING CIRCLE-->
+    <!-- For now, this page is always shown in a loading state, before automatically going to the next page -->
+    <loading-spinning-circle loading-message="{{'LOADING'|translate}}"></loading-spinning-circle>
 </ons-page>
