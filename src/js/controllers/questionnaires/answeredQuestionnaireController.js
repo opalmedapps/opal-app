@@ -84,8 +84,7 @@ import '../../../css/views/answered-questionnaire.view.css';
 
             bindEvents();
 
-            // TODO remove if unused
-            const onceOnly = !!params?.onceOnly;
+            vm.onceOnly = !!params?.onceOnly;
 
             // Get the user and patient names to display on the submission page
             vm.isAnsweringAsSelf = ProfileSelector.currentProfileIsSelf();
@@ -156,7 +155,8 @@ import '../../../css/views/answered-questionnaire.view.css';
                 questionIndex: qIndex,
                 editQuestion: true,
                 answerQuestionnaireId: vm.questionnaire.qp_ser_num,
-                questionnairePurpose: purpose
+                questionnairePurpose: purpose,
+                onceOnly: vm.onceOnly,
             });
         }
 

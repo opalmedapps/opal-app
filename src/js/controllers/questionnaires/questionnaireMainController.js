@@ -58,6 +58,7 @@
         vm.hasLogo = false;     // the questionnaire has a logo to display
         vm.loadingSaveAnswer = false;      // loading for saving answer
         vm.loadingQuestionnaire = true;     // loading for questionnaire
+        vm.onceOnly = false;
         vm.progressBarPercent = 0;  // this is for the progress bar in the carousel
         vm.questionnaire = {}; // the questionnaire that this controller is dealing with
         vm.questionnaireStart = true;   // marks whether we just started a questionnaire or not (i.e. the questionnaire home page)
@@ -88,6 +89,7 @@
             navigator = Navigator.getNavigator();
 
             let params = Navigator.getParameters();
+            vm.onceOnly = !!params?.onceOnly;
 
             if (!params?.questionnairePurpose
                 || !Questionnaires.validateQuestionnairePurpose(params?.questionnairePurpose)
@@ -453,6 +455,7 @@
             // go to summary page directly
             navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
                 answerQuestionnaireId: vm.questionnaire.qp_ser_num,
+                onceOnly: vm.onceOnly,
             });
         }
 
