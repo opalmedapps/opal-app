@@ -190,22 +190,29 @@ import '../../../css/views/answered-questionnaire.view.css';
                         }
                     }
 
-                    // mark questionnaire as finished
-                    return Questionnaires.updateQuestionnaireStatus(
-                        vm.questionnaire.qp_ser_num,
-                        vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS,
-                        vm.questionnaire.status
-                    );
+                    if (vm.onceOnly) {
+                        console.log(vm.questionnaire);
+                    }
+                    else {
+                        // mark questionnaire as finished
+                        return Questionnaires.updateQuestionnaireStatus(
+                            vm.questionnaire.qp_ser_num,
+                            vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS,
+                            vm.questionnaire.status
+                        );
+                    }
                 })
                 .then(function(){
                     vm.loadingSubmitQuestionnaire = false;
 
-                    vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
+                    if (!vm.onceOnly) {
+                        vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
 
-                    navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {
-                        animation: 'slide', // OnsenUI
-                        questionnairePurpose: purpose
-                    });
+                        navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {
+                            animation: 'slide', // OnsenUI
+                            questionnairePurpose: purpose
+                        });
+                    }
                 })
                 .catch(handleSubmitErr)
         }
