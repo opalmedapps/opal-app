@@ -24,6 +24,7 @@ import '../../../css/views/answered-questionnaire.view.css';
         'Firebase',
         'NativeNotification',
         'Navigator',
+        'OnceOnlyQuestions',
         'Params',
         'ProfileSelector',
         'Questionnaires',
@@ -32,8 +33,8 @@ import '../../../css/views/answered-questionnaire.view.css';
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, Navigator, Params,
-                                             ProfileSelector, Questionnaires, Studies, User) {
+    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, Navigator, OnceOnlyQuestions,
+                                             Params, ProfileSelector, Questionnaires, Studies, User) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -191,7 +192,7 @@ import '../../../css/views/answered-questionnaire.view.css';
                     }
 
                     if (vm.onceOnly) {
-                        console.log(vm.questionnaire);
+                        OnceOnlyQuestions.submit(vm.questionnaire, patient_uuid);
                     }
                     else {
                         // mark questionnaire as finished
@@ -475,6 +476,7 @@ import '../../../css/views/answered-questionnaire.view.css';
          * @param {Error} error
          */
         function handleSubmitErr(error) {
+            console.error(error);
             if (error.code === Params.invalidPassword) {
 
                 $timeout(function () {

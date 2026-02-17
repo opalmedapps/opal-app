@@ -13,8 +13,78 @@
 
     function OnceOnlyQuestions($filter, Params) {
 
+        // source: https://browser.ihtsdotools.org/?perspective=full&conceptId1=365981007&edition=MAIN/2026-02-01&release=&languages=en
+        const TOBACCO_USE_CODES = {
+            1: {
+                system: "http://snomed.info/sct",
+                code: "8392000",
+                display: "Non-smoker"
+            },
+            2: {
+                system: "http://snomed.info/sct",
+                code: "8517006 ",
+                display: "Ex-smoker"
+            },
+            3: {
+                system: "http://snomed.info/sct",
+                code: "428041000124106",
+                display: "Occasional cigarette smoker",
+            },
+            4: {
+                system: "http://snomed.info/sct",
+                code: "230060001",
+                display: "Light cigarette smoker",
+            },
+            5: {
+                system: "http://snomed.info/sct",
+                code: "56578002",
+                display: "Moderate cigarette smoker",
+            },
+            6: {
+                system: "http://snomed.info/sct",
+                code: "230063004",
+                display: "Heavy cigarette smoker",
+            },
+            7: {
+                system: "http://snomed.info/sct",
+                code: "230064005",
+                display: "Very heavy cigarette smoker",
+            },
+            8: {
+                system: "http://snomed.info/sct",
+                code: "82302008",
+                display: "Pipe smoker",
+            },
+            9: {
+                system: "http://snomed.info/sct",
+                code: "59978006",
+                display: "Cigarette smoker",
+            },
+        }
+
+        // based on: https://build.fhir.org/ig/HL7/fhir-ips/en/Observation-alcohol-use-example.json.html
+        // Common UCUM units: https://terminology.hl7.org/5.5.0/ValueSet-ucum-common.html#logical-definition-cld
+        const ALCOHOL_USE_CODES = {
+            1: {
+                system: "http://snomed.info/sct",
+                code: "105542008",
+                display: "Current non-drinker of alcohol",
+            },
+            2: {
+                system: "http://loinc.org",
+                code: "74013-4",
+                display: "Alcoholic drinks per day"
+            },
+            3: {
+                system: "http://loinc.org",
+                code: "105992-2",
+                display: "Alcoholic drinks per week"
+            },
+        }
+
         return {
             getOnceOnlyQuestionnaire: getOnceOnlyQuestionnaire,
+            submit: submit,
         }
 
         /**
@@ -207,6 +277,87 @@
                     },
                 ],
             };
+        }
+
+        function submit(questionnaire, patient_uuid) {
+            let fhirData = {};
+
+            const frequencyAnswer = questionnaire.sections[0].questions[0].patient_answer;
+            const amountAnswer = questionnaire.sections[0].questions[1].patient_answer;
+            const smokingAnswer = questionnaire.sections[0].questions[2].patient_answer;
+
+            if (frequencyAnswer.is_defined === '1' && amountAnswer.is_defined === '1') {
+                const frequencyCode = ALCOHOL_USE_CODES[frequencyAnswer.answer[0].answer_value];
+                const amountValue = parseFloat(amountAnswer.answer[0].answer_value);
+
+                if (!isNaN(amountValue) && isFinite(amountValue)) {
+                    fhirData.alcoholUse = {
+                        resourceType: 'Observation',
+                        id: crypto.randomUUID(),
+                        status: 'preliminary',
+                        category: [
+                            {
+                                coding: [
+                                    {
+                                        system: 'http://terminology.hl7.org/CodeSystem/observation-category',
+                                        code: 'social-history',
+                                        display: 'Social History',
+                                    },
+                                ],
+                            },
+                        ],
+                        code: {
+                            coding: [frequencyCode],
+                        },
+                        valueQuantity: {
+                            value: amountValue,
+                            system: "http://unitsofmeasure.org",
+                            code: "/d",
+                            unit: "per day",
+                        }
+                    };
+                }
+            }
+
+            if (smokingAnswer.is_defined === '1') {
+                const smokingCode = TOBACCO_USE_CODES[smokingAnswer.answer[0].answer_value];
+
+                fhirData.tobaccoUse = {
+                    resourceType: 'Observation',
+                    id: crypto.randomUUID(),
+                    status: 'preliminary',
+                    category: [
+                        {
+                            coding: [
+                                {
+                                    system: 'http://terminology.hl7.org/CodeSystem/observation-category',
+                                    code: 'social-history',
+                                    display: 'Social History',
+                                },
+                            ],
+                        },
+                    ],
+                    code: {
+                        coding: [
+                            {
+                                system: "http://loinc.org",
+                                code: "72166-2",
+                                display: "Tobacco smoking status"
+                            }
+                        ]
+                    },
+                    valueCodeableConcept: {
+                        coding: [smokingCode],
+                    },
+                };
+            }
+
+            if (Object.keys(fhirData).length === 0) {
+                console.log("No FHIR data to submit.");
+            } else {
+                // TODO: replace with actual call to backend
+                console.log("Submitting FHIR data:", fhirData);
+            }
         }
     }
 })();
