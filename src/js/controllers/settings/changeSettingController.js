@@ -80,13 +80,43 @@
             UserPreferences.setFontSize(newVal);
         }
 
-        //Function to change the language
-        function changeLanguage(val) {
+        /**
+         * @description Changes the app language and forwards this change to the backend.
+         *              Note that the backend will not save the new value if the requested language isn't supported there.
+         * @param val The new app language (ISO 639-1 code in uppercase).
+         * @returns {Promise<void>} Resolves after receiving responses from the listener and backend.
+         */
+        async function changeLanguage(val) {
             UserPreferences.setLanguage(val, true);
-            RequestToServer.sendRequest('AccountChange', {
-                NewValue: val,
-                FieldToChange: Params.setLanguageParamProperCase,
-            });
+
+            // Send update to the listener
+            try {
+                await RequestToServer.sendRequestWithResponse('AccountChange', {
+                    NewValue: val,
+                    FieldToChange: Params.setLanguageParamProperCase,
+                });
+            }
+            catch (error) {
+                console.error(`Error updating language to '${val}' in the listener,`
+                    + ` either because this language is not supported there, or due to some other error.`, error);
+            }
+
+            // Send update to the API
+            try {
+                await RequestToServer.apiRequest({
+                    ...Params.API.ROUTES.USER.PATCH,
+                    data: {
+                        language: val.toLowerCase(),
+                    },
+                });
+            }
+            catch (error) {
+                if (error.message?.includes('400')) {
+                    console.warn(`Language update to '${val}' wasn't accepted by the backend,`
+                        + ` because this language is not supported there.`, error);
+                }
+                else console.error(error);
+            }
         }
 
         /**
