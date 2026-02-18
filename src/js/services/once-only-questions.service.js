@@ -96,6 +96,9 @@
          * @description Get once-only questions in a format supported by the questionnaire views.
          */
         function getOnceOnlyQuestionnaire() {
+            // See: https://stackoverflow.com/questions/3746725/how-to-create-an-array-containing-1-n
+            const arrayUpTo = length => [...Array(length).keys()].map(i => i+1);
+
             return {
                 allow_questionnaire_feedback: '1',
                 created: 1771250400000,
@@ -135,42 +138,19 @@
                                     is_defined: '0',
                                 },
                                 options: [
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '1',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_1'),
-                                        order: '1',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '2',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_2'),
-                                        order: '2',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '3',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_3'),
-                                        order: '3',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '4',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_4'),
-                                        order: '4',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
+                                    ...(
+                                        arrayUpTo(4).map(i => {
+                                            return {
+                                                ID: '-1',
+                                                description: '-1',
+                                                option_id: i.toString(),
+                                                option_text: $filter('translate')(`ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_${i}`),
+                                                order: i.toString(),
+                                                parentTableId: '-1',
+                                                questionId: '-1',
+                                            };
+                                        })
+                                    ),
                                 ],
                             },
                             {
@@ -213,87 +193,19 @@
                                     is_defined: '0',
                                 },
                                 options: [
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '1',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_1'),
-                                        order: '1',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '2',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_2'),
-                                        order: '2',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '3',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_3'),
-                                        order: '3',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '4',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_4'),
-                                        order: '4',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '5',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_5'),
-                                        order: '5',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '6',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_6'),
-                                        order: '6',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '7',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_7'),
-                                        order: '7',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '8',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_8'),
-                                        order: '8',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '9',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_9'),
-                                        order: '9',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
+                                    ...(
+                                        arrayUpTo(9).map(i => {
+                                            return {
+                                                ID: '-1',
+                                                description: '-1',
+                                                option_id: i.toString(),
+                                                option_text: $filter('translate')(`ONCE_ONLY_QUESTION_SMOKING_${i}`),
+                                                order: i.toString(),
+                                                parentTableId: '-1',
+                                                questionId: '-1',
+                                            };
+                                        })
+                                    ),
                                 ],
                             },
                         ],
