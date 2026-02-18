@@ -58,7 +58,7 @@
             9: {
                 system: "http://snomed.info/sct",
                 code: "59978006",
-                display: "Cigarette smoker",
+                display: "Cigar smoker",
             },
         }
 
@@ -71,14 +71,19 @@
                 display: "Current non-drinker of alcohol",
             },
             2: {
-                system: "http://loinc.org",
-                code: "74013-4",
-                display: "Alcoholic drinks per day"
+                system: "http://snomed.info/sct",
+                code: "228276006",
+                display: "Occasional drinker",
             },
             3: {
                 system: "http://loinc.org",
                 code: "105992-2",
                 display: "Alcoholic drinks per week"
+            },
+            4: {
+                system: "http://loinc.org",
+                code: "74013-4",
+                display: "Alcoholic drinks per day"
             },
         }
 
@@ -163,15 +168,6 @@
                                         option_id: '4',
                                         option_text: $filter('translate')('ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_4'),
                                         order: '4',
-                                        parentTableId: '-1',
-                                        questionId: '-1',
-                                    },
-                                    {
-                                        ID: '-1',
-                                        description: '-1',
-                                        option_id: '5',
-                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_5'),
-                                        order: '5',
                                         parentTableId: '-1',
                                         questionId: '-1',
                                     },
@@ -271,6 +267,33 @@
                                         parentTableId: '-1',
                                         questionId: '-1',
                                     },
+                                    {
+                                        ID: '-1',
+                                        description: '-1',
+                                        option_id: '7',
+                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_7'),
+                                        order: '7',
+                                        parentTableId: '-1',
+                                        questionId: '-1',
+                                    },
+                                    {
+                                        ID: '-1',
+                                        description: '-1',
+                                        option_id: '8',
+                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_8'),
+                                        order: '8',
+                                        parentTableId: '-1',
+                                        questionId: '-1',
+                                    },
+                                    {
+                                        ID: '-1',
+                                        description: '-1',
+                                        option_id: '9',
+                                        option_text: $filter('translate')('ONCE_ONLY_QUESTION_SMOKING_9'),
+                                        order: '9',
+                                        parentTableId: '-1',
+                                        questionId: '-1',
+                                    },
                                 ],
                             },
                         ],
@@ -279,78 +302,117 @@
             };
         }
 
-        function submit(questionnaire, patient_uuid) {
-            let fhirData = {};
-
+        /**
+         * @description Extracts data about alcohol consumption from a once-only questionnaire and formats it as FHIR data.
+         * @param questionnaire The once-only questionnaire from which to extract answers.
+         * @returns {*} FHIR Observation - Social History Alcohol Use
+         */
+        function alcoholDataToFhir(questionnaire) {
             const frequencyAnswer = questionnaire.sections[0].questions[0].patient_answer;
+
+            // If no frequency answer was given, cannot format data
+            if (frequencyAnswer.is_defined !== '1') return {}
+
+            const frequencyCode = ALCOHOL_USE_CODES[frequencyAnswer.answer[0].answer_value];
             const amountAnswer = questionnaire.sections[0].questions[1].patient_answer;
-            const smokingAnswer = questionnaire.sections[0].questions[2].patient_answer;
+            const amountValue = amountAnswer.is_defined === '1' ? parseFloat(amountAnswer.answer[0].answer_value) : undefined;
 
-            if (frequencyAnswer.is_defined === '1' && amountAnswer.is_defined === '1') {
-                const frequencyCode = ALCOHOL_USE_CODES[frequencyAnswer.answer[0].answer_value];
-                const amountValue = parseFloat(amountAnswer.answer[0].answer_value);
+            // In cases where the user has chosen a weekly or daily alcohol consumption amount and provided a number, format it as a valueQuantity
+            // See: https://build.fhir.org/ig/HL7/fhir-ips/en/Observation-alcohol-use-example.json.html
+            const perWeek = frequencyCode.display.includes('week');
+            const perDay = frequencyCode.display.includes('day');
 
-                if (!isNaN(amountValue) && isFinite(amountValue)) {
-                    fhirData.alcoholUse = {
-                        resourceType: 'Observation',
-                        id: crypto.randomUUID(),
-                        status: 'preliminary',
-                        category: [
-                            {
-                                coding: [
-                                    {
-                                        system: 'http://terminology.hl7.org/CodeSystem/observation-category',
-                                        code: 'social-history',
-                                        display: 'Social History',
-                                    },
-                                ],
-                            },
-                        ],
-                        code: {
-                            coding: [frequencyCode],
-                        },
-                        valueQuantity: {
-                            value: amountValue,
-                            system: "http://unitsofmeasure.org",
-                            code: "/d",
-                            unit: "per day",
-                        }
-                    };
+            let valueQuantity;
+
+            if (!isNaN(amountValue) && isFinite(amountValue)) {
+                if (perWeek) valueQuantity = {
+                    valueQuantity: {
+                        value: amountValue,
+                        system: "http://unitsofmeasure.org",
+                        code: "/wk",
+                        unit: "per week",
+                    }
+                }
+                else if (perDay) valueQuantity = {
+                    valueQuantity: {
+                        value: amountValue,
+                        system: "http://unitsofmeasure.org",
+                        code: "/d",
+                        unit: "per day",
+                    }
                 }
             }
 
-            if (smokingAnswer.is_defined === '1') {
-                const smokingCode = TOBACCO_USE_CODES[smokingAnswer.answer[0].answer_value];
-
-                fhirData.tobaccoUse = {
-                    resourceType: 'Observation',
-                    id: crypto.randomUUID(),
-                    status: 'preliminary',
-                    category: [
-                        {
-                            coding: [
-                                {
-                                    system: 'http://terminology.hl7.org/CodeSystem/observation-category',
-                                    code: 'social-history',
-                                    display: 'Social History',
-                                },
-                            ],
-                        },
-                    ],
-                    code: {
+            return {
+                resourceType: 'Observation',
+                id: crypto.randomUUID(),
+                status: 'preliminary',
+                category: [
+                    {
                         coding: [
                             {
-                                system: "http://loinc.org",
-                                code: "72166-2",
-                                display: "Tobacco smoking status"
-                            }
-                        ]
+                                system: 'http://terminology.hl7.org/CodeSystem/observation-category',
+                                code: 'social-history',
+                                display: 'Social History',
+                            },
+                        ],
                     },
-                    valueCodeableConcept: {
-                        coding: [smokingCode],
+                ],
+                code: {
+                    coding: [frequencyCode],
+                },
+                ...valueQuantity,
+            };
+        }
+
+        /**
+         * @description Extracts data about smoking habits from a once-only questionnaire and formats it as FHIR data.
+         * @param questionnaire The once-only questionnaire from which to extract answers.
+         * @returns {*} FHIR Observation - Social History Tobacco Use
+         */
+        function smokingDataToFhir(questionnaire) {
+            const smokingAnswer = questionnaire.sections[0].questions[2].patient_answer;
+
+            // If no smoking answer was given, cannot format data
+            if (smokingAnswer.is_defined !== '1') return {}
+
+            const smokingCode = TOBACCO_USE_CODES[smokingAnswer.answer[0].answer_value];
+
+            return {
+                resourceType: 'Observation',
+                id: crypto.randomUUID(),
+                status: 'preliminary',
+                category: [
+                    {
+                        coding: [
+                            {
+                                system: 'http://terminology.hl7.org/CodeSystem/observation-category',
+                                code: 'social-history',
+                                display: 'Social History',
+                            },
+                        ],
                     },
-                };
-            }
+                ],
+                code: {
+                    coding: [
+                        {
+                            system: "http://loinc.org",
+                            code: "72166-2",
+                            display: "Tobacco smoking status"
+                        }
+                    ]
+                },
+                valueCodeableConcept: {
+                    coding: [smokingCode],
+                },
+            };
+        }
+
+        function submit(questionnaire, patient_uuid) {
+            let fhirData = {};
+
+            fhirData.alcoholUse = alcoholDataToFhir(questionnaire);
+            fhirData.tobaccoUse = smokingDataToFhir(questionnaire);
 
             if (Object.keys(fhirData).length === 0) {
                 console.log("No FHIR data to submit.");
