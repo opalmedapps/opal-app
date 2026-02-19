@@ -58,6 +58,7 @@ import '../../../css/views/answered-questionnaire.view.css';
         vm.isConsent = false;
         vm.loadingQuestionnaire = true;     // the loading circle for one questionnaire
         vm.loadingSubmitQuestionnaire = false;  // the loading circle for saving questionnaire
+        vm.onceOnly = false;  // marks whether this controller is being used for once-only questions
         vm.password = '';   // the password that the user may enter for consent form
         vm.questionnaire = {};  // the questionnaire itself
         vm.requirePassword = false;     // determine whether the password is required for submission or not
@@ -136,10 +137,15 @@ import '../../../css/views/answered-questionnaire.view.css';
         }
 
         function bindEvents() {
+            // Refresh the view when coming back from another page
+            navigator.on('postpop', init);
+
             $scope.$on('$destroy', () => {
                 // Reload user profile if questionnaire was opened via Notifications tab,
                 // and profile was implicitly changed.
                 Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
+
+                navigator.off('postpop')
             });
         }
 
@@ -150,7 +156,8 @@ import '../../../css/views/answered-questionnaire.view.css';
          * @param {int} qIndex the index of the question to be edited
          */
         function editQuestion(sIndex, qIndex) {
-            navigator.replacePage('views/personal/questionnaires/questionnaires.html', {
+            const url = 'views/personal/questionnaires/questionnaires.html';
+            const parameters = {
                 animation: 'slide', // OnsenUI
                 sectionIndex: sIndex,
                 questionIndex: qIndex,
@@ -158,7 +165,9 @@ import '../../../css/views/answered-questionnaire.view.css';
                 answerQuestionnaireId: vm.questionnaire.qp_ser_num,
                 questionnairePurpose: purpose,
                 onceOnly: vm.onceOnly,
-            });
+            };
+            if (vm.onceOnly) navigator.pushPage(url, parameters);
+            else navigator.replacePage(url, parameters);
         }
 
         /**

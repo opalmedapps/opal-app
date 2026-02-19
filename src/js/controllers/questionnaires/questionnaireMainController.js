@@ -58,7 +58,7 @@
         vm.hasLogo = false;     // the questionnaire has a logo to display
         vm.loadingSaveAnswer = false;      // loading for saving answer
         vm.loadingQuestionnaire = true;     // loading for questionnaire
-        vm.onceOnly = false;
+        vm.onceOnly = false;  // marks whether this controller is being used for once-only questions
         vm.progressBarPercent = 0;  // this is for the progress bar in the carousel
         vm.questionnaire = {}; // the questionnaire that this controller is dealing with
         vm.questionnaireStart = true;   // marks whether we just started a questionnaire or not (i.e. the questionnaire home page)
@@ -68,6 +68,7 @@
         vm.questionIndex = 0;
 
         // functions that can be seen from view, sorted alphabetically
+        vm.answerChanged = answerChanged;
         vm.beginQuestionnaire = beginQuestionnaire;
         vm.finishQuestionnaireFromQuestion = finishQuestionnaireFromQuestion;
         vm.initTextboxQuestion = initTextboxQuestion;   // initialization functions for the different question types
@@ -87,9 +88,10 @@
 
         function activate() {
             navigator = Navigator.getNavigator();
-
             let params = Navigator.getParameters();
             vm.onceOnly = !!params?.onceOnly;
+
+            bindEvents();
 
             if (!params?.questionnairePurpose
                 || !Questionnaires.validateQuestionnairePurpose(params?.questionnairePurpose)
@@ -131,9 +133,6 @@
                 handleLoadQuestionnaireErr();
             }
 
-            // listen to the carousel changes
-            addListener();
-
             Questionnaires.requestQuestionnaire(params.answerQuestionnaireId)
                 .then(function(){
                     $timeout(function(){
@@ -157,14 +156,6 @@
                             resumeQuestionnaire(vm.startIndex);
                         }
 
-                        // listen to the event of destroy the controller in order to do clean up
-                        $scope.$on('$destroy', function() {
-                            removeListener();
-                            // Reload user profile if questionnaire was opened via Notifications tab,
-                            // and profile was implicitly changed.
-                            Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
-                        });
-
                         // no longer loading
                         delayLoading();
                     })
@@ -176,6 +167,21 @@
                         handleLoadQuestionnaireErr(error);
                     });
                 });
+        }
+
+        function bindEvents() {
+            // Listeners for the carousel
+            document.addEventListener('ons-carousel:init', carouselInit);
+            document.addEventListener('ons-carousel:postchange', carouselPostChange);
+
+            // Clean up on destroy
+            $scope.$on('$destroy', () => {
+                removeListener();
+
+                // Reload user profile if questionnaire was opened via Notifications tab,
+                // and profile was implicitly changed.
+                Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
+            });
         }
 
         /**
@@ -192,6 +198,22 @@
          */
         function prev(){
             vm.carousel.prev();
+        }
+
+        /**
+         * @description Used when a questionnaire answer is changed via ng-change.
+         * @param {*} question Question from the carousel (item.data in vm.carouselItems).
+         * @param {*} [value] If answering a radiobutton question, the chosen answer option (value in item.data.options).
+         */
+        function answerChanged(question, value) {
+            // ALL answer types
+            question.answerChangedFlag = true;
+            resetAnswerIsDefinedFlag(question);
+
+            // RADIOBUTTON only
+            if (question.type_id === vm.allowedType.RADIOBUTTON_TYPE_ID) {
+                question.patient_answer.answer[0].answer_option_text = value.option_text;
+            }
         }
 
         /**
@@ -452,8 +474,11 @@
          * @desc This function leads to the summary page
          */
         function summaryPage(){
-            // go to summary page directly
-            navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
+            // If the previous page is the summary page, go back to it
+            if (Navigator.getPreviousPageName() === 'answeredQuestionnaire.html') navigator.popPage();
+
+            // Otherwise, go to a new instance of the summary page
+            else navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
                 answerQuestionnaireId: vm.questionnaire.qp_ser_num,
                 onceOnly: vm.onceOnly,
             });
@@ -870,7 +895,11 @@
          * @param question
          */
         function resetAnswerIsDefinedFlag(question) {
-            question.patient_answer.is_defined = answerSavedInDBValidStatus.ANSWER_CHANGED;
+            // Regular questions are considered pending (ANSWER_CHANGED) until saved in the database
+            // Once-only questions should immediately be considered saved, so that the SHOW/HIDE buttons appear on the summary
+            question.patient_answer.is_defined = vm.onceOnly ?
+                answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED
+                : answerSavedInDBValidStatus.ANSWER_CHANGED;
         }
 
         /**
@@ -984,16 +1013,6 @@
 
             // this has to be here because we need the vm.carousel to be initialized
             vm.carousel.once('overscroll', carouselOverScroll);
-        }
-
-        /**
-         * @name addListener
-         * @desc This private function serves to add any listener for this controller
-         */
-        function addListener() {
-            // listener for the carousel
-            document.addEventListener('ons-carousel:init', carouselInit);
-            document.addEventListener('ons-carousel:postchange', carouselPostChange);
         }
 
         /**

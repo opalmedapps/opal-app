@@ -158,8 +158,9 @@ SPDX-License-Identifier: Apache-2.0
                                     ng-if="!vm.isCompleted() && !vm.isDefinedAnswer(question)"
                                     class="answered--label" ng-style="question.labelColor">
                                     <p>
-                                        <i class="ion-chevron-left"></i>
+                                        <i ng-if="!vm.onceOnly" class="ion-chevron-left"></i>
                                         {{"ANSWER"|translate}}
+                                        <i ng-if="vm.onceOnly" class="ion-chevron-right"></i>
                                     </p>
                                 </span>
 
@@ -182,8 +183,9 @@ SPDX-License-Identifier: Apache-2.0
                                 <span
                                     ng-if="!vm.isCompleted() && vm.isDefinedAnswer(question) && vm.isSlider(question)"
                                     class="answered--label" ng-style="question.labelColor">
-                                    <i class="ion-chevron-left"></i>
+                                    <i ng-if="!vm.onceOnly" class="ion-chevron-left"></i>
                                     {{question.patient_answer.answer[0].answer_value}}/{{question.options[0].max_value}}
+                                    <i ng-if="vm.onceOnly" class="ion-chevron-right"></i>
                                 </span>
                             </ons-col>
                         </ons-row>
@@ -219,8 +221,9 @@ SPDX-License-Identifier: Apache-2.0
                             <!-- need twice parent due to ng-repeat -->
                             <button class="button" style="margin-bottom: 10px" ng-class="fontSizeDesc"
                                 ng-click="vm.editQuestion($parent.$parent.$index, $index)">
-                                <i class="ion-chevron-left"></i>
+                                <i ng-if="!vm.onceOnly" class="ion-chevron-left"></i>
                                 {{"QUESTIONNAIRE_GO_TO_QUESTION"|translate}}
+                                <i ng-if="vm.onceOnly" class="ion-chevron-right"></i>
                             </button>
                         </div>
 

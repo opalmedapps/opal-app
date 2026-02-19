@@ -52,7 +52,7 @@
 
             $timeout(() => {
                 navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html', {
-                    animation: 'fade', // OnsenUI
+                    animation: 'slide', // OnsenUI
                     answerQuestionnaireId: onceOnlyQuestionnaires[0].qp_ser_num,
                     onceOnly: true,
                 });
