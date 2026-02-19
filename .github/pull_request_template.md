@@ -4,8 +4,7 @@
     - `feat`: minor app version will be incremented.
     - `fix`, `deps`, `perf`: patch app version will be incremented.
     - `chore`, `ci`, etc.: app version will not be incremented.
-    - See [semantic-release/commit-analyzer](https://github.com/semantic-release/commit-analyzer/blob/master/lib/default-release-rules.js)
-      for the complete set of rules.
+    - See [semantic-release/commit-analyzer](https://github.com/semantic-release/commit-analyzer/blob/master/lib/default-release-rules.js) for the complete set of rules.
 
 ### Changes
 <!-- Summary of the changes in this PR. -->
