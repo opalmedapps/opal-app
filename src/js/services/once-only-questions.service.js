@@ -9,9 +9,9 @@
         .module('OpalApp')
         .service('OnceOnlyQuestions', OnceOnlyQuestions);
 
-    OnceOnlyQuestions.$inject = ['$filter', 'Params'];
+    OnceOnlyQuestions.$inject = ['$filter', 'Params', 'RequestToServer'];
 
-    function OnceOnlyQuestions($filter, Params) {
+    function OnceOnlyQuestions($filter, Params, RequestToServer) {
 
         // source: https://browser.ihtsdotools.org/?perspective=full&conceptId1=365981007&edition=MAIN/2026-02-01&release=&languages=en
         const TOBACCO_USE_CODES = {
@@ -223,7 +223,7 @@
             const frequencyAnswer = questionnaire.sections[0].questions[0].patient_answer;
 
             // If no frequency answer was given, cannot format data
-            if (frequencyAnswer.is_defined !== '1') return {}
+            if (frequencyAnswer.is_defined !== '1') return;
 
             const frequencyCode = ALCOHOL_USE_CODES[frequencyAnswer.answer[0].answer_value];
             const amountAnswer = questionnaire.sections[0].questions[1].patient_answer;
@@ -286,7 +286,7 @@
             const smokingAnswer = questionnaire.sections[0].questions[2].patient_answer;
 
             // If no smoking answer was given, cannot format data
-            if (smokingAnswer.is_defined !== '1') return {}
+            if (smokingAnswer.is_defined !== '1') return;
 
             const smokingCode = TOBACCO_USE_CODES[smokingAnswer.answer[0].answer_value];
 
@@ -320,17 +320,27 @@
             };
         }
 
-        function submit(questionnaire, patient_uuid) {
-            let fhirData = {};
+        async function submit(questionnaire, patient_uuid) {
+            let socialHistory = [
+                alcoholDataToFhir(questionnaire),
+                smokingDataToFhir(questionnaire),
+            ].filter(entry => entry !== undefined);
 
-            fhirData.alcoholUse = alcoholDataToFhir(questionnaire);
-            fhirData.tobaccoUse = smokingDataToFhir(questionnaire);
+            const requestParams = Params.API.ROUTES.ONCE_ONLY;
+            const formattedParams = {
+                ...requestParams,
+                url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid),
+            };
 
-            if (Object.keys(fhirData).length === 0) {
-                console.log("No FHIR data to submit.");
-            } else {
-                // TODO: replace with actual call to backend
-                console.log("Submitting FHIR data:", fhirData);
+            try {
+                // TODO: display some indicator of success in the view
+                await RequestToServer.apiRequest(formattedParams, {
+                    social_history: socialHistory,
+                });
+            }
+            catch (error) {
+                // TODO: display an error message in the view
+                console.error('Error submitting once-only answers', error);
             }
         }
     }

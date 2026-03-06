@@ -77,6 +77,10 @@
                     method: 'get',
                     url: '/api/patients/<PATIENT_UUID>/ips/',
                 },
+                ONCE_ONLY: {
+                    method: 'put',
+                    url: '/api/patients/<PATIENT_UUID>/health-data/patient-reported/',
+                },
             }
         });
 })();
