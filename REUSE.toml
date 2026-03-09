@@ -30,6 +30,7 @@ precedence = "override"
 SPDX-FileCopyrightText = "Copyright (C) 2020 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
 SPDX-License-Identifier = "Apache-2.0"
 
+
 [[annotations]]
 path = [
     "src/Languages/appTranslationTablesViews/all-views/de.json",
@@ -43,15 +44,7 @@ SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
 path = [
-    ".gitlab/merge_request_templates/Default.md",
-]
-precedence = "override"
-SPDX-FileCopyrightText = "Copyright (C) 2021 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
-SPDX-License-Identifier = "Apache-2.0"
-
-
-[[annotations]]
-path = [
+    ".github/pull_request_template.md",
     "babel.config.json",
 ]
 precedence = "override"

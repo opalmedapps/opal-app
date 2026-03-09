@@ -32,7 +32,7 @@
          * @returns {Promise<void>}
          */
         async function initUser() {
-            const requestParams = Params.API.ROUTES.USER;
+            const requestParams = Params.API.ROUTES.USER.GET;
             const result = await RequestToServer.apiRequest(requestParams);
             userInfo = result?.data;
             assignColor();

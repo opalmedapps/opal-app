@@ -54,8 +54,14 @@
                     url: '/api/caregivers/patients/'
                 },
                 USER: {
-                    method: 'get',
-                    url: '/api/caregivers/profile/',
+                    GET: {
+                        method: 'get',
+                        url: '/api/caregivers/profile/',
+                    },
+                    PATCH: {
+                        method: 'patch',
+                        url: '/api/caregivers/profile/',
+                    },
                 },
                 CAREGIVERS: {
                     method: 'get',
