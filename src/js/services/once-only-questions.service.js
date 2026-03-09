@@ -326,7 +326,7 @@
                 smokingDataToFhir(questionnaire),
             ].filter(entry => entry !== undefined);
 
-            const requestParams = Params.API.ROUTES.ONCE_ONLY;
+            const requestParams = Params.API.ROUTES.ONCE_ONLY.PUT;
             const formattedParams = {
                 ...requestParams,
                 url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid),
