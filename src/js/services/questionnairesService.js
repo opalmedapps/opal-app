@@ -280,11 +280,12 @@
 
         /**
          * @name requestOnceOnlyQuestionnaire
+         * @param {str} patient_uuid UUID of the patient for which to get the once-only questionnaire
          * @desc Requests the unique once-only questionnaire from the once-only data service and sets it as the current questionnaire.
          */
-        function requestOnceOnlyQuestionnaire() {
+        async function requestOnceOnlyQuestionnaire(patient_uuid) {
             clearCurrentQuestionnaire();
-            const questionnaire = OnceOnlyQuestions.getOnceOnlyQuestionnaire();
+            const questionnaire = await OnceOnlyQuestions.getOnceOnlyQuestionnaire(patient_uuid);
             setQuestionnaireList([questionnaire]);
             setQuestionnaire(questionnaire);
             return {Success: true, Location: 'Local'};

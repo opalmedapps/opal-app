@@ -10,10 +10,10 @@
         .controller('OnceOnlyController', OnceOnlyController);
 
     OnceOnlyController.$inject = ['$filter', '$scope', '$timeout', 'NativeNotification', 'Navigator', 'Params',
-        'Questionnaires', 'UpdateUI'];
+        'ProfileSelector', 'Questionnaires', 'UpdateUI'];
 
     function OnceOnlyController($filter, $scope, $timeout, NativeNotification, Navigator, Params,
-                                Questionnaires, UpdateUI) {
+                                ProfileSelector, Questionnaires, UpdateUI) {
         const vm = this;
 
         let navigator;
@@ -22,12 +22,15 @@
 
         activate();
 
-        function activate() {
+        async function activate() {
             navigator = Navigator.getNavigator();
+
+            // Grab the patient uuid from the ProfileSelector
+            const patient_uuid = ProfileSelector.getActiveProfile().patient_uuid;
 
             // Get the once-only questionnaire and set it in the Questionnaire service
             Questionnaires.clearAllQuestionnaire();
-            Questionnaires.requestOnceOnlyQuestionnaire();
+            await Questionnaires.requestOnceOnlyQuestionnaire(patient_uuid);
 
             // Force questionnaires to be re-downloaded after this, if the user visits another questionnaires page
             UpdateUI.updateTimestamps('QuestionnaireList', 0);

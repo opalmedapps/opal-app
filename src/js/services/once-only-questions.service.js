@@ -94,10 +94,14 @@
 
         /**
          * @description Get once-only questions in a format supported by the questionnaire views.
+         * @param {str} patient_uuid UUID of the patient for which to get the once-only questionnaire
          */
-        function getOnceOnlyQuestionnaire() {
+        async function getOnceOnlyQuestionnaire(patient_uuid) {
             // See: https://stackoverflow.com/questions/3746725/how-to-create-an-array-containing-1-n
             const arrayUpTo = length => [...Array(length).keys()].map(i => i+1);
+
+            var result = await retrieve(patient_uuid);
+            console.log(result);
 
             return {
                 allow_questionnaire_feedback: '1',
@@ -318,6 +322,28 @@
                     coding: [smokingCode],
                 },
             };
+        }
+
+        async function retrieve(patient_uuid) {
+            const requestParams = Params.API.ROUTES.ONCE_ONLY.GET;
+            const formattedParams = {
+                ...requestParams,
+                url: requestParams.url.replace('<PATIENT_UUID>', patient_uuid),
+            };
+
+            try {
+                let result = await RequestToServer.apiRequest(formattedParams);
+                console.log(result);
+                return result.data;
+            }
+            catch (error) {
+                if (error.response.status_code !== '404') {
+                    // TODO: display an error message in the view
+                    console.error('Error retrieving existing once-only answers', error);
+                }
+            }
+
+            return {};
         }
 
         async function submit(questionnaire, patient_uuid) {
