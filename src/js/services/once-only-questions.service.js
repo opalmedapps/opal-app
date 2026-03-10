@@ -13,6 +13,8 @@
 
     function OnceOnlyQuestions($filter, Params, RequestToServer) {
 
+        const SMOKING_STATUS_CODE = "72166-2";
+
         // source: https://browser.ihtsdotools.org/?perspective=full&conceptId1=365981007&edition=MAIN/2026-02-01&release=&languages=en
         const TOBACCO_USE_CODES = {
             1: {
@@ -100,10 +102,7 @@
             // See: https://stackoverflow.com/questions/3746725/how-to-create-an-array-containing-1-n
             const arrayUpTo = length => [...Array(length).keys()].map(i => i+1);
 
-            var result = await retrieve(patient_uuid);
-            console.log(result);
-
-            return {
+            const QUESTIONNAIRE = {
                 allow_questionnaire_feedback: '1',
                 created: 1771250400000,
                 description: $filter('translate')('ONCE_ONLY_DESCRIPTION'),
@@ -216,6 +215,38 @@
                     },
                 ],
             };
+
+            let result = await retrieve(patient_uuid);
+            let questionnaire = structuredClone(QUESTIONNAIRE);
+
+            let [alcoholAnswer, alcoholAmount] = fhirToAlcoholData(result.social_history);
+
+            if (alcoholAnswer) {
+                questionnaire.sections[0].questions[0].patient_answer.is_defined = '1';
+                questionnaire.sections[0].questions[0].patient_answer.answer = [{
+                    answer_value: alcoholAnswer,
+                    answer_option_text: $filter('translate')(`ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_${alcoholAnswer}`)
+                }]
+            }
+
+            if (alcoholAmount) {
+                questionnaire.sections[0].questions[1].patient_answer.is_defined = '1';
+                questionnaire.sections[0].questions[1].patient_answer.answer = [{
+                    answer_value: alcoholAmount,
+                }]
+            }
+
+            let smokingAnswer = fhirToSmokingData(result.social_history);
+
+            if (smokingAnswer) {
+                questionnaire.sections[0].questions[2].patient_answer.is_defined = '1';
+                questionnaire.sections[0].questions[2].patient_answer.answer = [{
+                    answer_value: smokingAnswer,
+                    answer_option_text: $filter('translate')(`ONCE_ONLY_QUESTION_SMOKING_${smokingAnswer}`),
+                }]
+            }
+
+            return questionnaire;
         }
 
         /**
@@ -281,6 +312,26 @@
             };
         }
 
+        function fhirToAlcoholData(socialHistory) {
+            const codeToKey = Object.entries(ALCOHOL_USE_CODES).reduce((acc, [key, value]) => {
+                acc[value.code] = key;
+                return acc;
+            }, {});
+
+            for (const key in socialHistory) {
+                const observation = socialHistory[key];
+
+                let code = observation.code.coding[0].code;
+                let amount = observation.valueQuantity?.value;
+
+                if (code in codeToKey) {
+                    return [codeToKey[code], amount];
+                }
+            }
+
+            return [null, null];
+        }
+
         /**
          * @description Extracts data about smoking habits from a once-only questionnaire and formats it as FHIR data.
          * @param questionnaire The once-only questionnaire from which to extract answers.
@@ -313,7 +364,7 @@
                     coding: [
                         {
                             system: "http://loinc.org",
-                            code: "72166-2",
+                            code: SMOKING_STATUS_CODE,
                             display: "Tobacco smoking status"
                         }
                     ]
@@ -322,6 +373,28 @@
                     coding: [smokingCode],
                 },
             };
+        }
+
+        function fhirToSmokingData(socialHistory) {
+            const codeToKey = Object.entries(TOBACCO_USE_CODES).reduce((acc, [key, value]) => {
+                acc[value.code] = key;
+                return acc;
+            }, {});
+
+            for (const key in socialHistory) {
+                const observation = socialHistory[key];
+                let code = observation.code.coding[0].code;
+
+                if (code == SMOKING_STATUS_CODE) {
+                    let valueCode = observation.valueCodeableConcept.coding[0].code;
+
+                    if (valueCode in codeToKey) {
+                        return codeToKey[valueCode];
+                    }
+                }
+            }
+
+            return null;
         }
 
         async function retrieve(patient_uuid) {
