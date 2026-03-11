@@ -216,34 +216,36 @@
                 ],
             };
 
-            let result = await retrieve(patient_uuid);
             let questionnaire = structuredClone(QUESTIONNAIRE);
+            let result = await retrieve(patient_uuid);
 
-            let [alcoholAnswer, alcoholAmount] = fhirToAlcoholData(result.social_history);
+            if (result && result.social_history) {
+                let [alcoholAnswer, alcoholAmount] = fhirToAlcoholData(result.social_history);
 
-            if (alcoholAnswer) {
-                questionnaire.sections[0].questions[0].patient_answer.is_defined = '1';
-                questionnaire.sections[0].questions[0].patient_answer.answer = [{
-                    answer_value: alcoholAnswer,
-                    answer_option_text: $filter('translate')(`ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_${alcoholAnswer}`)
-                }]
-            }
+                if (alcoholAnswer) {
+                    questionnaire.sections[0].questions[0].patient_answer.is_defined = '1';
+                    questionnaire.sections[0].questions[0].patient_answer.answer = [{
+                        answer_value: alcoholAnswer,
+                        answer_option_text: $filter('translate')(`ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_${alcoholAnswer}`)
+                    }]
+                }
 
-            if (alcoholAmount) {
-                questionnaire.sections[0].questions[1].patient_answer.is_defined = '1';
-                questionnaire.sections[0].questions[1].patient_answer.answer = [{
-                    answer_value: alcoholAmount,
-                }]
-            }
+                if (alcoholAmount) {
+                    questionnaire.sections[0].questions[1].patient_answer.is_defined = '1';
+                    questionnaire.sections[0].questions[1].patient_answer.answer = [{
+                        answer_value: alcoholAmount,
+                    }]
+                }
 
-            let smokingAnswer = fhirToSmokingData(result.social_history);
+                let smokingAnswer = fhirToSmokingData(result.social_history);
 
-            if (smokingAnswer) {
-                questionnaire.sections[0].questions[2].patient_answer.is_defined = '1';
-                questionnaire.sections[0].questions[2].patient_answer.answer = [{
-                    answer_value: smokingAnswer,
-                    answer_option_text: $filter('translate')(`ONCE_ONLY_QUESTION_SMOKING_${smokingAnswer}`),
-                }]
+                if (smokingAnswer) {
+                    questionnaire.sections[0].questions[2].patient_answer.is_defined = '1';
+                    questionnaire.sections[0].questions[2].patient_answer.answer = [{
+                        answer_value: smokingAnswer,
+                        answer_option_text: $filter('translate')(`ONCE_ONLY_QUESTION_SMOKING_${smokingAnswer}`),
+                    }]
+                }
             }
 
             return questionnaire;
@@ -406,7 +408,6 @@
 
             try {
                 let result = await RequestToServer.apiRequest(formattedParams);
-                console.log(result);
                 return result.data;
             }
             catch (error) {
