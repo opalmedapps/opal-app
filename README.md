@@ -316,13 +316,15 @@ To add support for a new language in the app, follow the steps below:
    (or if it doesn't exist, use its 3-character ISO 639-3 code instead).
 1. Create the three main translation files for `all-views`, `login` and `top-view`
    in `src/Languages/appTranslationTablesViews/`, named using the language code from step 1 (`xx.json`).
+    1. Check carefully all translations that use curly brackets `{` `}`;
+       some content within brackets is translatable, but variable names should not be translated.
 1. Add a locale file for the new language at `src/Languages/angular-locales/`.
-    i. You can browse for and download existing ones [here](https://github.com/angular/bower-angular-i18n/blob/master/angular-locale_en-ca.js)
+    1. You can browse for and download existing ones [here](https://github.com/angular/bower-angular-i18n/blob/master/angular-locale_en-ca.js)
        (preferred), or create your own if needed.
-    i. Rename it with the country code `-ca`, no matter its actual locale, e.g. `angular-locale_en-ca.js`
+    1. Rename it with the country code `-ca`, no matter its actual locale, e.g. `angular-locale_en-ca.js`
        (for now, this is needed for `angular-translate` to properly locate the files).
-    i. Add a header comment to the file describing its source.
-    i. Compare the new locale file to existing ones to add any missing custom content.
+    1. Add a header comment to the file describing its source.
+    1. Compare the new locale file to existing ones to add any missing custom content.
        for example, the date formats `mediumNoSeconds` and `veryShortTime` should be added.
 1. Exclude the new language files from typo-checking (in `.typos.toml`).
 1. Add the new language's ISO 639 code to `supportedLanguages` in all `opal.config.js` files,
