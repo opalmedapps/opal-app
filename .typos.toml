@@ -34,6 +34,9 @@ extend-exclude = [
     "src/Languages/angular-locales/angular-locale_de-ca.js",
     "src/Languages/appTranslationTablesViews/*/de.json",
 
+    "src/Languages/angular-locales/angular-locale_ga-ca.js",
+    "src/Languages/appTranslationTablesViews/*/ga.json",
+
     "LICENSES/*",
     "src/lib/ui-bootstrap-tpls-2.5.6-original.js",
     "REUSE.toml",
