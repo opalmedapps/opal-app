@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import '../../../css/views/answered-questionnaire.view.css';
+
 (function () {
     'use strict';
 
@@ -22,6 +24,7 @@
         'Firebase',
         'NativeNotification',
         'Navigator',
+        'OnceOnlyQuestions',
         'Params',
         'ProfileSelector',
         'Questionnaires',
@@ -30,8 +33,8 @@
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, Navigator, Params,
-                                             ProfileSelector, Questionnaires, Studies, User) {
+    function AnsweredQuestionnaireController($filter, $scope, $timeout, Firebase, NativeNotification, Navigator, OnceOnlyQuestions,
+                                             Params, ProfileSelector, Questionnaires, Studies, User) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -55,6 +58,7 @@
         vm.isConsent = false;
         vm.loadingQuestionnaire = true;     // the loading circle for one questionnaire
         vm.loadingSubmitQuestionnaire = false;  // the loading circle for saving questionnaire
+        vm.onceOnly = false;  // marks whether this controller is being used for once-only questions
         vm.password = '';   // the password that the user may enter for consent form
         vm.questionnaire = {};  // the questionnaire itself
         vm.requirePassword = false;     // determine whether the password is required for submission or not
@@ -68,24 +72,21 @@
         vm.questionOnClick = questionOnClick;
         vm.submitQuestionnaire = submitQuestionnaire;
         vm.updateRequirePassword = updateRequirePassword
-        vm.isInvalidAnswerForQuestion = isInvalidAnswerForQuestion;
-        vm.isValidAnswerForQuestionAndNotSlider = isValidAnswerForQuestionAndNotSlider;
-        vm.isValidAnswerForQuestionAndSlider = isValidAnswerForQuestionAndSlider;
+        vm.isCompleted = () => vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
+        vm.isSlider = question => question.type_id === vm.allowedType.SLIDER_TYPE_ID;
+        vm.isDefinedAnswer = question => question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED;
 
         activate();
 
         ////////////////
 
-        function activate() {
+        async function activate() {
             navigator = Navigator.getNavigator();
-
             let params = Navigator.getParameters();
 
-            if (!params.hasOwnProperty('answerQuestionnaireId')){
-                vm.loadingQuestionnaire = false;
+            bindEvents();
 
-                handleLoadQuestionnaireErr();
-            }
+            vm.onceOnly = !!params?.onceOnly;
 
             // Get the user and patient names to display on the submission page
             vm.isAnsweringAsSelf = ProfileSelector.currentProfileIsSelf();
@@ -96,35 +97,56 @@
                 patientName: `${patient.first_name} ${patient.last_name}`,
             };
 
-            Questionnaires.requestQuestionnaire(params.answerQuestionnaireId)
-                .then(function(){
-                    $timeout(function(){
-                        vm.questionnaire = Questionnaires.getCurrentQuestionnaire();
+            if (!params.hasOwnProperty('answerQuestionnaireId')){
+                vm.loadingQuestionnaire = false;
+                console.error('Navigator parameter "answerQuestionnaireId" is missing');
+                handleLoadQuestionnaireErr();
+                return;
+            }
 
-                        // verify if we are waiting to save an answer
-                        if (Questionnaires.isWaitingForSavingAnswer()){
-                            setTimeout(init, vm.answerSavedInDBValidStatus.ANSWER_SAVING_WAITING_TIME);
-                        }else{
-                            // process the answers and check if submit is allowed.
-                            init();
-                        }
+            try {
+                await Questionnaires.requestQuestionnaire(params.answerQuestionnaireId);
 
-                        $scope.$on('$destroy', () => {
-                            // Reload user profile if questionnaire was opened via Notifications tab,
-                            // and profile was implicitly changed.
-                            Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
-                        });
+                vm.questionnaire = Questionnaires.getCurrentQuestionnaire();
 
-                        vm.loadingQuestionnaire = false;
-                    });
-                })
-                .catch(function(){
-                    $timeout(function(){
-                        vm.loadingQuestionnaire = false;
+                // If the questionnaire still has "new" status (possible for once-only questionnaires), update it to "in progress"
+                if (vm.questionnaire.status === vm.allowedStatus.NEW_QUESTIONNAIRE_STATUS) {
+                    await Questionnaires.updateQuestionnaireStatus(
+                        vm.questionnaire.qp_ser_num,
+                        vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS,
+                        vm.questionnaire.status
+                    );
+                }
 
-                        handleLoadQuestionnaireErr();
-                    });
-                });
+                // Verify if we are waiting to save an answer
+                if (Questionnaires.isWaitingForSavingAnswer()) {
+                    setTimeout(init, vm.answerSavedInDBValidStatus.ANSWER_SAVING_WAITING_TIME);
+                }
+                else {
+                    // Process the answers and check if submitting is allowed
+                    init();
+                }
+            }
+            catch (error) {
+                console.error(error);
+                handleLoadQuestionnaireErr();
+            }
+            finally {
+                vm.loadingQuestionnaire = false;
+            }
+        }
+
+        function bindEvents() {
+            // Refresh the view when coming back from another page
+            navigator.on('postpop', init);
+
+            $scope.$on('$destroy', () => {
+                // Reload user profile if questionnaire was opened via Notifications tab,
+                // and profile was implicitly changed.
+                Navigator.reloadPreviousProfilePrepopHandler('notifications.html');
+
+                navigator.off('postpop')
+            });
         }
 
         /**
@@ -134,14 +156,18 @@
          * @param {int} qIndex the index of the question to be edited
          */
         function editQuestion(sIndex, qIndex) {
-            navigator.replacePage('views/personal/questionnaires/questionnaires.html', {
+            const url = 'views/personal/questionnaires/questionnaires.html';
+            const parameters = {
                 animation: 'slide', // OnsenUI
                 sectionIndex: sIndex,
                 questionIndex: qIndex,
                 editQuestion: true,
                 answerQuestionnaireId: vm.questionnaire.qp_ser_num,
-                questionnairePurpose: purpose
-            });
+                questionnairePurpose: purpose,
+                onceOnly: vm.onceOnly,
+            };
+            if (vm.onceOnly) navigator.pushPage(url, parameters);
+            else navigator.replacePage(url, parameters);
         }
 
         /**
@@ -174,22 +200,29 @@
                         }
                     }
 
-                    // mark questionnaire as finished
-                    return Questionnaires.updateQuestionnaireStatus(
-                        vm.questionnaire.qp_ser_num,
-                        vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS,
-                        vm.questionnaire.status
-                    );
+                    if (vm.onceOnly) {
+                        OnceOnlyQuestions.submit(vm.questionnaire, patient_uuid);
+                    }
+                    else {
+                        // mark questionnaire as finished
+                        return Questionnaires.updateQuestionnaireStatus(
+                            vm.questionnaire.qp_ser_num,
+                            vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS,
+                            vm.questionnaire.status
+                        );
+                    }
                 })
                 .then(function(){
                     vm.loadingSubmitQuestionnaire = false;
 
-                    vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
+                    if (!vm.onceOnly) {
+                        vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
 
-                    navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {
-                        animation: 'slide', // OnsenUI
-                        questionnairePurpose: purpose
-                    });
+                        navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {
+                            animation: 'slide', // OnsenUI
+                            questionnairePurpose: purpose
+                        });
+                    }
                 })
                 .catch(handleSubmitErr)
         }
@@ -369,26 +402,36 @@
          * @desc Set the question's style to display on the front end
          *      The question is of color:
          *          red if the questionnaire is not completed and the question does not have a valid answer
-         *          green if the questionnaire is not completed and the question do have a valid answer
+         *          green if the questionnaire is not completed and the question does have a valid (defined) answer
+         *          white if the questionnaire is not completed and the question is unanswered but optional
          *          white if the questionnaire is completed or otherwise
          * @param {int} status the status of the questionnaire
          * @param {object} question the question itself
          */
-        function setQuestionStyle(status, question){
+        function setQuestionStyle(status, question) {
+            const redBackground = { 'background-color': '#d9534f' }
+            const whiteBackground = { 'background-color': 'white' }
+            const greenBackground = { 'background-color': '#5cd65c' }
+            const whiteLabel = { 'color': 'white' }
+            const blueLabel = { 'color': '#2664ABCC' }
+
             if (status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS){
                 if (question.optional === '0' && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED){
-                    question.style = {
-                        'background-color': '#d9534f',
-                    }
-                } else {
-                    question.style = {
-                        'background-color': '#5cd65c',
-                    }
+                    question.backgroundColor = redBackground;
+                    question.labelColor = whiteLabel;
                 }
-            } else {
-                question.style = {
-                    'background-color': 'white',
+                else if (question.optional === '1' && question.patient_answer.is_defined === '0') {
+                    question.backgroundColor = whiteBackground;
+                    question.labelColor = blueLabel;
                 }
+                else {
+                    question.backgroundColor = greenBackground;
+                    question.labelColor = whiteLabel;
+                }
+            }
+            else {
+                question.backgroundColor = whiteBackground;
+                question.labelColor = blueLabel;
             }
         }
 
@@ -442,6 +485,7 @@
          * @param {Error} error
          */
         function handleSubmitErr(error) {
+            console.error(error);
             if (error.code === Params.invalidPassword) {
 
                 $timeout(function () {
@@ -478,40 +522,5 @@
         function updateRequirePassword() {
             vm.requirePassword = purpose === 'consent' && vm.consentStatus === true;
         }
-
-        /**
-         * @name isInvalidAnswerForQuestion
-         * @desc Non completed questionnaire and invalid answer for the question
-         * @returns {boolean}
-         */
-         function isInvalidAnswerForQuestion(question) {
-            return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
-                && question.optional === '0'
-                && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED
-        }
-
-        /**
-         * @name isValidAnswerForQuestionAndNotSlider
-         * @desc Non completed questionnaire, valid answer for the question, and not slider
-         * @returns {boolean}
-         */
-         function isValidAnswerForQuestionAndNotSlider(question) {
-            return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
-                && question.type_id !== vm.allowedType.SLIDER_TYPE_ID
-                && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED);
-        }
-
-        /**
-         * @name isValidAnswerForQuestionAndSlider
-         * @desc Non completed questionnaire, valid answer for the question, and slider
-         * @returns {boolean}
-         */
-        function isValidAnswerForQuestionAndSlider(question) {
-            return vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS
-                && question.type_id === vm.allowedType.SLIDER_TYPE_ID
-                && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED);
-        }
-
     }
-
 })();

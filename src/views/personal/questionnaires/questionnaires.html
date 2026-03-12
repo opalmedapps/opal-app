@@ -206,7 +206,7 @@ SPDX-License-Identifier: Apache-2.0
                                     <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
                                         <input type="radio" name="{{'mcRadio'+item.data.question_id}}" value={{value.option_id}}
                                                ng-model="item.data.patient_answer.answer[0].answer_value"
-                                               ng-change="item.data.answerChangedFlag = true; item.data.patient_answer.answer[0].answer_option_text = value.option_text">
+                                               ng-change="vm.answerChanged(item.data, value)">
                                         <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                         {{value.option_text}}
                                     </label>
@@ -254,7 +254,7 @@ SPDX-License-Identifier: Apache-2.0
                                     <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
                                         <input type="radio" name="{{'slider'+item.data.question_id}}" value={{op.value}}
                                                ng-model="item.data.patient_answer.answer[0].answer_value"
-                                               ng-change="item.data.answerChangedFlag = true;">
+                                               ng-change="vm.answerChanged(item.data)">
                                         <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                         {{op.text}}
                                     </label>
@@ -268,7 +268,7 @@ SPDX-License-Identifier: Apache-2.0
 
                                         <textarea ng-class="fontSizeDesc" style="height:200px" id="textType" wrap="hard"
                                                   ng-model="item.data.patient_answer.answer[0].answer_value"
-                                                  ng-change="item.data.answerChangedFlag = true;"
+                                                  ng-change="vm.answerChanged(item.data)"
                                                   ng-init="vm.initTextboxQuestion(item.data)"
                                                   ng-trim="false"></textarea>
                             <style>
@@ -290,7 +290,7 @@ SPDX-License-Identifier: Apache-2.0
 
                         <div align="center" style="margin-top: 20px">
                             <button class="button--large--cta" ng-click="vm.finishQuestionnaireFromQuestion();"
-                                    ng-show="vm.questionnaire.status === vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && vm.editQuestion"
+                                    ng-show="vm.questionnaire.status === vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && vm.editQuestion && !vm.onceOnly"
                                     style="width:80%">{{"GO_TO_SUMMARY"|translate}}
                             </button>
                             <br>

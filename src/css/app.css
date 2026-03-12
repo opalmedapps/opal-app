@@ -98,6 +98,7 @@ p {
 @import url('./views/test-result.view.css');
 @import url('./elements/button.element.css');
 @import url('./views/account-settings.view.css');
+@import url('./views/answered-questionnaire.view.css');
 @import url('./views/smartdevices.view.css');
 @import url('./elements/tab-bar.element.css');
 @import url('./elements/card.element.css');

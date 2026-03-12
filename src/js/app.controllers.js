@@ -35,6 +35,7 @@ import "./controllers/notifications/notificationsController.js";
 import "./controllers/parking/parkingController.js";
 import "./controllers/questionnaires/questionnaireMainController.js";
 import "./controllers/questionnaires/answeredQuestionnaireController.js";
+import "./controllers/questionnaires/once-only-questions.controller.js";
 import "./controllers/questionnaires/questionnairesListController.js";
 import "./controllers/questionnaires/questionnaireCompletionController.js";
 import "./controllers/questionnaires/questionnaireNotifRedirectController";
