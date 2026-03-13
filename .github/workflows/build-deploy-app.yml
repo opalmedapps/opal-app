@@ -345,6 +345,8 @@ jobs:
   verify-ios-build:
     needs: build-ios-release
     runs-on: macos-latest
+    # Only run when deploying to the store
+    if: ${{ inputs.DEPLOY_APPLE_STORE }}
     steps:
       # Setup
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
