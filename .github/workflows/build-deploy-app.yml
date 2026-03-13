@@ -6,7 +6,7 @@
 
 name: Build and Deploy App
 # Default to dev when running automatically (see also "env" below)
-run-name: Building ${{ (inputs.DEPLOY_FIREBASE || inputs.DEPLOY_STORES) && 'and deploying ' || '' }}the mobile app for ${{ inputs.ENVIRONMENT || 'dev' }}
+run-name: Building ${{ (inputs.DEPLOY_FIREBASE || inputs.DEPLOY_APPLE_STORE || inputs.DEPLOY_GOOGLE_STORE) && 'and deploying ' || '' }}the mobile app for ${{ inputs.ENVIRONMENT || 'dev' }}
 on:
   # When pushing to main, automatically build for dev
   push:
@@ -29,8 +29,13 @@ on:
         required: true
         default: false
         type: boolean
-      DEPLOY_STORES:
-        description: '[Prod only] Deploy the app via the app stores'
+      DEPLOY_APPLE_STORE:
+        description: '[Prod only] Deploy the iOS app via the Apple App Store'
+        required: true
+        default: false
+        type: boolean
+      DEPLOY_GOOGLE_STORE:
+        description: '[Prod only] Deploy the Android app via the Google Play Store'
         required: true
         default: false
         type: boolean
@@ -361,11 +366,37 @@ jobs:
           APPLE_STORE_UPLOAD_PASSWORD: ${{ secrets.APPLE_STORE_UPLOAD_PASSWORD }}
 
 
+  deploy-android-to-store:
+    needs: build-android-release
+    runs-on: macos-latest
+    # Deploy manually via inputs
+    if: ${{ inputs.DEPLOY_GOOGLE_STORE }}
+    steps:
+      # Setup
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Download Android build artifact
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: android-app
+          run-id: ${{ github.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # See: https://github.com/marketplace/actions/upload-android-release-to-play-store
+      - uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_STORE_UPLOAD_SERVICE_ACCOUNT_JSON }}
+          packageName: ${{ vars.GOOGLE_STORE_UPLOAD_PACKAGE_NAME }}
+          releaseFiles: ${{ needs.build-android-release.outputs.ARTIFACT_NAME }}
+          track: qa
+          status: draft
+
+
   deploy-ios-to-store:
     needs: [build-ios-release, verify-ios-build]
     runs-on: macos-latest
     # Deploy manually via inputs
-    if: ${{ inputs.DEPLOY_STORES }}
+    if: ${{ inputs.DEPLOY_APPLE_STORE }}
     steps:
       # Setup
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
