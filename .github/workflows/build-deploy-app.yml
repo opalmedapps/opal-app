@@ -390,7 +390,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_STORE_UPLOAD_SERVICE_ACCOUNT_JSON }}
           packageName: ${{ vars.GOOGLE_STORE_UPLOAD_PACKAGE_NAME }}
           releaseFiles: ${{ needs.build-android-release.outputs.ARTIFACT_NAME }}
-          track: qa
+          track: internal
           status: draft
 
 
