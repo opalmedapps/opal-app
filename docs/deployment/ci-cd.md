@@ -24,12 +24,15 @@ To build and release the prod app to the stores, follow these steps:
      Go to the [GitHub Actions page](https://github.com/opalmedapps/opal-app/actions),
      select `Increment Version`, and next to the `workflow_dispatch`, select `Run workflow` for the `main` branch.
   2. After execution completes, on the Actions page, select `Build and Deploy App`, and `Run workflow` with the following options:
-      - Deploy the app via the app stores: yes.
+      - Deploy the app via the Apple App Store / Google Play Store: yes, usually for both,
+        unless you need to deploy only to one store for a specific reason.
       - A specific build number to use: enter a number — check the stores for the next sequential number to use.
   3. When the build finishes:
-      - It will have been automatically uploaded to TestFlight (Apple).
-      - You'll need to manually upload the `android-app-release` aab file to Google Play (Android).
-  4. The app won't automatically be published to users;
+      - It will have been automatically uploaded to TestFlight (Apple),
+        and will be available to testers within the next few minutes.
+      - It will have been automatically uploaded to Google Play (Android) in the internal test track as a draft.
+        You'll need to publish this draft manually to give access to the app to testers.
+  4. The app won't automatically be published to end users;
      you'll still need to create new releases in the stores and submit them for review.
 
 ## Workflow Descriptions
@@ -55,10 +58,9 @@ As such, the jobs in this workflow run by default for the Dev environment.
 
 This workflow also provides a manual interface ([workflow dispatch](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow))
 which can be used to build and deploy the app for another environment.
-When building for the prod environment, an option can be selected to also deploy the app to the stores.
-Choosing this option will build a release version of the iOS and Android apps (in addition to the regular build).
-In the case of iOS, this release app is uploaded to TestFlight for release.
-The Android release app can be uploaded manually to Google Play (WIP to use an action to also do this automatically).
+When building for the prod environment, options can be selected to also deploy the app to the stores.
+Choosing these options will build a release version of the iOS or Android app (in addition to the regular build),
+and upload it to the Apple App Store or Google Play Store.
 
 To build the app on demand, go to the [GitHub Actions Tab](https://github.com/opalmedapps/opal-app/actions),
 select `Build and Deploy App` in the left sidebar, and next to `This workflow has a workflow_dispatch event trigger`,
