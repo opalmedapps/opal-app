@@ -384,6 +384,12 @@ jobs:
           name: android-app
           run-id: ${{ github.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug ls
+        run: ls -la
+      - name: Debug artifact
+        run: echo $releaseFiles
+        env:
+          releaseFiles: ${{ needs.build-android-release.outputs.ARTIFACT_NAME }}
       # See: https://github.com/marketplace/actions/upload-android-release-to-play-store
       - uses: r0adkll/upload-google-play@v1
         with:
