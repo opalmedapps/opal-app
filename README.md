@@ -4,6 +4,30 @@ SPDX-FileCopyrightText: Copyright (C) 2015 Opal Health Informatics Group at the 
 SPDX-License-Identifier: Apache-2.0
 -->
 
+# Branch Notes
+
+This branch was created as a strangler-fig approach to migrate the app code from AngularJS to React.
+The goal is to translate as many pieces of the code as possible to React, one after the other,
+while still running the app withing its existing AngularJS shell.
+
+This version of the app is functional; the app runs with both AngularJS and React together in the same project.
+
+Once as many features as possible are translated, one last push would be made to remove AngularJS fully,
+and to have everything running on React and Cordova alone.
+After this point, if we choose, React Native could be considered as a possible phase 2 addition
+(if it serves the overall needs of the project).
+
+While translating to React, attempts should be made whenever possible to improve the code and switch to newer,
+best-practice components, instead of rewiring deprecated components to work in the new code.
+With this in mind, the following changes have been made:
+
+  - Switching from `angular-translate` to `react-i18next` for translation and localization.
+  - Implementing new components with `Mantine UI` instead of the deprecated `OnsenUI`
+    (while attempting to keep a similar look and feel).
+  - Collecting often-repeated code into reusable components
+
+This project is still in its beginning stage, and a lot of work is still needed to migrate more features to React.
+
 # Opal Web And Mobile App
 
 Opal is a patient portal application for mobile devices and the web which originated from the winning project of
