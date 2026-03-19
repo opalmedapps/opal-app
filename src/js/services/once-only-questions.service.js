@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// TODO: If a user answers and saves question A, leaves, then answers and saves question B, then the answers to A are overwritten and lost
-// TODO: add the ability to remove the answer to a radio button question; since once-only questions are optional, users should be able to remove an answer given by mistake
+// TODO: Add the ability to remove the answer to a radio button question; since once-only questions are optional, users should be able to remove an answer given by mistake
+// TODO: The dependency between the two alcohol questions might not be clear to users. If they answer the second question when not required, their answer gets deleted without a warning.
+//       Consider finding a way to make the answer to the second question invalid depending on what they answered in the first question.
 
 (function () {
     'use strict';
@@ -93,6 +94,8 @@
                 display: "Alcoholic drinks per day"
             },
         }
+
+        const isDefinedAnswer = patientAnswer => [STATUS.ANSWER_SAVED_CONFIRMED, STATUS.ANSWER_CHANGED_ONCE_ONLY].includes(patientAnswer.is_defined);
 
         return {
             getOnceOnlyQuestionnaire: getOnceOnlyQuestionnaire,
@@ -265,7 +268,7 @@
             const frequencyAnswer = questionnaire.sections[0].questions[0].patient_answer;
 
             // If no frequency answer was given, cannot format data
-            if (frequencyAnswer.is_defined !== STATUS.ANSWER_CHANGED_ONCE_ONLY) return;
+            if (!isDefinedAnswer(frequencyAnswer)) return;
 
             const frequencyCode = ALCOHOL_USE_CODES[frequencyAnswer.answer[0].answer_value];
             const amountAnswer = questionnaire.sections[0].questions[1].patient_answer;
@@ -348,7 +351,7 @@
             const smokingAnswer = questionnaire.sections[0].questions[2].patient_answer;
 
             // If no smoking answer was given, cannot format data
-            if (smokingAnswer.is_defined !== STATUS.ANSWER_CHANGED_ONCE_ONLY) return;
+            if (!isDefinedAnswer(smokingAnswer)) return;
 
             const smokingCode = TOBACCO_USE_CODES[smokingAnswer.answer[0].answer_value];
 
