@@ -36,6 +36,9 @@ path = [
     "src/Languages/appTranslationTablesViews/all-views/de.json",
     "src/Languages/appTranslationTablesViews/login/de.json",
     "src/Languages/appTranslationTablesViews/top-view/de.json",
+    "src/Languages/appTranslationTablesViews/all-views/ga.json",
+    "src/Languages/appTranslationTablesViews/login/ga.json",
+    "src/Languages/appTranslationTablesViews/top-view/ga.json",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "Copyright (C) 2026 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>"
