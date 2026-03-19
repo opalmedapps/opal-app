@@ -896,9 +896,9 @@
          */
         function resetAnswerIsDefinedFlag(question) {
             // Regular questions are considered pending (ANSWER_CHANGED) until saved in the database
-            // Once-only questions should immediately be considered saved, so that the SHOW/HIDE buttons appear on the summary
+            // Once-only questions should be considered as saved locally with a special status, so that the SHOW/HIDE buttons appear on the summary
             question.patient_answer.is_defined = vm.onceOnly ?
-                answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED
+                answerSavedInDBValidStatus.ANSWER_CHANGED_ONCE_ONLY
                 : answerSavedInDBValidStatus.ANSWER_CHANGED;
         }
 
@@ -925,6 +925,9 @@
          * @returns {Promise}
          */
         function saveAnswer(question){
+            // Once-only: do not save answers to the backend from here
+            if (vm.onceOnly) return Promise.resolve()
+
             // the argument for is_skipped is always 0 as of now (January 2019) because the skipped functionality is not available yet
             return Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, vm.questionnaire.sections[vm.sectionIndex].section_id, question, 0);
         }

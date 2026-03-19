@@ -19,7 +19,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <div ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS"
         ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire"
-        style="margin-top:5px">
+        style="margin-top: 5px; margin-bottom: 20px">
         <!-- Display title if consent form -->
         <div class="col-xs-12" align="center" ng-if="vm.isConsent">
             <h3><b><span style="color: darkmagenta" ng-class="fontSizeTitle">{{vm.questionnaire.nickname}}</span></b>
@@ -86,9 +86,12 @@ SPDX-License-Identifier: Apache-2.0
         <div class="light-grey-comment" style="padding: 0 10px">
             {{ (vm.isAnsweringAsSelf ? 'QUESTIONNAIRE_SUBMIT_AS_SELF' : 'QUESTIONNAIRE_SUBMIT_AS_OTHER') | translate:vm.submittedByNames }}
         </div>
-        <br>
     </div>
 
+    <!-- Once-only questionnaires: show a reminder if the user has un-submitted answers -->
+    <div ng-if="vm.onceOnly && vm.hasNewOnceOnlyAnswers()" style="padding: 0 10px 4px; font-style: italic">
+        {{ 'QUESTIONNAIRE_UNSAVED_ANSWERS' | translate }}
+    </div>
     <ons-row align="center" style="margin-left: 0.12vw;"
         ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
         <!-- Display questionnaire title and description on completed questionnaire view -->

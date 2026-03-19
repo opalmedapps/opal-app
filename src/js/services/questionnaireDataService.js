@@ -142,12 +142,8 @@
                 };
 
             try {
-                // Once-only: do not send answers to the backend
-                if (answerQuestionnaireId === '-1') return {Success: true, Location: 'Local'};
-                else {
-                    await RequestToServer.sendRequestWithResponse(api.SAVE_ANSWER, params);
-                    return {Success: true, Location: 'Server'};
-                }
+                await RequestToServer.sendRequestWithResponse(api.SAVE_ANSWER, params);
+                return {Success: true, Location: 'Server'};
             } catch (error) {
                 throw {Success: false, Location: '', Error: error};
             }

@@ -69,12 +69,13 @@ import '../../../css/views/answered-questionnaire.view.css';
 
         // functions that can be seen from view, sorted alphabetically
         vm.editQuestion = editQuestion;
+        vm.hasNewOnceOnlyAnswers = () => vm.questionnaire?.sections?.some(section => section.questions?.some(question => question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_CHANGED_ONCE_ONLY))
         vm.questionOnClick = questionOnClick;
         vm.submitQuestionnaire = submitQuestionnaire;
         vm.updateRequirePassword = updateRequirePassword
         vm.isCompleted = () => vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
         vm.isSlider = question => question.type_id === vm.allowedType.SLIDER_TYPE_ID;
-        vm.isDefinedAnswer = question => question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED;
+        vm.isDefinedAnswer = question => [vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED, vm.answerSavedInDBValidStatus.ANSWER_CHANGED_ONCE_ONLY].includes(question.patient_answer.is_defined);
 
         activate();
 
@@ -201,7 +202,7 @@ import '../../../css/views/answered-questionnaire.view.css';
                     }
 
                     if (vm.onceOnly) {
-                        OnceOnlyQuestions.submit(vm.questionnaire, patient_uuid);
+                        return OnceOnlyQuestions.submit(vm.questionnaire, patient_uuid);
                     }
                     else {
                         // mark questionnaire as finished
@@ -215,7 +216,9 @@ import '../../../css/views/answered-questionnaire.view.css';
                 .then(function(){
                     vm.loadingSubmitQuestionnaire = false;
 
-                    if (!vm.onceOnly) {
+                    // If submitting once-only questions, refresh the colours of the answer list
+                    if (vm.onceOnly) init();
+                    else {
                         vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
 
                         navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {
@@ -409,26 +412,46 @@ import '../../../css/views/answered-questionnaire.view.css';
          * @param {object} question the question itself
          */
         function setQuestionStyle(status, question) {
+            const blueBackground = { 'background-color': '#daeef5' }
+            const greenBackground = { 'background-color': '#5cd65c' }
             const redBackground = { 'background-color': '#d9534f' }
             const whiteBackground = { 'background-color': 'white' }
-            const greenBackground = { 'background-color': '#5cd65c' }
-            const whiteLabel = { 'color': 'white' }
             const blueLabel = { 'color': '#2664ABCC' }
+            const whiteLabel = { 'color': 'white' }
 
-            if (status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS){
-                if (question.optional === '0' && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED){
-                    question.backgroundColor = redBackground;
-                    question.labelColor = whiteLabel;
-                }
-                else if (question.optional === '1' && question.patient_answer.is_defined === '0') {
-                    question.backgroundColor = whiteBackground;
-                    question.labelColor = blueLabel;
-                }
-                else {
-                    question.backgroundColor = greenBackground;
-                    question.labelColor = whiteLabel;
-                }
+            const invalidAnswers = [
+                vm.answerSavedInDBValidStatus.ANSWER_INVALID,
+                vm.answerSavedInDBValidStatus.ANSWER_SAVING_WAITING,
+                vm.answerSavedInDBValidStatus.ANSWER_SAVING_ERROR,
+                vm.answerSavedInDBValidStatus.ANSWER_CHANGED,
+            ];
+
+            // Completed questionnaires always show answers on a plain white background
+            if (status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS) {
+                question.backgroundColor = whiteBackground;
+                question.labelColor = blueLabel;
             }
+            // Blue: used for once-only questions that haven't yet been saved in the backend
+            else if (question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_CHANGED_ONCE_ONLY) {
+                question.backgroundColor = blueBackground;
+                question.labelColor = blueLabel;
+            }
+            // White: an optional question that hasn't been answered
+            else if (question.optional === '1' && question.patient_answer.is_defined === '0') {
+                question.backgroundColor = whiteBackground;
+                question.labelColor = blueLabel;
+            }
+            // Green: the answer is saved in the backend
+            else if (question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED) {
+                question.backgroundColor = greenBackground;
+                question.labelColor = whiteLabel;
+            }
+            // Red: an invalid answer
+            else if (invalidAnswers.includes(question.patient_answer.is_defined)) {
+                question.backgroundColor = redBackground;
+                question.labelColor = whiteLabel;
+            }
+            // Fallback case
             else {
                 question.backgroundColor = whiteBackground;
                 question.labelColor = blueLabel;

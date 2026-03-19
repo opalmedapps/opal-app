@@ -48,6 +48,7 @@
                 'ANSWER_SAVING_WAITING':'-1',
                 'ANSWER_SAVING_ERROR':'-2',
                 'ANSWER_CHANGED': '2',
+                'ANSWER_CHANGED_ONCE_ONLY': '3',
                 'ANSWER_SAVING_WAITING_TIME': 30000
             },
             QUESTIONNAIRE_PURPOSES: [

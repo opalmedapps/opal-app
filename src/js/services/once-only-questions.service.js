@@ -2,6 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+// TODO: If a user answers and saves question A, leaves, then answers and saves question B, then the answers to A are overwritten and lost
+// TODO: add the ability to remove the answer to a radio button question; since once-only questions are optional, users should be able to remove an answer given by mistake
+
 (function () {
     'use strict';
 
@@ -9,9 +12,11 @@
         .module('OpalApp')
         .service('OnceOnlyQuestions', OnceOnlyQuestions);
 
-    OnceOnlyQuestions.$inject = ['$filter', 'Params', 'RequestToServer'];
+    OnceOnlyQuestions.$inject = ['$filter', 'NativeNotification', 'Params', 'RequestToServer'];
 
-    function OnceOnlyQuestions($filter, Params, RequestToServer) {
+    function OnceOnlyQuestions($filter, NativeNotification, Params, RequestToServer) {
+
+        const STATUS = Params.ANSWER_SAVED_IN_DB_STATUS;
 
         const SMOKING_STATUS_CODE = "72166-2";
 
@@ -223,7 +228,7 @@
                 let [alcoholAnswer, alcoholAmount] = fhirToAlcoholData(result.social_history);
 
                 if (alcoholAnswer) {
-                    questionnaire.sections[0].questions[0].patient_answer.is_defined = '1';
+                    questionnaire.sections[0].questions[0].patient_answer.is_defined = STATUS.ANSWER_SAVED_CONFIRMED;
                     questionnaire.sections[0].questions[0].patient_answer.answer = [{
                         answer_value: alcoholAnswer,
                         answer_option_text: $filter('translate')(`ONCE_ONLY_QUESTION_ALCOHOL_FREQUENCY_${alcoholAnswer}`)
@@ -231,7 +236,7 @@
                 }
 
                 if (alcoholAmount) {
-                    questionnaire.sections[0].questions[1].patient_answer.is_defined = '1';
+                    questionnaire.sections[0].questions[1].patient_answer.is_defined = STATUS.ANSWER_SAVED_CONFIRMED;
                     questionnaire.sections[0].questions[1].patient_answer.answer = [{
                         answer_value: alcoholAmount,
                     }]
@@ -240,7 +245,7 @@
                 let smokingAnswer = fhirToSmokingData(result.social_history);
 
                 if (smokingAnswer) {
-                    questionnaire.sections[0].questions[2].patient_answer.is_defined = '1';
+                    questionnaire.sections[0].questions[2].patient_answer.is_defined = STATUS.ANSWER_SAVED_CONFIRMED;
                     questionnaire.sections[0].questions[2].patient_answer.answer = [{
                         answer_value: smokingAnswer,
                         answer_option_text: $filter('translate')(`ONCE_ONLY_QUESTION_SMOKING_${smokingAnswer}`),
@@ -260,11 +265,11 @@
             const frequencyAnswer = questionnaire.sections[0].questions[0].patient_answer;
 
             // If no frequency answer was given, cannot format data
-            if (frequencyAnswer.is_defined !== '1') return;
+            if (frequencyAnswer.is_defined !== STATUS.ANSWER_CHANGED_ONCE_ONLY) return;
 
             const frequencyCode = ALCOHOL_USE_CODES[frequencyAnswer.answer[0].answer_value];
             const amountAnswer = questionnaire.sections[0].questions[1].patient_answer;
-            const amountValue = amountAnswer.is_defined === '1' ? parseFloat(amountAnswer.answer[0].answer_value) : undefined;
+            const amountValue = amountAnswer.is_defined === STATUS.ANSWER_CHANGED_ONCE_ONLY ? parseFloat(amountAnswer.answer[0].answer_value) : undefined;
 
             // In cases where the user has chosen a weekly or daily alcohol consumption amount and provided a number, format it as a valueQuantity
             // See: https://build.fhir.org/ig/HL7/fhir-ips/en/Observation-alcohol-use-example.json.html
@@ -343,7 +348,7 @@
             const smokingAnswer = questionnaire.sections[0].questions[2].patient_answer;
 
             // If no smoking answer was given, cannot format data
-            if (smokingAnswer.is_defined !== '1') return;
+            if (smokingAnswer.is_defined !== STATUS.ANSWER_CHANGED_ONCE_ONLY) return;
 
             const smokingCode = TOBACCO_USE_CODES[smokingAnswer.answer[0].answer_value];
 
@@ -410,10 +415,11 @@
                 let result = await RequestToServer.apiRequest(formattedParams);
                 return result.data;
             }
+            // TODO move error handling to the controller
             catch (error) {
                 if (error.response.status_code !== '404') {
-                    // TODO: display an error message in the view
                     console.error('Error retrieving existing once-only answers', error);
+                    NativeNotification.showNotificationAlert($filter('translate')('SERVER_ERROR_ALERT'));
                 }
             }
 
@@ -433,14 +439,24 @@
             };
 
             try {
-                // TODO: display some indicator of success in the view
+                // Submit answers to the backend
                 await RequestToServer.apiRequest(formattedParams, {
                     social_history: socialHistory,
                 });
+
+                // Mark answers that exist as successfully saved
+                questionnaire.sections.forEach(section => {
+                    section.questions.forEach(question => {
+                        if (question.patient_answer.is_defined !== '0') {
+                            question.patient_answer.is_defined = STATUS.ANSWER_SAVED_CONFIRMED;
+                        }
+                    });
+                });
             }
+            // TODO move error handling to the controller
             catch (error) {
-                // TODO: display an error message in the view
                 console.error('Error submitting once-only answers', error);
+                NativeNotification.showNotificationAlert($filter('translate')('QUESTIONNAIRE_SAVE_ERROR'));
             }
         }
     }
