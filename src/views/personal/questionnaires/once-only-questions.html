@@ -1,0 +1,15 @@
+<!--
+SPDX-FileCopyrightText: Copyright (C) 2026 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<ons-page ng-controller="OnceOnlyController as vm">
+    <generic-toolbar title="{{'ONCE_ONLY_QUESTIONS'|translate}}"></generic-toolbar>
+
+    <network-banner></network-banner>
+
+    <!-- LOADING CIRCLE-->
+    <!-- For now, this page is always shown in a loading state, before automatically going to the next page -->
+    <loading-spinning-circle loading-message="{{'LOADING'|translate}}"></loading-spinning-circle>
+</ons-page>
