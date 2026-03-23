@@ -47,7 +47,7 @@
   },
   "homepage": "https://github.com/opalmedapps/opal-app#readme",
   "dependencies": {
-    "@babel/runtime": "7.28.6",
+    "@babel/runtime": "7.29.2",
     "@fortawesome/fontawesome-free": "6.7.2",
     "@havesource/cordova-plugin-push": "7.0.0",
     "@zxcvbn-ts/core": "3.0.4",
@@ -107,7 +107,7 @@
     "@babel/core": "7.29.0",
     "@babel/plugin-proposal-throw-expressions": "7.27.1",
     "@babel/plugin-transform-runtime": "7.29.0",
-    "@babel/preset-env": "7.29.0",
+    "@babel/preset-env": "7.29.2",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "10.0.1",
