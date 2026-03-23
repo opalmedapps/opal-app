@@ -50,7 +50,6 @@ SPDX-License-Identifier: Apache-2.0
     <preference name="Orientation" value="default"/>
     <preference name="DisallowOverscroll" value="true"/>
     <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
-    <!-- <icon src="./res/opal-icon-1024.png"/> -->
     <platform name="android">
         <preference name="android-minSdkVersion" value="26"/>
         <preference name="AndroidPersistentFileLocation" value="Internal"/>
@@ -112,6 +111,7 @@ SPDX-License-Identifier: Apache-2.0
         <splash src="res/screen/ios/Default@2x~universal~anyany.png"/>
         <allow-intent href="itms:*"/>
         <allow-intent href="itms-apps:*"/>
+        <!-- See: https://github.com/apache/cordova-docs/pull/1487/changes -->
         <icon src="res/opal-icon-1024.png" foreground="res/opal-icon-dark-mode-1024.png"/>
         <!-- See: https://developer.apple.com/documentation/bundleresources/privacy_manifest_files -->
         <!-- See: https://developer.apple.com/app-store/app-privacy-details/ -->
