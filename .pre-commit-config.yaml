@@ -54,3 +54,11 @@ repos:
         # and checks these with shellcheck.
         # see also: https://github.com/rhysd/actionlint/pull/482
         - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@v0.11.1"
+
+- repo: local
+  hooks:
+    - id: npm-ci
+      name: npm lockfile up to date
+      language: node
+      entry: npm ci --dry-run
+      files: ^package(-lock)?\.json$
