@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="DocumentsController as docs">
-    <generic-toolbar title="{{'CLINICAL_REPORTS'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'CLINICAL_REPORTS'|translate}}"></generic-toolbar>
     <network-banner></network-banner>
 
     <!-- DATA REFRESHER -->
@@ -22,10 +22,10 @@ SPDX-License-Identifier: Apache-2.0
 
     <div ng-hide="docs.hideContent">
         <div style="color:grey;margin-top:25vh" ng-show="docs.noDocuments" align="center" ng-class="fontSizeTitle">
-            {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
+            {{"NO_PATIENT_DOCUMENTS_AVAILABLE"|translate}}
         </div>
         <ons-list ng-repeat="doc in docs.documents" ng-click="docs.goToDocument(doc)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{docs.documents | showHeader : $index : 'CreatedTimeStamp' }}">
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ docs.documents | showHeader : $index : 'CreatedTimeStamp' }}">
                 {{doc.CreatedTimeStamp|date:'longDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron">
@@ -37,7 +37,7 @@ SPDX-License-Identifier: Apache-2.0
                     <ons-col style="word-wrap: break-word;">
                         <div style="line-height:1;padding:5px;" >
                             <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': doc.ReadStatus==='0'}]">
-                                {{doc.Title}}<br>
+                                {{doc.AliasName}}<br>
                             </span>
                             <span class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{doc.CreatedTimeStamp|date:'shortTime'}}</span>
                         </div>

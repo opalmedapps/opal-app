@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright 2026 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Allow version pinning by reference
+# See: https://docs.zizmor.sh/audits/#unpinned-uses
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        actions/*: ref-pin
+        opalmedapps/*: ref-pin

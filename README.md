@@ -51,28 +51,25 @@ This section covers installation steps to build the app's web code on your local
     ```shell
     node -v
     ```
-   
+
     This installation also installs the Node.js package manager [npm](https://docs.npmjs.com/getting-started/what-is-npm),
     which is in charge of installing and managing all the libraries and dependencies required by the app.
 
 2.  Install the app's dependencies
 
-    Add the `.npmrc` file
-
-    This project uses [AngularJS](https://angularjs.org/) which reached end of life in January 2022.
-    This project uses a long-term support version of AngularJS provided by [HeroDevs](https://www.herodevs.com/support/nes-angularjs).
-    If you have an `npm` token to retrieve this version from their registry, place the `.npmrc` file containing the credentials in the root directory.
-
-    You can also use the [last available version](https://www.npmjs.com/package/angular) of AngularJS (version 1.8.3).
-    To do so, change the value for the `angular` dependency to `angular@1.8.3` in `package.json`.
-    Also change all other auxiliary angular dependencies accessed through `neverendingsupport` to their latest default versions, as provided by npm.
-    Then, run:
-
     ```shell
     npm install
     ```
 
-    For a list of all dependencies, refer to [package.json](./package.json).
+    This project uses [AngularJS](https://angularjs.org/) which reached end of life in January 2022.
+
+    A long-term support version of AngularJS can be used instead, provided by [HeroDevs](https://www.herodevs.com/support/nes-angularjs) (paid service).
+    If you have an `npm` token to retrieve this version from their registry, place the `.npmrc` file containing the credentials in the root directory.
+
+    Then, substitute the AngularJS dependencies in `package.json` with the packages provided by HeroDevs
+    (see [their setup instructions here](https://docs.herodevs.com/angularjs/angularjs-1-8#detailed-instructions)).
+
+    For a list of all dependencies used in this project, refer to [package.json](./package.json).
 
 3.  Connect your installation to a running backend.
 
@@ -81,7 +78,7 @@ This section covers installation steps to build the app's web code on your local
     Follow the instructions in [the env folder's README](./env/README.md) to configure your connection to a local or server-hosted backend.
 
 4.  Run the app in a browser (the following command assumes you've configured an environment called `local`;
-    if not, replace this with the name you've chosen). 
+    if not, replace this with the name you've chosen).
 
     ```shell
     npm run start --env=local
@@ -121,12 +118,15 @@ This section covers installation steps to build the app's web code on your local
 - To debug the code, open the developer console, switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
   Caching can sometimes interfere with Webpack's live reloading to see updates in real time.
 - If you followed all the steps in the [Web](#web) section correctly, the only errors you should see in the debug console are
-  a 404 error for `cordova.js`, a 404 error for `favicon.ico`, and many warnings for translations that don't exist.
+  errors for `cordova.js` (which only runs in the mobile app, and isn't needed in the web version).
   If you see any additional errors that seem to be interfering with the app's functionality, skip ahead to [Troubleshooting](#troubleshooting).
 
 ### Mobile App
 
-This section covers installation steps to build the mobile app on your local machine. 
+This section covers installation steps to build the mobile app on your local machine.
+
+Note that alternatively, the app can be built and released via GitHub Actions workflows.
+See [CI/CD](./docs/deployment/ci-cd.md) for more details.
 
 1.  Make sure you have followed the setup steps for [Web](#web).
 
@@ -198,12 +198,20 @@ You may choose to simply execute `cordova run ios`, if you know there already ex
 The app includes dynamically loaded pages such as `Terms of Use`, `Service Agreement`, `About`, etc., which are retrieved from an external server. On startup, it
 downloads a configuration file for this external content based on the `externalContentFileURL` setting in `opal.config.js`. **For testing purposes**, you can include the external configuration and content files in the webpack build, allowing them to be accessed as regular local static files. Follow the instructions in [the content folder's README](./content/README.md) to use the external content samples.
 
+### Password Reset
+
+To support password reset in the Opal app, a standalone web page must be deployed,
+which redirects users from password reset emails to the right page in the app.
+
+To deploy this webpage, follow the steps related to the password reset redirect page
+in [Pushing a Webpage to Firebase](./docs/deployment/firebase-webpage-deployment.md).
+
 ## Troubleshooting
 
 If you are getting errors during your installation, here are some things you can try.
 
 ### Dependency Installation Issues
-- If you get unexpected errors in the developer console, and the app's UI looks jumbled, it's likely that one of the packages used by Opal was not properly installed. 
+- If you get unexpected errors in the developer console, and the app's UI looks jumbled, it's likely that one of the packages used by Opal was not properly installed.
   To reinstall the packages from a clean state, delete `node_modules` and rerun `npm install`.
   If one or more packages didn't install correctly, one of the reasons below may be preventing `npm install` from executing correctly.
   - You don't have the required permissions to perform the installation. Make sure you are logged in as an administrator on your computer, and try re-installing the packages. If you have a Mac, precede your npm commands with `sudo` to run the command with administrator permissions.
@@ -284,7 +292,7 @@ and the platform specific code generated by Cordova for iOS and Android in `plat
 
 ```plain
 .
-├── .gitlab # Contains templates used in GitLab
+├── .github # Contains templates and Actions workflows used in GitHub
 ├── docs # Project-specific documentation
 ├── env # Contains folders configured to connect to any given backend environment
     ├── local
@@ -298,7 +306,6 @@ and the platform specific code generated by Cordova for iOS and Android in `plat
 ├── static # Contains static pages such as the web app's landing page and the password reset redirection webpage
 ├── www  # Web code folder (generated by Webpack), where the compiled web code lives
 ├── .gitignore
-├── .gitlab-ci.yml # GitLab CI/CD pipeline description file
 ├── .releaserc # Configuration for semantic-release, used to automatically increment the app version
 ├── CHANGELOG.md # Description of changes per version
 ├── firebase.json # Configuration used to deploy the password reset redirection webpage
@@ -313,7 +320,6 @@ and the platform specific code generated by Cordova for iOS and Android in `plat
 
 ## More Information
 
-- [Versioning](https://gitlab.com/opalmedapps/qplus/-/wikis/Versioning)
 - [Use of Webpack](./docs/webpack.md)
 
 ## Frameworks used

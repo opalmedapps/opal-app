@@ -12,9 +12,9 @@
 		.module('OpalApp')
 		.controller('PatientTestResultsController', PatientTestResultsController);
 
-	PatientTestResultsController.$inject = ['$scope', '$locale', 'Navigator','PatientTestResults','UserPreferences'];
+	PatientTestResultsController.$inject = ['$scope', '$locale', 'Navigator','PatientTestResults'];
 
-	function PatientTestResultsController($scope, $locale, Navigator, PatientTestResults, UserPreferences) {
+	function PatientTestResultsController($scope, $locale, Navigator, PatientTestResults) {
 
 		const vm = this;
 
@@ -44,7 +44,6 @@
 
 		vm.goToTestDateResults = goToTestDateResults;
 		vm.goToTestTypeResults = goToTestTypeResults;
-		vm.displayType = displayType;
 
 		// Used by patient-data-handler
 		vm.setTestsView = setTestsView;
@@ -52,7 +51,6 @@
 		// Current locale
 		vm.locale = $locale.id;
 
-		let language;
 		let navigator;
 
 		activate();
@@ -60,7 +58,6 @@
 		//////////////////////////////////////////
 
 		function activate() {
-			language = UserPreferences.getLanguage();
 			navigator = Navigator.getNavigator();
 			bindEvents();
 		}
@@ -99,14 +96,6 @@
 		}
 
 		/**
-		 * Returns the display name in the right language for a given TestType.
-		 * @param {PatientTestType} type TestType
-		 */
-		function displayType(type) {
-			return type[`name_${language}`];
-		}
-
-		/**
 		 * @description Gets the test results from the service and uses them to update the view.
 		 *              Results are sorted in reverse chronological order for dates, and alphabetical order for types.
 		 */
@@ -115,7 +104,7 @@
 				(a, b) => b.collectedDateTime.getTime() - a.collectedDateTime.getTime()
 			); // Newest first
 			vm.testTypes = PatientTestResults.getTestTypes();
-			vm.testTypes.sort((a, b) => a[`name_${language}`].localeCompare(b[`name_${language}`]));
+			vm.testTypes.sort((a, b) => a.name.localeCompare(b.name));
 		}
 
 		function bindEvents() {

@@ -30,9 +30,9 @@
             clearSensitive: clearSensitive
         };
         return service;
-        
+
         ////////////////
-        
+
         function clear() {
             PatientTestResults.clear();
             LocalStorage.resetUserLocalStorage();

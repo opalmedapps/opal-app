@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="IndividualDocumentController as doc">
-    <generic-toolbar title="{{'DOCUMENT'|translate}}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{'DOCUMENT'|translate}}">
         <right-content>
             <ons-toolbar-button ng-click="popoverDocsInfo.show('#buttonDocInfo')" id="buttonDocInfo">
                 <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
@@ -16,8 +16,8 @@ SPDX-License-Identifier: Apache-2.0
 
     <pdf-viewer pdf-content="docParams.Content"
                 show-error="doc.errorDownload"
-                loading-message="{{'LOADINGDOCUMENT'|translate}}"
-                error-message="{{'ERROROBTAININGDOCUMENT'|translate}}"
+                loading-message="{{'LOADING_DOCUMENT'|translate}}"
+                error-message="{{'ERROR_OBTAINING_DOCUMENT'|translate}}"
     ></pdf-viewer>
 
     <ons-modal var="modal">

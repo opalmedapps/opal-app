@@ -21,6 +21,7 @@
         vm.apiData;
         vm.caregivers;
         vm.loadingList = true;  // This is for loading the list of caregivers
+        // See translations for: RELATIONSHIPS_PATIENTS_STATUS_CON, RELATIONSHIPS_PATIENTS_STATUS_DEN, RELATIONSHIPS_PATIENTS_STATUS_EXP, RELATIONSHIPS_PATIENTS_STATUS_PEN, RELATIONSHIPS_PATIENTS_STATUS_REV
         vm.getRelationshipStatusText = (status) => `RELATIONSHIPS_PATIENTS_STATUS_${status}`;
         vm.goToCaregiversInfo = () => navigator.pushPage('views/settings/info-page-relationship-type.html', {id: 'caregivers'});
 

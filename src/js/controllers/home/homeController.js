@@ -12,19 +12,15 @@
     HomeController.$inject = [
         '$timeout', 'CheckInService', '$scope', '$filter', 'Navigator',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params',
-        'Version', 'User', 'ProfileSelector', '$interval', 'Permissions',
+        'User', 'ProfileSelector', '$interval', 'Permissions', 'NativeNotification',
     ];
 
     /* @ngInject */
     function HomeController($timeout, CheckInService, $scope, $filter, Navigator,
         UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params,
-        Version, User, ProfileSelector, $interval, Permissions,
+        User, ProfileSelector, $interval, Permissions, NativeNotification,
     ) {
         let vm = this;
-
-        vm.language = 'EN';
-        vm.calledApp = null;
-        $scope.infoModalData = [];
 
         vm.checkinState = {
             noAppointments: true,
@@ -35,10 +31,8 @@
             inRange: true
         };
 
-        // variable to let the user know which hospital they are logged in
-        vm.selectedHospitalToDisplay = "";
-        // control the modules to display to users
-        vm.allowedModules = {};
+        vm.accessLevel = ProfileSelector.getAccessLevel();
+        vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
 
         // For displaying the closest upcoming appointment
         vm.closestAppointment = null;
@@ -68,10 +62,9 @@
             //Initialize the page interval to refresh checkin state every 5 second
             setInterval();
             bindEvents();
+
             // Initialize the page data if online
             NetworkStatus.isOnline() ? homePageInit() : setPatientInfo();
-            // set the hospital banner and available modules
-            configureSelectedHospital();
         }
 
         /**
@@ -120,8 +113,6 @@
             initModalSize();
             //Set patient info
             setPatientInfo();
-            // display version updates info, if any
-            checkForVersionUpdates();
         }
 
         /**
@@ -154,37 +145,7 @@
          */
         function setPatientInfo() {
             vm.userInfo = User.getUserInfo();
-            vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments = false;
-        }
-
-        /**
-         * @name checkForVersionUpdates
-         * @desc get latest version info according to the current version
-         */
-        function checkForVersionUpdates() {
-            const currentVersion = Version.currentVersion();
-            let lastVersion = localStorage.getItem('lastVersion');
-            // Initialize lastVersion if not defined, so that we could
-            // get all the updates from the beginning of major version
-            if (!lastVersion) {
-                const lastPoint = currentVersion.lastIndexOf('.');
-                lastVersion = currentVersion.substr(0, lastPoint) + '.-1';
-                localStorage.setItem('lastVersion', lastVersion);
-            }
-
-            if (currentVersion !== lastVersion) {
-                Version.getVersionUpdates(lastVersion, currentVersion, vm.language).then(function (data) {
-                    if (data && data.length > 0) {
-                        $scope.infoModalVersion = Version.currentVersion();
-                        $scope.infoModalData = data;
-                        $timeout(function () {
-                            infoModal.show();
-                        }, 200);
-                        localStorage.setItem('lastVersion', currentVersion);
-                    }
-                }).catch(console.error);
-            }
         }
 
         /**
@@ -202,15 +163,6 @@
             else rcorners.setAttribute("style", "height: 50%");
         }
 
-        /**
-         * @name configureSelectedHospital
-         * @desc Set the hospital name to display
-         */
-        function configureSelectedHospital() {
-            vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
-            vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
-        }
-
         /*
          * PUBLIC METHODS
          * =========================================
@@ -221,20 +173,17 @@
          * Note: For Android devices only
          */
         function homeDeviceBackButton() {
-            ons.notification.confirm({
-                message: $filter('translate')('EXIT_APP'),
-                modifier: 'android',
-                callback: (index) => {
-                    if (index === 1) navigator.app.exitApp();
-                }
-            });
+            NativeNotification.showConfirmation(
+                $filter('translate')('EXIT_APP'),
+                navigator?.app?.exitApp,
+            );
         }
 
         /**
          * @desc Go to the About Opal page
          */
         function goToAboutOpal() {
-            homeNavigator.pushPage('./views/home/about/about.html', {'isBeforeLogin': false});
+            homeNavigator.pushPage('./views/home/about/about.html');
         }
 
         /**

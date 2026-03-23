@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="AboutController as about">
-    <generic-toolbar title="{{'OPAL_ABOUT'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'OPAL_ABOUT'|translate}}"></generic-toolbar>
 
     <network-banner></network-banner>
     <ons-list>
@@ -41,7 +41,7 @@ SPDX-License-Identifier: Apache-2.0
         </ons-list-item>
 
         <!-- CONTRIBUTE -->
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('donation', true)" ng-show="about.allowedModules.hasOwnProperty('CTB') && about.allowedModules['CTB']">
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('donation', true)">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -58,7 +58,7 @@ SPDX-License-Identifier: Apache-2.0
         </ons-list-item>
 
         <!-- CONTACT SUPPORT -->
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('support', true)" ng-show="about.allowedModules.hasOwnProperty('SUP') && about.allowedModules['SUP']">
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('support', true)">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>

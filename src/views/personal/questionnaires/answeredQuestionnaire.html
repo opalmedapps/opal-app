@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <ons-page ng-controller="AnsweredQuestionnaireController as vm">
     <!-- Note: this file is extremely hard coded to obey the desired inconsistent functionality-->
-    <generic-toolbar title="{{'SUMMARY'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'SUMMARY'|translate}}"></generic-toolbar>
 
     <!-- LOADING CIRCLE FOR SUBMITTING QUESTIONNAIRE -->
     <loading-spinning-circle ng-show="vm.loadingSubmitQuestionnaire"
@@ -14,7 +14,7 @@ SPDX-License-Identifier: Apache-2.0
     </loading-spinning-circle>
 
     <!--LOADING CIRCLE FOR QUESTIONNAIRE -->
-    <loading-spinning-circle ng-show="vm.loadingQuestionnaire" loading-message="{{'LOADINGQUESTIONNAIRE'|translate}}">
+    <loading-spinning-circle ng-show="vm.loadingQuestionnaire" loading-message="{{'LOADING_QUESTIONNAIRE'|translate}}">
     </loading-spinning-circle>
 
     <div ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS"
@@ -138,7 +138,7 @@ SPDX-License-Identifier: Apache-2.0
                                     ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID">
                                     <p ng-if="!question.showAnswer"
                                         style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81); white-space:nowrap;">
-                                        {{"SHOW"|translate}} 
+                                        {{"SHOW"|translate}}
                                         <i class="ion-chevron-right" style="padding-left: 2vw;"></i>
                                     </p>
                                     <p ng-if="question.showAnswer"
@@ -212,7 +212,7 @@ SPDX-License-Identifier: Apache-2.0
                             <button class="button" style="margin-bottom: 10px" ng-class="fontSizeDesc"
                                 ng-click="vm.editQuestion($parent.$parent.$index, $index)">
                                 <i class="ion-chevron-left"></i>
-                                {{"QUESTIONNAIRE_INSTRUCTIONS4"|translate}}
+                                {{"QUESTIONNAIRE_GO_TO_QUESTION"|translate}}
                             </button>
                         </div>
 

@@ -42,10 +42,17 @@ const config = env => {
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
 
 	// Read environment settings from opal.config.js
-	let requiredSettingNames = ["externalContentFileURL", "serviceStatusURL", "useSourceMap", "webpackMode"];
+	let requiredSettingNames = [
+		'externalContentFileURL',
+		'fallbackLanguage',
+		'serviceStatusURL',
+		'supportedLanguages',
+		'useSourceMap',
+		'webpackMode',
+	];
 	let settings = {};
 	requiredSettingNames.forEach(name => settings[name] = OpalEnv.getEnvSetting(name, OPAL_ENV));
-	console.log("Environment settings:", settings);
+	console.log("Required environment settings:", settings);
 
 	// Check whether to minimize the output (default = true)
 	let minimize;
@@ -145,7 +152,7 @@ const config = env => {
 				},
 				// CHANGE TO ALLOW ONSEN TO COMPILE WITH WEBPACK, When compiling with Webpack, the Fastclick library
 				// in onsenui (get rid of the 300ms delay) has a set of if statements to determine the sort of
-				// module resolution system available in the environment, the rules here simply deactive AMD modules
+				// module resolution system available in the environment, the rules here simply deactivate AMD modules
 				// and node modules and makes Fastclick implement the Web interface.
 				{
 					test: /onsenui.js/,

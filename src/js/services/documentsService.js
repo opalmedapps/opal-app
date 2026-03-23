@@ -18,8 +18,8 @@ var myApp=angular.module('OpalApp');
  *@requires $filter
  *@description Sets the documents and provides an API to interact with them and the server
  **/
-myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage','Constants',
-function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage,Constants){
+myApp.service('Documents',['UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage','Constants',
+function(UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage,Constants){
     //Array documentsArray contains all the documents for the patient
     /**
      *@ngdoc property
@@ -259,32 +259,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
             });
             return r.promise;
         },
-        /**
-         *@ngdoc method
-         *@name setDocumentsLanguage
-         *@param {Array} array Array with documents
-         *@description Translates the array parameter containing documents to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
-         *@returns {Array} Returns array with translated values
-         **/
-        setDocumentsLanguage:function(array)
-        {
-            //Get language
-            var language = UserPreferences.getLanguage();
 
-            //Check if array
-            if (Object.prototype.toString.call( array ) === '[object Array]') {
-                for (var i = 0; i < array.length; i++) {
-                    //set language
-                    array[i].Title = (language=='EN')? array[i].AliasName_EN : array[i].AliasName_FR;
-                    array[i].Description = (language == 'EN')? array[i].AliasDescription_EN : array[i].AliasDescription_FR;
-                }
-            }else{
-                //set language if string
-                array.Description = (language == 'EN')? array.AliasDescription_EN : array.AliasDescription_FR;
-                array.Title = (language=='EN')? array.AliasName_EN : array.AliasName_FR;
-            }
-            return array;
-        },
         /**
          *@ngdoc method
          *@name clearDocuments

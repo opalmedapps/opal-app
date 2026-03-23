@@ -76,7 +76,7 @@
                     NetworkStatus.setStatus(true);
                 });
             }, false);
-            
+
             addAppInBackgroundScreen();
 
             setupInactivityChecks();
@@ -100,7 +100,7 @@
             addEventListener("mousedown", resetTimer, false);
             startTimer();
         }
-        
+
         function startTimer() {
             timeoutLockout = window.setTimeout(goInactive, Params.maxIdleTimeAllowed);
         }
@@ -233,7 +233,7 @@
             updateRequiredModal.show();
             $state.go('init')
         }
-        
+
         /**
          * Function takes care of displaying the splash screen when app is placed in the background. Note that this
          * works with the plugin: cordova-plugin-privacyscreen which offers a black screen. This is not so pretty

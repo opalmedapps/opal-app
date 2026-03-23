@@ -118,7 +118,7 @@
                             vm.alert.content = "PASSWORD_CRITERIA";
                             break;
                         default:
-                            vm.alert.content = "PASSWORDRESETSERVERERROR";
+                            vm.alert.content = "PASSWORD_RESET_SERVER_ERROR";
                             break;
                     }
                 })

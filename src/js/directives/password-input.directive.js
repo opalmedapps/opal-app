@@ -22,12 +22,12 @@ import '../../css/directives/password-input.directive.css';
             scope: true,
             transclude: true,
             template: `
-                <div class="password-input--wraper style-4">
+                <div class="password-input--wrapper style-4">
                     <div class="input-slot" ng-transclude></div>
                     <ons-icon class="icon" icon={{iconType}} role="button" ng-click="switchInputType($event)" aria-label="{{'SHOW_PASSWORD' | translate}}"></ons-icon>
                 </div>
             `,
-            link: function (scope) {                
+            link: function (scope) {
                 scope.isVisible = false;
                 scope.iconType = 'ion-eye';
                 scope.switchInputType = (event) => {

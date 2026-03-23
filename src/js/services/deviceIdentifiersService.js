@@ -5,12 +5,12 @@
 /*
  * Filename     :   deviceIdentifiersService.js
  * Description  :   Service that manages user device identifiers and registration ids for push notifications
- * Created by   :   Robert Maglieri 
+ * Created by   :   Robert Maglieri
  * Date         :   02 Mar 2017
  */
- 
- 
- 
+
+
+
 var app = angular.module('OpalApp');
 /**
  *@ngdoc service
@@ -37,7 +37,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         setDeviceIdentifiers:function(browserUUID)
         {
-            
+
             deviceIdentifiers.deviceUUID = Constants.app ? device.uuid : browserUUID;
             deviceIdentifiers.deviceType = Constants.app ? device.platform : 'browser';
         },

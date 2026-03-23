@@ -139,7 +139,7 @@
         function handleLoadQuestionnaireErr() {
             // go to the questionnaire list page if there is an error
             navigator.popPage();
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+            NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_ALERT"));
         }
     }
 })();

@@ -46,43 +46,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
      **/
     var educationalMaterialType = Params.educationalMaterial;
 
-    function setLanguageEduMaterial(array)
-    {
-        var language = UserPreferences.getLanguage();
-
-        if (!array.hasOwnProperty("Language")) {
-            array.Language = language;
-        }
-
-        //Check if array
-        if (Object.prototype.toString.call( array ) === '[object Array]') {
-            if (array.Language != language) {
-                array.forEach(function (element) {
-                    delete element.Content;
-                });
-                array.Language = language;
-            }
-            for (var i = 0; i < array.length; i++) {
-                array[i].Url = (language ==='EN')?array[i].URL_EN:array[i].URL_FR;
-                array[i].Name =(language==='EN')? array[i].Name_EN : array[i].Name_FR;
-                array[i].ShareURL =(language ==='EN')? array[i].ShareURL_EN : array[i].ShareURL_FR;
-                array[i].Type = (language ==='EN')? array[i].EducationalMaterialType_EN : array[i].EducationalMaterialType_FR;
-            }
-        }else{
-            //set language if string
-            if (array.Language != language) {
-                delete array.Content;
-                array.Language = language;
-            }
-            array.Url = (language ==='EN')?array.URL_EN:array.URL_FR;
-            array.Name =(language ==='EN')? array.Name_EN : array.Name_FR;
-            array.Type = (language ==='EN')? array.EducationalMaterialType_EN : array.EducationalMaterialType_FR;
-        }
-        //console.log('Set edu material language:');
-        //console.log(array);
-        return array;
-    }
-
     /**
      * @description Obtains the type of display to use for a given educational material. For example, a material
      *              ending in '.php' should be displayed as an embedded HTML page.
@@ -98,7 +61,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         else if (edumaterial.EducationalMaterialType_EN === 'Package') type = 'package';
         else {
             // In the remaining cases, use the material's file extension
-            type = FileManagerService.getFileExtension(edumaterial[`URL_${UserPreferences.getLanguage()}`]);
+            type = FileManagerService.getFileExtension(edumaterial.URL);
 
             if (type === 'php') type = 'html';  // A php extension should be displayed as html
             else if (type !== 'pdf') type = 'link';  // All other extensions (including no extension, but excluding pdf) should default to a link
@@ -119,10 +82,10 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         }
     }
 
-    //Formats the input dates and gets it ready for controllers, updates announcementsArray
+    //Formats the input dates and gets it ready for controllers, updates educationalMaterialArray
     function addEducationalMaterial(edumaterial)
     {
-        //If announcements are undefined simply return
+        //If educational materials are undefined simply return
         if(typeof edumaterial == 'undefined') return;
         for (var i = 0; i < edumaterial.length; i++) {
             //Format the date to javascript
@@ -138,7 +101,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
                 edumaterial[i].Color = educationalMaterialType['Other'].color;
             }
 
-            //Add to my annoucements array
+            //Add to educational material array
             educationalMaterialArray.push(edumaterial[i]);
         }
 
@@ -347,9 +310,8 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             if (type === "booklet") return {Url:'./views/personal/education/education-booklet.html'};
             else if (type === 'link')
             {
-                // If it's a url, set the language, then open the url in another page
-                edumaterial = setLanguageEduMaterial(edumaterial);
-                FileManagerService.openUrl(edumaterial.Url);
+                // If it's a url, open it in another page
+                FileManagerService.openUrl(edumaterial.URL);
                 return -1;
             }
             else if (type === 'html') return {Url:'./views/personal/education/education-individual-page.html'};
@@ -371,8 +333,8 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             Logger.logClickedPdfEduMaterial(eduMaterial.EducationalMaterialControlSerNum);
 
             // Use the file manager service to open the material
-            let fileName = eduMaterial.Url.substring(eduMaterial.Url.lastIndexOf('/') + 1);
-            await FileManagerService.openPDF(eduMaterial.Url, fileName);
+            let fileName = eduMaterial.URL.substring(eduMaterial.URL.lastIndexOf('/') + 1);
+            await FileManagerService.openPDF(eduMaterial.URL, fileName);
         },
 
         /**
@@ -414,18 +376,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             });
             return deferred.promise;
         },
-        /**
-         *@ngdoc method
-         *@name setLanguage
-         *@param {Array} array Array with educational material
-         *@description Translates the array parameter containing educational material to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
-         *@returns {Array} Returns array with translated values
-         **/
-        setLanguage:function(array)
-        {
 
-            return setLanguageEduMaterial(array);
-        },
         /**
          *@ngdoc method
          *@name clearEducationalMaterial

@@ -5,11 +5,11 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="CheckInController as checkIn">
-    <generic-toolbar title="{{'CHECKIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'CHECKIN'|translate}}"></generic-toolbar>
     <network-banner></network-banner>
 
     <!-- LOADING CIRCLE-->
-    <loading-spinning-circle ng-if="checkIn.loadingPage" loading-message="{{'LOADINGAPPOINTMENTS'|translate}}"></loading-spinning-circle>
+    <loading-spinning-circle ng-if="checkIn.loadingPage" loading-message="{{'LOADING_APPOINTMENTS'|translate}}"></loading-spinning-circle>
 
     <!-- ERROR -->
     <div ng-if="checkIn.loadingError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
     </div>
 
     <ons-list ng-if="!checkIn.loadingPage && !checkIn.loadingError" ng-repeat="(patientSerNum, patient) in checkIn.displayApps">
-        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
+        <ons-list-header class="default-list-header" ng-class="fontSizeTitle" style="padding:10px;">
             {{patient.patientHeader}}
         </ons-list-header>
         <ons-list-item modifier="tappable chevron" ng-repeat="app in patient.apps" ng-click="checkIn.goToAppointment(app)">
@@ -31,7 +31,7 @@ SPDX-License-Identifier: Apache-2.0
             The appointment will show the status according to its checkin status,
             including:
                 1. 'info': before checkin,
-                2. 'success': successful checkin, 
+                2. 'success': successful checkin,
                 3. 'warning': non-checkin-possible,
                 4. 'danger' : failed checkin
             Checkin status is defined by appointment's attributes 'Checkin' and
@@ -60,14 +60,14 @@ SPDX-License-Identifier: Apache-2.0
                 <ons-col width="1%" > <div class="{{checkIn.separatorStatus[app.CheckInStatus]}}"></div></ons-col>
                 <ons-col>
                     <div class="appointment-content">
-                        <span ng-class="fontSizeTitle">{{app['AppointmentType_' + checkIn.language]}}</span>
+                        <span ng-class="fontSizeTitle">{{app.AppointmentType}}</span>
 
-                        <p ng-if="app['RoomLocation_'+checkIn.language]" class="item-desc" ng-class="fontSizeDesc" >
-                            {{app["RoomLocation_" + checkIn.language]}}
+                        <p ng-if="app.RoomLocation" class="item-desc" ng-class="fontSizeDesc" >
+                            {{app.RoomLocation}}
                         </p>
 
                         <p ng-if="app.CheckInStatus == 'warning'" class="item-desc" ng-class="fontSizeDesc" style="color:#FF803E;"
-                           ng-bind-html="app['CheckinInstruction_' + checkIn.language] | trustHTML">
+                           ng-bind-html="app.CheckinInstruction | trustHTML">
                         </p>
 
                         <p></p>
@@ -75,15 +75,15 @@ SPDX-License-Identifier: Apache-2.0
                         <!-- Successful Checkin -->
                         <div ng-if="app.CheckInStatus == 'success'">
                             <span class="item-desc" ng-class="fontSizeDesc"
-                                  ng-bind-html="app['CheckinInstruction_' + checkIn.language] | trustHTML">
+                                  ng-bind-html="app.CheckinInstruction | trustHTML">
                             </span>
                         </div>
 
                         <!-- Show the waiting Room when: Non-Checkinable appointment OR Successful Checked-in Appointment -->
                         <div ng-if="['warning', 'success'].indexOf(app.CheckInStatus) > -1">
                             <p></p>
-                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.MapName_EN">
-                                {{"WAITING_ROOM"|translate}} {{app["MapName_" + checkIn.language]}}
+                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.MapName">
+                                {{"WAITING_ROOM"|translate}} {{app.MapName}}
                             </p>
                         </div>
 

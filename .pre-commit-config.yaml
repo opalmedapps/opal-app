@@ -1,0 +1,56 @@
+# SPDX-FileCopyrightText: Copyright (C) 2025 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0
+  hooks:
+    - id: check-added-large-files
+    - id: check-merge-conflict
+    - id: check-shebang-scripts-are-executable
+    - id: check-json
+    - id: check-toml
+    - id: check-yaml
+    - id: double-quote-string-fixer
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+      exclude: '.github/pull_request_template.md'
+
+- repo: https://github.com/fsfe/reuse-tool
+  rev: v6.2.0
+  hooks:
+    - id: reuse-lint-file
+
+- repo: https://github.com/crate-ci/typos
+  rev: v1.43.1
+  hooks:
+    - id: typos
+
+# zizmor detects security vulnerabilities in GitHub Actions workflows.
+- repo: https://github.com/woodruffw/zizmor-pre-commit
+  rev: v1.22.0
+  hooks:
+    - id: zizmor
+
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 0.36.1
+  hooks:
+    - id: check-github-workflows
+      args: ["--verbose"]
+    - id: check-renovate
+      args: ["--verbose"]
+      additional_dependencies: ['json5']
+
+# `actionlint` hook, for verifying correct syntax in GitHub Actions workflows.
+# Some additional configuration for `actionlint` can be added in `.github/actionlint.yaml` (this file can be created if it doesn't exist yet).
+- repo: https://github.com/rhysd/actionlint
+  rev: v1.7.10
+  hooks:
+    - id: actionlint
+      language: golang
+      additional_dependencies:
+        # actionlint has a shellcheck integration which extracts shell scripts in `run:` steps from GitHub Actions
+        # and checks these with shellcheck.
+        # see also: https://github.com/rhysd/actionlint/pull/482
+        - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@v0.11.1"

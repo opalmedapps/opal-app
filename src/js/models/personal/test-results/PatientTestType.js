@@ -7,19 +7,17 @@ import { PatientTestResult } from "./PatientTestResult";
  * PatientTestType class to model the TestTypes from the back-end
  */
 export class PatientTestType {
-	constructor({ educationalMaterialURL_EN, educationalMaterialURL_FR, interpretationRecommended, latestAbnormalFlag, latestCollectedDateTime,
-		latestPatientTestResultSerNum, latestTestValue, name_EN, name_FR, normalRange, normalRangeMax,
+	constructor({ educationalMaterialURL, interpretationRecommended, latestAbnormalFlag, latestCollectedDateTime,
+		latestPatientTestResultSerNum, latestTestValue, name, normalRange, normalRangeMax,
 		normalRangeMin, readStatus, testExpressionSerNum, unitDescription, hasNumericValues = "false",
 		results = null }) {
-		this.educationalMaterialURL_EN = educationalMaterialURL_EN;
-		this.educationalMaterialURL_FR = educationalMaterialURL_FR;
+		this.educationalMaterialURL = educationalMaterialURL;
 		this.interpretationRecommended = interpretationRecommended === "1";
 		this.latestAbnormalFlag = latestAbnormalFlag;
 		this.latestCollectedDateTime = Date.parse(latestCollectedDateTime);
 		this.latestPatientTestResultSerNum = Number(latestPatientTestResultSerNum);
 		this.latestTestValue = latestTestValue;
-		this.name_EN = name_EN;
-		this.name_FR = name_FR;
+		this.name = name;
 		this.normalRange = normalRange;
 		this.normalRangeMax = Number(normalRangeMax);
 		this.normalRangeMin = Number(normalRangeMin);

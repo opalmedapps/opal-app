@@ -38,14 +38,14 @@ SPDX-License-Identifier: Apache-2.0
                             ng-class="fontSizeDesc"><br><b>{{"EMAIL"|translate}}: </b><a
                                 href="mailto:{{stud.study['email']}}">{{stud.study["email"]}}</a></span>
                         <span ng-if="stud.study['phone']!==undefined"
-                            ng-class="fontSizeDesc"><br><b>{{"PHONENUMBER"|translate}}: </b><a
+                            ng-class="fontSizeDesc"><br><b>{{"PHONE_NUMBER"|translate}}: </b><a
                                 href="tel:{{stud.study['phone']}}"> {{stud.study["phone"]|FormatPhoneNumber}}</a></span>
                         <span ng-if="stud.study['phoneExt']!==undefined" ng-class="fontSizeDesc"> x
                             {{stud.study["phoneExt"]}}</span>
                     </div>
                 </div>
                 <br>
-                <ons-list style="margin: 0px 0">
+                <ons-list>
                     <ons-list-item modifier="chevron" class="item"
                         ng-click="stud.goToQuestionnaire(stud.study['QuestionnaireSerNum'])">
                         <ons-row align="center">

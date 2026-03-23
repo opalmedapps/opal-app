@@ -10,33 +10,40 @@
     ":pinAllExceptPeerDependencies",
     // https://docs.renovatebot.com/presets-default/#separatemultiplemajorreleases
     ":separateMultipleMajorReleases",
-    // https://docs.renovatebot.com/presets-default/#separatepatchreleases
-    ":separatePatchReleases",
-    // get updates for alpine version of node images
-    "gitlab>opalmedapps/renovate-bot//presets/docker-alpine.json5",
+    // https://docs.renovatebot.com/presets-default/#maintainlockfilesweekly
+    ":maintainLockFilesWeekly",
+    // https://docs.renovatebot.com/presets-security/#securityminimumreleaseagenpm
+    "security:minimumReleaseAgeNpm",
+    // https://docs.renovatebot.com/presets-default/#configmigration
+    ":configMigration",
+    // https://docs.renovatebot.com/presets-helpers/#helperspingithubactiondigeststosemver
+    "helpers:pinGitHubActionDigestsToSemver",
     // set timezone to local one to ensure schedules are run
     // https://docs.renovatebot.com/configuration-options/#timezone
     ":timezone(America/Toronto)",
     // get weekly updates to lighten load
     // https://docs.renovatebot.com/presets-schedule/#scheduleweekly
     "schedule:weekly",
+    // get updates for alpine version of node images
+    "github>mschoettle/renovate-presets//presets/docker-alpine.json5",
+    "github>mschoettle/renovate-presets//presets/actions-dependency-version.json5",
+    "github>mschoettle/renovate-presets//presets/pre-commit-hooks.json5",
   ],
   // Extra rules for node images. See: https://github.com/renovatebot/renovate/discussions/29501
-  // Ensure that node docker versioning doesn't interfer with the custom managers.
+  // Ensure that node docker versioning doesn't interfere with the custom managers.
   "ignorePresets": ["workarounds:nodeDockerVersioning"],
   "assignees": ["staceybeard"],
   "labels": ["dependencies"],
   "packageRules": [
     // Group auxiliary angular-related updates
     {
-      "matchDepPatterns": ["^angular"],
-      "excludePackagePatterns": ["^@neverendingsupport/"],
+      "matchDepNames": ["/^angular/"],
       "groupName": "auxiliary angular packages"
     },
-    // Group AngularJS Never-Ending Support updates (from HeroDevs)
+    // Group angular-translate updates
     {
-      "matchSourceUrlPrefixes": ["https://github.com/xlts-dev/"],
-      "groupName": "angularjs NES packages"
+      "matchPackageNames": ["/^angular-translate/"],
+      "groupName": "angular-translate packages"
     },
     // Rate-limit firebase-tools updates: first day of each month
     {
@@ -45,28 +52,23 @@
     },
     // Group plotly updates
     {
-        "matchPackagePatterns": ["plotly"],
+        "matchPackageNames": ["/plotly/"],
         "groupName": "plotly packages",
     },
     // Group @zxcvbn-ts updates
     {
-      "matchPackagePatterns": ["^@zxcvbn-ts/"],
+      "matchPackageNames": ["/^@zxcvbn-ts//"],
       "groupName": "@zxcvbn-ts packages"
     },
     // Group webpack updates
     {
-      "matchPackagePatterns": ["webpack"],
+      "matchPackageNames": ["/webpack/"],
       "groupName": "webpack packages",
     },
     // Group webpack loader updates
     {
-      "matchPackagePatterns": ["-loader$"],
+      "matchPackageNames": ["/-loader$/"],
       "groupName": "webpack loader packages",
-    },
-    // Group angular-translate updates
-    {
-      "matchPackagePatterns": ["^angular-translate"],
-      "groupName": "angular-translate packages"
     },
   ],
 }

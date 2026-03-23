@@ -11,7 +11,7 @@
  * Date         :   21 Feb 2017
  */
 import angular from "angular";
- 
+
 /*
  * Bootstrapping the application
  */

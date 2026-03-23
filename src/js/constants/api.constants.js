@@ -54,12 +54,18 @@
                     url: '/api/caregivers/patients/'
                 },
                 USER: {
-                    method: 'get',
-                    url: '/api/caregivers/profile/',
+                    GET: {
+                        method: 'get',
+                        url: '/api/caregivers/profile/',
+                    },
+                    PATCH: {
+                        method: 'patch',
+                        url: '/api/caregivers/profile/',
+                    },
                 },
                 CAREGIVERS: {
                     method: 'get',
-                    url: '/api/patients/legacy/<PATIENT_ID>/caregivers/' 
+                    url: '/api/patients/legacy/<PATIENT_ID>/caregivers/',
                 },
                 RELATIONSHIP_TYPES: {
                     method: 'get',
@@ -72,7 +78,11 @@
                 DATABANK_CONSENT: {
                     method: 'post',
                     url: '/api/patients/<PATIENT_UUID>/databank/consent/'
-                }
+                },
+                IPS: {
+                    method: 'get',
+                    url: '/api/patients/<PATIENT_UUID>/ips/',
+                },
             }
         });
 })();

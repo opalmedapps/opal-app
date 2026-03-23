@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="TxTeamMessagesController as txTeam">
-    <generic-toolbar title="{{'TEAMMESSAGES'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'TEAM_MESSAGES'|translate}}"></generic-toolbar>
     <network-banner></network-banner>
 
     <!-- DATA REFRESHER -->
@@ -22,7 +22,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <div ng-hide="txTeam.hideContent || txTeam.noMessages">
         <ons-list  ng-repeat="message in txTeam.txTeamMessages | orderBy:'-DateAdded'" ng-click="txTeam.goToTeamMessage(message)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{txTeam.txTeamMessages | showHeader : $index : 'DateAdded' }}">{{message.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ txTeam.txTeamMessages | showHeader : $index : 'DateAdded' }}">{{ message.DateAdded | date:'fullDate' }}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center" >
                     <ons-col width="60px" align="center">
@@ -32,7 +32,7 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                     <ons-col style="word-wrap: break-word;">
                         <header>
-                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': message.ReadStatus==='0'}]">{{message.Title}}</span>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': message.ReadStatus==='0'}]">{{message.PostName}}</span>
                         </header>
                     </ons-col>
                 </ons-row>
@@ -40,6 +40,6 @@ SPDX-License-Identifier: Apache-2.0
         </ons-list>
     </div>
     <div ng-hide="txTeam.hideContent" class="container" align="center">
-      <p style="margin-top:25vh;color:grey" ng-show="txTeam.noMessages">{{"NOTEAMMESSAGES"|translate}}</p>
+      <p style="margin-top:25vh;color:grey" ng-show="txTeam.noMessages">{{"NO_TEAM_MESSAGES"|translate}}</p>
     </div>
 </ons-page>

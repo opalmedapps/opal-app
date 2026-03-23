@@ -37,7 +37,7 @@
             handleDisplay();
         }
 
-        
+
         /**
          * @description Handle display of data, not found or error message.
         */

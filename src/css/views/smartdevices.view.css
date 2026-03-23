@@ -29,12 +29,12 @@
 }
 
 .smartdevices-fa-logo {
-    font-size: 5em; 
+    font-size: 5em;
     margin: 5vh 0;
 }
 
 .smartdevices-page {
-    width: 90%; 
+    width: 90%;
     margin: 0 5% 3% 5%;
 }
 
@@ -43,9 +43,9 @@
 }
 
 .smartdevices-page .error {
-    color: red; 
-    margin: 1vh; 
-    padding: 1vh; 
+    color: red;
+    margin: 1vh;
+    padding: 1vh;
     font-weight: bold;
 }
 
@@ -54,9 +54,9 @@
 }
 
 .smartdevices-page p.data span {
-    border: 1px solid #ddd; 
-    padding: 1vh; 
-    display: inline-block; 
+    border: 1px solid #ddd;
+    padding: 1vh;
+    display: inline-block;
     margin-right: 1vh;
 }
 

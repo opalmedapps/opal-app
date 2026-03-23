@@ -23,7 +23,9 @@
     function accountSettingController(UserPreferences, $scope, $timeout, Navigator,
                                       UserHospitalPreferences, LogOutService, User) {
 
-        var vm = this;
+        let vm = this;
+        vm.multipleLanguageOptions = UserPreferences.getSupportedLanguages().length > 1;
+
         vm.accountDeviceBackButton = () => tabbar.setActiveTab(0);
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToUpdateAccountField = (param, animation) => settingsNavigator.pushPage('views/settings/update-account-field.html', {param:param},{ animation : animation });
@@ -38,7 +40,7 @@
 
             loadSettings();
 
-            // After a page is popped reintialize the settings.
+            // After a page is popped reinitialize the settings.
             settingsNavigator.on('postpop', () => {
                 $timeout(() => loadSettings());
             });
@@ -47,7 +49,7 @@
                 if (settingsNavigator._doorLock.isLocked()) event.cancel();
             });
 
-            //On destroy, dettach listener
+            //On destroy, detach listener
             $scope.$on('$destroy', () => {
                 settingsNavigator.off('postpop');
                 settingsNavigator.off('prepush');
@@ -66,4 +68,3 @@
         }
     }
 })();
-

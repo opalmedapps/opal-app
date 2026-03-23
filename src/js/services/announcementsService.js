@@ -21,10 +21,10 @@
         .module('OpalApp')
         .factory('Announcements', Announcements);
 
-    Announcements.$inject = ['RequestToServer','$filter', 'UserPreferences'];
+    Announcements.$inject = ['$filter', 'RequestToServer'];
 
     /* @ngInject */
-    function Announcements(RequestToServer,$filter, UserPreferences) {
+    function Announcements($filter, RequestToServer) {
 
         /**
          *@ngdoc property
@@ -46,7 +46,6 @@
             getAnnouncementBySerNum: getAnnouncementBySerNum,
             readAnnouncementBySerNum: readAnnouncementBySerNum,
             readAnnouncement: readAnnouncement,
-            setLanguage: setLanguage,
             getAnnouncementUrl: () => './views/general/announcements/individual-announcement.html',
             clearAnnouncements: clearAnnouncements,
             getLastUpdated: () => lastUpdated,
@@ -80,7 +79,7 @@
         /**
          *@ngdoc method
          *@name setAnnouncements
-         *@param {Array} array announcements array that containts the new announcements
+         *@param {Array} array announcements array that contains the new announcements
          *@description Setter method for announcements
          **/
         function setAnnouncements(array) {
@@ -93,8 +92,8 @@
          *@ngdoc method
          *@name getAnnouncementBySerNum
          *@param {String} serNum AnnouncementSerNum to be looked for
-         *@description Iterates through the annoucements array and returns annoucement object matching the serNum
-         *@returns {Object} Returns object containing annoucement
+         *@description Iterates through the announcements array and returns announcement object matching the serNum
+         *@returns {Object} Returns object containing announcement
          **/
         function getAnnouncementBySerNum(serNum) {
             for (var i = 0; i < announcements.length; i++) {
@@ -121,37 +120,13 @@
         /**
          *@ngdoc method
          *@name readAnnouncement
-         *@param {String} index index in the annoucement array to be read
+         *@param {String} index index in the announcement array to be read
          *@param {String} serNum AnnouncementSerNum to be read
          *@description Faster method to read an announcement, no iteration required.
          **/
         function readAnnouncement(index, serNum) {
             announcements[index].ReadStatus = '1';
             RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Announcements'});
-        }
-
-        /**
-         *@ngdoc method
-         *@name setLanguage
-         *@param {Array} item Array or object with announcements
-         *@description Translates the array parameter containing announcements to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
-         *@returns {Array} Returns array with translated values
-         **/
-        function setLanguage(item) {
-            var language = UserPreferences.getLanguage();
-            if (Array.isArray( item )) {
-                for (var i = 0; i < item.length; i++) {
-                    //set language
-                    item[i].Title = (language === 'EN')? item[i].PostName_EN : item[i].PostName_FR;
-                    item[i].Body = (language === 'EN')? item[i].Body_EN : item[i].Body_FR;
-                }
-            }else{
-                //set language if string
-                item.Title = (language ==='EN')? item.PostName_EN : item.PostName_FR;
-                item.Body = (language === 'EN')? item.Body_EN: item.Body_FR;
-            }
-
-            return item;
         }
 
         /**

@@ -5,12 +5,12 @@
 /*
  * Filename     :   diagnosesService.js
  * Description  :   Service that store and manages the patient diagnosis information.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   02 Mar 2017
  */
- 
- 
- 
+
+
+
 var myApp=angular.module('OpalApp');
 /**
 *@ngdoc service
@@ -57,8 +57,8 @@ myApp.service('Diagnoses', ['$filter', 'LocalStorage', function($filter, LocalSt
        /**
       *@ngdoc method
       *@name setDiagnoses
-      *@param {Array} diag diagnoses array that containts all the patient diagnosis
-      *@description Setter method for patient diagoses
+      *@param {Array} diag diagnoses array that contains all the patient diagnoses
+      *@description Setter method for patient diagnoses
       **/
       setDiagnoses:function(diag)
       {

@@ -53,7 +53,7 @@
                 case 'general':
                     vm.title = 'FEEDBACK';
                     vm.description = 'FEEDBACK_MESSAGE';
-                    vm.placeholder = 'LEAVEMESSAGE';
+                    vm.placeholder = 'FEEDBACK_LEAVE_MESSAGE';
                     break;
                 case 'research':
                     vm.title = 'RESEARCH_FEEDBACK';
@@ -86,7 +86,7 @@
                     $timeout(function(){
                         $scope.feedbackText = '';
                         vm.submitted = true;
-                        vm.enableSend = false; 
+                        vm.enableSend = false;
                         vm.isSubmitting = false;
                     });
                 }).catch(function(error){
@@ -96,7 +96,7 @@
                         vm.isSubmitting = false;
                     });
                 });
-                
+
             }
         }
 

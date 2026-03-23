@@ -42,7 +42,7 @@ import "../../css/directives/profile-selector.directive.css"
                         </div>
                         <ul ng-show="listVisible" class="profile-selector--list">
                             <top-page-banner title="'RELATIONSHIPS_PATIENTS_AVAILABLE'"></top-page-banner>
-                            <li 
+                            <li
                             ng-repeat="profile in profileList"
                             ng-if="canDisplayProfile(profile)"
                             ng-class="{
@@ -61,7 +61,7 @@ import "../../css/directives/profile-selector.directive.css"
                 </ons-toolbar>
             `,
             link: function (scope) {
-                
+
                 scope.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
                 scope.profileList = ProfileSelector.getPatientList();
                 scope.listVisible = false;

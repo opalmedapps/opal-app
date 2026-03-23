@@ -25,13 +25,13 @@
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'Navigator', '$scope', 'Params',
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'Navigator', '$scope', 'Params', 'Constants',
         'UserHospitalPreferences'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
                                         UserAuthorizationInfo, $state, DeviceIdentifiers, Navigator, $scope,
-                                        Params, UserHospitalPreferences) {
+                                        Params, Constants, UserHospitalPreferences) {
 
         var vm = this;
         var deviceID;
@@ -129,6 +129,7 @@
         vm.goToReset = goToReset;
         vm.isThereSelectedHospital = isThereSelectedHospital;
         vm.lockout = lockout;
+        vm.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
 
         activate();
 
@@ -216,8 +217,9 @@
 
             $scope.initNavigator.on('postpush', () => {
                 $timeout(() => {
-                    const securityAnswer = document.getElementById('security_answer_input');
-                    if (securityAnswer) {
+                    const securityAnswer = document.getElementById('security-answer-input');
+                    // iOS blocks focus events and causes issues focussing the input field afterwards
+                    if (securityAnswer && !(Constants.app && ons.platform.isIOS())) {
                         securityAnswer.focus();
                     }
                 });
@@ -287,18 +289,18 @@
                         vm.alert.content = "INVALID_USER";
                         break;
                     case 4:
-                        vm.alert.content = "OUTOFTRIES";
+                        vm.alert.content = "OUT_OF_TRIES";
                         vm.tooManyAttempts = true;
                         vm.lockout();
                         break;
                     case "corrupted-data":
-                        vm.alert.content = "CONTACTHOSPITAL";
+                        vm.alert.content = "CONTACT_HOSPITAL";
                         break;
                     case "wrong-answer":
-                        vm.alert.content = "ERRORANSWERNOTMATCH";
+                        vm.alert.content = "ERROR_ANSWER_NOT_MATCH";
                         break;
                     case "no-answer":
-                        vm.alert.content = "ENTERANANSWER";
+                        vm.alert.content = "ENTER_AN_ANSWER";
                         break;
                     default:
                         vm.alert.content = "ERROR_GENERIC";

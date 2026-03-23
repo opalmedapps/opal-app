@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="PatientTestResultsController as tests">
-    <generic-toolbar title="{{'LAB_RESULTS'|translate}}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{'LAB_RESULTS'|translate}}">
         <right-content>
             <!-- INFO BUTTON -->
             <labs-info-button style="margin-right: -10px"></labs-info-button>
@@ -30,12 +30,12 @@ SPDX-License-Identifier: Apache-2.0
             <div class="button-bar" style="margin-top:10px;width:70%;left:15%;" >
                 <div class="button-bar__item">
                     <input type="radio" name="navi-segment-a" checked ng-model="tests.showByDate" ng-value="true">
-                    <div class="button-bar__button">{{'LAB_BYDATE'|translate}}</div>
+                    <div class="button-bar__button">{{'LAB_BY_DATE'|translate}}</div>
                 </div>
 
                 <div class="button-bar__item">
                     <input type="radio" name="navi-segment-a" ng-model="tests.showByDate" ng-value="false">
-                    <div class="button-bar__button">{{'LAB_BYTYPE'|translate}}</div>
+                    <div class="button-bar__button">{{'LAB_BY_TYPE'|translate}}</div>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@ SPDX-License-Identifier: Apache-2.0
                 <div ng-if="tests.testDates.length > 0">
                     <ons-list>
                         <div ng-repeat="testDate in tests.testDates">
-                            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="tests.testDates | showHeader : $index"
+                            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="tests.testDates | showHeader : $index"
                                             >{{
                                                 testDate.collectedDateTime.toLocaleString(
                                                     tests.locale,
@@ -107,7 +107,7 @@ SPDX-License-Identifier: Apache-2.0
                     <search-bar search-text="tests.searchTestTypeText" placeholder="{{'SEARCH'|translate}}" style-class="fontSizeDesc"></search-bar>
                     <!-- HEADER WITH COLUMN TITLES -->
                     <ons-list>
-                        <ons-list-header class="person-list-header" ng-class="fontSizeTitle">
+                        <ons-list-header class="default-list-header" ng-class="fontSizeTitle">
                             <ons-row ng-class="fontSizeDesc" style="font-weight:bold" vertical-align="center">
 
                                 <!-- HEADER - LEFT (NAME) -->
@@ -153,7 +153,7 @@ SPDX-License-Identifier: Apache-2.0
                                 <!-- LAB RESULT - LEFT (NAME) -->
                                 <ons-col width="35%" class="labtest-col" vertical-align="center">
                                     <div align="left" style="margin-left:4px;">
-                                        <p class="hyphens">{{tests.displayType(testResult)}}</p>
+                                        <p class="hyphens">{{testResult.name}}</p>
                                     </div>
                                 </ons-col>
 

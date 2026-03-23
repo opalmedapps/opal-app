@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {Observer} from "../models/utility/observer";
- 
+
  (function () {
     'use strict';
 
@@ -81,7 +81,7 @@ import {Observer} from "../models/utility/observer";
          *              because the relationship was revoked), fall back onto any valid profile.
          * @param {number} requestedPatientSerNum The PatientSerNum of the profile to load.
          */
-        // TODO: As of now we NEED to have a `patient_legacy_id` to be able to get any data since data calls still go through the old listener. 
+        // TODO: As of now we NEED to have a `patient_legacy_id` to be able to get any data since data calls still go through the old listener.
         // Once endpoints to get patient's data are done, we will need to adjust this code in consequences.
         function loadPatientProfile(requestedPatientSerNum) {
             // Validate that the requested profile can be loaded. If not, fall back onto some other valid profile.
@@ -126,8 +126,8 @@ import {Observer} from "../models/utility/observer";
                 if (!result.data) {
                     return [];
                 }
-                const formatedResult = assignColor(result.data) ? result.data : [];
-                return formatedResult
+                const formattedResult = assignColor(result.data) ? result.data : [];
+                return formattedResult
             } catch (error) {
                 // TODO: Display error in the view (QSCCD-77)
                 console.error(error);
@@ -136,7 +136,7 @@ import {Observer} from "../models/utility/observer";
 
         /**
          * Add color to the the passed profile.
-         * @param {object} profiles - The profile we need to assign a color too. 
+         * @param {object} profiles - The profile we need to assign a color too.
          * @returns {object} Profiles data with it's color added.
          */
         function assignColor(profiles) {

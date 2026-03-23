@@ -20,6 +20,7 @@
         vm.message = null;
         vm.apiData;
         vm.patients;
+        // See translations for: RELATIONSHIPS_PATIENTS_STATUS_CON, RELATIONSHIPS_PATIENTS_STATUS_DEN, RELATIONSHIPS_PATIENTS_STATUS_EXP, RELATIONSHIPS_PATIENTS_STATUS_PEN, RELATIONSHIPS_PATIENTS_STATUS_REV
         vm.getRelationshipStatusText = (status) => `RELATIONSHIPS_PATIENTS_STATUS_${status}`;
         vm.goToPatientsInfo = () => navigator.pushPage('views/settings/info-page-relationship-type.html', {id: 'patients'})
 

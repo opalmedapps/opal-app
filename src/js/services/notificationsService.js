@@ -22,10 +22,10 @@
         .factory('Notifications', Notifications);
 
     Notifications.$inject = ['$filter','$injector','$q','Announcements','Appointments','CheckInService','Documents',
-        'EducationalMaterial', 'PatientTestResults', 'Questionnaires', 'RequestToServer','TxTeamMessages','UserPreferences', 'Params'];
+        'EducationalMaterial', 'PatientTestResults', 'Questionnaires', 'RequestToServer','TxTeamMessages', 'Params'];
 
     function Notifications($filter, $injector, $q, Announcements, Appointments, CheckInService, Documents,
-                           EducationalMaterial, PatientTestResults, Questionnaires, RequestToServer, TxTeamMessages, UserPreferences, Params) {
+                           EducationalMaterial, PatientTestResults, Questionnaires, RequestToServer, TxTeamMessages, Params) {
         /**
          * @ngdoc property
          * @description Initializing array that represents all the information for Notifications.
@@ -188,7 +188,6 @@
             getNotificationPost: getNotificationPost,
             downloadNotificationTarget: downloadNotificationTarget,
             setNotifications: setNotifications,
-            setNotificationsLanguage: setNotificationsLanguage,
             clearNotifications: clearNotifications,
             markAllRead: markAllRead,
             implicitlyMarkCachedNotificationAsRead: implicitlyMarkCachedNotificationAsRead,
@@ -222,7 +221,7 @@
                 if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') {
                     console.warn(`Notification with unsupported type ${temp[i].NotificationType}:`, temp[i]);
                     continue;
-                } 
+                }
 
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
@@ -346,31 +345,6 @@
         }
 
         /**
-         * @ngdoc method
-         * @name setNotificationsLanguage
-         * @param {Array} notifications Array with notifications
-         * @description Translates the array parameter containing notifications to the appropriate preferred language
-         *              specified in {@link OpalApp.service:UserPreferences UserPreferences}.
-         *
-         *              Note: notifications that cannot be processed successfully are removed from the list of
-         *              notifications passed as a parameter to this function.
-         * @returns {Array} Returns array with translated values
-         **/
-        function setNotificationsLanguage(notifications) {
-            let language = UserPreferences.getLanguage();
-            for (let i = notifications.length - 1; i >= 0; i--) {
-                try {
-                    notifications[i].Title = notifications[i][`Name_${language}`];
-                    notifications[i].RefTableRowTitle = notifications[i][`RefTableRowTitle_${language}`];
-                } catch (e) {
-                    console.error('Incorrectly formatted notification, not shown', notifications[i]);
-                    notifications.splice(i, 1);
-                }
-            }
-            return notifications;
-        }
-
-        /**
          * @description Returns a list of all notification types related to appointments.
          * @returns {(string)[]} The list of appointment notification types.
          */
@@ -396,7 +370,7 @@
         }
 
         /**
-         * @ngdoc method 
+         * @ngdoc method
          * @name implicitlyMarkCachedNotificationAsRead
          * @desc Implicitly mark cached notifications as read.
          *       E.g., cached notification linked to a new/updated/canceled appointment.

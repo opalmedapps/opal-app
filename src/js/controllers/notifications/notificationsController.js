@@ -67,7 +67,6 @@
                 });
                 return
             }
-            notifications = Notifications.setNotificationsLanguage(notifications);
 
             $timeout(function() {
                 vm.noNotifications = false;

@@ -29,6 +29,10 @@ content/*
 !content/service-status.sample.json
 !content/README.md
 
+# Local uv / pre-commit installation files
+pyproject.toml
+uv.lock
+
 # App branding
 src/img/branding/custom/*
 !src/img/branding/custom/README.md

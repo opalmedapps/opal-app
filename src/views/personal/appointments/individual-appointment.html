@@ -5,21 +5,21 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="AppointmentController as vm">
-    <generic-toolbar title="{{'APPOINTMENT'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'APPOINTMENT'|translate}}"></generic-toolbar>
     <div style="border-top: 1px solid lightsteelblue">
         <ons-list ng-hide="vm.corrupted_appointment">
             <!-- APPOINTMENT SUMMARY -->
             <ons-list-item class="item" >
                 <div style="line-height:1" align="left">
                     <header>
-                        <span class="item-title" ng-class="fontSizeTitle">{{vm.app["AppointmentType_"+vm.language]}}</span>
+                        <span class="item-title" ng-class="fontSizeTitle">{{vm.app.AppointmentType}}</span>
                     </header>
-                    <p class="item-desc" ng-class="fontSizeDesc" ng-if="vm.app['Status'] === 'Deleted' || vm.app['Status'] === 'Cancelled'" style="color:rgb(243, 33, 33)"> 
+                    <p class="item-desc" ng-class="fontSizeDesc" ng-if="vm.app['Status'] === 'Deleted' || vm.app['Status'] === 'Cancelled'" style="color:rgb(243, 33, 33)">
                         {{"APPOINTMENT_CANCELLED"|translate}}
                     </p>
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ScheduledStartTime|date:'mediumNoSeconds'}}</p>
-                    <p class="item-desc" ng-class="fontSizeDesc" ng-show="vm.app['RoomLocation_'+vm.language]">
-                        {{"GOTO_ROOM"|translate}} {{vm.app["RoomLocation_"+vm.language]}}
+                    <p class="item-desc" ng-class="fontSizeDesc" ng-show="vm.app.RoomLocation">
+                        {{"GO_TO_ROOM"|translate}} {{vm.app.RoomLocation}}
                     </p>
                 </div>
             </ons-list-item>
@@ -41,18 +41,18 @@ SPDX-License-Identifier: Apache-2.0
 
             <!-- MAP DESCRIPTION -->
             <ons-list-item ng-class="fontSizeDesc">
-                <p id="map-desc" class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app['MapDescription_' + vm.language] | trustHTML" align="center"></p>
+                <p id="map-desc" class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app.MapDescription | trustHTML" align="center"></p>
             </ons-list-item>
 
             <!-- MAP -->
             <ons-list class="settings-list" align="center">
                 <ons-list-item ng-click="vm.openMap()" align="center">
                     <div align="center" class="text-center" style="padding:5px">
-                        <img ng-src="{{vm.app['MapUrl_'+ vm.language]}}" style="max-width:100%;height:auto">
+                        <img ng-src="{{vm.app.MapUrl}}" style="max-width:100%;height:auto">
                     </div>
                 </ons-list-item>
             </ons-list>
         </ons-list>
-        <div style="color:grey;margin-top:10vh" ng-show="vm.corrupted_appointment" align="center" ng-class="fontSizeTitle">{{"NOAPPOINTMENTINFO"|translate}}</div>
+        <div style="color:grey;margin-top:10vh" ng-show="vm.corrupted_appointment" align="center" ng-class="fontSizeTitle">{{"NO_APPOINTMENT_INFO"|translate}}</div>
     </div>
 </ons-page>

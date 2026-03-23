@@ -45,7 +45,7 @@
             bindEvents();
 
             var parameters = Navigator.getParameters();
-            vm.announcement = Announcements.setLanguage(parameters.Post);
+            vm.announcement = parameters.Post;
         }
 
         function bindEvents() {

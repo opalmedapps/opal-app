@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 <ons-page ng-controller="NotificationsController as notif">
     <!-- TOOLBAR -->
-    <generic-toolbar title="{{'NOTIFICATIONS'|translate}}" style-class="fontSizeTitle">
+    <generic-toolbar title="{{'NOTIFICATIONS'|translate}}">
         <right-content>
             <ons-toolbar-button id="notificationsMenu" ng-click="notificationsPopover.show('#notificationsMenu')">
                 <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
@@ -39,7 +39,7 @@ SPDX-License-Identifier: Apache-2.0
     <div ng-hide="notif.hideContent">
         <ons-list ng-repeat="notification in notif.notifications"
                   ng-click="notif.goToNotification($index,notification)">
-            <ons-list-header class="person-list-header" ng-show="{{notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">
+            <ons-list-header class="default-list-header" ng-show="{{ notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">
                 {{notification.DateAdded|date:'fullDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron" class="item">
@@ -49,7 +49,7 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.Title}}</span>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.Name}}</span>
                             <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.RefTableRowTitle}}</p>
                             <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{"SENT_TO"|translate}}: {{notification.PatientFirstName}} {{notification.PatientLastName}}</p>
                         </header>
@@ -59,6 +59,6 @@ SPDX-License-Identifier: Apache-2.0
         </ons-list>
     </div>
     <div ng-show="notif.noNotifications" class="container" align="center">
-        <p style="margin-top:25vh;color:grey">{{"NONOTIFICATIONS"|translate}}</p>
+        <p style="margin-top:25vh;color:grey">{{"NO_NOTIFICATIONS"|translate}}</p>
     </div>
 </ons-page>

@@ -31,7 +31,7 @@
         ////////////////
 
         function activate() {
-            vm.hospitalList = UserHospitalPreferences.getHospitalListForDisplay();
+            vm.hospitalList = UserHospitalPreferences.getHospitalList();
             hospitalMessages = DynamicContent.getConstant('hospitalMessages');
             language = UserPreferences.getLanguage();
 

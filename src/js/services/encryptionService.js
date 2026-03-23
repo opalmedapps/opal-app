@@ -31,7 +31,7 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
             //grab the nonce
             var pair = splitValue(object);
             var decryptedObj = nacl.util.encodeUTF8(nacl.secretbox.open(pair[1], pair[0], secret));
-            
+
             return stripEscapingSlashes(decryptedObj);
 
         } else {
@@ -160,7 +160,8 @@ myApp.service('EncryptionService', ['UserAuthorizationInfo', 'UserHospitalPrefer
         /**
          *@ngdoc method
          *@name decryptDataWithKey
-         *@params {Object} object Object to be decrypted, {String} key fo
+         *@params {Object} object Object to be decrypted
+         *@params {String} key Key for decryption
          *@description Uses the given key as the decryption hash
          *@return {Object} Returns decrypted object
          **/

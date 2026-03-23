@@ -11,6 +11,10 @@
     --danger: red;
 }
 
+.default-list-header {
+    opacity: 0.6;
+}
+
 .list-item-note {
     position: absolute;
     right: 36px;
@@ -164,4 +168,3 @@
         display: none;
     }
 }
-

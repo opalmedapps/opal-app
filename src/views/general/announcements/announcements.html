@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="AnnouncementsController as vm">
-    <generic-toolbar title="{{'GENERALANNOUNCEMENTSHEADER'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'GENERAL_ANNOUNCEMENTS_HEADER'|translate}}"></generic-toolbar>
 
     <network-banner></network-banner>
 
@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <div ng-hide="vm.hideContent || vm.noAnnouncements">
         <ons-list  ng-repeat="announcement in vm.announcements" ng-click="vm.goToAnnouncement(announcement)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{vm.announcements | showHeader : $index : 'DateAdded' }}">{{announcement.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-header class="default-list-header" ng-class="fontSizeTitle" ng-show="{{ vm.announcements | showHeader : $index : 'DateAdded' }}">{{ announcement.DateAdded | date:'fullDate' }}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center" >
                     <ons-col width="70px" align="center">
@@ -33,7 +33,7 @@ SPDX-License-Identifier: Apache-2.0
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{announcement.Title}}</span>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{announcement.PostName}}</span>
                             <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{"SENT_TO"|translate}}: {{announcement.PatientFirstName}} {{announcement.PatientLastName}}</p>
                         </header>
                     </ons-col>
@@ -43,6 +43,6 @@ SPDX-License-Identifier: Apache-2.0
     </div>
 
     <div ng-hide="vm.hideContent" class="container" align="center">
-        <p style="margin-top:25vh;color:grey" ng-show="vm.noAnnouncements">{{"NOGENERALANNOUNCEMENTS"|translate}}</p>
+        <p style="margin-top:25vh;color:grey" ng-show="vm.noAnnouncements">{{"NO_GENERAL_ANNOUNCEMENTS"|translate}}</p>
     </div>
 </ons-page>

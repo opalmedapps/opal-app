@@ -15,7 +15,7 @@
      * @param {array} sourceArray Array from where values to be compared are coming from.
      * @param {int} index Index of the current value to be evaluated.
      * @param {String} [sortBy] (Optional) Name of the key used to compare two values from the sourceArray.
-     *                          If not provided, the object itself from sourceArray is used (should be a date or convertable to Date).
+     *                          If not provided, the object itself from sourceArray is used (should be a date or convertible to Date).
      * @date 2021-12-14
      */
     function ShowHeader() {

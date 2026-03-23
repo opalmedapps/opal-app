@@ -63,7 +63,7 @@
 
         /**
          * @description Validate response incoming from the new listener's section. On error show the toast with the error message.
-         * @param {object} response Object fetch from firebase 
+         * @param {object} response Object fetch from firebase
          * @returns {object} A decrypted response object on success, an error data object on error
          */
         function validateApiResponse(response) {

@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="accountSettingController as Ctrl" ng-device-backbutton="Ctrl.accountDeviceBackButton()">
-    <generic-toolbar title="{{'ACCOUNT'|translate}}" back-button="false" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'ACCOUNT'|translate}}" back-button="false"></generic-toolbar>
 
     <!-- HOSPITAL NAME BAR -->
     <top-page-banner title="Ctrl.selectedHospitalToDisplay"></top-page-banner>
@@ -56,7 +56,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PREFERENCES"|translate}}</div>
     <ons-list>
-        <ons-list-item modifier="chevron" ng-click="Ctrl.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-if="Ctrl.multipleLanguageOptions" ng-click="Ctrl.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
             {{"LANGUAGE"|translate}}
             <span class="list-item-note lucent">{{Ctrl.Language}}</span>
         </ons-list-item>
@@ -66,7 +66,7 @@ SPDX-License-Identifier: Apache-2.0
     </ons-list>
     <ons-list class="settings-list" ng-class="fontSizeDesc">
         <ons-list-item ng-click="Ctrl.logOut()" modifier="tappable">
-            {{"SIGNOUT"|translate}}
+            {{"SIGN_OUT"|translate}}
             <ons-icon icon="fa-sign-out"  style="margin-top: 10px; color:#1284FF" class="pull-right"></ons-icon>
         </ons-list-item>
     </ons-list>

@@ -5,14 +5,16 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="TechnicalLegalController as init">
-    <generic-toolbar title="{{'TECHNICAL_LEGAL'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'TECHNICAL_LEGAL'|translate}}"></generic-toolbar>
 
     <ons-list class="settings-list" ng-class="fontSizeDesc">
         <ons-list-item modifier = "chevron" ng-hide="init.navigatorName == 'initNavigator'" ng-click="init.goToFeedback()">
-            {{"RATETHISAPP"|translate}}
+            {{"FEEDBACK"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="init.openSecurityAndPrivacy()">
+        <ons-list-item ng-click="init.openSecurityAndPrivacy()">
             {{"SECURITY_AND_PRIVACY"|translate}}
+            <ons-icon icon="ion-android-open" style="color:#ddd; padding: 10px 5px" class="pull-right" size="1.2em">
+            </ons-icon>
         </ons-list-item>
         <ons-list-item modifier="chevron" ng-click="init.openPageLegal('termsOfUse')">
             {{"TERMS_OF_USE"|translate}}

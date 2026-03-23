@@ -13,11 +13,11 @@ angular.module('OpalApp').directive('heightChange', function() {
     	var change=newValue;
     	var changeHeight=element[0].offsetHeight+change;
     	changeHeight=changeHeight+'';
- 
+
     	if(newValue){
     		element.css('height',newValue+'px');
     	}
-    	
+
     });
   };
 });

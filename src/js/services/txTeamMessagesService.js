@@ -11,8 +11,8 @@ var myApp=angular.module('OpalApp');
  *@requires $filter
  *@description Service that deals with the treatment team message information
  **/
-myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'UserPreferences', function($filter,RequestToServer, LocalStorage,UserPreferences){
-    //Initializing array that represents all the informations for TxTeamMessages
+myApp.service('TxTeamMessages', ['$filter', 'RequestToServer', 'LocalStorage', function($filter, RequestToServer, LocalStorage) {
+    //Initializing array that represents all the information for TxTeamMessages
     /**
      *@ngdoc property
      *@description Initializing array that represents all the information for TxTeamMessages, this array is passed to appropriate controllers.
@@ -55,7 +55,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         /**
          *@ngdoc method
          *@name setTxTeamMessages
-         *@param {Object} messages messages array that containts the new messages
+         *@param {Object} messages messages array that contains the new messages
          *@description Setter method for TxTeamMessages
          **/
         setTxTeamMessages:function(messages)
@@ -156,30 +156,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         getTxTeamMessageUrl:function(serNum)
         {
             return './views/personal/treatment-team-messages/individual-team-message.html';
-        },
-        /**
-         *@ngdoc method
-         *@name setLanguageTxTeamMessages
-         *@param {Array} array Array with TxTeamMessages
-         *@description Translates the array parameter containing announcements to appropriate preferred language specified in {@link OpalApp.service:UserPreferences UserPreferences}.
-         *@returns {Array} Returns array with translated values
-         **/
-        setLanguageTxTeamMessages :function(array)
-        {
-            var language = UserPreferences.getLanguage();
-            //Check if array
-            if (Object.prototype.toString.call( array ) === '[object Array]') {
-                for (var i = 0; i < array.length; i++) {
-                    //set language
-                    array[i].Title = (language=='EN')? array[i].PostName_EN : array[i].PostName_FR;
-                    array[i].Body = (language == 'EN')? array[i].Body_EN : array[i].Body_FR;
-                }
-            }else{
-                //set language if string
-                array.Title = (language=='EN')? array.PostName_EN : array.PostName_FR;
-                array.Body = (language == 'EN')? array.Body_EN: array.Body_FR;
-            }
-            return array;
         },
         /**
          *@ngdoc method

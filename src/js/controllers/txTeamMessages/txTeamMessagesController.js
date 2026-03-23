@@ -40,7 +40,7 @@
          */
         function setTxTeamMessagesView() {
             vm.noMessages = true;
-            var messages = TxTeamMessages.setLanguageTxTeamMessages(TxTeamMessages.getTxTeamMessages());
+            let messages = TxTeamMessages.getTxTeamMessages();
             if (messages.length > 0) vm.noMessages = false;
 
             $timeout(function(){

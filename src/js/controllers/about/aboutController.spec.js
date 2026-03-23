@@ -16,12 +16,10 @@ describe('AboutController', function() {
 
     var $controller;
     var controller;
-    var UserPreferences;
     var $window;
 
-    beforeEach(inject(function(_$controller_, _UserPreferences_, _$window_){
+    beforeEach(inject(function(_$controller_, _$window_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
-        UserPreferences = _UserPreferences_;
         $window = _$window_;
 
         // Spies
@@ -29,21 +27,10 @@ describe('AboutController', function() {
                 return url;
             } );
 
-        spyOn( UserPreferences, 'getLanguage' ).and.callFake( function() {
-                return 'en';
-            } );
-
         $controller = _$controller_;
-        controller = $controller('AboutController', {$window: $window, UserPreferences: UserPreferences});
+        controller = $controller('AboutController', {$window: $window});
 
     }));
-
-    describe('sanity test', function() {
-        it('activates the proper language', inject(function(UserPreferences) {
-            expect(UserPreferences.getLanguage).toHaveBeenCalled();
-            expect(controller.language).toEqual('en');
-        }));
-    });
 
     it('opens the donation window properly', function(){
         controller.openDonation();

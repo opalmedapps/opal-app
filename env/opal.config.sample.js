@@ -15,8 +15,6 @@ const config = {
         // For testing purposes (e.g., if no external server is setup), it's possible to provide a path to
         // a local configuration file (e.g., `./content/content.config.json`).
         externalContentFileURL: "./content/content.config.json",
-        // Boolean: whether to kick out a user when another person logs into the same user account on another device.
-        kickOutConcurrentUsers: false,
         // String: the service status URL is used to display a 'service status message' to the user when they log in.
         // Leave empty if no service status URL has been set on the external server.
         // E.g., https://<YOUR-EXTERNAL-HOST>/<PATH-TO-THE-SERVICE-STATUS>
@@ -25,8 +23,12 @@ const config = {
         serviceStatusURL: "./content/service-status.json",
         // Boolean: whether to show the app's version and build number on the front page.
         showVersionOnInit: true,
-        // Boolean: whether to use real (production-ready) institution names and acronyms (such as "RI-MUHC"). If false, generic names are used.
-        useRealInstitutionNames: false,
+        // String: comma-separated list of languages supported in the system (ISO 639-1 codes) with the first language being the default
+        supportedLanguages: 'en,fr',
+        // String: language (ISO 639-1 code) used as a fallback for frontend elements that aren't available in the user's chosen language, for example, app links
+        fallbackLanguage: 'en',
+        // Boolean: whether to use real (production-ready) hospitals for login. If false, development-specific hospitals are used instead.
+        useProductionHospitals: false,
         // Boolean: whether to use a sourcemap when building the web code. Should be false in production.
         useSourceMap: true,
         // Boolean: whether screenshots can be taken in the app. Should be false in production.
@@ -40,7 +42,8 @@ const config = {
         "APP_ID": "",
         // String: the display name of the app when installed on a device.
         "APP_NAME": "Opal Local",
-        // Integer: the build number shown in brackets after the app's version number. Must always increase for consecutive store uploads.
+        // Integer: the build number shown in brackets after the app's version number.
+        // Note: when building in the pipeline, this value is replaced by a number that's calculated automatically, or one that's manually entered via workflow_dispatch inputs.
         "BUILD_NUMBER": 1,
         // Boolean: whether the Android app is debuggable (android:debuggable). Should be false in production.
         "ANDROID_DEBUGGABLE": true,

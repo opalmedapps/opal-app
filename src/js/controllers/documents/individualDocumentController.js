@@ -54,12 +54,12 @@
             navigator = Navigator.getNavigator();
 
             //PDF params
-            docParams = Documents.setDocumentsLanguage(parameters.Post);
+            docParams = parameters.Post;
             docParams.fileName = FileManagerService.generateDocumentName(docParams);
             $scope.docParams = docParams;
 
-            vm.doc_title = docParams.Title;
-            vm.DocumentDescription = docParams.Description;
+            vm.doc_title = docParams.AliasName;
+            vm.DocumentDescription = docParams.AliasDescription;
 
             //Create popover
             ons.createPopover('./views/personal/documents/info-popover.html', {parentScope: $scope}).then(function (popover) {
@@ -156,14 +156,10 @@
             if (vm.DocumentDescription !== '') {
                 navigator.pushPage('./views/personal/documents/about-document.html', {'Post': docParams});
             } else {
-                // Check if there is any about link
-                var link = null;
-                docParams.hasOwnProperty("URL_EN") ? link = docParams["URL_" + UserPreferences.getLanguage()] : {};
-
                 // Set the options to send to the content controller
                 var contentOptions = {
-                    contentType: docParams.AliasName_EN,
-                    contentLink: link,
+                    contentType: docParams.AliasName,
+                    contentLink: docParams.URL,
                     title: 'INFO',
                 };
 

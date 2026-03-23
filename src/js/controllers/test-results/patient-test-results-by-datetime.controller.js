@@ -29,51 +29,37 @@ class PatientTestResultsByDatetimeController {
 	 */
 	locale = "";
 
-	/**
-	* @type {string}
-	*/
-	#language = "";
-
 	#patientTestResults;
 	#navigator;
 	#$timeout;
 	#$filter;
 	#updateUI;
+	#nativeNotification;
 
 	/**
 	 *
 	 * @param {PatientTestResults} patientTestResults
 	 * @param {Navigator} navigator
-	 * @param {UserPreferences} userPreferences
 	 * @param {$timeout} $timeout
 	 * @param {$filter} $filter
 	 * @param {UpdateUI} updateUI update UI service
 	 * @param {$locale} $locale
+	 * @param {NativeNotification} nativeNotification NativeNotification service
 	 */
 	constructor(patientTestResults, navigator,
-	            userPreferences, $timeout, $filter, updateUI, $locale) {
+	            $timeout, $filter, updateUI, $locale, nativeNotification) {
 		this.#patientTestResults = patientTestResults;
 		this.#navigator = navigator.getNavigator();
-		this.#language = userPreferences.getLanguage();
 		this.#$filter = $filter;
 		this.#$timeout = $timeout;
 		this.#updateUI = updateUI;
 		this.locale = $locale.id;
+		this.#nativeNotification = nativeNotification;
 		this.#initialize(this.#navigator.getCurrentPage().options);
 	}
 
-
 	/**
-	 * Returns the test name in the preferred patient language
-	 * @param {*} testResult Result for given test type
-	 * @returns {string} Returns test name
-	 */
-	getTestName(testResult) {
-		return testResult[`name_${this.#language}`];
-	}
-
-	/**
-	 * Returns the display group name for the current result, some results are under no group, in this case the string 
+	 * Returns the display group name for the current result, some results are under no group, in this case the string
 	 * Other is used as group name
 	 * @param {string} groupName Group name string
 	 * @returns {string} Group name display string
@@ -84,7 +70,7 @@ class PatientTestResultsByDatetimeController {
 	}
 
 	/**
-	 * Returns whether or not to show the group header in the view 
+	 * Returns whether or not to show the group header in the view
 	 * @param {string} $index in the test result
 	 * @returns {boolean} Returns whether or not to show the group header in the view
 	 */
@@ -103,7 +89,7 @@ class PatientTestResultsByDatetimeController {
 			'./views/personal/test-results/test-results-by-type.html',
 			{testTypeSerNum});
 	}
-	
+
 	////////////////////////////////////////////////////////////
 	/**
 	 * Initializes the controller, takes the testTypeSerNum (ExpressionSerNum) for the TestType from the
@@ -122,17 +108,13 @@ class PatientTestResultsByDatetimeController {
 	 * At the time, Opal does not have a logging mechanism for errors.
 	 */
 	#handleServerFetchError = (err) => {
-		// TODO: (dherre3) logging of the error
+		console.error(err);
 		this.#updateView();
-		ons.notification.alert({
-			//message: 'Server problem: could not fetch data, try again later',
-			message: this.#$filter('translate')("SERVERERRORALERT"),
-			modifier: (ons.platform.isAndroid()) ? 'material' : null
-		});
+		this.#nativeNotification.showNotificationAlert(this.#$filter('translate')('SERVER_ERROR_ALERT'));
 	};
 	/**
 	 * Updates the user view with the new server information for the date test results
-	 * @param {*} results contains TestType results. 
+	 * @param {*} results contains TestType results.
 	 */
 	#updateView=(results=null) =>{
 		this.#$timeout(()=>{
@@ -155,8 +137,8 @@ class PatientTestResultsByDatetimeController {
 	}
 }
 
-PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator', 'UserPreferences',
-													'$timeout', '$filter', 'UpdateUI', '$locale'];
+PatientTestResultsByDatetimeController.$inject = ['PatientTestResults', 'Navigator',
+													'$timeout', '$filter', 'UpdateUI', '$locale', 'NativeNotification'];
 angular
 	.module('OpalApp')
 	.controller('PatientTestResultsByDatetimeController', PatientTestResultsByDatetimeController);

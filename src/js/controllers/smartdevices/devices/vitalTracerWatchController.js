@@ -24,9 +24,9 @@
         const BLOOD_PRESSURE_CHARACTERISTIC_UUID = '2A35';
 
         // Error messages
-        const ERROR_BACKEND = $filter('translate')('SMARTDEVICES_ERROR_BACKEND');
-        const ERROR_NO_DEVICE = $filter('translate')('SMARTDEVICES_VITALTRACER_ERROR_NO_DEVICE');
-        const ERROR_NO_DATA = $filter('translate')('SMARTDEVICES_ERROR_NO_DATA');
+        const ERROR_BACKEND = $filter('translate')('SMART_DEVICES_ERROR_BACKEND');
+        const ERROR_NO_DEVICE = $filter('translate')('SMART_DEVICES_VITALTRACER_ERROR_NO_DEVICE');
+        const ERROR_NO_DATA = $filter('translate')('SMART_DEVICES_ERROR_NO_DATA');
 
         const SAMPLE_TYPE_HEART_RATE = 'HR';
         const SAMPLE_TYPE_BLOOD_PRESSURE_SYSTOLIC = 'BPS';
@@ -42,7 +42,7 @@
 
         vm.selectedDevice = null;
         vm.errorMessage = null;
-        
+
         let devices = new Map();
         vm.messages = [];
 
@@ -63,7 +63,7 @@
         async function scanAndConnect() {
             vm.scanning = true;
             vm.errorMessage = null;
-                
+
             vm.selectDevice = null;
             vm.messages = [];
             devices.clear();
@@ -131,13 +131,13 @@
                 device.connecting = false;
                 devices.clear();
             });
-            
+
             await ble.withPromises.disconnect(device.id);
         }
 
         async function onConnected(device, result) {
             addMessage(`Connected to device`);
-            
+
             addDebugMessage('Subscribing to receive notifications');
             await ble.withPromises.startNotification(
                 result.id,
@@ -190,7 +190,7 @@
                 source: SAMPLE_SOURCE,
                 device: vm.selectedDevice.name,
             }];
-            
+
             submitToBackend(data);
         }
 
@@ -238,7 +238,7 @@
 
             try {
                 let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
-                
+
                 addMessage('Vital signs successfully sent to backend');
             } catch (error) {
                 vm.errorMessage = `${ERROR_BACKEND}: ${error}`;

@@ -17,18 +17,17 @@
         .controller('CheckInController', CheckInController);
 
     CheckInController.$inject = ['$filter', '$timeout', 'CheckInService', 'NativeNotification', 'Navigator', 'Params',
-        'ProfileSelector', 'RequestToServer', 'Toast', 'User', 'UserPreferences'];
+        'ProfileSelector', 'RequestToServer', 'Toast', 'User'];
 
     /* @ngInject */
     function CheckInController($filter, $timeout, CheckInService, NativeNotification, Navigator, Params,
-                               ProfileSelector, RequestToServer, Toast, User, UserPreferences) {
+                               ProfileSelector, RequestToServer, Toast, User) {
         let vm = this;
         let navigator;
 
         vm.apps = [];
         vm.displayApps = {};
         vm.noAppointments = true;
-        vm.language = '';
         vm.loadingError = false;
         vm.loadingPage = true;
         vm.errorAlertType = Params.alertTypeDanger;
@@ -51,7 +50,6 @@
         async function activate() {
             try {
                 navigator = Navigator.getNavigator();
-                vm.language = UserPreferences.getLanguage();
 
                 await initializeCheckInData();
                 vm.apps = CheckInService.getAppointmentsForCheckIn();

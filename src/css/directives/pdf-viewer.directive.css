@@ -1,0 +1,41 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (C) 2022 Opal Health Informatics Group at the Research Institute of the McGill University Health Centre <john.kildea@mcgill.ca>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* Popup container */
+.popup {
+    cursor: pointer;
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 3%;
+}
+/* The actual popup (appears on top) */
+.popuptext {
+    visibility: hidden;
+    display: flex;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 5px;
+    position: relative;
+    z-index: 1001;
+    left: -50%;
+    opacity: 0.85;
+
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup-show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1.5s;
+    animation: fadeIn 1.5s
+}
+
+.popup-hide{
+    -webkit-animation: fadeOut 1.5s;
+    animation: fadeOut 1.5s
+}

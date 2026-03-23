@@ -4,7 +4,7 @@
 
 /*
  * Filename     :   forgotPasswordController.js
- * Description  :   Controlls the forgot password view.
+ * Description  :   Controls the forgot password view.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   28 Apr 2017
  */

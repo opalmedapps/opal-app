@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <ons-page ng-controller="HomeController as Ctrl" ng-device-backbutton="Ctrl.homeDeviceBackButton()">
-    <generic-toolbar title="{{'HEADER_MESSAGE_HOME'|translate}}" back-button="false" style-class="fontSizeTitle">
+    <generic-toolbar title="{{'HEADER_MESSAGE_HOME'|translate}}" back-button="false">
         <right-content>
             <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html', {id:'home'})"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button>
         </right-content>
@@ -60,7 +60,7 @@ SPDX-License-Identifier: Apache-2.0
             ABOUT OPAL
             ================================
             -->
-            <ons-list-item modifier="chevron tappable" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('ABT') && Ctrl.allowedModules['ABT']" ng-click="Ctrl.goToAboutOpal()">
+            <ons-list-item modifier="chevron tappable" class="item" ng-click="Ctrl.goToAboutOpal()">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <img class="home-view--opal--logo" src="img/Opal_Logo_Transparent_Inverse_Icon.png">
@@ -78,10 +78,11 @@ SPDX-License-Identifier: Apache-2.0
             NOTIFICATIONS
             ================================
             -->
-            <ons-list-item modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('NTF') && Ctrl.allowedModules['NTF']" ng-click="homeNavigator.pushPage('views/personal/notifications/notifications.html')">
+            <ons-list-item modifier="chevron" class="item" ng-if="'NTF' | moduleIsEnabled : Ctrl.accessLevel"
+                           ng-click="homeNavigator.pushPage('views/personal/notifications/notifications.html')">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
-                        <ons-icon 
+                        <ons-icon
                             icon="ion-android-notifications"
                             size="2x"
                             style="color:#FFC107">
@@ -107,7 +108,7 @@ SPDX-License-Identifier: Apache-2.0
             <!-- The button is initialized with the "non-navigable" class; this is updated later in the controller according to the check-in state -->
             <ons-list-item
                 id="check-in-button"
-                ng-if="Ctrl.allowedModules.hasOwnProperty('CHK') && Ctrl.allowedModules['CHK']"
+                ng-if="'CHK' | moduleIsEnabled : Ctrl.accessLevel"
                 modifier="chevron tappable"
                 class="item non-navigable"
                 ng-click="Ctrl.checkinState.canNavigate ? Ctrl.goToCheckinAppointments() : undefined">
@@ -134,7 +135,6 @@ SPDX-License-Identifier: Apache-2.0
                         </header>
                         <div ng-if="Ctrl.checkinState.canNavigate">
                             <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message | translate}}</p>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.calledApp["AppointmentType_"+Ctrl.language]}}</p>
                         </div>
                         <div ng-if="!Ctrl.checkinState.canNavigate">
                             <p class="item-desc" ng-class="fontSizeDesc">{{Ctrl.checkinState.message|translate}}</p>
@@ -148,7 +148,8 @@ SPDX-License-Identifier: Apache-2.0
             APPOINTMENT STATUS
             ================================
             -->
-            <ons-list-item modifier="chevron" class="item" ng-if="Ctrl.allowedModules.hasOwnProperty('APT') && Ctrl.allowedModules['APT']" ng-click="Ctrl.goToAppointments()">
+            <ons-list-item modifier="chevron" class="item" ng-if="'APT' | moduleIsEnabled : Ctrl.accessLevel"
+                           ng-click="Ctrl.goToAppointments()">
                 <ons-row align="center">
                     <ons-col class="home-view--list--icon">
                         <i class="fa-regular fa-calendar-days fa-2x" style="color: #ffc107"></i>
@@ -167,7 +168,5 @@ SPDX-License-Identifier: Apache-2.0
                 </ons-row>
             </ons-list-item>
         </ons-list>
-        
     </div>
-    <div ng-include="'./views/modals/info-modal.html'"></div>
 </ons-page>

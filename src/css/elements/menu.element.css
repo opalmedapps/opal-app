@@ -86,16 +86,6 @@
     display: flex;
     align-items: center;
 }
-/* Override default toolbar space allocation of 27-46-27% */
-.navigation-bar__left {
-    width: 22%;
-}
-.navigation-bar__center {
-    width: 56%;
-}
-.navigation-bar__right {
-    width: 22%;
-}
 .tab-bar{
     border-top: 1px solid #ddd !important;
 }

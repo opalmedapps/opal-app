@@ -77,8 +77,8 @@ img {
   height: auto;
 }
 
-.nav, .pagination, .carousel, .panel-title a { 
-  cursor: pointer; 
+.nav, .pagination, .carousel, .panel-title a {
+  cursor: pointer;
 }
 
 p {
@@ -92,7 +92,6 @@ p {
 @import url('./dependencies/onsenui.dependency.css');
 @import url('./elements/menu.element.css');
 @import url('./elements/event.element.css');
-@import url('./elements/contact.element.css');
 @import url('./elements/checkout.element.css');
 @import url('./elements/triangle.element.css');
 @import url('./elements/text.element.css');
@@ -107,7 +106,6 @@ p {
 @import url('./views/technical-legal.view.css');
 @import url('./elements/profile.element.css');
 @import url('./elements/list.element.css');
-@import url('./elements/info.element.css');
 @import url('./views/calendar.view.css');
 @import url('./font.css');
 @import url('./elements/action.element.css');
@@ -118,7 +116,7 @@ p {
 @import url('./elements/radio-button.element.css');
 @import url('./views/questionnaires.view.css');
 @import url('./elements/input.element.css');
-@import url('./directives/pdf-view.directive.css');
+@import url('./directives/pdf-viewer.directive.css');
 @import url('./elements/checkmark.element.css');
 @import url('./views/third-party.view.css');
 @import url('./views/questionnaires-list.view.css');

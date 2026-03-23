@@ -40,10 +40,10 @@
 
         // Variable to toggle visibility of the 'no materials' text. Default is false to avoid errors.
         vm.noMaterials = false;
-        
+
         // Variable containing filtered educational materials
         vm.filteredEduMaterials;
-        
+
         // Variables to store the current category of material (clinical or research) and corresponding page title
         vm.eduCategory = '';
         vm.pageTitle = '';
@@ -64,10 +64,7 @@
 
         function initData() {
             vm.noMaterials = false;
-            // Full list of educational materials in the right language.
-            vm.edumaterials = EducationalMaterial.setLanguage(
-                EducationalMaterial.getEducationalMaterial(vm.eduCategory)
-            );
+            vm.edumaterials = EducationalMaterial.getEducationalMaterial(vm.eduCategory);
             // Educational materials filtered based on the search string.
             vm.filteredEduMaterials = $filter('orderBy')(vm.edumaterials, '-DateAdded');
         }

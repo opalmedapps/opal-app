@@ -52,7 +52,7 @@
          */
         function setAnnouncementsView() {
             var announcements = Announcements.getAnnouncements();
-            announcements = Announcements.setLanguage(announcements);
+
             if (announcements.length > 0) {
                 vm.noAnnouncements = false;
                 vm.announcements = $filter('orderBy')(announcements, '-DateAdded');

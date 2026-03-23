@@ -42,7 +42,7 @@
                 await UserPreferences.initFontSize();
                 await UpdateUI.init();
                 await ProfileSelector.init();
-                
+
                 // TODO: Currently, the app isn't able to handle a state in which there are no confirmed profiles. In this case, cancel login.
                 if (ProfileSelector.getConfirmedProfiles().length === 0) {
                     console.error('Cannot log in when there are no confirmed profiles.');
@@ -68,7 +68,7 @@
         //Timeout to show, alerting user of server problems.
         let timeOut = setTimeout(function(){
             loadingmodal.hide();
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"), null, LogOutService.logOut);
+            NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_ALERT"), null, LogOutService.logOut);
         }, 90000);
     }
 })();
