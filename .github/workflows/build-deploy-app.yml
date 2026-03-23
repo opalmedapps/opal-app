@@ -55,7 +55,7 @@ permissions:
 
 jobs:
   build-android:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
       # Setup
       - name: Print environment
@@ -93,7 +93,7 @@ jobs:
 
 
   build-android-release:
-    runs-on: macos-latest
+    runs-on: macos-26
     # Build in release mode for prod
     if: ${{ inputs.ENVIRONMENT == 'prod' }}
     steps:
@@ -146,7 +146,7 @@ jobs:
 
 
   build-ios:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
       # Setup
       - name: Print environment
@@ -224,7 +224,7 @@ jobs:
 
 
   build-ios-release:
-    runs-on: macos-latest
+    runs-on: macos-26
     # Build in release mode for prod
     if: ${{ inputs.ENVIRONMENT == 'prod' }}
     steps:
@@ -344,7 +344,7 @@ jobs:
 
   verify-ios-build:
     needs: build-ios-release
-    runs-on: macos-latest
+    runs-on: macos-26
     # Only run when deploying to the store
     if: ${{ inputs.DEPLOY_APPLE_STORE }}
     steps:
@@ -370,7 +370,7 @@ jobs:
 
   deploy-android-to-store:
     needs: build-android-release
-    runs-on: macos-latest
+    runs-on: macos-26
     # Deploy manually via inputs
     if: ${{ inputs.DEPLOY_GOOGLE_STORE }}
     steps:
@@ -396,7 +396,7 @@ jobs:
 
   deploy-ios-to-store:
     needs: [build-ios-release, verify-ios-build]
-    runs-on: macos-latest
+    runs-on: macos-26
     # Deploy manually via inputs
     if: ${{ inputs.DEPLOY_APPLE_STORE }}
     steps:
