@@ -83,13 +83,14 @@ SPDX-License-Identifier: Apache-2.0
             </button>
         </div>
         <!-- User's name, and patient's name (if different), to make it clear who's submitting the questionnaire -->
-        <div ng-hide="vm.loadingQuestionnaire" class="light-grey-comment" style="padding: 0 10px">
+        <div class="light-grey-comment" style="padding: 0 10px">
             {{ (vm.isAnsweringAsSelf ? 'QUESTIONNAIRE_SUBMIT_AS_SELF' : 'QUESTIONNAIRE_SUBMIT_AS_OTHER') | translate:vm.submittedByNames }}
         </div>
     </div>
 
     <!-- Once-only questionnaires: show a reminder if the user has un-submitted answers -->
-    <div ng-if="vm.onceOnly && vm.hasNewOnceOnlyAnswers()" style="padding: 0 10px 4px; font-style: italic">
+    <div ng-if="vm.onceOnly && vm.hasNewOnceOnlyAnswers() && !vm.loadingQuestionnaire && !vm.loadingSubmitQuestionnaire"
+         style="padding: 0 10px 4px; font-style: italic">
         {{ 'QUESTIONNAIRE_UNSAVED_ANSWERS' | translate }}
     </div>
     <ons-row align="center" style="margin-left: 0.12vw;"

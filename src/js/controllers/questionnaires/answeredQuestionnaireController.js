@@ -403,11 +403,7 @@ import '../../../css/views/answered-questionnaire.view.css';
         /**
          * @name setQuestionStyle
          * @desc Set the question's style to display on the front end
-         *      The question is of color:
-         *          red if the questionnaire is not completed and the question does not have a valid answer
-         *          green if the questionnaire is not completed and the question does have a valid (defined) answer
-         *          white if the questionnaire is not completed and the question is unanswered but optional
-         *          white if the questionnaire is completed or otherwise
+         *       For details on the possible question colors, see below.
          * @param {int} status the status of the questionnaire
          * @param {object} question the question itself
          */

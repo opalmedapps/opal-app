@@ -112,7 +112,7 @@
             research: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
             consent: 'CONSENT_FORM_SUBMIT_INSTRUCTION',
             default: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
-            'once-only': 'QUESTIONNAIRE_SAVE_INSTRUCTION',
+            'once-only': 'ONCE_ONLY_DESCRIPTION',
         };
 
         // constants for the app notifications

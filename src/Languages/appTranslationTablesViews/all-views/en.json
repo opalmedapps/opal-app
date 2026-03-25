@@ -223,7 +223,6 @@
   "QUESTIONNAIRE_REMOVE_ANSWER": "Remove answer",
   "QUESTIONNAIRE_RESUME_INSTRUCTION": "Tap \"Resume\" or swipe to the left to resume the questionnaire.",
   "QUESTIONNAIRE_SAVE_ERROR": "An error occurred while attempting to save your answers.",
-  "QUESTIONNAIRE_SAVE_INSTRUCTION": "When visiting different clinics or doctors, you may be asked the same questions over and over. This page provides a place to answer these questions once and for all. All questions are optional depending on your needs.",
   "QUESTIONNAIRE_SECTION_INSTRUCTION": "Section instruction:",
   "QUESTIONNAIRE_SELECT": "Select",
   "QUESTIONNAIRE_SUBMIT_AS_OTHER": "Submitting answers as: {userName} (on behalf of {patientName})",

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// TODO: Add the ability to remove the answer to a radio button question; since once-only questions are optional, users should be able to remove an answer given by mistake
+// TODO: If a user removes a radio button answer that was previously saved, they won't see the "You have unsaved answers" message
 // TODO: The dependency between the two alcohol questions might not be clear to users. If they answer the second question when not required, their answer gets deleted without a warning.
 //       Consider finding a way to make the answer to the second question invalid depending on what they answered in the first question.
 
@@ -19,6 +19,7 @@
 
         const STATUS = Params.ANSWER_SAVED_IN_DB_STATUS;
 
+        // See: https://loinc.org/72166-2
         const SMOKING_STATUS_CODE = "72166-2";
 
         // source: https://browser.ihtsdotools.org/?perspective=full&conceptId1=365981007&edition=MAIN/2026-02-01&release=&languages=en
@@ -111,7 +112,7 @@
 
         /**
          * @description Get once-only questions in a format supported by the questionnaire views.
-         * @param {str} patient_uuid UUID of the patient for which to get the once-only questionnaire
+         * @param {string} patient_uuid UUID of the patient for which to get the once-only questionnaire.
          */
         async function getOnceOnlyQuestionnaire(patient_uuid) {
             // See: https://stackoverflow.com/questions/3746725/how-to-create-an-array-containing-1-n
