@@ -60,6 +60,5 @@ repos:
     - id: npm-ci
       name: npm lockfile up to date
       language: node
-      language_version: "lts"
       entry: npm ci --dry-run
       files: ^package(-lock)?\.json$

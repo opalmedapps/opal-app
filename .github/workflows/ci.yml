@@ -23,7 +23,7 @@ jobs:
   lint:
     uses: opalmedapps/actions/.github/workflows/prek.yaml@main
     with:
-      skip: reuse-lint-file
+      skip: reuse-lint-file,npm-ci
 
   run-reuse-workflow:
     uses: opalmedapps/.github/.github/workflows/reuse.yaml@main
