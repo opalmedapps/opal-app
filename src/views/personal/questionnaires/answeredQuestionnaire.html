@@ -83,7 +83,7 @@ SPDX-License-Identifier: Apache-2.0
             </button>
         </div>
         <!-- User's name, and patient's name (if different), to make it clear who's submitting the questionnaire -->
-        <div class="light-grey-comment" style="padding: 0 10px">
+        <div ng-hide="vm.loadingQuestionnaire" class="light-grey-comment" style="padding: 0 10px">
             {{ (vm.isAnsweringAsSelf ? 'QUESTIONNAIRE_SUBMIT_AS_SELF' : 'QUESTIONNAIRE_SUBMIT_AS_OTHER') | translate:vm.submittedByNames }}
         </div>
     </div>

@@ -95,11 +95,18 @@
             },
         }
 
-        const isDefinedAnswer = patientAnswer => [STATUS.ANSWER_SAVED_CONFIRMED, STATUS.ANSWER_CHANGED_ONCE_ONLY].includes(patientAnswer.is_defined);
-
         return {
             getOnceOnlyQuestionnaire: getOnceOnlyQuestionnaire,
             submit: submit,
+        }
+
+        /**
+         * @description Evaluates whether a once-only question has been answered.
+         * @param {object} patientAnswer The question.patient_answer attribute for a question.
+         */
+        function isDefinedAnswer(patientAnswer) {
+            return [STATUS.ANSWER_SAVED_CONFIRMED, STATUS.ANSWER_CHANGED_ONCE_ONLY].includes(patientAnswer.is_defined)
+                && patientAnswer.answer.length > 0;
         }
 
         /**

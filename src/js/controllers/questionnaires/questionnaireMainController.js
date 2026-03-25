@@ -212,7 +212,14 @@
 
             // RADIOBUTTON only
             if (question.type_id === vm.allowedType.RADIOBUTTON_TYPE_ID) {
-                question.patient_answer.answer[0].answer_option_text = value.option_text;
+                // Once-Only: allow users to remove radio button answers
+                // TODO: to make this work for other questionnaires, we must also be able to save the change to the database
+                if (typeof value === 'undefined') {
+                    question.patient_answer.answer = [];
+                    question.patient_answer.is_defined = '0';
+                    question.answerChangedFlag = false;
+                }
+                else question.patient_answer.answer[0].answer_option_text = value.option_text;
             }
         }
 
