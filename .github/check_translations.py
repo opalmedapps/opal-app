@@ -9,8 +9,6 @@ from pathlib import Path
 MASTER_LANGUAGE = 'en'
 TRANSLATION_ROOT = Path('src/Languages/appTranslationTablesViews')
 
-print(sys.argv)
-
 errors = []
 
 for directory in TRANSLATION_ROOT.glob('*'):
