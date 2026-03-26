@@ -19,13 +19,12 @@
         .factory('QuestionnaireDataService', QuestionnaireDataService);
 
     QuestionnaireDataService.$inject = [
-        'RequestToServer',
         'Params',
-        'UserPreferences',
+        'RequestToServer',
     ];
 
     /* @ngInject */
-    function QuestionnaireDataService(RequestToServer, Params, UserPreferences) {
+    function QuestionnaireDataService(Params, RequestToServer) {
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const validType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
         const api = Params.QUESTIONNAIRE_API;
@@ -101,7 +100,7 @@
         /**
          * @name saveQuestionnaireAnswer
          * @desc This function saves the answer for a single question (even if it is skipped)
-         * @param {int} answerQuestionnaireId ID of particular questionnaire received by patient
+         * @param {int|string} answerQuestionnaireId ID of particular questionnaire received by patient
          * @param {int} sectionId ID of particular section of the question answered
          * @param {int} questionId ID of the question answered
          * @param {int} questionSectionId unique ID between the question and the section

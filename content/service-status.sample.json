@@ -1,15 +1,15 @@
 {
-    "en": {
-        "title": "Announcement",
-        "message": ""
-    },
-    "fr": {
-        "title": "Annonce",
-        "message": ""
-    },
-    "xx": {
-        "_comment": "Any additional language entries can be added according to the languages supported in the app (see `supportedLanguages` in `opal.config.js`)",
-        "title": "",
-        "message": ""
-    }
+  "en": {
+    "title": "Announcement",
+    "message": ""
+  },
+  "fr": {
+    "title": "Annonce",
+    "message": ""
+  },
+  "xx": {
+    "_comment": "Any additional language entries can be added according to the languages supported in the app (see `supportedLanguages` in `opal.config.js`)",
+    "title": "",
+    "message": ""
+  }
 }

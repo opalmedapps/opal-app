@@ -6,6 +6,7 @@ import "./services/appointments.service.js";
 import "./services/firebase.service.js";
 import "./services/utility.service";
 import "./services/notificationsService.js";
+import "./services/once-only-questions.service.js";
 import "./services/userAuthorizationInfoService.js";
 import "./services/updateUIService.js";
 import "./services/documentsService.js";

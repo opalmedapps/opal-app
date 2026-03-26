@@ -16,6 +16,13 @@ repos:
     - id: end-of-file-fixer
     - id: trailing-whitespace
       exclude: '.github/pull_request_template.md'
+    - id: pretty-format-json
+      args: ["--autofix", "--no-ensure-ascii", "--no-sort-keys"]
+      exclude: "^src/Languages/appTranslationTablesViews/.+\\.json"
+    - id: pretty-format-json
+      name: pretty-format translation JSON files
+      args: ["--autofix", "--no-ensure-ascii"]
+      files: "^src/Languages/appTranslationTablesViews/.+\\.json"
 
 - repo: https://github.com/fsfe/reuse-tool
   rev: v6.2.0
@@ -54,3 +61,16 @@ repos:
         # and checks these with shellcheck.
         # see also: https://github.com/rhysd/actionlint/pull/482
         - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@v0.11.1"
+
+- repo: local
+  hooks:
+    - id: npm-ci
+      name: npm lockfile up to date
+      language: node
+      entry: npm ci --dry-run
+      files: ^package(-lock)?\.json$
+    - id: check-translations
+      name: Check translation files have the same translation keys
+      entry: python ./.github/check_translations.py
+      language: python
+      files: "^src/Languages/appTranslationTablesViews/.+en\\.json$"
