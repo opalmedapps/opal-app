@@ -1,6 +1,7 @@
 {
   "ATTENTION": "Achtung!",
   "CLOSE": "Schließen",
+  "ERROR_INIT_LINKS": "Fehler beim Laden der Links in der App. Einige Links können möglicherweise nicht geöffnet werden.",
   "HEADER_MESSAGE_LOGIN": "Anmelden",
   "JAILBREAK_MESSAGE": "Die Ausführung dieser App auf einem gejailbreakten oder gerooteten Gerät wird nicht unterstützt.",
   "JAILBREAK_TITLE": "Jailbreak/gerootetes Gerät erkannt",
