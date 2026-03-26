@@ -10,7 +10,6 @@
   "CONFIRM": "Bestätigen",
   "CONTACT_HOSPITAL": "Kontaktieren Sie die Klinik für Hilfe",
   "CONTINUE": "Weiter",
-  "CURRENT_VERSION": "Aktuelle Version: ",
   "EDUCATION": "Klinisches Lernmaterial",
   "EDUCATION_SHORT": "Klinisches Lernmaterial",
   "EMAIL": "E-Mail",
@@ -21,7 +20,6 @@
   "ERROR_ANSWER_NOT_MATCH": "Antwort stimmt nicht mit unseren Daten überein",
   "ERROR_CONTACTING_HOSPITAL": "Fehler beim Kontaktieren der Klinik. Versuchen Sie es später erneut.",
   "ERROR_GENERIC": "Etwas ist schiefgelaufen",
-  "ERROR_INIT_LINKS": "Fehler beim Laden der Links in der App. Einige Links können möglicherweise nicht geöffnet werden.",
   "ERROR_NETWORK": "Keine Verbindung zum Internet möglich",
   "ERROR_NO_CONFIRMED_PROFILES": "Der Zugriff auf Ihr Konto wurde noch nicht von der Patientenverwaltung genehmigt oder wurde widerrufen. Wenn Sie kürzlich Zugriff beantragt haben, warten Sie bitte auf die Genehmigung. Andernfalls wenden Sie sich bitte an den Opal-Support.",
   "ERROR_PAGE": "Fehler beim Laden dieser Seite",
@@ -119,6 +117,5 @@
   "TOUR_WELCOME_DESC": "Opal ist ein Patientenportal, das Ihnen einige Ihrer medizinischen Informationen direkt zur Verfügung stellt. Um zu beginnen, tippen Sie auf den Pfeil oder wischen Sie über den Bildschirm, um die Folien zu wechseln.",
   "TRUST_DEVICE": "Dieses Gerät als vertrauenswürdiges Gerät festlegen?",
   "UNTRANSLATED_PAGE_DISCLAIMER": "Diese Seite wurde noch nicht übersetzt, aber der ursprüngliche Inhalt wird unten zu Referenzzwecken angezeigt. Vielen Dank für Ihr Verständnis.",
-  "USER_DISABLED": "Ihr Konto wurde gesperrt. Bitte wenden Sie sich für weitere Unterstützung an den Opal-Support.",
-  "WHATS_NEW": "Neuigkeiten"
+  "USER_DISABLED": "Ihr Konto wurde gesperrt. Bitte wenden Sie sich für weitere Unterstützung an den Opal-Support."
 }

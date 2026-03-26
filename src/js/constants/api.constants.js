@@ -83,6 +83,16 @@
                     method: 'get',
                     url: '/api/patients/<PATIENT_UUID>/ips/',
                 },
+                ONCE_ONLY: {
+                    GET: {
+                        method: 'get',
+                        url: '/api/patients/<PATIENT_UUID>/health-data/patient-reported/',
+                    },
+                    PUT: {
+                        method: 'put',
+                        url: '/api/patients/<PATIENT_UUID>/health-data/patient-reported/',
+                    },
+                },
             }
         });
 })();

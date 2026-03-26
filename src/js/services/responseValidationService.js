@@ -11,6 +11,22 @@
  * the error accordingly
  */
 
+// see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#custom_error_types
+class APIError extends Error {
+  constructor(response = null, ...params) {
+    // Pass remaining arguments (including vendor specific ones) to parent constructor
+    super(...params);
+
+    // Maintains proper stack trace for where our error was thrown (non-standard)
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, APIError);
+    }
+
+    this.name = "APIError";
+    this.response = response;
+  }
+}
+
 (function () {
     'use strict';
 
@@ -70,7 +86,7 @@
             let decryptedresponse = (typeof response.status_code === 'number') ? response : EncryptionService.decryptData(response);
             // TODO: Create a list of all valid status codes and check that
             if (response.status_code !== Params.API.SUCCESS && response.status_code !== Params.API.CREATED) {
-                return new Error(`API ERROR: ${response.status_code}: ${response.data.errorMessage}`);
+                return new APIError(response, `API ERROR: ${response.status_code}: ${response.data.errorMessage}`);
             }
             return decryptedresponse;
         }

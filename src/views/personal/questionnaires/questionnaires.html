@@ -198,7 +198,7 @@ SPDX-License-Identifier: Apache-2.0
                             </h4>
                         </div>
 
-                        <!-- MULTIPLE CHOICE -->
+                        <!-- MULTIPLE CHOICE (RADIO BUTTON) -->
                         <div ng-if="item.data.type_id === vm.allowedType.RADIOBUTTON_TYPE_ID" class="center"
                              style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
                             <ul class="list" ng-init="vm.initRadioButtonQuestion(item.data)">
@@ -206,9 +206,19 @@ SPDX-License-Identifier: Apache-2.0
                                     <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
                                         <input type="radio" name="{{'mcRadio'+item.data.question_id}}" value={{value.option_id}}
                                                ng-model="item.data.patient_answer.answer[0].answer_value"
-                                               ng-change="item.data.answerChangedFlag = true; item.data.patient_answer.answer[0].answer_option_text = value.option_text">
+                                               ng-change="vm.answerChanged(item.data, value)">
                                         <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                         {{value.option_text}}
+                                    </label>
+                                </li>
+                                <!-- Once-Only: since all questions are optional, allow users to remove radio button answers -->
+                                <!-- TODO: make this work for all questionnaires (this may require a call to mark previously saved answers as deleted in the database) -->
+                                <li ng-if="vm.onceOnly" class="list__item list__item--tappable"
+                                    ng-style="{'background-color':'#f9f9f9'}" style="border-top: 3px solid #337ab7"
+                                    ng-click="vm.answerChanged(item.data, undefined)">
+                                    <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
+                                        <i class="fa-solid fa-circle-minus fa12x" style="color:#999999"></i>
+                                        {{'QUESTIONNAIRE_REMOVE_ANSWER'|translate}}
                                     </label>
                                 </li>
                             </ul>
@@ -254,7 +264,7 @@ SPDX-License-Identifier: Apache-2.0
                                     <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
                                         <input type="radio" name="{{'slider'+item.data.question_id}}" value={{op.value}}
                                                ng-model="item.data.patient_answer.answer[0].answer_value"
-                                               ng-change="item.data.answerChangedFlag = true;">
+                                               ng-change="vm.answerChanged(item.data)">
                                         <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                         {{op.text}}
                                     </label>
@@ -268,7 +278,7 @@ SPDX-License-Identifier: Apache-2.0
 
                                         <textarea ng-class="fontSizeDesc" style="height:200px" id="textType" wrap="hard"
                                                   ng-model="item.data.patient_answer.answer[0].answer_value"
-                                                  ng-change="item.data.answerChangedFlag = true;"
+                                                  ng-change="vm.answerChanged(item.data)"
                                                   ng-init="vm.initTextboxQuestion(item.data)"
                                                   ng-trim="false"></textarea>
                             <style>
@@ -290,7 +300,7 @@ SPDX-License-Identifier: Apache-2.0
 
                         <div align="center" style="margin-top: 20px">
                             <button class="button--large--cta" ng-click="vm.finishQuestionnaireFromQuestion();"
-                                    ng-show="vm.questionnaire.status === vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && vm.editQuestion"
+                                    ng-show="vm.questionnaire.status === vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && vm.editQuestion && !vm.onceOnly"
                                     style="width:80%">{{"GO_TO_SUMMARY"|translate}}
                             </button>
                             <br>

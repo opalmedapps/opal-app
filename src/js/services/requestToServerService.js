@@ -78,7 +78,7 @@ import { CancelledPromiseError } from '../models/utility/cancelled-promise-error
 
         function formatParams(parameters, data){
             if (parameters.method === 'get' && data) parameters.params = data;
-            if (parameters.method === 'post' && data) parameters.data = data;
+            if (['post', 'put'].includes(parameters.method) && data) parameters.data = data;
 
             const headers = {
                 ...Params.API.REQUEST_HEADERS,
