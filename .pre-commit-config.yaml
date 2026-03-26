@@ -64,6 +64,11 @@ repos:
 
 - repo: local
   hooks:
+    - id: npm-ci
+      name: npm lockfile up to date
+      language: node
+      entry: npm ci --dry-run
+      files: ^package(-lock)?\.json$
     - id: check-translations
       name: Check translation files have the same translation keys
       entry: python ./.github/check_translations.py
