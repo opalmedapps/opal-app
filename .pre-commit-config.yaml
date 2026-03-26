@@ -54,3 +54,11 @@ repos:
         # and checks these with shellcheck.
         # see also: https://github.com/rhysd/actionlint/pull/482
         - "github.com/wasilibs/go-shellcheck/cmd/shellcheck@v0.11.1"
+
+- repo: local
+  hooks:
+    - id: check-translations
+      name: Check translation files have the same translation keys
+      entry: python ./.github/check_translations.py
+      language: python
+      files: "^src/Languages/appTranslationTablesViews/.+en\\.json$"
