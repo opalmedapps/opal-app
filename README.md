@@ -326,6 +326,7 @@ To add support for a new language in the app, follow the steps below:
     1. Compare the new locale file to existing ones to add any missing custom content.
        for example, the date formats `mediumNoSeconds` and `veryShortTime` should be added.
 1. Exclude the new language files from typo-checking (in `.typos.toml`).
+1. Add an entry with a copyright notice for each of the new language files in REUSE.toml.
 1. Add the new language's ISO 639 code to `supportedLanguages` in all `opal.config.js` files,
    both in the project and in GitHub Actions variables (if using Actions).
 
