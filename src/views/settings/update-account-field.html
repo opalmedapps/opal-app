@@ -84,7 +84,7 @@ SPDX-License-Identifier: Apache-2.0
                 <label class="radio-button radio-button--list-item">
                     <input ng-change="Ctrl.changeLanguage(option)" ng-model="Ctrl.pickLanguage" type="radio" value="{{option}}">
                     <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescLarge"></div>
-                    {{option}}
+                    {{'LANGUAGE_' + option | translate}} ({{option}})
                 </label>
             </li>
         </div>
