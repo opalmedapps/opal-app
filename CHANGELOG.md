@@ -1,3 +1,19 @@
+# [2.5.0](https://github.com/opalmedapps/opal-app/compare/v2.4.0...v2.5.0) (2026-03-27)
+
+
+### Bug Fixes
+
+* **deps:** update babel monorepo to v7.29.2 ([#1526](https://github.com/opalmedapps/opal-app/issues/1526)) ([ce18152](https://github.com/opalmedapps/opal-app/commit/ce1815272e4d0dad32d57de4db249ab9dd9f5ec8))
+* **deps:** update cordova-ios to v8, cordova-android to v15, cordova-plugin-push to v7, and firebase to v12.11.0 ([#1528](https://github.com/opalmedapps/opal-app/issues/1528)) ([05ab26b](https://github.com/opalmedapps/opal-app/commit/05ab26b51dd78512fbb8b2fd36fdc62cde7d2fd6))
+* **deps:** update dependency marked to v17.0.5 ([#1529](https://github.com/opalmedapps/opal-app/issues/1529)) ([ade4b8c](https://github.com/opalmedapps/opal-app/commit/ade4b8c525ebce5b5f437f5f349a637896e511d3))
+* **deps:** update dependency pdfjs-dist to v5 ([#1416](https://github.com/opalmedapps/opal-app/issues/1416)) ([9ffe7a8](https://github.com/opalmedapps/opal-app/commit/9ffe7a86c83e423db3881dbe88ab9c7544351c04))
+
+
+### Features
+
+* add once-only questionnaire ([#1512](https://github.com/opalmedapps/opal-app/issues/1512)) ([7372a60](https://github.com/opalmedapps/opal-app/commit/7372a6074d87d518f4917c8f8c0d4c3c56cbc4a3))
+* **i18n:** add Irish translation files ([#1513](https://github.com/opalmedapps/opal-app/issues/1513)) ([5556af1](https://github.com/opalmedapps/opal-app/commit/5556af1b6fae016d6544c39fbdaea906c7a09d0b))
+
 # [2.4.0](https://github.com/opalmedapps/opal-app/compare/v2.3.0...v2.4.0) (2026-03-19)
 
 
