@@ -79,6 +79,7 @@ jobs:
 
 
   deploy-web:
+    environment: ${{ format('{0}-web', inputs.ENVIRONMENT) || 'dev-web' }}
     needs: build-web
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
@@ -121,6 +122,6 @@ jobs:
             bye
           "
         env:
-          FTP_HOST: ${{ vars.FTP_HOST }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_USER: ${{ vars.FTP_USER }}
+          FTP_USER: ${{ secrets.FTP_USER }}

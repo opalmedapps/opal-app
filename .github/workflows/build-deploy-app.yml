@@ -55,6 +55,7 @@ permissions:
 
 jobs:
   build-android:
+    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
     runs-on: macos-26
     steps:
       # Setup
@@ -93,6 +94,7 @@ jobs:
 
 
   build-android-release:
+    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
     runs-on: macos-26
     # Build in release mode for prod
     if: ${{ inputs.ENVIRONMENT == 'prod' }}
@@ -146,6 +148,7 @@ jobs:
 
 
   build-ios:
+    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
     runs-on: macos-26
     steps:
       # Setup
@@ -224,6 +227,7 @@ jobs:
 
 
   build-ios-release:
+    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
     runs-on: macos-26
     # Build in release mode for prod
     if: ${{ inputs.ENVIRONMENT == 'prod' }}
@@ -277,6 +281,7 @@ jobs:
 
 
   deploy-android-to-firebase:
+    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
     needs: build-android
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
@@ -311,6 +316,7 @@ jobs:
 
 
   deploy-ios-to-firebase:
+    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
     needs: build-ios
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
@@ -343,6 +349,7 @@ jobs:
 
 
   verify-ios-build:
+    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
     needs: build-ios-release
     runs-on: macos-26
     # Only run when deploying to the store
@@ -369,6 +376,7 @@ jobs:
 
 
   deploy-android-to-store:
+    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
     needs: build-android-release
     runs-on: macos-26
     # Deploy manually via inputs
@@ -395,6 +403,7 @@ jobs:
 
 
   deploy-ios-to-store:
+    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
     needs: [build-ios-release, verify-ios-build]
     runs-on: macos-26
     # Deploy manually via inputs
