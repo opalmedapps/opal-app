@@ -14,7 +14,7 @@ runs:
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           # renovate: datasource=node-version dependency=node
-          node-version: 24.14.0
+          node-version: 24.14.1
           cache: 'npm'
       - name: Check npm installation
         run: npm -v
