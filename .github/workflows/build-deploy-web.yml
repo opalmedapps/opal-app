@@ -79,7 +79,9 @@ jobs:
 
 
   deploy-web:
-    environment: ${{ format('{0}-web', inputs.ENVIRONMENT) || 'dev-web' }}
+    environment:
+      name: ${{ inputs.ENVIRONMENT || 'dev' }}
+      deployment: false
     needs: build-web
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
