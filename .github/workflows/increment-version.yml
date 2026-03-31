@@ -17,7 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     # use an environment to be able to protect the SSH private key (below) via an environment secret
     # this allows the secret to be restricted to specific branches
-    environment: semantic-release
+    environment:
+      name: semantic-release
+      deployment: false
     steps:
       # Setup
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
