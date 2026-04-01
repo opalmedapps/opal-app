@@ -30,13 +30,13 @@ repos:
     - id: reuse-lint-file
 
 - repo: https://github.com/crate-ci/typos
-  rev: v1.44.0
+  rev: v1.45.0
   hooks:
     - id: typos
 
 # zizmor detects security vulnerabilities in GitHub Actions workflows.
 - repo: https://github.com/woodruffw/zizmor-pre-commit
-  rev: v1.22.0
+  rev: v1.23.1
   hooks:
     - id: zizmor
 
