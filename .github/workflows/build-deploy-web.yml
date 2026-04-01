@@ -45,6 +45,17 @@ permissions:
 
 jobs:
   build-web:
+    environment:
+      # We want to keep environment variables per environment
+      # Pull requests need access to CONFIG_JS and GOOGLE_SERVICES
+      # Use a dedicated preview environment for pull requests
+      name: |-
+        ${{ case(
+          inputs.ENVIRONMENT != '', inputs.ENVIRONMENT,
+          github.event_name == 'pull_request', 'preview',
+          'dev'
+        ) }}
+      deployment: false
     runs-on: ubuntu-latest
     steps:
       # Setup
@@ -61,8 +72,8 @@ jobs:
         with:
           # Should only have a value when building for prod and also releasing the app to the stores; otherwise, will be undefined and the build number will be calculated
           BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_OVERRIDE }}
-          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
-          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
+          ENV_CONFIG_JS: ${{ vars.CONFIG_JS }}
+          ENV_GOOGLE_SERVICES: ${{ vars.GOOGLE_SERVICES }}
 
       # Build for web
       - name: Build the web app
@@ -79,6 +90,9 @@ jobs:
 
 
   deploy-web:
+    environment:
+      name: ${{ inputs.ENVIRONMENT || 'dev' }}
+      deployment: false
     needs: build-web
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
@@ -121,6 +135,6 @@ jobs:
             bye
           "
         env:
-          FTP_HOST: ${{ vars.FTP_HOST }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_USER: ${{ vars.FTP_USER }}
+          FTP_USER: ${{ secrets.FTP_USER }}
