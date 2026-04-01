@@ -96,7 +96,9 @@ jobs:
 
 
   build-android-release:
-    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
+    environment:
+      name: ${{ inputs.ENVIRONMENT || 'dev' }}
+      deployment: false
     runs-on: macos-26
     # Build in release mode for prod
     if: ${{ inputs.ENVIRONMENT == 'prod' }}
@@ -114,8 +116,8 @@ jobs:
         uses: ./.github/actions/build-setup
         with:
           BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_STORES }}
-          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
-          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
+          ENV_CONFIG_JS: ${{ vars.CONFIG_JS }}
+          ENV_GOOGLE_SERVICES: ${{ vars.GOOGLE_SERVICES }}
 
       # Build an aab in release mode
       - name: Build the app (.aab, release mode)
@@ -231,7 +233,9 @@ jobs:
 
 
   build-ios-release:
-    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
+    environment:
+      name: ${{ inputs.ENVIRONMENT || 'dev' }}
+      deployment: false
     runs-on: macos-26
     # Build in release mode for prod
     if: ${{ inputs.ENVIRONMENT == 'prod' }}
@@ -249,8 +253,8 @@ jobs:
         uses: ./.github/actions/build-setup
         with:
           BUILD_NUMBER_OVERRIDE: ${{ inputs.BUILD_NUMBER_STORES }}
-          ENV_CONFIG_JS: ${{ vars[format('{0}_CONFIG_JS', env.ENVIRONMENT)] }}
-          ENV_GOOGLE_SERVICES: ${{ vars[format('{0}_GOOGLE_SERVICES', env.ENVIRONMENT)] }}
+          ENV_CONFIG_JS: ${{ vars.CONFIG_JS }}
+          ENV_GOOGLE_SERVICES: ${{ vars.GOOGLE_SERVICES }}
 
       # Install an Apple certificate and provisioning profile used to build the app for iOS
       # See: https://docs.github.com/en/actions/use-cases-and-examples/deploying/installing-an-apple-certificate-on-macos-runners-for-xcode-development
@@ -258,7 +262,7 @@ jobs:
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_DISTRIBUTION_BASE64_FILE }}
           P12_PASSWORD: ${{ secrets.BUILD_CERTIFICATE_DISTRIBUTION_PASSWORD }}
-          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets[format('{0}_PROVISIONING_PROFILE_DISTRIBUTION_BASE64_FILE', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_DISTRIBUTION_BASE64_FILE }}
           KEYCHAIN_PASSWORD: ${{ secrets.TEMPORARY_KEYCHAIN_PASSWORD }}
         # Reuse the same setup steps from build-ios
         run: *ios-setup
@@ -268,7 +272,7 @@ jobs:
         run: npm run build:app:ios:release:ci --env="$ENVIRONMENT" --devteam="$IOS_DEVELOPMENT_TEAM" --provisioningprofile="$PROVISIONING_PROFILE_UUID"
         env:
           IOS_DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
-          PROVISIONING_PROFILE_UUID: ${{ secrets[format('{0}_PROVISIONING_PROFILE_DISTRIBUTION_UUID', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
+          PROVISIONING_PROFILE_UUID: ${{ secrets.PROVISIONING_PROFILE_DISTRIBUTION_UUID }}
       - name: Rename build output
         id: rename-ios
         run: |
@@ -285,7 +289,9 @@ jobs:
 
 
   deploy-android-to-firebase:
-    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
+    environment:
+      name: ${{ inputs.ENVIRONMENT || 'dev' }}
+      deployment: false
     needs: build-android
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
@@ -305,7 +311,7 @@ jobs:
         uses: ./.github/actions/deploy-app-firebase-setup
         with:
           ENVIRONMENT: ${{ env.ENVIRONMENT }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
       # Deploy the app to Firebase app distribution
       # Deployment via firebase-tools implicitly uses a service account assigned to $GOOGLE_APPLICATION_CREDENTIALS (from values defined in the GitHub project settings)
@@ -315,12 +321,14 @@ jobs:
         run: npx firebase-tools appdistribution:distribute "$ARTIFACT_NAME" --app "$FIREBASE_APP_ANDROID" --release-notes "$RELEASE_NOTES" --groups "$FIREBASE_GROUP"
         env:
           ARTIFACT_NAME: ${{ needs.build-android.outputs.ARTIFACT_NAME }}
-          FIREBASE_APP_ANDROID: ${{ vars[format('{0}_FIREBASE_APP_ANDROID', env.ENVIRONMENT)] }}
+          FIREBASE_APP_ANDROID: ${{ vars.FIREBASE_APP_ANDROID }}
           FIREBASE_GROUP: ${{ env.FIREBASE_GROUP }}
 
 
   deploy-ios-to-firebase:
-    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
+    environment:
+      name: ${{ inputs.ENVIRONMENT || 'dev' }}
+      deployment: false
     needs: build-ios
     runs-on: ubuntu-latest
     # Deploy manually via inputs, or automatically (to dev) when building on main
@@ -340,7 +348,7 @@ jobs:
         uses: ./.github/actions/deploy-app-firebase-setup
         with:
           ENVIRONMENT: ${{ env.ENVIRONMENT }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_FIREBASE_SERVICE_ACCOUNT', env.ENVIRONMENT)] }} # zizmor: ignore[overprovisioned-secrets]
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
       # Deploy the app to Firebase app distribution
       # Deployment implicitly uses $GOOGLE_APPLICATION_CREDENTIALS; see deploy-android-to-firebase above for more details
@@ -348,12 +356,14 @@ jobs:
         run: npx firebase-tools appdistribution:distribute "$ARTIFACT_NAME" --app "$FIREBASE_APP_IOS" --release-notes "$RELEASE_NOTES" --groups "$FIREBASE_GROUP"
         env:
           ARTIFACT_NAME: ${{ needs.build-ios.outputs.ARTIFACT_NAME }}
-          FIREBASE_APP_IOS: ${{ vars[format('{0}_FIREBASE_APP_IOS', env.ENVIRONMENT)] }}
+          FIREBASE_APP_IOS: ${{ vars.FIREBASE_APP_IOS }}
           FIREBASE_GROUP: ${{ env.FIREBASE_GROUP }}
 
 
   verify-ios-build:
-    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
+    environment:
+      name: ${{ inputs.ENVIRONMENT || 'dev' }}
+      deployment: false
     needs: build-ios-release
     runs-on: macos-26
     # Only run when deploying to the store
@@ -375,7 +385,7 @@ jobs:
         run: xcrun altool --validate-app -f "$ARTIFACT_NAME" -t ios -u "$APPLE_STORE_UPLOAD_EMAIL" -p "$APPLE_STORE_UPLOAD_PASSWORD"
         env:
           ARTIFACT_NAME: ${{ needs.build-ios-release.outputs.ARTIFACT_NAME }}
-          APPLE_STORE_UPLOAD_EMAIL: ${{ vars.APPLE_STORE_UPLOAD_EMAIL }}
+          APPLE_STORE_UPLOAD_EMAIL: ${{ secrets.APPLE_STORE_UPLOAD_EMAIL }}
           APPLE_STORE_UPLOAD_PASSWORD: ${{ secrets.APPLE_STORE_UPLOAD_PASSWORD }}
 
 
@@ -407,7 +417,9 @@ jobs:
 
 
   deploy-ios-to-store:
-    environment: ${{ inputs.ENVIRONMENT || 'dev' }}
+    environment:
+      name: ${{ inputs.ENVIRONMENT || 'dev' }}
+      deployment: false
     needs: [build-ios-release, verify-ios-build]
     runs-on: macos-26
     # Deploy manually via inputs
@@ -429,5 +441,5 @@ jobs:
         run: xcrun altool --upload-app -f "$ARTIFACT_NAME" -t ios -u "$APPLE_STORE_UPLOAD_EMAIL" -p "$APPLE_STORE_UPLOAD_PASSWORD"
         env:
           ARTIFACT_NAME: ${{ needs.build-ios-release.outputs.ARTIFACT_NAME }}
-          APPLE_STORE_UPLOAD_EMAIL: ${{ vars.APPLE_STORE_UPLOAD_EMAIL }}
+          APPLE_STORE_UPLOAD_EMAIL: ${{ secrets.APPLE_STORE_UPLOAD_EMAIL }}
           APPLE_STORE_UPLOAD_PASSWORD: ${{ secrets.APPLE_STORE_UPLOAD_PASSWORD }}
