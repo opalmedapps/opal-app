@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 .idea
-.npmrc
 *.swp
 .DS_Store
 .firebase/
