@@ -127,7 +127,7 @@
     "shelljs": "0.10.0",
     "style-loader": "4.0.0",
     "terser-webpack-plugin": "5.4.0",
-    "webpack": "5.105.4",
+    "webpack": "5.106.2",
     "webpack-cli": "7.0.2",
     "webpack-dev-server": "5.2.3",
     "webpack-manifest-plugin": "6.0.1",
