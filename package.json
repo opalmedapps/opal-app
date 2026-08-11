@@ -104,7 +104,7 @@
     "tweetnacl-util": "0.15.1"
   },
   "devDependencies": {
-    "@babel/core": "7.29.0",
+    "@babel/core": "7.29.6",
     "@babel/plugin-proposal-throw-expressions": "7.27.1",
     "@babel/plugin-transform-runtime": "7.29.0",
     "@babel/preset-env": "7.29.2",
